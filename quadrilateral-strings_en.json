@@ -15,6 +15,12 @@
       },
       "vertex4": {
         "value": "Vertex 4"
+      },
+      "parallelogramSuccess": {
+        "value": "You made a parallelogram!"
+      },
+      "parallelogramFailure": {
+        "value": "Not a parallelogram"
       }
     }
   }

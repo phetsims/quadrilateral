@@ -12,8 +12,8 @@ import voicingUtteranceQueue from '../../../../scenery/js/accessibility/voicing/
 import Plane from '../../../../scenery/js/nodes/Plane.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
-import quadrilateralStrings from '../../quadrilateralStrings.js';
 import quadrilateral from '../../quadrilateral.js';
+import quadrilateralStrings from '../../quadrilateralStrings.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import VertexNode from './VertexNode.js';
 
@@ -22,6 +22,8 @@ const vertex1String = quadrilateralStrings.a11y.voicing.vertex1;
 const vertex2String = quadrilateralStrings.a11y.voicing.vertex2;
 const vertex3String = quadrilateralStrings.a11y.voicing.vertex3;
 const vertex4String = quadrilateralStrings.a11y.voicing.vertex4;
+const parallelogramSuccessString = quadrilateralStrings.a11y.voicing.parallelogramSuccess;
+const parallelogramFailureString = quadrilateralStrings.a11y.voicing.parallelogramFailure;
 
 class QuadrilateralScreenView extends ScreenView {
 
@@ -107,7 +109,7 @@ class QuadrilateralScreenView extends ScreenView {
 
     // listeners
     model.isParallelogramProperty.lazyLink( isParallelogram => {
-      const alertString = isParallelogram ? 'You made a parallelogram!' : 'Not a parallelogram';
+      const alertString = isParallelogram ? parallelogramSuccessString : parallelogramFailureString;
       voicingUtteranceQueue.addToBack( alertString );
     } );
   }
