@@ -6,6 +6,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import PreferencesConfiguration from '../../joist/js/preferences/PreferencesConfiguration.js';
 import Sim from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
 import Tandem from '../../tandem/js/Tandem.js';
@@ -25,7 +26,10 @@ const simOptions = {
     graphicArts: '',
     soundDesign: '',
     thanks: ''
-  }
+  },
+
+  // preferences configuration with defaults from package.json
+  preferencesConfiguration: new PreferencesConfiguration()
 };
 
 // launch the sim - beware that scenery Image nodes created outside of simLauncher.launch() will have zero bounds

@@ -45,6 +45,36 @@ class QuadrilateralScreenView extends ScreenView {
   }
 
   /**
+   * Get the content that is spoken from the Voicing toolbar to describe this ScreenView.
+   * @public
+   *
+   * @returns {string}
+   */
+  getVoicingOverviewContent() {
+    return 'Please implement getVoicingOverviewContent';
+  }
+
+  /**
+   * Get the content that is spoken from the Voicing toolbar to describe this ScreenView.
+   * @public
+   *
+   * @returns {string}
+   */
+  getVoicingDetailsContent() {
+    return 'Please implement getVoicingDetailsContent';
+  }
+
+  /**
+   * Get the content that is spoken from the Voicing toolbar to describe this ScreenView.
+   * @public
+   *
+   * @returns {string}
+   */
+  getVoicingHintContent() {
+    return 'Please implement getVoicingHintContent';
+  }
+
+  /**
    * Resets the view.
    * @public
    */

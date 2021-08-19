@@ -16,7 +16,11 @@
     "supportedBrands": [
       "phet",
       "adapted-from-phet"
-    ]
+    ],
+    "simFeatures": {
+      "supportsInteractiveDescription": true,
+      "supportsVoicing": true
+    }
   },
   "eslintConfig": {
     "extends": "../chipper/eslint/sim_eslintrc.js"
