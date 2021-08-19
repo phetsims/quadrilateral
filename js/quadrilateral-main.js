@@ -12,7 +12,7 @@ import Tandem from '../../tandem/js/Tandem.js';
 import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';
 import quadrilateralStrings from './quadrilateralStrings.js';
 
-const quadrilateralTitleString = quadrilateralStrings[ 'quadrilateral' ].title;
+const quadrilateralTitleString = quadrilateralStrings.quadrilateral.title;
 
 const simOptions = {
 
