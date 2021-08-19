@@ -4,13 +4,16 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
+import ModelViewTransform from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import Plane from '../../../../scenery/js/nodes/Plane.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
+import VertexNode from './VertexNode.js';
 
 class QuadrilateralScreenView extends ScreenView {
 
@@ -23,8 +26,26 @@ class QuadrilateralScreenView extends ScreenView {
     assert && assert( tandem instanceof Tandem, 'invalid tandem' );
 
     super( {
+
+      // phet-io
       tandem: tandem
     } );
+
+    const viewHeight = this.layoutBounds.height - 2 * QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN;
+    const modelViewTransform = ModelViewTransform.createRectangleInvertedYMapping(
+      new Bounds2( -1, -1, 1, 1 ),
+      new Bounds2(
+        this.layoutBounds.centerX - viewHeight / 2,
+        QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN,
+        this.layoutBounds.centerX + viewHeight / 2,
+        viewHeight
+      )
+    );
+
+    this.addChild( new VertexNode( model.vertex1, modelViewTransform, { tandem: tandem.createTandem( 'vertex1Node' ) } ) );
+    this.addChild( new VertexNode( model.vertex2, modelViewTransform, { tandem: tandem.createTandem( 'vertex2Node' ) } ) );
+    this.addChild( new VertexNode( model.vertex3, modelViewTransform, { tandem: tandem.createTandem( 'vertex3Node' ) } ) );
+    this.addChild( new VertexNode( model.vertex4, modelViewTransform, { tandem: tandem.createTandem( 'vertex4Node' ) } ) );
 
     const resetAllButton = new ResetAllButton( {
       listener: () => {
