@@ -7,12 +7,20 @@
  */
 
 import merge from '../../../../phet-core/js/merge.js';
+import Voicing from '../../../../scenery/js/accessibility/voicing/Voicing.js';
 import KeyboardDragListener from '../../../../scenery/js/listeners/KeyboardDragListener.js';
 import Circle from '../../../../scenery/js/nodes/Circle.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 
 class VertexNode extends Circle {
+
+  /**
+   * @mixes Voicing
+   * @param {Vertex} vertex
+   * @param {ModelViewTransform2} modelViewTransform
+   * @param {Object} [options]
+   */
   constructor( vertex, modelViewTransform, options ) {
 
     options = merge( {
@@ -26,6 +34,7 @@ class VertexNode extends Circle {
     }, options );
 
     super( 25, options );
+    this.initializeVoicing( options );
 
     vertex.positionProperty.link( position => {
       this.translation = modelViewTransform.modelToViewPosition( position );
@@ -40,6 +49,8 @@ class VertexNode extends Circle {
     } ) );
   }
 }
+
+Voicing.compose( VertexNode );
 
 quadrilateral.register( 'VertexNode', VertexNode );
 export default VertexNode;

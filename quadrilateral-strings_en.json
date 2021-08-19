@@ -1,5 +1,21 @@
 {
   "quadrilateral.title": {
     "value": "Quadrilateral"
+  },
+  "a11y": {
+    "voicing": {
+      "vertex1": {
+        "value": "Vertex 1"
+      },
+      "vertex2": {
+        "value": "Vertex 2"
+      },
+      "vertex3": {
+        "value": "Vertex 3"
+      },
+      "vertex4": {
+        "value": "Vertex 4"
+      }
+    }
   }
 }
