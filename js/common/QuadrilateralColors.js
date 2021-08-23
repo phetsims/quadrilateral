@@ -20,7 +20,7 @@ import quadrilateral from '../quadrilateral.js';
 const quadrilateralColors = {
 
   // Background color that for screens in this sim
-  screenBackgroundColorProperty: new ProfileColorProperty( 'background', {
+  screenBackgroundColorProperty: new ProfileColorProperty( quadrilateral, 'background', {
     default: 'white'
   } )
 };
