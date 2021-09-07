@@ -1,6 +1,10 @@
 // Copyright 2021, University of Colorado Boulder
 
 /**
+ * The base model class for Quadrilateral. Assembles all model components and responsible for managing Properties
+ * that indicate the state of the whole Quadrilateral shape. Will probably also manage Properties that manage
+ * the state of the Sim (UI element visibility and so on).
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
@@ -8,7 +12,6 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Range from '../../../../dot/js/Range.js';
-import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
@@ -44,17 +47,25 @@ class QuadrilateralModel {
       range: new Range( 0.01, 0.3 )
     } );
 
-    // @public {DerivedProperty.<boolean>} - A value that indicates that the quadrilateral is
-    // curently a parallelogram. We assume that the quad is a parallelogram if oposite angles
-    // are equal within a margin of error.
+    // {DerivedProperty.<boolean} - Values that represents the difference opposing angles. When both of these values
+    // becomes less than this.angleEqualityEpsilonProperty the quad is considered to be a parallelogram. These
+    // Properties are pulled out from the isParallelogramProperty calculation because it is expected that we will
+    // add sounds to represent these two values.
+    const angle1DiffAngle3Property = new DerivedProperty( [ this.vertex1.angleProperty, this.vertex2.angleProperty ], ( angle1, angle3 ) => {
+      return Math.abs( angle1 - angle3 );
+    } );
+    const angle2DiffAngle4Property = new DerivedProperty( [ this.vertex2.angleProperty, this.vertex4.angleProperty ], ( angle2, angle4 ) => {
+      return Math.abs( angle2 - angle4 );
+    } );
+
+    // @public {DerivedProperty.<boolean>} - A value that indicates that the quadrilateral is currently a
+    // parallelogram. We assume that the quad is a parallelogram if opposite angles are equal within a margin of error.
     this.isParallelogramProperty = new DerivedProperty( [
-      this.vertex1.angleProperty,
-      this.vertex2.angleProperty,
-      this.vertex3.angleProperty,
-      this.vertex4.angleProperty,
+      angle1DiffAngle3Property,
+      angle2DiffAngle4Property,
       this.angleEqualityEpsilonProperty
-    ], ( angle1, angle2, angle3, angle4, epsilon ) => {
-      return Utils.equalsEpsilon( angle1, angle3, epsilon ) && Utils.equalsEpsilon( angle2, angle4, epsilon );
+    ], ( angle1DiffAngle3, angle2DiffAngle4, epsilon ) => {
+      return angle1DiffAngle3 < epsilon && angle2DiffAngle4 < epsilon;
     }, {
       tandem: tandem.createTandem( 'isParallelogramProperty' ),
       phetioType: DerivedProperty.DerivedPropertyIO( BooleanIO )
@@ -70,6 +81,7 @@ class QuadrilateralModel {
     this.vertex2.reset();
     this.vertex3.reset();
     this.vertex4.reset();
+    this.angleEqualityEpsilonProperty.reset();
   }
 
   /**
