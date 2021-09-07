@@ -47,10 +47,10 @@ class QuadrilateralModel {
       range: new Range( 0.01, 0.3 )
     } );
 
-    // {DerivedProperty.<boolean} - Values that represents the difference opposing angles. When both of these values
-    // becomes less than this.angleEqualityEpsilonProperty the quad is considered to be a parallelogram. These values
-    // are pulled out as Properties from the isParallelogramProperty calculation because it is expected that we will
-    // add sounds to represent the differences in these values.
+    // {DerivedProperty.<boolean} - Values that represents the difference of opposing angles, in radians. When both of
+    // these values becomes less than this.angleEqualityEpsilonProperty the quad is considered to be a parallelogram.
+    // These values are pulled out as Properties from the isParallelogramProperty calculation because it is expected
+    // that we will add sounds to represent the differences in these values.
     const angle1DiffAngle3Property = new DerivedProperty( [ this.vertex1.angleProperty, this.vertex2.angleProperty ], ( angle1, angle3 ) => {
       return Math.abs( angle1 - angle3 );
     } );
