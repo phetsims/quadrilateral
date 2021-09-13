@@ -20,7 +20,8 @@
     ],
     "simFeatures": {
       "supportsInteractiveDescription": true,
-      "supportsVoicing": true
+      "supportsVoicing": true,
+      "supportsSound": true
     },
     "supportsOutputJS": true
   },
