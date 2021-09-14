@@ -16,6 +16,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import quadrilateral from '../../quadrilateral.js';
+import Side from './Side.js';
 import Vertex from './Vertex.js';
 
 class QuadrilateralModel {
@@ -32,11 +33,17 @@ class QuadrilateralModel {
     this.vertex3 = new Vertex( new Vector2( 0.5, -0.5 ), new Bounds2( 0, -1, 1, 0 ), tandem.createTandem( 'vertex3' ) );
     this.vertex4 = new Vertex( new Vector2( -0.5, -0.5 ), new Bounds2( -1, -1, 0, 0 ), tandem.createTandem( 'vertex4' ) );
 
-    // connect vertices to form the quadrilateral shape and initialize angles
-    this.vertex1.connectToOThers( this.vertex4, this.vertex2 );
-    this.vertex2.connectToOThers( this.vertex1, this.vertex3 );
-    this.vertex3.connectToOThers( this.vertex2, this.vertex4 );
-    this.vertex4.connectToOThers( this.vertex3, this.vertex1 );
+    // create the sides of the shape
+    const topSide = new Side( this.vertex1, this.vertex2, tandem.createTandem( 'topSide' ) );
+    const rightSide = new Side( this.vertex2, this.vertex3, tandem.createTandem( 'rightSide' ) );
+    const bottomSide = new Side( this.vertex3, this.vertex4, tandem.createTandem( 'bottomSide' ) );
+    const leftSide = new Side( this.vertex4, this.vertex1, tandem.createTandem( 'leftSide' ) );
+
+    // Connect the sides, creating the shape and giving vertices the information they need to determine their angles.
+    rightSide.connectToSide( topSide );
+    bottomSide.connectToSide( rightSide );
+    leftSide.connectToSide( bottomSide );
+    topSide.connectToSide( leftSide );
 
     // @public {NumberProperty} - A value that controls the threshold for equality when determining
     // if the quadrilateral forms a parallelogram. Without a margin of error it would be exceedingly

@@ -59,7 +59,7 @@ class Vertex {
    * @param {Vertex} vertex1
    * @param {Vertex} vertex2
    */
-  connectToOThers( vertex1, vertex2 ) {
+  connectToOthers( vertex1, vertex2 ) {
 
     this.angleProperty = new DerivedProperty( [ vertex1.positionProperty, this.positionProperty, vertex2.positionProperty ], ( vertex1Position, thisPosition, vertex2Position ) => {
       const sideA = vertex1Position.distance( thisPosition );
