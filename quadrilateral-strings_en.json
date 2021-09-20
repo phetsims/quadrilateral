@@ -16,6 +16,18 @@
       "vertex4": {
         "value": "Vertex 4"
       },
+      "topSide": {
+        "value": "Top Side"
+      },
+      "rightSide": {
+        "value": "Right Side"
+      },
+      "bottomSide": {
+        "value": "Bottom Side"
+      },
+      "leftSide": {
+        "value": "Left Side"
+      },
       "parallelogramSuccess": {
         "value": "You made a parallelogram!"
       },

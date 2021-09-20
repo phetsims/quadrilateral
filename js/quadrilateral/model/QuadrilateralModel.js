@@ -33,17 +33,17 @@ class QuadrilateralModel {
     this.vertex3 = new Vertex( new Vector2( 0.5, -0.5 ), new Bounds2( 0, -1, 1, 0 ), tandem.createTandem( 'vertex3' ) );
     this.vertex4 = new Vertex( new Vector2( -0.5, -0.5 ), new Bounds2( -1, -1, 0, 0 ), tandem.createTandem( 'vertex4' ) );
 
-    // create the sides of the shape
-    const topSide = new Side( this.vertex1, this.vertex2, tandem.createTandem( 'topSide' ) );
-    const rightSide = new Side( this.vertex2, this.vertex3, tandem.createTandem( 'rightSide' ) );
-    const bottomSide = new Side( this.vertex3, this.vertex4, tandem.createTandem( 'bottomSide' ) );
-    const leftSide = new Side( this.vertex4, this.vertex1, tandem.createTandem( 'leftSide' ) );
+    // @public {Side} - create the sides of the shape
+    this.topSide = new Side( this.vertex1, this.vertex2, tandem.createTandem( 'topSide' ) );
+    this.rightSide = new Side( this.vertex2, this.vertex3, tandem.createTandem( 'rightSide' ) );
+    this.bottomSide = new Side( this.vertex3, this.vertex4, tandem.createTandem( 'bottomSide' ) );
+    this.leftSide = new Side( this.vertex4, this.vertex1, tandem.createTandem( 'leftSide' ) );
 
     // Connect the sides, creating the shape and giving vertices the information they need to determine their angles.
-    rightSide.connectToSide( topSide );
-    bottomSide.connectToSide( rightSide );
-    leftSide.connectToSide( bottomSide );
-    topSide.connectToSide( leftSide );
+    this.rightSide.connectToSide( this.topSide );
+    this.bottomSide.connectToSide( this.rightSide );
+    this.leftSide.connectToSide( this.bottomSide );
+    this.topSide.connectToSide( this.leftSide );
 
     // @public {NumberProperty} - A value that controls the threshold for equality when determining
     // if the quadrilateral forms a parallelogram. Without a margin of error it would be exceedingly
