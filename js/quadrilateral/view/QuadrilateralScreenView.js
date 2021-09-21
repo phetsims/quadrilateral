@@ -16,7 +16,7 @@ import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralNode from './QuadrilateralNode.js';
 import QuadrilateralSoundView from './QuadrilateralSoundView.js';
-import SideDmonstrationNode from './SideDemonstrationNode.js';
+import SideDemonstrationNode from './SideDemonstrationNode.js';
 
 class QuadrilateralScreenView extends ScreenView {
 
@@ -47,7 +47,7 @@ class QuadrilateralScreenView extends ScreenView {
 
     if ( QuadrilateralQueryParameters.rightSide || QuadrilateralQueryParameters.leftSide ||
          QuadrilateralQueryParameters.topSide || QuadrilateralQueryParameters.bottomSide ) {
-      this.demonstrationNode = new SideDmonstrationNode( model, modelViewTransform );
+      this.demonstrationNode = new SideDemonstrationNode( model, modelViewTransform );
       this.addChild( this.demonstrationNode );
     }
     else {

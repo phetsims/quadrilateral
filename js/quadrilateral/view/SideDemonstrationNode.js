@@ -16,7 +16,13 @@ import SideSoundView from './SideSoundView.js';
 import VertexNode from './VertexNode.js';
 
 class SideDemonstrationNode extends Node {
-  constructor( model, modelViewTransform, numberOfSides, options ) {
+
+  /**
+   * @param {QuadrilateralModel} model
+   * @param {ModelViewTransform2} modelViewTransform
+   * @param {Object} [options]
+   */
+  constructor( model, modelViewTransform, options ) {
     super( options );
 
     const vertex1Node = new VertexNode( model.vertex1, modelViewTransform );
