@@ -15,7 +15,7 @@ import SideNode from './SideNode.js';
 import SideSoundView from './SideSoundView.js';
 import VertexNode from './VertexNode.js';
 
-class SideDmonstrationNode extends Node {
+class SideDemonstrationNode extends Node {
   constructor( model, modelViewTransform, numberOfSides, options ) {
     super( options );
 
@@ -93,5 +93,5 @@ class SideDmonstrationNode extends Node {
   }
 }
 
-quadrilateral.register( 'SideDmonstrationNode', SideDmonstrationNode );
-export default SideDmonstrationNode;
+quadrilateral.register( 'SideDemonstrationNode', SideDemonstrationNode );
+export default SideDemonstrationNode;
