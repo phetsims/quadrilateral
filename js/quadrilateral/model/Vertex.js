@@ -95,10 +95,6 @@ class Vertex {
    */
   static calculateAngle( vertex1Position, vertex2Position, vertex3Position ) {
 
-    // const vectorFromVertex2ToVertex1 = vertex1Position.minus( vertex2Position );
-    // const vectorFromVertex2ToVertex3 = vertex3Position.minus( vertex2Position );
-
-    // return Vector2.getAngleBetweenVectors( vectorFromVertex2ToVertex3, vectorFromVertex2ToVertex1 );
     const sideA = vertex1Position.distance( vertex2Position );
     const sideB = vertex3Position.distance( vertex2Position );
     const sideC = vertex3Position.distance( vertex1Position );
