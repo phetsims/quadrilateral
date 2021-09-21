@@ -7,8 +7,10 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import merge from '../../../../phet-core/js/merge.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import quadrilateral from '../../quadrilateral.js';
+import Vertex from './Vertex.js';
 
 class Side {
 
@@ -16,8 +18,13 @@ class Side {
    * @param {Vertex} vertex1
    * @param {Vertex} vertex2
    * @param {Tandem} tandem
+   * @param {Object} [options]
    */
-  constructor( vertex1, vertex2, tandem ) {
+  constructor( vertex1, vertex2, tandem, options ) {
+
+    options = merge( {
+      offsetVectorForTiltCalculation: new Vector2( 1, 0 )
+    }, options );
 
     // @public {Vertex}
     this.vertex1 = vertex1;
@@ -31,6 +38,15 @@ class Side {
       return ( vertex2Position.y - vertex1Position.y ) / ( vertex2Position.x - vertex1Position.x );
     }, {
       tandem: tandem.createTandem( 'slopeProperty' ),
+      phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
+    } );
+
+    // @public {DerivedProperty.<number>} - angle of this line against a perpendicular line that would be drawn
+    // across it when the vertices are at their initial positions, used to determine the amount of tilt of the line
+    this.angleToThePerpendicularProperty = new DerivedProperty( [ this.vertex1.positionProperty, this.vertex2.positionProperty ], ( vertex1Position, vertex2Position ) => {
+      return Vertex.calculateAngle( vertex1Position, vertex2Position, vertex2Position.plus( options.offsetVectorForTiltCalculation ) );
+    }, {
+      tandem: tandem.createTandem( 'angleToThePerpendicularProperty' ),
       phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
     } );
 

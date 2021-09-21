@@ -66,11 +66,52 @@ class Vertex {
       const sideB = vertex2Position.distance( thisPosition );
       const sideC = vertex2Position.distance( vertex1Position );
 
+      assert && assert( sideA !== 0 && sideB !== 0, 'law of cosines will not work when sides are of zero length' );
       return Math.acos( ( ( sideA * sideA ) + ( sideB * sideB ) - ( sideC * sideC ) ) / ( 2 * sideA * sideB ) );
     }, {
       tandem: this.tandem.createTandem( 'angleProperty' ),
       phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
     } );
+  }
+
+  /**
+   * Calculates the angle between three vertices, returning the angle at vertex2.
+   *
+   * Uses the law of cosines to calculate the angle, assuming vertex positions like this:
+   *
+   *        vertex2Position
+   *          /           \
+   *   sideA /             \ sideB
+   *        /               \
+   * vertex1Position -------- vertex3Position
+   *                   sideC
+   *
+   * See https://en.wikipedia.org/wiki/Law_of_cosines
+   * @public
+   *
+   * @param {Vector2} vertex1Position
+   * @param {Vector2} vertex2Position - returns angle at this vertex, between vertex1Position and vertex3Position
+   * @param {Vector2} vertex3Position
+   */
+  static calculateAngle( vertex1Position, vertex2Position, vertex3Position ) {
+
+    // const vectorFromVertex2ToVertex1 = vertex1Position.minus( vertex2Position );
+    // const vectorFromVertex2ToVertex3 = vertex3Position.minus( vertex2Position );
+
+    // return Vector2.getAngleBetweenVectors( vectorFromVertex2ToVertex3, vectorFromVertex2ToVertex1 );
+    const sideA = vertex1Position.distance( vertex2Position );
+    const sideB = vertex3Position.distance( vertex2Position );
+    const sideC = vertex3Position.distance( vertex1Position );
+
+    assert && assert( sideA !== 0 && sideB !== 0, 'law of cosines will not work when sides are of zero length' );
+
+    // the absolute value of the arcos argument must be less than one to be defined, but it may have exceeded 1 due
+    // to precision errors
+    let argument = ( ( sideA * sideA ) + ( sideB * sideB ) - ( sideC * sideC ) ) / ( 2 * sideA * sideB );
+    argument = argument > 1 ? 1 :
+               argument < -1 ? -1 :
+               argument;
+    return Math.acos( argument );
   }
 }
 

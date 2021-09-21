@@ -9,7 +9,9 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import Emitter from '../../../../axon/js/Emitter.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -28,16 +30,26 @@ class QuadrilateralModel {
     assert && assert( tandem instanceof Tandem, 'invalid tandem' );
 
     // @public {Vertex}
-    this.vertex1 = new Vertex( new Vector2( -0.5, 0.5 ), new Bounds2( -1, 0, 0, 1 ), tandem.createTandem( 'vertex1' ) );
-    this.vertex2 = new Vertex( new Vector2( 0.5, 0.5 ), new Bounds2( 0, 0, 1, 1 ), tandem.createTandem( 'vertex2' ) );
-    this.vertex3 = new Vertex( new Vector2( 0.5, -0.5 ), new Bounds2( 0, -1, 1, 0 ), tandem.createTandem( 'vertex3' ) );
-    this.vertex4 = new Vertex( new Vector2( -0.5, -0.5 ), new Bounds2( -1, -1, 0, 0 ), tandem.createTandem( 'vertex4' ) );
+    const vertex1Bounds = new Bounds2( -1, 0.05, -0.05, 1 );
+    const vertex2Bounds = new Bounds2( 0.05, 0.05, 1, 1 );
+    const vertex3Bounds = new Bounds2( 0.05, -1, 1, -0.05 );
+    const vertex4Bounds = new Bounds2( -1, -1, -0.05, -0.05 );
+    this.vertex1 = new Vertex( vertex1Bounds.center, vertex1Bounds, tandem.createTandem( 'vertex1' ) );
+    this.vertex2 = new Vertex( vertex2Bounds.center, vertex2Bounds, tandem.createTandem( 'vertex2' ) );
+    this.vertex3 = new Vertex( vertex3Bounds.center, vertex3Bounds, tandem.createTandem( 'vertex3' ) );
+    this.vertex4 = new Vertex( vertex4Bounds.center, vertex4Bounds, tandem.createTandem( 'vertex4' ) );
 
     // @public {Side} - create the sides of the shape
-    this.topSide = new Side( this.vertex1, this.vertex2, tandem.createTandem( 'topSide' ) );
+    this.topSide = new Side( this.vertex1, this.vertex2, tandem.createTandem( 'topSide' ), {
+      offsetVectorForTiltCalculation: new Vector2( 0, 1 )
+    } );
     this.rightSide = new Side( this.vertex2, this.vertex3, tandem.createTandem( 'rightSide' ) );
-    this.bottomSide = new Side( this.vertex3, this.vertex4, tandem.createTandem( 'bottomSide' ) );
-    this.leftSide = new Side( this.vertex4, this.vertex1, tandem.createTandem( 'leftSide' ) );
+    this.bottomSide = new Side( this.vertex3, this.vertex4, tandem.createTandem( 'bottomSide' ), {
+      offsetVectorForTiltCalculation: new Vector2( 0, -1 )
+    } );
+    this.leftSide = new Side( this.vertex4, this.vertex1, tandem.createTandem( 'leftSide' ), {
+      offsetVectorForTiltCalculation: new Vector2( -1, 0 )
+    } );
 
     // Connect the sides, creating the shape and giving vertices the information they need to determine their angles.
     this.rightSide.connectToSide( this.topSide );
@@ -76,6 +88,23 @@ class QuadrilateralModel {
     }, {
       tandem: tandem.createTandem( 'isParallelogramProperty' ),
       phetioType: DerivedProperty.DerivedPropertyIO( BooleanIO )
+    } );
+
+    this.shapeChangedEmitter = new Emitter();
+
+    Property.multilink( [
+        this.vertex1.positionProperty,
+        this.vertex2.positionProperty,
+        this.vertex3.positionProperty,
+        this.vertex4.positionProperty ],
+      ( position1, position2, position3, position4 ) => {
+        this.shapeChangedEmitter.emit();
+      }
+    );
+
+    this.rightSide.angleToThePerpendicularProperty.link( rightAngleToHorizontal => {
+      // Vertex.calculateAngle( this.rightSide.vertex1.positionProperty.value, this.rightSide.vertex2.positionProperty.value, this.rightSide.vertex2.positionProperty.value.plusXY( 1, 0 ) );
+      // console.log( rightAngleToHorizontal );
     } );
   }
 

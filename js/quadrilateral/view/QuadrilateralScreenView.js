@@ -13,7 +13,10 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
+import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralNode from './QuadrilateralNode.js';
+import QuadrilateralSoundView from './QuadrilateralSoundView.js';
+import SideDmonstrationNode from './SideDemonstrationNode.js';
 
 class QuadrilateralScreenView extends ScreenView {
 
@@ -42,10 +45,19 @@ class QuadrilateralScreenView extends ScreenView {
       )
     );
 
-    const quadrilateralNode = new QuadrilateralNode( model, modelViewTransform, {
-      tandem: tandem.createTandem( 'quadrilateralNode' )
-    } );
-    this.addChild( quadrilateralNode );
+    if ( QuadrilateralQueryParameters.rightSide || QuadrilateralQueryParameters.leftSide ||
+         QuadrilateralQueryParameters.topSide || QuadrilateralQueryParameters.bottomSide ) {
+      this.demonstrationNode = new SideDmonstrationNode( model, modelViewTransform );
+      this.addChild( this.demonstrationNode );
+    }
+    else {
+      const quadrilateralNode = new QuadrilateralNode( model, modelViewTransform, {
+        tandem: tandem.createTandem( 'quadrilateralNode' )
+      } );
+      this.addChild( quadrilateralNode );
+
+      this.quadrilateralSoundView = new QuadrilateralSoundView( model );
+    }
 
     const resetAllButton = new ResetAllButton( {
       listener: () => {
@@ -109,7 +121,12 @@ class QuadrilateralScreenView extends ScreenView {
    * @public
    */
   step( dt ) {
-    //TODO
+    if ( this.quadrilateralSoundView ) {
+      this.quadrilateralSoundView.step( dt );
+    }
+    if ( this.demonstrationNode ) {
+      this.demonstrationNode.step( dt );
+    }
   }
 }
 

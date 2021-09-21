@@ -11,6 +11,7 @@ import Sim from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';
+import QuadrilateralSoundOptionsNode from './quadrilateral/view/QuadrilateralSoundOptionsNode.js';
 import quadrilateralStrings from './quadrilateralStrings.js';
 
 const quadrilateralTitleString = quadrilateralStrings.quadrilateral.title;
@@ -29,7 +30,11 @@ const simOptions = {
   },
 
   // preferences configuration with defaults from package.json
-  preferencesConfiguration: new PreferencesConfiguration()
+  preferencesConfiguration: new PreferencesConfiguration( {
+    generalOptions: {
+      simControls: new QuadrilateralSoundOptionsNode()
+    }
+  } )
 };
 
 // launch the sim - beware that scenery Image nodes created outside of simLauncher.launch() will have zero bounds
