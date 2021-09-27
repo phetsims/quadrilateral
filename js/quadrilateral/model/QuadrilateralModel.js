@@ -102,7 +102,7 @@ class QuadrilateralModel {
       }
     );
 
-    this.rightSide.angleToThePerpendicularProperty.link( rightAngleToHorizontal => {
+    this.rightSide.tiltProperty.link( rightAngleToHorizontal => {
       // Vertex.calculateAngle( this.rightSide.vertex1.positionProperty.value, this.rightSide.vertex2.positionProperty.value, this.rightSide.vertex2.positionProperty.value.plusXY( 1, 0 ) );
       // console.log( rightAngleToHorizontal );
     } );

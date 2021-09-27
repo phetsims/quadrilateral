@@ -43,10 +43,10 @@ class Side {
 
     // @public {DerivedProperty.<number>} - angle of this line against a perpendicular line that would be drawn
     // across it when the vertices are at their initial positions, used to determine the amount of tilt of the line
-    this.angleToThePerpendicularProperty = new DerivedProperty( [ this.vertex1.positionProperty, this.vertex2.positionProperty ], ( vertex1Position, vertex2Position ) => {
+    this.tiltProperty = new DerivedProperty( [ this.vertex1.positionProperty, this.vertex2.positionProperty ], ( vertex1Position, vertex2Position ) => {
       return Vertex.calculateAngle( vertex1Position, vertex2Position, vertex2Position.plus( options.offsetVectorForTiltCalculation ) );
     }, {
-      tandem: tandem.createTandem( 'angleToThePerpendicularProperty' ),
+      tandem: tandem.createTandem( 'tiltProperty' ),
       phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
     } );
 

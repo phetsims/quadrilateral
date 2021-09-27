@@ -73,7 +73,7 @@ class SideSoundView {
     const firstOctaveAngleToThePerpendicularToPlaybackRate = new LinearFunction( 0, Math.PI / 2, 0.5, 1 );
     const secondOctaveAngleToThePerpendicularToPlaybackRate = new LinearFunction( Math.PI / 2, Math.PI, 1, 2 );
 
-    Property.lazyMultilink( [ side.lengthProperty, side.angleToThePerpendicularProperty ], ( length, angleToThePerpendicular ) => {
+    Property.lazyMultilink( [ side.lengthProperty, side.tiltProperty ], ( length, angleToThePerpendicular ) => {
       this.lowestOctave.setOutputLevel( lowestOctaveLengthToOutputLevel( length ) );
       this.middleOctave.setOutputLevel( middleOctaveLengthToOutputLevel.evaluate( length ) );
       this.highestOctave.setOutputLevel( highestOctaveToOutputLevel( length ) );
