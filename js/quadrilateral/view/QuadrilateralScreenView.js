@@ -70,6 +70,7 @@ class QuadrilateralScreenView extends ScreenView {
       tandem: tandem.createTandem( 'resetAllButton' )
     } );
     this.addChild( resetAllButton );
+    window.resetAllButton = resetAllButton;
 
     // We are attempting to develop this simulation without any graphical design at first,
     // this plane will hide everything

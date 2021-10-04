@@ -38,6 +38,59 @@ class SideDemonstrationNode extends Node {
       model.shapeChangedEmitter.addListener( () => {
         this.rightSideSoundView.startPlayingSounds();
       } );
+
+      // for demonstration purposes we will tie the tilt of the right side to the tilt of a phone
+      // while both phone and simulation are attached to the websocket server
+      if ( QuadrilateralQueryParameters.ipAddress && QuadrilateralQueryParameters.port ) {
+        const ipAddress = QuadrilateralQueryParameters.ipAddress.replaceAll( '_', '.' );
+        const port = QuadrilateralQueryParameters.port;
+        console.log( ipAddress );
+
+        const wsPrefix = 'ws'; // TODO: needs another s for https cases
+        const ws = new WebSocket( `${wsPrefix}://${ipAddress}:${port}`, [ 'json' ] );
+
+        const sendJSON = payload => {
+          ws.send( JSON.stringify( payload ) );
+        };
+
+        const myClientName = 'simulation';
+        ws.onopen = () => {
+          sendJSON( 'Hello from the client' );
+
+          // specify the client name so that the server registers this websocket
+          sendJSON( {
+            messageType: 'open',
+            clientName: myClientName
+          } );
+        };
+
+        model.rightSide.tiltProperty.link( tilt => {
+
+        } );
+
+        ws.onmessage = function( evt ) {
+          const received_msg = evt.data;
+          const jsonObject = ( JSON.parse( received_msg ) );
+
+          if ( jsonObject.value && jsonObject.value.command ) {
+            if ( jsonObject.value.command === 'reset' ) {
+              window.resetAllButton.pdomClick();
+            }
+          }
+        };
+
+        window.onbeforeunload = function() {
+
+          // TODO: Why can't this be done in browser.onClose?
+          sendJSON( {
+            messageType: 'close',
+            clientName: myClientName
+          } );
+
+          // ws.onclose = function() {}; // disable onclose handler first
+          ws.close();
+        };
+      }
     }
     if ( QuadrilateralQueryParameters.leftSide ) {
       const leftSideNode = new SideNode( model.leftSide, modelViewTransform );
