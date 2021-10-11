@@ -8,7 +8,6 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import ModelViewTransform from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
-import Plane from '../../../../scenery/js/nodes/Plane.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import quadrilateral from '../../quadrilateral.js';
@@ -70,11 +69,6 @@ class QuadrilateralScreenView extends ScreenView {
       tandem: tandem.createTandem( 'resetAllButton' )
     } );
     this.addChild( resetAllButton );
-
-    // We are attempting to develop this simulation without any graphical design at first,
-    // this plane will hide everything
-    const plane = new Plane( { fill: 'darkblue', pickable: false } );
-    this.addChild( plane );
   }
 
   /**

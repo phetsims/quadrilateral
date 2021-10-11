@@ -28,7 +28,6 @@ class SideNode extends Line {
   constructor( side, modelViewTransform, options ) {
 
     options = merge( {
-      stroke: 'red',
       lineWidth: 20,
 
       // pdom
@@ -74,7 +73,29 @@ class SideNode extends Line {
     this.addInputListener( new DragListener( {
       transform: modelViewTransform,
       drag: ( event, listener ) => {
-        this.moveVerticesFromModelDelta( listener.modelDelta );
+
+        const vertex1Pressed = side.vertex1.isPressedProperty.value;
+        const vertex2Pressed = side.vertex2.isPressedProperty.value;
+
+        if ( !vertex1Pressed && !vertex2Pressed ) {
+
+          // neither vertex is pressed, move both vertices together as you drag a side
+          this.moveVerticesFromModelDelta( listener.modelDelta );
+        }
+        else if ( vertex1Pressed !== vertex2Pressed ) {
+
+          // TODO: Why doesn't listener.modelPoint work here??
+          const parentPoint = this.globalToParentPoint( event.pointer.point );
+          const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
+
+          // only one vertex is pressed, rotate around the pressed vertex
+          if ( vertex1Pressed ) {
+            this.rotateVertexAroundOther( side.vertex1, side.vertex2, modelPoint );
+          }
+          else {
+            this.rotateVertexAroundOther( side.vertex2, side.vertex1, modelPoint );
+          }
+        }
       }
     } ) );
   }
@@ -95,6 +116,30 @@ class SideNode extends Line {
          this.side.vertex2.positionProperty.validBounds.containsPoint( proposedVertex2Position ) ) {
       this.side.vertex1.positionProperty.set( proposedVertex1Position );
       this.side.vertex2.positionProperty.set( proposedVertex2Position );
+    }
+  }
+
+  /**
+   * Rotate one vertex around another from the model position of the Pointer with dictates the amount of rotation.
+   * @private
+   *
+   * @param {Vertex} anchorVertex - Anchor vertex we are rotating around.
+   * @param {Vertex} armVertex - Vertex being repositioned.
+   * @param {Vector2} modelPoint - Model point of the Pointer to determine how much to rotate.
+   */
+  rotateVertexAroundOther( anchorVertex, armVertex, modelPoint ) {
+    const initialAngle = armVertex.positionProperty.value.minus( anchorVertex.positionProperty.value ).angle;
+    const newAngle = modelPoint.minus( anchorVertex.positionProperty.value ).angle;
+
+    const angleDelta = newAngle - initialAngle;
+
+    const anchorPosition = anchorVertex.positionProperty.value;
+    const rotatePosition = armVertex.positionProperty.value;
+
+    const newPosition = rotatePosition.rotatedAboutPoint( anchorPosition, angleDelta );
+
+    if ( armVertex.positionProperty.validBounds.containsPoint( newPosition ) ) {
+      armVertex.positionProperty.value = newPosition;
     }
   }
 }

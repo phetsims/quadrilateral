@@ -12,8 +12,11 @@ import Voicing from '../../../../scenery/js/accessibility/voicing/Voicing.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import KeyboardDragListener from '../../../../scenery/js/listeners/KeyboardDragListener.js';
 import Circle from '../../../../scenery/js/nodes/Circle.js';
+import Path from '../../../../scenery/js/nodes/Path.js';
+import timesSolidShape from '../../../../sherpa/js/fontawesome-5/timesSolidShape.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
+import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 
 class VertexNode extends Circle {
 
@@ -38,6 +41,14 @@ class VertexNode extends Circle {
     super( 25, options );
     this.initializeVoicing( options );
 
+    if ( QuadrilateralQueryParameters.showVertices ) {
+      this.addChild( new Path( timesSolidShape, {
+        fill: 'red',
+        scale: 0.05,
+        center: this.center
+      } ) );
+    }
+
     vertex.positionProperty.link( position => {
       this.translation = modelViewTransform.modelToViewPosition( position );
     } );
@@ -50,13 +61,17 @@ class VertexNode extends Circle {
       shiftDragVelocity: 100
     } ) );
 
-    // add basic mouse/touch input
-    this.addInputListener( new DragListener( {
+    // @private {DragListener}
+    const dragListener = new DragListener( {
       positionProperty: vertex.positionProperty,
       transform: modelViewTransform,
       dragBoundsProperty: new Property( vertex.positionProperty.validBounds ),
       tandem: options.tandem.createTandem( 'dragListener' )
-    } ) );
+    } );
+    this.addInputListener( dragListener );
+
+    // notify when this vertex is pressed
+    dragListener.isPressedProperty.link( isPressed => vertex.isPressedProperty.set( isPressed ) );
 
     // TODO: For now we are showing pointer areas instead of a graphical sim. These are used just to indicate
     // where you can press while we discuss multitouch considerations. We don't want something more permanent because

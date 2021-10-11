@@ -21,7 +21,7 @@ const quadrilateralColors = {
 
   // Background color that for screens in this sim
   screenBackgroundColorProperty: new ProfileColorProperty( quadrilateral, 'background', {
-    default: 'white'
+    default: 'darkblue'
   } )
 };
 

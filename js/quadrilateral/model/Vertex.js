@@ -6,6 +6,7 @@
  * @author Jesse Greenberg
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
@@ -29,6 +30,11 @@ class Vertex {
     // @public {DerivedProperty.<number>|null} - the angle at this vertex of the quadrilateral, null until
     // this vertex is connected to two others because we need three points to form the angle
     this.angleProperty = null;
+
+    // @public {BooleanProperty
+    this.isPressedProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'isPressedProperty' )
+    } );
 
     // @private {Tandem}
     this.tandem = tandem;
