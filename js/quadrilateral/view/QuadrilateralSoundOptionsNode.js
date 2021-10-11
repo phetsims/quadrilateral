@@ -17,28 +17,38 @@ const TEXT_OPTIONS = {
 };
 
 class QuadrilateralSoundOptionsNode extends Panel {
-  constructor() {
+
+  /**
+   * @param {Tandem} tandem
+   */
+  constructor( tandem ) {
 
     const radioButtonItems = [
       {
         node: new Text( 'Sound One', TEXT_OPTIONS ),
-        value: soundFileProperty.enumeration.ONE
+        value: soundFileProperty.enumeration.ONE,
+        tandemName: 'soundOneRadioButton'
       },
       {
         node: new Text( 'Sound Two', TEXT_OPTIONS ),
-        value: soundFileProperty.enumeration.TWO
+        value: soundFileProperty.enumeration.TWO,
+        tandemName: 'soundTwoRadioButton'
       },
       {
         node: new Text( 'Sound Three', TEXT_OPTIONS ),
-        value: soundFileProperty.enumeration.THREE
+        value: soundFileProperty.enumeration.THREE,
+        tandemName: 'soundThreeRadioButton'
       },
       {
         node: new Text( 'Sound Four', TEXT_OPTIONS ),
-        value: soundFileProperty.enumeration.FOUR
+        value: soundFileProperty.enumeration.FOUR,
+        tandemName: 'soundFourRadioButton'
       }
     ];
 
-    const optionsRadioButtonGroup = new VerticalAquaRadioButtonGroup( soundFileProperty, radioButtonItems );
+    const optionsRadioButtonGroup = new VerticalAquaRadioButtonGroup( soundFileProperty, radioButtonItems, {
+      tandem: tandem.createTandem( 'optionsRadioButtonGroup' )
+    } );
     super( optionsRadioButtonGroup );
   }
 }

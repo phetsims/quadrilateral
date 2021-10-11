@@ -32,7 +32,7 @@ const simOptions = {
   // preferences configuration with defaults from package.json
   preferencesConfiguration: new PreferencesConfiguration( {
     generalOptions: {
-      simControls: new QuadrilateralSoundOptionsNode()
+      simControls: new QuadrilateralSoundOptionsNode( Tandem.GENERAL_VIEW )
     }
   } )
 };
