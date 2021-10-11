@@ -26,6 +26,12 @@ const parallelogramSuccessString = quadrilateralStrings.a11y.voicing.parallelogr
 const parallelogramFailureString = quadrilateralStrings.a11y.voicing.parallelogramFailure;
 
 class QuadrilateralNode extends Node {
+
+  /**
+   * @param {QuadrilateralModel} model
+   * @param {ModelViewTransform2} modelViewTransform
+   * @param {Object} [options]
+   */
   constructor( model, modelViewTransform, options ) {
 
     options = merge( {
@@ -88,16 +94,21 @@ class QuadrilateralNode extends Node {
       voicingNameResponse: leftSideString
     } );
 
-    // add children
+    // add children - sides first because we want vertices to catch all input
+    this.addChild( topSideNode );
+    this.addChild( rightSideNode );
+    this.addChild( bottomSideNode );
+    this.addChild( leftSideNode );
+
     this.addChild( vertexNode1 );
     this.addChild( vertexNode2 );
     this.addChild( vertexNode3 );
     this.addChild( vertexNode4 );
 
-    this.addChild( topSideNode );
-    this.addChild( rightSideNode );
-    this.addChild( bottomSideNode );
-    this.addChild( leftSideNode );
+    this.pdomOrder = [
+      vertexNode1, vertexNode2, vertexNode3, vertexNode4,
+      topSideNode, rightSideNode, bottomSideNode, leftSideNode
+    ];
 
     // listeners
     model.isParallelogramProperty.lazyLink( isParallelogram => {

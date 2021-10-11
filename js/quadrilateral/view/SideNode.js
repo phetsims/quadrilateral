@@ -12,6 +12,7 @@ import Property from '../../../../axon/js/Property.js';
 import merge from '../../../../phet-core/js/merge.js';
 import FocusHighlightPath from '../../../../scenery/js/accessibility/FocusHighlightPath.js';
 import Voicing from '../../../../scenery/js/accessibility/voicing/Voicing.js';
+import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import KeyboardDragListener from '../../../../scenery/js/listeners/KeyboardDragListener.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import quadrilateral from '../../quadrilateral.js';
@@ -28,7 +29,7 @@ class SideNode extends Line {
 
     options = merge( {
       stroke: 'red',
-      lineWidth: 5,
+      lineWidth: 20,
 
       // pdom
       tagName: 'div',
@@ -39,6 +40,9 @@ class SideNode extends Line {
 
     // initialize the voicing trait
     this.initializeVoicing( options );
+
+    // @private {Side}
+    this.side = side;
 
     // pdom - make the focus highlight tightly surround the line so that it is easier to see the shape
     this.focusHighlight = new FocusHighlightPath( null );
@@ -51,24 +55,47 @@ class SideNode extends Line {
 
       // set the focus highlight shape
       this.focusHighlight.setShape( this.getStrokedShape() );
+
+      // TODO: For now we are showing pointer areas instead of a graphical sim. These are used just to indicate
+      // where you can press while we discuss multitouch considerations. We don't want something more permanent because
+      // we are afraid a graphical design will influence other modalities.
+      this.mouseArea = this.getStrokedShape();
+      this.touchArea = this.mouseArea;
     } );
 
     // supports keyboard dragging, attempts to move both vertices in the direction of motion of the line
     this.addInputListener( new KeyboardDragListener( {
       transform: modelViewTransform,
       drag: vectorDelta => {
-
-        // vectorDelta is in model coordinates already since we provided a transform to the listener
-        const proposedVertex1Position = side.vertex1.positionProperty.get().plus( vectorDelta );
-        const proposedVertex2Position = side.vertex2.positionProperty.get().plus( vectorDelta );
-
-        if ( side.vertex1.positionProperty.validBounds.containsPoint( proposedVertex1Position ) &&
-             side.vertex2.positionProperty.validBounds.containsPoint( proposedVertex2Position ) ) {
-          side.vertex1.positionProperty.set( proposedVertex1Position );
-          side.vertex2.positionProperty.set( proposedVertex2Position );
-        }
+        this.moveVerticesFromModelDelta( vectorDelta );
       }
     } ) );
+
+    this.addInputListener( new DragListener( {
+      transform: modelViewTransform,
+      drag: ( event, listener ) => {
+        this.moveVerticesFromModelDelta( listener.modelDelta );
+      }
+    } ) );
+  }
+
+  /**
+   * Move both vertices of this side from the change in position specified by deltaVector.
+   * @private
+   *
+   * @param {Vector2} deltaVector - change of position in model coordinates
+   */
+  moveVerticesFromModelDelta( deltaVector ) {
+
+    // vectorDelta is in model coordinates already since we provided a transform to the listener
+    const proposedVertex1Position = this.side.vertex1.positionProperty.get().plus( deltaVector );
+    const proposedVertex2Position = this.side.vertex2.positionProperty.get().plus( deltaVector );
+
+    if ( this.side.vertex1.positionProperty.validBounds.containsPoint( proposedVertex1Position ) &&
+         this.side.vertex2.positionProperty.validBounds.containsPoint( proposedVertex2Position ) ) {
+      this.side.vertex1.positionProperty.set( proposedVertex1Position );
+      this.side.vertex2.positionProperty.set( proposedVertex2Position );
+    }
   }
 }
 
