@@ -24,6 +24,6 @@ class SoundFileProperty extends EnumerationProperty {
   }
 }
 
-const soundFileProperty = new SoundFileProperty( SoundFile, SoundFile.ONE );
+const soundFileProperty = new SoundFileProperty( SoundFile, SoundFile.TWO );
 quadrilateral.register( 'soundFileProperty', soundFileProperty );
 export default soundFileProperty;

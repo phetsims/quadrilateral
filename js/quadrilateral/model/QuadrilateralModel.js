@@ -34,10 +34,10 @@ class QuadrilateralModel {
     const vertex2Bounds = new Bounds2( 0.05, 0.05, 1, 1 );
     const vertex3Bounds = new Bounds2( 0.05, -1, 1, -0.05 );
     const vertex4Bounds = new Bounds2( -1, -1, -0.05, -0.05 );
-    this.vertex1 = new Vertex( vertex1Bounds.center, vertex1Bounds, tandem.createTandem( 'vertex1' ) );
-    this.vertex2 = new Vertex( vertex2Bounds.center, vertex2Bounds, tandem.createTandem( 'vertex2' ) );
-    this.vertex3 = new Vertex( vertex3Bounds.center, vertex3Bounds, tandem.createTandem( 'vertex3' ) );
-    this.vertex4 = new Vertex( vertex4Bounds.center, vertex4Bounds, tandem.createTandem( 'vertex4' ) );
+    this.vertex1 = new Vertex( new Vector2( -0.25, 0.25 ), vertex1Bounds, tandem.createTandem( 'vertex1' ) );
+    this.vertex2 = new Vertex( new Vector2( 0.25, 0.25 ), vertex2Bounds, tandem.createTandem( 'vertex2' ) );
+    this.vertex3 = new Vertex( new Vector2( 0.25, -0.25 ), vertex3Bounds, tandem.createTandem( 'vertex3' ) );
+    this.vertex4 = new Vertex( new Vector2( -0.25, -0.25 ), vertex4Bounds, tandem.createTandem( 'vertex4' ) );
 
     // @public {Side} - create the sides of the shape
     this.topSide = new Side( this.vertex1, this.vertex2, tandem.createTandem( 'topSide' ), {
