@@ -1,7 +1,11 @@
 // Copyright 2021, University of Colorado Boulder
 
 /**
- * The sound view for a Side of the Parallelogram.
+ * The sound view for a Side of the Parallelogram. The sound design implemented by this file is described as follows:
+ *
+ * Each Side plays a sound representing its length and tilt. All four sides of the Quadrilateral play at the same
+ * time to create a sound representing the shape. The generated sound comes from a base SoundClip which changes
+ * in playbackRate
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -10,7 +14,6 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';
 import PiecewiseLinearFunction from '../../../../dot/js/PiecewiseLinearFunction.js';
 import Utils from '../../../../dot/js/Utils.js';
-import merge from '../../../../phet-core/js/merge.js';
 import phetAudioContext from '../../../../tambo/js/phetAudioContext.js';
 import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
 import SoundGenerator from '../../../../tambo/js/sound-generators/SoundGenerator.js';
@@ -27,18 +30,20 @@ import quadrilateral from '../../quadrilateral.js';
 const MIN_LENGTH = 0.10;
 const MAX_LENGTH_SQUARE = 2;
 
+// Sound clips will be created between these exponentials, using these values in a function to set the playback
+// rate for imported sound clips. The playback rate will will be set by Math.pow( 2, i / 12 ), where i is between
+// these values, effectively creating a span of 4 octaves with tones along the chromatic scale.
 const MAX_SOUND_CLIP_EXPONENTIAL = 24;
 const MIN_SOUND_CLIP_EXPONENTIAL = -24;
 
-// the max possible length of a side in the hypotenuse formed when one vertex is in the outer corner of its bounds
-// and the other is at the center point between oposite vertices of the shape
+// The max possible length of a side is the hypotenuse formed when one vertex is in the outer corner of its bounds
+// and the other is at the center point between opposite vertices of the shape
 //                     * (outer top)
 //                   /
 //                  /
 //                 /
 //(center-bottom) *----O (outer bottom)
 const MAX_LENGTH = Math.sqrt( MAX_LENGTH_SQUARE * MAX_LENGTH_SQUARE + ( MAX_LENGTH_SQUARE / 2 ) * ( MAX_LENGTH_SQUARE / 2 ) );
-
 
 // highest octave is loudest at min length and silent beyond half length
 const UPPER_OCTAVE_LENGTH_TO_OUTPUT_LEVEL = new LinearFunction( MIN_LENGTH, MAX_LENGTH / 2, 1, 0, true );
@@ -49,8 +54,7 @@ const MIDDLE_OCTAVE_LENGTH_TO_OUTPUT_LEVEL = new PiecewiseLinearFunction( [ MIN_
 // highest octave is loudest at max length and silent lower than half length
 const LOWER_OCTAVE_LENGTH_TO_OUTPUT_LEVEL = new LinearFunction( MAX_LENGTH / 2, MAX_LENGTH, 0, 1, true );
 
-const SOUND_PLAY_TIME = 2;
-
+// Maps soundFileProperty to the WrappedAudioBuffer for the SoundClip
 const AUDIO_BUFFER_MAP = new Map();
 AUDIO_BUFFER_MAP.set( soundFileProperty.enumeration.ONE, quadLoop01Sound );
 AUDIO_BUFFER_MAP.set( soundFileProperty.enumeration.TWO, quadLoop02Sound );
@@ -58,18 +62,14 @@ AUDIO_BUFFER_MAP.set( soundFileProperty.enumeration.THREE, quadLoop03Sound );
 AUDIO_BUFFER_MAP.set( soundFileProperty.enumeration.FOUR, quadLoop04Sound );
 
 class SideSoundView {
-  constructor( side, options ) {
 
-    options = merge( {
-      firstOctaveAngleToRate: new LinearFunction( Math.PI / 4, Math.PI / 2, 0.5, 1 ),
-      secondOctaveAngleToRate: new LinearFunction( Math.PI / 2, 3 * Math.PI / 4, 1, 2 )
-    }, options );
-
-    // initialize to max value so sound doesn't start until first change
-    this.timePlayingSound = SOUND_PLAY_TIME;
-
+  /**
+   * @param {Side} side
+   */
+  constructor( side ) {
     this.side = side;
 
+    // @private {Map} - A map that goes from playback rate to the created SoundClipCollection.
     this.playbackRateToSoundClipCollection = new Map();
 
     // Create sound clips for the chosen sound - while still exploring different sounds we will
@@ -77,10 +77,12 @@ class SideSoundView {
       this.createSoundClips( selectedSound );
     } );
 
+    // A map that goes between tilt to the value used to calculate playback rate for a particular tilt. Initial value
+    // for each side is Math.PI / 2. A value of 0 is fully tilted to the "left" while a value of Math.PI is fully
+    // tilted to the right.
     this.tiltToPlaybackExponential = new LinearFunction( 0, Math.PI, MIN_SOUND_CLIP_EXPONENTIAL, MAX_SOUND_CLIP_EXPONENTIAL );
 
     this.activeSoundClipCollection = null;
-    this.previousSoundClipCollection = null;
   }
 
   /**
@@ -100,7 +102,6 @@ class SideSoundView {
     const selectedSound = AUDIO_BUFFER_MAP.get( soundFile );
 
     for ( let i = MIN_SOUND_CLIP_EXPONENTIAL; i <= MAX_SOUND_CLIP_EXPONENTIAL; i++ ) {
-      console.log( i / 12 );
       const playbackRate = Math.pow( 2, i / 12 );
       const soundClipCollection = new SoundClipCollection( selectedSound, playbackRate );
 
@@ -134,17 +135,6 @@ class SideSoundView {
         }
       } );
 
-      // there is a previous collection and it is actively playing, fade those out
-      if ( this.previousSoundClipCollection ) {
-        // this.previousSoundClipCollection.fadeOutClips();
-      }
-
-      // the activeSoundClipCollection is about to be replaced, fade it out
-      if ( this.activeSoundClipCollection ) {
-        this.previousSoundClipCollection = this.activeSoundClipCollection;
-        // this.previousSoundClipCollection.fadeOutClips();
-      }
-
       newCollection.startPlayingSounds();
       this.activeSoundClipCollection = newCollection;
     }
@@ -168,8 +158,8 @@ class SideSoundView {
   }
 
   /**
-   * Play all sound clips.
-   * @private
+   * Start playing the active SoundClipCollection.
+   * @public
    */
   playSoundClips() {
     if ( this.activeSoundClipCollection ) {
@@ -178,24 +168,12 @@ class SideSoundView {
   }
 
   /**
-   * Stop playing all sound clips.
-   * @private
-   */
-  stopSoundClips() {
-    if ( this.activeSoundClipCollection ) {
-      this.activeSoundClipCollection.stopSoundClips();
-    }
-  }
-
-  /**
-   * Step the sound view, starting/stopping playing depending on how long we have been playing already.
+   * Step the sound view, stopping all of the SoundClipCollections.
    * @public
    *
    * @param {number} dt
    */
   step( dt ) {
-
-    // step all clips
     this.playbackRateToSoundClipCollection.forEach( value => {
       value.step( dt );
     } );
@@ -203,19 +181,32 @@ class SideSoundView {
 }
 
 class SoundClipCollection extends SoundGenerator {
+
+  /**
+   * @param {WrappedAudioBuffer} wrappedAudioBuffer
+   * @param {number} defaultPlaybackRate - The middle octave playbackRate for this collection. The collection will
+   *                                       contain clips with playback rates that are one octave above and one octave
+   *                                       below this rate.
+   * @param {Object} [options]
+   */
   constructor( wrappedAudioBuffer, defaultPlaybackRate, options ) {
 
     super( options );
 
+    // @private {number} - See constructor
     this.defaultPlaybackRate = defaultPlaybackRate;
 
+    // @private {number} - The length of time that SoundClips will take to fade out and in while playing, in seconds
     this.fadeDuration = 0.35;
 
-    // fade from 0 to 1 over the fadeDuration
+    // @private {number} - The rate of fadeout, used to modify the output level in step so that it can go up or down
+    // when fading in adn out, in 1 / seconds.
     this.fadeRate = 1 / this.fadeDuration;
 
+    // @private {number} - How long clips play for, in seconds.
     this.playDuration = 2.0;
 
+    // @private {number} - The amount of time remaining for this SoundClipCollection to play.
     this.remainingPlayTime = 0;
 
     this.clipOutputLevel = 0;
