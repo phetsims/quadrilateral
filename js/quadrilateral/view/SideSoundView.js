@@ -329,7 +329,6 @@ class SoundClipCollection extends SoundGenerator {
 
       // we haven't started playing yet, start now
       if ( !this.anyClipsPlayingProperty.value ) {
-        assert && assert( this.clipOutputLevel < 0.2, 'if starting play, should be quiet to avoid distortion' );
         this.playSoundClips();
       }
 
