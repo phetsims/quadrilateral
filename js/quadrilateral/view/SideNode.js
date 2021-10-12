@@ -15,6 +15,7 @@ import Voicing from '../../../../scenery/js/accessibility/voicing/Voicing.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import KeyboardDragListener from '../../../../scenery/js/listeners/KeyboardDragListener.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 
 class SideNode extends Line {
@@ -32,7 +33,10 @@ class SideNode extends Line {
 
       // pdom
       tagName: 'div',
-      focusable: true
+      focusable: true,
+
+      // phet-io
+      tandem: Tandem.OPTIONAL
     }, options );
 
     super( 0, 0, 0, 0, options );
@@ -96,7 +100,9 @@ class SideNode extends Line {
             this.rotateVertexAroundOther( side.vertex2, side.vertex1, modelPoint );
           }
         }
-      }
+      },
+
+      tandem: options.tandem.createTandem( 'dragListener' )
     } ) );
   }
 

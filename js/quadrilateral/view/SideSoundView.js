@@ -321,10 +321,6 @@ class SoundClipCollection extends SoundGenerator {
           this.stopSoundClips();
         }
       }
-
-      if ( this.anyClipsPlayingProperty.value ) {
-        assert && assert( Math.abs( this.clipOutputLevel - this.outputLevelGainNode.gain.value ) < 0.5, 'large change, likely distortion' );
-      }
       this.outputLevelGainNode.gain.value = this.clipOutputLevel;
 
       // we haven't started playing yet, start now
