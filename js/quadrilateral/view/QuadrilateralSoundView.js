@@ -7,6 +7,8 @@
  */
 
 import quadrilateral from '../../quadrilateral.js';
+import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
+import ParallelsVolumeSoundView from './ParallelsVolumeSoundView.js';
 import QuartetSoundView from './QuartetSoundView.js';
 
 // constants
@@ -20,9 +22,15 @@ class QuadrilateralSoundView {
   constructor( model, soundOptionsModel ) {
 
     const quartetSoundView = new QuartetSoundView( model, soundOptionsModel );
+    const parallelsVolumeSoundView = new ParallelsVolumeSoundView( model, soundOptionsModel );
 
     // @private {*}
-    this.activeSoundView = quartetSoundView;
+    this.activeSoundView = null;
+
+    soundOptionsModel.soundDesignProperty.link( soundDesign => {
+      this.activeSoundView = soundDesign === QuadrilateralSoundOptionsModel.SoundDesign.QUARTET ? quartetSoundView :
+                             parallelsVolumeSoundView;
+    } );
   }
 
   /**

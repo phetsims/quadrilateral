@@ -14,6 +14,7 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Range from '../../../../dot/js/Range.js';
+import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
@@ -66,6 +67,14 @@ class QuadrilateralModel {
       range: new Range( 0.01, 0.3 )
     } );
 
+    // @public {NumberProperty} - A value that controls the threshold for determining when two sides are
+    // parallel. The slope is calculated and if the slope of two sides is equal within this epsilon, they
+    // are considered in parallel.
+    this.slopeEqualityEpsilonProperty = new NumberProperty( 0.1, {
+      tandem: tandem.createTandem( 'angleEqualityEpsilonProperty' ),
+      range: new Range( 0.01, 0.3 )
+    } );
+
     // {DerivedProperty.<boolean} - Values that represents the difference of opposing angles, in radians. When both of
     // these values becomes less than this.angleEqualityEpsilonProperty the quad is considered to be a parallelogram.
     // These values are pulled out as Properties from the isParallelogramProperty calculation because it is expected
@@ -90,7 +99,24 @@ class QuadrilateralModel {
       phetioType: DerivedProperty.DerivedPropertyIO( BooleanIO )
     } );
 
+    // @public {Emitter} - Emits an event whenever the shape of the Quadrilateral changes
     this.shapeChangedEmitter = new Emitter();
+
+    // @public {DerivedProperty.<boolean>} - true when the left side and right side are parallel
+    this.leftSideRightSideParallelProperty = new DerivedProperty(
+      [ this.leftSide.slopeProperty, this.rightSide.slopeProperty, this.slopeEqualityEpsilonProperty ],
+      ( leftSlope, rightSlope, epsilon ) => {
+        return Utils.equalsEpsilon( leftSlope, rightSlope, epsilon );
+      }
+    );
+
+    // @public {DerivedProperty.<boolean>} - true when the top side and bottom side are in parallel
+    this.leftSideRightSideParallelProperty = new DerivedProperty(
+      [ this.topSide.slopeProperty, this.bottomSide.slopeProperty, this.slopeEqualityEpsilonProperty ],
+      ( topSide, bottomSide, epsilon ) => {
+        return Utils.equalsEpsilon( topSide, bottomSide, epsilon );
+      }
+    );
 
     Property.multilink( [
         this.vertex1.positionProperty,
@@ -101,11 +127,6 @@ class QuadrilateralModel {
         this.shapeChangedEmitter.emit();
       }
     );
-
-    this.rightSide.tiltProperty.link( rightAngleToHorizontal => {
-      // Vertex.calculateAngle( this.rightSide.vertex1.positionProperty.value, this.rightSide.vertex2.positionProperty.value, this.rightSide.vertex2.positionProperty.value.plusXY( 1, 0 ) );
-      // console.log( rightAngleToHorizontal );
-    } );
   }
 
   /**

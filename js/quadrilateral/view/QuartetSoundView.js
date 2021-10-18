@@ -20,10 +20,10 @@ class QuartetSoundView {
    */
   constructor( model, soundOptionsModel ) {
 
-    this.topSideSoundView = new QuartetSideSoundView( model.topSide, soundOptionsModel.quartetSoundFileProperty );
-    this.rightSideSoundView = new QuartetSideSoundView( model.rightSide, soundOptionsModel.quartetSoundFileProperty );
-    this.bottomSideSoundView = new QuartetSideSoundView( model.bottomSide, soundOptionsModel.quartetSoundFileProperty );
-    this.leftSideSoundView = new QuartetSideSoundView( model.leftSide, soundOptionsModel.quartetSoundFileProperty );
+    this.topSideSoundView = new QuartetSideSoundView( model.topSide, soundOptionsModel.baseSoundFileProperty );
+    this.rightSideSoundView = new QuartetSideSoundView( model.rightSide, soundOptionsModel.baseSoundFileProperty );
+    this.bottomSideSoundView = new QuartetSideSoundView( model.bottomSide, soundOptionsModel.baseSoundFileProperty );
+    this.leftSideSoundView = new QuartetSideSoundView( model.leftSide, soundOptionsModel.baseSoundFileProperty );
 
     model.shapeChangedEmitter.addListener( () => {
       this.topSideSoundView.startPlayingSounds();

@@ -26,27 +26,27 @@ class QuadrilateralSoundOptionsNode extends Panel {
     const radioButtonItems = [
       {
         node: new Text( 'Sound One', TEXT_OPTIONS ),
-        value: model.quartetSoundFileProperty.enumeration.ONE,
+        value: model.baseSoundFileProperty.enumeration.ONE,
         tandemName: 'soundOneRadioButton'
       },
       {
         node: new Text( 'Sound Two', TEXT_OPTIONS ),
-        value: model.quartetSoundFileProperty.enumeration.TWO,
+        value: model.baseSoundFileProperty.enumeration.TWO,
         tandemName: 'soundTwoRadioButton'
       },
       {
         node: new Text( 'Sound Three', TEXT_OPTIONS ),
-        value: model.quartetSoundFileProperty.enumeration.THREE,
+        value: model.baseSoundFileProperty.enumeration.THREE,
         tandemName: 'soundThreeRadioButton'
       },
       {
         node: new Text( 'Sound Four', TEXT_OPTIONS ),
-        value: model.quartetSoundFileProperty.enumeration.FOUR,
+        value: model.baseSoundFileProperty.enumeration.FOUR,
         tandemName: 'soundFourRadioButton'
       }
     ];
 
-    const optionsRadioButtonGroup = new VerticalAquaRadioButtonGroup( model.quartetSoundFileProperty, radioButtonItems, {
+    const optionsRadioButtonGroup = new VerticalAquaRadioButtonGroup( model.baseSoundFileProperty, radioButtonItems, {
       tandem: tandem.createTandem( 'optionsRadioButtonGroup' )
     } );
     super( optionsRadioButtonGroup );
