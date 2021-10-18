@@ -12,7 +12,7 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import SideNode from './SideNode.js';
-import SideSoundView from './SideSoundView.js';
+import QuartetSideSoundView from './QuartetSideSoundView.js';
 import VertexNode from './VertexNode.js';
 
 class SideDemonstrationNode extends Node {
@@ -20,9 +20,10 @@ class SideDemonstrationNode extends Node {
   /**
    * @param {QuadrilateralModel} model
    * @param {ModelViewTransform2} modelViewTransform
+   * @param {QuadrilateralSoundOptionsModel} soundOptionsModel
    * @param {Object} [options]
    */
-  constructor( model, modelViewTransform, options ) {
+  constructor( model, modelViewTransform, soundOptionsModel, options ) {
     super( options );
 
     const vertex1Node = new VertexNode( model.vertex1, modelViewTransform );
@@ -34,7 +35,7 @@ class SideDemonstrationNode extends Node {
       const rightSideNode = new SideNode( model.rightSide, modelViewTransform );
       this.addChild( rightSideNode );
 
-      this.rightSideSoundView = new SideSoundView( model.rightSide );
+      this.rightSideSoundView = new QuartetSideSoundView( model.rightSide, soundOptionsModel.quartetSoundFileProperty );
       model.shapeChangedEmitter.addListener( () => {
         this.rightSideSoundView.startPlayingSounds();
       } );
@@ -44,7 +45,7 @@ class SideDemonstrationNode extends Node {
       this.addChild( leftSideNode );
 
       // sound
-      this.leftSideSoundView = new SideSoundView( model.leftSide );
+      this.leftSideSoundView = new QuartetSideSoundView( model.leftSide, soundOptionsModel.quartetSoundFileProperty );
       model.shapeChangedEmitter.addListener( () => {
         this.leftSideSoundView.startPlayingSounds();
       } );
@@ -54,7 +55,7 @@ class SideDemonstrationNode extends Node {
       this.addChild( topSideNode );
 
       // sound
-      this.topSideSoundView = new SideSoundView( model.topSide );
+      this.topSideSoundView = new QuartetSideSoundView( model.topSide, soundOptionsModel.quartetSoundFileProperty );
       model.shapeChangedEmitter.addListener( () => {
         this.topSideSoundView.startPlayingSounds();
       } );
@@ -64,7 +65,7 @@ class SideDemonstrationNode extends Node {
       this.addChild( bottomSideNode );
 
       // sound
-      this.bottomSideSoundView = new SideSoundView( model.bottomSide );
+      this.bottomSideSoundView = new QuartetSideSoundView( model.bottomSide, soundOptionsModel.quartetSoundFileProperty );
       model.shapeChangedEmitter.addListener( () => {
         this.bottomSideSoundView.startPlayingSounds();
       } );

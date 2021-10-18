@@ -9,7 +9,6 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Panel from '../../../../sun/js/Panel.js';
 import VerticalAquaRadioButtonGroup from '../../../../sun/js/VerticalAquaRadioButtonGroup.js';
-import soundFileProperty from '../../common/soundFileProperty.js';
 import quadrilateral from '../../quadrilateral.js';
 
 const TEXT_OPTIONS = {
@@ -19,34 +18,35 @@ const TEXT_OPTIONS = {
 class QuadrilateralSoundOptionsNode extends Panel {
 
   /**
+   * @param {QuadrilateralSoundOptionsModel} model
    * @param {Tandem} tandem
    */
-  constructor( tandem ) {
+  constructor( model, tandem ) {
 
     const radioButtonItems = [
       {
         node: new Text( 'Sound One', TEXT_OPTIONS ),
-        value: soundFileProperty.enumeration.ONE,
+        value: model.quartetSoundFileProperty.enumeration.ONE,
         tandemName: 'soundOneRadioButton'
       },
       {
         node: new Text( 'Sound Two', TEXT_OPTIONS ),
-        value: soundFileProperty.enumeration.TWO,
+        value: model.quartetSoundFileProperty.enumeration.TWO,
         tandemName: 'soundTwoRadioButton'
       },
       {
         node: new Text( 'Sound Three', TEXT_OPTIONS ),
-        value: soundFileProperty.enumeration.THREE,
+        value: model.quartetSoundFileProperty.enumeration.THREE,
         tandemName: 'soundThreeRadioButton'
       },
       {
         node: new Text( 'Sound Four', TEXT_OPTIONS ),
-        value: soundFileProperty.enumeration.FOUR,
+        value: model.quartetSoundFileProperty.enumeration.FOUR,
         tandemName: 'soundFourRadioButton'
       }
     ];
 
-    const optionsRadioButtonGroup = new VerticalAquaRadioButtonGroup( soundFileProperty, radioButtonItems, {
+    const optionsRadioButtonGroup = new VerticalAquaRadioButtonGroup( model.quartetSoundFileProperty, radioButtonItems, {
       tandem: tandem.createTandem( 'optionsRadioButtonGroup' )
     } );
     super( optionsRadioButtonGroup );

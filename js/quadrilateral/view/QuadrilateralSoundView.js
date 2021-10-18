@@ -7,8 +7,7 @@
  */
 
 import quadrilateral from '../../quadrilateral.js';
-import SideSoundView from './SideSoundView.js';
-
+import QuartetSoundView from './QuartetSoundView.js';
 
 // constants
 
@@ -16,33 +15,27 @@ class QuadrilateralSoundView {
 
   /**
    * @param {QuadrilateralModel} model
+   * @param {QuadrilateralSoundOptionsModel} soundOptionsModel
    */
-  constructor( model ) {
+  constructor( model, soundOptionsModel ) {
 
-    this.topSideSoundView = new SideSoundView( model.topSide );
-    this.rightSideSoundView = new SideSoundView( model.rightSide );
-    this.bottomSideSoundView = new SideSoundView( model.bottomSide );
-    this.leftSideSoundView = new SideSoundView( model.leftSide );
+    const quartetSoundView = new QuartetSoundView( model, soundOptionsModel );
 
-    model.shapeChangedEmitter.addListener( () => {
-      this.topSideSoundView.startPlayingSounds();
-      this.rightSideSoundView.startPlayingSounds();
-      this.bottomSideSoundView.startPlayingSounds();
-      this.leftSideSoundView.startPlayingSounds();
-    } );
+    // @private {*}
+    this.activeSoundView = quartetSoundView;
   }
 
   /**
-   * Step the sound view, playing sounds for their allotted time.
+   * Step the sound view.
    * @public
-   * @param dt
+   *
+   * @param {number} dt - in seconds
    */
   step( dt ) {
-    this.topSideSoundView.step( dt );
-    this.rightSideSoundView.step( dt );
-    this.bottomSideSoundView.step( dt );
-    this.leftSideSoundView.step( dt );
+
+    this.activeSoundView.step( dt );
   }
+
 }
 
 quadrilateral.register( 'QuadrilateralSoundView', QuadrilateralSoundView );

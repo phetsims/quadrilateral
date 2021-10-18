@@ -21,9 +21,10 @@ class QuadrilateralScreenView extends ScreenView {
 
   /**
    * @param {QuadrilateralModel} model
+   * @param {QuadrilateralSoundOptionsModel} soundOptionsModel
    * @param {Tandem} tandem
    */
-  constructor( model, tandem ) {
+  constructor( model, soundOptionsModel, tandem ) {
     assert && assert( model instanceof QuadrilateralModel, 'invalid model' );
     assert && assert( tandem instanceof Tandem, 'invalid tandem' );
 
@@ -46,7 +47,7 @@ class QuadrilateralScreenView extends ScreenView {
 
     if ( QuadrilateralQueryParameters.rightSide || QuadrilateralQueryParameters.leftSide ||
          QuadrilateralQueryParameters.topSide || QuadrilateralQueryParameters.bottomSide ) {
-      this.demonstrationNode = new SideDemonstrationNode( model, modelViewTransform );
+      this.demonstrationNode = new SideDemonstrationNode( model, modelViewTransform, soundOptionsModel );
       this.addChild( this.demonstrationNode );
     }
     else {
@@ -55,7 +56,7 @@ class QuadrilateralScreenView extends ScreenView {
       } );
       this.addChild( quadrilateralNode );
 
-      this.quadrilateralSoundView = new QuadrilateralSoundView( model );
+      this.quadrilateralSoundView = new QuadrilateralSoundView( model, soundOptionsModel );
     }
 
     const resetAllButton = new ResetAllButton( {

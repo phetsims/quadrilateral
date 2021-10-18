@@ -10,11 +10,14 @@ import PreferencesConfiguration from '../../joist/js/preferences/PreferencesConf
 import Sim from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
 import Tandem from '../../tandem/js/Tandem.js';
+import QuadrilateralSoundOptionsModel from './quadrilateral/model/QuadrilateralSoundOptionsModel.js';
 import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';
 import QuadrilateralSoundOptionsNode from './quadrilateral/view/QuadrilateralSoundOptionsNode.js';
 import quadrilateralStrings from './quadrilateralStrings.js';
 
 const quadrilateralTitleString = quadrilateralStrings.quadrilateral.title;
+
+const soundOptionsModel = new QuadrilateralSoundOptionsModel();
 
 const simOptions = {
 
@@ -32,7 +35,7 @@ const simOptions = {
   // preferences configuration with defaults from package.json
   preferencesConfiguration: new PreferencesConfiguration( {
     generalOptions: {
-      simControls: new QuadrilateralSoundOptionsNode( Tandem.GENERAL_VIEW )
+      simControls: new QuadrilateralSoundOptionsNode( soundOptionsModel, Tandem.GENERAL_VIEW )
     }
   } )
 };
@@ -41,7 +44,7 @@ const simOptions = {
 // until the images are fully loaded, see https://github.com/phetsims/coulombs-law/issues/70
 simLauncher.launch( () => {
   const sim = new Sim( quadrilateralTitleString, [
-    new QuadrilateralScreen( Tandem.ROOT.createTandem( 'quadrilateralScreen' ) )
+    new QuadrilateralScreen( soundOptionsModel, Tandem.ROOT.createTandem( 'quadrilateralScreen' ) )
   ], simOptions );
   sim.start();
 } );

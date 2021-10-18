@@ -22,8 +22,8 @@ import quadLoop01Sound from '../../../sounds/quad-loop-01_mp3.js';
 import quadLoop02Sound from '../../../sounds/quad-loop-02_mp3.js';
 import quadLoop03Sound from '../../../sounds/quad-loop-03_mp3.js';
 import quadLoop04Sound from '../../../sounds/quad-loop-04_mp3.js';
-import soundFileProperty from '../../common/soundFileProperty.js';
 import quadrilateral from '../../quadrilateral.js';
+import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
 
 // constants
 // TODO: calculate these from constants, should be based on the limitations of each vertex bounds
@@ -56,24 +56,25 @@ const LOWER_OCTAVE_LENGTH_TO_OUTPUT_LEVEL = new LinearFunction( MAX_LENGTH / 2, 
 
 // Maps soundFileProperty to the WrappedAudioBuffer for the SoundClip
 const AUDIO_BUFFER_MAP = new Map();
-AUDIO_BUFFER_MAP.set( soundFileProperty.enumeration.ONE, quadLoop01Sound );
-AUDIO_BUFFER_MAP.set( soundFileProperty.enumeration.TWO, quadLoop02Sound );
-AUDIO_BUFFER_MAP.set( soundFileProperty.enumeration.THREE, quadLoop03Sound );
-AUDIO_BUFFER_MAP.set( soundFileProperty.enumeration.FOUR, quadLoop04Sound );
+AUDIO_BUFFER_MAP.set( QuadrilateralSoundOptionsModel.QuartetSoundFile.ONE, quadLoop01Sound );
+AUDIO_BUFFER_MAP.set( QuadrilateralSoundOptionsModel.QuartetSoundFile.TWO, quadLoop02Sound );
+AUDIO_BUFFER_MAP.set( QuadrilateralSoundOptionsModel.QuartetSoundFile.THREE, quadLoop03Sound );
+AUDIO_BUFFER_MAP.set( QuadrilateralSoundOptionsModel.QuartetSoundFile.FOUR, quadLoop04Sound );
 
-class SideSoundView {
+class QuartetSideSoundView {
 
   /**
    * @param {Side} side
+   * @param {EnumerationProperty} quartetSoundFileProperty
    */
-  constructor( side ) {
+  constructor( side, quartetSoundFileProperty ) {
     this.side = side;
 
     // @private {Map} - A map that goes from playback rate to the created SoundClipCollection.
     this.playbackRateToSoundClipCollection = new Map();
 
     // Create sound clips for the chosen sound - while still exploring different sounds we will
-    soundFileProperty.link( selectedSound => {
+    quartetSoundFileProperty.link( selectedSound => {
       this.createSoundClips( selectedSound );
     } );
 
@@ -378,5 +379,5 @@ class SoundClipCollection extends SoundGenerator {
   }
 }
 
-quadrilateral.register( 'SideSoundView', SideSoundView );
-export default SideSoundView;
+quadrilateral.register( 'QuartetSideSoundView', QuartetSideSoundView );
+export default QuartetSideSoundView;

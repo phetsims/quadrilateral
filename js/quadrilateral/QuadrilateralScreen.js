@@ -13,9 +13,10 @@ import QuadrilateralScreenView from './view/QuadrilateralScreenView.js';
 class QuadrilateralScreen extends Screen {
 
   /**
+   * @param {QuadrilateralSoundOptionsModel} soundOptionsModel
    * @param {Tandem} tandem
    */
-  constructor( tandem ) {
+  constructor( soundOptionsModel, tandem ) {
 
     const options = {
       //TODO if you include homeScreenIcon or navigationBarIcon, use JOIST/ScreenIcon
@@ -25,7 +26,7 @@ class QuadrilateralScreen extends Screen {
 
     super(
       () => new QuadrilateralModel( tandem.createTandem( 'model' ) ),
-      model => new QuadrilateralScreenView( model, tandem.createTandem( 'view' ) ),
+      model => new QuadrilateralScreenView( model, soundOptionsModel, tandem.createTandem( 'view' ) ),
       options
     );
   }
