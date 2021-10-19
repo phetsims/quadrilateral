@@ -8,6 +8,7 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import quadrilateral from '../../quadrilateral.js';
@@ -16,20 +17,20 @@ class Vertex {
 
   /**
    * @param {Vector2} initialPosition
-   * @param {Bounds2} bounds
    * @param {Tandem} tandem
    */
-  constructor( initialPosition, bounds, tandem ) {
+  constructor( initialPosition, tandem ) {
 
     // @public {Vector2Property} - the position of this vertex in model space
     this.positionProperty = new Vector2Property( initialPosition, {
-      tandem: tandem.createTandem( 'positionProperty' ),
-      validBounds: bounds
+      tandem: tandem.createTandem( 'positionProperty' )
     } );
 
     // @public {DerivedProperty.<number>|null} - the angle at this vertex of the quadrilateral, null until
     // this vertex is connected to two others because we need three points to form the angle
     this.angleProperty = null;
+
+    this.dragBoundsProperty = new Property( null );
 
     // @public {BooleanProperty
     this.isPressedProperty = new BooleanProperty( false, {

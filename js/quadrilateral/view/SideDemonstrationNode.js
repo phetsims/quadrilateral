@@ -11,8 +11,8 @@
 import Node from '../../../../scenery/js/nodes/Node.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
-import SideNode from './SideNode.js';
 import QuartetSideSoundView from './QuartetSideSoundView.js';
+import SideNode from './SideNode.js';
 import VertexNode from './VertexNode.js';
 
 class SideDemonstrationNode extends Node {
@@ -21,9 +21,10 @@ class SideDemonstrationNode extends Node {
    * @param {QuadrilateralModel} model
    * @param {ModelViewTransform2} modelViewTransform
    * @param {QuadrilateralSoundOptionsModel} soundOptionsModel
+   * @param {Bounds2} layoutBounds
    * @param {Object} [options]
    */
-  constructor( model, modelViewTransform, soundOptionsModel, options ) {
+  constructor( model, modelViewTransform, layoutBounds, soundOptionsModel, options ) {
     super( options );
 
     const vertex1Node = new VertexNode( model.vertex1, modelViewTransform );

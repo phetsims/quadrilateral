@@ -389,9 +389,18 @@ class SoundClipCollection extends SoundGenerator {
 
   // @private
   setOutputLevels( length ) {
-    this.lowerOctaveClip.setOutputLevel( LOWER_OCTAVE_LENGTH_TO_OUTPUT_LEVEL( length ) );
-    this.middleOctaveClip.setOutputLevel( MIDDLE_OCTAVE_LENGTH_TO_OUTPUT_LEVEL.evaluate( length ) );
-    this.upperOctaveClip.setOutputLevel( UPPER_OCTAVE_LENGTH_TO_OUTPUT_LEVEL( length ) );
+
+    // outside the bounds of the piecewise functions, just use the lowest octave for long lengths for now
+    if ( length > MAX_LENGTH ) {
+      this.lowerOctaveClip.setOutputLevel( 1 );
+      this.middleOctaveClip.setOutputLevel( 0 );
+      this.upperOctaveClip.setOutputLevel( 0 );
+    }
+    else {
+      this.lowerOctaveClip.setOutputLevel( LOWER_OCTAVE_LENGTH_TO_OUTPUT_LEVEL( length ) );
+      this.middleOctaveClip.setOutputLevel( MIDDLE_OCTAVE_LENGTH_TO_OUTPUT_LEVEL.evaluate( length ) );
+      this.upperOctaveClip.setOutputLevel( UPPER_OCTAVE_LENGTH_TO_OUTPUT_LEVEL( length ) );
+    }
   }
 
   // @private

@@ -45,16 +45,18 @@ class QuadrilateralScreenView extends ScreenView {
       )
     );
 
+    this.quadrilateralNode = null;
+
     if ( QuadrilateralQueryParameters.rightSide || QuadrilateralQueryParameters.leftSide ||
          QuadrilateralQueryParameters.topSide || QuadrilateralQueryParameters.bottomSide ) {
-      this.demonstrationNode = new SideDemonstrationNode( model, modelViewTransform, soundOptionsModel );
+      this.demonstrationNode = new SideDemonstrationNode( model, modelViewTransform, this.layoutBounds, soundOptionsModel );
       this.addChild( this.demonstrationNode );
     }
     else {
-      const quadrilateralNode = new QuadrilateralNode( model, modelViewTransform, {
+      this.quadrilateralNode = new QuadrilateralNode( model, modelViewTransform, this.layoutBounds, {
         tandem: tandem.createTandem( 'quadrilateralNode' )
       } );
-      this.addChild( quadrilateralNode );
+      this.addChild( this.quadrilateralNode );
 
       this.quadrilateralSoundView = new QuadrilateralSoundView( model, soundOptionsModel );
     }
@@ -122,6 +124,17 @@ class QuadrilateralScreenView extends ScreenView {
     if ( this.demonstrationNode ) {
       this.demonstrationNode.step( dt );
     }
+  }
+
+  /**
+   * @public
+   * @override
+   * @param viewBounds
+   */
+  layout( viewBounds ) {
+    super.layout( viewBounds );
+
+    this.quadrilateralNode && this.quadrilateralNode.layout( this.layoutBounds );
   }
 }
 

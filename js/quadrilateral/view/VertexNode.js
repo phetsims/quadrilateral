@@ -6,7 +6,6 @@
  * @author Jesse Greenberg
  */
 
-import Property from '../../../../axon/js/Property.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Voicing from '../../../../scenery/js/accessibility/voicing/Voicing.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
@@ -54,18 +53,19 @@ class VertexNode extends Circle {
     } );
 
     // A basic keyboard input listener.
-    this.addInputListener( new KeyboardDragListener( {
+    const keyboardDragListener = new KeyboardDragListener( {
       positionProperty: vertex.positionProperty,
       transform: modelViewTransform,
-      dragBounds: vertex.positionProperty.validBounds,
+      dragBounds: vertex.dragBoundsProperty.value,
       shiftDragVelocity: 100
-    } ) );
+    } );
+    this.addInputListener( keyboardDragListener );
 
     // @private {DragListener}
     const dragListener = new DragListener( {
       positionProperty: vertex.positionProperty,
       transform: modelViewTransform,
-      dragBoundsProperty: new Property( vertex.positionProperty.validBounds ),
+      dragBoundsProperty: vertex.dragBoundsProperty,
       tandem: options.tandem.createTandem( 'dragListener' )
     } );
     this.addInputListener( dragListener );
@@ -78,6 +78,10 @@ class VertexNode extends Circle {
     // we are afraid a graphical design will influence other modalities.
     this.mouseArea = this.localBounds;
     this.touchArea = this.mouseArea;
+
+    vertex.dragBoundsProperty.link( dragBounds => {
+      keyboardDragListener.dragBounds = dragBounds;
+    } );
   }
 }
 

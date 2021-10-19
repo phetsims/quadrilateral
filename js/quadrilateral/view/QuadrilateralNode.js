@@ -4,6 +4,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import voicingUtteranceQueue from '../../../../scenery/js/accessibility/voicing/voicingUtteranceQueue.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
@@ -30,15 +31,19 @@ class QuadrilateralNode extends Node {
   /**
    * @param {QuadrilateralModel} model
    * @param {ModelViewTransform2} modelViewTransform
+   * @param {Bounds2} layoutBounds
    * @param {Object} [options]
    */
-  constructor( model, modelViewTransform, options ) {
+  constructor( model, modelViewTransform, layoutBounds, options ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED
     }, options );
 
     super( options );
+
+    this.model = model;
+    this.modelViewTransform = modelViewTransform;
 
     const vertexNode1 = new VertexNode( model.vertex1, modelViewTransform, {
 
@@ -48,6 +53,7 @@ class QuadrilateralNode extends Node {
       // phet-io
       tandem: options.tandem.createTandem( 'vertex1Node' )
     } );
+
     const vertexNode2 = new VertexNode( model.vertex2, modelViewTransform, {
 
       // voicing
@@ -56,6 +62,7 @@ class QuadrilateralNode extends Node {
       // phet-io
       tandem: options.tandem.createTandem( 'vertex2Node' )
     } );
+
     const vertexNode3 = new VertexNode( model.vertex3, modelViewTransform, {
 
       // voicing
@@ -64,6 +71,7 @@ class QuadrilateralNode extends Node {
       // phet-io
       tandem: options.tandem.createTandem( 'vertex3Node' )
     } );
+
     const vertexNode4 = new VertexNode( model.vertex4, modelViewTransform, {
 
       // voicing
@@ -115,6 +123,33 @@ class QuadrilateralNode extends Node {
       const alertString = isParallelogram ? parallelogramSuccessString : parallelogramFailureString;
       voicingUtteranceQueue.addToBack( alertString );
     } );
+  }
+
+  /**
+   * When the layout bounds change, update the available drag bounds for each vertex.
+   * @public
+   * @param {Bounds2} layoutBounds
+   */
+  layout( layoutBounds ) {
+    this.model.vertex1.dragBoundsProperty.value = new Bounds2(
+      this.modelViewTransform.viewToModelX( layoutBounds.minX ), 0.05,
+      -0.05, this.modelViewTransform.viewToModelY( layoutBounds.minY )
+    );
+
+    this.model.vertex2.dragBoundsProperty.value = new Bounds2(
+      0.05, 0.05,
+      this.modelViewTransform.viewToModelX( layoutBounds.maxX ), this.modelViewTransform.viewToModelY( layoutBounds.minY )
+    );
+
+    this.model.vertex3.dragBoundsProperty.value = new Bounds2(
+      0.05, this.modelViewTransform.viewToModelY( layoutBounds.maxY ),
+      this.modelViewTransform.viewToModelX( layoutBounds.maxX ), -0.05
+    );
+
+    this.model.vertex4.dragBoundsProperty.value = new Bounds2(
+      this.modelViewTransform.viewToModelX( layoutBounds.minX ), this.modelViewTransform.viewToModelY( layoutBounds.maxY ),
+      -0.05, -0.05
+    );
   }
 }
 

@@ -12,7 +12,6 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -31,14 +30,10 @@ class QuadrilateralModel {
     assert && assert( tandem instanceof Tandem, 'invalid tandem' );
 
     // @public {Vertex}
-    const vertex1Bounds = new Bounds2( -1, 0.05, -0.05, 1 );
-    const vertex2Bounds = new Bounds2( 0.05, 0.05, 1, 1 );
-    const vertex3Bounds = new Bounds2( 0.05, -1, 1, -0.05 );
-    const vertex4Bounds = new Bounds2( -1, -1, -0.05, -0.05 );
-    this.vertex1 = new Vertex( new Vector2( -0.25, 0.25 ), vertex1Bounds, tandem.createTandem( 'vertex1' ) );
-    this.vertex2 = new Vertex( new Vector2( 0.25, 0.25 ), vertex2Bounds, tandem.createTandem( 'vertex2' ) );
-    this.vertex3 = new Vertex( new Vector2( 0.25, -0.25 ), vertex3Bounds, tandem.createTandem( 'vertex3' ) );
-    this.vertex4 = new Vertex( new Vector2( -0.25, -0.25 ), vertex4Bounds, tandem.createTandem( 'vertex4' ) );
+    this.vertex1 = new Vertex( new Vector2( -0.25, 0.25 ), tandem.createTandem( 'vertex1' ) );
+    this.vertex2 = new Vertex( new Vector2( 0.25, 0.25 ), tandem.createTandem( 'vertex2' ) );
+    this.vertex3 = new Vertex( new Vector2( 0.25, -0.25 ), tandem.createTandem( 'vertex3' ) );
+    this.vertex4 = new Vertex( new Vector2( -0.25, -0.25 ), tandem.createTandem( 'vertex4' ) );
 
     // @public {Side} - create the sides of the shape
     this.topSide = new Side( this.vertex1, this.vertex2, tandem.createTandem( 'topSide' ), {
