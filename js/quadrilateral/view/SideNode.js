@@ -118,8 +118,8 @@ class SideNode extends Line {
     const proposedVertex1Position = this.side.vertex1.positionProperty.get().plus( deltaVector );
     const proposedVertex2Position = this.side.vertex2.positionProperty.get().plus( deltaVector );
 
-    if ( this.side.vertex1.positionProperty.validBounds.containsPoint( proposedVertex1Position ) &&
-         this.side.vertex2.positionProperty.validBounds.containsPoint( proposedVertex2Position ) ) {
+    if ( this.side.vertex1.dragBoundsProperty.value.containsPoint( proposedVertex1Position ) &&
+         this.side.vertex2.dragBoundsProperty.value.containsPoint( proposedVertex2Position ) ) {
       this.side.vertex1.positionProperty.set( proposedVertex1Position );
       this.side.vertex2.positionProperty.set( proposedVertex2Position );
     }
@@ -144,7 +144,7 @@ class SideNode extends Line {
 
     const newPosition = rotatePosition.rotatedAboutPoint( anchorPosition, angleDelta );
 
-    if ( armVertex.positionProperty.validBounds.containsPoint( newPosition ) ) {
+    if ( armVertex.dragBoundsProperty.value.containsPoint( newPosition ) ) {
       armVertex.positionProperty.value = newPosition;
     }
   }
