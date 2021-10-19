@@ -79,7 +79,7 @@ class QuadrilateralModel {
     // these values becomes less than this.angleEqualityEpsilonProperty the quad is considered to be a parallelogram.
     // These values are pulled out as Properties from the isParallelogramProperty calculation because it is expected
     // that we will add sounds to represent the differences in these values.
-    const angle1DiffAngle3Property = new DerivedProperty( [ this.vertex1.angleProperty, this.vertex2.angleProperty ], ( angle1, angle3 ) => {
+    const angle1DiffAngle3Property = new DerivedProperty( [ this.vertex1.angleProperty, this.vertex3.angleProperty ], ( angle1, angle3 ) => {
       return Math.abs( angle1 - angle3 );
     } );
     const angle2DiffAngle4Property = new DerivedProperty( [ this.vertex2.angleProperty, this.vertex4.angleProperty ], ( angle2, angle4 ) => {
