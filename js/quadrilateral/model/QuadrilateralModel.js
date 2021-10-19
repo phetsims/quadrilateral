@@ -66,7 +66,7 @@ class QuadrilateralModel {
     // parallel. The slope is calculated and if the slope of two sides is equal within this epsilon, they
     // are considered in parallel.
     this.slopeEqualityEpsilonProperty = new NumberProperty( 0.1, {
-      tandem: tandem.createTandem( 'angleEqualityEpsilonProperty' ),
+      tandem: tandem.createTandem( 'slopeEqualityEpsilonProperty' ),
       range: new Range( 0.01, 0.3 )
     } );
 
