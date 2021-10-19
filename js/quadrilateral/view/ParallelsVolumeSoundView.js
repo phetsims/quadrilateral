@@ -46,12 +46,13 @@ class ParallelsVolumeSoundView {
     this.isPlaying = true;
     this.remainingPlayTime = 0;
 
-    soundOptionsModel.baseSoundFileProperty.link( soundFile => {
+    const createSoundClipsListener = soundFile => {
       const audioBuffer = QuadrilateralSoundOptionsModel.AUDIO_BUFFER_MAP.get( soundFile );
       this.createSoundClips( audioBuffer );
-    } );
+    };
+    soundOptionsModel.baseSoundFileProperty.link( createSoundClipsListener );
 
-    this.model.shapeChangedEmitter.addListener( () => {
+    const shapeChangeListener = () => {
       this.isPlaying = true;
       this.remainingPlayTime = 2;
 
@@ -70,17 +71,20 @@ class ParallelsVolumeSoundView {
         this.topBottomSideGenerator.play();
         this.topBottomSideGenerator.setOutputLevel( this.topBottomSideOutputLevel, 0.3 );
       }
-    } );
+    };
+    this.model.shapeChangedEmitter.addListener( shapeChangeListener );
+
+    this.disposeParallelsVolumeSoundView = () => {
+      this.model.shapeChangedEmitter.removeListener( shapeChangeListener );
+      soundOptionsModel.baseSoundFileProperty.unlink( createSoundClipsListener );
+    };
   }
 
   /**
-   * Create new SoundClips for the audioBuffer. Only necessary because we are playing around with different "base"
-   * sounds for this prototype.
+   * Dispose the SoundClips, removing them from the soundManager.
    * @private
-   *
-   * @param {*} audioBuffer
    */
-  createSoundClips( audioBuffer ) {
+  disposeSoundClips() {
 
     if ( this.leftRightSideGenerator ) {
       soundManager.removeSoundGenerator( this.leftRightSideGenerator );
@@ -94,6 +98,39 @@ class ParallelsVolumeSoundView {
 
       Property.unmultilink( this.topBottomSideMultilink );
     }
+  }
+
+  /**
+   * Dispose this sound view.
+   * @public
+   */
+  dispose() {
+    this.disposeSoundClips();
+    this.disposeParallelsVolumeSoundView();
+  }
+
+  /**
+   * Immediately stops all playing sounds.
+   * @public
+   */
+  stopSounds() {
+    this.leftRightSideGenerator.setOutputLevel( 0 );
+    this.leftRightSideGenerator.setOutputLevel( 0 );
+
+    this.isPlaying = false;
+    this.remainingPlayTime = 0;
+  }
+
+  /**
+   * Create new SoundClips for the audioBuffer. Only necessary because we are playing around with different "base"
+   * sounds for this prototype.
+   * @private
+   *
+   * @param {*} audioBuffer
+   */
+  createSoundClips( audioBuffer ) {
+
+    this.disposeSoundClips();
 
     this.leftRightSideGenerator = new SoundClipChord( audioBuffer, {
       soundClipOptions: {

@@ -25,12 +25,42 @@ class QuartetSoundView {
     this.bottomSideSoundView = new QuartetSideSoundView( model.bottomSide, soundOptionsModel.baseSoundFileProperty );
     this.leftSideSoundView = new QuartetSideSoundView( model.leftSide, soundOptionsModel.baseSoundFileProperty );
 
-    model.shapeChangedEmitter.addListener( () => {
+    // starts playing sounds whenever the shape changes - references for removal on dispose
+    const shapeChangeListener = () => {
       this.topSideSoundView.startPlayingSounds();
       this.rightSideSoundView.startPlayingSounds();
       this.bottomSideSoundView.startPlayingSounds();
       this.leftSideSoundView.startPlayingSounds();
-    } );
+    };
+
+    this.disposeQuartetSoundView = () => {
+      model.shapeChangedEmitter.removeListener( shapeChangeListener );
+    };
+
+    model.shapeChangedEmitter.addListener( shapeChangeListener );
+  }
+
+  /**
+   * Immediately stop playing all sounds from the QuartetSoundView.
+   * @public
+   */
+  stopSounds() {
+    this.topSideSoundView.stopSoundClips();
+    this.rightSideSoundView.stopSoundClips();
+    this.bottomSideSoundView.stopSoundClips();
+    this.leftSideSoundView.stopSoundClips();
+  }
+
+  /**
+   * @public
+   */
+  dispose() {
+    this.topSideSoundView.dispose();
+    this.rightSideSoundView.dispose();
+    this.bottomSideSoundView.dispose();
+    this.leftSideSoundView.dispose();
+
+    this.disposeQuartetSoundView();
   }
 
   /**

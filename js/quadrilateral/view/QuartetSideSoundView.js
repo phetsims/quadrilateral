@@ -73,10 +73,12 @@ class QuartetSideSoundView {
     // @private {Map} - A map that goes from playback rate to the created SoundClipCollection.
     this.playbackRateToSoundClipCollection = new Map();
 
-    // Create sound clips for the chosen sound - while still exploring different sounds we will
-    quartetSoundFileProperty.link( selectedSound => {
+    const createSoundClipsListener = selectedSound => {
       this.createSoundClips( selectedSound );
-    } );
+    };
+
+    // Create sound clips for the chosen sound - while still exploring different sounds we will
+    quartetSoundFileProperty.link( createSoundClipsListener );
 
     // A map that goes between tilt to the value used to calculate playback rate for a particular tilt. Initial value
     // for each side is Math.PI / 2. A value of 0 is fully tilted to the "left" while a value of Math.PI is fully
@@ -84,6 +86,11 @@ class QuartetSideSoundView {
     this.tiltToPlaybackExponential = new LinearFunction( 0, Math.PI, MIN_SOUND_CLIP_EXPONENTIAL, MAX_SOUND_CLIP_EXPONENTIAL );
 
     this.activeSoundClipCollection = null;
+
+    // @private {function} - for disposal
+    this.disposeQuartetSideSoundView = () => {
+      quartetSoundFileProperty.unlink( createSoundClipsListener );
+    };
   }
 
   /**
@@ -93,12 +100,7 @@ class QuartetSideSoundView {
    */
   createSoundClips( soundFile ) {
 
-    // remove the previous sound generators
-    this.playbackRateToSoundClipCollection.forEach( ( soundClipCollection, playbackRate ) => {
-      soundManager.removeSoundGenerator( soundClipCollection );
-      soundClipCollection.dispose();
-    } );
-    this.playbackRateToSoundClipCollection.clear();
+    this.disposeSoundClips();
 
     const selectedSound = AUDIO_BUFFER_MAP.get( soundFile );
 
@@ -111,6 +113,30 @@ class QuartetSideSoundView {
 
       this.playbackRateToSoundClipCollection.set( playbackRate, soundClipCollection );
     }
+  }
+
+  /**
+   * Dispose the active sound clips.
+   * @private
+   */
+  disposeSoundClips() {
+
+    // remove the previous sound generators
+    this.playbackRateToSoundClipCollection.forEach( ( soundClipCollection, playbackRate ) => {
+      soundManager.removeSoundGenerator( soundClipCollection );
+      soundClipCollection.dispose();
+    } );
+
+    this.playbackRateToSoundClipCollection.clear();
+  }
+
+  /**
+   * Dispose the QuartetSideSoundView by removing SoundClipCollections from the soundManager and dispose them.
+   * @public
+   */
+  dispose() {
+    this.disposeSoundClips();
+    this.disposeQuartetSideSoundView();
   }
 
   /**
@@ -254,7 +280,7 @@ class SoundClipCollection extends SoundGenerator {
     this.upperOctaveClip.play();
   }
 
-  // @private
+  // @public
   stopSoundClips() {
     this.lowerOctaveClip.stop();
     this.middleOctaveClip.stop();
