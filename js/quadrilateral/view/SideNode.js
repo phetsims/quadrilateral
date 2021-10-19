@@ -88,16 +88,12 @@ class SideNode extends Line {
         }
         else if ( vertex1Pressed !== vertex2Pressed ) {
 
-          // TODO: Why doesn't listener.modelPoint work here??
-          const parentPoint = this.globalToParentPoint( event.pointer.point );
-          const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
-
           // only one vertex is pressed, rotate around the pressed vertex
           if ( vertex1Pressed ) {
-            this.rotateVertexAroundOther( side.vertex1, side.vertex2, modelPoint );
+            this.rotateVertexAroundOther( side.vertex1, side.vertex2, listener.modelDelta );
           }
           else {
-            this.rotateVertexAroundOther( side.vertex2, side.vertex1, modelPoint );
+            this.rotateVertexAroundOther( side.vertex2, side.vertex1, listener.modelDelta );
           }
         }
       },
@@ -126,26 +122,19 @@ class SideNode extends Line {
   }
 
   /**
-   * Rotate one vertex around another from the model position of the Pointer with dictates the amount of rotation.
+   * Rotate one vertex around another by moving the "arm" vertex as if it were being directly dragged while keeping the
+   * pressed vertex locked in place.
    * @private
    *
    * @param {Vertex} anchorVertex - Anchor vertex we are rotating around.
    * @param {Vertex} armVertex - Vertex being repositioned.
-   * @param {Vector2} modelPoint - Model point of the Pointer to determine how much to rotate.
+   * @param {Vector2} modelDelta - The amount of movement of the arm drag in model coordinates
    */
-  rotateVertexAroundOther( anchorVertex, armVertex, modelPoint ) {
-    const initialAngle = armVertex.positionProperty.value.minus( anchorVertex.positionProperty.value ).angle;
-    const newAngle = modelPoint.minus( anchorVertex.positionProperty.value ).angle;
+  rotateVertexAroundOther( anchorVertex, armVertex, modelDelta ) {
+    const proposedPosition = armVertex.positionProperty.get().plus( modelDelta );
 
-    const angleDelta = newAngle - initialAngle;
-
-    const anchorPosition = anchorVertex.positionProperty.value;
-    const rotatePosition = armVertex.positionProperty.value;
-
-    const newPosition = rotatePosition.rotatedAboutPoint( anchorPosition, angleDelta );
-
-    if ( armVertex.dragBoundsProperty.value.containsPoint( newPosition ) ) {
-      armVertex.positionProperty.value = newPosition;
+    if ( armVertex.dragBoundsProperty.value.containsPoint( proposedPosition ) ) {
+      armVertex.positionProperty.value = proposedPosition;
     }
   }
 }
