@@ -13,7 +13,6 @@ import Emitter from '../../../../axon/js/Emitter.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Range from '../../../../dot/js/Range.js';
-import Ray2 from '../../../../dot/js/Ray2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
@@ -145,47 +144,95 @@ class QuadrilateralModel {
     assert && assert( this.vertex3.angleProperty.value !== null, 'vertex3 must be connected to the shape' );
     assert && assert( this.vertex4.angleProperty.value !== null, 'vertex4 must be connected to the shape' );
 
-    // turn the modelBounds into a Shape so we can use kite intersection utility functions
-    const modelBoundsShape = Shape.bounds( modelBounds );
-
     // shape for the first vertex
     // modelBounds.leftBottom because model space has +y in the up direction
-    this.vertex1.freeSpaceShapeProperty.value = this.createVertexArea( modelBoundsShape, this.vertex1, this.vertex2, this.vertex3, this.vertex4, modelBounds.leftBottom );
+    this.vertex1.freeSpaceShapeProperty.value = this.createVertexArea( [
+      modelBounds.leftBottom,
+      new Vector2( this.vertex2.positionProperty.value.x, modelBounds.leftBottom.y ),
+      this.vertex2.positionProperty.value,
+      this.vertex3.positionProperty.value,
+      this.vertex4.positionProperty.value,
+      new Vector2( modelBounds.leftBottom.x, this.vertex4.positionProperty.value.y )
+    ] );
+
+    this.vertex2.freeSpaceShapeProperty.value = this.createVertexArea( [
+      modelBounds.rightBottom,
+      new Vector2( modelBounds.rightBottom.x, this.vertex3.positionProperty.value.y ),
+      this.vertex3.positionProperty.value,
+      this.vertex4.positionProperty.value,
+      this.vertex1.positionProperty.value,
+      new Vector2( this.vertex1.positionProperty.value.x, modelBounds.rightBottom.y )
+    ] );
+
+    this.vertex3.freeSpaceShapeProperty.value = this.createVertexArea( [
+      modelBounds.rightTop,
+      new Vector2( this.vertex4.positionProperty.value.x, modelBounds.rightTop.y ),
+      this.vertex4.positionProperty.value,
+      this.vertex1.positionProperty.value,
+      this.vertex2.positionProperty.value,
+      new Vector2( modelBounds.rightTop.x, this.vertex2.positionProperty.value.y )
+    ] );
+
+    this.vertex4.freeSpaceShapeProperty.value = this.createVertexArea( [
+      modelBounds.leftTop,
+      new Vector2( modelBounds.leftTop.x, this.vertex1.positionProperty.value.y ),
+      this.vertex1.positionProperty.value,
+      this.vertex2.positionProperty.value,
+      this.vertex3.positionProperty.value,
+      new Vector2( this.vertex3.positionProperty.value.x, modelBounds.leftTop.y )
+    ] );
   }
 
   /**
    * @private
-   * @param modelBoundsShape
-   * @param vertexA
-   * @param vertexB
-   * @param vertexC
-   * @param vertexD
-   * @param boundsCorner
    * @returns {Shape}
    */
-  createVertexArea( modelBoundsShape, vertexA, vertexB, vertexC, vertexD, boundsCorner ) {
+  createVertexArea( points ) {
 
-    const firstRayDirection = vertexD.positionProperty.value.minus( vertexC.positionProperty.value ).normalized();
-    const firstRay = new Ray2( vertexC.positionProperty.value, firstRayDirection );
-    const firstIntersection = modelBoundsShape.intersection( firstRay );
-    assert && assert( firstIntersection.length === 1, 'there must have been one intersection point for the first Ray' );
+    // const firstRayDirection = vertexD.positionProperty.value.minus( vertexC.positionProperty.value ).normalized();
+    // const firstRay = new Ray2( vertexC.positionProperty.value, firstRayDirection );
+    // const firstIntersection = modelBoundsShape.intersection( firstRay );
+    // assert && assert( firstIntersection.length === 1, 'there must have been one intersection point for the first Ray' );
+    //
+    // const firstIntersectionPoint = firstIntersection[ 0 ].point;
+    //
+    //
+    // const secondRayDirection = vertexB.positionProperty.value.minus( vertexC.positionProperty.value ).normalized();
+    // const secondRay = new Ray2( vertexC.positionProperty.value, secondRayDirection );
+    // const secondIntersection = modelBoundsShape.intersection( secondRay );
+    // assert && assert( secondIntersection.length === 1, 'there must have been one intersection point for the second Ray' );
+    //
+    // const secondIntersectionPoint = secondIntersection[ 0 ].point;
 
-    const firstIntersectionPoint = firstIntersection[ 0 ].point;
+    // const vertexArea = new Shape( firstIntersectionPoint, secondIntersectionPoint );
+    // vertexArea.moveToPointb( firstIntersectionPoint );
+    // vertexArea.lineToPoint( boundsCorner );
+    // vertexArea.lineToPoint( secondIntersectionPoint );
+    // vertexArea.lineToPoint( vertexC.positionProperty.value );
 
+    // vertexArea.moveToPoint( boundsCorner );
+    // vertexArea.lineToPoint( new Vector2( vertexB.positionProperty.value.x, boundsCorner.y ) );
+    // vertexArea.lineToPoint( vertexB.positionProperty.value );
+    // vertexArea.lineToPoint( vertexC.positionProperty.value );
+    // vertexArea.lineToPoint( vertexD.positionProperty.value );
+    // vertexArea.lineToPoint( new Vector2( boundsCorner.x, vertexD.positionProperty.value.y ) );
+    // vertexArea.close();
 
-    const secondRayDirection = vertexB.positionProperty.value.minus( vertexC.positionProperty.value ).normalized();
-    const secondRay = new Ray2( vertexC.positionProperty.value, secondRayDirection );
-    const secondIntersection = modelBoundsShape.intersection( secondRay );
-    assert && assert( secondIntersection.length === 1, 'there must have been one intersection point for the second Ray' );
+    const vertexArea = new Shape();
+    vertexArea.moveToPoint( points[ 0 ] );
 
-    const secondIntersectionPoint = secondIntersection[ 0 ].point;
+    for ( let i = 0; i < points.length; i++ ) {
+      vertexArea.lineToPoint( points[ i ] );
+    }
 
-    const vertexArea = new Shape( firstIntersectionPoint, secondIntersectionPoint );
-    vertexArea.moveToPoint( firstIntersectionPoint );
-    console.log( firstIntersectionPoint );
-    vertexArea.lineToPoint( boundsCorner );
-    vertexArea.lineToPoint( secondIntersectionPoint );
-    vertexArea.lineToPoint( vertexC.positionProperty.value );
+    // vertexArea.moveToPoint( boundsCorner );
+    // vertexArea.lineToPoint( new Vector2( boundsCorner.x, vertexB.positionProperty.value.y ) );
+    // vertexArea.lineToPoint( vertexB.positionProperty.value );
+    // vertexArea.lineToPoint( vertexC.positionProperty.value );
+    // vertexArea.lineToPoint( vertexD.positionProperty.value );
+    // vertexArea.lineToPoint( new Vector2( vertexD.positionProperty.value.x, boundsCorner.y ) );
+    // vertexArea.close();
+
 
     return vertexArea;
   }

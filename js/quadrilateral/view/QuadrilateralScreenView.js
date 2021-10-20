@@ -64,11 +64,35 @@ class QuadrilateralScreenView extends ScreenView {
       this.quadrilateralSoundView = new QuadrilateralSoundView( model, soundOptionsModel );
     }
 
-    const testPath = new Path( null, { fill: 'rgba(255,0,0,0.3)' } );
-    this.addChild( testPath );
+    const vertex1AreaPath = new Path( null, { fill: 'rgba(255,0,0,0.3)' } );
+    this.addChild( vertex1AreaPath );
     this.model.vertex1.freeSpaceShapeProperty.link( shape => {
       if ( shape ) {
-        testPath.shape = this.modelViewTransform.modelToViewShape( shape );
+        vertex1AreaPath.shape = this.modelViewTransform.modelToViewShape( shape );
+      }
+    } );
+
+    const vertex2AreaPath = new Path( null, { fill: 'rgba(0,255,0,0.3)' } );
+    this.addChild( vertex2AreaPath );
+    this.model.vertex2.freeSpaceShapeProperty.link( shape => {
+      if ( shape ) {
+        vertex2AreaPath.shape = this.modelViewTransform.modelToViewShape( shape );
+      }
+    } );
+
+    const vertex3AreaPath = new Path( null, { fill: 'rgba(0,0,255,0.3)' } );
+    this.addChild( vertex3AreaPath );
+    this.model.vertex3.freeSpaceShapeProperty.link( shape => {
+      if ( shape ) {
+        vertex3AreaPath.shape = this.modelViewTransform.modelToViewShape( shape );
+      }
+    } );
+
+    const vertex4AreaPath = new Path( null, { fill: 'rgba(0,255,255,0.3)' } );
+    this.addChild( vertex4AreaPath );
+    this.model.vertex4.freeSpaceShapeProperty.link( shape => {
+      if ( shape ) {
+        vertex4AreaPath.shape = this.modelViewTransform.modelToViewShape( shape );
       }
     } );
 
