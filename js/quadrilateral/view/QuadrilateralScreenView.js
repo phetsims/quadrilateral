@@ -8,6 +8,7 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import ModelViewTransform from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
+import Path from '../../../../scenery/js/nodes/Path.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import quadrilateral from '../../quadrilateral.js';
@@ -46,6 +47,8 @@ class QuadrilateralScreenView extends ScreenView {
     );
 
     this.quadrilateralNode = null;
+    this.model = model;
+    this.modelViewTransform = modelViewTransform;
 
     if ( QuadrilateralQueryParameters.rightSide || QuadrilateralQueryParameters.leftSide ||
          QuadrilateralQueryParameters.topSide || QuadrilateralQueryParameters.bottomSide ) {
@@ -60,6 +63,14 @@ class QuadrilateralScreenView extends ScreenView {
 
       this.quadrilateralSoundView = new QuadrilateralSoundView( model, soundOptionsModel );
     }
+
+    const testPath = new Path( null, { fill: 'rgba(255,0,0,0.3)' } );
+    this.addChild( testPath );
+    this.model.vertex1.freeSpaceShapeProperty.link( shape => {
+      if ( shape ) {
+        testPath.shape = this.modelViewTransform.modelToViewShape( shape );
+      }
+    } );
 
     const resetAllButton = new ResetAllButton( {
       listener: () => {
@@ -135,6 +146,7 @@ class QuadrilateralScreenView extends ScreenView {
     super.layout( viewBounds );
 
     this.quadrilateralNode && this.quadrilateralNode.layout( this.layoutBounds );
+    this.model.playAreaBounds = this.modelViewTransform.viewToModelBounds( this.layoutBounds );
   }
 }
 

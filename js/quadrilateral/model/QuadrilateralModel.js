@@ -13,8 +13,10 @@ import Emitter from '../../../../axon/js/Emitter.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Range from '../../../../dot/js/Range.js';
+import Ray2 from '../../../../dot/js/Ray2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import Shape from '../../../../kite/js/Shape.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import quadrilateral from '../../quadrilateral.js';
@@ -46,6 +48,8 @@ class QuadrilateralModel {
     this.leftSide = new Side( this.vertex4, this.vertex1, tandem.createTandem( 'leftSide' ), {
       offsetVectorForTiltCalculation: new Vector2( -1, 0 )
     } );
+
+    this.playAreaBounds = null;
 
     // Connect the sides, creating the shape and giving vertices the information they need to determine their angles.
     this.rightSide.connectToSide( this.topSide );
@@ -122,6 +126,68 @@ class QuadrilateralModel {
         this.shapeChangedEmitter.emit();
       }
     );
+
+    this.shapeChangedEmitter.addListener( () => {
+      if ( this.playAreaBounds ) {
+        this.createVertexAreas( this.playAreaBounds );
+      }
+    } );
+  }
+
+  /**
+   * @private
+   * @param modelBounds
+   */
+  createVertexAreas( modelBounds ) {
+
+    assert && assert( this.vertex1.angleProperty.value !== null, 'vertex1 must be connected to the shape' );
+    assert && assert( this.vertex2.angleProperty.value !== null, 'vertex2 must be connected to the shape' );
+    assert && assert( this.vertex3.angleProperty.value !== null, 'vertex3 must be connected to the shape' );
+    assert && assert( this.vertex4.angleProperty.value !== null, 'vertex4 must be connected to the shape' );
+
+    // turn the modelBounds into a Shape so we can use kite intersection utility functions
+    const modelBoundsShape = Shape.bounds( modelBounds );
+
+    // shape for the first vertex
+    // modelBounds.leftBottom because model space has +y in the up direction
+    this.vertex1.freeSpaceShapeProperty.value = this.createVertexArea( modelBoundsShape, this.vertex1, this.vertex2, this.vertex3, this.vertex4, modelBounds.leftBottom );
+  }
+
+  /**
+   * @private
+   * @param modelBoundsShape
+   * @param vertexA
+   * @param vertexB
+   * @param vertexC
+   * @param vertexD
+   * @param boundsCorner
+   * @returns {Shape}
+   */
+  createVertexArea( modelBoundsShape, vertexA, vertexB, vertexC, vertexD, boundsCorner ) {
+
+    const firstRayDirection = vertexD.positionProperty.value.minus( vertexC.positionProperty.value ).normalized();
+    const firstRay = new Ray2( vertexC.positionProperty.value, firstRayDirection );
+    const firstIntersection = modelBoundsShape.intersection( firstRay );
+    assert && assert( firstIntersection.length === 1, 'there must have been one intersection point for the first Ray' );
+
+    const firstIntersectionPoint = firstIntersection[ 0 ].point;
+
+
+    const secondRayDirection = vertexB.positionProperty.value.minus( vertexC.positionProperty.value ).normalized();
+    const secondRay = new Ray2( vertexC.positionProperty.value, secondRayDirection );
+    const secondIntersection = modelBoundsShape.intersection( secondRay );
+    assert && assert( secondIntersection.length === 1, 'there must have been one intersection point for the second Ray' );
+
+    const secondIntersectionPoint = secondIntersection[ 0 ].point;
+
+    const vertexArea = new Shape( firstIntersectionPoint, secondIntersectionPoint );
+    vertexArea.moveToPoint( firstIntersectionPoint );
+    console.log( firstIntersectionPoint );
+    vertexArea.lineToPoint( boundsCorner );
+    vertexArea.lineToPoint( secondIntersectionPoint );
+    vertexArea.lineToPoint( vertexC.positionProperty.value );
+
+    return vertexArea;
   }
 
   /**
