@@ -131,25 +131,31 @@ class QuadrilateralNode extends Node {
    * @param {Bounds2} layoutBounds
    */
   layout( layoutBounds ) {
-    this.model.vertex1.dragBoundsProperty.value = new Bounds2(
-      this.modelViewTransform.viewToModelX( layoutBounds.minX ), 0.05,
-      -0.05, this.modelViewTransform.viewToModelY( layoutBounds.minY )
-    );
+    // this.model.vertex1.dragBoundsProperty.value = new Bounds2(
+    //   this.modelViewTransform.viewToModelX( layoutBounds.minX ), 0.05,
+    //   -0.05, this.modelViewTransform.viewToModelY( layoutBounds.minY )
+    // );
+    //
+    // this.model.vertex2.dragBoundsProperty.value = new Bounds2(
+    //   0.05, 0.05,
+    //   this.modelViewTransform.viewToModelX( layoutBounds.maxX ), this.modelViewTransform.viewToModelY( layoutBounds.minY )
+    // );
+    //
+    // this.model.vertex3.dragBoundsProperty.value = new Bounds2(
+    //   0.05, this.modelViewTransform.viewToModelY( layoutBounds.maxY ),
+    //   this.modelViewTransform.viewToModelX( layoutBounds.maxX ), -0.05
+    // );
+    //
+    // this.model.vertex4.dragBoundsProperty.value = new Bounds2(
+    //   this.modelViewTransform.viewToModelX( layoutBounds.minX ), this.modelViewTransform.viewToModelY( layoutBounds.maxY ),
+    //   -0.05, -0.05
+    // );
 
-    this.model.vertex2.dragBoundsProperty.value = new Bounds2(
-      0.05, 0.05,
-      this.modelViewTransform.viewToModelX( layoutBounds.maxX ), this.modelViewTransform.viewToModelY( layoutBounds.minY )
-    );
-
-    this.model.vertex3.dragBoundsProperty.value = new Bounds2(
-      0.05, this.modelViewTransform.viewToModelY( layoutBounds.maxY ),
-      this.modelViewTransform.viewToModelX( layoutBounds.maxX ), -0.05
-    );
-
-    this.model.vertex4.dragBoundsProperty.value = new Bounds2(
-      this.modelViewTransform.viewToModelX( layoutBounds.minX ), this.modelViewTransform.viewToModelY( layoutBounds.maxY ),
-      -0.05, -0.05
-    );
+    // TODO: For this test we are not constraining the vertex positions
+    this.model.vertex1.dragBoundsProperty.value = Bounds2.EVERYTHING;
+    this.model.vertex2.dragBoundsProperty.value = Bounds2.EVERYTHING;
+    this.model.vertex3.dragBoundsProperty.value = Bounds2.EVERYTHING;
+    this.model.vertex4.dragBoundsProperty.value = Bounds2.EVERYTHING;
   }
 }
 

@@ -6,6 +6,7 @@
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
+import merge from '../../../../phet-core/js/merge.js';
 import ModelViewTransform from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -22,21 +23,26 @@ class QuadrilateralScreenView extends ScreenView {
   /**
    * @param {QuadrilateralModel} model
    * @param {QuadrilateralSoundOptionsModel} soundOptionsModel
-   * @param {Tandem} tandem
+   * @param {Object} [options]
    */
-  constructor( model, soundOptionsModel, tandem ) {
+  constructor( model, soundOptionsModel, options ) {
     assert && assert( model instanceof QuadrilateralModel, 'invalid model' );
-    assert && assert( tandem instanceof Tandem, 'invalid tandem' );
 
-    super( {
+    options = merge( {
+
+      // {boolean} - If true, the Sim (!!) is modified to not look like a PhET sim for demonstration
+      // purposes
+      calibrationDemoDevice: false,
 
       // phet-io
-      tandem: tandem
-    } );
+      tandem: Tandem.REQUIRED
+    }, options );
+
+    super( options );
 
     const viewHeight = this.layoutBounds.height - 2 * QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN;
     const modelViewTransform = ModelViewTransform.createRectangleInvertedYMapping(
-      new Bounds2( -1, -1, 1, 1 ),
+      QuadrilateralModel.MODEL_BOUNDS,
       new Bounds2(
         this.layoutBounds.centerX - viewHeight / 2,
         QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN,
@@ -54,7 +60,7 @@ class QuadrilateralScreenView extends ScreenView {
     }
     else {
       this.quadrilateralNode = new QuadrilateralNode( model, modelViewTransform, this.layoutBounds, {
-        tandem: tandem.createTandem( 'quadrilateralNode' )
+        tandem: options.tandem.createTandem( 'quadrilateralNode' )
       } );
       this.addChild( this.quadrilateralNode );
 
@@ -69,9 +75,16 @@ class QuadrilateralScreenView extends ScreenView {
       },
       right: this.layoutBounds.maxX - QuadrilateralConstants.SCREEN_VIEW_X_MARGIN,
       bottom: this.layoutBounds.maxY - QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN,
-      tandem: tandem.createTandem( 'resetAllButton' )
+      tandem: options.tandem.createTandem( 'resetAllButton' )
     } );
     this.addChild( resetAllButton );
+
+    // if in the calibration demo and we are pretending to be a device, make some modifications to the sim
+    // so that it doesn't look like a sim
+    if ( options.calibrationDemoDevice ) {
+      resetAllButton.visible = false;
+      phet.joist.sim.navigationBar.visible = false;
+    }
   }
 
   /**

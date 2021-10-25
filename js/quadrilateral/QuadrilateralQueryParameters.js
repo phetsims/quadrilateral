@@ -19,7 +19,12 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // If provided, a temporary graphic to indicate vertex locations will be included. There is no graphical
   // design yet and we don't want to create one yet. This lets us test mouse/touch input without showing
   // a detailed graphic that would overly influence design of other modailities.
-  showVertices: { type: 'flag' }
+  showVertices: { type: 'flag' },
+
+  // if provided, a second screen is added to support a demo for calibrating the sim to an external device,
+  // giving us the information to set the positions of vertices in the sim from length and angle information
+  // from a device
+  calibrationDemo: { type: 'flag' }
 } );
 
 quadrilateral.register( 'QuadrilateralQueryParameters', QuadrilateralQueryParameters );

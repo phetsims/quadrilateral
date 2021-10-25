@@ -9,13 +9,17 @@
 import PreferencesConfiguration from '../../joist/js/preferences/PreferencesConfiguration.js';
 import Sim from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
+import Color from '../../scenery/js/util/Color.js';
+import ColorProperty from '../../scenery/js/util/ColorProperty.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import QuadrilateralSoundOptionsModel from './quadrilateral/model/QuadrilateralSoundOptionsModel.js';
+import QuadrilateralQueryParameters from './quadrilateral/QuadrilateralQueryParameters.js';
 import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';
 import QuadrilateralSoundOptionsNode from './quadrilateral/view/QuadrilateralSoundOptionsNode.js';
 import quadrilateralStrings from './quadrilateralStrings.js';
 
 const quadrilateralTitleString = quadrilateralStrings.quadrilateral.title;
+const calibrationDemoString = 'Device'; // this will never be translatable, keep out of json file
 
 const soundOptionsModel = new QuadrilateralSoundOptionsModel();
 
@@ -40,11 +44,23 @@ const simOptions = {
   } )
 };
 
+const quadrilateralScreen = new QuadrilateralScreen( soundOptionsModel, {
+  name: quadrilateralTitleString,
+  tandem: Tandem.ROOT.createTandem( 'quadrilateralScreen' )
+} );
+const calibrationDemoScreen = new QuadrilateralScreen( soundOptionsModel, {
+  name: calibrationDemoString,
+  screenViewOptions: {
+    calibrationDemoDevice: true
+  },
+  backgroundColorProperty: new ColorProperty( new Color( 'white' ) ),
+  tandem: Tandem.ROOT.createTandem( 'calibrationDemoScreen' )
+} );
+const simScreens = QuadrilateralQueryParameters.calibrationDemo ? [ quadrilateralScreen, calibrationDemoScreen ] : [ quadrilateralScreen ];
+
 // launch the sim - beware that scenery Image nodes created outside of simLauncher.launch() will have zero bounds
 // until the images are fully loaded, see https://github.com/phetsims/coulombs-law/issues/70
 simLauncher.launch( () => {
-  const sim = new Sim( quadrilateralTitleString, [
-    new QuadrilateralScreen( soundOptionsModel, Tandem.ROOT.createTandem( 'quadrilateralScreen' ) )
-  ], simOptions );
+  const sim = new Sim( quadrilateralTitleString, simScreens, simOptions );
   sim.start();
 } );
