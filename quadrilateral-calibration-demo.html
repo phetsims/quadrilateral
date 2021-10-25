@@ -15,7 +15,7 @@
       top: 0;
       left: 0;
       width: 80%;
-      height: 25%;
+      height: 50%;
     }
 
     #device-frame {
@@ -23,14 +23,16 @@
       bottom: 0;
       right: 0;
       width: 100%;
-      height: 75%;
+      height: 50%;
     }
   </style>
 </head>
 <body>
 
-<iframe id="sim-frame" src="quadrilateral_en.html?brand=phet&ea&calibrationDemo&screens=1&showVertices&postMessageOnLoad"></iframe>
-<iframe id="device-frame" src="quadrilateral_en.html?brand=phet&ea&calibrationDemo&screens=2&showVertices&audio=disabled&postMessageOnLoad&showPointerAreas"></iframe>
+<iframe id="sim-frame"
+        src="quadrilateral_en.html?brand=phet&ea&calibrationDemo&screens=1&showVertices&postMessageOnLoad"></iframe>
+<iframe id="device-frame"
+        src="quadrilateral_en.html?brand=phet&ea&calibrationDemo&screens=2&showVertices&audio=disabled&postMessageOnLoad&showPointerAreas&calibrationDemoDevice"></iframe>
 
 </body>
 
@@ -64,6 +66,7 @@
 
         // whenever the device shape changes, send a message to the simulation to recreate the shape
         deviceModel.shapeChangedEmitter.addListener( () => {
+
           const topLength = deviceModel.topSide.lengthProperty.value;
           const rightLength = deviceModel.rightSide.lengthProperty.value;
           const bottomLength = deviceModel.bottomSide.lengthProperty.value;
@@ -74,7 +77,30 @@
           const p3Angle = deviceModel.vertex3.angleProperty.value;
           const p4Angle = deviceModel.vertex4.angleProperty.value;
 
-          simulationModel.setPositionsFromLengthAndAngleData( topLength, rightLength, bottomLength, leftLength, p1Angle, p2Angle, p3Angle, p4Angle );
+          // we are in a "calibration" stage, use device data to provide physical model bounds
+          if ( simulationModel.isCalibratingProperty.value ) {
+            simulationModel.setPhysicalModelBounds( topLength, rightLength, bottomLength, leftLength );
+          }
+          else if ( simulationModel.physicalModelBounds !== null ) {
+
+            // there must have been a calibration before updating simulation model
+            simulationModel.setPositionsFromLengthAndAngleData( topLength, rightLength, bottomLength, leftLength, p1Angle, p2Angle, p3Angle, p4Angle );
+          }
+        } );
+
+        // we are ready to start calibrating, start populating values
+        simulationModel.isCalibratingProperty.link( isCalibrating => {
+          const topLength = deviceModel.topSide.lengthProperty.value;
+          const rightLength = deviceModel.rightSide.lengthProperty.value;
+          const bottomLength = deviceModel.bottomSide.lengthProperty.value;
+          const leftLength = deviceModel.leftSide.lengthProperty.value;
+
+          const p1Angle = deviceModel.vertex1.angleProperty.value;
+          const p2Angle = deviceModel.vertex2.angleProperty.value;
+          const p3Angle = deviceModel.vertex3.angleProperty.value;
+          const p4Angle = deviceModel.vertex4.angleProperty.value;
+
+          simulationModel.setPhysicalModelBounds( topLength, rightLength, bottomLength, leftLength );
         } );
       }
     }

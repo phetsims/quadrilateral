@@ -8,11 +8,13 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
+import LinearFunction from '../../../../dot/js/LinearFunction.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -20,11 +22,13 @@ import merge from '../../../../phet-core/js/merge.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import quadrilateral from '../../quadrilateral.js';
+import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import Side from './Side.js';
 import Vertex from './Vertex.js';
 
 // the full bounds of the model, vertices are constrained to these values
-const MODEL_BOUNDS = new Bounds2( -1, -1, 1, 1 );
+const MODEL_BOUNDS = QuadrilateralQueryParameters.calibrationDemoDevice ?
+                     new Bounds2( -4.5, -4.5, 4.5, 4.5 ) : new Bounds2( -1, -1, 1, 1 );
 
 class QuadrilateralModel {
 
@@ -65,6 +69,14 @@ class QuadrilateralModel {
     this.bottomSide.connectToSide( this.rightSide );
     this.leftSide.connectToSide( this.bottomSide );
     this.topSide.connectToSide( this.leftSide );
+
+    // @public {Bounds2|null} - The Bounds provided by the physical model, so we know how to map the physical model
+    // bounds to the model space (MODEL_BOUNDS)
+    this.physicalModelBoundsProperty = new Property( null );
+
+    // @public {BooleanProperty} - If true, the simulation is "calibrating" to a physical device so we don't set the
+    // vertex positions in response to changes from the physical device. Instead we are updating physicalModelBounds.
+    this.isCalibratingProperty = new BooleanProperty( false );
 
     window.simModel = this;
 
@@ -168,33 +180,69 @@ class QuadrilateralModel {
     assert && assert( this.vertex3.dragBoundsProperty.value );
     assert && assert( this.vertex4.dragBoundsProperty.value );
 
-    // vertex1 and the topLine are anchored, the rest of the shape is relative to this
-    const vector1Position = new Vector2( MODEL_BOUNDS.minX, MODEL_BOUNDS.maxX );
-    const vector2Position = new Vector2( vector1Position.x + topLength, vector1Position.y );
+    // you must calibrate before setting positions from a physical device
+    if ( this.physicalModelBoundsProperty.value !== null && !this.isCalibratingProperty.value ) {
 
-    const vector4Offset = new Vector2( Math.cos( -p1Angle ), Math.sin( -p1Angle ) ).timesScalar( leftLength );
-    const vector4Position = vector1Position.plus( vector4Offset );
 
-    const vector3Offset = new Vector2( Math.cos( Math.PI + p2Angle ), Math.sin( Math.PI + p2Angle ) ).timesScalar( rightLength );
-    const vector3Position = vector2Position.plus( vector3Offset );
+      // the physical device lengths can only become half as long as the largest length, so map to the sim model
+      // with that constraint as well so that the smallest shape on the physical device doesn't bring vertices
+      // all the way to the center of the screen (0, 0).
+      const deviceLengthToSimLength = new LinearFunction( 0, this.physicalModelBoundsProperty.value.width, 0, MODEL_BOUNDS.width );
 
-    // make sure that the proposed positions are within bounds defined in the simulation model
-    const shapePosition1 = this.vertex1.dragBoundsProperty.value.closestPointTo( vector1Position );
-    const shapePosition2 = this.vertex2.dragBoundsProperty.value.closestPointTo( vector2Position );
-    const shapePosition3 = this.vertex3.dragBoundsProperty.value.closestPointTo( vector3Position );
-    const shapePosition4 = this.vertex4.dragBoundsProperty.value.closestPointTo( vector4Position );
-    const shapePositions = [ shapePosition1, shapePosition2, shapePosition3, shapePosition4 ];
+      const mappedTopLength = deviceLengthToSimLength( topLength );
+      const mappedRightLength = deviceLengthToSimLength( rightLength );
+      const mappedLeftLength = deviceLengthToSimLength( leftLength );
 
-    // we have the vertex positions to recreate the shape, but shift them so that the centroid of the quadrilateral is
-    // in the center of the model space
-    const centroidPosition = this.getCentroidFromPositions( shapePositions );
-    const centroidOffset = centroidPosition.negated();
-    const shiftedPositions = _.map( shapePositions, shapePosition => shapePosition.plus( centroidOffset ) );
+      // vertex1 and the topLine are anchored, the rest of the shape is relative to this
+      const vector1Position = new Vector2( MODEL_BOUNDS.minX, MODEL_BOUNDS.maxX );
+      const vector2Position = new Vector2( vector1Position.x + mappedTopLength, vector1Position.y );
 
-    this.vertex1.positionProperty.set( shiftedPositions[ 0 ] );
-    this.vertex2.positionProperty.set( shiftedPositions[ 1 ] );
-    this.vertex3.positionProperty.set( shiftedPositions[ 2 ] );
-    this.vertex4.positionProperty.set( shiftedPositions[ 3 ] );
+      const vector4Offset = new Vector2( Math.cos( -p1Angle ), Math.sin( -p1Angle ) ).timesScalar( mappedLeftLength );
+      const vector4Position = vector1Position.plus( vector4Offset );
+
+      const vector3Offset = new Vector2( Math.cos( Math.PI + p2Angle ), Math.sin( Math.PI + p2Angle ) ).timesScalar( mappedRightLength );
+      const vector3Position = vector2Position.plus( vector3Offset );
+
+      // make sure that the proposed positions are within bounds defined in the simulation model
+      const shapePosition1 = this.vertex1.dragBoundsProperty.value.closestPointTo( vector1Position );
+      const shapePosition2 = this.vertex2.dragBoundsProperty.value.closestPointTo( vector2Position );
+      const shapePosition3 = this.vertex3.dragBoundsProperty.value.closestPointTo( vector3Position );
+      const shapePosition4 = this.vertex4.dragBoundsProperty.value.closestPointTo( vector4Position );
+      const shapePositions = [ shapePosition1, shapePosition2, shapePosition3, shapePosition4 ];
+
+      // we have the vertex positions to recreate the shape, but shift them so that the centroid of the quadrilateral is
+      // in the center of the model space
+      const centroidPosition = this.getCentroidFromPositions( shapePositions );
+      const centroidOffset = centroidPosition.negated();
+      const shiftedPositions = _.map( shapePositions, shapePosition => shapePosition.plus( centroidOffset ) );
+
+      this.vertex1.positionProperty.set( shiftedPositions[ 0 ] );
+      this.vertex2.positionProperty.set( shiftedPositions[ 1 ] );
+      this.vertex3.positionProperty.set( shiftedPositions[ 2 ] );
+      this.vertex4.positionProperty.set( shiftedPositions[ 3 ] );
+    }
+  }
+
+  /**
+   * Set the physical model bounds from the device bounds. For now, we assume that the devices is like
+   * one provided by CHROME lab, where sides are created from a socket and arm such that the largest length
+   * of one side is when the arm is as far out of the socket as possible and the smallest length is when the
+   * arm is fully inserted into the socket. In this case the smallest length will be half of the largest length.
+   * When calibrating, we ask for the largest shape possible, so the minimum lengths are just half these
+   * provided values. There is also an assumption that the sides are the same and the largest possible shape is a
+   * square. We create a Bounds2 defined by these constraints
+   * @public
+   *
+   * @param {number} topLength
+   * @param {number} rightLength
+   * @param {number} bottomLength
+   * @param {number} leftLength
+   */
+  setPhysicalModelBounds( topLength, rightLength, bottomLength, leftLength ) {
+
+    // assuming a square shape for extrema - we may need a mapping function for each individual side if this cannot be assumed
+    const maxLength = _.max( [ topLength, rightLength, bottomLength, leftLength ] );
+    this.physicalModelBoundsProperty.value = new Bounds2( 0, 0, maxLength, maxLength );
   }
 
   /**

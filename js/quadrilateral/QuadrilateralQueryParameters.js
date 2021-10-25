@@ -24,7 +24,12 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // if provided, a second screen is added to support a demo for calibrating the sim to an external device,
   // giving us the information to set the positions of vertices in the sim from length and angle information
   // from a device
-  calibrationDemo: { type: 'flag' }
+  calibrationDemo: { type: 'flag' },
+
+  // If provided, the model will change slightly to act more like a "physical" device. The model coordinates
+  // may change from arbitrary model space to example coordinates provided by the device. To be used in combination
+  // with calibrationDemo, since one of the screens needs to act more like the device.
+  calibrationDemoDevice: { type: 'flag' }
 } );
 
 quadrilateral.register( 'QuadrilateralQueryParameters', QuadrilateralQueryParameters );

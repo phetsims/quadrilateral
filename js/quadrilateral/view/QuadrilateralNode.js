@@ -11,6 +11,8 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import quadrilateralStrings from '../../quadrilateralStrings.js';
+import QuadrilateralModel from '../model/QuadrilateralModel.js';
+import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import SideNode from './SideNode.js';
 import VertexNode from './VertexNode.js';
 
@@ -151,11 +153,23 @@ class QuadrilateralNode extends Node {
     //   -0.05, -0.05
     // );
 
-    // TODO: For this test we are not constraining the vertex positions
-    this.model.vertex1.dragBoundsProperty.value = Bounds2.EVERYTHING;
-    this.model.vertex2.dragBoundsProperty.value = Bounds2.EVERYTHING;
-    this.model.vertex3.dragBoundsProperty.value = Bounds2.EVERYTHING;
-    this.model.vertex4.dragBoundsProperty.value = Bounds2.EVERYTHING;
+    if ( QuadrilateralQueryParameters.calibrationDemoDevice ) {
+
+      // don't allow the device to go out of model bounds
+      this.model.vertex1.dragBoundsProperty.value = QuadrilateralModel.MODEL_BOUNDS;
+      this.model.vertex2.dragBoundsProperty.value = QuadrilateralModel.MODEL_BOUNDS;
+      this.model.vertex3.dragBoundsProperty.value = QuadrilateralModel.MODEL_BOUNDS;
+      this.model.vertex4.dragBoundsProperty.value = QuadrilateralModel.MODEL_BOUNDS;
+    }
+    else {
+
+      // TODO: For this test we are not constraining the vertex positions in the sim because we want to see how
+      // move when attached to a physical model without being bound
+      this.model.vertex1.dragBoundsProperty.value = Bounds2.EVERYTHING;
+      this.model.vertex2.dragBoundsProperty.value = Bounds2.EVERYTHING;
+      this.model.vertex3.dragBoundsProperty.value = Bounds2.EVERYTHING;
+      this.model.vertex4.dragBoundsProperty.value = Bounds2.EVERYTHING;
+    }
   }
 }
 
