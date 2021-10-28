@@ -56,13 +56,13 @@ class QuadrilateralModel {
     // if the quadrilateral forms a parallelogram. Without a margin of error it would be exceedingly
     // difficult to create a parallelogram shape. It is unclear whether this need to change, but
     // it seems useful now to be able to easily change this value during development.
-    this.angleEqualityEpsilonProperty = new NumberProperty( 0.1, {
-      tandem: tandem.createTandem( 'angleEqualityEpsilonProperty' ),
+    this.angleToleranceIntervalProperty = new NumberProperty( 0.1, {
+      tandem: tandem.createTandem( 'angleToleranceIntervalProperty' ),
       range: new Range( 0.01, 0.3 )
     } );
 
     // {DerivedProperty.<boolean} - Values that represents the difference of opposing angles, in radians. When both of
-    // these values becomes less than this.angleEqualityEpsilonProperty the quad is considered to be a parallelogram.
+    // these values becomes less than this.angleToleranceIntervalProperty the quad is considered to be a parallelogram.
     // These values are pulled out as Properties from the isParallelogramProperty calculation because it is expected
     // that we will add sounds to represent the differences in these values.
     const angle1DiffAngle3Property = new DerivedProperty( [ this.vertex1.angleProperty, this.vertex3.angleProperty ], ( angle1, angle3 ) => {
@@ -77,7 +77,7 @@ class QuadrilateralModel {
     this.isParallelogramProperty = new DerivedProperty( [
       angle1DiffAngle3Property,
       angle2DiffAngle4Property,
-      this.angleEqualityEpsilonProperty
+      this.angleToleranceIntervalProperty
     ], ( angle1DiffAngle3, angle2DiffAngle4, epsilon ) => {
       return angle1DiffAngle3 < epsilon && angle2DiffAngle4 < epsilon;
     }, {
@@ -108,7 +108,7 @@ class QuadrilateralModel {
     this.vertex2.reset();
     this.vertex3.reset();
     this.vertex4.reset();
-    this.angleEqualityEpsilonProperty.reset();
+    this.angleToleranceIntervalProperty.reset();
   }
 
   /**
