@@ -13,6 +13,7 @@ import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
+import QuadrilateralMarkerInput from './QuadrilateralMarkerInput.js';
 import QuadrilateralNode from './QuadrilateralNode.js';
 import QuadrilateralSoundView from './QuadrilateralSoundView.js';
 import SideDemonstrationNode from './SideDemonstrationNode.js';
@@ -72,6 +73,9 @@ class QuadrilateralScreenView extends ScreenView {
       tandem: tandem.createTandem( 'resetAllButton' )
     } );
     this.addChild( resetAllButton );
+
+    // testing marker input
+    this.markerInput = new QuadrilateralMarkerInput();
   }
 
   /**
@@ -124,6 +128,8 @@ class QuadrilateralScreenView extends ScreenView {
     if ( this.demonstrationNode ) {
       this.demonstrationNode.step( dt );
     }
+
+    this.markerInput.step( dt );
   }
 
   /**
