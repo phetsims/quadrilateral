@@ -39,10 +39,10 @@ class SideNode extends Line {
       tandem: Tandem.OPTIONAL
     }, options );
 
-    super( 0, 0, 0, 0, options );
+    super( 0, 0, 0, 0 );
 
     // initialize the voicing trait
-    this.initializeVoicing( options );
+    this.initializeVoicing();
 
     // @private {Side}
     this.side = side;
@@ -100,6 +100,8 @@ class SideNode extends Line {
 
       tandem: options.tandem.createTandem( 'dragListener' )
     } ) );
+
+    this.mutate( options );
   }
 
   /**

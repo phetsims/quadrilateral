@@ -37,8 +37,8 @@ class VertexNode extends Circle {
       tandem: Tandem.REQUIRED
     }, options );
 
-    super( 25, options );
-    this.initializeVoicing( options );
+    super( 25 );
+    this.initializeVoicing();
 
     if ( QuadrilateralQueryParameters.showVertices ) {
       this.addChild( new Path( timesSolidShape, {
@@ -82,6 +82,8 @@ class VertexNode extends Circle {
     vertex.dragBoundsProperty.link( dragBounds => {
       keyboardDragListener.dragBounds = dragBounds;
     } );
+
+    this.mutate( options );
   }
 }
 
