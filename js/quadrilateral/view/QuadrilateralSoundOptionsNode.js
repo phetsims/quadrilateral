@@ -39,6 +39,7 @@ class QuadrilateralSoundOptionsNode extends Panel {
 
     const optionsParentNode = new Node();
     const designComboBox = new ComboBox( [
+      new ComboBoxItem( new Text( 'Success Sounds', LABEL_TEXT_OPTIONS ), QuadrilateralSoundOptionsModel.SoundDesign.SUCCESS_SOUNDS, { tandemName: 'successItem' } ),
       new ComboBoxItem( new Text( 'Quartet', LABEL_TEXT_OPTIONS ), QuadrilateralSoundOptionsModel.SoundDesign.QUARTET, { tandemName: 'quartetItem' } ),
       new ComboBoxItem( new Text( 'Parallels Volume', LABEL_TEXT_OPTIONS ), QuadrilateralSoundOptionsModel.SoundDesign.PARALLELS_VOLUME, { tandemName: 'parallelsVolumeItem' } ),
       new ComboBoxItem( new Text( 'Parallels Staccato', LABEL_TEXT_OPTIONS ), QuadrilateralSoundOptionsModel.SoundDesign.PARALLELS_STACCATO, { tandemName: 'parallelsStaccatoItem' } )
@@ -55,9 +56,8 @@ class QuadrilateralSoundOptionsNode extends Panel {
       children: [ labelledComboBox, optionsParentNode ]
     } );
 
-    const baseSoundLabelText = new Text( 'Base Sound', TITLE_TEXT_OPTIONS );
 
-    const radioButtonItems = [
+    const baseSoundRadioButtonItems = [
       {
         node: new Text( 'Sound One', LABEL_TEXT_OPTIONS ),
         value: model.baseSoundFileProperty.enumeration.ONE,
@@ -80,19 +80,37 @@ class QuadrilateralSoundOptionsNode extends Panel {
       }
     ];
 
-    const optionsRadioButtonGroup = new VerticalAquaRadioButtonGroup( model.baseSoundFileProperty, radioButtonItems, {
-      tandem: tandem.createTandem( 'optionsRadioButtonGroup' )
-    } );
+    const labelledBaseSoundRadioButtonGroup = new LabelledRadioButtonGroup( model.baseSoundFileProperty, baseSoundRadioButtonItems, 'Base Sound', tandem.createTandem( 'labelledBaseSoundRadioButtonGroup' ) );
 
-    const labelledRadioButtons = new HBox( {
-      children: [ baseSoundLabelText, optionsRadioButtonGroup ],
-      spacing: 15
-    } );
+    const successSoundRadioButtonItems = [
+      {
+        node: new Text( 'Collection One', LABEL_TEXT_OPTIONS ),
+        value: model.successSoundFileProperty.enumeration.ONE,
+        tandemName: 'soundCollectionOneRadioButton'
+      },
+      {
+        node: new Text( 'Collection Two', LABEL_TEXT_OPTIONS ),
+        value: model.successSoundFileProperty.enumeration.TWO,
+        tandemName: 'soundCollectionTwoRadioButton'
+      },
+      {
+        node: new Text( 'Collection Three', LABEL_TEXT_OPTIONS ),
+        value: model.successSoundFileProperty.enumeration.THREE,
+        tandemName: 'soundCollectionThreeRadioButton'
+      },
+      {
+        node: new Text( 'Collection Four', LABEL_TEXT_OPTIONS ),
+        value: model.successSoundFileProperty.enumeration.FOUR,
+        tandemName: 'soundCollectionFourRadioButton'
+      }
+    ];
+
+    const labelledSuccessSoundRadioButtonGroup = new LabelledRadioButtonGroup( model.successSoundFileProperty, successSoundRadioButtonItems, 'Success Sounds', tandem.createTandem( 'labelledSuccessSoundRadioButtonGroup' ) );
 
     const content = new VBox( {
       children: [
         comboBoxWithParentNode,
-        labelledRadioButtons
+        labelledBaseSoundRadioButtonGroup
       ],
       align: 'left'
     } );
@@ -102,7 +120,48 @@ class QuadrilateralSoundOptionsNode extends Panel {
     } );
 
     model.soundDesignProperty.link( design => {
-      labelledRadioButtons.visible = design !== QuadrilateralSoundOptionsModel.SoundDesign.PARALLELS_STACCATO;
+
+      // modify children instead of changing visibility for layout purposes
+      const children = [ comboBoxWithParentNode ];
+      if ( design === QuadrilateralSoundOptionsModel.SoundDesign.QUARTET ||
+           design === QuadrilateralSoundOptionsModel.SoundDesign.PARALLELS_VOLUME ) {
+
+        // "Quartet" and "Parallels Volume" use a base sound for all output which can be changed
+        children.push( labelledBaseSoundRadioButtonGroup );
+      }
+      else if ( design === QuadrilateralSoundOptionsModel.SoundDesign.SUCCESS_SOUNDS ) {
+
+        // there are different sets of "success" sounds in this prototype
+        children.push( labelledSuccessSoundRadioButtonGroup );
+      }
+
+      content.children = children;
+    } );
+  }
+}
+
+/**
+ * An inner class for a radio button group that has a visual Text label. These
+ * radio buttons are often sub-options under one of the sound design prototypes.
+ */
+class LabelledRadioButtonGroup extends VBox {
+
+
+  /**
+   * @param {EnumerationProperty} property - a Property of QuadrilateralSoundOptionsModel
+   * @param {ComboBoxItem[]} items
+   * @param {string} labelString
+   * @param {Tandem} tandem
+   */
+  constructor( property, items, labelString, tandem ) {
+    const labelText = new Text( labelString, TITLE_TEXT_OPTIONS );
+    const radioButtonGroup = new VerticalAquaRadioButtonGroup( property, items, {
+      tandem: tandem.createTandem( 'radioButtonGroup' )
+    } );
+
+    super( {
+      children: [ labelText, radioButtonGroup ],
+      spacing: 15
     } );
   }
 }

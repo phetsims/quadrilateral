@@ -8,14 +8,13 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import quadrilateral from '../../quadrilateral.js';
 import Side from './Side.js';
 import Vertex from './Vertex.js';
@@ -61,28 +60,13 @@ class QuadrilateralModel {
       range: new Range( 0.01, 0.3 )
     } );
 
-    // {DerivedProperty.<boolean} - Values that represents the difference of opposing angles, in radians. When both of
-    // these values becomes less than this.angleToleranceIntervalProperty the quad is considered to be a parallelogram.
-    // These values are pulled out as Properties from the isParallelogramProperty calculation because it is expected
-    // that we will add sounds to represent the differences in these values.
-    const angle1DiffAngle3Property = new DerivedProperty( [ this.vertex1.angleProperty, this.vertex3.angleProperty ], ( angle1, angle3 ) => {
-      return Math.abs( angle1 - angle3 );
-    } );
-    const angle2DiffAngle4Property = new DerivedProperty( [ this.vertex2.angleProperty, this.vertex4.angleProperty ], ( angle2, angle4 ) => {
-      return Math.abs( angle2 - angle4 );
-    } );
-
-    // @public {DerivedProperty.<boolean>} - A value that indicates that the quadrilateral is currently a
-    // parallelogram. We assume that the quad is a parallelogram if opposite angles are equal within a margin of error.
-    this.isParallelogramProperty = new DerivedProperty( [
-      angle1DiffAngle3Property,
-      angle2DiffAngle4Property,
-      this.angleToleranceIntervalProperty
-    ], ( angle1DiffAngle3, angle2DiffAngle4, epsilon ) => {
-      return angle1DiffAngle3 < epsilon && angle2DiffAngle4 < epsilon;
-    }, {
-      tandem: tandem.createTandem( 'isParallelogramProperty' ),
-      phetioType: DerivedProperty.DerivedPropertyIO( BooleanIO )
+    // @public (read-only) {BooleanProperty} - Whether the quadrilateral is a parallelogram. This Property updates
+    // async in the step function! We need to update this Property after all vertex positions and all vertex angles
+    // have been updated. When moving more than one vertex at a time, only one vertex position updates synchronously
+    // in the code and in those transient states the model may temporarily not be a parallelogram. Updating in step
+    // after all Properties and listeners are done with this work resolves the problem.
+    this.isParallelogramProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'isParallelogramProperty' )
     } );
 
     // @public {Emitter} - Emits an event whenever the shape of the Quadrilateral changes
@@ -97,6 +81,21 @@ class QuadrilateralModel {
         this.shapeChangedEmitter.emit();
       }
     );
+  }
+
+  /**
+   * Returns whether or not the quadrilateral shape is a parallelogram, within the tolerance defined by
+   * angleToleranceIntervalProperty.
+   * @public
+   *
+   * @returns {boolean}
+   */
+  getIsParallelogram() {
+    const angle1DiffAngle3 = Math.abs( this.vertex1.angleProperty.value - this.vertex3.angleProperty.value );
+    const angle2DiffAngle4 = Math.abs( this.vertex2.angleProperty.value - this.vertex4.angleProperty.value );
+    const epsilon = this.angleToleranceIntervalProperty.value;
+
+    return angle1DiffAngle3 < epsilon && angle2DiffAngle4 < epsilon;
   }
 
   /**
@@ -117,7 +116,9 @@ class QuadrilateralModel {
    * @public
    */
   step( dt ) {
-    //TODO
+
+    // the isParallelogramProperty needs to be set asynchronously, see the documentation for isParallelogramProperty
+    this.isParallelogramProperty.set( this.getIsParallelogram() );
   }
 }
 

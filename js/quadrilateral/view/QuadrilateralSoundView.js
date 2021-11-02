@@ -11,6 +11,7 @@ import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsMo
 import ParallelsStaccatoSoundView from './ParallelsStaccatoSoundView.js';
 import ParallelsVolumeSoundView from './ParallelsVolumeSoundView.js';
 import QuartetSoundView from './QuartetSoundView.js';
+import SuccessSoundView from './SuccessSoundView.js';
 
 // constants
 
@@ -36,6 +37,9 @@ class QuadrilateralSoundView {
       }
       else if ( soundDesign === QuadrilateralSoundOptionsModel.SoundDesign.PARALLELS_STACCATO ) {
         this.activeSoundView = new ParallelsStaccatoSoundView( model, soundOptionsModel );
+      }
+      else if ( soundDesign === QuadrilateralSoundOptionsModel.SoundDesign.SUCCESS_SOUNDS ) {
+        this.activeSoundView = new SuccessSoundView( model, soundOptionsModel );
       }
     } );
   }
