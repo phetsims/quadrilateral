@@ -196,7 +196,7 @@ class ParallelsVolumeSoundView {
       [ sideA.tiltProperty, sideB.tiltProperty ],
       ( leftTilt, rightTilt ) => {
 
-        const outputLevel = TILT_DIFFERENCE_TO_OUTPUT_LEVEL( Math.abs( leftTilt - rightTilt ) );
+        const outputLevel = TILT_DIFFERENCE_TO_OUTPUT_LEVEL.evaluate( Math.abs( leftTilt - rightTilt ) );
         applyOutputLevel( outputLevel );
       }
     );

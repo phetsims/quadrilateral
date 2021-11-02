@@ -146,7 +146,7 @@ class QuartetSideSoundView {
    */
   startPlayingSounds() {
 
-    const exponential = Utils.roundToInterval( this.tiltToPlaybackExponential( this.side.tiltProperty.value ), 1 );
+    const exponential = Utils.roundToInterval( this.tiltToPlaybackExponential.evaluate( this.side.tiltProperty.value ), 1 );
     const playbackRate = Math.pow( 2, exponential / 12 );
 
     const newCollection = this.playbackRateToSoundClipCollection.get( playbackRate );
@@ -397,9 +397,9 @@ class SoundClipCollection extends SoundGenerator {
       this.upperOctaveClip.setOutputLevel( 0 );
     }
     else {
-      this.lowerOctaveClip.setOutputLevel( LOWER_OCTAVE_LENGTH_TO_OUTPUT_LEVEL( length ) );
+      this.lowerOctaveClip.setOutputLevel( LOWER_OCTAVE_LENGTH_TO_OUTPUT_LEVEL.evaluate( length ) );
       this.middleOctaveClip.setOutputLevel( MIDDLE_OCTAVE_LENGTH_TO_OUTPUT_LEVEL.evaluate( length ) );
-      this.upperOctaveClip.setOutputLevel( UPPER_OCTAVE_LENGTH_TO_OUTPUT_LEVEL( length ) );
+      this.upperOctaveClip.setOutputLevel( UPPER_OCTAVE_LENGTH_TO_OUTPUT_LEVEL.evaluate( length ) );
     }
   }
 

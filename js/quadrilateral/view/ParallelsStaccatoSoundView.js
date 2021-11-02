@@ -42,15 +42,15 @@ class ParallelsStaccatoSoundView {
     const leftRightMultilink = Property.multilink(
       [ model.leftSide.tiltProperty, model.rightSide.tiltProperty ],
       ( leftTilt, rightTilt ) => {
-        this.leftRightPopCoefficient = TILT_DIFFERENCE_TO_PITCHED_POP_COEFFICIENT( Math.abs( leftTilt - rightTilt ) );
-        this.leftRightRelativePitch = TILT_DIFFERENCE_TO_PITCH( Math.abs( leftTilt - rightTilt ) );
+        this.leftRightPopCoefficient = TILT_DIFFERENCE_TO_PITCHED_POP_COEFFICIENT.evaluate( Math.abs( leftTilt - rightTilt ) );
+        this.leftRightRelativePitch = TILT_DIFFERENCE_TO_PITCH.evaluate( Math.abs( leftTilt - rightTilt ) );
       }
     );
     const topBottomMultilink = Property.multilink(
       [ model.topSide.tiltProperty, model.bottomSide.tiltProperty ],
       ( topTilt, bottomTilt ) => {
-        this.topBottomPopCoefficient = TILT_DIFFERENCE_TO_PITCHED_POP_COEFFICIENT( Math.abs( topTilt - bottomTilt ) );
-        this.topBottomRelativePitch = TILT_DIFFERENCE_TO_PITCH( Math.abs( topTilt - bottomTilt ) );
+        this.topBottomPopCoefficient = TILT_DIFFERENCE_TO_PITCHED_POP_COEFFICIENT.evaluate( Math.abs( topTilt - bottomTilt ) );
+        this.topBottomRelativePitch = TILT_DIFFERENCE_TO_PITCH.evaluate( Math.abs( topTilt - bottomTilt ) );
       }
     );
 
