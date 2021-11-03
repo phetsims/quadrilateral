@@ -6,20 +6,29 @@
  * @author Jesse Greenberg
  */
 
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import quadrilateral from '../../quadrilateral.js';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 
 class Vertex {
+  public positionProperty: Property<Vector2>;
+  public angleProperty: null | Property<number>;
+  public dragBoundsProperty: Property<null | Bounds2>;
+  public dragAreaProperty: Property<null | Bounds2>;
+  public isPressedProperty: Property<boolean>;
+  private tandem: Tandem;
 
   /**
    * @param {Vector2} initialPosition
    * @param {Tandem} tandem
    */
-  constructor( initialPosition, tandem ) {
+  constructor( initialPosition: Vector2, tandem: Tandem ) {
 
     // @public {Vector2Property} - the position of this vertex in model space
     this.positionProperty = new Vector2Property( initialPosition, {
@@ -68,19 +77,21 @@ class Vertex {
    * @param {Vertex} vertex1
    * @param {Vertex} vertex2
    */
-  connectToOthers( vertex1, vertex2 ) {
+  connectToOthers( vertex1: Vertex, vertex2: Vertex ) {
 
-    this.angleProperty = new DerivedProperty( [ vertex1.positionProperty, this.positionProperty, vertex2.positionProperty ], ( vertex1Position, thisPosition, vertex2Position ) => {
-      const sideA = vertex1Position.distance( thisPosition );
-      const sideB = vertex2Position.distance( thisPosition );
-      const sideC = vertex2Position.distance( vertex1Position );
+    this.angleProperty = new DerivedProperty(
+      [ vertex1.positionProperty, this.positionProperty, vertex2.positionProperty ],
+      ( vertex1Position: Vector2, thisPosition: Vector2, vertex2Position: Vector2 ) => {
+        const sideA = vertex1Position.distance( thisPosition );
+        const sideB = vertex2Position.distance( thisPosition );
+        const sideC = vertex2Position.distance( vertex1Position );
 
-      assert && assert( sideA !== 0 && sideB !== 0, 'law of cosines will not work when sides are of zero length' );
-      return Math.acos( ( ( sideA * sideA ) + ( sideB * sideB ) - ( sideC * sideC ) ) / ( 2 * sideA * sideB ) );
-    }, {
-      tandem: this.tandem.createTandem( 'angleProperty' ),
-      phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
-    } );
+        assert && assert( sideA !== 0 && sideB !== 0, 'law of cosines will not work when sides are of zero length' );
+        return Math.acos( ( ( sideA * sideA ) + ( sideB * sideB ) - ( sideC * sideC ) ) / ( 2 * sideA * sideB ) );
+      }, {
+        tandem: this.tandem.createTandem( 'angleProperty' ),
+        phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
+      } );
   }
 
   /**
@@ -102,7 +113,7 @@ class Vertex {
    * @param {Vector2} vertex2Position - returns angle at this vertex, between vertex1Position and vertex3Position
    * @param {Vector2} vertex3Position
    */
-  static calculateAngle( vertex1Position, vertex2Position, vertex3Position ) {
+  static calculateAngle( vertex1Position: Vector2, vertex2Position: Vector2, vertex3Position: Vector2 ) {
 
     const sideA = vertex1Position.distance( vertex2Position );
     const sideB = vertex3Position.distance( vertex2Position );
