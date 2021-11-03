@@ -8,50 +8,49 @@
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import quadrilateral from '../../quadrilateral.js';
 import Vertex from './Vertex.js';
 
 class Side {
+  public vertex1: Vertex;
+  public vertex2: Vertex;
+  private isConnected: boolean;
+  public tiltProperty: DerivedProperty<number>;
+  public lengthProperty: DerivedProperty<number>
 
   /**
-   * @param {Vertex} vertex1
-   * @param {Vertex} vertex2
-   * @param {Tandem} tandem
-   * @param {Object} [options]
+   * @param vertex1 - The first vertex of this Side.
+   * @param vertex2 - The second vertex of this Side.
+   * @param tandem
+   * @param [options]
    */
-  constructor( vertex1, vertex2, tandem, options ) {
+  constructor( vertex1: Vertex, vertex2: Vertex, tandem: Tandem, options: any ) {
 
     options = merge( {
       offsetVectorForTiltCalculation: new Vector2( 1, 0 )
     }, options );
 
-    // @public {Vertex}
     this.vertex1 = vertex1;
     this.vertex2 = vertex2;
 
-    // @private - Has this side been connected to another to form a shape?
+    // Has this side been connected to another to form a shape?
     this.isConnected = false;
 
-    // @public {DerivedProperty} - The slope between the vertices in model space.
-    this.slopeProperty = new DerivedProperty( [ this.vertex2.positionProperty, this.vertex1.positionProperty ], ( vertex2Position, vertex1Position ) => {
-      return ( vertex2Position.y - vertex1Position.y ) / ( vertex2Position.x - vertex1Position.x );
-    }, {
-      tandem: tandem.createTandem( 'slopeProperty' ),
-      phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
-    } );
-
-    // @public {DerivedProperty.<number>} - angle of this line against a perpendicular line that would be drawn
-    // across it when the vertices are at their initial positions, used to determine the amount of tilt of the line
-    this.tiltProperty = new DerivedProperty( [ this.vertex1.positionProperty, this.vertex2.positionProperty ], ( vertex1Position, vertex2Position ) => {
+    // Angle of this line against a perpendicular line that would be drawn across it when the vertices are at their
+    // initial positions, used to determine the amount of tilt of the line.
+    this.tiltProperty = new DerivedProperty( [ this.vertex1.positionProperty, this.vertex2.positionProperty ],
+      ( vertex1Position: Vector2, vertex2Position: Vector2 ) => {
       return Vertex.calculateAngle( vertex1Position, vertex2Position, vertex2Position.plus( options.offsetVectorForTiltCalculation ) );
     }, {
       tandem: tandem.createTandem( 'tiltProperty' ),
       phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
     } );
 
-    // @public {DerivedProperty.<number>} - The distance between the two vertices, in model space.
-    this.lengthProperty = new DerivedProperty( [ this.vertex2.positionProperty, this.vertex1.positionProperty ], ( vertex2Position, vertex1Position ) => {
+    // The distance between the two vertices, in model space.
+    this.lengthProperty = new DerivedProperty( [ this.vertex2.positionProperty, this.vertex1.positionProperty ],
+      ( vertex2Position: Vector2, vertex1Position: Vector2 ) => {
       return Vector2.getDistanceBetweenVectors( vertex2Position, vertex1Position );
     }, {
       tandem: tandem.createTandem( 'lengthProperty' ),
@@ -75,7 +74,7 @@ class Side {
    * @param {Side} otherSide
    * @public
    */
-  connectToSide( otherSide ) {
+  connectToSide( otherSide: Side ) {
     assert && assert( !this.isConnected, 'Cannot connect a side that is already connected to another.' );
     assert && assert( otherSide !== this, 'Cannot connect a side to itself.' );
 
