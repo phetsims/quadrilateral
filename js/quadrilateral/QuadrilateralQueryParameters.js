@@ -19,7 +19,11 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // If provided, a temporary graphic to indicate vertex locations will be included. There is no graphical
   // design yet and we don't want to create one yet. This lets us test mouse/touch input without showing
   // a detailed graphic that would overly influence design of other modailities.
-  showVertices: { type: 'flag' }
+  showVertices: { type: 'flag' },
+
+  // If provided, a graphic showing the area available for the vertex that is being dragged
+  // is drawn on screen for debugging and demonstration purposes.
+  showDragAreas: { type: 'flag' }
 } );
 
 quadrilateral.register( 'QuadrilateralQueryParameters', QuadrilateralQueryParameters );

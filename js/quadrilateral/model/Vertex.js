@@ -32,6 +32,8 @@ class Vertex {
 
     this.dragBoundsProperty = new Property( null );
 
+    this.dragAreaProperty = new Property( null );
+
     // @public {BooleanProperty
     this.isPressedProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'isPressedProperty' )

@@ -54,18 +54,31 @@ class VertexNode extends Circle {
 
     // A basic keyboard input listener.
     const keyboardDragListener = new KeyboardDragListener( {
-      positionProperty: vertex.positionProperty,
       transform: modelViewTransform,
-      dragBounds: vertex.dragBoundsProperty.value,
+      drag: modelDelta => {
+        const proposedPosition = vertex.positionProperty.value.plus( modelDelta );
+
+        if ( vertex.dragAreaProperty.value.containsPoint( proposedPosition ) ) {
+          vertex.positionProperty.value = proposedPosition;
+        }
+      },
       shiftDragVelocity: 100
     } );
     this.addInputListener( keyboardDragListener );
 
     // @private {DragListener}
     const dragListener = new DragListener( {
-      positionProperty: vertex.positionProperty,
       transform: modelViewTransform,
-      dragBoundsProperty: vertex.dragBoundsProperty,
+      drag: ( event, listener ) => {
+        const pointerPoint = event.pointer.point;
+        const parentPoint = this.globalToParentPoint( pointerPoint );
+        const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
+
+        const proposedPosition = modelPoint;
+        if ( vertex.dragAreaProperty.value.containsPoint( proposedPosition ) ) {
+          vertex.positionProperty.value = proposedPosition;
+        }
+      },
       tandem: options.tandem.createTandem( 'dragListener' )
     } );
     this.addInputListener( dragListener );
@@ -82,6 +95,23 @@ class VertexNode extends Circle {
     vertex.dragBoundsProperty.link( dragBounds => {
       keyboardDragListener.dragBounds = dragBounds;
     } );
+
+    if ( QuadrilateralQueryParameters.showDragAreas ) {
+
+      // Updating the isPressedProperty with focus/blur will show the drag areas
+      // with those events. I am not sure if the isPressedProperty should be set here
+      // anyway, but it may not be necessary. It should probably be set by the
+      // KeyboardDragListener on start/end drag, or the KeyboardDRagListener should
+      // have its own isPressedProperty to match the API of the DragListener.
+      this.addInputListener( {
+        focus: event => {
+          vertex.isPressedProperty.value = true;
+        },
+        blur: event => {
+          vertex.isPressedProperty.value = false;
+        }
+      } );
+    }
 
     this.mutate( options );
   }

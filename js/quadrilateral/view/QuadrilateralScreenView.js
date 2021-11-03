@@ -8,6 +8,7 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import ModelViewTransform from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
+import Path from '../../../../scenery/js/nodes/Path.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import quadrilateral from '../../quadrilateral.js';
@@ -16,6 +17,7 @@ import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralNode from './QuadrilateralNode.js';
 import QuadrilateralSoundView from './QuadrilateralSoundView.js';
 import SideDemonstrationNode from './SideDemonstrationNode.js';
+import VertexDragAreaNode from './VertexDragAreaNode.js';
 
 class QuadrilateralScreenView extends ScreenView {
 
@@ -45,6 +47,10 @@ class QuadrilateralScreenView extends ScreenView {
       )
     );
 
+    this.model = model;
+
+    this.modelViewTransform = modelViewTransform;
+
     this.quadrilateralNode = null;
 
     if ( QuadrilateralQueryParameters.rightSide || QuadrilateralQueryParameters.leftSide ||
@@ -72,6 +78,22 @@ class QuadrilateralScreenView extends ScreenView {
       tandem: tandem.createTandem( 'resetAllButton' )
     } );
     this.addChild( resetAllButton );
+
+    const testPath = new Path( null, { fill: 'rgba(255,0,0,0.5)' } );
+    this.addChild( testPath );
+    this.model.shapeChangedEmitter.addListener( () => {
+      if ( this.model.testArea ) {
+        const transformedShape = this.modelViewTransform.modelToViewShape( this.model.testArea );
+        testPath.shape = transformedShape;
+      }
+    } );
+
+    if ( QuadrilateralQueryParameters.showDragAreas ) {
+      this.addChild( new VertexDragAreaNode( model.vertex1, modelViewTransform ) );
+      this.addChild( new VertexDragAreaNode( model.vertex2, modelViewTransform ) );
+      this.addChild( new VertexDragAreaNode( model.vertex3, modelViewTransform ) );
+      this.addChild( new VertexDragAreaNode( model.vertex4, modelViewTransform ) );
+    }
   }
 
   /**
@@ -135,6 +157,8 @@ class QuadrilateralScreenView extends ScreenView {
     super.layout( viewBounds );
 
     this.quadrilateralNode && this.quadrilateralNode.layout( this.layoutBounds );
+
+    this.model.modelBoundsProperty.value = this.modelViewTransform.viewToModelBounds( this.layoutBounds );
   }
 }
 

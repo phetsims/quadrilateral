@@ -13,7 +13,10 @@ import Emitter from '../../../../axon/js/Emitter.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Range from '../../../../dot/js/Range.js';
+import Ray2 from '../../../../dot/js/Ray2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import Line from '../../../../kite/js/segments/Line.js';
+import Shape from '../../../../kite/js/Shape.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import Side from './Side.js';
@@ -45,7 +48,9 @@ class QuadrilateralModel {
       offsetVectorForTiltCalculation: new Vector2( -1, 0 )
     } );
 
-    // Connect the sides, creating the shape and giving vertices the information they need to determine their angles.
+    this.modelBoundsProperty = new Property( null );
+
+    // Connect the sides, creating the shape and giving xvertices the information they need to determine their angles.
     this.rightSide.connectToSide( this.topSide );
     this.bottomSide.connectToSide( this.rightSide );
     this.leftSide.connectToSide( this.bottomSide );
@@ -79,8 +84,18 @@ class QuadrilateralModel {
         this.vertex4.positionProperty ],
       ( position1, position2, position3, position4 ) => {
         this.shapeChangedEmitter.emit();
+
+        if ( this.modelBoundsProperty.value ) {
+          this.setVertexDragAreas();
+        }
       }
     );
+
+    this.modelBoundsProperty.link( modelBounds => {
+      if ( modelBounds ) {
+        this.setVertexDragAreas();
+      }
+    } );
   }
 
   /**
@@ -119,6 +134,101 @@ class QuadrilateralModel {
 
     // the isParallelogramProperty needs to be set asynchronously, see the documentation for isParallelogramProperty
     this.isParallelogramProperty.set( this.getIsParallelogram() );
+  }
+
+  /**
+   * Create the drag area for a vertex from the positions of the others. The vertex area
+   * @private
+   *
+   * @param {Bounds2} modelBounds - The bounds containing all vertices (entire model space)
+   * @param vertexA - The vertex whose area we are determining
+   * @param vertexB - the next vertex from vertexA, moving clockwise
+   * @param vertexC - the next vertex from vertexB, moving clockwise
+   * @param vertexD - the next vertex from vertexC, moving clockwise
+   */
+  createVertexArea( modelBounds, vertexA, vertexB, vertexC, vertexD ) {
+
+    // Lines around the bounds to detect intersections - remember that for Bounds2 top and bottom
+    // will be flipped relative to the model because Bounds2 matches scenery +y direction convention.
+    const leftLine = new Line( modelBounds.leftTop, modelBounds.leftBottom );
+    const topLine = new Line( modelBounds.leftBottom, modelBounds.rightBottom );
+    const rightLine = new Line( modelBounds.rightBottom, modelBounds.rightTop );
+    const bottomLine = new Line( modelBounds.rightTop, modelBounds.leftTop );
+
+    // the lines collected here in clockwise order, segments have start/end points in clockwise order as well.
+    // This way we can use them to update accordingly
+    const directedLines = [ leftLine, topLine, rightLine, bottomLine ];
+
+    const firstRayDirection = vertexD.positionProperty.value.minus( vertexC.positionProperty.value ).normalized();
+    const firstRay = new Ray2( vertexC.positionProperty.value, firstRayDirection );
+
+    const secondRayDirection = vertexB.positionProperty.value.minus( vertexC.positionProperty.value ).normalized();
+    const secondRay = new Ray2( vertexC.positionProperty.value, secondRayDirection );
+
+    let firstRayIntersectionLinePair = null;
+    let secondRayIntersectionLinePair = null;
+    directedLines.forEach( line => {
+      const firstLineIntersections = line.intersection( firstRay );
+      const secondLineIntersections = line.intersection( secondRay );
+
+      if ( firstLineIntersections.length > 0 ) {
+        firstRayIntersectionLinePair = {
+          line: line,
+          intersection: firstLineIntersections[ 0 ]
+        };
+      }
+      if ( secondLineIntersections.length > 0 ) {
+        secondRayIntersectionLinePair = {
+          line: line,
+          intersection: secondLineIntersections[ 0 ]
+        };
+      }
+    } );
+
+    const points = [];
+    points.push( vertexC.positionProperty.value );
+    points.push( firstRayIntersectionLinePair.intersection.point );
+
+    let iterations = 0;
+    let nextLine = firstRayIntersectionLinePair.line;
+    while ( nextLine !== secondRayIntersectionLinePair.line ) {
+      points.push( nextLine.end );
+
+      let nextIndex = directedLines.indexOf( nextLine ) + 1;
+      nextIndex = nextIndex > ( directedLines.length - 1 ) ? 0 : nextIndex;
+      nextLine = directedLines[ nextIndex ];
+
+      assert && assert( nextLine );
+
+      iterations++;
+      assert && assert( iterations < 10, 'we should have closed the shape by now! Likely infinite loop' );
+    }
+
+    // we have walked to the same line, just include the second intersection point
+    points.push( secondRayIntersectionLinePair.intersection.point );
+
+    const shape = new Shape();
+    shape.moveToPoint( points[ 0 ] );
+
+    for ( let i = 1; i < points.length; i++ ) {
+      shape.lineToPoint( points[ i ] );
+    }
+
+    // closing the shape after the last intersection should bring us back to vertexC
+    shape.close();
+
+    return shape;
+  }
+
+  /**
+   * Update the drag areas for all vertices.
+   * @private
+   */
+  setVertexDragAreas() {
+    this.vertex1.dragAreaProperty.set( this.createVertexArea( this.modelBoundsProperty.value, this.vertex1, this.vertex2, this.vertex3, this.vertex4 ) );
+    this.vertex2.dragAreaProperty.set( this.createVertexArea( this.modelBoundsProperty.value, this.vertex2, this.vertex3, this.vertex4, this.vertex1 ) );
+    this.vertex3.dragAreaProperty.set( this.createVertexArea( this.modelBoundsProperty.value, this.vertex3, this.vertex4, this.vertex1, this.vertex2 ) );
+    this.vertex4.dragAreaProperty.set( this.createVertexArea( this.modelBoundsProperty.value, this.vertex4, this.vertex1, this.vertex2, this.vertex3 ) );
   }
 }
 
