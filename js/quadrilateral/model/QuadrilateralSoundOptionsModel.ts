@@ -3,12 +3,14 @@
 /**
  * A model for the sound designs that are being proposed for Quadrilateral. In active development and we are
  * iterating on all of these. Different sound designs can be tested from the Preferences Dialog in the sim.
+ * Once a single design is decided this will probably be entirely removed.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import WrappedAudioBuffer from '../../../../tambo/js/WrappedAudioBuffer.js';
 import quadIntoParallel001Sound from '../../../sounds/quad-into-parallel-001_mp3.js';
 import quadIntoParallel002Sound from '../../../sounds/quad-into-parallel-002_mp3.js';
 import quadIntoParallel003Sound from '../../../sounds/quad-into-parallel-003_mp3.js';
@@ -39,9 +41,17 @@ const SuccessSoundFile = Enumeration.byKeys( [ 'ONE', 'TWO', 'THREE', 'FOUR' ] )
 
 // Maps QuartetSoundFile to the WrappedAudioBuffer for the SoundClip
 const AUDIO_BUFFER_MAP = new Map();
+
+// @ts-ignore
 AUDIO_BUFFER_MAP.set( QuartetSoundFile.ONE, quadLoop01Sound );
+
+// @ts-ignore
 AUDIO_BUFFER_MAP.set( QuartetSoundFile.TWO, quadLoop02Sound );
+
+// @ts-ignore
 AUDIO_BUFFER_MAP.set( QuartetSoundFile.THREE, quadLoop03Sound );
+
+// @ts-ignore
 AUDIO_BUFFER_MAP.set( QuartetSoundFile.FOUR, quadLoop04Sound );
 
 /**
@@ -50,13 +60,16 @@ AUDIO_BUFFER_MAP.set( QuartetSoundFile.FOUR, quadLoop04Sound );
  * while moving.
  */
 class SuccessSoundCollection {
+  public readonly successSound: WrappedAudioBuffer;
+  public readonly failureSound: WrappedAudioBuffer;
+  public readonly maintenanceSound: WrappedAudioBuffer;
 
   /**
-   * @param {WrappedAudioBuffer} successSound
-   * @param {WrappedAudioBuffer} failureSound
-   * @param {WrappedAudioBuffer} maintenanceSound
+   * @param successSound
+   * @param failureSound
+   * @param maintenanceSound
    */
-  constructor( successSound, failureSound, maintenanceSound ) {
+  constructor( successSound: WrappedAudioBuffer, failureSound: WrappedAudioBuffer, maintenanceSound: WrappedAudioBuffer ) {
 
     // @public (read-only) {WrappedAudioBuffer}
     this.successSound = successSound;
@@ -65,22 +78,52 @@ class SuccessSoundCollection {
   }
 }
 
+// TODO: How to do this? I think it should be
+// const SUCCESS_SOUND_COLLECTION_MAP: Map<SuccessSoundFile, SuccessSoundCollection> = new Map();
+// But typescript complains:  "TS2749: 'SuccessSoundFile' refers to a value, but is being used as a type here. Did you
+// mean 'typeof SuccessSoundFile'?"
+// See https://github.com/phetsims/quadrilateral/issues/27
 const SUCCESS_SOUND_COLLECTION_MAP = new Map();
+
+// @ts-ignore
 SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.ONE, new SuccessSoundCollection( quadIntoParallel001Sound, quadOutOfParallel001Sound, quadMovingInParallelSuccessLoop001Sound ) );
+
+// @ts-ignore
 SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.TWO, new SuccessSoundCollection( quadIntoParallel002Sound, quadOutOfParallel002Sound, quadMovingInParallelSuccessLoop002Sound ) );
+
+// @ts-ignore
 SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.THREE, new SuccessSoundCollection( quadIntoParallel003Sound, quadOutOfParallel003Sound, quadMovingInParallelSuccessLoop003Sound ) );
+
+// @ts-ignore
 SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.FOUR, new SuccessSoundCollection( quadIntoParallel004Sound, quadOutOfParallel004Sound, quadMovingInParallelSuccessLoop004Sound ) );
 
 class QuadrilateralSoundOptionsModel {
+  public soundDesignProperty: EnumerationProperty; // TODO: type for Enumeration? #27
+  public baseSoundFileProperty: EnumerationProperty; // TODO: type for Enumeration? #27
+  public successSoundFileProperty: EnumerationProperty; // TODO: type for Enumeration? #27
+
+  // TODO: how to do these with typescript? See #27
+  public static SoundDesign: any;
+  public static QuartetSoundFile: any;
+  public static AUDIO_BUFFER_MAP: any;
+  public static SUCCESS_SOUND_COLLECTION_MAP: any;
+
   constructor() {
 
-    // the fundamental sound design
+    // The selected sound design, changing this will change the entire design.
+    // @ts-ignore
     this.soundDesignProperty = new EnumerationProperty( SoundDesign, SoundDesign.SUCCESS_SOUNDS );
 
-    // @public {EnumerationProperty} - Property that controls the base sound of the "quartet" design. In the
-    // quartet design there is a single sound whose pitch is changed depending on length and tilt of each line.
+    // Property that controls the base sound for a few of the prototypes. Some prototypes have a base sound and
+    // the state of the sim changes the frequency and layering of the base sound. But there are a few base
+    // sounds to choose frome.
+    // @ts-ignore
     this.baseSoundFileProperty = new EnumerationProperty( QuartetSoundFile, QuartetSoundFile.FOUR );
 
+    // @ts-ignore
+    // For the "Success" sound prototype, a sound is played when reaching a parallelogram, leaving a parallelogram,
+    // and when the parallelogram is maintained while the shape changes. Within this paradigm there are
+    // different sound options for each of these to chose from.
     this.successSoundFileProperty = new EnumerationProperty( SuccessSoundFile, SuccessSoundFile.FOUR );
   }
 }
