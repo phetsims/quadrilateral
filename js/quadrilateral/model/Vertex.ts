@@ -25,30 +25,36 @@ class Vertex {
   private tandem: Tandem;
 
   /**
-   * @param {Vector2} initialPosition
-   * @param {Tandem} tandem
+   * @param initialPosition - The initial position for the Vertex in model coordinates.
+   * @param tandem
    */
   constructor( initialPosition: Vector2, tandem: Tandem ) {
 
-    // @public {Vector2Property} - the position of this vertex in model space
+    // The position of the vertex in model coordinates.
     this.positionProperty = new Vector2Property( initialPosition, {
       tandem: tandem.createTandem( 'positionProperty' )
     } );
 
-    // @public {DerivedProperty.<number>|null} - the angle at this vertex of the quadrilateral, null until
-    // this vertex is connected to two others because we need three points to form the angle
+    // The angle at this vertex of the quadrilateral, null until this vertex is connected to two others because we
+    // need three points to form the angle.
     this.angleProperty = null;
 
+    // The bounds in model coordinates that define where this vertex can move. NOTE: Likely this
+    // is being replaced by dragAreaProperty, see next field.
     this.dragBoundsProperty = new Property( null );
 
+    // The Shape in model coordinates that defines where this Vertex can move. It can never
+    // go outside of this area. The dragAreaProperty is determined by other vertices of the quadrilateral
+    // and is calculated such that the quadrilateral can never become complex or concave. It is null until
+    // the model bounds are defined and this Vertex is connected to others to form the quadrilateral shape.
     this.dragAreaProperty = new Property( null );
 
-    // @public {BooleanProperty
+    // True when this Vertex is "pressed" during user interaction.
     this.isPressedProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'isPressedProperty' )
     } );
 
-    // @private {Tandem}
+    // Referenced so that we can pass the tandem to Properties as they are dynamically created in the methods below.
     this.tandem = tandem;
   }
 
