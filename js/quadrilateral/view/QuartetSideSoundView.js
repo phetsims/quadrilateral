@@ -54,7 +54,7 @@ const MIDDLE_OCTAVE_LENGTH_TO_OUTPUT_LEVEL = new PiecewiseLinearFunction( [ MIN_
 // highest octave is loudest at max length and silent lower than half length
 const LOWER_OCTAVE_LENGTH_TO_OUTPUT_LEVEL = new LinearFunction( MAX_LENGTH / 2, MAX_LENGTH, 0, 1, true );
 
-// Maps soundFileProperty to the WrappedAudioBuffer for the SoundClip
+// Maps QuartetSoundFile to the WrappedAudioBuffer for the SoundClip
 const AUDIO_BUFFER_MAP = new Map();
 AUDIO_BUFFER_MAP.set( QuadrilateralSoundOptionsModel.QuartetSoundFile.ONE, quadLoop01Sound );
 AUDIO_BUFFER_MAP.set( QuadrilateralSoundOptionsModel.QuartetSoundFile.TWO, quadLoop02Sound );

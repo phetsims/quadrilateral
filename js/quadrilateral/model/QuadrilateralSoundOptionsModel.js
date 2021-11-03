@@ -37,7 +37,7 @@ const QuartetSoundFile = Enumeration.byKeys( [ 'ONE', 'TWO', 'THREE', 'FOUR' ] )
 // "getting out of parallel", and "moving in parallel". See SUCCESS_SOUND_COLLECTION_MAP below.
 const SuccessSoundFile = Enumeration.byKeys( [ 'ONE', 'TWO', 'THREE', 'FOUR' ] );
 
-// Maps soundFileProperty to the WrappedAudioBuffer for the SoundClip
+// Maps QuartetSoundFile to the WrappedAudioBuffer for the SoundClip
 const AUDIO_BUFFER_MAP = new Map();
 AUDIO_BUFFER_MAP.set( QuartetSoundFile.ONE, quadLoop01Sound );
 AUDIO_BUFFER_MAP.set( QuartetSoundFile.TWO, quadLoop02Sound );
