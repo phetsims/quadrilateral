@@ -15,12 +15,13 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import Shape from '../../../../kite/js/Shape.js';
 
 class Vertex {
   public positionProperty: Property<Vector2>;
   public angleProperty: null | Property<number>;
   public dragBoundsProperty: Property<null | Bounds2>;
-  public dragAreaProperty: Property<null | Bounds2>;
+  public dragAreaProperty: Property<null | Shape>;
   public isPressedProperty: Property<boolean>;
   private tandem: Tandem;
 

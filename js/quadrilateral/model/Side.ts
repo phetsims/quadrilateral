@@ -26,7 +26,7 @@ class Side {
    * @param tandem
    * @param [options]
    */
-  constructor( vertex1: Vertex, vertex2: Vertex, tandem: Tandem, options: any ) {
+  constructor( vertex1: Vertex, vertex2: Vertex, tandem: Tandem, options?: any ) {
 
     options = merge( {
       offsetVectorForTiltCalculation: new Vector2( 1, 0 )
