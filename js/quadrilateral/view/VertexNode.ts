@@ -16,17 +16,14 @@ import timesSolidShape from '../../../../sherpa/js/fontawesome-5/timesSolidShape
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import Vertex from '../model/Vertex.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import SceneryEvent from '../../../../scenery/js/input/SceneryEvent.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 
 class VertexNode extends Circle {
-
-  /**
-   * @mixes Voicing
-   * @param {Vertex} vertex
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {Object} [options]
-   */
-  constructor( vertex, modelViewTransform, options ) {
-
+  constructor( vertex: Vertex, modelViewTransform: ModelViewTransform2, options?: Object ) {
     options = merge( {
 
       // pdom
@@ -38,6 +35,8 @@ class VertexNode extends Circle {
     }, options );
 
     super( 25 );
+
+    // @ts-ignore - how do we deal with mixin?
     this.initializeVoicing();
 
     if ( QuadrilateralQueryParameters.showVertices ) {
@@ -48,17 +47,17 @@ class VertexNode extends Circle {
       } ) );
     }
 
-    vertex.positionProperty.link( position => {
+    vertex.positionProperty.link( ( position: Vector2 ) => {
       this.translation = modelViewTransform.modelToViewPosition( position );
     } );
 
     // A basic keyboard input listener.
     const keyboardDragListener = new KeyboardDragListener( {
       transform: modelViewTransform,
-      drag: modelDelta => {
+      drag: ( modelDelta: Vector2 ) => {
         const proposedPosition = vertex.positionProperty.value.plus( modelDelta );
 
-        if ( vertex.dragAreaProperty.value.containsPoint( proposedPosition ) ) {
+        if ( vertex.dragAreaProperty.value!.containsPoint( proposedPosition ) ) {
           vertex.positionProperty.value = proposedPosition;
         }
       },
@@ -69,22 +68,24 @@ class VertexNode extends Circle {
     // @private {DragListener}
     const dragListener = new DragListener( {
       transform: modelViewTransform,
-      drag: ( event, listener ) => {
+      drag: ( event: SceneryEvent, listener: DragListener ) => {
         const pointerPoint = event.pointer.point;
-        const parentPoint = this.globalToParentPoint( pointerPoint );
+        const parentPoint = this.globalToParentPoint( pointerPoint! );
         const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
 
         const proposedPosition = modelPoint;
-        if ( vertex.dragAreaProperty.value.containsPoint( proposedPosition ) ) {
+        if ( vertex.dragAreaProperty.value!.containsPoint( proposedPosition ) ) {
           vertex.positionProperty.value = proposedPosition;
         }
       },
+
+      // @ts-ignore - TODO: Need to come through and do options, see #27
       tandem: options.tandem.createTandem( 'dragListener' )
     } );
     this.addInputListener( dragListener );
 
     // notify when this vertex is pressed
-    dragListener.isPressedProperty.link( isPressed => vertex.isPressedProperty.set( isPressed ) );
+    dragListener.isPressedProperty.link( ( isPressed: boolean ) => vertex.isPressedProperty.set( isPressed ) );
 
     // TODO: For now we are showing pointer areas instead of a graphical sim. These are used just to indicate
     // where you can press while we discuss multitouch considerations. We don't want something more permanent because
@@ -92,7 +93,7 @@ class VertexNode extends Circle {
     this.mouseArea = this.localBounds;
     this.touchArea = this.mouseArea;
 
-    vertex.dragBoundsProperty.link( dragBounds => {
+    vertex.dragBoundsProperty.link( ( dragBounds: Bounds2 ) => {
       keyboardDragListener.dragBounds = dragBounds;
     } );
 
@@ -104,10 +105,10 @@ class VertexNode extends Circle {
       // KeyboardDragListener on start/end drag, or the KeyboardDRagListener should
       // have its own isPressedProperty to match the API of the DragListener.
       this.addInputListener( {
-        focus: event => {
+        focus: () => {
           vertex.isPressedProperty.value = true;
         },
-        blur: event => {
+        blur: () => {
           vertex.isPressedProperty.value = false;
         }
       } );
@@ -117,6 +118,7 @@ class VertexNode extends Circle {
   }
 }
 
+// @ts-ignore - TODO: What to do with trait? See #27
 Voicing.compose( VertexNode );
 
 quadrilateral.register( 'VertexNode', VertexNode );
