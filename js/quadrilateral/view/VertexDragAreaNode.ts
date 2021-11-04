@@ -9,15 +9,13 @@
 import merge from '../../../../phet-core/js/merge.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import quadrilateral from '../../quadrilateral.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import Vertex from '../model/Vertex.js';
+import Shape from '../../../../kite/js/Shape.js';
 
 class VertexDragAreaNode extends Path {
 
-  /**
-   * @param {Vertex} vertex
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {Object} [options]
-   */
-  constructor( vertex, modelViewTransform, options ) {
+  constructor( vertex: Vertex, modelViewTransform: ModelViewTransform2, options?: any ) {
 
     options = merge( {
       fill: 'rgba(255,0,0,0.5)'
@@ -26,7 +24,7 @@ class VertexDragAreaNode extends Path {
     super( null, options );
 
     // update shape when the model shape changes
-    vertex.dragAreaProperty.link( dragArea => {
+    vertex.dragAreaProperty.link( ( dragArea: Shape ) => {
       if ( dragArea ) {
         this.shape = modelViewTransform.modelToViewShape( dragArea );
       }
@@ -34,7 +32,7 @@ class VertexDragAreaNode extends Path {
 
     // the shape should only be visible during input, if we show all vertex
     // drag areas at once it is impossible to understand
-    vertex.isPressedProperty.link( isPressed => {
+    vertex.isPressedProperty.link( ( isPressed: boolean ) => {
       this.visible = isPressed;
     } );
   }
