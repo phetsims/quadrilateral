@@ -30,7 +30,7 @@ class SideNode extends Line {
    * // TODO: How to do Voicing mixin?
    * @mixes Voicing
    */
-  constructor( side: Side, modelViewTransform: ModelViewTransform2, options: any ) {
+  public constructor( side: Side, modelViewTransform: ModelViewTransform2, options?: any ) {
 
     options = merge( {
       lineWidth: 20,

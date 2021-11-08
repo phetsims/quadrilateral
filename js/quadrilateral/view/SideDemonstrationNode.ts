@@ -14,17 +14,19 @@ import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuartetSideSoundView from './QuartetSideSoundView.js';
 import SideNode from './SideNode.js';
 import VertexNode from './VertexNode.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import QuadrilateralModel from '../model/QuadrilateralModel.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
+import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
 
 class SideDemonstrationNode extends Node {
+  private readonly rightSideSoundView: QuartetSideSoundView | null;
+  private readonly leftSideSoundView: QuartetSideSoundView | null;
+  private readonly bottomSideSoundView: QuartetSideSoundView | null;
+  private readonly topSideSoundView: QuartetSideSoundView | null;
 
-  /**
-   * @param {QuadrilateralModel} model
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {QuadrilateralSoundOptionsModel} soundOptionsModel
-   * @param {Bounds2} layoutBounds
-   * @param {Object} [options]
-   */
-  constructor( model, modelViewTransform, layoutBounds, soundOptionsModel, options ) {
+
+  constructor( model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, soundOptionsModel: QuadrilateralSoundOptionsModel, options: any ) {
     super( options );
 
     const vertex1Node = new VertexNode( model.vertex1, modelViewTransform );
@@ -32,13 +34,19 @@ class SideDemonstrationNode extends Node {
     const vertex3Node = new VertexNode( model.vertex3, modelViewTransform );
     const vertex4Node = new VertexNode( model.vertex4, modelViewTransform );
 
+    // references to SideViews, only created if requested by query parameter
+    this.rightSideSoundView = null;
+    this.leftSideSoundView = null;
+    this.topSideSoundView = null;
+    this.bottomSideSoundView = null;
+
     if ( QuadrilateralQueryParameters.rightSide ) {
       const rightSideNode = new SideNode( model.rightSide, modelViewTransform );
       this.addChild( rightSideNode );
 
       this.rightSideSoundView = new QuartetSideSoundView( model.rightSide, soundOptionsModel.baseSoundFileProperty );
       model.shapeChangedEmitter.addListener( () => {
-        this.rightSideSoundView.startPlayingSounds();
+        this.rightSideSoundView!.startPlayingSounds();
       } );
     }
     if ( QuadrilateralQueryParameters.leftSide ) {
@@ -48,7 +56,7 @@ class SideDemonstrationNode extends Node {
       // sound
       this.leftSideSoundView = new QuartetSideSoundView( model.leftSide, soundOptionsModel.baseSoundFileProperty );
       model.shapeChangedEmitter.addListener( () => {
-        this.leftSideSoundView.startPlayingSounds();
+        this.leftSideSoundView!.startPlayingSounds();
       } );
     }
     if ( QuadrilateralQueryParameters.topSide ) {
@@ -58,7 +66,7 @@ class SideDemonstrationNode extends Node {
       // sound
       this.topSideSoundView = new QuartetSideSoundView( model.topSide, soundOptionsModel.baseSoundFileProperty );
       model.shapeChangedEmitter.addListener( () => {
-        this.topSideSoundView.startPlayingSounds();
+        this.topSideSoundView!.startPlayingSounds();
       } );
     }
     if ( QuadrilateralQueryParameters.bottomSide ) {
@@ -68,7 +76,7 @@ class SideDemonstrationNode extends Node {
       // sound
       this.bottomSideSoundView = new QuartetSideSoundView( model.bottomSide, soundOptionsModel.baseSoundFileProperty );
       model.shapeChangedEmitter.addListener( () => {
-        this.bottomSideSoundView.startPlayingSounds();
+        this.bottomSideSoundView!.startPlayingSounds();
       } );
     }
 
@@ -89,11 +97,10 @@ class SideDemonstrationNode extends Node {
 
   /**
    * Step the sound views.
-   * @public
    *
    * @param dt
    */
-  step( dt ) {
+  public step( dt: number ) {
     this.rightSideSoundView && this.rightSideSoundView.step( dt );
     this.leftSideSoundView && this.leftSideSoundView.step( dt );
     this.topSideSoundView && this.topSideSoundView.step( dt );
