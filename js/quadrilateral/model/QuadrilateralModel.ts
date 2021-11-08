@@ -73,7 +73,7 @@ class QuadrilateralModel {
       offsetVectorForTiltCalculation: new Vector2( -1, 0 )
     } );
 
-    this.modelBoundsProperty = new Property( null );
+    this.modelBoundsProperty = new Property<Bounds2 | null>( null );
 
     // Connect the sides, creating the shape and giving xvertices the information they need to determine their angles.
     this.rightSide.connectToSide( this.topSide );
@@ -115,7 +115,7 @@ class QuadrilateralModel {
       }
     );
 
-    this.modelBoundsProperty.link( ( modelBounds: Bounds2 ) => {
+    this.modelBoundsProperty.link( modelBounds => {
       if ( modelBounds ) {
         this.setVertexDragAreas();
       }

@@ -42,13 +42,13 @@ class Vertex {
 
     // The bounds in model coordinates that define where this vertex can move. NOTE: Likely this
     // is being replaced by dragAreaProperty, see next field.
-    this.dragBoundsProperty = new Property( null );
+    this.dragBoundsProperty = new Property<Bounds2 | null>( null );
 
     // The Shape in model coordinates that defines where this Vertex can move. It can never
     // go outside of this area. The dragAreaProperty is determined by other vertices of the quadrilateral
     // and is calculated such that the quadrilateral can never become complex or concave. It is null until
     // the model bounds are defined and this Vertex is connected to others to form the quadrilateral shape.
-    this.dragAreaProperty = new Property( null );
+    this.dragAreaProperty = new Property<Shape | null>( null );
 
     // True when this Vertex is "pressed" during user interaction.
     this.isPressedProperty = new BooleanProperty( false, {

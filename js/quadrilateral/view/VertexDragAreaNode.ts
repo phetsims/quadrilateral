@@ -11,7 +11,6 @@ import Path from '../../../../scenery/js/nodes/Path.js';
 import quadrilateral from '../../quadrilateral.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vertex from '../model/Vertex.js';
-import Shape from '../../../../kite/js/Shape.js';
 
 class VertexDragAreaNode extends Path {
 
@@ -24,7 +23,7 @@ class VertexDragAreaNode extends Path {
     super( null, options );
 
     // update shape when the model shape changes
-    vertex.dragAreaProperty.link( ( dragArea: Shape ) => {
+    vertex.dragAreaProperty.link( dragArea => {
       if ( dragArea ) {
         this.shape = modelViewTransform.modelToViewShape( dragArea );
       }

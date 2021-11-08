@@ -20,7 +20,6 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import Vertex from '../model/Vertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import SceneryEvent from '../../../../scenery/js/input/SceneryEvent.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
 
 class VertexNode extends Circle {
   constructor( vertex: Vertex, modelViewTransform: ModelViewTransform2, options?: Object ) {
@@ -93,7 +92,7 @@ class VertexNode extends Circle {
     this.mouseArea = this.localBounds;
     this.touchArea = this.mouseArea;
 
-    vertex.dragBoundsProperty.link( ( dragBounds: Bounds2 ) => {
+    vertex.dragBoundsProperty.link( dragBounds => {
       keyboardDragListener.dragBounds = dragBounds;
     } );
 
