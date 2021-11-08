@@ -11,27 +11,60 @@ import merge from '../../../../phet-core/js/merge.js';
 import SoundGenerator from '../../../../tambo/js/sound-generators/SoundGenerator.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
 import quadrilateral from '../../quadrilateral.js';
+import QuadrilateralModel from '../model/QuadrilateralModel.js';
+import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
 
 const STACCATO_PLAY_INTERVAL = 0.5; // in seconds, how frequently we play the staccato sound
 
 const TILT_DIFFERENCE_TO_PITCHED_POP_COEFFICIENT = new LinearFunction( 0, 1, 1, 6, true );
 const TILT_DIFFERENCE_TO_PITCH = new LinearFunction( 0, 0.5, 0.5, 0, true );
 
+// A type for elements used to create Sound sources with the PitchedPopGenerator.
+type OscillatorWithGainNode = {
+  oscillator: OscillatorNode,
+  gainNode: GainNode
+};
+
 class ParallelsStaccatoSoundView {
-  constructor( model, soundOptionsModel ) {
+  private readonly model: QuadrilateralModel;
+  private readonly leftRightSideGenerator: QuadrilateralPitchedPopGenerator;
+  private readonly topBottomSideGenerator: QuadrilateralPitchedPopGenerator;
+  private isPlaying: boolean;
+  private remainingPlayTime: number;
+  private timeSinceLeftRightPlay: number;
+  private timeSinceTopBottomPlay: number;
+  private leftRightPopCoefficient: number | null;
+  private leftRightRelativePitch: number | null;
+  private topBottomPopCoefficient: number | null;
+  private topBottomRelativePitch: number | null;
+  private readonly disposeParallelsStaccatoSoundView: () => void;
+
+
+  public constructor( model: QuadrilateralModel, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
     this.model = model;
 
     this.leftRightSideGenerator = new QuadrilateralPitchedPopGenerator();
     this.topBottomSideGenerator = new QuadrilateralPitchedPopGenerator();
-
     soundManager.addSoundGenerator( this.leftRightSideGenerator );
     soundManager.addSoundGenerator( this.topBottomSideGenerator );
 
+    // Whether or not this SoundView is currently playing so we know to stop playing after a time interval or
+    // fade out.
     this.isPlaying = false;
+
+    // How much longer we should play this SoundView before stopping play after an interaction.
     this.remainingPlayTime = 0;
 
+    // How much time we have played a sound for a particular pair of sides.
     this.timeSinceLeftRightPlay = STACCATO_PLAY_INTERVAL;
     this.timeSinceTopBottomPlay = 0;
+
+    // Coefficients that control the Sound output with the pitched/pop generator, null until first modified
+    // in the multilinks attached to the model.
+    this.leftRightPopCoefficient = null;
+    this.leftRightRelativePitch = null;
+    this.topBottomPopCoefficient = null;
+    this.topBottomRelativePitch = null;
 
     const shapeChangeListener = () => {
       this.isPlaying = true;
@@ -41,14 +74,14 @@ class ParallelsStaccatoSoundView {
 
     const leftRightMultilink = Property.multilink(
       [ model.leftSide.tiltProperty, model.rightSide.tiltProperty ],
-      ( leftTilt, rightTilt ) => {
+      ( leftTilt: number, rightTilt: number ) => {
         this.leftRightPopCoefficient = TILT_DIFFERENCE_TO_PITCHED_POP_COEFFICIENT.evaluate( Math.abs( leftTilt - rightTilt ) );
         this.leftRightRelativePitch = TILT_DIFFERENCE_TO_PITCH.evaluate( Math.abs( leftTilt - rightTilt ) );
       }
     );
     const topBottomMultilink = Property.multilink(
       [ model.topSide.tiltProperty, model.bottomSide.tiltProperty ],
-      ( topTilt, bottomTilt ) => {
+      ( topTilt: number, bottomTilt: number ) => {
         this.topBottomPopCoefficient = TILT_DIFFERENCE_TO_PITCHED_POP_COEFFICIENT.evaluate( Math.abs( topTilt - bottomTilt ) );
         this.topBottomRelativePitch = TILT_DIFFERENCE_TO_PITCH.evaluate( Math.abs( topTilt - bottomTilt ) );
       }
@@ -65,10 +98,9 @@ class ParallelsStaccatoSoundView {
   }
 
   /**
-   * @public
-   * @param {number} dt
+   * @param dt - in seconds
    */
-  step( dt ) {
+  public step( dt: number ): void {
     if ( this.isPlaying ) {
       this.remainingPlayTime -= dt;
 
@@ -77,11 +109,11 @@ class ParallelsStaccatoSoundView {
       if ( this.timeSinceLeftRightPlay > STACCATO_PLAY_INTERVAL ) {
         this.timeSinceLeftRightPlay = 0;
         this.timeSinceTopBottomPlay = 0;
-        this.leftRightSideGenerator.playPop( this.leftRightRelativePitch * 0.5, STACCATO_PLAY_INTERVAL / 3, this.leftRightPopCoefficient );
+        this.leftRightSideGenerator.playPop( this.leftRightRelativePitch! * 0.5, STACCATO_PLAY_INTERVAL / 3, this.leftRightPopCoefficient! );
       }
       if ( this.timeSinceTopBottomPlay > STACCATO_PLAY_INTERVAL / 2 ) {
         this.timeSinceTopBottomPlay = -STACCATO_PLAY_INTERVAL / 2;
-        this.topBottomSideGenerator.playPop( this.topBottomRelativePitch, STACCATO_PLAY_INTERVAL / 3, this.topBottomPopCoefficient );
+        this.topBottomSideGenerator.playPop( this.topBottomRelativePitch!, STACCATO_PLAY_INTERVAL / 3, this.topBottomPopCoefficient! );
       }
 
       if ( this.remainingPlayTime <= 0 ) {
@@ -104,7 +136,11 @@ class ParallelsStaccatoSoundView {
  * I am not sure what the best way to make modifications in common code would be.
  */
 class QuadrilateralPitchedPopGenerator extends SoundGenerator {
-  constructor( options ) {
+  private pitchRange: Range;
+  private readonly soundSources: OscillatorWithGainNode[];
+  private nextSoundSourceIndex: number;
+
+  public constructor( options?: any ) {
 
     options = merge( {
 
@@ -120,8 +156,8 @@ class QuadrilateralPitchedPopGenerator extends SoundGenerator {
     // @private {Range} - range of pitches to be produced
     this.pitchRange = options.pitchRange;
 
-    // {DynamicsCompressorNode} - a dynamics compressor node used to limit max output amplitude, otherwise distortion
-    // tends to occur when lots of pops are played at once
+    // a dynamics compressor node used to limit max output amplitude, otherwise distortion tends to occur when lots of
+    // pops are played at once
     const dynamicsCompressorNode = this.audioContext.createDynamicsCompressor();
 
     // the following values were empirically determined throgh informed experimentation
@@ -163,12 +199,13 @@ class QuadrilateralPitchedPopGenerator extends SoundGenerator {
   }
 
   /**
-   * play the pop sound
-   * {number} relativePitch - a value from 0 to 1 indicating the frequency to play within the pitch range
-   * {number} [duration] - the duration of the sound, in seconds
-   * @public
+   * Play the Pop sound.
+   * @param relativePitch - a value from 0 to 1 indicating the frequency to play within the pitch range
+   * @param duration - the duration of the sound, in seconds
+   * @param frequencyCoefficient - Coefficient controlling the frequency as we shift pitch, higher values result
+   *                               in greater changes in frequency over the duration.
    */
-  playPop( relativePitch, duration, frequencyCoefficient ) {
+  public playPop( relativePitch: number, duration: number, frequencyCoefficient: number ): void {
 
     assert && assert( relativePitch >= 0 && relativePitch <= 1, 'relative pitch value out of range' );
 
