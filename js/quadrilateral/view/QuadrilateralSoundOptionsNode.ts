@@ -1,10 +1,14 @@
 // Copyright 2021, University of Colorado Boulder
 
 /**
- * Options for the Preferences Dialog that allow us to set the base sound file.
+ * Options for the Preferences Dialog that allow us to set the sound design and sub-options. Sounds are
+ * being actively designed while we implement them and we are adding all designs at once. TThe sounds can be selected
+ * and controlled by the UI that is provided by this Node.
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/nodes/HBox.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
@@ -14,8 +18,9 @@ import ComboBox from '../../../../sun/js/ComboBox.js';
 import ComboBoxItem from '../../../../sun/js/ComboBoxItem.js';
 import Panel from '../../../../sun/js/Panel.js';
 import VerticalAquaRadioButtonGroup from '../../../../sun/js/VerticalAquaRadioButtonGroup.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
+import QuadrilateralSoundOptionsModel, { SoundDesign } from '../model/QuadrilateralSoundOptionsModel.js';
 
 const LABEL_TEXT_OPTIONS = {
   font: new PhetFont( { size: 16 } )
@@ -25,15 +30,11 @@ const TITLE_TEXT_OPTIONS = {
   font: new PhetFont( { size: 16, weight: 'bold' } )
 };
 
+// spacing between title for option and the content Node
 const TITLE_SPACING = 15;
 
 class QuadrilateralSoundOptionsNode extends Panel {
-
-  /**
-   * @param {QuadrilateralSoundOptionsModel} model
-   * @param {Tandem} tandem
-   */
-  constructor( model, tandem ) {
+  public constructor( model: QuadrilateralSoundOptionsModel, tandem: Tandem ) {
 
     const soundDesignLabelText = new Text( 'Sound Design', TITLE_TEXT_OPTIONS );
 
@@ -56,25 +57,32 @@ class QuadrilateralSoundOptionsNode extends Panel {
       children: [ labelledComboBox, optionsParentNode ]
     } );
 
-
     const baseSoundRadioButtonItems = [
       {
         node: new Text( 'Sound One', LABEL_TEXT_OPTIONS ),
+
+        // @ts-ignore - TODO: How do we do Enumeration?
         value: model.baseSoundFileProperty.enumeration.ONE,
         tandemName: 'soundOneRadioButton'
       },
       {
         node: new Text( 'Sound Two', LABEL_TEXT_OPTIONS ),
+
+        // @ts-ignore - TODO: How do we do Enumeration?
         value: model.baseSoundFileProperty.enumeration.TWO,
         tandemName: 'soundTwoRadioButton'
       },
       {
         node: new Text( 'Sound Three', LABEL_TEXT_OPTIONS ),
+
+        // @ts-ignore - TODO: How do we do Enumeration?
         value: model.baseSoundFileProperty.enumeration.THREE,
         tandemName: 'soundThreeRadioButton'
       },
       {
         node: new Text( 'Sound Four', LABEL_TEXT_OPTIONS ),
+
+        // @ts-ignore - TODO: How do we do Enumeration?
         value: model.baseSoundFileProperty.enumeration.FOUR,
         tandemName: 'soundFourRadioButton'
       }
@@ -85,21 +93,29 @@ class QuadrilateralSoundOptionsNode extends Panel {
     const successSoundRadioButtonItems = [
       {
         node: new Text( 'Collection One', LABEL_TEXT_OPTIONS ),
+
+        // @ts-ignore - TODO: How do we do Enumeration?
         value: model.successSoundFileProperty.enumeration.ONE,
         tandemName: 'soundCollectionOneRadioButton'
       },
       {
         node: new Text( 'Collection Two', LABEL_TEXT_OPTIONS ),
+
+        // @ts-ignore - TODO: How do we do Enumeration?
         value: model.successSoundFileProperty.enumeration.TWO,
         tandemName: 'soundCollectionTwoRadioButton'
       },
       {
         node: new Text( 'Collection Three', LABEL_TEXT_OPTIONS ),
+
+        // @ts-ignore - TODO: How do we do Enumeration?
         value: model.successSoundFileProperty.enumeration.THREE,
         tandemName: 'soundCollectionThreeRadioButton'
       },
       {
         node: new Text( 'Collection Four', LABEL_TEXT_OPTIONS ),
+
+        // @ts-ignore - TODO: How do we do Enumeration?
         value: model.successSoundFileProperty.enumeration.FOUR,
         tandemName: 'soundCollectionFourRadioButton'
       }
@@ -119,7 +135,8 @@ class QuadrilateralSoundOptionsNode extends Panel {
       resize: false
     } );
 
-    model.soundDesignProperty.link( design => {
+    // @ts-ignore - TODO: How to we do Enumeration with TypeScript?
+    model.soundDesignProperty.link( ( design: SoundDesign ) => {
 
       // modify children instead of changing visibility for layout purposes
       const children = [ comboBoxWithParentNode ];
@@ -146,14 +163,13 @@ class QuadrilateralSoundOptionsNode extends Panel {
  */
 class LabelledRadioButtonGroup extends VBox {
 
-
   /**
-   * @param {EnumerationProperty} property - a Property of QuadrilateralSoundOptionsModel
-   * @param {ComboBoxItem[]} items
-   * @param {string} labelString
-   * @param {Tandem} tandem
+   * @param property - a Property of QuadrilateralSoundOptionsModel
+   * @param items - type `any` until AquaRadioButtonGroup is in TypeScript
+   * @param labelString
+   * @param tandem
    */
-  constructor( property, items, labelString, tandem ) {
+  constructor( property: EnumerationProperty, items: any, labelString: string, tandem: Tandem ) {
     const labelText = new Text( labelString, TITLE_TEXT_OPTIONS );
     const radioButtonGroup = new VerticalAquaRadioButtonGroup( property, items, {
       tandem: tandem.createTandem( 'radioButtonGroup' )
