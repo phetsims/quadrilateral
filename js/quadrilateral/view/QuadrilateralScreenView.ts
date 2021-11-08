@@ -24,9 +24,9 @@ import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsMo
 class QuadrilateralScreenView extends ScreenView {
   private readonly model: QuadrilateralModel;
   private readonly modelViewTransform: ModelViewTransform2;
-  private quadrilateralNode: QuadrilateralNode | null;
-  private demonstrationNode: SideDemonstrationNode | null;
-  private quadrilateralSoundView: QuadrilateralSoundView | null;
+  private readonly quadrilateralNode: QuadrilateralNode | null;
+  private readonly demonstrationNode: SideDemonstrationNode | null;
+  private readonly quadrilateralSoundView: QuadrilateralSoundView | null;
 
   public constructor( model: QuadrilateralModel, soundOptionsModel: QuadrilateralSoundOptionsModel, tandem: Tandem ) {
     super( {

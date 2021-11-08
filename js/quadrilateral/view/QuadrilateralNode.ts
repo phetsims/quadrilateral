@@ -13,6 +13,8 @@ import quadrilateral from '../../quadrilateral.js';
 import quadrilateralStrings from '../../quadrilateralStrings.js';
 import SideNode from './SideNode.js';
 import VertexNode from './VertexNode.js';
+import QuadrilateralModel from '../model/QuadrilateralModel.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 
 // constants
 const vertex1String = quadrilateralStrings.a11y.voicing.vertex1;
@@ -27,14 +29,10 @@ const parallelogramSuccessString = quadrilateralStrings.a11y.voicing.parallelogr
 const parallelogramFailureString = quadrilateralStrings.a11y.voicing.parallelogramFailure;
 
 class QuadrilateralNode extends Node {
+  private readonly model: QuadrilateralModel;
+  private readonly modelViewTransform: ModelViewTransform2
 
-  /**
-   * @param {QuadrilateralModel} model
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {Bounds2} layoutBounds
-   * @param {Object} [options]
-   */
-  constructor( model, modelViewTransform, layoutBounds, options ) {
+  public constructor( model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, options?: any ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED
@@ -113,13 +111,14 @@ class QuadrilateralNode extends Node {
     this.addChild( vertexNode3 );
     this.addChild( vertexNode4 );
 
+    // @ts-ignore - TODO: How do we do mixin/trait?
     this.pdomOrder = [
       vertexNode1, vertexNode2, vertexNode3, vertexNode4,
       topSideNode, rightSideNode, bottomSideNode, leftSideNode
     ];
 
     // listeners
-    model.isParallelogramProperty.lazyLink( isParallelogram => {
+    model.isParallelogramProperty.lazyLink( ( isParallelogram: boolean ) => {
       const alertString = isParallelogram ? parallelogramSuccessString : parallelogramFailureString;
       voicingUtteranceQueue.addToBack( alertString );
     } );
@@ -127,10 +126,8 @@ class QuadrilateralNode extends Node {
 
   /**
    * When the layout bounds change, update the available drag bounds for each vertex.
-   * @public
-   * @param {Bounds2} layoutBounds
    */
-  layout( layoutBounds ) {
+  public layout( layoutBounds: Bounds2 ): void {
     // this.model.vertex1.dragBoundsProperty.value = new Bounds2(
     //   this.modelViewTransform.viewToModelX( layoutBounds.minX ), 0.05,
     //   -0.05, this.modelViewTransform.viewToModelY( layoutBounds.minY )
@@ -151,6 +148,7 @@ class QuadrilateralNode extends Node {
     //   -0.05, -0.05
     // );
 
+    // For now, the bounds can be anything, until we we have https://github.com/phetsims/quadrilateral/issues/15 done
     this.model.vertex1.dragBoundsProperty.value = Bounds2.EVERYTHING;
     this.model.vertex2.dragBoundsProperty.value = Bounds2.EVERYTHING;
     this.model.vertex3.dragBoundsProperty.value = Bounds2.EVERYTHING;
