@@ -137,6 +137,7 @@ QuadrilateralSoundOptionsModel.AUDIO_BUFFER_MAP = AUDIO_BUFFER_MAP;
 QuadrilateralSoundOptionsModel.SUCCESS_SOUND_COLLECTION_MAP = SUCCESS_SOUND_COLLECTION_MAP;
 
 quadrilateral.register( 'QuadrilateralSoundOptionsModel', QuadrilateralSoundOptionsModel );
+export { SoundDesign };
 export { SuccessSoundFile };
 export { SuccessSoundCollection };
 export default QuadrilateralSoundOptionsModel;
