@@ -11,14 +11,17 @@
 
 import quadrilateral from '../../quadrilateral.js';
 import QuartetSideSoundView from './QuartetSideSoundView.js';
+import QuadrilateralModel from '../model/QuadrilateralModel.js';
+import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
 
 class QuartetSoundView {
+  private readonly topSideSoundView: QuartetSideSoundView;
+  private readonly rightSideSoundView: QuartetSideSoundView;
+  private readonly bottomSideSoundView: QuartetSideSoundView;
+  private readonly leftSideSoundView: QuartetSideSoundView;
+  private readonly disposeQuartetSoundView: () => void;
 
-  /**
-   * @param {QuadrilateralModel} model
-   * @param {QuadrilateralSoundOptionsModel} soundOptionsModel
-   */
-  constructor( model, soundOptionsModel ) {
+  public constructor( model: QuadrilateralModel, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
 
     this.topSideSoundView = new QuartetSideSoundView( model.topSide, soundOptionsModel.baseSoundFileProperty );
     this.rightSideSoundView = new QuartetSideSoundView( model.rightSide, soundOptionsModel.baseSoundFileProperty );
@@ -32,29 +35,14 @@ class QuartetSoundView {
       this.bottomSideSoundView.startPlayingSounds();
       this.leftSideSoundView.startPlayingSounds();
     };
+    model.shapeChangedEmitter.addListener( shapeChangeListener );
 
     this.disposeQuartetSoundView = () => {
       model.shapeChangedEmitter.removeListener( shapeChangeListener );
     };
-
-    model.shapeChangedEmitter.addListener( shapeChangeListener );
   }
 
-  /**
-   * Immediately stop playing all sounds from the QuartetSoundView.
-   * @public
-   */
-  stopSounds() {
-    this.topSideSoundView.stopSoundClips();
-    this.rightSideSoundView.stopSoundClips();
-    this.bottomSideSoundView.stopSoundClips();
-    this.leftSideSoundView.stopSoundClips();
-  }
-
-  /**
-   * @public
-   */
-  dispose() {
+  public dispose(): void {
     this.topSideSoundView.dispose();
     this.rightSideSoundView.dispose();
     this.bottomSideSoundView.dispose();
@@ -66,10 +54,8 @@ class QuartetSoundView {
   /**
    * Step the sound view, playing sounds for their allotted time.
    * @public
-   *
-   * @param {number} dt - in seconds
    */
-  step( dt ) {
+  public step( dt: number ): void {
     this.topSideSoundView.step( dt );
     this.rightSideSoundView.step( dt );
     this.bottomSideSoundView.step( dt );

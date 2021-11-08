@@ -14,6 +14,8 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';
 import PiecewiseLinearFunction from '../../../../dot/js/PiecewiseLinearFunction.js';
 import Utils from '../../../../dot/js/Utils.js';
+
+// @ts-ignore - TODO: Variable 'phetAudioContext' implicitly has type 'any' in some locations where its type cannot be determined.
 import phetAudioContext from '../../../../tambo/js/phetAudioContext.js';
 import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
 import SoundGenerator from '../../../../tambo/js/sound-generators/SoundGenerator.js';
@@ -24,6 +26,8 @@ import quadLoop03Sound from '../../../sounds/quad-loop-03_mp3.js';
 import quadLoop04Sound from '../../../sounds/quad-loop-04_mp3.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
+import Side from '../model/Side.js';
+import WrappedAudioBuffer from '../../../../tambo/js/WrappedAudioBuffer.js';
 
 // constants
 // TODO: calculate these from constants, should be based on the limitations of each vertex bounds
@@ -62,18 +66,21 @@ AUDIO_BUFFER_MAP.set( QuadrilateralSoundOptionsModel.QuartetSoundFile.THREE, qua
 AUDIO_BUFFER_MAP.set( QuadrilateralSoundOptionsModel.QuartetSoundFile.FOUR, quadLoop04Sound );
 
 class QuartetSideSoundView {
+  private readonly side: Side;
+  private playbackRateToSoundClipCollection: Map<number, SoundClipCollection>;
+  private readonly tiltToPlaybackExponential: LinearFunction;
+  private activeSoundClipCollection: null | SoundClipCollection;
+  private readonly disposeQuartetSideSoundView: () => void;
 
-  /**
-   * @param {Side} side
-   * @param {EnumerationProperty} quartetSoundFileProperty
-   */
-  constructor( side, quartetSoundFileProperty ) {
+  // TODO: How to do EnumerationProperty, see https://github.com/phetsims/quadrilateral/issues/27
+  constructor( side: Side, quartetSoundFileProperty: any ) {
     this.side = side;
 
     // @private {Map} - A map that goes from playback rate to the created SoundClipCollection.
     this.playbackRateToSoundClipCollection = new Map();
 
-    const createSoundClipsListener = selectedSound => {
+    // TODO: selectedSound is one of SoundFile enumeration, how do we do this?
+    const createSoundClipsListener = ( selectedSound: any ) => {
       this.createSoundClips( selectedSound );
     };
 
@@ -85,6 +92,7 @@ class QuartetSideSoundView {
     // tilted to the right.
     this.tiltToPlaybackExponential = new LinearFunction( 0, Math.PI, MIN_SOUND_CLIP_EXPONENTIAL, MAX_SOUND_CLIP_EXPONENTIAL );
 
+    // The SoundClipCollection that is currently active for the given value of the Side tiltProperty.
     this.activeSoundClipCollection = null;
 
     // @private {function} - for disposal
@@ -95,10 +103,9 @@ class QuartetSideSoundView {
 
   /**
    * Create the sound clips used to represent aspects of the Side.
-   * @private
-   * @param {SoundFile} soundFile - Enumeration value
+   * @param soundFile - TODO: How to do Enumerations, see https://github.com/phetsims/quadrilateral/issues/27
    */
-  createSoundClips( soundFile ) {
+  private createSoundClips( soundFile: any ) {
 
     this.disposeSoundClips();
 
@@ -149,7 +156,7 @@ class QuartetSideSoundView {
     const exponential = Utils.roundToInterval( this.tiltToPlaybackExponential.evaluate( this.side.tiltProperty.value ), 1 );
     const playbackRate = Math.pow( 2, exponential / 12 );
 
-    const newCollection = this.playbackRateToSoundClipCollection.get( playbackRate );
+    const newCollection = this.playbackRateToSoundClipCollection.get( playbackRate ) as SoundClipCollection;
     assert && assert( newCollection !== undefined, 'no new soundClipCollection found' );
 
     if ( newCollection !== this.activeSoundClipCollection ) {
@@ -162,7 +169,7 @@ class QuartetSideSoundView {
         }
       } );
 
-      newCollection.startPlayingSounds();
+      newCollection!.startPlayingSounds();
       this.activeSoundClipCollection = newCollection;
     }
     else {
@@ -186,9 +193,8 @@ class QuartetSideSoundView {
 
   /**
    * Start playing the active SoundClipCollection.
-   * @public
    */
-  playSoundClips() {
+  public playSoundClips(): void {
     if ( this.activeSoundClipCollection ) {
       this.activeSoundClipCollection.playSoundClips();
     }
@@ -200,46 +206,65 @@ class QuartetSideSoundView {
    *
    * @param {number} dt
    */
-  step( dt ) {
-    this.playbackRateToSoundClipCollection.forEach( value => {
+  public step( dt: number ): void {
+    this.playbackRateToSoundClipCollection.forEach( ( value: SoundClipCollection ) => {
       value.step( dt );
     } );
   }
 }
 
 class SoundClipCollection extends SoundGenerator {
+  private readonly defaultPlaybackRate: number;
+  private readonly fadeDuration: number;
+  private readonly fadeRate: number;
+  private readonly playDuration: number;
+  private remainingPlayTime: number;
+  private clipOutputLevel: number;
+  playing: boolean;
+  private fadingIn: boolean;
+  private fadingOut: boolean;
+  private readonly playTimeToFadeInOutputLevel: LinearFunction;
+  private readonly playTimeToFadeOutOutputLevel: LinearFunction;
+  private readonly lowerOctaveClip: SoundClip;
+  private readonly middleOctaveClip: SoundClip;
+  private readonly upperOctaveClip: SoundClip;
+  private readonly outputLevelGainNode: AudioParam;
+  private readonly anyClipsPlayingProperty: DerivedProperty<boolean>;
+  private connected: boolean;
 
   /**
-   * @param {WrappedAudioBuffer} wrappedAudioBuffer
-   * @param {number} defaultPlaybackRate - The middle octave playbackRate for this collection. The collection will
+   * @param wrappedAudioBuffer
+   * @param defaultPlaybackRate - The middle octave playbackRate for this collection. The collection will
    *                                       contain clips with playback rates that are one octave above and one octave
    *                                       below this rate.
-   * @param {Object} [options]
+   * @param [options] - TODO: How to do options?
    */
-  constructor( wrappedAudioBuffer, defaultPlaybackRate, options ) {
-
+  constructor( wrappedAudioBuffer: WrappedAudioBuffer, defaultPlaybackRate: number, options?: any ) {
     super( options );
 
-    // @private {number} - See constructor
     this.defaultPlaybackRate = defaultPlaybackRate;
 
-    // @private {number} - The length of time that SoundClips will take to fade out and in while playing, in seconds
+    // The length of time that SoundClips will take to fade out and in while playing, in seconds
     this.fadeDuration = 0.35;
 
-    // @private {number} - The rate of fadeout, used to modify the output level in step so that it can go up or down
+    // The rate of fadeout, used to modify the output level in step so that it can go up or down
     // when fading in adn out, in 1 / seconds.
     this.fadeRate = 1 / this.fadeDuration;
 
-    // @private {number} - How long clips play for, in seconds.
+    // How long clips play for, in seconds.
     this.playDuration = 2.0;
 
-    // @private {number} - The amount of time remaining for this SoundClipCollection to play.
+    // The amount of time remaining for this SoundClipCollection to play.
     this.remainingPlayTime = 0;
 
+    // The output level for the clip, sill change to fade in (to avoid abrupt changes or browser clipping the output)
+    // or fad out (to sound smooth)
     this.clipOutputLevel = 0;
 
+    // Whether the sounds for this sound view are currently playing.
     this.playing = false;
 
+    // Whether or not we are fading in or fading out of continuous sound clips.
     this.fadingIn = false;
     this.fadingOut = false;
 
@@ -248,6 +273,8 @@ class SoundClipCollection extends SoundGenerator {
     this.playTimeToFadeInOutputLevel = new LinearFunction( 0, this.fadeDuration, 0, 1, true );
     this.playTimeToFadeOutOutputLevel = new LinearFunction( this.playDuration - this.fadeDuration, this.playDuration, 1, 0, true );
 
+    // The octaves of the sound clip, whose volumes are changed to create a composition of sounds representing
+    // the state of the side.
     this.lowerOctaveClip = new SoundClip( wrappedAudioBuffer, {
       initialPlaybackRate: defaultPlaybackRate * 0.5,
       loop: true
@@ -261,7 +288,11 @@ class SoundClipCollection extends SoundGenerator {
       loop: true
     } );
 
+    // The GainNode that will control the volume for all sounds of this SoundView collectively.
+    // @ts-ignore - TODO: How to do phetAudioContext for TypeScript?
     this.outputLevelGainNode = phetAudioContext.createGain();
+
+    // @ts-ignore - TODO: How to do phetAudioContext for TypeScript?
     this.outputLevelGainNode.connect( this.masterGainNode );
 
     this.anyClipsPlayingProperty = DerivedProperty.or( [
@@ -273,15 +304,20 @@ class SoundClipCollection extends SoundGenerator {
     this.connected = false;
   }
 
-  // @private
-  playSoundClips() {
+  /**
+   * Start playing SoundClips for all octaves. Octaves may or may not be heard depending on tilt, but that is
+   * controlled by output level.
+   */
+  public playSoundClips(): void {
     this.lowerOctaveClip.play();
     this.middleOctaveClip.play();
     this.upperOctaveClip.play();
   }
 
-  // @public
-  stopSoundClips() {
+  /**
+   * Stop playing all SoundClips immediately.
+   */
+  public stopSoundClips(): void {
     this.lowerOctaveClip.stop();
     this.middleOctaveClip.stop();
     this.upperOctaveClip.stop();
@@ -294,36 +330,46 @@ class SoundClipCollection extends SoundGenerator {
     this.remainingPlayTime = 0;
   }
 
-  // @private
-  startPlayingSounds() {
+  /**
+   * Start playing SoundClips, fading them in.
+   */
+  public startPlayingSounds(): void {
     this.playing = true;
 
     this.fadeInClips();
   }
 
-  // @private
-  fadeInClips() {
+  /**
+   * Fade in the SoundClips, starting play for full duration.
+   */
+  public fadeInClips(): void {
     this.fadingOut = false;
     this.fadingIn = true;
 
     this.remainingPlayTime = this.playDuration;
   }
 
-  // @private
-  fadeOutClips() {
+  /**
+   * Fade out the SoundClips, ending their play after the fadeDuration.
+   */
+  public fadeOutClips(): void {
     this.fadingIn = false;
     this.fadingOut = true;
 
     this.remainingPlayTime = this.fadeDuration;
   }
 
-  // @private
-  resetPlayTime() {
+  /**
+   * Reset the remaining play time such that sound will continue to play for the full duration again.
+   */
+  public resetPlayTime(): void {
     this.remainingPlayTime = this.playDuration;
   }
 
-  // @private
-  step( dt ) {
+  /**
+   * Step the SoundView, fading in or fading out of the playing sounds.
+   */
+  public step( dt: number ) {
 
     if ( this.playing ) {
       this.remainingPlayTime -= dt;
@@ -348,6 +394,8 @@ class SoundClipCollection extends SoundGenerator {
           this.stopSoundClips();
         }
       }
+
+      // @ts-ignore - TODO: `gain` does not exist on AudioParam, see https://github.com/phetsims/quadrilateral/issues/27
       this.outputLevelGainNode.gain.value = this.clipOutputLevel;
 
       // we haven't started playing yet, start now
@@ -367,7 +415,7 @@ class SoundClipCollection extends SoundGenerator {
 
   // @private
   connectClips() {
-    assert && assert( !this.connected, 'testing' );
+    assert && assert( !this.connected, 'Cannot connect clips to an audio context if already connected.' );
 
     this.lowerOctaveClip.connect( this.outputLevelGainNode );
     this.middleOctaveClip.connect( this.outputLevelGainNode );
@@ -387,8 +435,10 @@ class SoundClipCollection extends SoundGenerator {
     this.connected = false;
   }
 
-  // @private
-  setOutputLevels( length ) {
+  /**
+   * Set output levels for the various octave SoundCLips
+   */
+  public setOutputLevels( length: number ): void {
 
     // outside the bounds of the piecewise functions, just use the lowest octave for long lengths for now
     if ( length > MAX_LENGTH ) {
