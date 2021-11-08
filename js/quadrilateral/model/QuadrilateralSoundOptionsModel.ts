@@ -105,6 +105,7 @@ class QuadrilateralSoundOptionsModel {
   // TODO: how to do these with typescript? See #27
   public static SoundDesign: any;
   public static QuartetSoundFile: any;
+  public static SuccessSoundFile: any;
   public static AUDIO_BUFFER_MAP: any;
   public static SUCCESS_SOUND_COLLECTION_MAP: any;
 
@@ -131,8 +132,11 @@ class QuadrilateralSoundOptionsModel {
 // @public @static
 QuadrilateralSoundOptionsModel.SoundDesign = SoundDesign;
 QuadrilateralSoundOptionsModel.QuartetSoundFile = QuartetSoundFile;
+QuadrilateralSoundOptionsModel.SuccessSoundFile = SuccessSoundFile;
 QuadrilateralSoundOptionsModel.AUDIO_BUFFER_MAP = AUDIO_BUFFER_MAP;
 QuadrilateralSoundOptionsModel.SUCCESS_SOUND_COLLECTION_MAP = SUCCESS_SOUND_COLLECTION_MAP;
 
 quadrilateral.register( 'QuadrilateralSoundOptionsModel', QuadrilateralSoundOptionsModel );
+export { SuccessSoundFile };
+export { SuccessSoundCollection };
 export default QuadrilateralSoundOptionsModel;

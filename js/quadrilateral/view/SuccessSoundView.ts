@@ -7,44 +7,63 @@
 import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
 import quadrilateral from '../../quadrilateral.js';
+import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
+import { SuccessSoundFile } from '../model/QuadrilateralSoundOptionsModel.js';
+import { SuccessSoundCollection } from '../model/QuadrilateralSoundOptionsModel.js';
 
 const MAX_OUTPUT_LEVEL = 0.2;
 
 class SuccessSoundView {
+  private successSoundClip: null | SoundClip;
+  private failureSoundClip: null | SoundClip;
+  private maintenanceSoundClip: null | SoundClip;
 
-  /**
-   * @param {QuadrilateralModel} model
-   * @param {QuadrilateralSoundOptionsModel} soundOptionsModel
-   */
-  constructor( model, soundOptionsModel ) {
+  private model: QuadrilateralModel;
+  private remainingMaintenancePlayTime: number;
+  private maintenanceSoundClipPlaying: boolean;
 
+  public constructor( model: QuadrilateralModel, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
+
+    this.model = model;
+
+    // The SoundClips are null until a SuccessSoundFile is selected by the user. There are several to choose
+    // from for now while we experiment with different prototypes, but we expect a single design at some point. At
+    // that time the SoundClips can be created on construction.
     this.successSoundClip = null;
     this.failureSoundClip = null;
     this.maintenanceSoundClip = null;
 
-    this.model = model;
-
+    // The amount of time left to continue playing the "maintenance" sounds.
     this.remainingMaintenancePlayTime = 0;
 
+    // Whether the maintenance sound clip is currently playing, so we know whether to decrement the
+    // remainingMaintenancePlayTime or stop playing the maintenance sound.
+    this.maintenanceSoundClipPlaying = false;
+
     // link is called eagerly so that we have SoundClips to play in the following listeners
-    soundOptionsModel.successSoundFileProperty.link( successSoundFile => {
+    // @ts-ignore - TODO: How to do
+    soundOptionsModel.successSoundFileProperty.link( ( successSoundFile: SuccessSoundFile ) => {
       const successSoundCollection = QuadrilateralSoundOptionsModel.SUCCESS_SOUND_COLLECTION_MAP.get( successSoundFile );
       this.createSoundClips( successSoundCollection );
     } );
 
-    model.isParallelogramProperty.lazyLink( ( isParallelogram, wasParallelogram ) => {
+    model.isParallelogramProperty.lazyLink( ( isParallelogram: boolean, wasParallelogram: boolean | null ) => {
+      assert && assert( this.failureSoundClip, 'SoundClips must be created to play sounds' );
+      assert && assert( this.successSoundClip, 'SoundClips must be created to play sounds' );
+      const successSoundClip = this.successSoundClip!;
+      const failureSoundClip = this.failureSoundClip!;
 
       // immediately stop playing the maintenance sounds to make room for the failure/success clips
       this.stopPlayingMaintenanceSoundClip();
 
       if ( isParallelogram ) {
-        this.failureSoundClip.stop();
-        this.successSoundClip.play();
+        failureSoundClip.stop();
+        successSoundClip.play();
       }
       else {
-        this.successSoundClip.stop();
-        this.failureSoundClip.play();
+        successSoundClip.stop();
+        failureSoundClip.play();
       }
     } );
 
@@ -62,18 +81,27 @@ class SuccessSoundView {
    * @private
    */
   startPlayingMaintenanceSoundClip() {
-    this.isPlaying = true;
+    assert && assert( this.maintenanceSoundClip, 'maintenanceSoundClip must be constructed to play' );
+    const maintenanceSoundClip = this.maintenanceSoundClip!;
+
+    assert && assert( this.successSoundClip, 'successSoundClip must be constructed to play' );
+    const successSoundClip = this.successSoundClip!;
+
+    assert && assert( this.failureSoundClip, 'failureSoundClip must be constructed to play' );
+    const failureSoundClip = this.failureSoundClip!;
+
+    this.maintenanceSoundClipPlaying = true;
     this.remainingMaintenancePlayTime = 1;
 
-    this.maintenanceSoundClip.setOutputLevel( MAX_OUTPUT_LEVEL );
+    maintenanceSoundClip.setOutputLevel( MAX_OUTPUT_LEVEL );
 
     // when the model changes while it is a parallelogram, play the
     if (
-      !this.maintenanceSoundClip.isPlayingProperty.value &&
-      !this.successSoundClip.isPlayingProperty.value &&
-      !this.failureSoundClip.isPlayingProperty.value
+      !maintenanceSoundClip.isPlayingProperty.value &&
+      !successSoundClip.isPlayingProperty.value &&
+      !failureSoundClip.isPlayingProperty.value
     ) {
-      this.maintenanceSoundClip.play();
+      maintenanceSoundClip.play();
     }
   }
 
@@ -83,13 +111,14 @@ class SuccessSoundView {
    * @private
    */
   stopPlayingMaintenanceSoundClip() {
+    assert && assert( this.maintenanceSoundClip, 'maintenanceSoundClip needs to be constructed before stopping play' );
+    const maintenanceSoundClip = this.maintenanceSoundClip!;
 
-    this.isPlaying = false;
+    this.maintenanceSoundClipPlaying = false;
     this.remainingMaintenancePlayTime = 0;
 
-    this.maintenanceSoundClip.setOutputLevel( 0, 0.1 );
-
-    this.maintenanceSoundClip.stop();
+    maintenanceSoundClip.setOutputLevel( 0, 0.1 );
+    maintenanceSoundClip.stop();
   }
 
   /**
@@ -99,7 +128,7 @@ class SuccessSoundView {
    *
    * @param {SuccessSoundCollection} successSoundCollection - See QuadrilateralSoundOptionsModel
    */
-  createSoundClips( successSoundCollection ) {
+  createSoundClips( successSoundCollection: SuccessSoundCollection ) {
     this.disposeSoundClips();
 
     this.successSoundClip = new SoundClip( successSoundCollection.successSound, {
@@ -148,17 +177,17 @@ class SuccessSoundView {
    * Required by the usage to implement. Maybe create a supertype with this.
    * @public
    *
-   * @param {number} dt
+   * @param dt - time step for the animation, in seconds
    */
-  step( dt ) {
-
-    if ( this.isPlaying ) {
+  step( dt: number ) {
+    if ( this.maintenanceSoundClipPlaying ) {
       this.remainingMaintenancePlayTime -= dt;
 
       if ( this.remainingMaintenancePlayTime <= 0 ) {
-        this.maintenanceSoundClip.setOutputLevel( 0, 0.1 );
+        assert && assert( this.maintenanceSoundClip, 'maintenanceSoundClip needs to be created to set output level in step' );
+        this.maintenanceSoundClip!.setOutputLevel( 0, 0.1 );
 
-        this.isPlaying = false;
+        this.maintenanceSoundClipPlaying = false;
       }
     }
   }
