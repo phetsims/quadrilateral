@@ -7,6 +7,7 @@
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import ModelViewTransform from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -18,18 +19,16 @@ import QuadrilateralNode from './QuadrilateralNode.js';
 import QuadrilateralSoundView from './QuadrilateralSoundView.js';
 import SideDemonstrationNode from './SideDemonstrationNode.js';
 import VertexDragAreaNode from './VertexDragAreaNode.js';
+import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
 
 class QuadrilateralScreenView extends ScreenView {
+  private readonly model: QuadrilateralModel;
+  private readonly modelViewTransform: ModelViewTransform2;
+  private quadrilateralNode: QuadrilateralNode | null;
+  private demonstrationNode: SideDemonstrationNode | null;
+  private quadrilateralSoundView: QuadrilateralSoundView | null;
 
-  /**
-   * @param {QuadrilateralModel} model
-   * @param {QuadrilateralSoundOptionsModel} soundOptionsModel
-   * @param {Tandem} tandem
-   */
-  constructor( model, soundOptionsModel, tandem ) {
-    assert && assert( model instanceof QuadrilateralModel, 'invalid model' );
-    assert && assert( tandem instanceof Tandem, 'invalid tandem' );
-
+  public constructor( model: QuadrilateralModel, soundOptionsModel: QuadrilateralSoundOptionsModel, tandem: Tandem ) {
     super( {
 
       // phet-io
@@ -48,10 +47,18 @@ class QuadrilateralScreenView extends ScreenView {
     );
 
     this.model = model;
-
     this.modelViewTransform = modelViewTransform;
 
+    // A reference to the QuadrilateralNode. For now, it is not always created while we have the side query parameters
+    // for development. But we may want
     this.quadrilateralNode = null;
+
+    // A reference to the SideDemonstrationNode, which will be created if we are using debugging query parameters.
+    this.demonstrationNode = null;
+
+    // A reference to the QuadriladteralSoundView, created if we are NOT using debugging query parameters. When the
+    // "demonstration" Node is no longer useful this can be created eagerly.
+    this.quadrilateralSoundView = null;
 
     if ( QuadrilateralQueryParameters.rightSide || QuadrilateralQueryParameters.leftSide ||
          QuadrilateralQueryParameters.topSide || QuadrilateralQueryParameters.bottomSide ) {
@@ -81,12 +88,6 @@ class QuadrilateralScreenView extends ScreenView {
 
     const testPath = new Path( null, { fill: 'rgba(255,0,0,0.5)' } );
     this.addChild( testPath );
-    this.model.shapeChangedEmitter.addListener( () => {
-      if ( this.model.testArea ) {
-        const transformedShape = this.modelViewTransform.modelToViewShape( this.model.testArea );
-        testPath.shape = transformedShape;
-      }
-    } );
 
     if ( QuadrilateralQueryParameters.showDragAreas ) {
       this.addChild( new VertexDragAreaNode( model.vertex1, modelViewTransform ) );
@@ -98,48 +99,37 @@ class QuadrilateralScreenView extends ScreenView {
 
   /**
    * Get the content that is spoken from the Voicing toolbar to describe this ScreenView.
-   * @public
-   *
-   * @returns {string}
    */
-  getVoicingOverviewContent() {
+  public getVoicingOverviewContent(): string {
     return 'Please implement getVoicingOverviewContent';
   }
 
   /**
    * Get the content that is spoken from the Voicing toolbar to describe this ScreenView.
-   * @public
-   *
-   * @returns {string}
    */
-  getVoicingDetailsContent() {
+  public getVoicingDetailsContent(): string {
     return 'Please implement getVoicingDetailsContent';
   }
 
   /**
    * Get the content that is spoken from the Voicing toolbar to describe this ScreenView.
-   * @public
-   *
-   * @returns {string}
    */
-  getVoicingHintContent() {
+  public getVoicingHintContent(): string {
     return 'Please implement getVoicingHintContent';
   }
 
   /**
    * Resets the view.
-   * @public
    */
-  reset() {
+  public reset(): void {
     //TODO
   }
 
   /**
    * Steps the view.
-   * @param {number} dt - time step, in seconds
-   * @public
+   * @param dt - time step, in seconds
    */
-  step( dt ) {
+  public step( dt: number ): void {
     if ( this.quadrilateralSoundView ) {
       this.quadrilateralSoundView.step( dt );
     }
@@ -148,16 +138,10 @@ class QuadrilateralScreenView extends ScreenView {
     }
   }
 
-  /**
-   * @public
-   * @override
-   * @param viewBounds
-   */
-  layout( viewBounds ) {
+  public override layout( viewBounds: Bounds2 ): void {
     super.layout( viewBounds );
 
     this.quadrilateralNode && this.quadrilateralNode.layout( this.layoutBounds );
-
     this.model.modelBoundsProperty.value = this.modelViewTransform.viewToModelBounds( this.layoutBounds );
   }
 }
