@@ -2,7 +2,7 @@
 
 /**
  * The node for a side of a quadrilateral. No graphical design has been done yet, but creating this node
- * to exercise input and maniuplation of the quad shape. By dragging a side both vertices of the side will
+ * to exercise input and manipulation of the quad shape. By dragging a side both vertices of the side will
  * extend in the direction of motion of the side.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
@@ -17,16 +17,20 @@ import KeyboardDragListener from '../../../../scenery/js/listeners/KeyboardDragL
 import Line from '../../../../scenery/js/nodes/Line.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
+import Side from '../model/Side.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import SceneryEvent from '../../../../scenery/js/input/SceneryEvent.js';
+import Vertex from '../model/Vertex.js';
 
 class SideNode extends Line {
+  private side: Side;
 
   /**
+   * // TODO: How to do Voicing mixin?
    * @mixes Voicing
-   * @param {Side} side
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {Object} [options]
    */
-  constructor( side, modelViewTransform, options ) {
+  constructor( side: Side, modelViewTransform: ModelViewTransform2, options: any ) {
 
     options = merge( {
       lineWidth: 20,
@@ -41,22 +45,25 @@ class SideNode extends Line {
 
     super( 0, 0, 0, 0 );
 
-    // initialize the voicing trait
-    this.initializeVoicing();
-
-    // @private {Side}
+    // A reference to the model component.
     this.side = side;
 
+    // initialize the voicing trait
+    // @ts-ignore - TODO: How to do mixin/Trait pattern?
+    this.initializeVoicing();
+
     // pdom - make the focus highlight tightly surround the line so that it is easier to see the shape
+    // @ts-ignore - TODO: Setters added by scenery mixins are not available, see https://github.com/phetsims/quadrilateral/issues/27
     this.focusHighlight = new FocusHighlightPath( null );
 
     // listeners
-    Property.multilink( [ side.vertex1.positionProperty, side.vertex2.positionProperty ], ( vertex1Position, vertex2Position ) => {
+    Property.multilink( [ side.vertex1.positionProperty, side.vertex2.positionProperty ], ( vertex1Position: Vector2, vertex2Position: Vector2 ) => {
       const vertex1ViewPosition = modelViewTransform.modelToViewPosition( vertex1Position );
       const vertex2ViewPosition = modelViewTransform.modelToViewPosition( vertex2Position );
       this.setLine( vertex1ViewPosition.x, vertex1ViewPosition.y, vertex2ViewPosition.x, vertex2ViewPosition.y );
 
       // set the focus highlight shape
+      // @ts-ignore - TODO: Setters added by scenery mixins are not available, see https://github.com/phetsims/quadrilateral/issues/27
       this.focusHighlight.setShape( this.getStrokedShape() );
 
       // TODO: For now we are showing pointer areas instead of a graphical sim. These are used just to indicate
@@ -69,14 +76,14 @@ class SideNode extends Line {
     // supports keyboard dragging, attempts to move both vertices in the direction of motion of the line
     this.addInputListener( new KeyboardDragListener( {
       transform: modelViewTransform,
-      drag: vectorDelta => {
+      drag: ( vectorDelta: Vector2 ) => {
         this.moveVerticesFromModelDelta( vectorDelta );
       }
     } ) );
 
     this.addInputListener( new DragListener( {
       transform: modelViewTransform,
-      drag: ( event, listener ) => {
+      drag: ( event: SceneryEvent, listener: DragListener ) => {
 
         const vertex1Pressed = side.vertex1.isPressedProperty.value;
         const vertex2Pressed = side.vertex2.isPressedProperty.value;
@@ -90,10 +97,10 @@ class SideNode extends Line {
 
           // only one vertex is pressed, rotate around the pressed vertex
           if ( vertex1Pressed ) {
-            this.rotateVertexAroundOther( side.vertex1, side.vertex2, listener.modelDelta );
+            SideNode.rotateVertexAroundOther( side.vertex1, side.vertex2, listener.modelDelta );
           }
           else {
-            this.rotateVertexAroundOther( side.vertex2, side.vertex1, listener.modelDelta );
+            SideNode.rotateVertexAroundOther( side.vertex2, side.vertex1, listener.modelDelta );
           }
         }
       },
@@ -106,18 +113,22 @@ class SideNode extends Line {
 
   /**
    * Move both vertices of this side from the change in position specified by deltaVector.
-   * @private
    *
-   * @param {Vector2} deltaVector - change of position in model coordinates
+   * @param deltaVector - change of position in model coordinates
    */
-  moveVerticesFromModelDelta( deltaVector ) {
+  private moveVerticesFromModelDelta( deltaVector: Vector2 ) {
+    assert && assert( this.side.vertex1.dragBoundsProperty.value, 'The dragBoundsProperty must be set on the Vertex to move it in model space' );
+    assert && assert( this.side.vertex2.dragBoundsProperty.value, 'The dragBoundsProperty must be set on the Vertex to move it in model space' );
+    const vertex1DragBounds = this.side.vertex1.dragBoundsProperty.value!;
+    const vertex2DragBounds = this.side.vertex2.dragBoundsProperty.value!;
+
 
     // vectorDelta is in model coordinates already since we provided a transform to the listener
     const proposedVertex1Position = this.side.vertex1.positionProperty.get().plus( deltaVector );
     const proposedVertex2Position = this.side.vertex2.positionProperty.get().plus( deltaVector );
 
-    if ( this.side.vertex1.dragBoundsProperty.value.containsPoint( proposedVertex1Position ) &&
-         this.side.vertex2.dragBoundsProperty.value.containsPoint( proposedVertex2Position ) ) {
+    if ( vertex1DragBounds.containsPoint( proposedVertex1Position ) &&
+         vertex2DragBounds.containsPoint( proposedVertex2Position ) ) {
       this.side.vertex1.positionProperty.set( proposedVertex1Position );
       this.side.vertex2.positionProperty.set( proposedVertex2Position );
     }
@@ -128,19 +139,23 @@ class SideNode extends Line {
    * pressed vertex locked in place.
    * @private
    *
-   * @param {Vertex} anchorVertex - Anchor vertex we are rotating around.
-   * @param {Vertex} armVertex - Vertex being repositioned.
-   * @param {Vector2} modelDelta - The amount of movement of the arm drag in model coordinates
+   * @param anchorVertex - Anchor vertex we are rotating around.
+   * @param armVertex - Vertex being repositioned.
+   * @param modelDelta - The amount of movement of the arm drag in model coordinates
    */
-  rotateVertexAroundOther( anchorVertex, armVertex, modelDelta ) {
+  private static rotateVertexAroundOther( anchorVertex: Vertex, armVertex: Vertex, modelDelta: Vector2 ) {
+    assert && assert( armVertex.dragBoundsProperty.value, 'Vertex dragBoundsProperty must be set before vertices can be moved in the model' );
+    const armVertexDragBounds = armVertex.dragBoundsProperty.value!;
+
     const proposedPosition = armVertex.positionProperty.get().plus( modelDelta );
 
-    if ( armVertex.dragBoundsProperty.value.containsPoint( proposedPosition ) ) {
+    if ( armVertexDragBounds.containsPoint( proposedPosition ) ) {
       armVertex.positionProperty.value = proposedPosition;
     }
   }
 }
 
+// @ts-ignore - TODO: How to do mixin/trait with TypeScript?
 Voicing.compose( SideNode );
 
 quadrilateral.register( 'SideNode', SideNode );
