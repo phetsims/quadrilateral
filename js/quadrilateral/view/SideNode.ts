@@ -109,6 +109,17 @@ class SideNode extends Line {
     } ) );
 
     this.mutate( options );
+
+    // for debugging, set this Property when we receive focus so that the debugging shapes showing vertex drag areas
+    // become visible
+    this.addInputListener( {
+      focus: () => {
+        side.isPressedProperty.value = true;
+      },
+      blur: () => {
+        side.isPressedProperty.value = false;
+      }
+    } );
   }
 
   /**
@@ -117,18 +128,18 @@ class SideNode extends Line {
    * @param deltaVector - change of position in model coordinates
    */
   private moveVerticesFromModelDelta( deltaVector: Vector2 ) {
-    assert && assert( this.side.vertex1.dragBoundsProperty.value, 'The dragBoundsProperty must be set on the Vertex to move it in model space' );
-    assert && assert( this.side.vertex2.dragBoundsProperty.value, 'The dragBoundsProperty must be set on the Vertex to move it in model space' );
-    const vertex1DragBounds = this.side.vertex1.dragBoundsProperty.value!;
-    const vertex2DragBounds = this.side.vertex2.dragBoundsProperty.value!;
+    assert && assert( this.side.vertex1.dragAreaProperty.value, 'The dragAreaProperty must be set on the Vertex to move it in model space' );
+    assert && assert( this.side.vertex2.dragAreaProperty.value, 'The dragAreaProperty must be set on the Vertex to move it in model space' );
+    const vertex1DragShape = this.side.vertex1.dragAreaProperty.value!;
+    const vertex2DragShape = this.side.vertex2.dragAreaProperty.value!;
 
 
     // vectorDelta is in model coordinates already since we provided a transform to the listener
     const proposedVertex1Position = this.side.vertex1.positionProperty.get().plus( deltaVector );
     const proposedVertex2Position = this.side.vertex2.positionProperty.get().plus( deltaVector );
 
-    if ( vertex1DragBounds.containsPoint( proposedVertex1Position ) &&
-         vertex2DragBounds.containsPoint( proposedVertex2Position ) ) {
+    if ( vertex1DragShape.containsPoint( proposedVertex1Position ) &&
+         vertex2DragShape.containsPoint( proposedVertex2Position ) ) {
       this.side.vertex1.positionProperty.set( proposedVertex1Position );
       this.side.vertex2.positionProperty.set( proposedVertex2Position );
     }

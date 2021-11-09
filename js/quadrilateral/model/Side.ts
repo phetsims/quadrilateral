@@ -12,13 +12,15 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import quadrilateral from '../../quadrilateral.js';
 import Vertex from './Vertex.js';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 
 class Side {
   public vertex1: Vertex;
   public vertex2: Vertex;
   private isConnected: boolean;
   public tiltProperty: DerivedProperty<number>;
-  public lengthProperty: DerivedProperty<number>
+  public lengthProperty: DerivedProperty<number>;
+  public readonly isPressedProperty: BooleanProperty;
 
   /**
    * @param vertex1 - The first vertex of this Side.
@@ -37,6 +39,9 @@ class Side {
 
     // Has this side been connected to another to form a shape?
     this.isConnected = false;
+
+    // Whether or not this Side is pressed and being interacted with. For now this is useful for debugging.
+    this.isPressedProperty = new BooleanProperty( false );
 
     // Angle of this line against a perpendicular line that would be drawn across it when the vertices are at their
     // initial positions, used to determine the amount of tilt of the line.

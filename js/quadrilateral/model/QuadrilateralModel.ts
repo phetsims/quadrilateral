@@ -210,7 +210,6 @@ class QuadrilateralModel {
     let secondRay: null | Ray2 = null;
 
     if ( vertexC.angleProperty!.value > Math.PI ) {
-      console.log( 'here' );
 
       // angle is greater than Math.PI so we have a concave shape and need to use a more constrained shape to
       // prevent crossed quadrilaterals

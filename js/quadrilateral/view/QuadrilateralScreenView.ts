@@ -9,7 +9,6 @@ import ScreenView from '../../../../joist/js/ScreenView.js';
 import ModelViewTransform from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
-import Path from '../../../../scenery/js/nodes/Path.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import quadrilateral from '../../quadrilateral.js';
@@ -86,14 +85,11 @@ class QuadrilateralScreenView extends ScreenView {
     } );
     this.addChild( resetAllButton );
 
-    const testPath = new Path( null, { fill: 'rgba(255,0,0,0.5)' } );
-    this.addChild( testPath );
-
     if ( QuadrilateralQueryParameters.showDragAreas ) {
-      this.addChild( new VertexDragAreaNode( model.vertex1, modelViewTransform ) );
-      this.addChild( new VertexDragAreaNode( model.vertex2, modelViewTransform ) );
-      this.addChild( new VertexDragAreaNode( model.vertex3, modelViewTransform ) );
-      this.addChild( new VertexDragAreaNode( model.vertex4, modelViewTransform ) );
+      this.addChild( new VertexDragAreaNode( model.vertex1, [ model.leftSide, model.topSide ], modelViewTransform ) );
+      this.addChild( new VertexDragAreaNode( model.vertex2, [ model.topSide, model.rightSide ], modelViewTransform ) );
+      this.addChild( new VertexDragAreaNode( model.vertex3, [ model.rightSide, model.bottomSide ], modelViewTransform ) );
+      this.addChild( new VertexDragAreaNode( model.vertex4, [ model.bottomSide, model.leftSide ], modelViewTransform ) );
     }
   }
 
