@@ -89,9 +89,18 @@ class ParallelsVolumeSoundView {
     };
     this.model.shapeChangedEmitter.addListener( shapeChangeListener );
 
+    // make sure that sounds do not start playing again after the changes detected by reset
+    const resetListener = ( resetNotInProgress: boolean ) => {
+      if ( resetNotInProgress ) {
+        this.stopSounds();
+      }
+    };
+    this.model.resetNotInProgressProperty.link( resetListener );
+
     this.disposeParallelsVolumeSoundView = () => {
       this.model.shapeChangedEmitter.removeListener( shapeChangeListener );
       soundOptionsModel.baseSoundFileProperty.unlink( createSoundClipsListener );
+      this.model.resetNotInProgressProperty.unlink( resetListener );
     };
   }
 
@@ -131,7 +140,7 @@ class ParallelsVolumeSoundView {
    */
   public stopSounds(): void {
     this.leftRightSideGenerator!.setOutputLevel( 0 );
-    this.leftRightSideGenerator!.setOutputLevel( 0 );
+    this.topBottomSideGenerator!.setOutputLevel( 0 );
 
     this.isPlaying = false;
     this.remainingPlayTime = 0;
@@ -146,15 +155,19 @@ class ParallelsVolumeSoundView {
     this.disposeSoundClips();
 
     this.leftRightSideGenerator = new SoundClipChord( audioBuffer, {
+      enableControlProperties: [ this.model.resetNotInProgressProperty ],
       soundClipOptions: {
-        loop: true
+        loop: true,
+        enableControlProperties: [ this.model.resetNotInProgressProperty ]
       },
       chordPlaybackRates: [ 1, 4 ]
     } );
     this.topBottomSideGenerator = new SoundClipChord( audioBuffer, {
+      enableControlProperties: [ this.model.resetNotInProgressProperty ],
       chordPlaybackRates: [ Math.pow( 2, 7 / 12 ), Math.pow( 2, 19 / 12 ) ],
       soundClipOptions: {
-        loop: true
+        loop: true,
+        enableControlProperties: [ this.model.resetNotInProgressProperty ]
       }
     } );
 

@@ -113,7 +113,7 @@ class QuadrilateralSoundOptionsModel {
 
     // The selected sound design, changing this will change the entire design.
     // @ts-ignore
-    this.soundDesignProperty = new EnumerationProperty( SoundDesign, SoundDesign.QUARTET );
+    this.soundDesignProperty = new EnumerationProperty( SoundDesign, SoundDesign.PARALLELS_VOLUME );
 
     // Property that controls the base sound for a few of the prototypes. Some prototypes have a base sound and
     // the state of the sim changes the frequency and layering of the base sound. But there are a few base
