@@ -26,6 +26,7 @@ class QuadrilateralScreenView extends ScreenView {
   private readonly quadrilateralNode: QuadrilateralNode | null;
   private readonly demonstrationNode: SideDemonstrationNode | null;
   private readonly quadrilateralSoundView: QuadrilateralSoundView | null;
+  private readonly resetAllButton: ResetAllButton;
 
   public constructor( model: QuadrilateralModel, soundOptionsModel: QuadrilateralSoundOptionsModel, tandem: Tandem ) {
     super( {
@@ -73,7 +74,7 @@ class QuadrilateralScreenView extends ScreenView {
       this.quadrilateralSoundView = new QuadrilateralSoundView( model, soundOptionsModel );
     }
 
-    const resetAllButton = new ResetAllButton( {
+    this.resetAllButton = new ResetAllButton( {
       listener: () => {
         this.interruptSubtreeInput(); // cancel interactions that may be in progress
         model.reset();
@@ -83,7 +84,7 @@ class QuadrilateralScreenView extends ScreenView {
       bottom: this.layoutBounds.maxY - QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN,
       tandem: tandem.createTandem( 'resetAllButton' )
     } );
-    this.addChild( resetAllButton );
+    this.addChild( this.resetAllButton );
 
     if ( QuadrilateralQueryParameters.showDragAreas ) {
       this.addChild( new VertexDragAreaNode( model.vertex1, [ model.leftSide, model.topSide ], modelViewTransform ) );
@@ -137,8 +138,14 @@ class QuadrilateralScreenView extends ScreenView {
   public override layout( viewBounds: Bounds2 ): void {
     super.layout( viewBounds );
 
-    this.quadrilateralNode && this.quadrilateralNode.layout( this.layoutBounds );
-    this.model.modelBoundsProperty.value = this.modelViewTransform.viewToModelBounds( this.layoutBounds );
+    // the model bounds are defined by available view space. Some padding is added around the screen and we make
+    // sure that the vertices cannot overlap with simulation controls (at this time, just the ResetAllButton).
+    // Otherwise the quadrilateral can move around freely in model space.
+    let reducedViewBounds = this.layoutBounds.eroded( QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN );
+    reducedViewBounds = reducedViewBounds.withMaxX( reducedViewBounds.maxX - this.resetAllButton.width - QuadrilateralConstants.SCREEN_VIEW_X_MARGIN );
+
+    this.quadrilateralNode && this.quadrilateralNode.layout( reducedViewBounds );
+    this.model.modelBoundsProperty.value = this.modelViewTransform.viewToModelBounds( reducedViewBounds );
   }
 }
 
