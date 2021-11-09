@@ -23,7 +23,16 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
 
   // If provided, a graphic showing the area available for the vertex that is being dragged
   // is drawn on screen for debugging and demonstration purposes.
-  showDragAreas: { type: 'flag' }
+  showDragAreas: { type: 'flag' },
+
+  // The tolerance interval for the angle calculations which determine when the quadrilateral is a parallelogram.
+  // This is in radians, so it is limited between 0 and 2 PI. If maximum value, the quadrilateral will always
+  // register as a parallelogram.
+  angleToleranceInterval: {
+    type: 'number',
+    isValidValue: value => value <= ( 2 * Math.PI ) && value >= 0,
+    defaultValue: 0.2
+  }
 } );
 
 quadrilateral.register( 'QuadrilateralQueryParameters', QuadrilateralQueryParameters );

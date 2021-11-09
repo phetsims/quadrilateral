@@ -23,6 +23,7 @@ import quadrilateral from '../../quadrilateral.js';
 import Side from './Side.js';
 import Vertex from './Vertex.js';
 import RayIntersection from '../../../../kite/js/util/RayIntersection.js';
+import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 
 // A useful type for calculations for the vertex Shapes which define where the Vertex can move depending on
 // the positions of the other vertices. Lines are along the bounds of model space and RayIntersections
@@ -92,9 +93,11 @@ class QuadrilateralModel {
     // A value that controls the threshold for equality when determining if the quadrilateral forms a parallelogram.
     // Without a margin of error it would be exceedingly difficult to create a parallelogram shape. It is unclear
     // whether this need to change, but it seems useful now to be able to easily change this value during development.
-    this.angleToleranceIntervalProperty = new NumberProperty( 0.1, {
+    // The initial value is determined by query parameter while we sort out
+    // https://github.com/phetsims/quadrilateral/issues/26
+    this.angleToleranceIntervalProperty = new NumberProperty( QuadrilateralQueryParameters.angleToleranceInterval, {
       tandem: tandem.createTandem( 'angleToleranceIntervalProperty' ),
-      range: new Range( 0.01, 0.3 )
+      range: new Range( 0, 2 * Math.PI )
     } );
 
     // Whether the quadrilateral is a parallelogram. This Property updates async in the step function! We need to
