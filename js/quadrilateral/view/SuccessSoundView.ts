@@ -18,6 +18,8 @@ class SuccessSoundView {
   private failureSoundClip: null | SoundClip;
   private maintenanceSoundClip: null | SoundClip;
 
+  private readonly disposeSuccessSoundView: () => void;
+
   private model: QuadrilateralModel;
   private remainingMaintenancePlayTime: number;
   private maintenanceSoundClipPlaying: boolean;
@@ -47,7 +49,7 @@ class SuccessSoundView {
       this.createSoundClips( successSoundCollection );
     } );
 
-    model.isParallelogramProperty.lazyLink( ( isParallelogram: boolean, wasParallelogram: boolean | null ) => {
+    const isParallelogramListener = ( isParallelogram: boolean, wasParallelogram: boolean | null ) => {
       assert && assert( this.failureSoundClip, 'SoundClips must be created to play sounds' );
       assert && assert( this.successSoundClip, 'SoundClips must be created to play sounds' );
       const successSoundClip = this.successSoundClip!;
@@ -64,20 +66,29 @@ class SuccessSoundView {
         successSoundClip.stop();
         failureSoundClip.play();
       }
-    } );
+    };
+    model.isParallelogramProperty.lazyLink( isParallelogramListener );
 
-    model.shapeChangedEmitter.addListener( () => {
+    const shapeListener = () => {
       if ( model.isParallelogramProperty.value ) {
         this.startPlayingMaintenanceSoundClip();
       }
-    } );
+    };
+    model.shapeChangedEmitter.addListener( shapeListener );
 
     // Whenever a reset is complete (not in progress), stop playing all sound clips immediately.
-    model.resetNotInProgressProperty.link( resetNotInProgress => {
+    const resetNotInProgressListener = ( resetNotInProgress: boolean ) => {
       if ( resetNotInProgress ) {
         this.reset();
       }
-    } );
+    };
+    model.resetNotInProgressProperty.link( resetNotInProgressListener );
+
+    this.disposeSuccessSoundView = () => {
+      model.shapeChangedEmitter.removeListener( shapeListener );
+      model.isParallelogramProperty.unlink( isParallelogramListener );
+      model.resetNotInProgressProperty.unlink( resetNotInProgressListener );
+    };
   }
 
   /**
@@ -201,9 +212,6 @@ class SuccessSoundView {
       if ( this.remainingMaintenancePlayTime <= 0 ) {
         assert && assert( this.maintenanceSoundClip, 'maintenanceSoundClip needs to be created to set output level in step' );
         this.maintenanceSoundClip!.setOutputLevel( 0, 0.1 );
-        console.log( 'setting output level' );
-        // this.maintenanceSoundClip!.stop();
-
         this.maintenanceSoundClipPlaying = false;
       }
     }
@@ -214,6 +222,7 @@ class SuccessSoundView {
    * @public
    */
   dispose() {
+    this.disposeSuccessSoundView();
     this.disposeSoundClips();
   }
 }
