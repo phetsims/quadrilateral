@@ -203,11 +203,11 @@ class QuadrilateralModel {
     // This way we can use them to update accordingly
     const directedLines: Line[] = [ leftLine, topLine, rightLine, bottomLine ];
 
-    const firstRayDirection = vertexD.positionProperty.value.minus( vertexC.positionProperty.value ).normalized();
-    const firstRay = new Ray2( vertexC.positionProperty.value, firstRayDirection );
+    const firstRayDirection = vertexD.positionProperty.value.minus( vertexB.positionProperty.value ).normalized();
+    const firstRay = new Ray2( vertexD.positionProperty.value, firstRayDirection );
 
-    const secondRayDirection = vertexB.positionProperty.value.minus( vertexC.positionProperty.value ).normalized();
-    const secondRay = new Ray2( vertexC.positionProperty.value, secondRayDirection );
+    const secondRayDirection = vertexB.positionProperty.value.minus( vertexD.positionProperty.value ).normalized();
+    const secondRay = new Ray2( vertexB.positionProperty.value, secondRayDirection );
 
     let firstRayIntersectionLinePair: null | LineIntersectionPair = null;
     let secondRayIntersectionLinePair: null | LineIntersectionPair = null;
@@ -230,8 +230,9 @@ class QuadrilateralModel {
     } );
 
     const points = [];
-    points.push( vertexC.positionProperty.value );
-    points.push( firstRayIntersectionLinePair!.intersection.point );
+    points.push( vertexC.positionProperty.value ); // start at the opposite vertex
+    points.push( vertexD.positionProperty.value ); // walk to the next vertex
+    points.push( firstRayIntersectionLinePair!.intersection.point ); // walk to the first ray intersection with bounds
 
     let iterations = 0;
     let nextLine = firstRayIntersectionLinePair!.line;
@@ -250,6 +251,8 @@ class QuadrilateralModel {
 
     // we have walked to the same line, just include the second intersection point
     points.push( secondRayIntersectionLinePair!.intersection.point );
+
+    points.push( vertexB.positionProperty.value ); // walk back to vertexB
 
     const shape = new Shape();
     shape.moveToPoint( points[ 0 ] );
