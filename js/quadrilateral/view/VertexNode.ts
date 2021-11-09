@@ -46,7 +46,7 @@ class VertexNode extends Circle {
       } ) );
     }
 
-    vertex.positionProperty.link( ( position: Vector2 ) => {
+    vertex.positionProperty.link( position => {
       this.translation = modelViewTransform.modelToViewPosition( position );
     } );
 

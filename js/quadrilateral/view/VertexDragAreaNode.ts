@@ -31,7 +31,7 @@ class VertexDragAreaNode extends Path {
 
     // the shape should only be visible during input, if we show all vertex
     // drag areas at once it is impossible to understand
-    vertex.isPressedProperty.link( ( isPressed: boolean ) => {
+    vertex.isPressedProperty.link( isPressed => {
       this.visible = isPressed;
     } );
   }
