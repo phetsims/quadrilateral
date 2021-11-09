@@ -83,6 +83,16 @@ class SideNode extends Line {
 
     this.addInputListener( new DragListener( {
       transform: modelViewTransform,
+      start: () => {
+
+        // FOR DEBUGGING, when the side is pressed, show debug areas
+        side.isPressedProperty.value = true;
+      },
+      end: () => {
+
+        // FOR DEBUGGING: When the side is released, hide debug areas
+        side.isPressedProperty.value = false;
+      },
       drag: ( event: SceneryEvent, listener: DragListener ) => {
 
         const vertex1Pressed = side.vertex1.isPressedProperty.value;
