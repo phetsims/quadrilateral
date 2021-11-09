@@ -87,9 +87,16 @@ class ParallelsStaccatoSoundView {
       }
     );
 
+    // Whenever there is a reset, stop playing all sounds immediately, we should only hear the common reset sound.
+    const resetListener = () => {
+      this.stopPlayingSounds();
+    };
+    this.model.resetNotInProgressProperty.link( resetListener );
+
     // @private {function} - for disposal
     this.disposeParallelsStaccatoSoundView = () => {
       this.model.shapeChangedEmitter.removeListener( shapeChangeListener );
+      this.model.resetNotInProgressProperty.unlink( resetListener );
 
       Property.unmultilink( leftRightMultilink );
       Property.unmultilink( topBottomMultilink );
@@ -120,6 +127,14 @@ class ParallelsStaccatoSoundView {
         this.isPlaying = false;
       }
     }
+  }
+
+  /**
+   * Immediately stop playing all sounds related to this sound design.
+   */
+  public stopPlayingSounds(): void {
+    this.isPlaying = false;
+    this.remainingPlayTime = 0;
   }
 
   /**
