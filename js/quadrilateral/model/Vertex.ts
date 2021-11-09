@@ -69,7 +69,10 @@ class Vertex {
 
   /**
    * Connect this vertex to two others to form an angle and sides of the quadrilateral.
-   * Uses the law of cosines to calculate the angle, assuming vertex positions like this:
+   * Uses atan2 to get the angle at this vertex counter-clockwise between 0 and 2 * Math.PI. See
+   * https://math.stackexchange.com/questions/878785/how-to-find-an-angle-in-range0-360-between-2-vectors
+   *
+   * Assumes the following arrangement of vertices:
    *
    *        thisVertex
    *          /       \
@@ -78,7 +81,6 @@ class Vertex {
    *     vertex1 ----- vertex2
    *             sideC
    *
-   * See https://en.wikipedia.org/wiki/Law_of_cosines
    * @public
    *
    * @param {Vertex} vertex1
@@ -89,12 +91,20 @@ class Vertex {
     this.angleProperty = new DerivedProperty(
       [ vertex1.positionProperty, this.positionProperty, vertex2.positionProperty ],
       ( vertex1Position: Vector2, thisPosition: Vector2, vertex2Position: Vector2 ) => {
-        const sideA = vertex1Position.distance( thisPosition );
-        const sideB = vertex2Position.distance( thisPosition );
-        const sideC = vertex2Position.distance( vertex1Position );
 
-        assert && assert( sideA !== 0 && sideB !== 0, 'law of cosines will not work when sides are of zero length' );
-        return Math.acos( ( ( sideA * sideA ) + ( sideB * sideB ) - ( sideC * sideC ) ) / ( 2 * sideA * sideB ) );
+        const vector1 = vertex1.positionProperty.value.minus( this.positionProperty.value );
+        const vector2 = vertex2.positionProperty.value.minus( this.positionProperty.value );
+
+        const dot = vector1.x * vector2.x + vector1.y * vector2.y;
+        const det = vector1.x * vector2.y - vector2.x * vector1.y;
+        let angle = Math.atan2( det, dot );
+
+        // if the angle is less than zero, we have wrapped around Math.PI and formed a concave shape - the actual
+        // angle should be greater than PI
+        if ( angle < 0 ) {
+          angle = angle + 2 * Math.PI;
+        }
+        return angle;
       }, {
         tandem: this.tandem.createTandem( 'angleProperty' ),
         phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
@@ -102,7 +112,8 @@ class Vertex {
   }
 
   /**
-   * Calculates the angle between three vertices, returning the angle at vertex2.
+   * Calculates the angle between three vertices, returning the angle at vertex2. The returned angle will
+   * be between -PI and PI.
    *
    * Uses the law of cosines to calculate the angle, assuming vertex positions like this:
    *

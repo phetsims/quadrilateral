@@ -203,17 +203,38 @@ class QuadrilateralModel {
     // This way we can use them to update accordingly
     const directedLines: Line[] = [ leftLine, topLine, rightLine, bottomLine ];
 
-    const firstRayDirection = vertexD.positionProperty.value.minus( vertexB.positionProperty.value ).normalized();
-    const firstRay = new Ray2( vertexD.positionProperty.value, firstRayDirection );
+    let firstRayDirection: null | Vector2 = null;
+    let firstRay: null | Ray2 = null;
 
-    const secondRayDirection = vertexB.positionProperty.value.minus( vertexD.positionProperty.value ).normalized();
-    const secondRay = new Ray2( vertexB.positionProperty.value, secondRayDirection );
+    let secondRayDirection: null | Vector2 = null;
+    let secondRay: null | Ray2 = null;
+
+    if ( vertexC.angleProperty!.value > Math.PI ) {
+      console.log( 'here' );
+
+      // angle is greater than Math.PI so we have a concave shape and need to use a more constrained shape to
+      // prevent crossed quadrilaterals
+      firstRayDirection = vertexC.positionProperty.value.minus( vertexB.positionProperty.value ).normalized();
+      firstRay = new Ray2( vertexB.positionProperty.value, firstRayDirection );
+
+      secondRayDirection = vertexC.positionProperty.value.minus( vertexD.positionProperty.value ).normalized();
+      secondRay = new Ray2( vertexD.positionProperty.value, secondRayDirection );
+    }
+    else {
+
+      // with an angle less than Math.PI we can walk along rays that form a bisection between vertexB and vertexD
+      firstRayDirection = vertexD.positionProperty.value.minus( vertexB.positionProperty.value ).normalized();
+      firstRay = new Ray2( vertexD.positionProperty.value, firstRayDirection );
+
+      secondRayDirection = vertexB.positionProperty.value.minus( vertexD.positionProperty.value ).normalized();
+      secondRay = new Ray2( vertexB.positionProperty.value, secondRayDirection );
+    }
 
     let firstRayIntersectionLinePair: null | LineIntersectionPair = null;
     let secondRayIntersectionLinePair: null | LineIntersectionPair = null;
     directedLines.forEach( line => {
-      const firstLineIntersections = line.intersection( firstRay );
-      const secondLineIntersections = line.intersection( secondRay );
+      const firstLineIntersections = line.intersection( firstRay! );
+      const secondLineIntersections = line.intersection( secondRay! );
 
       if ( firstLineIntersections.length > 0 ) {
         firstRayIntersectionLinePair = {
@@ -229,30 +250,32 @@ class QuadrilateralModel {
       }
     } );
 
-    const points = [];
-    points.push( vertexC.positionProperty.value ); // start at the opposite vertex
-    points.push( vertexD.positionProperty.value ); // walk to the next vertex
-    points.push( firstRayIntersectionLinePair!.intersection.point ); // walk to the first ray intersection with bounds
+    // An array of points that will create the final shape
+    let points = [];
 
-    let iterations = 0;
-    let nextLine = firstRayIntersectionLinePair!.line;
-    while ( nextLine !== secondRayIntersectionLinePair!.line ) {
-      points.push( nextLine.end );
+    if ( vertexC.angleProperty!.value > Math.PI ) {
 
-      let nextIndex = directedLines.indexOf( nextLine ) + 1;
-      nextIndex = nextIndex > ( directedLines.length - 1 ) ? 0 : nextIndex;
-      nextLine = directedLines[ nextIndex ];
+      // angle is greater than Math.PI so we have a concave shape and need to use a more constrained shape to
+      // prevent crossed quadrilaterals
+      points.push( vertexC.positionProperty.value ); // start at the opposite vertex
 
-      assert && assert( nextLine );
-
-      iterations++;
-      assert && assert( iterations < 10, 'we should have closed the shape by now! Likely infinite loop' );
+      // The rays between vertexB and vertexC and vertexD and vertexC define the shape that will prevent twisted
+      // quadrilaterals, so after starting at vertexC we just walk clockwise along the boundary points
+      const intersectionAndBoundaryPoints = QuadrilateralModel.getPointsAlongBoundary( directedLines, firstRayIntersectionLinePair!, secondRayIntersectionLinePair! );
+      points = points.concat( intersectionAndBoundaryPoints );
     }
+    else {
 
-    // we have walked to the same line, just include the second intersection point
-    points.push( secondRayIntersectionLinePair!.intersection.point );
+      // We have a convex shape so we can allow a larger area of movement without creating a twisted shape. This shape
+      // will walk between all other vertices and then close by walking clockwise around the bounds
+      points.push( vertexC.positionProperty.value ); // start at the opposite vertex
+      points.push( vertexD.positionProperty.value ); // walk to the next vertex
 
-    points.push( vertexB.positionProperty.value ); // walk back to vertexB
+      const intersectionAndBoundaryPoints = QuadrilateralModel.getPointsAlongBoundary( directedLines, firstRayIntersectionLinePair!, secondRayIntersectionLinePair! );
+      points = points.concat( intersectionAndBoundaryPoints );
+
+      points.push( vertexB.positionProperty.value ); // walk back to vertexB
+    }
 
     const shape = new Shape();
     shape.moveToPoint( points[ 0 ] );
@@ -265,6 +288,60 @@ class QuadrilateralModel {
     shape.close();
 
     return shape;
+  }
+
+
+  /**
+   * To create a bounding shape for a Vertex, walk along the boundary defined by directedLines until we traverse
+   * between two points along the boundary. The directed lines are ordered and directed in a clockwise motion around
+   * the entire model to assist in the traversal between intersection points. Graphically, what we are accomplishing
+   * is this:
+   *                        - firstLineIntersectionPair.intersection.point
+   *   -------------------A--B
+   *  |                      |
+   *  |                      |
+   *  |                      |
+   *  |                      |
+   *  |                      |
+   *  ----D------------------C
+   *       - secondLineIntersectionPair.intersection.point
+   *
+   * This function will return an array of points [A, B, C, D] to create a shape between the intersections on the lines.
+   *
+   * @param directedLines
+   * @param firstLineIntersectionPair
+   * @param secondLineIntersectionPair
+   * @private
+   */
+  private static getPointsAlongBoundary( directedLines: Line[], firstLineIntersectionPair: LineIntersectionPair, secondLineIntersectionPair: LineIntersectionPair ): Vector2[] {
+    const points = [];
+
+    // walk to the first ray intersection with the bounds
+    points.push( firstLineIntersectionPair.intersection.point );
+
+    // a safety net to make sure that we don't get stuck in this while loop
+    let iterations = 0;
+
+    // walk along the bounds, adding corner points until we reach the same line as the secondLineIntersectionPair
+    let nextLine = firstLineIntersectionPair!.line;
+    while ( nextLine !== secondLineIntersectionPair!.line ) {
+      points.push( nextLine.end );
+
+      let nextIndex = directedLines.indexOf( nextLine ) + 1;
+      nextIndex = nextIndex > ( directedLines.length - 1 ) ? 0 : nextIndex;
+
+      nextLine = directedLines[ nextIndex ];
+      assert && assert( nextLine );
+
+      iterations++;
+      assert && assert( iterations < 10, 'we should have closed the shape by now! Likely infinite loop' );
+    }
+
+    // we have walked to the same line as the second intersection point, finalize by including the second
+    // intersection point
+    points.push( secondLineIntersectionPair!.intersection.point );
+
+    return points;
   }
 
   /**
