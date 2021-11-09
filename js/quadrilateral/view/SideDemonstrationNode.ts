@@ -44,7 +44,7 @@ class SideDemonstrationNode extends Node {
       const rightSideNode = new SideNode( model.rightSide, modelViewTransform );
       this.addChild( rightSideNode );
 
-      this.rightSideSoundView = new QuartetSideSoundView( model.rightSide, soundOptionsModel.baseSoundFileProperty );
+      this.rightSideSoundView = new QuartetSideSoundView( model.rightSide, model.resetNotInProgressProperty, soundOptionsModel.baseSoundFileProperty );
       model.shapeChangedEmitter.addListener( () => {
         this.rightSideSoundView!.startPlayingSounds();
       } );
@@ -54,7 +54,7 @@ class SideDemonstrationNode extends Node {
       this.addChild( leftSideNode );
 
       // sound
-      this.leftSideSoundView = new QuartetSideSoundView( model.leftSide, soundOptionsModel.baseSoundFileProperty );
+      this.leftSideSoundView = new QuartetSideSoundView( model.leftSide, model.resetNotInProgressProperty, soundOptionsModel.baseSoundFileProperty );
       model.shapeChangedEmitter.addListener( () => {
         this.leftSideSoundView!.startPlayingSounds();
       } );
@@ -64,7 +64,7 @@ class SideDemonstrationNode extends Node {
       this.addChild( topSideNode );
 
       // sound
-      this.topSideSoundView = new QuartetSideSoundView( model.topSide, soundOptionsModel.baseSoundFileProperty );
+      this.topSideSoundView = new QuartetSideSoundView( model.topSide, model.resetNotInProgressProperty, soundOptionsModel.baseSoundFileProperty );
       model.shapeChangedEmitter.addListener( () => {
         this.topSideSoundView!.startPlayingSounds();
       } );
@@ -74,7 +74,7 @@ class SideDemonstrationNode extends Node {
       this.addChild( bottomSideNode );
 
       // sound
-      this.bottomSideSoundView = new QuartetSideSoundView( model.bottomSide, soundOptionsModel.baseSoundFileProperty );
+      this.bottomSideSoundView = new QuartetSideSoundView( model.bottomSide, model.resetNotInProgressProperty, soundOptionsModel.baseSoundFileProperty );
       model.shapeChangedEmitter.addListener( () => {
         this.bottomSideSoundView!.startPlayingSounds();
       } );

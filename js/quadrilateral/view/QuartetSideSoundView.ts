@@ -28,6 +28,7 @@ import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
 import Side from '../model/Side.js';
 import WrappedAudioBuffer from '../../../../tambo/js/WrappedAudioBuffer.js';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 
 // constants
 // TODO: calculate these from constants, should be based on the limitations of each vertex bounds
@@ -71,10 +72,12 @@ class QuartetSideSoundView {
   private readonly tiltToPlaybackExponential: LinearFunction;
   private activeSoundClipCollection: null | SoundClipCollection;
   private readonly disposeQuartetSideSoundView: () => void;
+  private readonly resetNotInProgressProperty: BooleanProperty;
 
   // TODO: How to do EnumerationProperty, see https://github.com/phetsims/quadrilateral/issues/27
-  constructor( side: Side, quartetSoundFileProperty: any ) {
+  constructor( side: Side, resetNotInProgressProperty: BooleanProperty, quartetSoundFileProperty: any ) {
     this.side = side;
+    this.resetNotInProgressProperty = resetNotInProgressProperty;
 
     // @private {Map} - A map that goes from playback rate to the created SoundClipCollection.
     this.playbackRateToSoundClipCollection = new Map();
@@ -87,6 +90,13 @@ class QuartetSideSoundView {
     // Create sound clips for the chosen sound - while still exploring different sounds we will
     quartetSoundFileProperty.link( createSoundClipsListener );
 
+    const resetListener = ( notInProgress: boolean ) => {
+      if ( this.activeSoundClipCollection ) {
+        this.activeSoundClipCollection!.stopSoundClips();
+      }
+    };
+    this.resetNotInProgressProperty.link( resetListener );
+
     // A map that goes between tilt to the value used to calculate playback rate for a particular tilt. Initial value
     // for each side is Math.PI / 2. A value of 0 is fully tilted to the "left" while a value of Math.PI is fully
     // tilted to the right.
@@ -97,6 +107,7 @@ class QuartetSideSoundView {
 
     // @private {function} - for disposal
     this.disposeQuartetSideSoundView = () => {
+      this.resetNotInProgressProperty.unlink( resetListener );
       quartetSoundFileProperty.unlink( createSoundClipsListener );
     };
   }
@@ -113,7 +124,7 @@ class QuartetSideSoundView {
 
     for ( let i = MIN_SOUND_CLIP_EXPONENTIAL; i <= MAX_SOUND_CLIP_EXPONENTIAL; i++ ) {
       const playbackRate = Math.pow( 2, i / 12 );
-      const soundClipCollection = new SoundClipCollection( selectedSound, playbackRate );
+      const soundClipCollection = new SoundClipCollection( selectedSound, this.resetNotInProgressProperty, playbackRate );
 
       soundClipCollection.connectClips();
       soundManager.addSoundGenerator( soundClipCollection );
@@ -231,18 +242,21 @@ class SoundClipCollection extends SoundGenerator {
   private readonly outputLevelGainNode: AudioParam;
   private readonly anyClipsPlayingProperty: DerivedProperty<boolean>;
   private connected: boolean;
+  private readonly resetNotInProgressProperty: BooleanProperty;
 
   /**
    * @param wrappedAudioBuffer
+   * @param resetNotInProgressProperty
    * @param defaultPlaybackRate - The middle octave playbackRate for this collection. The collection will
    *                                       contain clips with playback rates that are one octave above and one octave
    *                                       below this rate.
    * @param [options] - TODO: How to do options?
    */
-  constructor( wrappedAudioBuffer: WrappedAudioBuffer, defaultPlaybackRate: number, options?: any ) {
+  constructor( wrappedAudioBuffer: WrappedAudioBuffer, resetNotInProgressProperty: BooleanProperty, defaultPlaybackRate: number, options?: any ) {
     super( options );
 
     this.defaultPlaybackRate = defaultPlaybackRate;
+    this.resetNotInProgressProperty = resetNotInProgressProperty;
 
     // The length of time that SoundClips will take to fade out and in while playing, in seconds
     this.fadeDuration = 0.35;
@@ -277,14 +291,17 @@ class SoundClipCollection extends SoundGenerator {
     // the state of the side.
     this.lowerOctaveClip = new SoundClip( wrappedAudioBuffer, {
       initialPlaybackRate: defaultPlaybackRate * 0.5,
+      enableControlProperties: [ this.resetNotInProgressProperty ],
       loop: true
     } );
     this.middleOctaveClip = new SoundClip( wrappedAudioBuffer, {
       initialPlaybackRate: defaultPlaybackRate,
+      enableControlProperties: [ this.resetNotInProgressProperty ],
       loop: true
     } );
     this.upperOctaveClip = new SoundClip( wrappedAudioBuffer, {
       initialPlaybackRate: defaultPlaybackRate * 2,
+      enableControlProperties: [ this.resetNotInProgressProperty ],
       loop: true
     } );
 

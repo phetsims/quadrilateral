@@ -23,10 +23,10 @@ class QuartetSoundView {
 
   public constructor( model: QuadrilateralModel, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
 
-    this.topSideSoundView = new QuartetSideSoundView( model.topSide, soundOptionsModel.baseSoundFileProperty );
-    this.rightSideSoundView = new QuartetSideSoundView( model.rightSide, soundOptionsModel.baseSoundFileProperty );
-    this.bottomSideSoundView = new QuartetSideSoundView( model.bottomSide, soundOptionsModel.baseSoundFileProperty );
-    this.leftSideSoundView = new QuartetSideSoundView( model.leftSide, soundOptionsModel.baseSoundFileProperty );
+    this.topSideSoundView = new QuartetSideSoundView( model.topSide, model.resetNotInProgressProperty, soundOptionsModel.baseSoundFileProperty );
+    this.rightSideSoundView = new QuartetSideSoundView( model.rightSide, model.resetNotInProgressProperty, soundOptionsModel.baseSoundFileProperty );
+    this.bottomSideSoundView = new QuartetSideSoundView( model.bottomSide, model.resetNotInProgressProperty, soundOptionsModel.baseSoundFileProperty );
+    this.leftSideSoundView = new QuartetSideSoundView( model.leftSide, model.resetNotInProgressProperty, soundOptionsModel.baseSoundFileProperty );
 
     // starts playing sounds whenever the shape changes - references for removal on dispose
     const shapeChangeListener = () => {
