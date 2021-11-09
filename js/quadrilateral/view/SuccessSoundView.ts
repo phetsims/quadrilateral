@@ -4,13 +4,12 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import merge from '../../../../phet-core/js/merge.js';
 import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
-import { SuccessSoundFile } from '../model/QuadrilateralSoundOptionsModel.js';
-import { SuccessSoundCollection } from '../model/QuadrilateralSoundOptionsModel.js';
+import QuadrilateralSoundOptionsModel, { SuccessSoundCollection } from '../model/QuadrilateralSoundOptionsModel.js';
 
 const MAX_OUTPUT_LEVEL = 0.2;
 
@@ -43,7 +42,7 @@ class SuccessSoundView {
 
     // link is called eagerly so that we have SoundClips to play in the following listeners
     // @ts-ignore - TODO: How to do
-    soundOptionsModel.successSoundFileProperty.link( ( successSoundFile: SuccessSoundFile ) => {
+    soundOptionsModel.successSoundFileProperty.link( successSoundFile => {
       const successSoundCollection = QuadrilateralSoundOptionsModel.SUCCESS_SOUND_COLLECTION_MAP.get( successSoundFile );
       this.createSoundClips( successSoundCollection );
     } );
@@ -70,6 +69,13 @@ class SuccessSoundView {
     model.shapeChangedEmitter.addListener( () => {
       if ( model.isParallelogramProperty.value ) {
         this.startPlayingMaintenanceSoundClip();
+      }
+    } );
+
+    // Whenever a reset is complete (not in progress), stop playing all sound clips immediately.
+    model.resetNotInProgressProperty.link( resetNotInProgress => {
+      if ( resetNotInProgress ) {
+        this.reset();
       }
     } );
   }
@@ -122,6 +128,13 @@ class SuccessSoundView {
   }
 
   /**
+   * Reset this SoundView, stopping all sounds and resetting SoundClips.
+   */
+  public reset(): void {
+    this.stopPlayingMaintenanceSoundClip();
+  }
+
+  /**
    * Create new sound clips for the collection of sounds. Not sure which (if any) we will use so to demonstrate
    * to the design team we are creating these options to play with.
    * @private
@@ -131,20 +144,22 @@ class SuccessSoundView {
   createSoundClips( successSoundCollection: SuccessSoundCollection ) {
     this.disposeSoundClips();
 
-    this.successSoundClip = new SoundClip( successSoundCollection.successSound, {
+    const soundClipOptions = {
+
+      // so that success sounds do not play while reset is in progress
+      enableControlProperties: [ this.model.resetNotInProgressProperty ],
       initialOutputLevel: MAX_OUTPUT_LEVEL
-    } );
+    };
+
+    this.successSoundClip = new SoundClip( successSoundCollection.successSound, soundClipOptions );
     soundManager.addSoundGenerator( this.successSoundClip );
 
-    this.failureSoundClip = new SoundClip( successSoundCollection.failureSound, {
-      initialOutputLevel: MAX_OUTPUT_LEVEL
-    } );
+    this.failureSoundClip = new SoundClip( successSoundCollection.failureSound, soundClipOptions );
     soundManager.addSoundGenerator( this.failureSoundClip );
 
-    this.maintenanceSoundClip = new SoundClip( successSoundCollection.maintenanceSound, {
-      loop: true,
-      initialOutputLevel: MAX_OUTPUT_LEVEL
-    } );
+    this.maintenanceSoundClip = new SoundClip( successSoundCollection.maintenanceSound, merge( {}, soundClipOptions, {
+      loop: true
+    } ) );
     soundManager.addSoundGenerator( this.maintenanceSoundClip );
   }
 
@@ -186,6 +201,8 @@ class SuccessSoundView {
       if ( this.remainingMaintenancePlayTime <= 0 ) {
         assert && assert( this.maintenanceSoundClip, 'maintenanceSoundClip needs to be created to set output level in step' );
         this.maintenanceSoundClip!.setOutputLevel( 0, 0.1 );
+        console.log( 'setting output level' );
+        // this.maintenanceSoundClip!.stop();
 
         this.maintenanceSoundClipPlaying = false;
       }

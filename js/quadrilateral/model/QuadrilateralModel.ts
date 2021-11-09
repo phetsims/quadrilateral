@@ -47,6 +47,7 @@ class QuadrilateralModel {
   public modelBoundsProperty: Property<Bounds2 | null>;
   public angleToleranceIntervalProperty: Property<number>;
   public readonly isParallelogramProperty: Property<boolean>;
+  public resetNotInProgressProperty: BooleanProperty;
 
   public shapeChangedEmitter: Emitter<[]>;
 
@@ -74,6 +75,13 @@ class QuadrilateralModel {
     } );
 
     this.modelBoundsProperty = new Property<Bounds2 | null>( null );
+
+    // Whether or not a reset is currently in progress. Added for sound. If the model is actively resetting,
+    // SoundManagers will disable so we don't play sounds for transient model states. It is a value for when
+    // the reset is NOT in progress because that is most convenient to pass to SoundGenerator enableControlProperties.
+    this.resetNotInProgressProperty = new BooleanProperty( true, {
+      tandem: tandem.createTandem( 'resetNotInProgressProperty' )
+    } );
 
     // Connect the sides, creating the shape and giving xvertices the information they need to determine their angles.
     this.rightSide.connectToSide( this.topSide );
@@ -142,11 +150,23 @@ class QuadrilateralModel {
    * @public
    */
   reset() {
+
+    // reset is in progress (not not in progress)
+    this.resetNotInProgressProperty.value = false;
+
     this.vertex1.reset();
     this.vertex2.reset();
     this.vertex3.reset();
     this.vertex4.reset();
     this.angleToleranceIntervalProperty.reset();
+
+    // Eagerly update isParallelogramProperty so that it is up to date before resetNotInProgressProperty is set back
+    // to true. This is important for Sound so that isParallelogramProperty sounds do not play until after the
+    // reset is complete.
+    this.isParallelogramProperty.set( this.getIsParallelogram() );
+
+    // reset is not in progress anymore
+    this.resetNotInProgressProperty.value = true;
   }
 
   /**
