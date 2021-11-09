@@ -84,7 +84,7 @@ class VertexNode extends Circle {
     this.addInputListener( dragListener );
 
     // notify when this vertex is pressed
-    dragListener.isPressedProperty.link( ( isPressed: boolean ) => vertex.isPressedProperty.set( isPressed ) );
+    dragListener.isPressedProperty.link( isPressed => vertex.isPressedProperty.set( isPressed ) );
 
     // TODO: For now we are showing pointer areas instead of a graphical sim. These are used just to indicate
     // where you can press while we discuss multitouch considerations. We don't want something more permanent because

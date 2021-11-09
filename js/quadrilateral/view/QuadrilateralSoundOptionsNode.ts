@@ -20,7 +20,7 @@ import Panel from '../../../../sun/js/Panel.js';
 import VerticalAquaRadioButtonGroup from '../../../../sun/js/VerticalAquaRadioButtonGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralSoundOptionsModel, { SoundDesign } from '../model/QuadrilateralSoundOptionsModel.js';
+import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
 
 const LABEL_TEXT_OPTIONS = {
   font: new PhetFont( { size: 16 } )
@@ -136,7 +136,7 @@ class QuadrilateralSoundOptionsNode extends Panel {
     } );
 
     // @ts-ignore - TODO: How to we do Enumeration with TypeScript?
-    model.soundDesignProperty.link( ( design: SoundDesign ) => {
+    model.soundDesignProperty.link( design => {
 
       // modify children instead of changing visibility for layout purposes
       const children = [ comboBoxWithParentNode ];
