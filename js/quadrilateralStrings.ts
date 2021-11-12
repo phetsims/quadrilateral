@@ -1,13 +1,33 @@
-// Copyright 2020-2021, University of Colorado Boulder
+// Copyright 2021, University of Colorado Boulder
 
 /**
- * TODO: How will we do strings with TypeScript? See https://github.com/phetsims/quadrilateral/issues/27.
+ * Auto-generated from modulify, DO NOT manually modify.
  */
-
+/* eslint-disable */
 import getStringModule from '../../chipper/js/getStringModule.js';
 import quadrilateral from './quadrilateral.js';
 
-const quadrilateralStrings = getStringModule( 'QUADRILATERAL' ) as any;
+type StringsType = {
+  'quadrilateral': {
+    'title': string
+  },
+  'a11y': {
+    'voicing': {
+      'vertex1': string,
+      'vertex2': string,
+      'vertex3': string,
+      'vertex4': string,
+      'topSide': string,
+      'rightSide': string,
+      'bottomSide': string,
+      'leftSide': string,
+      'parallelogramSuccess': string,
+      'parallelogramFailure': string
+    }
+  }
+};
+
+const quadrilateralStrings = getStringModule( 'QUADRILATERAL' ) as StringsType;
 
 quadrilateral.register( 'quadrilateralStrings', quadrilateralStrings );
 
