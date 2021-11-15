@@ -43,7 +43,7 @@ class SideNode extends Line {
       tandem: Tandem.OPTIONAL
     }, options );
 
-    super( 0, 0, 0, 0 );
+    super( 0, 0, 0, 0, options );
 
     // A reference to the model component.
     this.side = side;
