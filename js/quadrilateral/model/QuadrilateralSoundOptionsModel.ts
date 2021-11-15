@@ -125,7 +125,7 @@ class QuadrilateralSoundOptionsModel {
     // For the "Success" sound prototype, a sound is played when reaching a parallelogram, leaving a parallelogram,
     // and when the parallelogram is maintained while the shape changes. Within this paradigm there are
     // different sound options for each of these to chose from.
-    this.successSoundFileProperty = new EnumerationProperty( SuccessSoundFile, SuccessSoundFile.FOUR );
+    this.successSoundFileProperty = new EnumerationProperty( SuccessSoundFile, SuccessSoundFile.ONE );
   }
 }
 
