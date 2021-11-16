@@ -23,6 +23,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import SceneryEvent from '../../../../scenery/js/input/SceneryEvent.js';
 import Vertex from '../model/Vertex.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
+import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 
 class SideNode extends Line {
   private side: Side;
@@ -79,6 +80,7 @@ class SideNode extends Line {
     } );
 
     // supports keyboard dragging, attempts to move both vertices in the direction of motion of the line
+    const viewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralConstants.MOVEMENT_PER_KEY_PRESS );
     this.addInputListener( new KeyboardDragListener( {
       transform: modelViewTransform,
       start: () => {
@@ -86,7 +88,16 @@ class SideNode extends Line {
       },
       drag: ( vectorDelta: Vector2 ) => {
         this.moveVerticesFromModelDelta( vectorDelta );
-      }
+      },
+
+      // velocity defined in view coordinates per second, assuming 60 fps
+      dragVelocity: viewDragDelta * 60,
+      shiftDragVelocity: ( viewDragDelta / 2 ) * 60,
+
+      downDelta: viewDragDelta,
+      shiftDownDelta: viewDragDelta / 2,
+      moveOnHoldDelay: 750,
+      moveOnHoldInterval: 50
     } ) );
 
     this.addInputListener( new DragListener( {

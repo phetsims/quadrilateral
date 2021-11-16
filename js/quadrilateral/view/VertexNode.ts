@@ -21,6 +21,7 @@ import Vertex from '../model/Vertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import SceneryEvent from '../../../../scenery/js/input/SceneryEvent.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
+import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 
 class VertexNode extends Rectangle {
   constructor( vertex: Vertex, quadrilateralModel: QuadrilateralModel, modelViewTransform: ModelViewTransform2, options?: Object ) {
@@ -63,6 +64,7 @@ class VertexNode extends Rectangle {
     } );
 
     // A basic keyboard input listener.
+    const viewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralConstants.MOVEMENT_PER_KEY_PRESS );
     const keyboardDragListener = new KeyboardDragListener( {
       transform: modelViewTransform,
       drag: ( modelDelta: Vector2 ) => {
@@ -72,7 +74,15 @@ class VertexNode extends Rectangle {
           vertex.positionProperty.value = proposedPosition;
         }
       },
-      shiftDragVelocity: 100
+
+      // velocity defined in view coordinates per second, assuming 60 fps
+      dragVelocity: viewDragDelta * 60,
+      shiftDragVelocity: ( viewDragDelta / 2 ) * 60,
+
+      downDelta: viewDragDelta,
+      shiftDownDelta: viewDragDelta / 2,
+      moveOnHoldDelay: 750,
+      moveOnHoldInterval: 50
     } );
     this.addInputListener( keyboardDragListener );
 
