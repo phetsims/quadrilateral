@@ -275,7 +275,6 @@ class QuadrilateralModel {
     // Similarly, we also determine if side lengths have changed in the step function because we need to calculate
     // lengths after all positions have been set.
     this.lengthsEqualToSavedProperty.set( this.getSideLengthsChanged( this.getSideLengths() ) );
-    console.log( this.lengthsEqualToSavedProperty.value );
   }
 
   /**
