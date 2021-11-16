@@ -28,6 +28,7 @@ import quadOutOfParallel002Sound from '../../../sounds/quad-out-of-parallel-002_
 import quadOutOfParallel003Sound from '../../../sounds/quad-out-of-parallel-003_mp3.js';
 import quadOutOfParallel004Sound from '../../../sounds/quad-out-of-parallel-004_mp3.js';
 import quadrilateral from '../../quadrilateral.js';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 
 // constants
 // Enumeration for named sound designs, each with their own options and parameters
@@ -101,6 +102,7 @@ class QuadrilateralSoundOptionsModel {
   public soundDesignProperty: EnumerationProperty; // TODO: type for Enumeration? #27
   public baseSoundFileProperty: EnumerationProperty; // TODO: type for Enumeration? #27
   public successSoundFileProperty: EnumerationProperty; // TODO: type for Enumeration? #27
+  public maintenanceSoundRequiresEqualLengthsProperty: BooleanProperty;
 
   // TODO: how to do these with typescript? See #27
   public static SoundDesign: any;
@@ -126,6 +128,11 @@ class QuadrilateralSoundOptionsModel {
     // and when the parallelogram is maintained while the shape changes. Within this paradigm there are
     // different sound options for each of these to chose from.
     this.successSoundFileProperty = new EnumerationProperty( SuccessSoundFile, SuccessSoundFile.ONE );
+
+    // For the "Success" sound prototype, when true the "maintenance" sound will only play when the
+    // quadrilateral changes shape, remains a parallelogram, AND the lengths remain the same
+    // during the interaction.
+    this.maintenanceSoundRequiresEqualLengthsProperty = new BooleanProperty( false );
   }
 }
 

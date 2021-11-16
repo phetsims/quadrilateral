@@ -80,8 +80,23 @@ class SuccessSoundView {
       const countObject = _.countBy( vertices, vertex => {
         return vertex.isPressedProperty.value;
       } );
-      if ( model.isParallelogramProperty.value && countObject.true !== 1 ) {
-        this.startPlayingMaintenanceSoundClip();
+
+      // If testing equal lengths, the maintenance sound is only played when we stay a parallelogram but
+      // maintain equal lengths through the interaction.
+      if ( soundOptionsModel.maintenanceSoundRequiresEqualLengthsProperty.value ) {
+
+        // In this mode, we will
+        if ( model.isParallelogramProperty.value && countObject.true !== 1 && model.lengthsEqualToSavedProperty.value ) {
+          this.startPlayingMaintenanceSoundClip();
+        }
+        else {
+          this.stopPlayingMaintenanceSoundClip();
+        }
+      }
+      else {
+        if ( model.isParallelogramProperty.value && countObject.true !== 1 ) {
+          this.startPlayingMaintenanceSoundClip();
+        }
       }
     };
     model.shapeChangedEmitter.addListener( shapeListener );

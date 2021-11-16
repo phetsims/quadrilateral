@@ -12,7 +12,6 @@ import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/nodes/HBox.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
-import Text from '../../../../scenery/js/nodes/Text.js';
 import VBox from '../../../../scenery/js/nodes/VBox.js';
 import ComboBox from '../../../../sun/js/ComboBox.js';
 import ComboBoxItem from '../../../../sun/js/ComboBoxItem.js';
@@ -21,6 +20,8 @@ import VerticalAquaRadioButtonGroup from '../../../../sun/js/VerticalAquaRadioBu
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
+import Checkbox from '../../../../sun/js/Checkbox.js';
+import Text from '../../../../scenery/js/nodes/Text.js';
 
 const LABEL_TEXT_OPTIONS = {
   font: new PhetFont( { size: 16 } )
@@ -53,9 +54,9 @@ class QuadrilateralSoundOptionsNode extends Panel {
       children: [ soundDesignLabelText, designComboBox ],
       spacing: TITLE_SPACING
     } );
-    const comboBoxWithParentNode = new Node( {
-      children: [ labelledComboBox, optionsParentNode ]
-    } );
+    // const comboBoxWithParentNode = new Node( {
+    //   children: [ labelledComboBox, optionsParentNode ]
+    // } );
 
     const baseSoundRadioButtonItems = [
       {
@@ -123,23 +124,33 @@ class QuadrilateralSoundOptionsNode extends Panel {
 
     const labelledSuccessSoundRadioButtonGroup = new LabelledRadioButtonGroup( model.successSoundFileProperty, successSoundRadioButtonItems, 'Success Sounds', tandem.createTandem( 'labelledSuccessSoundRadioButtonGroup' ) );
 
+    // a checkbox to control the behavior of the maintenance sound
+    const maintenanceOptionLabel = new Text( 'Constant lengths for maintenance sound', LABEL_TEXT_OPTIONS );
+    const maintenanceSoundCheckbox = new Checkbox( maintenanceOptionLabel, model.maintenanceSoundRequiresEqualLengthsProperty, {
+      tandem: tandem.createTandem( 'maintenanceSoundCheckbox' )
+    } );
+
     const content = new VBox( {
       children: [
-        comboBoxWithParentNode,
+        // comboBoxWithParentNode,
+        labelledComboBox,
         labelledBaseSoundRadioButtonGroup
       ],
+      spacing: 15,
       align: 'left'
     } );
 
     super( content, {
-      resize: false
+      resize: true
     } );
+
+    this.addChild( optionsParentNode );
 
     // @ts-ignore - TODO: How to we do Enumeration with TypeScript?
     model.soundDesignProperty.link( design => {
 
       // modify children instead of changing visibility for layout purposes
-      const children = [ comboBoxWithParentNode ];
+      const children: Node[] = [ labelledComboBox ];
       if ( design === QuadrilateralSoundOptionsModel.SoundDesign.QUARTET ||
            design === QuadrilateralSoundOptionsModel.SoundDesign.PARALLELS_VOLUME ) {
 
@@ -150,6 +161,9 @@ class QuadrilateralSoundOptionsNode extends Panel {
 
         // there are different sets of "success" sounds in this prototype
         children.push( labelledSuccessSoundRadioButtonGroup );
+
+        // The "success" design has options for how the maintenance sound behaves
+        children.push( maintenanceSoundCheckbox );
       }
 
       content.children = children;

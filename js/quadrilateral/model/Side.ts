@@ -13,6 +13,8 @@ import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import quadrilateral from '../../quadrilateral.js';
 import Vertex from './Vertex.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import Utils from '../../../../dot/js/Utils.js';
+import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 
 class Side {
   public vertex1: Vertex;
@@ -21,6 +23,7 @@ class Side {
   public tiltProperty: DerivedProperty<number>;
   public lengthProperty: DerivedProperty<number>;
   public readonly isPressedProperty: BooleanProperty;
+  public readonly lengthToleranceIntervalProperty: DerivedProperty<number>;
 
   /**
    * @param vertex1 - The first vertex of this Side.
@@ -61,8 +64,27 @@ class Side {
       tandem: tandem.createTandem( 'lengthProperty' ),
       phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
     } );
+
+    // The tolerance for this side to determine if it is equal to another. It is a portion of the full length
+    // so that when the side is longer it still as easy for two sides to be equal in length. Otherwise the
+    // tolerance interval will be relatively much larger when the length is very small.
+    this.lengthToleranceIntervalProperty = new DerivedProperty( [ this.lengthProperty ], length => {
+      return length * QuadrilateralQueryParameters.lengthToleranceIntervalScaleFactor;
+    } );
   }
 
+  /**
+   * Returns true when the length of this Side is equal to the other Side, within length tolerance intervals.
+   * The Sides may have different tolerance intervals because the intervals are a function of the length.
+   * We always use the larger of the two intervals in this case.
+   */
+  public isLengthEqualToOther( side: Side ): boolean {
+
+    // for more consistent, always use the larger of the length tolerance intervals (they will be slightly
+    // different for sides with different lengths
+    const toleranceInterval = Math.max( side.lengthToleranceIntervalProperty.value, this.lengthToleranceIntervalProperty.value );
+    return Utils.equalsEpsilon( side.lengthProperty.value, this.lengthProperty.value, toleranceInterval );
+  }
 
   /**
    * Connect this side to another to form a shape. Connects this.vertex1 to otherSide.vertex2, illustrated like this.

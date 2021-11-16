@@ -24,6 +24,7 @@ import Side from './Side.js';
 import Vertex from './Vertex.js';
 import RayIntersection from '../../../../kite/js/util/RayIntersection.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
+import Utils from '../../../../dot/js/Utils.js';
 
 // A useful type for calculations for the vertex Shapes which define where the Vertex can move depending on
 // the positions of the other vertices. Lines are along the bounds of model space and RayIntersections
@@ -37,11 +38,22 @@ type LineIntersectionPair = {
 // Bounds used for calculations, but a single instance to reduce garbage.
 const SCRATCH_BOUNDS = new Bounds2( 0, 0, 0, 0 );
 
+// A type for saved Side lengths that can be used to compare how the lengths of sides change during interaction.
+type SideLengths = {
+  topSideLength: number,
+  rightSideLength: number,
+  bottomSideLength: number,
+  leftSideLength: number
+};
+
 class QuadrilateralModel {
   public vertex1: Vertex;
   public vertex2: Vertex;
   public vertex3: Vertex;
   public vertex4: Vertex;
+
+  private savedSideLengths: SideLengths;
+  public readonly lengthsEqualToSavedProperty: BooleanProperty;
 
   public readonly vertices: Vertex[];
 
@@ -98,6 +110,10 @@ class QuadrilateralModel {
     this.leftSide.connectToSide( this.bottomSide );
     this.topSide.connectToSide( this.leftSide );
 
+    // A collection of the Side lengths at a point in time. Updated whenever an interaction begins with the
+    // quadrilateral. Allows us to monitor the change in Side lengths during interaction.
+    this.savedSideLengths = this.getSideLengths();
+
     // A value that controls the threshold for equality when determining if the quadrilateral forms a parallelogram.
     // Without a margin of error it would be exceedingly difficult to create a parallelogram shape. It is unclear
     // whether this need to change, but it seems useful now to be able to easily change this value during development.
@@ -115,6 +131,14 @@ class QuadrilateralModel {
     // with this work resolves the problem.
     this.isParallelogramProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'isParallelogramProperty' )
+    } );
+
+    // Whether the Side lengths have changed relative to the saved side lengths that were stored at the beginning
+    // of an interaction. This helps accomplish a learning goal of determining if the quad remains a parallelogram
+    // while also keeping side lengths the same. This is set in the step function asynchronously(!!) so that
+    // it can be calculated only after all vertex positions have been set by listeners.
+    this.lengthsEqualToSavedProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'lengthsEqualToSavedProperty' )
     } );
 
     // @public {Emitter} - Emits an event whenever the shape of the Quadrilateral changes
@@ -139,6 +163,32 @@ class QuadrilateralModel {
         this.setVertexDragAreas();
       }
     } );
+  }
+
+  /**
+   * Get a SideLengths, a collection of all the side lengths at a particular point in time.
+   */
+  private getSideLengths(): SideLengths {
+    return {
+      topSideLength: this.topSide.lengthProperty.value,
+      rightSideLength: this.rightSide.lengthProperty.value,
+      bottomSideLength: this.bottomSide.lengthProperty.value,
+      leftSideLength: this.leftSide.lengthProperty.value
+    };
+  }
+
+  /**
+   * Save all side lengths for the model, to monitor changes in the length over time.
+   */
+  public saveSideLengths(): void {
+    this.savedSideLengths = this.getSideLengths();
+  }
+
+  public getSideLengthsChanged( currentSideLengths: SideLengths ) {
+    return Utils.equalsEpsilon( currentSideLengths.topSideLength, this.savedSideLengths.topSideLength, this.topSide.lengthToleranceIntervalProperty.value ) &&
+           Utils.equalsEpsilon( currentSideLengths.rightSideLength, this.savedSideLengths.rightSideLength, this.rightSide.lengthToleranceIntervalProperty.value ) &&
+           Utils.equalsEpsilon( currentSideLengths.bottomSideLength, this.savedSideLengths.bottomSideLength, this.bottomSide.lengthToleranceIntervalProperty.value ) &&
+           Utils.equalsEpsilon( currentSideLengths.leftSideLength, this.savedSideLengths.leftSideLength, this.leftSide.lengthToleranceIntervalProperty.value );
   }
 
   /**
@@ -219,8 +269,13 @@ class QuadrilateralModel {
    */
   public step( dt: number ): void {
 
-    // the isParallelogramProperty needs to be set asynchronously, see the documentation for isParallelogramProperty
+    // The isParallelogramProperty needs to be set asynchronously, see the documentation for isParallelogramProperty.
     this.isParallelogramProperty.set( this.getIsParallelogram() );
+
+    // Similarly, we also determine if side lengths have changed in the step function because we need to calculate
+    // lengths after all positions have been set.
+    this.lengthsEqualToSavedProperty.set( this.getSideLengthsChanged( this.getSideLengths() ) );
+    console.log( this.lengthsEqualToSavedProperty.value );
   }
 
   /**

@@ -32,6 +32,15 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     type: 'number',
     isValidValue: value => value <= ( 2 * Math.PI ) && value >= 0,
     defaultValue: 0.2
+  },
+
+  // A scale factor for the tolerance interval for comparing lengths in the model, relative to the
+  // length of one side. For example, two sides will be considered equal in length when both sides
+  // have a same length within ( length * lengthToleranceIntervalScaleFactor).
+  lengthToleranceIntervalScaleFactor: {
+    type: 'number',
+    isValidValue: value => value <= 1 && value >= 0,
+    defaultValue: 0.2
   }
 } );
 
