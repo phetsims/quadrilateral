@@ -29,10 +29,10 @@ class SideDemonstrationNode extends Node {
   constructor( model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, soundOptionsModel: QuadrilateralSoundOptionsModel, options?: any ) {
     super( options );
 
-    const vertex1Node = new VertexNode( model.vertex1, modelViewTransform );
-    const vertex2Node = new VertexNode( model.vertex2, modelViewTransform );
-    const vertex3Node = new VertexNode( model.vertex3, modelViewTransform );
-    const vertex4Node = new VertexNode( model.vertex4, modelViewTransform );
+    const vertex1Node = new VertexNode( model.vertex1, model, modelViewTransform );
+    const vertex2Node = new VertexNode( model.vertex2, model, modelViewTransform );
+    const vertex3Node = new VertexNode( model.vertex3, model, modelViewTransform );
+    const vertex4Node = new VertexNode( model.vertex4, model, modelViewTransform );
 
     // references to SideViews, only created if requested by query parameter
     this.rightSideSoundView = null;

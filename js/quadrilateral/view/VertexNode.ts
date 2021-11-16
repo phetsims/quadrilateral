@@ -10,7 +10,7 @@ import merge from '../../../../phet-core/js/merge.js';
 import Voicing from '../../../../scenery/js/accessibility/voicing/Voicing.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import KeyboardDragListener from '../../../../scenery/js/listeners/KeyboardDragListener.js';
-import Circle from '../../../../scenery/js/nodes/Circle.js';
+import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import timesSolidShape from '../../../../sherpa/js/fontawesome-5/timesSolidShape.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -20,9 +20,10 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import Vertex from '../model/Vertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import SceneryEvent from '../../../../scenery/js/input/SceneryEvent.js';
+import QuadrilateralModel from '../model/QuadrilateralModel.js';
 
-class VertexNode extends Circle {
-  constructor( vertex: Vertex, modelViewTransform: ModelViewTransform2, options?: Object ) {
+class VertexNode extends Rectangle {
+  constructor( vertex: Vertex, quadrilateralModel: QuadrilateralModel, modelViewTransform: ModelViewTransform2, options?: Object ) {
     options = merge( {
 
       // pdom
@@ -33,21 +34,32 @@ class VertexNode extends Circle {
       tandem: Tandem.REQUIRED
     }, options );
 
-    super( 25 );
+    const viewBounds = modelViewTransform.modelToViewBounds( vertex.modelBoundsProperty.value );
+    super( viewBounds );
 
     // @ts-ignore - how do we deal with mixin?
     this.initializeVoicing();
 
+    // debugging = to show the positions of the vertices while we don't have a graphical display
+    let showVerticesPath: null | Path = null;
     if ( QuadrilateralQueryParameters.showVertices ) {
-      this.addChild( new Path( timesSolidShape, {
+      showVerticesPath = new Path( timesSolidShape, {
         fill: 'red',
         scale: 0.05,
         center: this.center
-      } ) );
+      } );
+      this.addChild( showVerticesPath );
     }
 
-    vertex.positionProperty.link( position => {
-      this.translation = modelViewTransform.modelToViewPosition( position );
+    vertex.modelBoundsProperty.link( modelBounds => {
+      const viewBounds = modelViewTransform.modelToViewBounds( modelBounds );
+      this.setRectBounds( viewBounds );
+
+      // Since we are a purely graphical sim for now, these allow us to
+      this.mouseArea = viewBounds;
+      this.touchArea = this.mouseArea;
+
+      showVerticesPath && showVerticesPath.setCenter( viewBounds.center );
     } );
 
     // A basic keyboard input listener.
@@ -56,7 +68,7 @@ class VertexNode extends Circle {
       drag: ( modelDelta: Vector2 ) => {
         const proposedPosition = vertex.positionProperty.value.plus( modelDelta );
 
-        if ( vertex.dragAreaProperty.value!.containsPoint( proposedPosition ) ) {
+        if ( quadrilateralModel.isVertexPositionAllowed( vertex, proposedPosition ) ) {
           vertex.positionProperty.value = proposedPosition;
         }
       },
@@ -73,7 +85,8 @@ class VertexNode extends Circle {
         const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
 
         const proposedPosition = modelPoint;
-        if ( vertex.dragAreaProperty.value!.containsPoint( proposedPosition ) ) {
+        console.log( quadrilateralModel.isVertexPositionAllowed( vertex, proposedPosition ) );
+        if ( quadrilateralModel.isVertexPositionAllowed( vertex, proposedPosition ) ) {
           vertex.positionProperty.value = proposedPosition;
         }
       },
@@ -85,12 +98,6 @@ class VertexNode extends Circle {
 
     // notify when this vertex is pressed
     dragListener.isPressedProperty.link( isPressed => vertex.isPressedProperty.set( isPressed ) );
-
-    // TODO: For now we are showing pointer areas instead of a graphical sim. These are used just to indicate
-    // where you can press while we discuss multitouch considerations. We don't want something more permanent because
-    // we are afraid a graphical design will influence other modalities.
-    this.mouseArea = this.localBounds;
-    this.touchArea = this.mouseArea;
 
     vertex.dragBoundsProperty.link( dragBounds => {
       keyboardDragListener.dragBounds = dragBounds;

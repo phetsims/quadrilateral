@@ -43,7 +43,7 @@ class QuadrilateralNode extends Node {
     this.model = model;
     this.modelViewTransform = modelViewTransform;
 
-    const vertexNode1 = new VertexNode( model.vertex1, modelViewTransform, {
+    const vertexNode1 = new VertexNode( model.vertex1, model, modelViewTransform, {
 
       // voicing
       voicingNameResponse: vertex1String,
@@ -52,7 +52,7 @@ class QuadrilateralNode extends Node {
       tandem: options.tandem.createTandem( 'vertex1Node' )
     } );
 
-    const vertexNode2 = new VertexNode( model.vertex2, modelViewTransform, {
+    const vertexNode2 = new VertexNode( model.vertex2, model, modelViewTransform, {
 
       // voicing
       voicingNameResponse: vertex2String,
@@ -61,7 +61,7 @@ class QuadrilateralNode extends Node {
       tandem: options.tandem.createTandem( 'vertex2Node' )
     } );
 
-    const vertexNode3 = new VertexNode( model.vertex3, modelViewTransform, {
+    const vertexNode3 = new VertexNode( model.vertex3, model, modelViewTransform, {
 
       // voicing
       voicingNameResponse: vertex3String,
@@ -70,7 +70,7 @@ class QuadrilateralNode extends Node {
       tandem: options.tandem.createTandem( 'vertex3Node' )
     } );
 
-    const vertexNode4 = new VertexNode( model.vertex4, modelViewTransform, {
+    const vertexNode4 = new VertexNode( model.vertex4, model, modelViewTransform, {
 
       // voicing
       voicingNameResponse: vertex4String,

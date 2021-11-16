@@ -17,13 +17,21 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 
+// in model coordinates, the bounds of the vertex - necessary because we need to calculate vertex/vertex and
+// vertex/side collisions
+const VERTEX_BOUNDS = new Bounds2( 0, 0, 0.1, 0.1 );
+const HALF_WIDTH = VERTEX_BOUNDS.width / 2;
+const HALF_HEIGHT = VERTEX_BOUNDS.height / 2;
+
 class Vertex {
   public positionProperty: Property<Vector2>;
   public angleProperty: null | Property<number>;
   public dragBoundsProperty: Property<null | Bounds2>;
   public dragAreaProperty: Property<null | Shape>;
   public isPressedProperty: Property<boolean>;
+  public modelBoundsProperty: DerivedProperty<Bounds2>;
   private tandem: Tandem;
+  public static VERTEX_BOUNDS: Bounds2;
 
   /**
    * @param initialPosition - The initial position for the Vertex in model coordinates.
@@ -50,6 +58,14 @@ class Vertex {
     // the model bounds are defined and this Vertex is connected to others to form the quadrilateral shape.
     this.dragAreaProperty = new Property<Shape | null>( null );
 
+    // The bounds in model coordinates of this vertex, with dimensions VERTEX_BOUNDS, centered at the value of the
+    // positionProperty.
+    this.modelBoundsProperty = new DerivedProperty<Bounds2>( [ this.positionProperty ], position => {
+
+      // TODO: possibly reduce allocations?
+      return new Bounds2( position.x - HALF_WIDTH, position.y - HALF_HEIGHT, position.x + HALF_WIDTH, position.y + HALF_HEIGHT );
+    } );
+
     // True when this Vertex is "pressed" during user interaction.
     this.isPressedProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'isPressedProperty' )
@@ -57,6 +73,13 @@ class Vertex {
 
     // Referenced so that we can pass the tandem to Properties as they are dynamically created in the methods below.
     this.tandem = tandem;
+  }
+
+  /**
+   * Returns true when the provided bounds overlap the modelled bounds of this Vertex.
+   */
+  public boundsOverlapsVertex( bounds: Bounds2 ): boolean {
+    return bounds.intersectsBounds( this.modelBoundsProperty.value );
   }
 
   /**
@@ -148,6 +171,8 @@ class Vertex {
     return Math.acos( argument );
   }
 }
+
+Vertex.VERTEX_BOUNDS = VERTEX_BOUNDS;
 
 quadrilateral.register( 'Vertex', Vertex );
 export default Vertex;

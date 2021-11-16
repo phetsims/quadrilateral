@@ -34,11 +34,16 @@ type LineIntersectionPair = {
   intersection: RayIntersection
 }
 
+// Bounds used for calculations, but a single instance to reduce garbage.
+const SCRATCH_BOUNDS = new Bounds2( 0, 0, 0, 0 );
+
 class QuadrilateralModel {
   public vertex1: Vertex;
   public vertex2: Vertex;
   public vertex3: Vertex;
   public vertex4: Vertex;
+
+  public readonly vertices: Vertex[];
 
   public topSide: Side;
   public rightSide: Side;
@@ -62,6 +67,9 @@ class QuadrilateralModel {
     this.vertex2 = new Vertex( new Vector2( 0.25, 0.25 ), tandem.createTandem( 'vertex2' ) );
     this.vertex3 = new Vertex( new Vector2( 0.25, -0.25 ), tandem.createTandem( 'vertex3' ) );
     this.vertex4 = new Vertex( new Vector2( -0.25, -0.25 ), tandem.createTandem( 'vertex4' ) );
+
+    // Collection of the vertices which should be easy to iterate over
+    this.vertices = [ this.vertex1, this.vertex2, this.vertex3, this.vertex4 ];
 
     // create the sides of the quadrilateral
     this.topSide = new Side( this.vertex1, this.vertex2, tandem.createTandem( 'topSide' ), {
@@ -136,11 +144,8 @@ class QuadrilateralModel {
   /**
    * Returns whether or not the quadrilateral shape is a parallelogram, within the tolerance defined by
    * angleToleranceIntervalProperty.
-   * @public
-   *
-   * @returns {boolean}
    */
-  getIsParallelogram() {
+  public getIsParallelogram(): boolean {
     const angle1DiffAngle3 = Math.abs( this.vertex1.angleProperty!.value - this.vertex3.angleProperty!.value );
     const angle2DiffAngle4 = Math.abs( this.vertex2.angleProperty!.value - this.vertex4.angleProperty!.value );
     const epsilon = this.angleToleranceIntervalProperty.value;
@@ -149,10 +154,46 @@ class QuadrilateralModel {
   }
 
   /**
-   * Resets the model.
-   * @public
+   * Returns true if the provided Vertex is allowed to exist in the proposed position. The Vertex is not allowed
+   * to overlap any other Vertex of the model. It also must be within the drag area that is defined by the positions
+   * of other vertices in the model, which prevents the shape from becoming twisted.
+   *
+   * @param vertex - The vertex in question, so we don't compare it to itself
+   * @param proposedPosition
    */
-  reset() {
+  public isVertexPositionAllowed( vertex: Vertex, proposedPosition: Vector2 ): boolean {
+    let positionAllowed = true;
+
+    SCRATCH_BOUNDS.setMinMax(
+      proposedPosition.x - Vertex.VERTEX_BOUNDS.width / 2,
+      proposedPosition.y - Vertex.VERTEX_BOUNDS.height / 2,
+      proposedPosition.x + Vertex.VERTEX_BOUNDS.width / 2,
+      proposedPosition.y + Vertex.VERTEX_BOUNDS.height / 2
+    );
+
+    // vertex cannot overlap any others
+    for ( let i = 0; i < this.vertices.length; i++ ) {
+      const otherVertex = this.vertices[ i ];
+      if ( vertex !== otherVertex && otherVertex.boundsOverlapsVertex( SCRATCH_BOUNDS ) ) {
+        positionAllowed = false;
+        break;
+      }
+    }
+
+    // if the position is still allowed, check to see if the position is within the valid shape of the
+    // vertex
+    if ( positionAllowed ) {
+      assert && assert( vertex.dragAreaProperty.value, 'Drag area must be defined for the Vertex' );
+      positionAllowed = vertex.dragAreaProperty.value!.containsPoint( proposedPosition );
+    }
+
+    return positionAllowed;
+  }
+
+  /**
+   * Resets the model.
+   */
+  public reset(): void {
 
     // reset is in progress (not not in progress)
     this.resetNotInProgressProperty.value = false;
@@ -175,9 +216,8 @@ class QuadrilateralModel {
   /**
    * Steps the model.
    * @param dt - time step, in seconds
-   * @public
    */
-  step( dt: number ) {
+  public step( dt: number ): void {
 
     // the isParallelogramProperty needs to be set asynchronously, see the documentation for isParallelogramProperty
     this.isParallelogramProperty.set( this.getIsParallelogram() );
