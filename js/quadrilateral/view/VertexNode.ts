@@ -85,7 +85,6 @@ class VertexNode extends Rectangle {
         const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
 
         const proposedPosition = modelPoint;
-        console.log( quadrilateralModel.isVertexPositionAllowed( vertex, proposedPosition ) );
         if ( quadrilateralModel.isVertexPositionAllowed( vertex, proposedPosition ) ) {
           vertex.positionProperty.value = proposedPosition;
         }

@@ -41,7 +41,7 @@ class SideDemonstrationNode extends Node {
     this.bottomSideSoundView = null;
 
     if ( QuadrilateralQueryParameters.rightSide ) {
-      const rightSideNode = new SideNode( model.rightSide, modelViewTransform );
+      const rightSideNode = new SideNode( model.rightSide, model, modelViewTransform );
       this.addChild( rightSideNode );
 
       this.rightSideSoundView = new QuartetSideSoundView( model.rightSide, model.resetNotInProgressProperty, soundOptionsModel.baseSoundFileProperty );
@@ -50,7 +50,7 @@ class SideDemonstrationNode extends Node {
       } );
     }
     if ( QuadrilateralQueryParameters.leftSide ) {
-      const leftSideNode = new SideNode( model.leftSide, modelViewTransform );
+      const leftSideNode = new SideNode( model.leftSide, model, modelViewTransform );
       this.addChild( leftSideNode );
 
       // sound
@@ -60,7 +60,7 @@ class SideDemonstrationNode extends Node {
       } );
     }
     if ( QuadrilateralQueryParameters.topSide ) {
-      const topSideNode = new SideNode( model.topSide, modelViewTransform );
+      const topSideNode = new SideNode( model.topSide, model, modelViewTransform );
       this.addChild( topSideNode );
 
       // sound
@@ -70,7 +70,7 @@ class SideDemonstrationNode extends Node {
       } );
     }
     if ( QuadrilateralQueryParameters.bottomSide ) {
-      const bottomSideNode = new SideNode( model.bottomSide, modelViewTransform );
+      const bottomSideNode = new SideNode( model.bottomSide, model, modelViewTransform );
       this.addChild( bottomSideNode );
 
       // sound

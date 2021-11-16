@@ -79,22 +79,22 @@ class QuadrilateralNode extends Node {
       tandem: options.tandem.createTandem( 'vertex4Node' )
     } );
 
-    const topSideNode = new SideNode( model.topSide, modelViewTransform, {
+    const topSideNode = new SideNode( model.topSide, model, modelViewTransform, {
 
       // voicing
       voicingNameResponse: topSideString
     } );
-    const rightSideNode = new SideNode( model.rightSide, modelViewTransform, {
+    const rightSideNode = new SideNode( model.rightSide, model, modelViewTransform, {
 
       // voicing
       voicingNameResponse: rightSideString
     } );
-    const bottomSideNode = new SideNode( model.bottomSide, modelViewTransform, {
+    const bottomSideNode = new SideNode( model.bottomSide, model, modelViewTransform, {
 
       // voicing
       voicingNameResponse: bottomSideString
     } );
-    const leftSideNode = new SideNode( model.leftSide, modelViewTransform, {
+    const leftSideNode = new SideNode( model.leftSide, model, modelViewTransform, {
 
       // voicing
       voicingNameResponse: leftSideString

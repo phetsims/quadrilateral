@@ -22,15 +22,17 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import Vector2 from '../../../../dot/js/Vector2.js';
 import SceneryEvent from '../../../../scenery/js/input/SceneryEvent.js';
 import Vertex from '../model/Vertex.js';
+import QuadrilateralModel from '../model/QuadrilateralModel.js';
 
 class SideNode extends Line {
   private side: Side;
+  private quadrilateralModel: QuadrilateralModel;
 
   /**
    * // TODO: How to do Voicing mixin?
    * @mixes Voicing
    */
-  public constructor( side: Side, modelViewTransform: ModelViewTransform2, options?: any ) {
+  public constructor( side: Side, quadrilateralModel: QuadrilateralModel, modelViewTransform: ModelViewTransform2, options?: any ) {
 
     options = merge( {
       lineWidth: 20,
@@ -47,6 +49,9 @@ class SideNode extends Line {
 
     // A reference to the model component.
     this.side = side;
+
+    // A reference to the
+    this.quadrilateralModel = quadrilateralModel;
 
     // initialize the voicing trait
     // @ts-ignore - TODO: How to do mixin/Trait pattern?
@@ -107,10 +112,10 @@ class SideNode extends Line {
 
           // only one vertex is pressed, rotate around the pressed vertex
           if ( vertex1Pressed ) {
-            SideNode.rotateVertexAroundOther( side.vertex1, side.vertex2, listener.modelDelta );
+            this.rotateVertexAroundOther( side.vertex1, side.vertex2, listener.modelDelta );
           }
           else {
-            SideNode.rotateVertexAroundOther( side.vertex2, side.vertex1, listener.modelDelta );
+            this.rotateVertexAroundOther( side.vertex2, side.vertex1, listener.modelDelta );
           }
         }
       },
@@ -138,18 +143,13 @@ class SideNode extends Line {
    * @param deltaVector - change of position in model coordinates
    */
   private moveVerticesFromModelDelta( deltaVector: Vector2 ) {
-    assert && assert( this.side.vertex1.dragAreaProperty.value, 'The dragAreaProperty must be set on the Vertex to move it in model space' );
-    assert && assert( this.side.vertex2.dragAreaProperty.value, 'The dragAreaProperty must be set on the Vertex to move it in model space' );
-    const vertex1DragShape = this.side.vertex1.dragAreaProperty.value!;
-    const vertex2DragShape = this.side.vertex2.dragAreaProperty.value!;
-
 
     // vectorDelta is in model coordinates already since we provided a transform to the listener
     const proposedVertex1Position = this.side.vertex1.positionProperty.get().plus( deltaVector );
     const proposedVertex2Position = this.side.vertex2.positionProperty.get().plus( deltaVector );
 
-    if ( vertex1DragShape.containsPoint( proposedVertex1Position ) &&
-         vertex2DragShape.containsPoint( proposedVertex2Position ) ) {
+    if ( this.quadrilateralModel.isVertexPositionAllowed( this.side.vertex1, proposedVertex1Position ) &&
+         this.quadrilateralModel.isVertexPositionAllowed( this.side.vertex2, proposedVertex2Position ) ) {
       this.side.vertex1.positionProperty.set( proposedVertex1Position );
       this.side.vertex2.positionProperty.set( proposedVertex2Position );
     }
@@ -164,13 +164,10 @@ class SideNode extends Line {
    * @param armVertex - Vertex being repositioned.
    * @param modelDelta - The amount of movement of the arm drag in model coordinates
    */
-  private static rotateVertexAroundOther( anchorVertex: Vertex, armVertex: Vertex, modelDelta: Vector2 ) {
-    assert && assert( armVertex.dragBoundsProperty.value, 'Vertex dragBoundsProperty must be set before vertices can be moved in the model' );
-    const armVertexDragBounds = armVertex.dragBoundsProperty.value!;
-
+  private rotateVertexAroundOther( anchorVertex: Vertex, armVertex: Vertex, modelDelta: Vector2 ) {
     const proposedPosition = armVertex.positionProperty.get().plus( modelDelta );
 
-    if ( armVertexDragBounds.containsPoint( proposedPosition ) ) {
+    if ( this.quadrilateralModel.isVertexPositionAllowed( armVertex, proposedPosition ) ) {
       armVertex.positionProperty.value = proposedPosition;
     }
   }
