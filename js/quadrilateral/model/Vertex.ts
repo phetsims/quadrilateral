@@ -60,7 +60,7 @@ class Vertex {
 
     // The bounds in model coordinates of this vertex, with dimensions VERTEX_BOUNDS, centered at the value of the
     // positionProperty.
-    this.modelBoundsProperty = new DerivedProperty<Bounds2>( [ this.positionProperty ], position => {
+    this.modelBoundsProperty = new DerivedProperty<Bounds2>( [ this.positionProperty ], ( position: Vector2 ) => {
 
       // TODO: possibly reduce allocations?
       return new Bounds2( position.x - HALF_WIDTH, position.y - HALF_HEIGHT, position.x + HALF_WIDTH, position.y + HALF_HEIGHT );

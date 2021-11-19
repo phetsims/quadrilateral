@@ -50,25 +50,25 @@ class Side {
     // initial positions, used to determine the amount of tilt of the line.
     this.tiltProperty = new DerivedProperty( [ this.vertex1.positionProperty, this.vertex2.positionProperty ],
       ( vertex1Position: Vector2, vertex2Position: Vector2 ) => {
-      return Vertex.calculateAngle( vertex1Position, vertex2Position, vertex2Position.plus( options.offsetVectorForTiltCalculation ) );
-    }, {
-      tandem: tandem.createTandem( 'tiltProperty' ),
-      phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
-    } );
+        return Vertex.calculateAngle( vertex1Position, vertex2Position, vertex2Position.plus( options.offsetVectorForTiltCalculation ) );
+      }, {
+        tandem: tandem.createTandem( 'tiltProperty' ),
+        phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
+      } );
 
     // The distance between the two vertices, in model space.
     this.lengthProperty = new DerivedProperty( [ this.vertex2.positionProperty, this.vertex1.positionProperty ],
       ( vertex2Position: Vector2, vertex1Position: Vector2 ) => {
-      return Vector2.getDistanceBetweenVectors( vertex2Position, vertex1Position );
-    }, {
-      tandem: tandem.createTandem( 'lengthProperty' ),
-      phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
-    } );
+        return Vector2.getDistanceBetweenVectors( vertex2Position, vertex1Position );
+      }, {
+        tandem: tandem.createTandem( 'lengthProperty' ),
+        phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
+      } );
 
     // The tolerance for this side to determine if it is equal to another. It is a portion of the full length
     // so that when the side is longer it still as easy for two sides to be equal in length. Otherwise the
     // tolerance interval will be relatively much larger when the length is very small.
-    this.lengthToleranceIntervalProperty = new DerivedProperty( [ this.lengthProperty ], length => {
+    this.lengthToleranceIntervalProperty = new DerivedProperty( [ this.lengthProperty ], ( length: number ) => {
       return length * QuadrilateralQueryParameters.lengthToleranceIntervalScaleFactor;
     } );
   }

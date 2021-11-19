@@ -49,7 +49,7 @@ class SuccessSoundView {
       this.createSoundClips( successSoundCollection );
     } );
 
-    const isParallelogramListener = ( isParallelogram: boolean, wasParallelogram: boolean | null ) => {
+    const isParallelogramListener = ( isParallelogram: boolean ) => {
       assert && assert( this.failureSoundClip, 'SoundClips must be created to play sounds' );
       assert && assert( this.successSoundClip, 'SoundClips must be created to play sounds' );
       const successSoundClip = this.successSoundClip!;
