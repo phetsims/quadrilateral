@@ -19,12 +19,13 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Line from '../../../../kite/js/segments/Line.js';
 import Shape from '../../../../kite/js/Shape.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import quadrilateral from '../../quadrilateral.js';
 import Side from './Side.js';
 import Vertex from './Vertex.js';
 import RayIntersection from '../../../../kite/js/util/RayIntersection.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import Utils from '../../../../dot/js/Utils.js';
+import NamedQuadrilateral from './NamedQuadrilateral.js';
+import quadrilateral from '../../quadrilateral.js';
 
 // A useful type for calculations for the vertex Shapes which define where the Vertex can move depending on
 // the positions of the other vertices. Lines are along the bounds of model space and RayIntersections
@@ -54,6 +55,9 @@ class QuadrilateralModel {
 
   private savedSideLengths: SideLengths;
   public readonly lengthsEqualToSavedProperty: BooleanProperty;
+
+  // TODO: this should eventually be a NamedQuadrilateral or null
+  public readonly shapeNameProperty: Property<unknown>;
 
   public readonly vertices: Vertex[];
 
@@ -133,6 +137,10 @@ class QuadrilateralModel {
       tandem: tandem.createTandem( 'isParallelogramProperty' )
     } );
 
+    // The name of the quadrilateral (like square/rhombus/trapezoid, etc). Will be null if it is a random
+    // unnamed shape.
+    this.shapeNameProperty = new Property( this.getShapeName() );
+
     // Whether the Side lengths have changed relative to the saved side lengths that were stored at the beginning
     // of an interaction. This helps accomplish a learning goal of determining if the quad remains a parallelogram
     // while also keeping side lengths the same. This is set in the step function asynchronously(!!) so that
@@ -191,6 +199,83 @@ class QuadrilateralModel {
            Utils.equalsEpsilon( currentSideLengths.leftSideLength, this.savedSideLengths.leftSideLength, this.leftSide.lengthToleranceIntervalProperty.value );
   }
 
+
+  /**
+   * Returns the name of the quadrilateral, one of NamedQuadrilateral enumeration. If the quadrilateral is in a shape
+   * that is not named, returns null.
+   */
+  // @ts-ignore - TODO: This should return an Enumeration value NamedQuadrilateral
+  public getShapeName(): unknown {
+    let namedQuadrilateral = null;
+
+    const topSideLengthEqualToRightSideLength = this.topSide.isLengthEqualToOther( this.rightSide );
+    const topSideLengthEqualToBottomSideLength = this.topSide.isLengthEqualToOther( this.bottomSide );
+    const rightSideLengthEqualToLeftSideLength = this.rightSide.isLengthEqualToOther( this.leftSide );
+
+    const vertex1AngleEqualsVertex2Angle = this.isAngleEqualToOther( this.vertex1.angleProperty!.value, this.vertex2.angleProperty!.value );
+
+    // If any angles are larger than PI it is a concave shape.
+    if ( _.some( this.vertices, vertex => vertex.angleProperty!.value > Math.PI ) ) {
+
+      // @ts-ignore TODO: How to do enumeration.
+      namedQuadrilateral = NamedQuadrilateral.CONCAVE;
+    }
+    else if ( this.isParallelogramProperty.value ) {
+
+      // Square, rhombus, rectangle must be a parallelogram. If we assume this then we can simplify some of the other
+      // comparisons to detect these shapes because we know that opposite angles must be equal and opposite sides must
+      // be the same length.
+
+      // because this is a parallelogram, we only have to check that the adjacent angles are equal, because to be
+      // a parallelogram the angles at opposite vertices must also be equal.
+      if ( vertex1AngleEqualsVertex2Angle ) {
+
+        // For a parallelogram, opposite sides are equal in length, so if adjacent sides are equal in length as well
+        // it must be a square.
+        if ( topSideLengthEqualToRightSideLength ) {
+
+          // @ts-ignore TODO - How to do enumeration
+          namedQuadrilateral = NamedQuadrilateral.SQUARE;
+        }
+        else {
+
+          // Adjacent side lengths are not equal, but opposite side lengths are. All angles are equal - we must be a
+          // rectangle.
+          // @ts-ignore TODO - How to do enumeration
+          namedQuadrilateral = NamedQuadrilateral.RECTANGLE;
+        }
+      }
+      else {
+
+        // Adjacent angles are different for the parallelogram - this is a rhombus
+        // @ts-ignore TODO: How to do enumeration
+        namedQuadrilateral = NamedQuadrilateral.RHOMBUS;
+      }
+    }
+    else {
+
+      // not a parallelogram - if any two sides are parallel we are some kind of trapezoid
+      if ( ( this.isAngleEqualToOther( this.topSide.tiltProperty.value, this.bottomSide.tiltProperty.value ) ) ||
+           ( this.isAngleEqualToOther( this.rightSide.tiltProperty.value, this.leftSide.tiltProperty.value ) ) ) {
+
+        // If one of the pairs of sides share the same length, it must be an isosceles trapezoid
+        if ( topSideLengthEqualToBottomSideLength || rightSideLengthEqualToLeftSideLength ) {
+
+          // @ts-ignore TODO: How to do enumeration
+          namedQuadrilateral = NamedQuadrilateral.ISOSCELES_TRAPEZOID;
+        }
+        else {
+
+          // @ts-ignore TODO: How to do enumeration
+          namedQuadrilateral = NamedQuadrilateral.TRAPEZOID;
+        }
+      }
+    }
+
+    return namedQuadrilateral;
+  }
+
+
   /**
    * Returns whether or not the quadrilateral shape is a parallelogram, within the tolerance defined by
    * angleToleranceIntervalProperty.
@@ -201,6 +286,14 @@ class QuadrilateralModel {
     const epsilon = this.angleToleranceIntervalProperty.value;
 
     return angle1DiffAngle3 < epsilon && angle2DiffAngle4 < epsilon;
+  }
+
+  /**
+   * Returns true if two angles are close enough to each other that they should be considered equal. They are close
+   * enough if they are within the angleToleranceIntervalProperty.
+   */
+  public isAngleEqualToOther( angle1: number, angle2: number ): boolean {
+    return Utils.equalsEpsilon( angle1, angle2, this.angleToleranceIntervalProperty.value );
   }
 
   /**
@@ -275,6 +368,12 @@ class QuadrilateralModel {
     // Similarly, we also determine if side lengths have changed in the step function because we need to calculate
     // lengths after all positions have been set.
     this.lengthsEqualToSavedProperty.set( this.getSideLengthsChanged( this.getSideLengths() ) );
+
+    // After we have detected whether or not we are a parallelogram, and after all vertices are positioned, calculate
+    // the name of the current quadrilateral shape.
+    this.shapeNameProperty.set( this.getShapeName() );
+
+    console.log( this.shapeNameProperty.value );
   }
 
   /**
