@@ -39,6 +39,41 @@
       },
       "hintContent":{
         "value": "Play with sides and corners and explore what makes a parallelogram."
+      },
+      "detailsPattern": {
+        "value": "Currently, your shape is {{description}}."
+      },
+      "notAParallelogram": {
+        "value": "not a parallelogram"
+      },
+      "aParallelogram": {
+        "value": "a parallelogram"
+      },
+      "namedShapePattern": {
+        "value": "a {{name}}, and {{parallelogramState}}"
+      },
+      "shapeNames": {
+        "square": {
+          "value": "square"
+        },
+        "rectangle": {
+          "value": "rectangle"
+        },
+        "rhombus": {
+          "value": "rhombus"
+        },
+        "kite": {
+          "value": "kite"
+        },
+        "isoscelesTrapezoid": {
+          "value": "isosceles trapezoid"
+        },
+        "trapezoid": {
+          "value": "trapezoid"
+        },
+        "concaveQuadrilateral": {
+          "value": "concave quadrilateral"
+        }
       }
     }
   }

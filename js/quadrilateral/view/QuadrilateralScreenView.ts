@@ -20,6 +20,8 @@ import SideDemonstrationNode from './SideDemonstrationNode.js';
 import VertexDragAreaNode from './VertexDragAreaNode.js';
 import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
 import quadrilateralStrings from '../../quadrilateralStrings.js';
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
+import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 
 class QuadrilateralScreenView extends ScreenView {
   private readonly model: QuadrilateralModel;
@@ -27,6 +29,7 @@ class QuadrilateralScreenView extends ScreenView {
   private readonly quadrilateralNode: QuadrilateralNode | null;
   private readonly demonstrationNode: SideDemonstrationNode | null;
   private readonly quadrilateralSoundView: QuadrilateralSoundView | null;
+  private readonly quadrilateralDescriber: QuadrilateralDescriber;
   private readonly resetAllButton: ResetAllButton;
 
   public constructor( model: QuadrilateralModel, soundOptionsModel: QuadrilateralSoundOptionsModel, tandem: Tandem ) {
@@ -49,6 +52,9 @@ class QuadrilateralScreenView extends ScreenView {
 
     this.model = model;
     this.modelViewTransform = modelViewTransform;
+
+    // Responsible for generating descriptions of the state of the quadrilateral for accessibility.
+    this.quadrilateralDescriber = new QuadrilateralDescriber( model );
 
     // A reference to the QuadrilateralNode. For now, it is not always created while we have the side query parameters
     // for development. But we may want
@@ -106,7 +112,9 @@ class QuadrilateralScreenView extends ScreenView {
    * Get the content that is spoken from the Voicing toolbar to describe this ScreenView.
    */
   public getVoicingDetailsContent(): string {
-    return 'Please implement getVoicingDetailsContent';
+    return StringUtils.fillIn( quadrilateralStrings.a11y.voicing.detailsPattern, {
+      description: this.quadrilateralDescriber.getShapeDescription()
+    } );
   }
 
   /**
@@ -134,6 +142,8 @@ class QuadrilateralScreenView extends ScreenView {
     if ( this.demonstrationNode ) {
       this.demonstrationNode.step( dt );
     }
+
+  console.log( this.getVoicingDetailsContent() );
   }
 
   public override layout( viewBounds: Bounds2 ): void {

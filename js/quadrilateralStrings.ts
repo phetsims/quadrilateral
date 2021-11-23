@@ -24,7 +24,20 @@ type StringsType = {
       'parallelogramSuccess': string,
       'parallelogramFailure': string,
       'overviewContent': string,
-      'hintContent': string
+      'hintContent': string,
+      'detailsPattern': string,
+      'notAParallelogram': string,
+      'aParallelogram': string,
+      'namedShapePattern': string,
+      'shapeNames': {
+        'square': string,
+        'rectangle': string,
+        'rhombus': string,
+        'kite': string,
+        'isoscelesTrapezoid': string,
+        'trapezoid': string,
+        'concaveQuadrilateral': string
+      }
     }
   }
 };
