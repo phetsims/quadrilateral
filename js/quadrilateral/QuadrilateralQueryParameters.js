@@ -40,7 +40,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   lengthToleranceIntervalScaleFactor: {
     type: 'number',
     isValidValue: value => value <= 1 && value >= 0,
-    defaultValue: 0.2
+    defaultValue: 0.05
   }
 } );
 

@@ -213,6 +213,8 @@ class QuadrilateralModel {
     const rightSideLengthEqualToLeftSideLength = this.rightSide.isLengthEqualToOther( this.leftSide );
 
     const vertex1AngleEqualsVertex2Angle = this.isAngleEqualToOther( this.vertex1.angleProperty!.value, this.vertex2.angleProperty!.value );
+    const vertex1AngleEqualsVertex3Angle = this.isAngleEqualToOther( this.vertex1.angleProperty!.value, this.vertex3.angleProperty!.value );
+    const vertex2AngleEqualsVertex4Angle = this.isAngleEqualToOther( this.vertex2.angleProperty!.value, this.vertex4.angleProperty!.value );
 
     // If any angles are larger than PI it is a concave shape.
     if ( _.some( this.vertices, vertex => vertex.angleProperty!.value > Math.PI ) ) {
@@ -254,9 +256,10 @@ class QuadrilateralModel {
     }
     else {
 
-      // not a parallelogram - if any two sides are parallel we are some kind of trapezoid
       if ( ( this.isAngleEqualToOther( this.topSide.tiltProperty.value, this.bottomSide.tiltProperty.value ) ) ||
            ( this.isAngleEqualToOther( this.rightSide.tiltProperty.value, this.leftSide.tiltProperty.value ) ) ) {
+
+        // if any of pairs of sides are parallel, we must be some kind of trapezoid
 
         // If one of the pairs of sides share the same length, it must be an isosceles trapezoid
         if ( topSideLengthEqualToBottomSideLength || rightSideLengthEqualToLeftSideLength ) {
@@ -269,6 +272,13 @@ class QuadrilateralModel {
           // @ts-ignore TODO: How to do enumeration
           namedQuadrilateral = NamedQuadrilateral.TRAPEZOID;
         }
+      }
+      else if ( vertex1AngleEqualsVertex3Angle !== vertex2AngleEqualsVertex4Angle ) {
+
+        // Only one pair of opposite angles is equal while the other is not - we must be a kite.
+        // @ts-ignore TODO: How to do enumeration
+        namedQuadrilateral = NamedQuadrilateral.KITE;
+
       }
     }
 
