@@ -22,7 +22,9 @@ type StringsType = {
       'bottomSide': string,
       'leftSide': string,
       'parallelogramSuccess': string,
-      'parallelogramFailure': string
+      'parallelogramFailure': string,
+      'overviewContent': string,
+      'hintContent': string
     }
   }
 };

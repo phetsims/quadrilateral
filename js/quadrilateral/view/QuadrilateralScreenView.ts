@@ -19,6 +19,7 @@ import QuadrilateralSoundView from './QuadrilateralSoundView.js';
 import SideDemonstrationNode from './SideDemonstrationNode.js';
 import VertexDragAreaNode from './VertexDragAreaNode.js';
 import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
+import quadrilateralStrings from '../../quadrilateralStrings.js';
 
 class QuadrilateralScreenView extends ScreenView {
   private readonly model: QuadrilateralModel;
@@ -98,7 +99,7 @@ class QuadrilateralScreenView extends ScreenView {
    * Get the content that is spoken from the Voicing toolbar to describe this ScreenView.
    */
   public getVoicingOverviewContent(): string {
-    return 'Please implement getVoicingOverviewContent';
+    return quadrilateralStrings.a11y.voicing.overviewContent;
   }
 
   /**
@@ -112,7 +113,7 @@ class QuadrilateralScreenView extends ScreenView {
    * Get the content that is spoken from the Voicing toolbar to describe this ScreenView.
    */
   public getVoicingHintContent(): string {
-    return 'Please implement getVoicingHintContent';
+    return quadrilateralStrings.a11y.voicing.hintContent;
   }
 
   /**
