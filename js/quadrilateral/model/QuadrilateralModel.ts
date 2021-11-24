@@ -230,6 +230,7 @@ class QuadrilateralModel {
       [ this.vertex4.angleProperty!.value, this.vertex1.angleProperty!.value ]
     ];
     const vertex1AngleEqualsVertex2Angle = this.isAngleEqualToOther( this.vertex1.angleProperty!.value, this.vertex2.angleProperty!.value );
+    const vertex2AngleEqualsVertex3Angle = this.isAngleEqualToOther( this.vertex1.angleProperty!.value, this.vertex2.angleProperty!.value );
 
     // equalities for opposite vertices
     const vertex1AngleEqualsVertex3Angle = this.isAngleEqualToOther( this.vertex1.angleProperty!.value, this.vertex3.angleProperty!.value );
@@ -249,7 +250,7 @@ class QuadrilateralModel {
 
       // because this is a parallelogram, we only have to check that the adjacent angles are equal, because to be
       // a parallelogram the angles at opposite vertices must also be equal.
-      if ( vertex1AngleEqualsVertex2Angle ) {
+      if ( vertex1AngleEqualsVertex2Angle && vertex2AngleEqualsVertex3Angle ) {
 
         // For a parallelogram, opposite sides are equal in length, so if adjacent sides are equal in length as well
         // it must be a square.
@@ -278,14 +279,14 @@ class QuadrilateralModel {
       // According to https://en.wikipedia.org/wiki/Trapezoid#Characterizations a trapezoid has two adjacent
       // angles that add up to Math.PI.
       const trapezoidRequirement = _.some( adjacentVertexAngles, anglePair => {
-        return this.isShapeAngleEqualToOther( anglePair[ 0 ] + anglePair[ 1 ], Math.PI );
+        return this.isAngleEqualToOther( anglePair[ 0 ] + anglePair[ 1 ], Math.PI );
       } );
 
       if ( trapezoidRequirement ) {
 
         // An isosceles trapezoid will have two pairs of adjacent angles that are equal.
         const isoscelesRequirement = _.countBy( adjacentVertexAngles, anglePair => {
-          return this.isShapeAngleEqualToOther( anglePair[ 0 ], anglePair[ 1 ] );
+          return this.isAngleEqualToOther( anglePair[ 0 ], anglePair[ 1 ] );
         } ).true === 2;
 
         // If one of the pairs of sides share the same length, it must be an isosceles trapezoid
