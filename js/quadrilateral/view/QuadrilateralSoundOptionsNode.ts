@@ -10,9 +10,9 @@
 
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import HBox from '../../../../scenery/js/nodes/HBox.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
-import VBox from '../../../../scenery/js/nodes/VBox.js';
+import { HBox } from '../../../../scenery/js/imports.js';
+import { Node } from '../../../../scenery/js/imports.js';
+import { VBox } from '../../../../scenery/js/imports.js';
 import ComboBox from '../../../../sun/js/ComboBox.js';
 import ComboBoxItem from '../../../../sun/js/ComboBoxItem.js';
 import Panel from '../../../../sun/js/Panel.js';
@@ -21,7 +21,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
-import Text from '../../../../scenery/js/nodes/Text.js';
+import { Text } from '../../../../scenery/js/imports.js';
 
 const LABEL_TEXT_OPTIONS = {
   font: new PhetFont( { size: 16 } )

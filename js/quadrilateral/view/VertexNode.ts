@@ -7,11 +7,11 @@
  */
 
 import merge from '../../../../phet-core/js/merge.js';
-import Voicing from '../../../../scenery/js/accessibility/voicing/Voicing.js';
-import DragListener from '../../../../scenery/js/listeners/DragListener.js';
-import KeyboardDragListener from '../../../../scenery/js/listeners/KeyboardDragListener.js';
-import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
-import Path from '../../../../scenery/js/nodes/Path.js';
+import { Voicing } from '../../../../scenery/js/imports.js';
+import { DragListener } from '../../../../scenery/js/imports.js';
+import { KeyboardDragListener } from '../../../../scenery/js/imports.js';
+import { Rectangle } from '../../../../scenery/js/imports.js';
+import { Path } from '../../../../scenery/js/imports.js';
 import timesSolidShape from '../../../../sherpa/js/fontawesome-5/timesSolidShape.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
@@ -19,7 +19,7 @@ import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vertex from '../model/Vertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import SceneryEvent from '../../../../scenery/js/input/SceneryEvent.js';
+import { SceneryEvent } from '../../../../scenery/js/imports.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 

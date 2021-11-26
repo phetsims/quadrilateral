@@ -8,7 +8,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Node from '../../../../scenery/js/nodes/Node.js';
+import { Node } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuartetSideSoundView from './QuartetSideSoundView.js';

@@ -10,17 +10,17 @@
 
 import Property from '../../../../axon/js/Property.js';
 import merge from '../../../../phet-core/js/merge.js';
-import FocusHighlightPath from '../../../../scenery/js/accessibility/FocusHighlightPath.js';
-import Voicing from '../../../../scenery/js/accessibility/voicing/Voicing.js';
-import DragListener from '../../../../scenery/js/listeners/DragListener.js';
-import KeyboardDragListener from '../../../../scenery/js/listeners/KeyboardDragListener.js';
-import Line from '../../../../scenery/js/nodes/Line.js';
+import { FocusHighlightPath } from '../../../../scenery/js/imports.js';
+import { Voicing } from '../../../../scenery/js/imports.js';
+import { DragListener } from '../../../../scenery/js/imports.js';
+import { KeyboardDragListener } from '../../../../scenery/js/imports.js';
+import { Line } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import Side from '../model/Side.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import SceneryEvent from '../../../../scenery/js/input/SceneryEvent.js';
+import { SceneryEvent } from '../../../../scenery/js/imports.js';
 import Vertex from '../model/Vertex.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
