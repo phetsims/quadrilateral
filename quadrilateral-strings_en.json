@@ -50,29 +50,29 @@
         "value": "a parallelogram"
       },
       "namedShapePattern": {
-        "value": "a {{name}}, and {{parallelogramState}}"
+        "value": "{{name}}, and {{parallelogramState}}"
       },
       "shapeNames": {
         "square": {
-          "value": "square"
+          "value": "a square"
         },
         "rectangle": {
-          "value": "rectangle"
+          "value": "a rectangle"
         },
         "rhombus": {
-          "value": "rhombus"
+          "value": "a rhombus"
         },
         "kite": {
-          "value": "kite"
+          "value": "a kite"
         },
         "isoscelesTrapezoid": {
-          "value": "isosceles trapezoid"
+          "value": "an isosceles trapezoid"
         },
         "trapezoid": {
-          "value": "trapezoid"
+          "value": "a trapezoid"
         },
         "concaveQuadrilateral": {
-          "value": "concave quadrilateral"
+          "value": "a concave quadrilateral"
         }
       }
     }
