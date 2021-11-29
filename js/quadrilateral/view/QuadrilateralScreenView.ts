@@ -142,8 +142,6 @@ class QuadrilateralScreenView extends ScreenView {
     if ( this.demonstrationNode ) {
       this.demonstrationNode.step( dt );
     }
-
-  console.log( this.getVoicingDetailsContent() );
   }
 
   public override layout( viewBounds: Bounds2 ): void {
