@@ -12,15 +12,22 @@ import Utterance from '../../../../utterance-queue/js/Utterance.js';
 import ResponsePacket from '../../../../utterance-queue/js/ResponsePacket.js';
 import Alerter from '../../../../scenery-phet/js/accessibility/describers/Alerter.js';
 
+const ALERT_INTERVAL = 1; // in seconds
+
 class QuadrilateralAlerter extends Alerter {
   private readonly quadrilateralDescriber;
   private shapeSnapshot: ShapeSnapshot;
   private readonly model: QuadrilateralModel;
   private utterance: Utterance;
   private parallelogramChangeUtterance: Utterance;
+  private alertDirty: boolean;
+  private timeSinceLastAlert: number;
 
   constructor( model: QuadrilateralModel, quadrilateralDescriber: QuadrilateralDescriber ) {
     super();
+
+    this.alertDirty = false;
+    this.timeSinceLastAlert = 0;
 
     this.quadrilateralDescriber = quadrilateralDescriber;
     this.model = model;
@@ -29,7 +36,7 @@ class QuadrilateralAlerter extends Alerter {
 
     this.utterance = new Utterance( {
       alert: new ResponsePacket(),
-      alertStableDelay: 1000
+      alertStableDelay: 500
     } );
 
     this.parallelogramChangeUtterance = new Utterance( {
@@ -38,9 +45,26 @@ class QuadrilateralAlerter extends Alerter {
         priority: 2
       }
     } );
+
+    // If we ever change from being in parallelogram to not in parallelogram, we want to describe that change
+    model.isParallelogramProperty.link( () => {
+      this.alertDirty = true;
+    } );
+
+    model.shapeChangedEmitter.addListener( () => {
+      this.alertDirty = true;
+    } );
   }
 
   public step( dt: number ): void {
+
+    // Only increment the time since last alert if we are waiting to describe some change so that
+    // we dont immediately alert a change if it is been a while since the last time the quadrilateral
+    // was manipulated.
+    if ( this.alertDirty ) {
+      this.timeSinceLastAlert += dt;
+    }
+
     const nextSnapshot = new ShapeSnapshot( this.model );
 
     const rightTiltDifference = nextSnapshot.rightSideTilt - this.shapeSnapshot.rightSideTilt;
@@ -62,7 +86,7 @@ class QuadrilateralAlerter extends Alerter {
 
     // at least one of the tilts have changed sufficiently to describe a change in shape OR we have just shifted
     // into parallelogram.
-    if ( changedSideCount > 0 || nextSnapshot.isParallelogram !== this.shapeSnapshot.isParallelogram ) {
+    if ( this.alertDirty && this.timeSinceLastAlert > ALERT_INTERVAL ) {
 
       // If the state of parallelogram changed, alert that with higher priority so that it is always heard and never
       // interrupted.
@@ -76,7 +100,6 @@ class QuadrilateralAlerter extends Alerter {
 
       const parallelogramDescription = this.quadrilateralDescriber.getParallelogramDescription( nextSnapshot, this.shapeSnapshot );
       alert.contextResponse = parallelogramDescription;
-      console.log( alert.contextResponse );
 
       this.alert( utterance );
 
@@ -84,6 +107,8 @@ class QuadrilateralAlerter extends Alerter {
       // relative to this shape
       this.shapeSnapshot = nextSnapshot;
 
+      this.alertDirty = false;
+      this.timeSinceLastAlert = 0;
     }
   }
 }
