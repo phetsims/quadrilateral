@@ -31,7 +31,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   angleToleranceInterval: {
     type: 'number',
     isValidValue: value => value <= ( 2 * Math.PI ) && value >= 0,
-    defaultValue: 0.2
+    defaultValue: 0.05
   },
 
   shapeAngleToleranceInterval: {
