@@ -6,7 +6,6 @@
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import merge from '../../../../phet-core/js/merge.js';
-import { voicingUtteranceQueue } from '../../../../scenery/js/imports.js';
 import { Node } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
@@ -25,8 +24,6 @@ const topSideString = quadrilateralStrings.a11y.voicing.topSide;
 const rightSideString = quadrilateralStrings.a11y.voicing.rightSide;
 const bottomSideString = quadrilateralStrings.a11y.voicing.bottomSide;
 const leftSideString = quadrilateralStrings.a11y.voicing.leftSide;
-const parallelogramSuccessString = quadrilateralStrings.a11y.voicing.parallelogramSuccess;
-const parallelogramFailureString = quadrilateralStrings.a11y.voicing.parallelogramFailure;
 
 class QuadrilateralNode extends Node {
   private readonly model: QuadrilateralModel;
@@ -116,12 +113,6 @@ class QuadrilateralNode extends Node {
       vertexNode1, vertexNode2, vertexNode3, vertexNode4,
       topSideNode, rightSideNode, bottomSideNode, leftSideNode
     ];
-
-    // listeners
-    model.isParallelogramProperty.lazyLink( ( isParallelogram: boolean ) => {
-      const alertString = isParallelogram ? parallelogramSuccessString : parallelogramFailureString;
-      voicingUtteranceQueue.addToBack( alertString );
-    } );
   }
 
   /**

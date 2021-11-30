@@ -37,6 +37,25 @@ type StringsType = {
         'isoscelesTrapezoid': string,
         'trapezoid': string,
         'concaveQuadrilateral': string
+      },
+      'transformations': {
+        'tiltingTwoSidesPattern': string,
+        'tiltingOneSidePattern': string,
+        'oppositeSides': string,
+        'rightSide': string,
+        'leftSide': string,
+        'upperSide': string,
+        'lowerSide': string,
+        'up': string,
+        'down': string,
+        'left': string,
+        'right': string,
+        'inParallel': string,
+        'notInParallel': string,
+        'keepingAParallelogram': string,
+        'youLostYourParallelogram': string,
+        'youMadeAParellelogram': string,
+        'notYetAParallelogram': string
       }
     }
   }

@@ -28,16 +28,10 @@
       "leftSide": {
         "value": "Left Side"
       },
-      "parallelogramSuccess": {
-        "value": "You made a parallelogram!"
-      },
-      "parallelogramFailure": {
-        "value": "Not a parallelogram"
-      },
       "overviewContent": {
         "value": "A quadrilateral is a closed four-sided shape. This quadrilateral is an interactive sim. It changes as you play with it. There are four grabbable sides and four grabbable corners. You have the power to change the shape and explore what makes a parallelogram. You can also reset the sim."
       },
-      "hintContent":{
+      "hintContent": {
         "value": "Play with sides and corners and explore what makes a parallelogram."
       },
       "detailsPattern": {
@@ -73,6 +67,59 @@
         },
         "concaveQuadrilateral": {
           "value": "a concave quadrilateral"
+        }
+      },
+      "transformations": {
+        "tiltingTwoSidesPattern": {
+          "value": "Tilting {{sideDescription}} {{direction}} {{parallelDescription}}."
+        },
+        "tiltingOneSidePattern": {
+          "value": "Tilting {{sideDescription}} {{direction}}, opposite sides {{parallelDescription}}."
+        },
+        "oppositeSides": {
+          "value": "opposite sides"
+        },
+        "rightSide": {
+          "value": "right side"
+        },
+        "leftSide": {
+          "value": "left side"
+        },
+        "upperSide": {
+          "value": "upper side"
+        },
+        "lowerSide": {
+          "value": "lower side"
+        },
+        "up": {
+          "value": "up"
+        },
+        "down": {
+          "value": "down"
+        },
+        "left": {
+          "value": "left"
+        },
+        "right": {
+          "value": "right"
+        },
+        "inParallel": {
+          "value": "in parallel"
+        },
+        "notInParallel": {
+          "value": "not in parallel"
+        },
+        "keepingAParallelogram": {
+          "value": "Keeping a parallelogram."
+        },
+        "youLostYourParallelogram": {
+          "value": "You lost your parallelogram."
+        },
+        "youMadeAParallelogram": {
+          "value": "You made a parallelogram."
+        },
+        "notYetAParallelogram": {
+          "value": "Not yet a parallelogram."
         }
       }
     }

@@ -22,6 +22,7 @@ import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsMo
 import quadrilateralStrings from '../../quadrilateralStrings.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
+import QuadrilateralAlerter from './QuadrilateralAlerter.js';
 
 class QuadrilateralScreenView extends ScreenView {
   private readonly model: QuadrilateralModel;
@@ -30,6 +31,7 @@ class QuadrilateralScreenView extends ScreenView {
   private readonly demonstrationNode: SideDemonstrationNode | null;
   private readonly quadrilateralSoundView: QuadrilateralSoundView | null;
   private readonly quadrilateralDescriber: QuadrilateralDescriber;
+  private readonly quadrilateralAlerter: QuadrilateralAlerter;
   private readonly resetAllButton: ResetAllButton;
 
   public constructor( model: QuadrilateralModel, soundOptionsModel: QuadrilateralSoundOptionsModel, tandem: Tandem ) {
@@ -55,6 +57,9 @@ class QuadrilateralScreenView extends ScreenView {
 
     // Responsible for generating descriptions of the state of the quadrilateral for accessibility.
     this.quadrilateralDescriber = new QuadrilateralDescriber( model );
+
+    // Responsible for alerting updates about the changing simulation in real-time.
+    this.quadrilateralAlerter = new QuadrilateralAlerter( model, this.quadrilateralDescriber );
 
     // A reference to the QuadrilateralNode. For now, it is not always created while we have the side query parameters
     // for development. But we may want
@@ -142,6 +147,8 @@ class QuadrilateralScreenView extends ScreenView {
     if ( this.demonstrationNode ) {
       this.demonstrationNode.step( dt );
     }
+
+    this.quadrilateralAlerter.step( dt );
   }
 
   public override layout( viewBounds: Bounds2 ): void {
