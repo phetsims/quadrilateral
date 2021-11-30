@@ -267,9 +267,11 @@ class QuadrilateralModel {
           namedQuadrilateral = NamedQuadrilateral.RECTANGLE;
         }
       }
-      else {
+      else if ( topSideLengthEqualToRightSideLength ) {
 
-        // Adjacent angles are different for the parallelogram - this is a rhombus
+        // Adjacent angles are different for the parallelogram and adjacent sides are equal in length. Since it is
+        // a parallelogram, if the top and right sides are equal in length, the bottom and left sides must be equal
+        // as well.
         // @ts-ignore TODO: How to do enumeration
         namedQuadrilateral = NamedQuadrilateral.RHOMBUS;
       }
@@ -306,7 +308,6 @@ class QuadrilateralModel {
         // Only one pair of opposite angles is equal while the other is not - we must be a kite.
         // @ts-ignore TODO: How to do enumeration
         namedQuadrilateral = NamedQuadrilateral.KITE;
-
       }
     }
 
