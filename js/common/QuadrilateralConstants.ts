@@ -15,8 +15,6 @@ const QuadrilateralConstants = {
 
   // {number} - The amount of movement per key press in model coordinates for vertices and sides.
   MOVEMENT_PER_KEY_PRESS: 0.05
-
-  //TODO
 };
 
 quadrilateral.register( 'QuadrilateralConstants', QuadrilateralConstants );

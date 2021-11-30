@@ -70,11 +70,8 @@
         }
       },
       "transformations": {
-        "tiltingTwoSidesPattern": {
-          "value": "Tilting {{sideDescription}} {{direction}} {{parallelDescription}}."
-        },
-        "tiltingOneSidePattern": {
-          "value": "Tilting {{sideDescription}} {{direction}}, opposite sides {{parallelDescription}}."
+        "tiltingPattern": {
+          "value": "Tilting {{sideDescription}} {{direction}}."
         },
         "oppositeSides": {
           "value": "opposite sides"
@@ -110,16 +107,40 @@
           "value": "not in parallel"
         },
         "keepingAParallelogram": {
-          "value": "Keeping a parallelogram."
+          "value": "Sides in parallel. Keeping a parallelogram."
         },
-        "youLostYourParallelogram": {
-          "value": "You lost your parallelogram."
+        "youLostYourParallelogramPattern": {
+          "value": "You lost your parallelogram! Opposite sides {{proximityDescription}} parallel."
         },
         "youMadeAParallelogram": {
-          "value": "You made a parallelogram."
+          "value": "You made a parallelogram! Opposite sides in parallel."
         },
-        "notYetAParallelogram": {
-          "value": "Not yet a parallelogram."
+        "parallelogramChangePattern": {
+          "value": ""
+        },
+        "extremelyFarFrom": {
+          "value": "extremely far from"
+        },
+        "veryFarFrom": {
+          "value": "very far from"
+        },
+        "farFrom": {
+          "value": "far from"
+        },
+        "notSoCloseTo": {
+          "value": "not so close to"
+        },
+        "somewhatCloseTo": {
+          "value": "somewhat close to"
+        },
+        "veryCloseTo": {
+          "value": "very close to"
+        },
+        "extremelyCloseTo": {
+          "value": "extremely close to"
+        },
+        "proximityToParallelogramPattern": {
+          "value": "{{changeDescription}}. Opposite sides {{proximityDescription}} parallel."
         }
       }
     }

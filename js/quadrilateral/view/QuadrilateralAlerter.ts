@@ -17,6 +17,7 @@ class QuadrilateralAlerter extends Alerter {
   private shapeSnapshot: ShapeSnapshot;
   private readonly model: QuadrilateralModel;
   private utterance: Utterance;
+  private parallelogramChangeUtterance: Utterance;
 
   constructor( model: QuadrilateralModel, quadrilateralDescriber: QuadrilateralDescriber ) {
     super();
@@ -27,7 +28,15 @@ class QuadrilateralAlerter extends Alerter {
     this.shapeSnapshot = new ShapeSnapshot( model );
 
     this.utterance = new Utterance( {
-      alert: new ResponsePacket()
+      alert: new ResponsePacket(),
+      alertStableDelay: 1000
+    } );
+
+    this.parallelogramChangeUtterance = new Utterance( {
+      alert: new ResponsePacket(),
+      announcerOptions: {
+        priority: 2
+      }
     } );
   }
 
@@ -51,19 +60,25 @@ class QuadrilateralAlerter extends Alerter {
       changedSideCount = Math.abs( difference ) > this.quadrilateralDescriber.tiltDifferenceToleranceInterval ? ( changedSideCount + 1 ) : changedSideCount;
     } );
 
-    // at least one of the tilts have changed sufficiently to describe a change in shape
-    if ( changedSideCount > 0 ) {
+    // at least one of the tilts have changed sufficiently to describe a change in shape OR we have just shifted
+    // into parallelogram.
+    if ( changedSideCount > 0 || nextSnapshot.isParallelogram !== this.shapeSnapshot.isParallelogram ) {
+
+      // If the state of parallelogram changed, alert that with higher priority so that it is always heard and never
+      // interrupted.
+      const utterance = nextSnapshot.isParallelogram === this.shapeSnapshot.isParallelogram ? this.utterance : this.parallelogramChangeUtterance;
 
       // TODO (TypeScript): Why is this necessary? Docs indicate that it can be a ResponsePacket.
-      const alert = this.utterance.alert as ResponsePacket;
+      const alert = utterance.alert as ResponsePacket;
 
       const tiltDescription = this.quadrilateralDescriber.getTiltChangeDescription( nextSnapshot, this.shapeSnapshot );
       alert.objectResponse = tiltDescription;
 
       const parallelogramDescription = this.quadrilateralDescriber.getParallelogramDescription( nextSnapshot, this.shapeSnapshot );
       alert.contextResponse = parallelogramDescription;
+      console.log( alert.contextResponse );
 
-      this.alert( this.utterance );
+      this.alert( utterance );
 
       // only save the next snapshot if we have generated a description, further descriptions will be described
       // relative to this shape

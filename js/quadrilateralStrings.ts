@@ -21,8 +21,6 @@ type StringsType = {
       'rightSide': string,
       'bottomSide': string,
       'leftSide': string,
-      'parallelogramSuccess': string,
-      'parallelogramFailure': string,
       'overviewContent': string,
       'hintContent': string,
       'detailsPattern': string,
@@ -39,8 +37,7 @@ type StringsType = {
         'concaveQuadrilateral': string
       },
       'transformations': {
-        'tiltingTwoSidesPattern': string,
-        'tiltingOneSidePattern': string,
+        'tiltingPattern': string,
         'oppositeSides': string,
         'rightSide': string,
         'leftSide': string,
@@ -53,9 +50,17 @@ type StringsType = {
         'inParallel': string,
         'notInParallel': string,
         'keepingAParallelogram': string,
-        'youLostYourParallelogram': string,
-        'youMadeAParellelogram': string,
-        'notYetAParallelogram': string
+        'youLostYourParallelogramPattern': string,
+        'youMadeAParallelogram': string,
+        'notYetAParallelogram': string,
+        'extremelyFarFrom': string,
+        'veryFarFrom': string,
+        'farFrom': string,
+        'notSoCloseTo': string,
+        'somewhatCloseTo': string,
+        'veryCloseTo': string,
+        'extremelyCloseTo': string,
+        'proximityToParallelogramPattern': string
       }
     }
   }
