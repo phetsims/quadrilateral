@@ -59,16 +59,11 @@ class QuadrilateralDescriber {
   // The tolerance used to determine if a tilt has changed enough to describe it.
   public readonly tiltDifferenceToleranceInterval: number;
 
-  // The tolerance used to determine if two sides have tilted the same amount
-  public readonly tiltEqualityToleranceInterval: number;
-
   constructor( model: QuadrilateralModel ) {
     this.model = model;
 
     // TODO: Do we need a query parameter for this?
     this.tiltDifferenceToleranceInterval = 0.2;
-
-    this.tiltEqualityToleranceInterval = 0.1;
   }
 
   public getTiltChangeDescription( newSnapshot: ShapeSnapshot, oldSnapshot: ShapeSnapshot ): string {
