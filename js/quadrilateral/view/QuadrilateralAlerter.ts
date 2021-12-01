@@ -93,7 +93,7 @@ class QuadrilateralAlerter extends Alerter {
       const utterance = nextSnapshot.isParallelogram === this.shapeSnapshot.isParallelogram ? this.utterance : this.parallelogramChangeUtterance;
 
       // TODO (TypeScript): Why is this necessary? Docs indicate that it can be a ResponsePacket.
-      const alert = utterance.alert as ResponsePacket;
+      const alert = utterance.alert as unknown as ResponsePacket;
 
       const sidesWithChangedLengths = this.quadrilateralDescriber.getChangedLengthSidesFromSnapshots( nextSnapshot, this.shapeSnapshot );
 
