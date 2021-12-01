@@ -18,6 +18,11 @@ class ShapeSnapshot {
   public readonly vertex2Position: Vector2;
   public readonly vertex3Position: Vector2;
   public readonly vertex4Position: Vector2;
+  public readonly topSideLength: number;
+  public readonly rightSideLength: number;
+  public readonly leftSideLength: number;
+  public readonly bottomSideLength: number;
+
 
   constructor( model: QuadrilateralModel ) {
     this.topSideTilt = model.topSide.tiltProperty.value;
@@ -29,6 +34,11 @@ class ShapeSnapshot {
     this.vertex2Position = model.vertex2.positionProperty.value;
     this.vertex3Position = model.vertex3.positionProperty.value;
     this.vertex4Position = model.vertex4.positionProperty.value;
+
+    this.topSideLength = model.topSide.lengthProperty.value;
+    this.rightSideLength = model.rightSide.lengthProperty.value;
+    this.bottomSideLength = model.bottomSide.lengthProperty.value;
+    this.leftSideLength = model.leftSide.lengthProperty.value;
   }
 }
 

@@ -57,12 +57,15 @@ class QuadrilateralDescriber {
 
   // The tolerance used to determine if a tilt has changed enough to describe it.
   public readonly tiltDifferenceToleranceInterval: number;
+  public readonly lengthDifferenceToleranceInterval: number;
 
   constructor( model: QuadrilateralModel ) {
     this.model = model;
 
     // TODO: Do we need a query parameter for this?
     this.tiltDifferenceToleranceInterval = 0.2;
+
+    this.lengthDifferenceToleranceInterval = 0.05;
   }
 
   public getTiltChangeDescription( newSnapshot: ShapeSnapshot, oldSnapshot: ShapeSnapshot ): string {
@@ -159,6 +162,21 @@ class QuadrilateralDescriber {
     return description;
   }
 
+  getLengthChangeDescription( newSnapshot: ShapeSnapshot, oldSnapshot: ShapeSnapshot ): string {
+
+    const rightLengthDifference = newSnapshot.rightSideLength - oldSnapshot.rightSideLength;
+    const topLengthDifference = newSnapshot.topSideLength - oldSnapshot.topSideLength;
+
+    let actionString = '';
+    if ( rightLengthDifference > 0 || topLengthDifference > 0 ) {
+      actionString = 'pulling opposite sides apart.';
+    }
+    else {
+      actionString = 'pushing opposite sides closer.';
+    }
+    return actionString;
+  }
+
   getParallelogramDescription( newSnapshot: ShapeSnapshot, oldSnapshot: ShapeSnapshot ): string {
     let description = '';
     const isParallelogram = newSnapshot.isParallelogram;
@@ -184,7 +202,9 @@ class QuadrilateralDescriber {
         changeValueToDescribe = Math.abs( oldSnapshot.rightSideTilt - oldSnapshot.leftSideTilt ) - Math.abs( newSnapshot.rightSideTilt - newSnapshot.leftSideTilt );
       }
 
-      const changeDescriptionString = changeValueToDescribe < 0 ? 'Farther from a parallelogram' : 'Closer to a parallelogram';
+      const changeDescriptionString = changeValueToDescribe < 0 ? 'Farther from a parallelogram' :
+                                      changeValueToDescribe === 0 ? 'Still not a parallelogram' :
+                                      'Closer to a parallelogram';
 
       // still not a parallelogram
       const proximityDescription = this.getProximityToParallelDescription( newSnapshot, oldSnapshot, changedSides );
@@ -243,6 +263,27 @@ class QuadrilateralDescriber {
     const bottomSideChanged = Math.abs( bottomTiltDifference ) > this.tiltDifferenceToleranceInterval;
     const leftSideChanged = Math.abs( leftTiltDifference ) > this.tiltDifferenceToleranceInterval;
     const topSideChanged = Math.abs( topTiltDifference ) > this.tiltDifferenceToleranceInterval;
+
+    const changedSides = [];
+
+    rightSideChanged && changedSides.push( this.model.rightSide );
+    leftSideChanged && changedSides.push( this.model.leftSide );
+    topSideChanged && changedSides.push( this.model.topSide );
+    bottomSideChanged && changedSides.push( this.model.bottomSide );
+
+    return changedSides;
+  }
+
+  getChangedLengthSidesFromSnapshots( newSnapshot: ShapeSnapshot, oldSnapshot: ShapeSnapshot ): Side[] {
+    const rightLengthDifference = newSnapshot.rightSideLength - oldSnapshot.rightSideLength;
+    const bottomLengthDifference = newSnapshot.bottomSideLength - oldSnapshot.bottomSideLength;
+    const leftLengthDifference = newSnapshot.leftSideLength - oldSnapshot.leftSideLength;
+    const topLengthDifference = newSnapshot.topSideLength - oldSnapshot.topSideLength;
+
+    const rightSideChanged = Math.abs( rightLengthDifference ) > this.lengthDifferenceToleranceInterval;
+    const bottomSideChanged = Math.abs( bottomLengthDifference ) > this.lengthDifferenceToleranceInterval;
+    const leftSideChanged = Math.abs( leftLengthDifference ) > this.lengthDifferenceToleranceInterval;
+    const topSideChanged = Math.abs( topLengthDifference ) > this.lengthDifferenceToleranceInterval;
 
     const changedSides = [];
 

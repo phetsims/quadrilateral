@@ -95,8 +95,20 @@ class QuadrilateralAlerter extends Alerter {
       // TODO (TypeScript): Why is this necessary? Docs indicate that it can be a ResponsePacket.
       const alert = utterance.alert as ResponsePacket;
 
-      const tiltDescription = this.quadrilateralDescriber.getTiltChangeDescription( nextSnapshot, this.shapeSnapshot );
-      alert.objectResponse = tiltDescription;
+      const sidesWithChangedLengths = this.quadrilateralDescriber.getChangedLengthSidesFromSnapshots( nextSnapshot, this.shapeSnapshot );
+
+      // If none of the sides have tilted and opposite sides are changing in length have changed, then we are
+      // expanding/contracting a rectangle, which is what getLengthChangeDescription is designed to describe.
+      const oppositeSidesChangingLength = ( sidesWithChangedLengths.includes( this.model.leftSide ) && sidesWithChangedLengths.includes( this.model.rightSide ) ) ||
+                                    ( sidesWithChangedLengths.includes( this.model.topSide ) && sidesWithChangedLengths.includes( this.model.bottomSide ) );
+      if ( changedSideCount === 0 && oppositeSidesChangingLength ) {
+        const lengthChangeDescription = this.quadrilateralDescriber.getLengthChangeDescription( nextSnapshot, this.shapeSnapshot );
+        alert.objectResponse = lengthChangeDescription;
+      }
+      else {
+        const tiltDescription = this.quadrilateralDescriber.getTiltChangeDescription( nextSnapshot, this.shapeSnapshot );
+        alert.objectResponse = tiltDescription;
+      }
 
       const parallelogramDescription = this.quadrilateralDescriber.getParallelogramDescription( nextSnapshot, this.shapeSnapshot );
       alert.contextResponse = parallelogramDescription;
