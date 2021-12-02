@@ -52,7 +52,6 @@ type StringsType = {
         'keepingAParallelogram': string,
         'youLostYourParallelogramPattern': string,
         'youMadeAParallelogram': string,
-        'notYetAParallelogram': string,
         'extremelyFarFrom': string,
         'veryFarFrom': string,
         'farFrom': string,
