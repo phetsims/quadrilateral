@@ -16,6 +16,7 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
+import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 
 // in model coordinates, the bounds of the vertex - necessary because we need to calculate vertex/vertex and
 // vertex/side collisions
@@ -29,7 +30,7 @@ class Vertex {
   public dragBoundsProperty: Property<null | Bounds2>;
   public dragAreaProperty: Property<null | Shape>;
   public isPressedProperty: Property<boolean>;
-  public modelBoundsProperty: DerivedProperty<Bounds2>;
+  public modelBoundsProperty: IReadOnlyProperty<Bounds2>;
   private tandem: Tandem;
   public static VERTEX_BOUNDS: Bounds2;
 
@@ -60,7 +61,7 @@ class Vertex {
 
     // The bounds in model coordinates of this vertex, with dimensions VERTEX_BOUNDS, centered at the value of the
     // positionProperty.
-    this.modelBoundsProperty = new DerivedProperty<Bounds2>( [ this.positionProperty ], ( position: Vector2 ) => {
+    this.modelBoundsProperty = new DerivedProperty( [ this.positionProperty ], ( position: Vector2 ) => {
 
       // TODO: possibly reduce allocations?
       return new Bounds2( position.x - HALF_WIDTH, position.y - HALF_HEIGHT, position.x + HALF_WIDTH, position.y + HALF_HEIGHT );

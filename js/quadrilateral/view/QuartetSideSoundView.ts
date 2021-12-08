@@ -29,6 +29,7 @@ import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsMo
 import Side from '../model/Side.js';
 import WrappedAudioBuffer from '../../../../tambo/js/WrappedAudioBuffer.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 
 // constants
 // TODO: calculate these from constants, should be based on the limitations of each vertex bounds
@@ -240,7 +241,7 @@ class SoundClipCollection extends SoundGenerator {
   private readonly middleOctaveClip: SoundClip;
   private readonly upperOctaveClip: SoundClip;
   private readonly outputLevelGainNode: AudioParam;
-  private readonly anyClipsPlayingProperty: DerivedProperty<boolean>;
+  private readonly anyClipsPlayingProperty: IReadOnlyProperty<boolean>;
   private connected: boolean;
   private readonly resetNotInProgressProperty: BooleanProperty;
 

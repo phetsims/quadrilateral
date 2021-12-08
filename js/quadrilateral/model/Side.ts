@@ -15,15 +15,16 @@ import Vertex from './Vertex.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
+import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 
 class Side {
   public vertex1: Vertex;
   public vertex2: Vertex;
   private isConnected: boolean;
-  public tiltProperty: DerivedProperty<number>;
-  public lengthProperty: DerivedProperty<number>;
+  public tiltProperty: IReadOnlyProperty<number>;
+  public lengthProperty: IReadOnlyProperty<number>;
   public readonly isPressedProperty: BooleanProperty;
-  public readonly lengthToleranceIntervalProperty: DerivedProperty<number>;
+  public readonly lengthToleranceIntervalProperty: IReadOnlyProperty<number>;
 
   /**
    * @param vertex1 - The first vertex of this Side.

@@ -28,8 +28,8 @@ class ParallelsVolumeSoundView {
   private model: QuadrilateralModel;
   private leftRightSideGenerator: null | SoundClipChord;
   private topBottomSideGenerator: null | SoundClipChord;
-  private leftRightSideMultilink: null | Multilink;
-  private topBottomSideMultilink: null | Multilink;
+  private leftRightSideMultilink: null | Multilink<any[]>;
+  private topBottomSideMultilink: null | Multilink<any[]>;
   private leftRightSideOutputLevel: number;
   private topBottomSideOutputLevel: number;
   private isPlaying: boolean;
@@ -214,7 +214,7 @@ class ParallelsVolumeSoundView {
    * difference in tilts of two sides.
    * @public
    */
-  public createTiltMultilink( sideA: Side, sideB: Side, applyOutputLevel: ( outputLevel: number ) => void ): Multilink {
+  public createTiltMultilink( sideA: Side, sideB: Side, applyOutputLevel: ( outputLevel: number ) => void ) {
     return Property.multilink(
       [ sideA.tiltProperty, sideB.tiltProperty ],
       ( leftTilt: number, rightTilt: number ) => {
