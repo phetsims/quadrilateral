@@ -8,7 +8,6 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { HBox } from '../../../../scenery/js/imports.js';
 import { Node } from '../../../../scenery/js/imports.js';
@@ -178,12 +177,12 @@ class QuadrilateralSoundOptionsNode extends Panel {
 class LabelledRadioButtonGroup extends VBox {
 
   /**
-   * @param property - a Property of QuadrilateralSoundOptionsModel
+   * @param property - a Property of QuadrilateralSoundOptionsModel TODO: type, see #27
    * @param items - type `any` until AquaRadioButtonGroup is in TypeScript
    * @param labelString
    * @param tandem
    */
-  constructor( property: EnumerationProperty, items: any, labelString: string, tandem: Tandem ) {
+  constructor( property: any, items: any, labelString: string, tandem: Tandem ) {
     const labelText = new Text( labelString, TITLE_TEXT_OPTIONS );
     const radioButtonGroup = new VerticalAquaRadioButtonGroup( property, items, {
       tandem: tandem.createTandem( 'radioButtonGroup' )

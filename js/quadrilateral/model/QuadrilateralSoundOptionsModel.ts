@@ -99,8 +99,13 @@ SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.THREE, new SuccessSoundCollec
 SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.FOUR, new SuccessSoundCollection( quadIntoParallel004Sound, quadOutOfParallel004Sound, quadMovingInParallelSuccessLoop004Sound ) );
 
 class QuadrilateralSoundOptionsModel {
+  // @ts-ignore
   public soundDesignProperty: EnumerationProperty; // TODO: type for Enumeration? #27
+
+  // @ts-ignore
   public baseSoundFileProperty: EnumerationProperty; // TODO: type for Enumeration? #27
+
+  // @ts-ignore
   public successSoundFileProperty: EnumerationProperty; // TODO: type for Enumeration? #27
   public maintenanceSoundRequiresEqualLengthsProperty: BooleanProperty;
 
