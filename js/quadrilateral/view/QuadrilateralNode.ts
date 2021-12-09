@@ -12,8 +12,8 @@ import quadrilateral from '../../quadrilateral.js';
 import quadrilateralStrings from '../../quadrilateralStrings.js';
 import SideNode from './SideNode.js';
 import VertexNode from './VertexNode.js';
-import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 
 // constants
 const vertex1String = quadrilateralStrings.a11y.voicing.vertex1;
@@ -26,10 +26,10 @@ const bottomSideString = quadrilateralStrings.a11y.voicing.bottomSide;
 const leftSideString = quadrilateralStrings.a11y.voicing.leftSide;
 
 class QuadrilateralNode extends Node {
-  private readonly model: QuadrilateralModel;
+  private readonly model: QuadrilateralShapeModel;
   private readonly modelViewTransform: ModelViewTransform2
 
-  public constructor( model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, options?: any ) {
+  public constructor( model: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, options?: any ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED

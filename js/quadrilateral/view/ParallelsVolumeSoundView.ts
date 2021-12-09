@@ -85,9 +85,8 @@ class ParallelsVolumeSoundView {
           this.topBottomSideGenerator.setOutputLevel( this.topBottomSideOutputLevel, 0.3 );
         }
       }
-
     };
-    this.model.shapeChangedEmitter.addListener( shapeChangeListener );
+    this.model.quadrilateralShapeModel.shapeChangedEmitter.addListener( shapeChangeListener );
 
     // make sure that sounds do not start playing again after the changes detected by reset
     const resetListener = ( resetNotInProgress: boolean ) => {
@@ -98,7 +97,7 @@ class ParallelsVolumeSoundView {
     this.model.resetNotInProgressProperty.link( resetListener );
 
     this.disposeParallelsVolumeSoundView = () => {
-      this.model.shapeChangedEmitter.removeListener( shapeChangeListener );
+      this.model.quadrilateralShapeModel.shapeChangedEmitter.removeListener( shapeChangeListener );
       soundOptionsModel.baseSoundFileProperty.unlink( createSoundClipsListener );
       this.model.resetNotInProgressProperty.unlink( resetListener );
     };
@@ -174,12 +173,12 @@ class ParallelsVolumeSoundView {
     this.leftRightSideGenerator.setOutputLevel( 0 );
     this.topBottomSideGenerator.setOutputLevel( 0 );
 
-    this.leftRightSideMultilink = this.createTiltMultilink( this.model.leftSide, this.model.rightSide, ( outputLevel: number ) => {
+    this.leftRightSideMultilink = this.createTiltMultilink( this.model.quadrilateralShapeModel.leftSide, this.model.quadrilateralShapeModel.rightSide, ( outputLevel: number ) => {
       assert && assert( this.leftRightSideGenerator, 'The SoundGenerator has been disposed of, you can no longer set its output level' );
       this.leftRightSideOutputLevel = outputLevel;
       this.leftRightSideGenerator!.outputLevel = outputLevel;
     } );
-    this.topBottomSideMultilink = this.createTiltMultilink( this.model.topSide, this.model.bottomSide, ( outputLevel: number ) => {
+    this.topBottomSideMultilink = this.createTiltMultilink( this.model.quadrilateralShapeModel.topSide, this.model.quadrilateralShapeModel.bottomSide, ( outputLevel: number ) => {
       assert && assert( this.leftRightSideGenerator, 'The SoundGenerator has been disposed of, you can no longer set its output level' );
       this.topBottomSideOutputLevel = outputLevel;
       this.topBottomSideGenerator!.outputLevel = outputLevel;

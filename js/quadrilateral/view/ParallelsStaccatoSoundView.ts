@@ -66,21 +66,23 @@ class ParallelsStaccatoSoundView {
     this.topBottomPopCoefficient = null;
     this.topBottomRelativePitch = null;
 
+    const quadrilateralShapeModel = model.quadrilateralShapeModel;
+
     const shapeChangeListener = () => {
       this.isPlaying = true;
       this.remainingPlayTime = 2;
     };
-    this.model.shapeChangedEmitter.addListener( shapeChangeListener );
+    quadrilateralShapeModel.shapeChangedEmitter.addListener( shapeChangeListener );
 
     const leftRightMultilink = Property.multilink(
-      [ model.leftSide.tiltProperty, model.rightSide.tiltProperty ],
+      [ quadrilateralShapeModel.leftSide.tiltProperty, quadrilateralShapeModel.rightSide.tiltProperty ],
       ( leftTilt: number, rightTilt: number ) => {
         this.leftRightPopCoefficient = TILT_DIFFERENCE_TO_PITCHED_POP_COEFFICIENT.evaluate( Math.abs( leftTilt - rightTilt ) );
         this.leftRightRelativePitch = TILT_DIFFERENCE_TO_PITCH.evaluate( Math.abs( leftTilt - rightTilt ) );
       }
     );
     const topBottomMultilink = Property.multilink(
-      [ model.topSide.tiltProperty, model.bottomSide.tiltProperty ],
+      [ quadrilateralShapeModel.topSide.tiltProperty, quadrilateralShapeModel.bottomSide.tiltProperty ],
       ( topTilt: number, bottomTilt: number ) => {
         this.topBottomPopCoefficient = TILT_DIFFERENCE_TO_PITCHED_POP_COEFFICIENT.evaluate( Math.abs( topTilt - bottomTilt ) );
         this.topBottomRelativePitch = TILT_DIFFERENCE_TO_PITCH.evaluate( Math.abs( topTilt - bottomTilt ) );
@@ -95,7 +97,7 @@ class ParallelsStaccatoSoundView {
 
     // @private {function} - for disposal
     this.disposeParallelsStaccatoSoundView = () => {
-      this.model.shapeChangedEmitter.removeListener( shapeChangeListener );
+      this.model.quadrilateralShapeModel.shapeChangedEmitter.removeListener( shapeChangeListener );
       this.model.resetNotInProgressProperty.unlink( resetListener );
 
       Property.unmultilink( leftRightMultilink );

@@ -22,18 +22,18 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { SceneryEvent } from '../../../../scenery/js/imports.js';
 import Vertex from '../model/Vertex.js';
-import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
+import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 
 class SideNode extends Line {
   private side: Side;
-  private quadrilateralModel: QuadrilateralModel;
+  private quadrilateralShapeModel: QuadrilateralShapeModel;
 
   /**
    * // TODO: How to do Voicing mixin?
    * @mixes Voicing
    */
-  public constructor( side: Side, quadrilateralModel: QuadrilateralModel, modelViewTransform: ModelViewTransform2, options?: any ) {
+  public constructor( side: Side, quadrilateralShapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2, options?: any ) {
 
     options = merge( {
       lineWidth: 20,
@@ -52,7 +52,7 @@ class SideNode extends Line {
     this.side = side;
 
     // A reference to the
-    this.quadrilateralModel = quadrilateralModel;
+    this.quadrilateralShapeModel = quadrilateralShapeModel;
 
     // initialize the voicing trait
     // @ts-ignore - TODO: How to do mixin/Trait pattern?
@@ -158,7 +158,7 @@ class SideNode extends Line {
    * new side lengths during the drag.
    */
   private dragStart(): void {
-    this.quadrilateralModel.saveSideLengths();
+    this.quadrilateralShapeModel.saveSideLengths();
   }
 
   /**
@@ -172,8 +172,8 @@ class SideNode extends Line {
     const proposedVertex1Position = this.side.vertex1.positionProperty.get().plus( deltaVector );
     const proposedVertex2Position = this.side.vertex2.positionProperty.get().plus( deltaVector );
 
-    if ( this.quadrilateralModel.isVertexPositionAllowed( this.side.vertex1, proposedVertex1Position ) &&
-         this.quadrilateralModel.isVertexPositionAllowed( this.side.vertex2, proposedVertex2Position ) ) {
+    if ( this.quadrilateralShapeModel.isVertexPositionAllowed( this.side.vertex1, proposedVertex1Position ) &&
+         this.quadrilateralShapeModel.isVertexPositionAllowed( this.side.vertex2, proposedVertex2Position ) ) {
       this.side.vertex1.positionProperty.set( proposedVertex1Position );
       this.side.vertex2.positionProperty.set( proposedVertex2Position );
     }
@@ -191,7 +191,7 @@ class SideNode extends Line {
   private rotateVertexAroundOther( anchorVertex: Vertex, armVertex: Vertex, modelDelta: Vector2 ) {
     const proposedPosition = armVertex.positionProperty.get().plus( modelDelta );
 
-    if ( this.quadrilateralModel.isVertexPositionAllowed( armVertex, proposedPosition ) ) {
+    if ( this.quadrilateralShapeModel.isVertexPositionAllowed( armVertex, proposedPosition ) ) {
       armVertex.positionProperty.value = proposedPosition;
     }
   }

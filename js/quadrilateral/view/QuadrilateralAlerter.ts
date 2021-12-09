@@ -11,6 +11,8 @@ import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import Utterance from '../../../../utterance-queue/js/Utterance.js';
 import ResponsePacket from '../../../../utterance-queue/js/ResponsePacket.js';
 import Alerter from '../../../../scenery-phet/js/accessibility/describers/Alerter.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 
 const ALERT_INTERVAL = 1; // in seconds
 
@@ -32,7 +34,7 @@ class QuadrilateralAlerter extends Alerter {
     this.quadrilateralDescriber = quadrilateralDescriber;
     this.model = model;
 
-    this.shapeSnapshot = new ShapeSnapshot( model );
+    this.shapeSnapshot = new ShapeSnapshot( model.quadrilateralShapeModel );
 
     this.utterance = new Utterance( {
       alert: new ResponsePacket(),
@@ -47,12 +49,21 @@ class QuadrilateralAlerter extends Alerter {
     } );
 
     // If we ever change from being in parallelogram to not in parallelogram, we want to describe that change
-    model.isParallelogramProperty.link( () => {
+    model.quadrilateralShapeModel.isParallelogramProperty.link( () => {
       this.alertDirty = true;
     } );
 
-    model.shapeChangedEmitter.addListener( () => {
-      this.alertDirty = true;
+    model.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
+      if ( QuadrilateralQueryParameters.deviceConnection ) {
+
+        // When connected to a device, we ONLY want to describe if there is enough movement of the device,
+        // the device could send changing values rapidly without any noticable difference and we want to filter
+        // this out
+        this.alertDirty = this.vertexPositionsIndicateDirty( new ShapeSnapshot( this.model.quadrilateralShapeModel ) );
+      }
+      else {
+        this.alertDirty = true;
+      }
     } );
   }
 
@@ -65,7 +76,7 @@ class QuadrilateralAlerter extends Alerter {
       this.timeSinceLastAlert += dt;
     }
 
-    const nextSnapshot = new ShapeSnapshot( this.model );
+    const nextSnapshot = new ShapeSnapshot( this.model.quadrilateralShapeModel );
 
     const rightTiltDifference = nextSnapshot.rightSideTilt - this.shapeSnapshot.rightSideTilt;
     const bottomTiltDifference = nextSnapshot.bottomSideTilt - this.shapeSnapshot.bottomSideTilt;
@@ -99,8 +110,8 @@ class QuadrilateralAlerter extends Alerter {
 
       // If none of the sides have tilted and opposite sides are changing in length have changed, then we are
       // expanding/contracting a rectangle, which is what getLengthChangeDescription is designed to describe.
-      const oppositeSidesChangingLength = ( sidesWithChangedLengths.includes( this.model.leftSide ) && sidesWithChangedLengths.includes( this.model.rightSide ) ) ||
-                                    ( sidesWithChangedLengths.includes( this.model.topSide ) && sidesWithChangedLengths.includes( this.model.bottomSide ) );
+      const oppositeSidesChangingLength = ( sidesWithChangedLengths.includes( this.model.quadrilateralShapeModel.leftSide ) && sidesWithChangedLengths.includes( this.model.quadrilateralShapeModel.rightSide ) ) ||
+                                          ( sidesWithChangedLengths.includes( this.model.quadrilateralShapeModel.topSide ) && sidesWithChangedLengths.includes( this.model.quadrilateralShapeModel.bottomSide ) );
       if ( changedSideCount === 0 && oppositeSidesChangingLength ) {
         const lengthChangeDescription = this.quadrilateralDescriber.getLengthChangeDescription( nextSnapshot, this.shapeSnapshot );
         alert.objectResponse = lengthChangeDescription;
@@ -122,6 +133,17 @@ class QuadrilateralAlerter extends Alerter {
       this.alertDirty = false;
       this.timeSinceLastAlert = 0;
     }
+  }
+
+  private vertexPositionsIndicateDirty( snapshot: ShapeSnapshot ): boolean {
+
+    const vertex1Distance = Vector2.getDistanceBetweenVectors( snapshot.vertex1Position, this.shapeSnapshot.vertex1Position );
+    const vertex2Distance = Vector2.getDistanceBetweenVectors( snapshot.vertex2Position, this.shapeSnapshot.vertex2Position );
+    const vertex3Distance = Vector2.getDistanceBetweenVectors( snapshot.vertex3Position, this.shapeSnapshot.vertex3Position );
+    const vertex4Distance = Vector2.getDistanceBetweenVectors( snapshot.vertex4Position, this.shapeSnapshot.vertex4Position );
+
+    const distances = [ vertex1Distance, vertex2Distance, vertex3Distance, vertex4Distance ];
+    return _.some( distances, distance => distance > 0.1 );
   }
 }
 

@@ -28,6 +28,8 @@ class SuccessSoundView {
 
     this.model = model;
 
+    const shapeModel = model.quadrilateralShapeModel;
+
     // The SoundClips are null until a SuccessSoundFile is selected by the user. There are several to choose
     // from for now while we experiment with different prototypes, but we expect a single design at some point. At
     // that time the SoundClips can be created on construction.
@@ -67,9 +69,9 @@ class SuccessSoundView {
         failureSoundClip.play();
       }
     };
-    model.isParallelogramProperty.lazyLink( isParallelogramListener );
+    shapeModel.isParallelogramProperty.lazyLink( isParallelogramListener );
 
-    const vertices = [ model.vertex1, model.vertex2, model.vertex3, model.vertex4 ];
+    const vertices = [ shapeModel.vertex1, shapeModel.vertex2, shapeModel.vertex3, shapeModel.vertex4 ];
     const shapeListener = () => {
 
       // The maintenance sounds should only play when more than one vertex is moving at a time.
@@ -86,7 +88,7 @@ class SuccessSoundView {
       if ( soundOptionsModel.maintenanceSoundRequiresEqualLengthsProperty.value ) {
 
         // In this mode, we will
-        if ( model.isParallelogramProperty.value && countObject.true !== 1 && model.lengthsEqualToSavedProperty.value ) {
+        if ( shapeModel.isParallelogramProperty.value && countObject.true !== 1 && shapeModel.lengthsEqualToSavedProperty.value ) {
           this.startPlayingMaintenanceSoundClip();
         }
         else {
@@ -94,12 +96,12 @@ class SuccessSoundView {
         }
       }
       else {
-        if ( model.isParallelogramProperty.value && countObject.true !== 1 ) {
+        if ( shapeModel.isParallelogramProperty.value && countObject.true !== 1 ) {
           this.startPlayingMaintenanceSoundClip();
         }
       }
     };
-    model.shapeChangedEmitter.addListener( shapeListener );
+    shapeModel.shapeChangedEmitter.addListener( shapeListener );
 
     // Whenever a reset is complete (not in progress), stop playing all sound clips immediately.
     const resetNotInProgressListener = ( resetNotInProgress: boolean ) => {
@@ -110,8 +112,8 @@ class SuccessSoundView {
     model.resetNotInProgressProperty.link( resetNotInProgressListener );
 
     this.disposeSuccessSoundView = () => {
-      model.shapeChangedEmitter.removeListener( shapeListener );
-      model.isParallelogramProperty.unlink( isParallelogramListener );
+      shapeModel.shapeChangedEmitter.removeListener( shapeListener );
+      shapeModel.isParallelogramProperty.unlink( isParallelogramListener );
       model.resetNotInProgressProperty.unlink( resetNotInProgressListener );
     };
   }

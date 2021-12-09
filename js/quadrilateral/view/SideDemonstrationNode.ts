@@ -29,10 +29,12 @@ class SideDemonstrationNode extends Node {
   constructor( model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, soundOptionsModel: QuadrilateralSoundOptionsModel, options?: any ) {
     super( options );
 
-    const vertex1Node = new VertexNode( model.vertex1, model, modelViewTransform );
-    const vertex2Node = new VertexNode( model.vertex2, model, modelViewTransform );
-    const vertex3Node = new VertexNode( model.vertex3, model, modelViewTransform );
-    const vertex4Node = new VertexNode( model.vertex4, model, modelViewTransform );
+    const shapeModel = model.quadrilateralShapeModel;
+
+    const vertex1Node = new VertexNode( shapeModel.vertex1, shapeModel, modelViewTransform );
+    const vertex2Node = new VertexNode( shapeModel.vertex2, shapeModel, modelViewTransform );
+    const vertex3Node = new VertexNode( shapeModel.vertex3, shapeModel, modelViewTransform );
+    const vertex4Node = new VertexNode( shapeModel.vertex4, shapeModel, modelViewTransform );
 
     // references to SideViews, only created if requested by query parameter
     this.rightSideSoundView = null;
@@ -41,41 +43,41 @@ class SideDemonstrationNode extends Node {
     this.bottomSideSoundView = null;
 
     if ( QuadrilateralQueryParameters.rightSide ) {
-      const rightSideNode = new SideNode( model.rightSide, model, modelViewTransform );
+      const rightSideNode = new SideNode( shapeModel.rightSide, shapeModel, modelViewTransform );
       this.addChild( rightSideNode );
 
-      this.rightSideSoundView = new QuartetSideSoundView( model.rightSide, model.resetNotInProgressProperty, soundOptionsModel.baseSoundFileProperty );
-      model.shapeChangedEmitter.addListener( () => {
+      this.rightSideSoundView = new QuartetSideSoundView( shapeModel.rightSide, model.resetNotInProgressProperty, soundOptionsModel.baseSoundFileProperty );
+      shapeModel.shapeChangedEmitter.addListener( () => {
         this.rightSideSoundView!.startPlayingSounds();
       } );
     }
     if ( QuadrilateralQueryParameters.leftSide ) {
-      const leftSideNode = new SideNode( model.leftSide, model, modelViewTransform );
+      const leftSideNode = new SideNode( shapeModel.leftSide, shapeModel, modelViewTransform );
       this.addChild( leftSideNode );
 
       // sound
-      this.leftSideSoundView = new QuartetSideSoundView( model.leftSide, model.resetNotInProgressProperty, soundOptionsModel.baseSoundFileProperty );
-      model.shapeChangedEmitter.addListener( () => {
+      this.leftSideSoundView = new QuartetSideSoundView( shapeModel.leftSide, model.resetNotInProgressProperty, soundOptionsModel.baseSoundFileProperty );
+      shapeModel.shapeChangedEmitter.addListener( () => {
         this.leftSideSoundView!.startPlayingSounds();
       } );
     }
     if ( QuadrilateralQueryParameters.topSide ) {
-      const topSideNode = new SideNode( model.topSide, model, modelViewTransform );
+      const topSideNode = new SideNode( shapeModel.topSide, shapeModel, modelViewTransform );
       this.addChild( topSideNode );
 
       // sound
-      this.topSideSoundView = new QuartetSideSoundView( model.topSide, model.resetNotInProgressProperty, soundOptionsModel.baseSoundFileProperty );
-      model.shapeChangedEmitter.addListener( () => {
+      this.topSideSoundView = new QuartetSideSoundView( shapeModel.topSide, model.resetNotInProgressProperty, soundOptionsModel.baseSoundFileProperty );
+      shapeModel.shapeChangedEmitter.addListener( () => {
         this.topSideSoundView!.startPlayingSounds();
       } );
     }
     if ( QuadrilateralQueryParameters.bottomSide ) {
-      const bottomSideNode = new SideNode( model.bottomSide, model, modelViewTransform );
+      const bottomSideNode = new SideNode( shapeModel.bottomSide, shapeModel, modelViewTransform );
       this.addChild( bottomSideNode );
 
       // sound
-      this.bottomSideSoundView = new QuartetSideSoundView( model.bottomSide, model.resetNotInProgressProperty, soundOptionsModel.baseSoundFileProperty );
-      model.shapeChangedEmitter.addListener( () => {
+      this.bottomSideSoundView = new QuartetSideSoundView( shapeModel.bottomSide, model.resetNotInProgressProperty, soundOptionsModel.baseSoundFileProperty );
+      shapeModel.shapeChangedEmitter.addListener( () => {
         this.bottomSideSoundView!.startPlayingSounds();
       } );
     }

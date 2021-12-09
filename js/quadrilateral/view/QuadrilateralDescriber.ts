@@ -5,13 +5,13 @@
  */
 
 import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import quadrilateralStrings from '../../quadrilateralStrings.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import ShapeSnapshot from '../model/ShapeSnapshot.js';
 import ParallelProximityStringMap from '../../ParallelProximityStringMap.js';
 import Side from '../model/Side.js';
+import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 
 // constants
 const oppositeSidesString = quadrilateralStrings.a11y.voicing.transformations.oppositeSides;
@@ -53,14 +53,14 @@ shapeNameMap.set( NamedQuadrilateral.TRAPEZOID, quadrilateralStrings.a11y.voicin
 shapeNameMap.set( NamedQuadrilateral.CONCAVE, quadrilateralStrings.a11y.voicing.shapeNames.concaveQuadrilateral );
 
 class QuadrilateralDescriber {
-  private readonly model: QuadrilateralModel;
+  private readonly shapeModel: QuadrilateralShapeModel;
 
   // The tolerance used to determine if a tilt has changed enough to describe it.
   public readonly tiltDifferenceToleranceInterval: number;
   public readonly lengthDifferenceToleranceInterval: number;
 
-  constructor( model: QuadrilateralModel ) {
-    this.model = model;
+  constructor( shapeModel: QuadrilateralShapeModel ) {
+    this.shapeModel = shapeModel;
 
     // TODO: Do we need a query parameter for this?
     this.tiltDifferenceToleranceInterval = 0.2;
@@ -79,10 +79,10 @@ class QuadrilateralDescriber {
     const changedSides = this.getChangedSidesFromSnapshots( newSnapshot, oldSnapshot );
     const changedSideCount = changedSides.length;
 
-    const rightSideChanged = changedSides.includes( this.model.rightSide );
-    const bottomSideChanged = changedSides.includes( this.model.bottomSide );
-    const leftSideChanged = changedSides.includes( this.model.leftSide );
-    const topSideChanged = changedSides.includes( this.model.topSide );
+    const rightSideChanged = changedSides.includes( this.shapeModel.rightSide );
+    const bottomSideChanged = changedSides.includes( this.shapeModel.bottomSide );
+    const leftSideChanged = changedSides.includes( this.shapeModel.leftSide );
+    const topSideChanged = changedSides.includes( this.shapeModel.topSide );
 
     // if any of the tilts are different enough, then we have changed sufficiently to describe a change in shape
     if ( changedSideCount > 0 ) {
@@ -195,10 +195,10 @@ class QuadrilateralDescriber {
 
       // moving such that we are still not in parallelogram - describe this and the proximity to parallelogram
       // with respect to the sides that have changed since the last time we described this.
-      if ( changedSides.includes( this.model.topSide ) || changedSides.includes( this.model.bottomSide ) ) {
+      if ( changedSides.includes( this.shapeModel.topSide ) || changedSides.includes( this.shapeModel.bottomSide ) ) {
         changeValueToDescribe = Math.abs( oldSnapshot.topSideTilt - oldSnapshot.bottomSideTilt ) - Math.abs( newSnapshot.topSideTilt - newSnapshot.bottomSideTilt );
       }
-      else if ( changedSides.includes( this.model.rightSide ) || changedSides.includes( this.model.leftSide ) ) {
+      else if ( changedSides.includes( this.shapeModel.rightSide ) || changedSides.includes( this.shapeModel.leftSide ) ) {
         changeValueToDescribe = Math.abs( oldSnapshot.rightSideTilt - oldSnapshot.leftSideTilt ) - Math.abs( newSnapshot.rightSideTilt - newSnapshot.leftSideTilt );
       }
 
@@ -236,10 +236,10 @@ class QuadrilateralDescriber {
   getProximityToParallelDescription( newSnapshot: ShapeSnapshot, oldSnapshot: ShapeSnapshot, changedSides: Side[] ): string {
 
     let oppositeSideTiltDifference = 0;
-    if ( changedSides.includes( this.model.rightSide ) || changedSides.includes( this.model.leftSide ) ) {
+    if ( changedSides.includes( this.shapeModel.rightSide ) || changedSides.includes( this.shapeModel.leftSide ) ) {
       oppositeSideTiltDifference = Math.abs( newSnapshot.rightSideTilt - newSnapshot.leftSideTilt );
     }
-    else if ( changedSides.includes( this.model.bottomSide ) || changedSides.includes( this.model.topSide ) ) {
+    else if ( changedSides.includes( this.shapeModel.bottomSide ) || changedSides.includes( this.shapeModel.topSide ) ) {
       oppositeSideTiltDifference = Math.abs( newSnapshot.bottomSideTilt - newSnapshot.topSideTilt );
     }
 
@@ -266,10 +266,10 @@ class QuadrilateralDescriber {
 
     const changedSides = [];
 
-    rightSideChanged && changedSides.push( this.model.rightSide );
-    leftSideChanged && changedSides.push( this.model.leftSide );
-    topSideChanged && changedSides.push( this.model.topSide );
-    bottomSideChanged && changedSides.push( this.model.bottomSide );
+    rightSideChanged && changedSides.push( this.shapeModel.rightSide );
+    leftSideChanged && changedSides.push( this.shapeModel.leftSide );
+    topSideChanged && changedSides.push( this.shapeModel.topSide );
+    bottomSideChanged && changedSides.push( this.shapeModel.bottomSide );
 
     return changedSides;
   }
@@ -287,10 +287,10 @@ class QuadrilateralDescriber {
 
     const changedSides = [];
 
-    rightSideChanged && changedSides.push( this.model.rightSide );
-    leftSideChanged && changedSides.push( this.model.leftSide );
-    topSideChanged && changedSides.push( this.model.topSide );
-    bottomSideChanged && changedSides.push( this.model.bottomSide );
+    rightSideChanged && changedSides.push( this.shapeModel.rightSide );
+    leftSideChanged && changedSides.push( this.shapeModel.leftSide );
+    topSideChanged && changedSides.push( this.shapeModel.topSide );
+    bottomSideChanged && changedSides.push( this.shapeModel.bottomSide );
 
     return changedSides;
   }
@@ -306,9 +306,9 @@ class QuadrilateralDescriber {
     let descriptionString = null;
 
     // of type NamedQuadrilateral enumeration
-    const shapeName = this.model.shapeNameProperty.value;
+    const shapeName = this.shapeModel.shapeNameProperty.value;
 
-    const parallelogramStateString = this.model.isParallelogramProperty.value ?
+    const parallelogramStateString = this.shapeModel.isParallelogramProperty.value ?
                                      quadrilateralStrings.a11y.voicing.aParallelogram : quadrilateralStrings.a11y.voicing.notAParallelogram;
 
     if ( shapeName ) {

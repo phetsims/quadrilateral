@@ -13,6 +13,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
+import { Text } from '../../../../scenery/js/imports.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralNode from './QuadrilateralNode.js';
 import QuadrilateralSoundView from './QuadrilateralSoundView.js';
@@ -23,6 +24,14 @@ import quadrilateralStrings from '../../quadrilateralStrings.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 import QuadrilateralAlerter from './QuadrilateralAlerter.js';
+import Dialog from '../../../../sun/js/Dialog.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import CalibrationContentNode from './CalibrationContentNode.js';
+import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
+import PhetColorScheme from '../../../../scenery-phet/js/PhetColorScheme.js';
+
+const MODEL_BOUNDS = QuadrilateralQueryParameters.calibrationDemoDevice ? new Bounds2( -4.5, -4.5, 4.5, 4.5 ) :
+                     new Bounds2( -1, -1, 1, 1 );
 
 class QuadrilateralScreenView extends ScreenView {
   private readonly model: QuadrilateralModel;
@@ -43,7 +52,7 @@ class QuadrilateralScreenView extends ScreenView {
 
     const viewHeight = this.layoutBounds.height - 2 * QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN;
     const modelViewTransform = ModelViewTransform.createRectangleInvertedYMapping(
-      new Bounds2( -1, -1, 1, 1 ),
+      MODEL_BOUNDS,
       new Bounds2(
         this.layoutBounds.centerX - viewHeight / 2,
         QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN,
@@ -55,8 +64,10 @@ class QuadrilateralScreenView extends ScreenView {
     this.model = model;
     this.modelViewTransform = modelViewTransform;
 
+    const shapeModel = model.quadrilateralShapeModel;
+
     // Responsible for generating descriptions of the state of the quadrilateral for accessibility.
-    this.quadrilateralDescriber = new QuadrilateralDescriber( model );
+    this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel );
 
     // Responsible for alerting updates about the changing simulation in real-time.
     this.quadrilateralAlerter = new QuadrilateralAlerter( model, this.quadrilateralDescriber );
@@ -78,7 +89,7 @@ class QuadrilateralScreenView extends ScreenView {
       this.addChild( this.demonstrationNode );
     }
     else {
-      this.quadrilateralNode = new QuadrilateralNode( model, modelViewTransform, this.layoutBounds, {
+      this.quadrilateralNode = new QuadrilateralNode( shapeModel, modelViewTransform, this.layoutBounds, {
         tandem: tandem.createTandem( 'quadrilateralNode' )
       } );
       this.addChild( this.quadrilateralNode );
@@ -99,10 +110,60 @@ class QuadrilateralScreenView extends ScreenView {
     this.addChild( this.resetAllButton );
 
     if ( QuadrilateralQueryParameters.showDragAreas ) {
-      this.addChild( new VertexDragAreaNode( model.vertex1, [ model.leftSide, model.topSide ], modelViewTransform ) );
-      this.addChild( new VertexDragAreaNode( model.vertex2, [ model.topSide, model.rightSide ], modelViewTransform ) );
-      this.addChild( new VertexDragAreaNode( model.vertex3, [ model.rightSide, model.bottomSide ], modelViewTransform ) );
-      this.addChild( new VertexDragAreaNode( model.vertex4, [ model.bottomSide, model.leftSide ], modelViewTransform ) );
+      this.addChild( new VertexDragAreaNode( shapeModel.vertex1, [ shapeModel.leftSide, shapeModel.topSide ], modelViewTransform ) );
+      this.addChild( new VertexDragAreaNode( shapeModel.vertex2, [ shapeModel.topSide, shapeModel.rightSide ], modelViewTransform ) );
+      this.addChild( new VertexDragAreaNode( shapeModel.vertex3, [ shapeModel.rightSide, shapeModel.bottomSide ], modelViewTransform ) );
+      this.addChild( new VertexDragAreaNode( shapeModel.vertex4, [ shapeModel.bottomSide, shapeModel.leftSide ], modelViewTransform ) );
+    }
+
+    if ( QuadrilateralQueryParameters.deviceConnection ) {
+
+      // Add a Dialog that will calibrate the device to the simulation (mapping physical data to modelled data).
+      const calibrationDialog = new Dialog( new CalibrationContentNode( model ), {
+        title: new Text( 'Calibrate with device', {
+          font: new PhetFont( { size: 36 } )
+        } )
+      } );
+
+      calibrationDialog.isShowingProperty.link( ( isShowing, wasShowing ) => {
+        model.isCalibratingProperty.value = isShowing;
+
+        if ( !isShowing && wasShowing !== null ) {
+          const physicalModelBounds = model.physicalModelBoundsProperty.value;
+
+          // it is possible that the Dialog was closed without getting good values for the bounds, only set
+          // positions if all is well
+          if ( physicalModelBounds && physicalModelBounds.isValid() ) {
+            shapeModel.setPositionsFromLengthAndAngleData(
+              physicalModelBounds!.width,
+              physicalModelBounds!.width,
+              physicalModelBounds!.width,
+              physicalModelBounds!.width,
+              Math.PI / 2,
+              Math.PI / 2,
+              Math.PI / 2,
+              Math.PI / 2
+            );
+          }
+        }
+      } );
+
+      // this is the "sim", add a button to start calibration
+      const calibrationButton = new TextPushButton( 'Calibrate Device', {
+        listener: () => {
+          calibrationDialog.show();
+        },
+
+        textNodeOptions: {
+          font: new PhetFont( { size: 36 } )
+        },
+        baseColor: PhetColorScheme.BUTTON_YELLOW,
+
+        // position is relative to the ResetAllButton for now
+        rightBottom: this.resetAllButton.rightTop.minusXY( 0, 15 )
+      } );
+
+      this.addChild( calibrationButton );
     }
   }
 
