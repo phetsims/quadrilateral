@@ -46,7 +46,7 @@ class SideNode extends Line {
       tandem: Tandem.OPTIONAL
     }, options );
 
-    super( 0, 0, 0, 0, options );
+    super( 0, 0, 0, 0 );
 
     // A reference to the model component.
     this.side = side;
@@ -57,6 +57,9 @@ class SideNode extends Line {
     // initialize the voicing trait
     // @ts-ignore - TODO: How to do mixin/Trait pattern?
     this.initializeVoicing();
+
+    // Mutate options eagerly, but after voicing is initialized
+    this.mutate( options );
 
     // pdom - make the focus highlight tightly surround the line so that it is easier to see the shape
     // @ts-ignore - TODO: Setters added by scenery mixins are not available, see https://github.com/phetsims/quadrilateral/issues/27
