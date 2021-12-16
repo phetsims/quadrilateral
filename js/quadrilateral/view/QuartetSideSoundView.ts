@@ -20,10 +20,10 @@ import phetAudioContext from '../../../../tambo/js/phetAudioContext.js';
 import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
 import SoundGenerator from '../../../../tambo/js/sound-generators/SoundGenerator.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
-import quadLoop01Sound from '../../../sounds/quad-loop-01_mp3.js';
-import quadLoop02Sound from '../../../sounds/quad-loop-02_mp3.js';
-import quadLoop03Sound from '../../../sounds/quad-loop-03_mp3.js';
-import quadLoop04Sound from '../../../sounds/quad-loop-04_mp3.js';
+import quadLoop01_mp3 from '../../../sounds/quadLoop01_mp3.js';
+import quadLoop02_mp3 from '../../../sounds/quadLoop02_mp3.js';
+import quadLoop03_mp3 from '../../../sounds/quadLoop03_mp3.js';
+import quadLoop04_mp3 from '../../../sounds/quadLoop04_mp3.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
 import Side from '../model/Side.js';
@@ -62,10 +62,10 @@ const LOWER_OCTAVE_LENGTH_TO_OUTPUT_LEVEL = new LinearFunction( MAX_LENGTH / 2, 
 
 // Maps QuartetSoundFile to the WrappedAudioBuffer for the SoundClip
 const AUDIO_BUFFER_MAP = new Map();
-AUDIO_BUFFER_MAP.set( QuadrilateralSoundOptionsModel.QuartetSoundFile.ONE, quadLoop01Sound );
-AUDIO_BUFFER_MAP.set( QuadrilateralSoundOptionsModel.QuartetSoundFile.TWO, quadLoop02Sound );
-AUDIO_BUFFER_MAP.set( QuadrilateralSoundOptionsModel.QuartetSoundFile.THREE, quadLoop03Sound );
-AUDIO_BUFFER_MAP.set( QuadrilateralSoundOptionsModel.QuartetSoundFile.FOUR, quadLoop04Sound );
+AUDIO_BUFFER_MAP.set( QuadrilateralSoundOptionsModel.QuartetSoundFile.ONE, quadLoop01_mp3 );
+AUDIO_BUFFER_MAP.set( QuadrilateralSoundOptionsModel.QuartetSoundFile.TWO, quadLoop02_mp3 );
+AUDIO_BUFFER_MAP.set( QuadrilateralSoundOptionsModel.QuartetSoundFile.THREE, quadLoop03_mp3 );
+AUDIO_BUFFER_MAP.set( QuadrilateralSoundOptionsModel.QuartetSoundFile.FOUR, quadLoop04_mp3 );
 
 class QuartetSideSoundView {
   private readonly side: Side;

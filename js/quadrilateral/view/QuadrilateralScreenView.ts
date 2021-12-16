@@ -6,7 +6,6 @@
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
-import ModelViewTransform from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -51,7 +50,7 @@ class QuadrilateralScreenView extends ScreenView {
     } );
 
     const viewHeight = this.layoutBounds.height - 2 * QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN;
-    const modelViewTransform = ModelViewTransform.createRectangleInvertedYMapping(
+    const modelViewTransform = ModelViewTransform2.createRectangleInvertedYMapping(
       MODEL_BOUNDS,
       new Bounds2(
         this.layoutBounds.centerX - viewHeight / 2,

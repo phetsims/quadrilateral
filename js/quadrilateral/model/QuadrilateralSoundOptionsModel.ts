@@ -11,22 +11,22 @@
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import WrappedAudioBuffer from '../../../../tambo/js/WrappedAudioBuffer.js';
-import quadIntoParallel001Sound from '../../../sounds/quad-into-parallel-001_mp3.js';
-import quadIntoParallel002Sound from '../../../sounds/quad-into-parallel-002_mp3.js';
-import quadIntoParallel003Sound from '../../../sounds/quad-into-parallel-003_mp3.js';
-import quadIntoParallel004Sound from '../../../sounds/quad-into-parallel-004_mp3.js';
-import quadLoop01Sound from '../../../sounds/quad-loop-01_mp3.js';
-import quadLoop02Sound from '../../../sounds/quad-loop-02_mp3.js';
-import quadLoop03Sound from '../../../sounds/quad-loop-03_mp3.js';
-import quadLoop04Sound from '../../../sounds/quad-loop-04_mp3.js';
-import quadMovingInParallelSuccessLoop001Sound from '../../../sounds/quad-moving-in-parallel-success-loop-001_mp3.js';
-import quadMovingInParallelSuccessLoop002Sound from '../../../sounds/quad-moving-in-parallel-success-loop-002_mp3.js';
-import quadMovingInParallelSuccessLoop003Sound from '../../../sounds/quad-moving-in-parallel-success-loop-003_mp3.js';
-import quadMovingInParallelSuccessLoop004Sound from '../../../sounds/quad-moving-in-parallel-success-loop-004_mp3.js';
-import quadOutOfParallel001Sound from '../../../sounds/quad-out-of-parallel-001_mp3.js';
-import quadOutOfParallel002Sound from '../../../sounds/quad-out-of-parallel-002_mp3.js';
-import quadOutOfParallel003Sound from '../../../sounds/quad-out-of-parallel-003_mp3.js';
-import quadOutOfParallel004Sound from '../../../sounds/quad-out-of-parallel-004_mp3.js';
+import quadIntoParallel001_mp3 from '../../../sounds/quadIntoParallel001_mp3.js';
+import quadIntoParallel002_mp3 from '../../../sounds/quadIntoParallel002_mp3.js';
+import quadIntoParallel003_mp3 from '../../../sounds/quadIntoParallel003_mp3.js';
+import quadIntoParallel004_mp3 from '../../../sounds/quadIntoParallel004_mp3.js';
+import quadLoop01_mp3 from '../../../sounds/quadLoop01_mp3.js';
+import quadLoop02_mp3 from '../../../sounds/quadLoop02_mp3.js';
+import quadLoop03_mp3 from '../../../sounds/quadLoop03_mp3.js';
+import quadLoop04_mp3 from '../../../sounds/quadLoop04_mp3.js';
+import quadMovingInParallelSuccessLoop001_mp3 from '../../../sounds/quadMovingInParallelSuccessLoop001_mp3.js';
+import quadMovingInParallelSuccessLoop002_mp3 from '../../../sounds/quadMovingInParallelSuccessLoop002_mp3.js';
+import quadMovingInParallelSuccessLoop003_mp3 from '../../../sounds/quadMovingInParallelSuccessLoop003_mp3.js';
+import quadMovingInParallelSuccessLoop004_mp3 from '../../../sounds/quadMovingInParallelSuccessLoop004_mp3.js';
+import quadOutOfParallel001_mp3 from '../../../sounds/quadOutOfParallel001_mp3.js';
+import quadOutOfParallel002_mp3 from '../../../sounds/quadOutOfParallel002_mp3.js';
+import quadOutOfParallel003_mp3 from '../../../sounds/quadOutOfParallel003_mp3.js';
+import quadOutOfParallel004_mp3 from '../../../sounds/quadOutOfParallel004_mp3.js';
 import quadrilateral from '../../quadrilateral.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 
@@ -44,16 +44,16 @@ const SuccessSoundFile = Enumeration.byKeys( [ 'ONE', 'TWO', 'THREE', 'FOUR' ] )
 const AUDIO_BUFFER_MAP = new Map();
 
 // @ts-ignore
-AUDIO_BUFFER_MAP.set( QuartetSoundFile.ONE, quadLoop01Sound );
+AUDIO_BUFFER_MAP.set( QuartetSoundFile.ONE, quadLoop01_mp3 );
 
 // @ts-ignore
-AUDIO_BUFFER_MAP.set( QuartetSoundFile.TWO, quadLoop02Sound );
+AUDIO_BUFFER_MAP.set( QuartetSoundFile.TWO, quadLoop02_mp3 );
 
 // @ts-ignore
-AUDIO_BUFFER_MAP.set( QuartetSoundFile.THREE, quadLoop03Sound );
+AUDIO_BUFFER_MAP.set( QuartetSoundFile.THREE, quadLoop03_mp3 );
 
 // @ts-ignore
-AUDIO_BUFFER_MAP.set( QuartetSoundFile.FOUR, quadLoop04Sound );
+AUDIO_BUFFER_MAP.set( QuartetSoundFile.FOUR, quadLoop04_mp3 );
 
 /**
  * An inner class that collects a group of sounds that go together for one of the options of the "Success" prototype.
@@ -87,16 +87,16 @@ class SuccessSoundCollection {
 const SUCCESS_SOUND_COLLECTION_MAP = new Map();
 
 // @ts-ignore
-SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.ONE, new SuccessSoundCollection( quadIntoParallel001Sound, quadOutOfParallel001Sound, quadMovingInParallelSuccessLoop001Sound ) );
+SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.ONE, new SuccessSoundCollection( quadIntoParallel001_mp3, quadOutOfParallel001_mp3, quadMovingInParallelSuccessLoop001_mp3 ) );
 
 // @ts-ignore
-SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.TWO, new SuccessSoundCollection( quadIntoParallel002Sound, quadOutOfParallel002Sound, quadMovingInParallelSuccessLoop002Sound ) );
+SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.TWO, new SuccessSoundCollection( quadIntoParallel002_mp3, quadOutOfParallel002_mp3, quadMovingInParallelSuccessLoop002_mp3 ) );
 
 // @ts-ignore
-SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.THREE, new SuccessSoundCollection( quadIntoParallel003Sound, quadOutOfParallel003Sound, quadMovingInParallelSuccessLoop003Sound ) );
+SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.THREE, new SuccessSoundCollection( quadIntoParallel003_mp3, quadOutOfParallel003_mp3, quadMovingInParallelSuccessLoop003_mp3 ) );
 
 // @ts-ignore
-SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.FOUR, new SuccessSoundCollection( quadIntoParallel004Sound, quadOutOfParallel004Sound, quadMovingInParallelSuccessLoop004Sound ) );
+SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.FOUR, new SuccessSoundCollection( quadIntoParallel004_mp3, quadOutOfParallel004_mp3, quadMovingInParallelSuccessLoop004_mp3 ) );
 
 class QuadrilateralSoundOptionsModel {
   // @ts-ignore
