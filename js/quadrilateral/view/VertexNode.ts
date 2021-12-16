@@ -73,6 +73,7 @@ class VertexNode extends Rectangle {
       // velocity defined in view coordinates per second, assuming 60 fps
       dragVelocity: viewDragDelta * 60,
       shiftDragVelocity: ( viewDragDelta / 2 ) * 60,
+      dragBoundsProperty: vertex.dragBoundsProperty,
 
       downDelta: viewDragDelta,
       shiftDownDelta: viewDragDelta / 2,
@@ -102,10 +103,6 @@ class VertexNode extends Rectangle {
 
     // notify when this vertex is pressed
     dragListener.isPressedProperty.link( isPressed => vertex.isPressedProperty.set( isPressed ) );
-
-    vertex.dragBoundsProperty.link( dragBounds => {
-      keyboardDragListener.dragBounds = dragBounds;
-    } );
 
     if ( QuadrilateralQueryParameters.showDragAreas ) {
 
