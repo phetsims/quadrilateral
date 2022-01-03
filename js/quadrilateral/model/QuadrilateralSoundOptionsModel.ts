@@ -29,10 +29,25 @@ import quadOutOfParallel003_mp3 from '../../../sounds/quadOutOfParallel003_mp3.j
 import quadOutOfParallel004_mp3 from '../../../sounds/quadOutOfParallel004_mp3.js';
 import quadrilateral from '../../quadrilateral.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import RichEnumerationProperty from '../../../../axon/js/RichEnumerationProperty.js';
+import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
+import RichEnumeration from '../../../../phet-core/js/RichEnumeration.js';
 
 // constants
 // Enumeration for named sound designs, each with their own options and parameters
-const SoundDesign = Enumeration.byKeys( [ 'QUARTET', 'PARALLELS_VOLUME', 'PARALLELS_STACCATO', 'SUCCESS_SOUNDS' ] );
+class SoundDesign extends EnumerationValue {
+  static QUARTET = new SoundDesign();
+  static PARALLELS_VOLUME = new SoundDesign();
+  static PARALLELS_STACCATO = new SoundDesign();
+  static SUCCESS_SOUNDS = new SoundDesign();
+
+  // gets a list of keys, values and mapping between them for RichEnumerationProperty and PhET-iO
+  static enumeration = new RichEnumeration<SoundDesign>( SoundDesign );
+
+  private constructor() { super(); }
+}
+
+// const SoundDesign = Enumeration.byKeys( [ 'QUARTET', 'PARALLELS_VOLUME', 'PARALLELS_STACCATO', 'SUCCESS_SOUNDS' ] );
 
 const QuartetSoundFile = Enumeration.byKeys( [ 'ONE', 'TWO', 'THREE', 'FOUR' ] );
 
@@ -99,8 +114,7 @@ SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.THREE, new SuccessSoundCollec
 SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.FOUR, new SuccessSoundCollection( quadIntoParallel004_mp3, quadOutOfParallel004_mp3, quadMovingInParallelSuccessLoop004_mp3 ) );
 
 class QuadrilateralSoundOptionsModel {
-  // @ts-ignore
-  public soundDesignProperty: EnumerationProperty; // TODO: type for Enumeration? #27
+  public soundDesignProperty: RichEnumerationProperty<SoundDesign>;
 
   // @ts-ignore
   public baseSoundFileProperty: EnumerationProperty; // TODO: type for Enumeration? #27
@@ -110,7 +124,7 @@ class QuadrilateralSoundOptionsModel {
   public maintenanceSoundRequiresEqualLengthsProperty: BooleanProperty;
 
   // TODO: how to do these with typescript? See #27
-  public static SoundDesign: any;
+  public static SoundDesign: SoundDesign;
   public static QuartetSoundFile: any;
   public static SuccessSoundFile: any;
   public static AUDIO_BUFFER_MAP: any;
@@ -119,8 +133,7 @@ class QuadrilateralSoundOptionsModel {
   constructor() {
 
     // The selected sound design, changing this will change the entire design.
-    // @ts-ignore
-    this.soundDesignProperty = new EnumerationProperty( SoundDesign, SoundDesign.SUCCESS_SOUNDS );
+    this.soundDesignProperty = new RichEnumerationProperty( SoundDesign, SoundDesign.SUCCESS_SOUNDS );
 
     // Property that controls the base sound for a few of the prototypes. Some prototypes have a base sound and
     // the state of the sim changes the frequency and layering of the base sound. But there are a few base
@@ -142,7 +155,6 @@ class QuadrilateralSoundOptionsModel {
 }
 
 // @public @static
-QuadrilateralSoundOptionsModel.SoundDesign = SoundDesign;
 QuadrilateralSoundOptionsModel.QuartetSoundFile = QuartetSoundFile;
 QuadrilateralSoundOptionsModel.SuccessSoundFile = SuccessSoundFile;
 QuadrilateralSoundOptionsModel.AUDIO_BUFFER_MAP = AUDIO_BUFFER_MAP;

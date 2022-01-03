@@ -8,7 +8,7 @@
 
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
+import QuadrilateralSoundOptionsModel, { SoundDesign } from '../model/QuadrilateralSoundOptionsModel.js';
 import ParallelsStaccatoSoundView from './ParallelsStaccatoSoundView.js';
 import ParallelsVolumeSoundView from './ParallelsVolumeSoundView.js';
 import QuartetSoundView from './QuartetSoundView.js';
@@ -29,20 +29,19 @@ class QuadrilateralSoundView {
     // Preferences dialog.
     this.activeSoundView = null;
 
-    // @ts-ignore - TODO: How to do Enumeration? See #27
     soundOptionsModel.soundDesignProperty.link( soundDesign => {
       this.activeSoundView && this.activeSoundView.dispose();
 
-      if ( soundDesign === QuadrilateralSoundOptionsModel.SoundDesign.QUARTET ) {
+      if ( soundDesign === SoundDesign.QUARTET ) {
         this.activeSoundView = new QuartetSoundView( model, soundOptionsModel );
       }
-      else if ( soundDesign === QuadrilateralSoundOptionsModel.SoundDesign.PARALLELS_VOLUME ) {
+      else if ( soundDesign === SoundDesign.PARALLELS_VOLUME ) {
         this.activeSoundView = new ParallelsVolumeSoundView( model, soundOptionsModel );
       }
-      else if ( soundDesign === QuadrilateralSoundOptionsModel.SoundDesign.PARALLELS_STACCATO ) {
+      else if ( soundDesign === SoundDesign.PARALLELS_STACCATO ) {
         this.activeSoundView = new ParallelsStaccatoSoundView( model, soundOptionsModel );
       }
-      else if ( soundDesign === QuadrilateralSoundOptionsModel.SoundDesign.SUCCESS_SOUNDS ) {
+      else if ( soundDesign === SoundDesign.SUCCESS_SOUNDS ) {
         this.activeSoundView = new SuccessSoundView( model, soundOptionsModel );
       }
     } );

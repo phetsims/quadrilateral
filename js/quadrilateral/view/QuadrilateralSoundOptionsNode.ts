@@ -9,18 +9,15 @@
  */
 
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { HBox } from '../../../../scenery/js/imports.js';
-import { Node } from '../../../../scenery/js/imports.js';
-import { VBox } from '../../../../scenery/js/imports.js';
+import { HBox, Node, Text, VBox } from '../../../../scenery/js/imports.js';
 import ComboBox from '../../../../sun/js/ComboBox.js';
 import ComboBoxItem from '../../../../sun/js/ComboBoxItem.js';
 import Panel from '../../../../sun/js/Panel.js';
 import VerticalAquaRadioButtonGroup from '../../../../sun/js/VerticalAquaRadioButtonGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
+import QuadrilateralSoundOptionsModel, { SoundDesign } from '../model/QuadrilateralSoundOptionsModel.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
-import { Text } from '../../../../scenery/js/imports.js';
 
 const LABEL_TEXT_OPTIONS = {
   font: new PhetFont( { size: 16 } )
@@ -40,10 +37,10 @@ class QuadrilateralSoundOptionsNode extends Panel {
 
     const optionsParentNode = new Node();
     const designComboBox = new ComboBox( [
-      new ComboBoxItem( new Text( 'Success Sounds', LABEL_TEXT_OPTIONS ), QuadrilateralSoundOptionsModel.SoundDesign.SUCCESS_SOUNDS, { tandemName: 'successItem' } ),
-      new ComboBoxItem( new Text( 'Quartet', LABEL_TEXT_OPTIONS ), QuadrilateralSoundOptionsModel.SoundDesign.QUARTET, { tandemName: 'quartetItem' } ),
-      new ComboBoxItem( new Text( 'Parallels Volume', LABEL_TEXT_OPTIONS ), QuadrilateralSoundOptionsModel.SoundDesign.PARALLELS_VOLUME, { tandemName: 'parallelsVolumeItem' } ),
-      new ComboBoxItem( new Text( 'Parallels Staccato', LABEL_TEXT_OPTIONS ), QuadrilateralSoundOptionsModel.SoundDesign.PARALLELS_STACCATO, { tandemName: 'parallelsStaccatoItem' } )
+      new ComboBoxItem( new Text( 'Success Sounds', LABEL_TEXT_OPTIONS ), SoundDesign.SUCCESS_SOUNDS, { tandemName: 'successItem' } ),
+      new ComboBoxItem( new Text( 'Quartet', LABEL_TEXT_OPTIONS ), SoundDesign.QUARTET, { tandemName: 'quartetItem' } ),
+      new ComboBoxItem( new Text( 'Parallels Volume', LABEL_TEXT_OPTIONS ), SoundDesign.PARALLELS_VOLUME, { tandemName: 'parallelsVolumeItem' } ),
+      new ComboBoxItem( new Text( 'Parallels Staccato', LABEL_TEXT_OPTIONS ), SoundDesign.PARALLELS_STACCATO, { tandemName: 'parallelsStaccatoItem' } )
     ], model.soundDesignProperty, optionsParentNode, {
 
       tandem: tandem.createTandem( 'designComboBox' )
@@ -150,13 +147,13 @@ class QuadrilateralSoundOptionsNode extends Panel {
 
       // modify children instead of changing visibility for layout purposes
       const children: Node[] = [ labelledComboBox ];
-      if ( design === QuadrilateralSoundOptionsModel.SoundDesign.QUARTET ||
-           design === QuadrilateralSoundOptionsModel.SoundDesign.PARALLELS_VOLUME ) {
+      if ( design === SoundDesign.QUARTET ||
+           design === SoundDesign.PARALLELS_VOLUME ) {
 
         // "Quartet" and "Parallels Volume" use a base sound for all output which can be changed
         children.push( labelledBaseSoundRadioButtonGroup );
       }
-      else if ( design === QuadrilateralSoundOptionsModel.SoundDesign.SUCCESS_SOUNDS ) {
+      else if ( design === SoundDesign.SUCCESS_SOUNDS ) {
 
         // there are different sets of "success" sounds in this prototype
         children.push( labelledSuccessSoundRadioButtonGroup );
