@@ -47,8 +47,6 @@ class SoundDesign extends EnumerationValue {
   private constructor() { super(); }
 }
 
-// const SoundDesign = Enumeration.byKeys( [ 'QUARTET', 'PARALLELS_VOLUME', 'PARALLELS_STACCATO', 'SUCCESS_SOUNDS' ] );
-
 const QuartetSoundFile = Enumeration.byKeys( [ 'ONE', 'TWO', 'THREE', 'FOUR' ] );
 
 // There are different options for the 'success' prototype. Each one has a sound for "getting into parallel",
