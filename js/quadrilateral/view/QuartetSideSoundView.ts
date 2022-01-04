@@ -25,7 +25,7 @@ import quadLoop02_mp3 from '../../../sounds/quadLoop02_mp3.js';
 import quadLoop03_mp3 from '../../../sounds/quadLoop03_mp3.js';
 import quadLoop04_mp3 from '../../../sounds/quadLoop04_mp3.js';
 import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
+import { QuartetSoundFile } from '../model/QuadrilateralSoundOptionsModel.js';
 import Side from '../model/Side.js';
 import WrappedAudioBuffer from '../../../../tambo/js/WrappedAudioBuffer.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
@@ -62,10 +62,10 @@ const LOWER_OCTAVE_LENGTH_TO_OUTPUT_LEVEL = new LinearFunction( MAX_LENGTH / 2, 
 
 // Maps QuartetSoundFile to the WrappedAudioBuffer for the SoundClip
 const AUDIO_BUFFER_MAP = new Map();
-AUDIO_BUFFER_MAP.set( QuadrilateralSoundOptionsModel.QuartetSoundFile.ONE, quadLoop01_mp3 );
-AUDIO_BUFFER_MAP.set( QuadrilateralSoundOptionsModel.QuartetSoundFile.TWO, quadLoop02_mp3 );
-AUDIO_BUFFER_MAP.set( QuadrilateralSoundOptionsModel.QuartetSoundFile.THREE, quadLoop03_mp3 );
-AUDIO_BUFFER_MAP.set( QuadrilateralSoundOptionsModel.QuartetSoundFile.FOUR, quadLoop04_mp3 );
+AUDIO_BUFFER_MAP.set( QuartetSoundFile.ONE, quadLoop01_mp3 );
+AUDIO_BUFFER_MAP.set( QuartetSoundFile.TWO, quadLoop02_mp3 );
+AUDIO_BUFFER_MAP.set( QuartetSoundFile.THREE, quadLoop03_mp3 );
+AUDIO_BUFFER_MAP.set( QuartetSoundFile.FOUR, quadLoop04_mp3 );
 
 class QuartetSideSoundView {
   private readonly side: Side;

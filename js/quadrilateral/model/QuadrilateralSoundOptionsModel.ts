@@ -8,8 +8,6 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
-import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import WrappedAudioBuffer from '../../../../tambo/js/WrappedAudioBuffer.js';
 import quadIntoParallel001_mp3 from '../../../sounds/quadIntoParallel001_mp3.js';
 import quadIntoParallel002_mp3 from '../../../sounds/quadIntoParallel002_mp3.js';
@@ -47,26 +45,37 @@ class SoundDesign extends EnumerationValue {
   private constructor() { super(); }
 }
 
-const QuartetSoundFile = Enumeration.byKeys( [ 'ONE', 'TWO', 'THREE', 'FOUR' ] );
 
-// There are different options for the 'success' prototype. Each one has a sound for "getting into parallel",
-// "getting out of parallel", and "moving in parallel". See SUCCESS_SOUND_COLLECTION_MAP below.
-const SuccessSoundFile = Enumeration.byKeys( [ 'ONE', 'TWO', 'THREE', 'FOUR' ] );
+class QuartetSoundFile extends EnumerationValue {
+  static ONE = new QuartetSoundFile();
+  static TWO = new QuartetSoundFile();
+  static THREE = new QuartetSoundFile();
+  static FOUR = new QuartetSoundFile();
+
+  // gets a list of keys, values and mapping between them for RichEnumerationProperty and PhET-iO
+  static enumeration = new RichEnumeration<QuartetSoundFile>( QuartetSoundFile );
+
+  private constructor() { super(); }
+}
+
+class SuccessSoundFile extends EnumerationValue {
+  static ONE = new SuccessSoundFile();
+  static TWO = new SuccessSoundFile();
+  static THREE = new SuccessSoundFile();
+  static FOUR = new SuccessSoundFile();
+
+  // gets a list of keys, values and mapping between them for RichEnumerationProperty and PhET-iO
+  static enumeration = new RichEnumeration<SuccessSoundFile>( SuccessSoundFile );
+
+  private constructor() { super(); }
+}
 
 // Maps QuartetSoundFile to the WrappedAudioBuffer for the SoundClip
 const AUDIO_BUFFER_MAP = new Map();
-
-// @ts-ignore
-AUDIO_BUFFER_MAP.set( QuartetSoundFile.ONE, quadLoop01_mp3 );
-
-// @ts-ignore
-AUDIO_BUFFER_MAP.set( QuartetSoundFile.TWO, quadLoop02_mp3 );
-
-// @ts-ignore
-AUDIO_BUFFER_MAP.set( QuartetSoundFile.THREE, quadLoop03_mp3 );
-
-// @ts-ignore
-AUDIO_BUFFER_MAP.set( QuartetSoundFile.FOUR, quadLoop04_mp3 );
+AUDIO_BUFFER_MAP.set( 'ONE', quadLoop01_mp3 );
+AUDIO_BUFFER_MAP.set( 'TWO', quadLoop02_mp3 );
+AUDIO_BUFFER_MAP.set( 'THREE', quadLoop03_mp3 );
+AUDIO_BUFFER_MAP.set( 'FOUR', quadLoop04_mp3 );
 
 /**
  * An inner class that collects a group of sounds that go together for one of the options of the "Success" prototype.
@@ -113,17 +122,12 @@ SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.FOUR, new SuccessSoundCollect
 
 class QuadrilateralSoundOptionsModel {
   public soundDesignProperty: RichEnumerationProperty<SoundDesign>;
-
-  // @ts-ignore
-  public baseSoundFileProperty: EnumerationProperty; // TODO: type for Enumeration? #27
-
-  // @ts-ignore
-  public successSoundFileProperty: EnumerationProperty; // TODO: type for Enumeration? #27
+  public baseSoundFileProperty: RichEnumerationProperty<QuartetSoundFile>;
+  public successSoundFileProperty: RichEnumerationProperty<SuccessSoundFile>;
   public maintenanceSoundRequiresEqualLengthsProperty: BooleanProperty;
 
-  // TODO: how to do these with typescript? See #27
   public static SoundDesign: SoundDesign;
-  public static QuartetSoundFile: any;
+  public static QuartetSoundFile: QuartetSoundFile;
   public static SuccessSoundFile: any;
   public static AUDIO_BUFFER_MAP: any;
   public static SUCCESS_SOUND_COLLECTION_MAP: any;
@@ -136,14 +140,12 @@ class QuadrilateralSoundOptionsModel {
     // Property that controls the base sound for a few of the prototypes. Some prototypes have a base sound and
     // the state of the sim changes the frequency and layering of the base sound. But there are a few base
     // sounds to choose frome.
-    // @ts-ignore
-    this.baseSoundFileProperty = new EnumerationProperty( QuartetSoundFile, QuartetSoundFile.FOUR );
+    this.baseSoundFileProperty = new RichEnumerationProperty( QuartetSoundFile, QuartetSoundFile.FOUR );
 
-    // @ts-ignore
     // For the "Success" sound prototype, a sound is played when reaching a parallelogram, leaving a parallelogram,
     // and when the parallelogram is maintained while the shape changes. Within this paradigm there are
     // different sound options for each of these to chose from.
-    this.successSoundFileProperty = new EnumerationProperty( SuccessSoundFile, SuccessSoundFile.ONE );
+    this.successSoundFileProperty = new RichEnumerationProperty( SuccessSoundFile, SuccessSoundFile.ONE );
 
     // For the "Success" sound prototype, when true the "maintenance" sound will only play when the
     // quadrilateral changes shape, remains a parallelogram, AND the lengths remain the same
@@ -153,7 +155,6 @@ class QuadrilateralSoundOptionsModel {
 }
 
 // @public @static
-QuadrilateralSoundOptionsModel.QuartetSoundFile = QuartetSoundFile;
 QuadrilateralSoundOptionsModel.SuccessSoundFile = SuccessSoundFile;
 QuadrilateralSoundOptionsModel.AUDIO_BUFFER_MAP = AUDIO_BUFFER_MAP;
 QuadrilateralSoundOptionsModel.SUCCESS_SOUND_COLLECTION_MAP = SUCCESS_SOUND_COLLECTION_MAP;
@@ -161,5 +162,6 @@ QuadrilateralSoundOptionsModel.SUCCESS_SOUND_COLLECTION_MAP = SUCCESS_SOUND_COLL
 quadrilateral.register( 'QuadrilateralSoundOptionsModel', QuadrilateralSoundOptionsModel );
 export { SoundDesign };
 export { SuccessSoundFile };
+export { QuartetSoundFile };
 export { SuccessSoundCollection };
 export default QuadrilateralSoundOptionsModel;

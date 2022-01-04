@@ -16,7 +16,7 @@ import SoundClipChord from '../../../../tambo/js/sound-generators/SoundClipChord
 import soundManager from '../../../../tambo/js/soundManager.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
+import QuadrilateralSoundOptionsModel, { SuccessSoundFile } from '../model/QuadrilateralSoundOptionsModel.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import Side from '../model/Side.js';
 
@@ -58,7 +58,7 @@ class ParallelsVolumeSoundView {
     // Remaining time to play sound clips since we will fade out.
     this.remainingPlayTime = 0;
 
-    const createSoundClipsListener = ( soundFile: AudioBuffer ) => {
+    const createSoundClipsListener = ( soundFile: SuccessSoundFile ) => {
       const audioBuffer = QuadrilateralSoundOptionsModel.AUDIO_BUFFER_MAP.get( soundFile );
       this.createSoundClips( audioBuffer );
     };

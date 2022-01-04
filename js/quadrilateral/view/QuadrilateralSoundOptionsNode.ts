@@ -16,7 +16,7 @@ import Panel from '../../../../sun/js/Panel.js';
 import VerticalAquaRadioButtonGroup from '../../../../sun/js/VerticalAquaRadioButtonGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralSoundOptionsModel, { SoundDesign } from '../model/QuadrilateralSoundOptionsModel.js';
+import QuadrilateralSoundOptionsModel, { QuartetSoundFile, SoundDesign, SuccessSoundFile } from '../model/QuadrilateralSoundOptionsModel.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 
 const LABEL_TEXT_OPTIONS = {
@@ -58,29 +58,25 @@ class QuadrilateralSoundOptionsNode extends Panel {
       {
         node: new Text( 'Sound One', LABEL_TEXT_OPTIONS ),
 
-        // @ts-ignore - TODO: How do we do Enumeration?
-        value: model.baseSoundFileProperty.enumeration.ONE,
+        value: QuartetSoundFile.ONE,
         tandemName: 'soundOneRadioButton'
       },
       {
         node: new Text( 'Sound Two', LABEL_TEXT_OPTIONS ),
 
-        // @ts-ignore - TODO: How do we do Enumeration?
-        value: model.baseSoundFileProperty.enumeration.TWO,
+        value: QuartetSoundFile.TWO,
         tandemName: 'soundTwoRadioButton'
       },
       {
         node: new Text( 'Sound Three', LABEL_TEXT_OPTIONS ),
 
-        // @ts-ignore - TODO: How do we do Enumeration?
-        value: model.baseSoundFileProperty.enumeration.THREE,
+        value: QuartetSoundFile.THREE,
         tandemName: 'soundThreeRadioButton'
       },
       {
         node: new Text( 'Sound Four', LABEL_TEXT_OPTIONS ),
 
-        // @ts-ignore - TODO: How do we do Enumeration?
-        value: model.baseSoundFileProperty.enumeration.FOUR,
+        value: QuartetSoundFile.FOUR,
         tandemName: 'soundFourRadioButton'
       }
     ];
@@ -90,30 +86,22 @@ class QuadrilateralSoundOptionsNode extends Panel {
     const successSoundRadioButtonItems = [
       {
         node: new Text( 'Collection One', LABEL_TEXT_OPTIONS ),
-
-        // @ts-ignore - TODO: How do we do Enumeration?
-        value: model.successSoundFileProperty.enumeration.ONE,
+        value: SuccessSoundFile.ONE,
         tandemName: 'soundCollectionOneRadioButton'
       },
       {
         node: new Text( 'Collection Two', LABEL_TEXT_OPTIONS ),
-
-        // @ts-ignore - TODO: How do we do Enumeration?
-        value: model.successSoundFileProperty.enumeration.TWO,
+        value: SuccessSoundFile.TWO,
         tandemName: 'soundCollectionTwoRadioButton'
       },
       {
         node: new Text( 'Collection Three', LABEL_TEXT_OPTIONS ),
-
-        // @ts-ignore - TODO: How do we do Enumeration?
-        value: model.successSoundFileProperty.enumeration.THREE,
+        value: SuccessSoundFile.THREE,
         tandemName: 'soundCollectionThreeRadioButton'
       },
       {
         node: new Text( 'Collection Four', LABEL_TEXT_OPTIONS ),
-
-        // @ts-ignore - TODO: How do we do Enumeration?
-        value: model.successSoundFileProperty.enumeration.FOUR,
+        value: SuccessSoundFile.FOUR,
         tandemName: 'soundCollectionFourRadioButton'
       }
     ];
