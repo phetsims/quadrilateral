@@ -1,4 +1,4 @@
-// Copyright 2021, University of Colorado Boulder
+// Copyright 2021-2022, University of Colorado Boulder
 
 /**
  * A model for the sound designs that are being proposed for Quadrilateral. In active development and we are
