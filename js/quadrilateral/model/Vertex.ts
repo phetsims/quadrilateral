@@ -84,6 +84,15 @@ class Vertex {
   }
 
   /**
+   * Returns true if this Vertex intersects another.
+   * @param other
+   */
+  public overlapsOther( other: Vertex ) {
+    assert && assert( other !== this, 'You are trying to see if this vertex overlaps self?' );
+    return other.modelBoundsProperty.value.intersectsBounds( this.modelBoundsProperty.value );
+  }
+
+  /**
    * Reset this vertex.
    * @public
    */

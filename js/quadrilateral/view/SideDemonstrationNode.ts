@@ -30,6 +30,7 @@ class SideDemonstrationNode extends Node {
     super( options );
 
     const shapeModel = model.quadrilateralShapeModel;
+    const scratchShapeModel = model.quadrilateralTestShapeModel;
 
     const vertex1Node = new VertexNode( shapeModel.vertex1, shapeModel, modelViewTransform );
     const vertex2Node = new VertexNode( shapeModel.vertex2, shapeModel, modelViewTransform );
@@ -43,7 +44,7 @@ class SideDemonstrationNode extends Node {
     this.bottomSideSoundView = null;
 
     if ( QuadrilateralQueryParameters.rightSide ) {
-      const rightSideNode = new SideNode( shapeModel.rightSide, shapeModel, modelViewTransform );
+      const rightSideNode = new SideNode( model, shapeModel.rightSide, scratchShapeModel.rightSide, modelViewTransform );
       this.addChild( rightSideNode );
 
       this.rightSideSoundView = new QuartetSideSoundView( shapeModel.rightSide, model.resetNotInProgressProperty, soundOptionsModel.baseSoundFileProperty );
@@ -52,7 +53,7 @@ class SideDemonstrationNode extends Node {
       } );
     }
     if ( QuadrilateralQueryParameters.leftSide ) {
-      const leftSideNode = new SideNode( shapeModel.leftSide, shapeModel, modelViewTransform );
+      const leftSideNode = new SideNode( model, shapeModel.leftSide, scratchShapeModel.leftSide, modelViewTransform );
       this.addChild( leftSideNode );
 
       // sound
@@ -62,7 +63,7 @@ class SideDemonstrationNode extends Node {
       } );
     }
     if ( QuadrilateralQueryParameters.topSide ) {
-      const topSideNode = new SideNode( shapeModel.topSide, shapeModel, modelViewTransform );
+      const topSideNode = new SideNode( model, shapeModel.topSide, scratchShapeModel.topSide, modelViewTransform );
       this.addChild( topSideNode );
 
       // sound
@@ -72,7 +73,7 @@ class SideDemonstrationNode extends Node {
       } );
     }
     if ( QuadrilateralQueryParameters.bottomSide ) {
-      const bottomSideNode = new SideNode( shapeModel.bottomSide, shapeModel, modelViewTransform );
+      const bottomSideNode = new SideNode( model, shapeModel.bottomSide, scratchShapeModel.bottomSide, modelViewTransform );
       this.addChild( bottomSideNode );
 
       // sound

@@ -10,30 +10,29 @@
 
 import Property from '../../../../axon/js/Property.js';
 import merge from '../../../../phet-core/js/merge.js';
-import { FocusHighlightPath } from '../../../../scenery/js/imports.js';
-import { Voicing } from '../../../../scenery/js/imports.js';
-import { DragListener } from '../../../../scenery/js/imports.js';
-import { KeyboardDragListener } from '../../../../scenery/js/imports.js';
-import { Line } from '../../../../scenery/js/imports.js';
+import { DragListener, FocusHighlightPath, KeyboardDragListener, Line, SceneryEvent, Voicing } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import Side from '../model/Side.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import { SceneryEvent } from '../../../../scenery/js/imports.js';
 import Vertex from '../model/Vertex.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
+import QuadrilateralModel from '../model/QuadrilateralModel.js';
 
 class SideNode extends Line {
   private side: Side;
-  private quadrilateralShapeModel: QuadrilateralShapeModel;
+  private scratchSide: Side;
+  private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
+  private scratchShapeModel: QuadrilateralShapeModel;
+  private quadrilateralModel: QuadrilateralModel;
 
   /**
    * // TODO: How to do Voicing mixin?
    * @mixes Voicing
    */
-  public constructor( side: Side, quadrilateralShapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2, options?: any ) {
+  public constructor( quadrilateralModel: QuadrilateralModel, side: Side, scratchSide: Side, modelViewTransform: ModelViewTransform2, options?: any ) {
 
     options = merge( {
       lineWidth: 20,
@@ -51,8 +50,17 @@ class SideNode extends Line {
     // A reference to the model component.
     this.side = side;
 
-    // A reference to the
-    this.quadrilateralShapeModel = quadrilateralShapeModel;
+    // A reference to the equivalent side with the two relevant vertices in the scratch model.
+    this.scratchSide = scratchSide;
+
+    // A reference to the main model for the simulation.
+    this.quadrilateralModel = quadrilateralModel;
+
+    // A reference to the main model for the simulation
+    this.quadrilateralShapeModel = quadrilateralModel.quadrilateralShapeModel;
+
+    // A scratch model so we can test vertex positions before setting them with input
+    this.scratchShapeModel = quadrilateralModel.quadrilateralTestShapeModel;
 
     // initialize the voicing trait
     // @ts-ignore - TODO: How to do mixin/Trait pattern?
@@ -175,8 +183,29 @@ class SideNode extends Line {
     const proposedVertex1Position = this.side.vertex1.positionProperty.get().plus( deltaVector );
     const proposedVertex2Position = this.side.vertex2.positionProperty.get().plus( deltaVector );
 
-    if ( this.quadrilateralShapeModel.isVertexPositionAllowed( this.side.vertex1, proposedVertex1Position ) &&
-         this.quadrilateralShapeModel.isVertexPositionAllowed( this.side.vertex2, proposedVertex2Position ) ) {
+    // if the positions are outside of model bounds, the shape is not allowed
+    // TODO: I am not sure how to put this in the isQuadrilateralShapeAllowed, because to set the shape
+    // we change the vertex position Properties, which recomputes drag areas. The drag area algorithm requires
+    // that vertex positions are within bounds so we are tyring to avoid reaching that. Perhaps allow infinite drag
+    // shapes for the scratch model?
+    if ( !this.quadrilateralModel.modelBoundsProperty.value?.containsPoint( proposedVertex1Position ) ||
+         !this.quadrilateralModel.modelBoundsProperty.value?.containsPoint( proposedVertex2Position ) ) {
+      return;
+    }
+
+    // update the scratch model before setting proposed vertex positions
+    this.scratchShapeModel.set( this.quadrilateralShapeModel );
+
+    // Set the positions to the scratch model so that we can verify that this produces a valid shape. Since we are
+    // moving two vertices at the same time we need to check the validity after both have moved, checking the shape
+    // moving one vertex at a time may result in incorrect results since that is not the shape we are ultimately
+    // going to create with this change.
+    this.scratchSide.vertex1.positionProperty.set( proposedVertex1Position );
+    this.scratchSide.vertex2.positionProperty.set( proposedVertex2Position );
+
+    console.log( this.scratchShapeModel.isQuadrilateralShapeAllowed() );
+
+    if ( this.scratchShapeModel.isQuadrilateralShapeAllowed() ) {
       this.side.vertex1.positionProperty.set( proposedVertex1Position );
       this.side.vertex2.positionProperty.set( proposedVertex2Position );
     }

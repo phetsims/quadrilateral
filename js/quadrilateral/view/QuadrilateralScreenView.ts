@@ -88,7 +88,7 @@ class QuadrilateralScreenView extends ScreenView {
       this.addChild( this.demonstrationNode );
     }
     else {
-      this.quadrilateralNode = new QuadrilateralNode( shapeModel, modelViewTransform, this.layoutBounds, {
+      this.quadrilateralNode = new QuadrilateralNode( model, modelViewTransform, this.layoutBounds, {
         tandem: tandem.createTandem( 'quadrilateralNode' )
       } );
       this.addChild( this.quadrilateralNode );

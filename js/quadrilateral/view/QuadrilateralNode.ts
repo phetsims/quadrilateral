@@ -14,6 +14,7 @@ import SideNode from './SideNode.js';
 import VertexNode from './VertexNode.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
+import QuadrilateralModel from '../model/QuadrilateralModel.js';
 
 // constants
 const vertex1String = quadrilateralStrings.a11y.voicing.vertex1;
@@ -26,10 +27,11 @@ const bottomSideString = quadrilateralStrings.a11y.voicing.bottomSide;
 const leftSideString = quadrilateralStrings.a11y.voicing.leftSide;
 
 class QuadrilateralNode extends Node {
-  private readonly model: QuadrilateralShapeModel;
+  private readonly model: QuadrilateralModel;
+  private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
   private readonly modelViewTransform: ModelViewTransform2
 
-  public constructor( model: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, options?: any ) {
+  public constructor( quadrilateralModel: QuadrilateralModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, options?: any ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED
@@ -37,10 +39,11 @@ class QuadrilateralNode extends Node {
 
     super( options );
 
-    this.model = model;
+    this.model = quadrilateralModel;
+    this.quadrilateralShapeModel = this.model.quadrilateralShapeModel;
     this.modelViewTransform = modelViewTransform;
 
-    const vertexNode1 = new VertexNode( model.vertex1, model, modelViewTransform, {
+    const vertexNode1 = new VertexNode( this.quadrilateralShapeModel.vertex1, this.quadrilateralShapeModel, modelViewTransform, {
 
       // voicing
       voicingNameResponse: vertex1String,
@@ -49,7 +52,7 @@ class QuadrilateralNode extends Node {
       tandem: options.tandem.createTandem( 'vertex1Node' )
     } );
 
-    const vertexNode2 = new VertexNode( model.vertex2, model, modelViewTransform, {
+    const vertexNode2 = new VertexNode( this.quadrilateralShapeModel.vertex2, this.quadrilateralShapeModel, modelViewTransform, {
 
       // voicing
       voicingNameResponse: vertex2String,
@@ -58,7 +61,7 @@ class QuadrilateralNode extends Node {
       tandem: options.tandem.createTandem( 'vertex2Node' )
     } );
 
-    const vertexNode3 = new VertexNode( model.vertex3, model, modelViewTransform, {
+    const vertexNode3 = new VertexNode( this.quadrilateralShapeModel.vertex3, this.quadrilateralShapeModel, modelViewTransform, {
 
       // voicing
       voicingNameResponse: vertex3String,
@@ -67,7 +70,7 @@ class QuadrilateralNode extends Node {
       tandem: options.tandem.createTandem( 'vertex3Node' )
     } );
 
-    const vertexNode4 = new VertexNode( model.vertex4, model, modelViewTransform, {
+    const vertexNode4 = new VertexNode( this.quadrilateralShapeModel.vertex4, this.quadrilateralShapeModel, modelViewTransform, {
 
       // voicing
       voicingNameResponse: vertex4String,
@@ -76,22 +79,22 @@ class QuadrilateralNode extends Node {
       tandem: options.tandem.createTandem( 'vertex4Node' )
     } );
 
-    const topSideNode = new SideNode( model.topSide, model, modelViewTransform, {
+    const topSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.topSide, this.model.quadrilateralTestShapeModel.topSide, modelViewTransform, {
 
       // voicing
       voicingNameResponse: topSideString
     } );
-    const rightSideNode = new SideNode( model.rightSide, model, modelViewTransform, {
+    const rightSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.rightSide, this.model.quadrilateralTestShapeModel.rightSide, modelViewTransform, {
 
       // voicing
       voicingNameResponse: rightSideString
     } );
-    const bottomSideNode = new SideNode( model.bottomSide, model, modelViewTransform, {
+    const bottomSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.bottomSide, this.model.quadrilateralTestShapeModel.bottomSide, modelViewTransform, {
 
       // voicing
       voicingNameResponse: bottomSideString
     } );
-    const leftSideNode = new SideNode( model.leftSide, model, modelViewTransform, {
+    const leftSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.leftSide, this.model.quadrilateralTestShapeModel.leftSide, modelViewTransform, {
 
       // voicing
       voicingNameResponse: leftSideString
@@ -140,10 +143,10 @@ class QuadrilateralNode extends Node {
     // );
 
     // For now, the bounds can be anything, until we we have https://github.com/phetsims/quadrilateral/issues/15 done
-    this.model.vertex1.dragBoundsProperty.value = Bounds2.EVERYTHING;
-    this.model.vertex2.dragBoundsProperty.value = Bounds2.EVERYTHING;
-    this.model.vertex3.dragBoundsProperty.value = Bounds2.EVERYTHING;
-    this.model.vertex4.dragBoundsProperty.value = Bounds2.EVERYTHING;
+    this.quadrilateralShapeModel.vertex1.dragBoundsProperty.value = Bounds2.EVERYTHING;
+    this.quadrilateralShapeModel.vertex2.dragBoundsProperty.value = Bounds2.EVERYTHING;
+    this.quadrilateralShapeModel.vertex3.dragBoundsProperty.value = Bounds2.EVERYTHING;
+    this.quadrilateralShapeModel.vertex4.dragBoundsProperty.value = Bounds2.EVERYTHING;
   }
 }
 

@@ -576,6 +576,55 @@ class QuadrilateralShapeModel {
   }
 
   /**
+   * Returns true if the current quadrilateral shape is allowed based on the rules of this model.
+   * No vertex can overlap another.
+   * All vertices must be within their drag areas.
+   * All vertices must be within model bounds.
+   * (TODO) No vertex can overlap another side.
+   */
+  public isQuadrilateralShapeAllowed(): boolean {
+    let shapeAllowed = true;
+
+    for ( let i = 0; i < this.vertices.length; i++ ) {
+      const testVertex = this.vertices[ i ];
+
+      assert && assert( this.model.modelBoundsProperty.value, 'Model bounds must be defined.' );
+      shapeAllowed = this.model.modelBoundsProperty.value!.containsPoint( testVertex.positionProperty.value );
+
+      // Make sure that no vertices overlap any other (only need to do this if  we haven't already found
+      // a disallowed case.
+      if ( shapeAllowed ) {
+        for ( let j = 0; j < this.vertices.length; j++ ) {
+          const otherVertex = this.vertices[ j ];
+
+          if ( testVertex !== otherVertex ) {
+            shapeAllowed = !testVertex.overlapsOther( otherVertex );
+
+            // Shape is not allowed, no need to keep testing
+            if ( !shapeAllowed ) {
+              break;
+            }
+          }
+        }
+      }
+
+      // If no vertices overlap, make sure that the vertex is within the drag area. No need to do this
+      // (potentially expensive) Shape work if the shape is already disallowed.
+      if ( shapeAllowed ) {
+        assert && assert( testVertex.dragAreaProperty.value, 'Drag area must be defined for the Vertex' );
+        shapeAllowed = testVertex.dragAreaProperty.value!.containsPoint( testVertex.positionProperty.value );
+      }
+
+      // Shape is not allowed, no need to keep testing
+      if ( !shapeAllowed ) {
+        break;
+      }
+    }
+
+    return shapeAllowed;
+  }
+
+  /**
    * Returns whether or not the quadrilateral shape is a parallelogram, within the tolerance defined by
    * angleToleranceIntervalProperty.
    */
@@ -619,6 +668,16 @@ class QuadrilateralShapeModel {
     // After we have detected whether or not we are a parallelogram, and after all vertices are positioned, calculate
     // the name of the current quadrilateral shape.
     this.shapeNameProperty.set( this.getShapeName() );
+  }
+
+  /**
+   * Sets this model to be the same as the provided QuadrilateralShapeModel, but setting Vertex positions.
+   */
+  public set( other: QuadrilateralShapeModel ): void {
+    this.vertex1.positionProperty.set( other.vertex1.positionProperty.value );
+    this.vertex2.positionProperty.set( other.vertex2.positionProperty.value );
+    this.vertex3.positionProperty.set( other.vertex3.positionProperty.value );
+    this.vertex4.positionProperty.set( other.vertex4.positionProperty.value );
   }
 
   /**
