@@ -49,11 +49,15 @@ class QuadrilateralModel {
     } );
 
     // This is the centrail quadrilateral shape for the simulation.
-    this.quadrilateralShapeModel = new QuadrilateralShapeModel( this );
+    this.quadrilateralShapeModel = new QuadrilateralShapeModel( this, {
+      tandem: tandem.createTandem( 'quadrilateralShapeModel' )
+    } );
 
     // This quadrilateral is often used as a "scratch" where we test positions to make
     // sure they are valid before setting to the main quadrilateral.
-    this.quadrilateralTestShapeModel = new QuadrilateralShapeModel( this );
+    this.quadrilateralTestShapeModel = new QuadrilateralShapeModel( this, {
+      tandem: tandem.createTandem( 'quadrilateralTestShapeModel' )
+    } );
 
     if ( QuadrilateralQueryParameters.deviceConnection ) {
 

@@ -125,7 +125,7 @@ class QuadrilateralShapeModel {
     } );
 
     this.shapeAngleToleranceIntervalProperty = new NumberProperty( QuadrilateralQueryParameters.shapeAngleToleranceInterval, {
-      tandem: options.tandem.createTandem( 'angleToleranceIntervalProperty' ),
+      tandem: options.tandem.createTandem( 'shapeAngleToleranceIntervalProperty' ),
       range: new Range( 0, 2 * Math.PI )
     } );
 
@@ -165,26 +165,6 @@ class QuadrilateralShapeModel {
 
     // @public {Emitter} - Emits an event whenever the shape of the Quadrilateral changes
     this.shapeChangedEmitter = new Emitter<[]>();
-
-    // A value that controls the threshold for equality when determining if the quadrilateral forms a parallelogram.
-    // Without a margin of error it would be exceedingly difficult to create a parallelogram shape. It is unclear
-    // whether this need to change, but it seems useful now to be able to easily change this value during development.
-    // The initial value is determined by query parameter while we sort out
-    // https://github.com/phetsims/quadrilateral/issues/26
-    this.angleToleranceIntervalProperty = new NumberProperty( QuadrilateralQueryParameters.angleToleranceInterval, {
-      tandem: options.tandem.createTandem( 'angleToleranceIntervalProperty' ),
-      range: new Range( 0, 2 * Math.PI )
-    } );
-
-    this.shapeAngleToleranceIntervalProperty = new NumberProperty( QuadrilateralQueryParameters.shapeAngleToleranceInterval, {
-      tandem: options.tandem.createTandem( 'angleToleranceIntervalProperty' ),
-      range: new Range( 0, 2 * Math.PI )
-    } );
-
-    this.tiltToleranceIntervalProperty = new NumberProperty( QuadrilateralQueryParameters.tiltToleranceInterval, {
-      tandem: options.tandem.createTandem( 'tiltToleranceIntervalProperty' ),
-      range: new Range( 0, 2 * Math.PI )
-    } );
 
     // referenced for private use in functions
     this.model = model;
