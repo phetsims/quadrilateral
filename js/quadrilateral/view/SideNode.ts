@@ -10,7 +10,7 @@
 
 import Property from '../../../../axon/js/Property.js';
 import merge from '../../../../phet-core/js/merge.js';
-import { DragListener, FocusHighlightPath, KeyboardDragListener, Line, SceneryEvent, Voicing } from '../../../../scenery/js/imports.js';
+import { DragListener, FocusHighlightPath, KeyboardDragListener, Path, SceneryEvent, Voicing } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import Side from '../model/Side.js';
@@ -21,7 +21,7 @@ import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 
-class SideNode extends Line {
+class SideNode extends Path {
   private side: Side;
   private scratchSide: Side;
   private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
@@ -45,7 +45,9 @@ class SideNode extends Line {
       tandem: Tandem.OPTIONAL
     }, options );
 
-    super( 0, 0, 0, 0 );
+    super( side.shapeProperty.value, {
+      // fill: 'red'
+    } );
 
     // A reference to the model component.
     this.side = side;
@@ -73,21 +75,35 @@ class SideNode extends Line {
     // @ts-ignore - TODO: Setters added by scenery mixins are not available, see https://github.com/phetsims/quadrilateral/issues/27
     this.focusHighlight = new FocusHighlightPath( null );
 
+    side.shapeProperty.link( modelShape => {
+      const viewShape = modelViewTransform.modelToViewShape( modelShape );
+
+      this.setShape( viewShape );
+
+      // FOR NOW: Instead of a graphical sim you can "see" sides through these pointer areas.
+      // These can be removed once a graphical design is complete.
+      this.mouseArea = viewShape;
+      this.touchArea = viewShape;
+
+      const highlight = this.focusHighlight as FocusHighlightPath;
+      highlight.setShape( viewShape );
+    } );
+
     // listeners
     Property.multilink( [ side.vertex1.positionProperty, side.vertex2.positionProperty ], ( vertex1Position: Vector2, vertex2Position: Vector2 ) => {
-      const vertex1ViewPosition = modelViewTransform.modelToViewPosition( vertex1Position );
-      const vertex2ViewPosition = modelViewTransform.modelToViewPosition( vertex2Position );
-      this.setLine( vertex1ViewPosition.x, vertex1ViewPosition.y, vertex2ViewPosition.x, vertex2ViewPosition.y );
-
-      // set the focus highlight shape
-      // @ts-ignore - TODO: Setters added by scenery mixins are not available, see https://github.com/phetsims/quadrilateral/issues/27
-      this.focusHighlight.setShape( this.getStrokedShape() );
-
-      // TODO: For now we are showing pointer areas instead of a graphical sim. These are used just to indicate
-      // where you can press while we discuss multitouch considerations. We don't want something more permanent because
-      // we are afraid a graphical design will influence other modalities.
-      this.mouseArea = this.getStrokedShape();
-      this.touchArea = this.mouseArea;
+      // const vertex1ViewPosition = modelViewTransform.modelToViewPosition( vertex1Position );
+      // const vertex2ViewPosition = modelViewTransform.modelToViewPosition( vertex2Position );
+      // this.setLine( vertex1ViewPosition.x, vertex1ViewPosition.y, vertex2ViewPosition.x, vertex2ViewPosition.y );
+      //
+      // // set the focus highlight shape
+      // // @ts-ignore - TODO: Setters added by scenery mixins are not available, see https://github.com/phetsims/quadrilateral/issues/27
+      // this.focusHighlight.setShape( this.getStrokedShape() );
+      //
+      // // TODO: For now we are showing pointer areas instead of a graphical sim. These are used just to indicate
+      // // where you can press while we discuss multitouch considerations. We don't want something more permanent because
+      // // we are afraid a graphical design will influence other modalities.
+      // this.mouseArea = this.getStrokedShape();
+      // this.touchArea = this.mouseArea;
     } );
 
     // supports keyboard dragging, attempts to move both vertices in the direction of motion of the line
@@ -202,8 +218,6 @@ class SideNode extends Line {
     // going to create with this change.
     this.scratchSide.vertex1.positionProperty.set( proposedVertex1Position );
     this.scratchSide.vertex2.positionProperty.set( proposedVertex2Position );
-
-    console.log( this.scratchShapeModel.isQuadrilateralShapeAllowed() );
 
     if ( this.scratchShapeModel.isQuadrilateralShapeAllowed() ) {
       this.side.vertex1.positionProperty.set( proposedVertex1Position );

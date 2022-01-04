@@ -16,6 +16,12 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import { Line } from '../../../../scenery/js/imports.js';
+import Shape from '../../../../kite/js/Shape.js';
+
+// in model coordinates, the width of a side - Sides exist in model space to apply rules that vertices and
+// sides can never overlap
+const SIDE_WIDTH = 0.05;
 
 class Side {
   public vertex1: Vertex;
@@ -24,6 +30,7 @@ class Side {
   public tiltProperty: IReadOnlyProperty<number>;
   public lengthProperty: IReadOnlyProperty<number>;
   public readonly isPressedProperty: BooleanProperty;
+  public shapeProperty: IReadOnlyProperty<Shape>;
   public readonly lengthToleranceIntervalProperty: IReadOnlyProperty<number>;
 
   /**
@@ -66,6 +73,19 @@ class Side {
         phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
       } );
 
+    // The shape of the side, determined by the length and the model width.
+    this.shapeProperty = new DerivedProperty(
+      [ this.vertex1.positionProperty, this.vertex2.positionProperty ],
+      ( position1: Vector2, position2: Vector2 ) => {
+
+        // TODO: make reusable
+        const lineShape = new Line( position1.x, position1.y, position2.x, position2.y, {
+          lineWidth: SIDE_WIDTH
+        } );
+
+        return lineShape.getStrokedShape();
+      } );
+
     // The tolerance for this side to determine if it is equal to another. It is a portion of the full length
     // so that when the side is longer it still as easy for two sides to be equal in length. Otherwise the
     // tolerance interval will be relatively much larger when the length is very small.
@@ -85,6 +105,14 @@ class Side {
     // different for sides with different lengths
     const toleranceInterval = Math.max( side.lengthToleranceIntervalProperty.value, this.lengthToleranceIntervalProperty.value );
     return Utils.equalsEpsilon( side.lengthProperty.value, this.lengthProperty.value, toleranceInterval );
+  }
+
+
+  /**
+   * Returns true if this Side includes the provided Vertex.
+   */
+  public includesVertex( vertex: Vertex ): boolean {
+    return this.vertex1 === vertex || this.vertex2 === vertex;
   }
 
   /**

@@ -56,6 +56,7 @@ class QuadrilateralShapeModel {
   public leftSide: Side;
 
   public readonly vertices: Vertex[];
+  public readonly sides: Side[];
 
   public readonly lengthsEqualToSavedProperty: BooleanProperty;
 
@@ -107,6 +108,9 @@ class QuadrilateralShapeModel {
     this.leftSide = new Side( this.vertex4, this.vertex1, options.tandem.createTandem( 'leftSide' ), {
       offsetVectorForTiltCalculation: new Vector2( -1, 0 )
     } );
+
+    // Collection of the Sides of the quadrilateral for easy iteration
+    this.sides = [ this.topSide, this.rightSide, this.bottomSide, this.leftSide ];
 
     // Connect the sides, creating the shape and giving xvertices the information they need to determine their angles.
     this.rightSide.connectToSide( this.topSide );
@@ -523,6 +527,8 @@ class QuadrilateralShapeModel {
    * to overlap any other Vertex of the model. It also must be within the drag area that is defined by the positions
    * of other vertices in the model, which prevents the shape from becoming twisted.
    *
+   * TODO: Remove this and use the other function everywhere.
+   *
    * @param vertex - The vertex in question, so we don't compare it to itself
    * @param proposedPosition
    */
@@ -542,6 +548,21 @@ class QuadrilateralShapeModel {
       if ( vertex !== otherVertex && otherVertex.boundsOverlapsVertex( SCRATCH_BOUNDS ) ) {
         positionAllowed = false;
         break;
+      }
+    }
+
+    if ( positionAllowed ) {
+
+      // vertex cannot overlap any sides
+      for ( let j = 0; j < this.sides.length; j++ ) {
+        const side = this.sides[ j ];
+        if ( !side.includesVertex( vertex ) ) {
+          positionAllowed = !this.sides[ j ].shapeProperty.value.intersectsBounds( SCRATCH_BOUNDS );
+
+          if ( !positionAllowed ) {
+            break;
+          }
+        }
       }
     }
 
@@ -581,6 +602,20 @@ class QuadrilateralShapeModel {
             shapeAllowed = !testVertex.overlapsOther( otherVertex );
 
             // Shape is not allowed, no need to keep testing
+            if ( !shapeAllowed ) {
+              break;
+            }
+          }
+        }
+      }
+
+      // Make sure that no vertex bounds overlap any line
+      if ( shapeAllowed ) {
+        for ( let j = 0; j < this.sides.length; j++ ) {
+          const side = this.sides[ j ];
+          if ( !side.includesVertex( testVertex ) ) {
+            shapeAllowed = !side.shapeProperty.value.intersectsBounds( testVertex.modelBoundsProperty.value );
+
             if ( !shapeAllowed ) {
               break;
             }
