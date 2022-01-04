@@ -155,7 +155,6 @@ class QuadrilateralSoundOptionsModel {
 }
 
 // @public @static
-QuadrilateralSoundOptionsModel.SuccessSoundFile = SuccessSoundFile;
 QuadrilateralSoundOptionsModel.AUDIO_BUFFER_MAP = AUDIO_BUFFER_MAP;
 QuadrilateralSoundOptionsModel.SUCCESS_SOUND_COLLECTION_MAP = SUCCESS_SOUND_COLLECTION_MAP;
 
