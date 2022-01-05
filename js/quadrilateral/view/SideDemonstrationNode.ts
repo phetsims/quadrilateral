@@ -1,4 +1,4 @@
-// Copyright 2021, University of Colorado Boulder
+// Copyright 2021-2022, University of Colorado Boulder
 
 /**
  * A Node used to test and demonstrate the sound design, allowing one to layer in one side at a time. When all

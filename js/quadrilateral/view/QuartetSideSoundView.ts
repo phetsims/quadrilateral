@@ -1,4 +1,4 @@
-// Copyright 2021, University of Colorado Boulder
+// Copyright 2021-2022, University of Colorado Boulder
 
 /**
  * The sound view for a Side of the Parallelogram. The sound design implemented by this file is described as follows:

@@ -1,4 +1,4 @@
-// Copyright 2021, University of Colorado Boulder
+// Copyright 2021-2022, University of Colorado Boulder
 
 /**
  * A class that implements the "Parallels Volume" sound design. In this prototype there are two sounds that
