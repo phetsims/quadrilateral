@@ -135,17 +135,17 @@ class QuadrilateralSoundOptionsModel {
   constructor() {
 
     // The selected sound design, changing this will change the entire design.
-    this.soundDesignProperty = new RichEnumerationProperty( SoundDesign, SoundDesign.SUCCESS_SOUNDS );
+    this.soundDesignProperty = new RichEnumerationProperty( SoundDesign.SUCCESS_SOUNDS );
 
     // Property that controls the base sound for a few of the prototypes. Some prototypes have a base sound and
     // the state of the sim changes the frequency and layering of the base sound. But there are a few base
     // sounds to choose frome.
-    this.baseSoundFileProperty = new RichEnumerationProperty( QuartetSoundFile, QuartetSoundFile.FOUR );
+    this.baseSoundFileProperty = new RichEnumerationProperty( QuartetSoundFile.FOUR );
 
     // For the "Success" sound prototype, a sound is played when reaching a parallelogram, leaving a parallelogram,
     // and when the parallelogram is maintained while the shape changes. Within this paradigm there are
     // different sound options for each of these to chose from.
-    this.successSoundFileProperty = new RichEnumerationProperty( SuccessSoundFile, SuccessSoundFile.ONE );
+    this.successSoundFileProperty = new RichEnumerationProperty( SuccessSoundFile.ONE );
 
     // For the "Success" sound prototype, when true the "maintenance" sound will only play when the
     // quadrilateral changes shape, remains a parallelogram, AND the lengths remain the same
