@@ -51,6 +51,8 @@ class Side {
     // Has this side been connected to another to form a shape?
     this.isConnected = false;
 
+    console.log( 'This is a console statement!' );
+
     // Whether or not this Side is pressed and being interacted with. For now this is useful for debugging.
     this.isPressedProperty = new BooleanProperty( false );
 
