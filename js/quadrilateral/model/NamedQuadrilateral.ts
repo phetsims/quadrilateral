@@ -7,10 +7,10 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
 import quadrilateral from '../../quadrilateral.js';
 
-const NamedQuadrilateral = Enumeration.byKeys( [
+const NamedQuadrilateral = EnumerationDeprecated.byKeys( [
   'SQUARE',
   'RECTANGLE',
   'RHOMBUS',
