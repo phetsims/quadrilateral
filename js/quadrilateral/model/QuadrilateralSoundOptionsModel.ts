@@ -40,9 +40,7 @@ class SoundDesign extends EnumerationValue {
   static SUCCESS_SOUNDS = new SoundDesign();
 
   // gets a list of keys, values and mapping between them for RichEnumerationProperty and PhET-iO
-  static enumeration = new RichEnumeration<SoundDesign>( SoundDesign );
-
-  private constructor() { super(); }
+  static enumeration = new RichEnumeration( SoundDesign );
 }
 
 
@@ -53,9 +51,7 @@ class QuartetSoundFile extends EnumerationValue {
   static FOUR = new QuartetSoundFile();
 
   // gets a list of keys, values and mapping between them for RichEnumerationProperty and PhET-iO
-  static enumeration = new RichEnumeration<QuartetSoundFile>( QuartetSoundFile );
-
-  private constructor() { super(); }
+  static enumeration = new RichEnumeration( QuartetSoundFile );
 }
 
 class SuccessSoundFile extends EnumerationValue {
@@ -65,9 +61,7 @@ class SuccessSoundFile extends EnumerationValue {
   static FOUR = new SuccessSoundFile();
 
   // gets a list of keys, values and mapping between them for RichEnumerationProperty and PhET-iO
-  static enumeration = new RichEnumeration<SuccessSoundFile>( SuccessSoundFile );
-
-  private constructor() { super(); }
+  static enumeration = new RichEnumeration( SuccessSoundFile );
 }
 
 // Maps QuartetSoundFile to the WrappedAudioBuffer for the SoundClip
