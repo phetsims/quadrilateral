@@ -75,7 +75,7 @@ class QuartetSideSoundView {
   private readonly disposeQuartetSideSoundView: () => void;
   private readonly resetNotInProgressProperty: BooleanProperty;
 
-  // TODO: How to do EnumerationProperty, see https://github.com/phetsims/quadrilateral/issues/27
+  // TODO: How to do EnumerationDeprecatedProperty, see https://github.com/phetsims/quadrilateral/issues/27
   constructor( side: Side, resetNotInProgressProperty: BooleanProperty, quartetSoundFileProperty: any ) {
     this.side = side;
     this.resetNotInProgressProperty = resetNotInProgressProperty;
