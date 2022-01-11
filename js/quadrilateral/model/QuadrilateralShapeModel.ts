@@ -542,12 +542,20 @@ class QuadrilateralShapeModel {
       proposedPosition.y + Vertex.VERTEX_BOUNDS.height / 2
     );
 
-    // vertex cannot overlap any others
-    for ( let i = 0; i < this.vertices.length; i++ ) {
-      const otherVertex = this.vertices[ i ];
-      if ( vertex !== otherVertex && otherVertex.boundsOverlapsVertex( SCRATCH_BOUNDS ) ) {
-        positionAllowed = false;
-        break;
+    // the vertex must be completely within the model bounds - this check is necessary in addition
+    // to the dragAreaProperty check below because that only checks the vertex point (not the vertex bounds)
+    assert && assert( this.model.modelBoundsProperty.value, 'modelBounds must be defined' );
+    positionAllowed = this.model.modelBoundsProperty.value!.containsBounds( SCRATCH_BOUNDS );
+
+    if ( positionAllowed ) {
+
+      // vertex cannot overlap any others
+      for ( let i = 0; i < this.vertices.length; i++ ) {
+        const otherVertex = this.vertices[ i ];
+        if ( vertex !== otherVertex && otherVertex.boundsOverlapsVertex( SCRATCH_BOUNDS ) ) {
+          positionAllowed = false;
+          break;
+        }
       }
     }
 
