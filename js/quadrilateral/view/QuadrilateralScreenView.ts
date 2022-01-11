@@ -28,6 +28,9 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import CalibrationContentNode from './CalibrationContentNode.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import PhetColorScheme from '../../../../scenery-phet/js/PhetColorScheme.js';
+import quadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
+import QuadrilateralModelValuePanel from './QuadrilateralModelValuePanel.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 
 const MODEL_BOUNDS = QuadrilateralQueryParameters.calibrationDemoDevice ? new Bounds2( -4.5, -4.5, 4.5, 4.5 ) :
                      new Bounds2( -1, -1, 1, 1 );
@@ -163,6 +166,12 @@ class QuadrilateralScreenView extends ScreenView {
       } );
 
       this.addChild( calibrationButton );
+    }
+
+    if ( quadrilateralQueryParameters.showModelValues ) {
+      this.addChild( new QuadrilateralModelValuePanel( model, {
+        leftTop: new Vector2( QuadrilateralConstants.SCREEN_VIEW_X_MARGIN, QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN )
+      } ) );
     }
   }
 

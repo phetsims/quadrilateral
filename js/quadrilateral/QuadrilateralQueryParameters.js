@@ -72,6 +72,11 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // adjusted slightly to look more like a physical device.
   calibrationDemoDevice: {
     type: 'flag'
+  },
+
+  // If provided, the simulation will act as a
+  showModelValues: {
+    type: 'flag'
   }
 } );
 
