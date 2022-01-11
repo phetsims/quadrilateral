@@ -19,9 +19,9 @@ class SideLengths {
 
   constructor( topSideLength: number, rightSideLength: number, bottomSideLength: number, leftSideLength: number ) {
     this.topSideLength = topSideLength;
-    this.rightSideLength = topSideLength;
-    this.bottomSideLength = topSideLength;
-    this.leftSideLength = topSideLength;
+    this.rightSideLength = rightSideLength;
+    this.bottomSideLength = bottomSideLength;
+    this.leftSideLength = leftSideLength;
   }
 }
 
