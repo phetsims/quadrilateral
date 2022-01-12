@@ -1,4 +1,4 @@
-// Copyright 2021, University of Colorado Boulder
+// Copyright 2021-2022, University of Colorado Boulder
 
 /**
  * A class that is a collection of side lengths at a snapshot in time. Used to compare how the collection of
