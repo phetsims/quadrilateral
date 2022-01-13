@@ -27,9 +27,9 @@ import quadOutOfParallel003_mp3 from '../../../sounds/quadOutOfParallel003_mp3.j
 import quadOutOfParallel004_mp3 from '../../../sounds/quadOutOfParallel004_mp3.js';
 import quadrilateral from '../../quadrilateral.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import RichEnumerationProperty from '../../../../axon/js/RichEnumerationProperty.js';
+import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
-import RichEnumeration from '../../../../phet-core/js/RichEnumeration.js';
+import Enumeration from '../../../../phet-core/js/Enumeration.js';
 
 // constants
 // Enumeration for named sound designs, each with their own options and parameters
@@ -39,8 +39,8 @@ class SoundDesign extends EnumerationValue {
   static PARALLELS_STACCATO = new SoundDesign();
   static SUCCESS_SOUNDS = new SoundDesign();
 
-  // gets a list of keys, values and mapping between them for RichEnumerationProperty and PhET-iO
-  static enumeration = new RichEnumeration( SoundDesign );
+  // gets a list of keys, values and mapping between them for EnumerationProperty and PhET-iO
+  static enumeration = new Enumeration( SoundDesign );
 }
 
 
@@ -50,8 +50,8 @@ class QuartetSoundFile extends EnumerationValue {
   static THREE = new QuartetSoundFile();
   static FOUR = new QuartetSoundFile();
 
-  // gets a list of keys, values and mapping between them for RichEnumerationProperty and PhET-iO
-  static enumeration = new RichEnumeration( QuartetSoundFile );
+  // gets a list of keys, values and mapping between them for EnumerationProperty and PhET-iO
+  static enumeration = new Enumeration( QuartetSoundFile );
 }
 
 class SuccessSoundFile extends EnumerationValue {
@@ -60,8 +60,8 @@ class SuccessSoundFile extends EnumerationValue {
   static THREE = new SuccessSoundFile();
   static FOUR = new SuccessSoundFile();
 
-  // gets a list of keys, values and mapping between them for RichEnumerationProperty and PhET-iO
-  static enumeration = new RichEnumeration( SuccessSoundFile );
+  // gets a list of keys, values and mapping between them for EnumerationProperty and PhET-iO
+  static enumeration = new Enumeration( SuccessSoundFile );
 }
 
 // Maps QuartetSoundFile to the WrappedAudioBuffer for the SoundClip
@@ -115,9 +115,9 @@ SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.THREE, new SuccessSoundCollec
 SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.FOUR, new SuccessSoundCollection( quadIntoParallel004_mp3, quadOutOfParallel004_mp3, quadMovingInParallelSuccessLoop004_mp3 ) );
 
 class QuadrilateralSoundOptionsModel {
-  public soundDesignProperty: RichEnumerationProperty<SoundDesign>;
-  public baseSoundFileProperty: RichEnumerationProperty<QuartetSoundFile>;
-  public successSoundFileProperty: RichEnumerationProperty<SuccessSoundFile>;
+  public soundDesignProperty: EnumerationProperty<SoundDesign>;
+  public baseSoundFileProperty: EnumerationProperty<QuartetSoundFile>;
+  public successSoundFileProperty: EnumerationProperty<SuccessSoundFile>;
   public maintenanceSoundRequiresEqualLengthsProperty: BooleanProperty;
 
   public static SoundDesign: SoundDesign;
@@ -129,17 +129,17 @@ class QuadrilateralSoundOptionsModel {
   constructor() {
 
     // The selected sound design, changing this will change the entire design.
-    this.soundDesignProperty = new RichEnumerationProperty( SoundDesign.SUCCESS_SOUNDS );
+    this.soundDesignProperty = new EnumerationProperty( SoundDesign.SUCCESS_SOUNDS );
 
     // Property that controls the base sound for a few of the prototypes. Some prototypes have a base sound and
     // the state of the sim changes the frequency and layering of the base sound. But there are a few base
     // sounds to choose frome.
-    this.baseSoundFileProperty = new RichEnumerationProperty( QuartetSoundFile.FOUR );
+    this.baseSoundFileProperty = new EnumerationProperty( QuartetSoundFile.FOUR );
 
     // For the "Success" sound prototype, a sound is played when reaching a parallelogram, leaving a parallelogram,
     // and when the parallelogram is maintained while the shape changes. Within this paradigm there are
     // different sound options for each of these to chose from.
-    this.successSoundFileProperty = new RichEnumerationProperty( SuccessSoundFile.ONE );
+    this.successSoundFileProperty = new EnumerationProperty( SuccessSoundFile.ONE );
 
     // For the "Success" sound prototype, when true the "maintenance" sound will only play when the
     // quadrilateral changes shape, remains a parallelogram, AND the lengths remain the same
