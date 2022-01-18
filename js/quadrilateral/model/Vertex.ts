@@ -17,6 +17,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import VertexLabel from './VertexLabel.js';
 
 // in model coordinates, the bounds of the vertex - necessary because we need to calculate vertex/vertex and
 // vertex/side collisions
@@ -27,6 +28,7 @@ const HALF_HEIGHT = VERTEX_BOUNDS.height / 2;
 class Vertex {
   public positionProperty: Property<Vector2>;
   public angleProperty: null | Property<number>;
+  public readonly vertexLabel: VertexLabel;
   public dragBoundsProperty: Property<null | Bounds2>;
   public dragAreaProperty: Property<null | Shape>;
   public isPressedProperty: Property<boolean>;
@@ -36,9 +38,10 @@ class Vertex {
 
   /**
    * @param initialPosition - The initial position for the Vertex in model coordinates.
+   * @param vertexLabel - A label tagging the vertex, so we can look up the equivalent vertex on another shape model
    * @param tandem
    */
-  constructor( initialPosition: Vector2, tandem: Tandem ) {
+  constructor( initialPosition: Vector2, vertexLabel: VertexLabel, tandem: Tandem ) {
 
     // The position of the vertex in model coordinates.
     this.positionProperty = new Vector2Property( initialPosition, {
@@ -48,6 +51,9 @@ class Vertex {
     // The angle at this vertex of the quadrilateral, null until this vertex is connected to two others because we
     // need three points to form the angle.
     this.angleProperty = null;
+
+    // The label for this vertex so we can get the same vertex on another QuadrilateralShapeModel.
+    this.vertexLabel = vertexLabel;
 
     // The bounds in model coordinates that define where this vertex can move. NOTE: Likely this
     // is being replaced by dragAreaProperty, see next field.

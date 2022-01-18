@@ -16,10 +16,12 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import Vertex from '../model/Vertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
-import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
+import QuadrilateralModel from '../model/QuadrilateralModel.js';
 
 class VertexNode extends Rectangle {
-  constructor( vertex: Vertex, quadrilateralShapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2, options?: Object ) {
+  private readonly model: QuadrilateralModel;
+
+  constructor( vertex: Vertex, model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, options?: Object ) {
     options = merge( {
 
       // pdom
@@ -32,6 +34,8 @@ class VertexNode extends Rectangle {
 
     const viewBounds = modelViewTransform.modelToViewBounds( vertex.modelBoundsProperty.value );
     super( viewBounds );
+
+    this.model = model;
 
     // @ts-ignore - how do we deal with mixin?
     this.initializeVoicing();
@@ -65,7 +69,7 @@ class VertexNode extends Rectangle {
       drag: ( modelDelta: Vector2 ) => {
         const proposedPosition = vertex.positionProperty.value.plus( modelDelta );
 
-        if ( quadrilateralShapeModel.isVertexPositionAllowed( vertex, proposedPosition ) ) {
+        if ( model.isVertexPositionAllowed( vertex, proposedPosition ) ) {
           vertex.positionProperty.value = proposedPosition;
         }
       },
@@ -91,7 +95,7 @@ class VertexNode extends Rectangle {
         const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
 
         const proposedPosition = modelPoint;
-        if ( quadrilateralShapeModel.isVertexPositionAllowed( vertex, proposedPosition ) ) {
+        if ( model.isVertexPositionAllowed( vertex, proposedPosition ) ) {
           vertex.positionProperty.value = proposedPosition;
         }
       },

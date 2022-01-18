@@ -15,6 +15,8 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
+import Vertex from './Vertex.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 
 class QuadrilateralModel {
   public modelBoundsProperty: Property<Bounds2 | null>;
@@ -56,6 +58,7 @@ class QuadrilateralModel {
     // This quadrilateral is often used as a "scratch" where we test positions to make
     // sure they are valid before setting to the main quadrilateral.
     this.quadrilateralTestShapeModel = new QuadrilateralShapeModel( this, {
+      validateShape: false,
       tandem: tandem.createTandem( 'quadrilateralTestShapeModel' )
     } );
 
@@ -66,6 +69,19 @@ class QuadrilateralModel {
       // @ts-ignore TODO: TypeScript doesn't allow us to do such hacky things (perhaps for good reason...)
       window.simModel = this;
     }
+  }
+
+  /**
+   * Returns true if the vertex position is allowed. Sets the proposed vertex position to the test shape
+   * and returns true if the scratch QuadrilateralShapeModel reports that it is in a valid position.
+   */
+  public isVertexPositionAllowed( vertex: Vertex, proposedPosition: Vector2 ): boolean {
+
+    // set the proposed position to the scratch shape
+    this.quadrilateralTestShapeModel.set( this.quadrilateralShapeModel );
+    this.quadrilateralTestShapeModel.getLabelledVertex( vertex.vertexLabel ).positionProperty.set( proposedPosition );
+
+    return this.quadrilateralTestShapeModel.isQuadrilateralShapeAllowed();
   }
 
   /**

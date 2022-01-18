@@ -30,6 +30,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Ray2 from '../../../../dot/js/Ray2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import SideLengths from './SideLengths.js';
+import VertexLabel from './VertexLabel.js';
 
 // constants
 // Bounds used for calculations, but a single instance to reduce garbage.
@@ -57,6 +58,8 @@ class QuadrilateralShapeModel {
 
   public readonly vertices: Vertex[];
   public readonly sides: Side[];
+
+  private readonly validateShape: boolean;
 
   public readonly lengthsEqualToSavedProperty: BooleanProperty;
 
@@ -88,11 +91,13 @@ class QuadrilateralShapeModel {
       tandem: Tandem.REQUIRED
     }, options );
 
+    this.validateShape = options.validateShape;
+
     // vertices of the quadrilateral
-    this.vertex1 = new Vertex( new Vector2( -0.25, 0.25 ), options.tandem.createTandem( 'vertex1' ) );
-    this.vertex2 = new Vertex( new Vector2( 0.25, 0.25 ), options.tandem.createTandem( 'vertex2' ) );
-    this.vertex3 = new Vertex( new Vector2( 0.25, -0.25 ), options.tandem.createTandem( 'vertex3' ) );
-    this.vertex4 = new Vertex( new Vector2( -0.25, -0.25 ), options.tandem.createTandem( 'vertex4' ) );
+    this.vertex1 = new Vertex( new Vector2( -0.25, 0.25 ), VertexLabel.VERTEX1, options.tandem.createTandem( 'vertex1' ) );
+    this.vertex2 = new Vertex( new Vector2( 0.25, 0.25 ), VertexLabel.VERTEX2, options.tandem.createTandem( 'vertex2' ) );
+    this.vertex3 = new Vertex( new Vector2( 0.25, -0.25 ), VertexLabel.VERTEX3, options.tandem.createTandem( 'vertex3' ) );
+    this.vertex4 = new Vertex( new Vector2( -0.25, -0.25 ), VertexLabel.VERTEX4, options.tandem.createTandem( 'vertex4' ) );
 
     // Collection of the vertices which should be easy to iterate over
     this.vertices = [ this.vertex1, this.vertex2, this.vertex3, this.vertex4 ];
@@ -332,10 +337,19 @@ class QuadrilateralShapeModel {
    * @param vertexC - the next vertex from vertexB, moving clockwise
    * @param vertexD - the next vertex from vertexC, moving clockwise
    */
-  createVertexArea( modelBounds: Bounds2, vertexA: Vertex, vertexB: Vertex, vertexC: Vertex, vertexD: Vertex ) {
+  createVertexArea( modelBounds: Bounds2, vertexA: Vertex, vertexB: Vertex, vertexC: Vertex, vertexD: Vertex ): Shape {
 
-    assert && assert( _.every( [ vertexA, vertexB, vertexC, vertexD ], vertex => modelBounds.containsPoint( vertex.positionProperty.value ) ),
-      'A vertex is not contained by modelBounds!' );
+    const allVerticesInBounds = _.every( [ vertexA, vertexB, vertexC, vertexD ], vertex => modelBounds.containsPoint( vertex.positionProperty.value ) );
+    if ( this.validateShape ) {
+      assert && assert( allVerticesInBounds, 'A vertex is not contained by modelBounds!' );
+    }
+
+    if ( !allVerticesInBounds ) {
+
+      // The shape creation algorithm requires that all vertices are in bounds - we may need to handle this gracefully
+      // so just return an empty shape in this case
+      return new Shape();
+    }
 
     // Lines around the bounds to detect intersections - remember that for Bounds2 top and bottom
     // will be flipped relative to the model because Bounds2 matches scenery +y direction convention.
@@ -564,13 +578,35 @@ class QuadrilateralShapeModel {
       // vertex cannot overlap any sides
       for ( let j = 0; j < this.sides.length; j++ ) {
         const side = this.sides[ j ];
-        if ( !side.includesVertex( vertex ) ) {
-          positionAllowed = !this.sides[ j ].shapeProperty.value.intersectsBounds( SCRATCH_BOUNDS );
+
+        for ( let i = 0; i < this.vertices.length; i++ ) {
+          const otherVertex = this.vertices[ i ];
+
+          // Vertices of a Side are allowed to overlap with that side
+          if ( !side.includesVertex( otherVertex ) ) {
+
+            // If the vertex is the one we are questioning its new position is being proposed so we need to
+            // check sratch bounds - otherwise we can check the current value of bounds for the other vertices
+            const boundsToCheck = otherVertex === vertex ? SCRATCH_BOUNDS : otherVertex.modelBoundsProperty.value;
+            positionAllowed = !side.shapeProperty.value.intersectsBounds( boundsToCheck );
+          }
 
           if ( !positionAllowed ) {
             break;
           }
         }
+
+        if ( !positionAllowed ) {
+          break;
+        }
+
+        // if ( !side.includesVertex( vertex ) ) {
+        //   positionAllowed = !this.sides[ j ].shapeProperty.value.intersectsBounds( SCRATCH_BOUNDS );
+        //
+        //   if ( !positionAllowed ) {
+        //     break;
+        //   }
+        // }
       }
     }
 
@@ -608,8 +644,9 @@ class QuadrilateralShapeModel {
     for ( let i = 0; i < this.vertices.length; i++ ) {
       const testVertex = this.vertices[ i ];
 
+      // The vertex must be completely within model bounds
       assert && assert( this.model.modelBoundsProperty.value, 'Model bounds must be defined.' );
-      shapeAllowed = this.model.modelBoundsProperty.value!.containsPoint( testVertex.positionProperty.value );
+      shapeAllowed = this.model.modelBoundsProperty.value!.containsBounds( testVertex.modelBoundsProperty.value );
 
       // Make sure that no vertices overlap any other (only need to do this if  we haven't already found
       // a disallowed case.
@@ -678,7 +715,7 @@ class QuadrilateralShapeModel {
     return Utils.equalsEpsilon( angle1, angle2, this.angleToleranceIntervalProperty.value );
   }
 
-  public isShapeAngleEqualToOther( angle1: number, angle2: number ): boolean {
+  public fngleEqualToOther( angle1: number, angle2: number ): boolean {
     return Utils.equalsEpsilon( angle1, angle2, this.shapeAngleToleranceIntervalProperty.value );
   }
 
@@ -712,6 +749,16 @@ class QuadrilateralShapeModel {
     this.vertex2.positionProperty.set( other.vertex2.positionProperty.value );
     this.vertex3.positionProperty.set( other.vertex3.positionProperty.value );
     this.vertex4.positionProperty.set( other.vertex4.positionProperty.value );
+  }
+
+  /**
+   * Get the vertex of this shape model with the provided vertexLabel.
+   */
+  public getLabelledVertex( vertexLabel: VertexLabel ): Vertex {
+    const labelledVertex = _.find( this.vertices, vertex => vertex.vertexLabel === vertexLabel );
+
+    assert && assert( labelledVertex, 'Could not find labelled vertex' );
+    return labelledVertex!;
   }
 
   /**

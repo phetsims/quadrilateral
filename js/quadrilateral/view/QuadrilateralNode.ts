@@ -29,6 +29,7 @@ const leftSideString = quadrilateralStrings.a11y.voicing.leftSide;
 class QuadrilateralNode extends Node {
   private readonly model: QuadrilateralModel;
   private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
+  private readonly scratchShapeModel: QuadrilateralShapeModel;
   private readonly modelViewTransform: ModelViewTransform2
 
   public constructor( quadrilateralModel: QuadrilateralModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, options?: any ) {
@@ -41,9 +42,10 @@ class QuadrilateralNode extends Node {
 
     this.model = quadrilateralModel;
     this.quadrilateralShapeModel = this.model.quadrilateralShapeModel;
+    this.scratchShapeModel = this.model.quadrilateralTestShapeModel;
     this.modelViewTransform = modelViewTransform;
 
-    const vertexNode1 = new VertexNode( this.quadrilateralShapeModel.vertex1, this.quadrilateralShapeModel, modelViewTransform, {
+    const vertexNode1 = new VertexNode( this.quadrilateralShapeModel.vertex1, quadrilateralModel, modelViewTransform, {
 
       // voicing
       voicingNameResponse: vertex1String,
@@ -52,7 +54,7 @@ class QuadrilateralNode extends Node {
       tandem: options.tandem.createTandem( 'vertex1Node' )
     } );
 
-    const vertexNode2 = new VertexNode( this.quadrilateralShapeModel.vertex2, this.quadrilateralShapeModel, modelViewTransform, {
+    const vertexNode2 = new VertexNode( this.quadrilateralShapeModel.vertex2, quadrilateralModel, modelViewTransform, {
 
       // voicing
       voicingNameResponse: vertex2String,
@@ -61,7 +63,7 @@ class QuadrilateralNode extends Node {
       tandem: options.tandem.createTandem( 'vertex2Node' )
     } );
 
-    const vertexNode3 = new VertexNode( this.quadrilateralShapeModel.vertex3, this.quadrilateralShapeModel, modelViewTransform, {
+    const vertexNode3 = new VertexNode( this.quadrilateralShapeModel.vertex3, quadrilateralModel, modelViewTransform, {
 
       // voicing
       voicingNameResponse: vertex3String,
@@ -70,7 +72,7 @@ class QuadrilateralNode extends Node {
       tandem: options.tandem.createTandem( 'vertex3Node' )
     } );
 
-    const vertexNode4 = new VertexNode( this.quadrilateralShapeModel.vertex4, this.quadrilateralShapeModel, modelViewTransform, {
+    const vertexNode4 = new VertexNode( this.quadrilateralShapeModel.vertex4, quadrilateralModel, modelViewTransform, {
 
       // voicing
       voicingNameResponse: vertex4String,
