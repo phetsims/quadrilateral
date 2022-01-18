@@ -110,9 +110,6 @@ class SideNode extends Path {
     const viewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralConstants.MOVEMENT_PER_KEY_PRESS );
     this.addInputListener( new KeyboardDragListener( {
       transform: modelViewTransform,
-      start: () => {
-        this.dragStart();
-      },
       drag: ( vectorDelta: Vector2 ) => {
         this.moveVerticesFromModelDelta( vectorDelta );
       },
@@ -133,8 +130,6 @@ class SideNode extends Path {
 
         // FOR DEBUGGING, when the side is pressed, show debug areas
         side.isPressedProperty.value = true;
-
-        this.dragStart();
       },
       end: () => {
 
@@ -178,14 +173,6 @@ class SideNode extends Path {
         side.isPressedProperty.value = false;
       }
     } );
-  }
-
-  /**
-   * When a drag starts, we want to save all side lengths so that we can compare them to
-   * new side lengths during the drag.
-   */
-  private dragStart(): void {
-    this.quadrilateralShapeModel.saveSideLengths();
   }
 
   /**

@@ -14,6 +14,7 @@ import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import { Text } from '../../../../scenery/js/imports.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
+import quadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralNode from './QuadrilateralNode.js';
 import QuadrilateralSoundView from './QuadrilateralSoundView.js';
 import SideDemonstrationNode from './SideDemonstrationNode.js';
@@ -28,9 +29,9 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import CalibrationContentNode from './CalibrationContentNode.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import PhetColorScheme from '../../../../scenery-phet/js/PhetColorScheme.js';
-import quadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralModelValuePanel from './QuadrilateralModelValuePanel.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import SideLengthAreaNode from './SideLengthAreaNode.js';
 
 const MODEL_BOUNDS = QuadrilateralQueryParameters.calibrationDemoDevice ? new Bounds2( -4.5, -4.5, 4.5, 4.5 ) :
                      new Bounds2( -1, -1, 1, 1 );
@@ -116,6 +117,12 @@ class QuadrilateralScreenView extends ScreenView {
       this.addChild( new VertexDragAreaNode( shapeModel.vertex2, [ shapeModel.topSide, shapeModel.rightSide ], modelViewTransform ) );
       this.addChild( new VertexDragAreaNode( shapeModel.vertex3, [ shapeModel.rightSide, shapeModel.bottomSide ], modelViewTransform ) );
       this.addChild( new VertexDragAreaNode( shapeModel.vertex4, [ shapeModel.bottomSide, shapeModel.leftSide ], modelViewTransform ) );
+    }
+    if ( QuadrilateralQueryParameters.showLengthAreas ) {
+      this.addChild( new SideLengthAreaNode( shapeModel, shapeModel.topSide, shapeModel.bottomSide, shapeModel.leftSide, modelViewTransform ) );
+      this.addChild( new SideLengthAreaNode( shapeModel, shapeModel.rightSide, shapeModel.leftSide, shapeModel.topSide, modelViewTransform, { drawRotation: -Math.PI / 2 } ) );
+      this.addChild( new SideLengthAreaNode( shapeModel, shapeModel.bottomSide, shapeModel.topSide, shapeModel.rightSide, modelViewTransform, { drawRotation: Math.PI } ) );
+      this.addChild( new SideLengthAreaNode( shapeModel, shapeModel.leftSide, shapeModel.rightSide, shapeModel.bottomSide, modelViewTransform, { drawRotation: Math.PI / 2 } ) );
     }
 
     if ( QuadrilateralQueryParameters.deviceConnection ) {

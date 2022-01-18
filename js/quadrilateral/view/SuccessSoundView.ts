@@ -13,6 +13,10 @@ import QuadrilateralSoundOptionsModel, { SuccessSoundCollection } from '../model
 
 const MAX_OUTPUT_LEVEL = 0.2;
 
+// In seconds - after lengths are no longer equal to saved side lengths we have lost the "success" case
+// for maintaining a parallelogram while keeping sides equal. We will wait this long before
+const DELAY_FOR_MAINTENANCE_SOUND = 1.5;
+
 class SuccessSoundView {
   private successSoundClip: null | SoundClip;
   private failureSoundClip: null | SoundClip;
@@ -23,6 +27,8 @@ class SuccessSoundView {
   private model: QuadrilateralModel;
   private remainingMaintenancePlayTime: number;
   private maintenanceSoundClipPlaying: boolean;
+
+  private remainingDelayForMaintenanceSound: number;
 
   public constructor( model: QuadrilateralModel, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
 
@@ -39,6 +45,8 @@ class SuccessSoundView {
 
     // The amount of time left to continue playing the "maintenance" sounds.
     this.remainingMaintenancePlayTime = 0;
+
+    this.remainingDelayForMaintenanceSound = 0;
 
     // Whether the maintenance sound clip is currently playing, so we know whether to decrement the
     // remainingMaintenancePlayTime or stop playing the maintenance sound.
@@ -88,7 +96,7 @@ class SuccessSoundView {
       if ( soundOptionsModel.maintenanceSoundRequiresEqualLengthsProperty.value ) {
 
         // In this mode, we will
-        if ( shapeModel.isParallelogramProperty.value && countObject.true !== 1 && shapeModel.lengthsEqualToSavedProperty.value ) {
+        if ( shapeModel.isParallelogramProperty.value && countObject.true !== 1 && shapeModel.lengthsEqualToSavedProperty.value && this.remainingDelayForMaintenanceSound < 0 ) {
           this.startPlayingMaintenanceSoundClip();
         }
         else {
@@ -102,6 +110,14 @@ class SuccessSoundView {
       }
     };
     shapeModel.shapeChangedEmitter.addListener( shapeListener );
+
+    // for when the maintenance sound requires constant lenghts (maintenanceSoundRequiresEqualLengthsProperty) -
+    // reset the delay timing variable when we are no longer in the range of saved values.
+    shapeModel.lengthsEqualToSavedProperty.link( equalToSaved => {
+      if ( !equalToSaved ) {
+        this.remainingDelayForMaintenanceSound = DELAY_FOR_MAINTENANCE_SOUND;
+      }
+    } );
 
     // Whenever a reset is complete (not in progress), stop playing all sound clips immediately.
     const resetNotInProgressListener = ( resetNotInProgress: boolean ) => {
@@ -233,6 +249,8 @@ class SuccessSoundView {
    * @param dt - time step for the animation, in seconds
    */
   step( dt: number ) {
+    this.remainingDelayForMaintenanceSound -= dt;
+
     if ( this.maintenanceSoundClipPlaying ) {
       this.remainingMaintenancePlayTime -= dt;
 

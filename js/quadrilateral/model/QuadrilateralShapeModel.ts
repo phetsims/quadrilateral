@@ -798,6 +798,10 @@ class QuadrilateralShapeModel {
     // lengths after all positions have been set.
     this.lengthsEqualToSavedProperty.set( this.getSideLengthsChanged( this.getSideLengths() ) );
 
+    if ( !this.lengthsEqualToSavedProperty.value ) {
+      this.saveSideLengths();
+    }
+
     // After we have detected whether or not we are a parallelogram, and after all vertices are positioned, calculate
     // the name of the current quadrilateral shape.
     this.shapeNameProperty.set( this.getShapeName() );
