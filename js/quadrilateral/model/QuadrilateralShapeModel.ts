@@ -786,6 +786,17 @@ class QuadrilateralShapeModel {
    */
   setPositionsFromLengthAndAngleData( topLength: number, rightLength: number, bottomLength: number, leftLength: number, p1Angle: number, p2Angle: number, p3Angle: number, p4Angle: number ) {
 
+    // only try to set to sim if values look reasonable - we want to handle this gracefully, the sim shouldn't crash
+    // if data isn't right
+    const allDataGood = _.every( [
+      topLength, rightLength, bottomLength, leftLength, p1Angle, p2Angle, p3Angle, p4Angle
+    ], value => {
+      return !isNaN( value ) && value >= 0 && value !== null;
+    } );
+    if ( !allDataGood ) {
+      return;
+    }
+
     // this function cannot be called until the bounds of movement for each vertex has been established
     assert && assert( this.vertex1.dragBoundsProperty.value );
     assert && assert( this.vertex2.dragBoundsProperty.value );
