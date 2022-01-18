@@ -34,6 +34,16 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     defaultValue: 0.05
   },
 
+  // A scale factor to apply to the angle tolerance interval which determines when the quadrilateral is a
+  // parallelogram. This is multiplied by the angleToleranceInterval when more than one vertex is dragged so
+  // that it is easier to "stay" in parallelogram in that case. It should be larger than one so that the
+  // angleToleranceInterval is larger in these cases. See QuadrilateralShapeModel for usage and more information.
+  angleToleranceIntervalScaleFactor: {
+    type: 'number',
+    defaultValue: 2,
+    isValidValue: value => value >= 1
+  },
+
   shapeAngleToleranceInterval: {
     type: 'number',
     isValidValue: value => value <= ( 2 * Math.PI ) && value >= 0,

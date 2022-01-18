@@ -16,12 +16,19 @@ import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import IProperty from '../../../../axon/js/IProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
+import merge from '../../../../phet-core/js/merge.js';
 
 const TEXT_OPTIONS = { fontSize: 16 };
 const valuePatternString = '{{label}}: {{value}}';
 
 class QuadrilateralModelValuePanel extends Panel {
   constructor( model: QuadrilateralModel, options?: any ) {
+
+    options = merge( {
+
+      // looks good for debugging without the panel resizing frequently
+      minWidth: 250
+    }, options );
 
     const topSideLengthText = new Text( '', TEXT_OPTIONS );
     const rightSideLengthText = new Text( '', TEXT_OPTIONS );
@@ -52,12 +59,17 @@ class QuadrilateralModelValuePanel extends Panel {
     } );
 
     const isParallelogramText = new Text( '', TEXT_OPTIONS );
+    const parallelogramToleranceIntervalText = new Text( '', TEXT_OPTIONS );
+    const parallelogramBox = new VBox( {
+      children: [ isParallelogramText, parallelogramToleranceIntervalText ],
+      align: 'left'
+    } );
 
     const content = new VBox( {
       children: [
         lengthBox,
         angleBox,
-        isParallelogramText
+        parallelogramBox
       ],
       align: 'left',
       spacing: 15
@@ -80,6 +92,9 @@ class QuadrilateralModelValuePanel extends Panel {
 
     // isParallelogramProperty
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.isParallelogramProperty, isParallelogramText, 'Is parallelogram' );
+
+    // angleToleranceInterval
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.angleToleranceIntervalProperty, parallelogramToleranceIntervalText, 'angleToleranceInterval' );
   }
 
   private static addRedrawValueTextListener( property: IReadOnlyProperty<number> | IProperty<boolean>, text: Text, label: string ) {

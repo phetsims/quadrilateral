@@ -31,6 +31,7 @@ import Ray2 from '../../../../dot/js/Ray2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import SideLengths from './SideLengths.js';
 import VertexLabel from './VertexLabel.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 
 // constants
 // Bounds used for calculations, but a single instance to reduce garbage.
@@ -65,7 +66,7 @@ class QuadrilateralShapeModel {
 
   public readonly model: QuadrilateralModel;
 
-  public angleToleranceIntervalProperty: Property<number>;
+  public angleToleranceIntervalProperty: DerivedProperty<number, boolean[]>;
   public tiltToleranceIntervalProperty: Property<number>;
   public shapeAngleToleranceIntervalProperty: Property<number>;
 
@@ -124,14 +125,64 @@ class QuadrilateralShapeModel {
     this.topSide.connectToSide( this.leftSide );
 
     // A value that controls the threshold for equality when determining if the quadrilateral forms a parallelogram.
-    // Without a margin of error it would be exceedingly difficult to create a parallelogram shape. It is unclear
-    // whether this need to change, but it seems useful now to be able to easily change this value during development.
-    // The initial value is determined by query parameter while we sort out
-    // https://github.com/phetsims/quadrilateral/issues/26
-    this.angleToleranceIntervalProperty = new NumberProperty( QuadrilateralQueryParameters.angleToleranceInterval, {
-      tandem: options.tandem.createTandem( 'angleToleranceIntervalProperty' ),
-      range: new Range( 0, 2 * Math.PI )
-    } );
+    // Without a margin of error it would be exceedingly difficult to create a parallelogram shape. The value changes
+    // depending on input. Any tolerance interval means isParallelogramProperty will be true when we are not exactly
+    // a parallelogram. This means that angles will NOT remain constant will dragging sides or more than one
+    // vertex at a time because the properties of a parallelogram will not be present, even though we are telling
+    // the user that they are "in parallelogram". As such, we make it more or less difficult to remain in parallelogram
+    // depending on the input.
+    //
+    // If a side is being dragged while in parallelogram, it should be impossible to go "out" of parallelogram.
+    // If dragging two or more sides, the tolerance is larger because it should be easier to find and stay in
+    // parallelogram with this mode of input.
+    // If dragging a single vertex, the tolerance is as small as possible because with this mode of input has the
+    // finest control.
+    this.angleToleranceIntervalProperty = new DerivedProperty(
+      [
+        this.vertex1.isPressedProperty, this.vertex2.isPressedProperty, this.vertex3.isPressedProperty, this.vertex4.isPressedProperty,
+        this.topSide.isPressedProperty, this.rightSide.isPressedProperty, this.bottomSide.isPressedProperty, this.leftSide.isPressedProperty
+      ],
+      (
+        vertex1Pressed, vertex2Pressed, vertex3Pressed, vertex4Pressed,
+        topSidePressed, rightSidePressed, bottomSidePressed, leftSidePressed
+      ) => {
+        const verticesPressedArray = [ vertex1Pressed, vertex2Pressed, vertex3Pressed, vertex4Pressed ];
+        const sidesPressedArray = [ topSidePressed, rightSidePressed, bottomSidePressed, leftSidePressed ];
+
+        const numberOfVerticesPressed = _.countBy( verticesPressedArray ).true;
+        const anySidesPressed = _.some( sidesPressedArray );
+
+        let toleranceInterval;
+
+        if ( anySidesPressed && this.isParallelogramProperty.value ) {
+
+          // A side has been picked up while the shape is a parallelogram - it should be impossible for the shape
+          // to go "out" of parallelogram in this case because none of the angles should be changing.
+          toleranceInterval = Number.POSITIVE_INFINITY;
+        }
+        else if ( numberOfVerticesPressed >= 2 ) {
+
+          // Two or more vertices pressed at once, increase the tolerance interval by a scale factor so that
+          // it is easier to find and remain a parallelogram with this input
+          toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval * QuadrilateralQueryParameters.angleToleranceIntervalScaleFactor;
+        }
+        else if ( numberOfVerticesPressed === 1 ) {
+
+          // Only one vertex is moving, we can afford to be as precise as possible from this form of input, and
+          // so we have the smallest tolerance interval.
+          toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval;
+        }
+        else {
+
+          // We are dragging a side while out of parallelogram, or we just released all sides and vertices. Do NOT
+          // change the angleToleranceInterval because we don't want the quadrilateral to suddenly appear out of
+          // parallelogram at the end of the interaction. The ternary handles initialization.
+          toleranceInterval = this.angleToleranceIntervalProperty ? this.angleToleranceIntervalProperty.value : QuadrilateralQueryParameters.angleToleranceInterval;
+        }
+
+        return toleranceInterval;
+      }
+    );
 
     this.shapeAngleToleranceIntervalProperty = new NumberProperty( QuadrilateralQueryParameters.shapeAngleToleranceInterval, {
       tandem: options.tandem.createTandem( 'shapeAngleToleranceIntervalProperty' ),
