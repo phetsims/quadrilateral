@@ -938,7 +938,6 @@ class QuadrilateralShapeModel {
     this.vertex2.reset();
     this.vertex3.reset();
     this.vertex4.reset();
-    this.angleToleranceIntervalProperty.reset();
 
     // Eagerly update isParallelogramProperty so that it is up to date before resetNotInProgressProperty is set back
     // to true. This is important for Sound so that isParallelogramProperty sounds do not play until after the
