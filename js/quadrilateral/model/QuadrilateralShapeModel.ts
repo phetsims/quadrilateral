@@ -682,8 +682,19 @@ class QuadrilateralShapeModel {
       // If no vertices overlap, make sure that the vertex is within the drag area. No need to do this
       // (potentially expensive) Shape work if the shape is already disallowed.
       if ( shapeAllowed ) {
+
+        // A workaround for https://github.com/phetsims/kite/issues/94 - If the proposed position perfectly aligns
+        // with one of the start/end points of a shape segment along the Ray2 used for the winding number calculation,
+        // intersection with the ray will be undefined and the point may incorrectly be counted as inside the Shape.
+        // For now we make sure that the BOTH the top right and bottom right points of the Vertex bounds are within
+        // the Shape. This will work for now because Shape.containsPoint uses a Ray that extends in the +x direction
+        // for the winding number. If the two points we are checking are not vertically aligned it is impossible
+        // that both points align vertically with a Shape start/end point.
+        // When kite #94 is fixed we can replace this with a single check to see if the proposedPosition is within
+        // the Vertex dragArea.
         assert && assert( testVertex.dragAreaProperty.value, 'Drag area must be defined for the Vertex' );
-        shapeAllowed = testVertex.dragAreaProperty.value!.containsPoint( testVertex.positionProperty.value );
+        shapeAllowed = testVertex.dragAreaProperty.value!.containsPoint( testVertex.modelBoundsProperty.value.rightTop ) &&
+                       testVertex.dragAreaProperty.value!.containsPoint( testVertex.modelBoundsProperty.value.rightBottom );
       }
 
       // Shape is not allowed, no need to keep testing
