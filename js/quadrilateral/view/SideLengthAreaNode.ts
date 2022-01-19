@@ -61,7 +61,8 @@ class SideLengthAreaNode extends Node {
         vertex2Path.stroke = nextColor;
       }
 
-      this.visible = isPressed;
+      // only show wile dragging and we are a parallelogram
+      this.visible = isPressed && shapeModel.isParallelogramProperty.value;
     } );
   }
 }

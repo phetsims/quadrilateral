@@ -650,14 +650,6 @@ class QuadrilateralShapeModel {
         if ( !positionAllowed ) {
           break;
         }
-
-        // if ( !side.includesVertex( vertex ) ) {
-        //   positionAllowed = !this.sides[ j ].shapeProperty.value.intersectsBounds( SCRATCH_BOUNDS );
-        //
-        //   if ( !positionAllowed ) {
-        //     break;
-        //   }
-        // }
       }
     }
 
