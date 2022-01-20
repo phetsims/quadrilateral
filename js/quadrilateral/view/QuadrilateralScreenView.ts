@@ -12,7 +12,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import { Text } from '../../../../scenery/js/imports.js';
+import { Rectangle, Text } from '../../../../scenery/js/imports.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import quadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralNode from './QuadrilateralNode.js';
@@ -111,6 +111,15 @@ class QuadrilateralScreenView extends ScreenView {
       tandem: tandem.createTandem( 'resetAllButton' )
     } );
     this.addChild( this.resetAllButton );
+
+    // Add a rectangle that shows the available model bounds, as requested in
+    // https://github.com/phetsims/quadrilateral/issues/49
+    const boundsRectangle = new Rectangle( { stroke: 'white', lineWidth: 2 } );
+    this.addChild( boundsRectangle );
+
+    this.model.modelBoundsProperty.lazyLink( modelBounds => {
+      boundsRectangle.setRectBounds( modelViewTransform.modelToViewBounds( modelBounds ) );
+    } );
 
     if ( QuadrilateralQueryParameters.showDragAreas ) {
       this.addChild( new VertexDragAreaNode( shapeModel.vertex1, [ shapeModel.leftSide, shapeModel.topSide ], modelViewTransform ) );
