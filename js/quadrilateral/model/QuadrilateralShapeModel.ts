@@ -783,6 +783,16 @@ class QuadrilateralShapeModel {
    */
   public step( dt: number ): void {
 
+    // Update Properties that need to be set only after vertex positions have been updated.
+    this.updateDeferredProperties();
+  }
+
+  /**
+   * Update Properties that need to be updated only after other model Properties are set. For example, we only
+   * determine whether the quadrilateral is a parallelogram after all vertex positions have been set.
+   */
+  updateDeferredProperties() {
+
     // The isParallelogramProperty needs to be set asynchronously, see the documentation for isParallelogramProperty.
     this.isParallelogramProperty.set( this.getIsParallelogram() );
 
@@ -934,11 +944,6 @@ class QuadrilateralShapeModel {
     this.vertex2.reset();
     this.vertex3.reset();
     this.vertex4.reset();
-
-    // Eagerly update isParallelogramProperty so that it is up to date before resetNotInProgressProperty is set back
-    // to true. This is important for Sound so that isParallelogramProperty sounds do not play until after the
-    // reset is complete.
-    this.isParallelogramProperty.set( this.getIsParallelogram() );
   }
 }
 

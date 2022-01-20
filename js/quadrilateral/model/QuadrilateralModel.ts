@@ -113,6 +113,10 @@ class QuadrilateralModel {
     this.quadrilateralShapeModel.reset();
     this.quadrilateralTestShapeModel.reset();
 
+    // Eagerly update the Properties that are set asynchronously so we don't wait until
+    // the next frame for these to be set after a reset.
+    this.quadrilateralShapeModel.updateDeferredProperties();
+
     // reset is not in progress anymore
     this.resetNotInProgressProperty.value = true;
   }

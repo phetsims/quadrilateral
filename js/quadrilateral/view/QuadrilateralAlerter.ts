@@ -50,7 +50,7 @@ class QuadrilateralAlerter extends Alerter {
 
     // If we ever change from being in parallelogram to not in parallelogram, we want to describe that change
     model.quadrilateralShapeModel.isParallelogramProperty.link( () => {
-      this.alertDirty = true;
+      this.setAlertDirtyOutsideOfReset();
     } );
 
     model.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
@@ -59,12 +59,25 @@ class QuadrilateralAlerter extends Alerter {
         // When connected to a device, we ONLY want to describe if there is enough movement of the device,
         // the device could send changing values rapidly without any noticable difference and we want to filter
         // this out
-        this.alertDirty = this.vertexPositionsIndicateDirty( new ShapeSnapshot( this.model.quadrilateralShapeModel ) );
+        if ( this.vertexPositionsIndicateDirty( new ShapeSnapshot( this.model.quadrilateralShapeModel ) ) ) {
+          this.setAlertDirtyOutsideOfReset();
+        }
       }
       else {
-        this.alertDirty = true;
+        this.setAlertDirtyOutsideOfReset();
       }
     } );
+  }
+
+  /**
+   * Set the alertDirty flag so that we generate a description next frame. We only want to do this if
+   * we are not in the middle of a reset. When resetting, we should only hear the generic reset alert
+   * and we don't want to describe the change from reset next frame.
+   */
+  private setAlertDirtyOutsideOfReset(): void {
+    if ( this.model.resetNotInProgressProperty.value ) {
+      this.alertDirty = true;
+    }
   }
 
   public step( dt: number ): void {
