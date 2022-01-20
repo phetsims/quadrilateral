@@ -13,10 +13,10 @@ type StringsType = {
   },
   'a11y': {
     'voicing': {
-      'vertex1': string,
-      'vertex2': string,
-      'vertex3': string,
-      'vertex4': string,
+      'corner1': string,
+      'corner2': string,
+      'corner3': string,
+      'corner4': string,
       'topSide': string,
       'rightSide': string,
       'bottomSide': string,

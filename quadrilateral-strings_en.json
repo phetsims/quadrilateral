@@ -4,17 +4,17 @@
   },
   "a11y": {
     "voicing": {
-      "vertex1": {
-        "value": "Vertex 1"
+      "corner1": {
+        "value": "Corner 1"
       },
-      "vertex2": {
-        "value": "Vertex 2"
+      "corner2": {
+        "value": "Corner 2"
       },
-      "vertex3": {
-        "value": "Vertex 3"
+      "corner3": {
+        "value": "Corner 3"
       },
-      "vertex4": {
-        "value": "Vertex 4"
+      "corner4": {
+        "value": "Corner 4"
       },
       "topSide": {
         "value": "Top Side"

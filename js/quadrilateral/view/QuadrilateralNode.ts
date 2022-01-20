@@ -17,10 +17,10 @@ import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 
 // constants
-const vertex1String = quadrilateralStrings.a11y.voicing.vertex1;
-const vertex2String = quadrilateralStrings.a11y.voicing.vertex2;
-const vertex3String = quadrilateralStrings.a11y.voicing.vertex3;
-const vertex4String = quadrilateralStrings.a11y.voicing.vertex4;
+const vertex1String = quadrilateralStrings.a11y.voicing.corner1;
+const vertex2String = quadrilateralStrings.a11y.voicing.corner2;
+const vertex3String = quadrilateralStrings.a11y.voicing.corner3;
+const vertex4String = quadrilateralStrings.a11y.voicing.corner4;
 const topSideString = quadrilateralStrings.a11y.voicing.topSide;
 const rightSideString = quadrilateralStrings.a11y.voicing.rightSide;
 const bottomSideString = quadrilateralStrings.a11y.voicing.bottomSide;
