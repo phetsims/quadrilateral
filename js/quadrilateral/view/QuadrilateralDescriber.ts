@@ -318,7 +318,11 @@ class QuadrilateralDescriber {
       const nameString = this.getShapeNameDescription( shapeName );
       assert && assert( nameString, `Detected a shape but did not find its description: ${shapeName}` );
 
-      descriptionString = StringUtils.fillIn( quadrilateralStrings.a11y.voicing.namedShapePattern, {
+      // There is a slightly different string pattern if it is a parallelogram
+      const namedShapePattern = this.shapeModel.isParallelogramProperty.value ? quadrilateralStrings.a11y.voicing.parallelogramNamedShapePattern :
+                                quadrilateralStrings.a11y.voicing.namedShapePattern;
+
+      descriptionString = StringUtils.fillIn( namedShapePattern, {
         name: this.getShapeNameDescription( shapeName ),
         parallelogramState: parallelogramStateString
       } );

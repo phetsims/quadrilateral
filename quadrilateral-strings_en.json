@@ -43,8 +43,11 @@
       "aParallelogram": {
         "value": "a parallelogram"
       },
+      "parallelogramNamedShapePattern": {
+        "value": "{{parallelogramState}}, and {{name}}"
+      },
       "namedShapePattern": {
-        "value": "{{name}}, and {{parallelogramState}}"
+        "value": "{{parallelogramState}}. You have {{name}}"
       },
       "shapeNames": {
         "square": {

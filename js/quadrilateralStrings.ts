@@ -26,6 +26,7 @@ type StringsType = {
       'detailsPattern': string,
       'notAParallelogram': string,
       'aParallelogram': string,
+      'parallelogramNamedShapePattern': string,
       'namedShapePattern': string,
       'shapeNames': {
         'square': string,
@@ -33,6 +34,7 @@ type StringsType = {
         'rhombus': string,
         'kite': string,
         'isoscelesTrapezoid': string,
+        'rightAngledTrapezoid': string,
         'trapezoid': string,
         'concaveQuadrilateral': string
       },
