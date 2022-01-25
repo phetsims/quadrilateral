@@ -15,6 +15,7 @@ const NamedQuadrilateral = EnumerationDeprecated.byKeys( [
   'RECTANGLE',
   'RHOMBUS',
   'KITE',
+  'RIGHT_ANGLED_TRAPEZOID',
   'ISOSCELES_TRAPEZOID',
   'TRAPEZOID',
   'CONCAVE'

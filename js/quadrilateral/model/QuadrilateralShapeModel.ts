@@ -355,11 +355,22 @@ class QuadrilateralShapeModel {
           return this.isAngleEqualToOther( anglePair[ 0 ], anglePair[ 1 ] );
         } ).true === 2;
 
+        // According to https://www.wikidata.org/wiki/Q19420771 a right trapezoid is a quadrilateral with
+        // two adjacent right angles
+        const rightAngledTrapezoidRequirement = _.countBy( adjacentVertexAngles, anglePair => {
+          return this.isAngleEqualToOther( anglePair[ 0 ], Math.PI / 2 ) && this.isAngleEqualToOther( anglePair[ 1 ], Math.PI / 2 );
+        } ).true === 1;
+
         // If one of the pairs of sides share the same length, it must be an isosceles trapezoid
         if ( isoscelesRequirement ) {
 
           // @ts-ignore TODO: How to do enumeration
           namedQuadrilateral = NamedQuadrilateral.ISOSCELES_TRAPEZOID;
+        }
+        else if ( rightAngledTrapezoidRequirement ) {
+
+          // @ts-ignore TODO: How to do enumeration
+          namedQuadrilateral = NamedQuadrilateral.RIGHT_ANGLED_TRAPEZOID;
         }
         else {
 

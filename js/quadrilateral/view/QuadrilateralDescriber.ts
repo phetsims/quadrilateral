@@ -47,6 +47,9 @@ shapeNameMap.set( NamedQuadrilateral.KITE, quadrilateralStrings.a11y.voicing.sha
 shapeNameMap.set( NamedQuadrilateral.ISOSCELES_TRAPEZOID, quadrilateralStrings.a11y.voicing.shapeNames.isoscelesTrapezoid );
 
 // @ts-ignore - TODO: How to do enumeration
+shapeNameMap.set( NamedQuadrilateral.RIGHT_ANGLED_TRAPEZOID, quadrilateralStrings.a11y.voicing.shapeNames.rightAngledTrapezoid );
+
+// @ts-ignore - TODO: How to do enumeration
 shapeNameMap.set( NamedQuadrilateral.TRAPEZOID, quadrilateralStrings.a11y.voicing.shapeNames.trapezoid );
 
 // @ts-ignore - TODO: How to do enumeration
