@@ -43,12 +43,18 @@ class SideLengthAreaNode extends Node {
 
     this.children = [ vertex1Path, vertex2Path ];
 
+    Property.multilink( [
+      shapeModel.lengthsEqualToSavedProperty,
+      dragSide.isPressedProperty,
+      dragSide.vertex1.isPressedProperty,
+      dragSide.vertex2.isPressedProperty
+    ], ( equalToSaved: boolean, sidePressed: boolean, vertex1Pressed: boolean, vertex2Pressed: boolean ) => {
 
-    Property.multilink( [ shapeModel.lengthsEqualToSavedProperty, dragSide.isPressedProperty ], ( equalToSaved: boolean, isPressed: boolean ) => {
+      const showArc = ( sidePressed || ( vertex1Pressed && vertex2Pressed ) ) && shapeModel.isParallelogramProperty.value;
 
       // The lengths changed and are no longer equal to the saved set. Redraw shapes and make this clear. Only
       // display if shape is a parallelogram
-      if ( ( !equalToSaved && shapeModel.isParallelogramProperty.value ) || isPressed ) {
+      if ( ( !equalToSaved && shapeModel.isParallelogramProperty.value ) || showArc ) {
         const length = lengthSide.lengthProperty.value;
         const vertex1Shape = new Shape().arcPoint( oppositeSide.vertex1.positionProperty.value, length, options.drawRotation, Math.PI + options.drawRotation, false );
         const vertex2Shape = new Shape().arcPoint( oppositeSide.vertex2.positionProperty.value, length, options.drawRotation, Math.PI + options.drawRotation, false );
@@ -62,7 +68,7 @@ class SideLengthAreaNode extends Node {
       }
 
       // only show wile dragging and we are a parallelogram
-      this.visible = isPressed && shapeModel.isParallelogramProperty.value;
+      this.visible = showArc;
     } );
   }
 }
