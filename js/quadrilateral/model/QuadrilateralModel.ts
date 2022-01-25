@@ -23,6 +23,7 @@ class QuadrilateralModel {
   public physicalModelBoundsProperty: Property<Bounds2 | null>;
   public resetNotInProgressProperty: BooleanProperty;
   public isCalibratingProperty: BooleanProperty;
+  public showDebugValuesProperty: BooleanProperty;
 
   public quadrilateralShapeModel: QuadrilateralShapeModel;
   public quadrilateralTestShapeModel: QuadrilateralShapeModel;
@@ -42,6 +43,9 @@ class QuadrilateralModel {
     // If true, the simulation is "calibrating" to a physical device so we don't set the vertex positions in response
     // to changes from the physical device. Instead we are updating physicalModelBounds.
     this.isCalibratingProperty = new BooleanProperty( false );
+
+    // If true, a panel displaying model values will be added to the view. Only for debugging.
+    this.showDebugValuesProperty = new BooleanProperty( QuadrilateralQueryParameters.showModelValues );
 
     // Whether or not a reset is currently in progress. Added for sound. If the model is actively resetting,
     // SoundManagers will disable so we don't play sounds for transient model states. It is a value for when

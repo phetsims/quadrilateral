@@ -184,6 +184,15 @@ class QuadrilateralScreenView extends ScreenView {
       this.addChild( calibrationButton );
     }
 
+    // A panel that displays model values, useful for debugging.
+    const debugValuesPanel = new QuadrilateralModelValuePanel( model, {
+      leftTop: new Vector2( QuadrilateralConstants.SCREEN_VIEW_X_MARGIN, QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN )
+    } );
+    this.addChild( debugValuesPanel );
+    model.showDebugValuesProperty.link( showValues => {
+      debugValuesPanel.visible = showValues;
+    } );
+
     if ( quadrilateralQueryParameters.showModelValues ) {
       this.addChild( new QuadrilateralModelValuePanel( model, {
         leftTop: new Vector2( QuadrilateralConstants.SCREEN_VIEW_X_MARGIN, QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN )
