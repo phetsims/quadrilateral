@@ -293,12 +293,12 @@ class QuadrilateralShapeModel {
       [ this.vertex3.angleProperty!.value, this.vertex4.angleProperty!.value ],
       [ this.vertex4.angleProperty!.value, this.vertex1.angleProperty!.value ]
     ];
-    const vertex1AngleEqualsVertex2Angle = this.isAngleEqualToOther( this.vertex1.angleProperty!.value, this.vertex2.angleProperty!.value );
-    const vertex2AngleEqualsVertex3Angle = this.isAngleEqualToOther( this.vertex1.angleProperty!.value, this.vertex2.angleProperty!.value );
+    const vertex1AngleEqualsVertex2Angle = this.isShapeAngleEqualToOther( this.vertex1.angleProperty!.value, this.vertex2.angleProperty!.value );
+    const vertex2AngleEqualsVertex3Angle = this.isShapeAngleEqualToOther( this.vertex2.angleProperty!.value, this.vertex3.angleProperty!.value );
 
     // equalities for opposite vertices
-    const vertex1AngleEqualsVertex3Angle = this.isAngleEqualToOther( this.vertex1.angleProperty!.value, this.vertex3.angleProperty!.value );
-    const vertex2AngleEqualsVertex4Angle = this.isAngleEqualToOther( this.vertex2.angleProperty!.value, this.vertex4.angleProperty!.value );
+    const vertex1AngleEqualsVertex3Angle = this.isShapeAngleEqualToOther( this.vertex1.angleProperty!.value, this.vertex3.angleProperty!.value );
+    const vertex2AngleEqualsVertex4Angle = this.isShapeAngleEqualToOther( this.vertex2.angleProperty!.value, this.vertex4.angleProperty!.value );
 
     // If any angles are larger than PI it is a concave shape.
     if ( _.some( this.vertices, vertex => vertex.angleProperty!.value > Math.PI ) ) {
@@ -780,7 +780,14 @@ class QuadrilateralShapeModel {
     return Utils.equalsEpsilon( angle1, angle2, this.angleToleranceIntervalProperty.value );
   }
 
-  public fngleEqualToOther( angle1: number, angle2: number ): boolean {
+  /**
+   * Returns true if two angles are close enough together that they should be considered equal. This uses the
+   * shapeAngleToleranceProperty, the most strict interval available. The angleToleranceInterval can be set
+   * to infinity and is very dynamic to accomplish comparisons required to detect parallelogram state during
+   * various interactions. But when detecting shapes we need to be more strict so that when the tolerance is
+   * very high the shape isn't incorrectly described.
+   */
+  public isShapeAngleEqualToOther( angle1: number, angle2: number ): boolean {
     return Utils.equalsEpsilon( angle1, angle2, this.shapeAngleToleranceIntervalProperty.value );
   }
 
