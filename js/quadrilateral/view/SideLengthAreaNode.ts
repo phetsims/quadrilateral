@@ -30,7 +30,7 @@ class SideLengthAreaNode extends Node {
 
     // Vertices must stay within this width for the success case - doing so means that the side lengths are not
     // changing.
-    const lineWidth = modelViewTransform.modelToViewDeltaX( QuadrilateralQueryParameters.lengthToleranceIntervalScaleFactor );
+    const lineWidth = modelViewTransform.modelToViewDeltaX( QuadrilateralQueryParameters.constantLengthToleranceInterval );
 
     const vertex1Path = new Path( null, {
       stroke: 'black',
