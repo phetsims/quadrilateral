@@ -154,30 +154,38 @@ class QuadrilateralShapeModel {
 
         let toleranceInterval;
 
-        if ( anySidesPressed && this.isParallelogramProperty.value ) {
+        if ( QuadrilateralQueryParameters.deviceConnection ) {
 
-          // A side has been picked up while the shape is a parallelogram - it should be impossible for the shape
-          // to go "out" of parallelogram in this case because none of the angles should be changing.
-          toleranceInterval = Number.POSITIVE_INFINITY;
-        }
-        else if ( numberOfVerticesPressed >= 2 ) {
-
-          // Two or more vertices pressed at once, increase the tolerance interval by a scale factor so that
-          // it is easier to find and remain a parallelogram with this input
+          // The simulation is connected to device hardware, so we use a larger tolerance interval because control
+          // with the hardware is more erratic and less fine-grained.
           toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval * QuadrilateralQueryParameters.angleToleranceIntervalScaleFactor;
         }
-        else if ( numberOfVerticesPressed === 1 ) {
-
-          // Only one vertex is moving, we can afford to be as precise as possible from this form of input, and
-          // so we have the smallest tolerance interval.
-          toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval;
-        }
         else {
+          if ( anySidesPressed && this.isParallelogramProperty.value ) {
 
-          // We are dragging a side while out of parallelogram, or we just released all sides and vertices. Do NOT
-          // change the angleToleranceInterval because we don't want the quadrilateral to suddenly appear out of
-          // parallelogram at the end of the interaction. The ternary handles initialization.
-          toleranceInterval = this.angleToleranceIntervalProperty ? this.angleToleranceIntervalProperty.value : QuadrilateralQueryParameters.angleToleranceInterval;
+            // A side has been picked up while the shape is a parallelogram - it should be impossible for the shape
+            // to go "out" of parallelogram in this case because none of the angles should be changing.
+            toleranceInterval = Number.POSITIVE_INFINITY;
+          }
+          else if ( numberOfVerticesPressed >= 2 ) {
+
+            // Two or more vertices pressed at once, increase the tolerance interval by a scale factor so that
+            // it is easier to find and remain a parallelogram with this input
+            toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval * QuadrilateralQueryParameters.angleToleranceIntervalScaleFactor;
+          }
+          else if ( numberOfVerticesPressed === 1 ) {
+
+            // Only one vertex is moving, we can afford to be as precise as possible from this form of input, and
+            // so we have the smallest tolerance interval.
+            toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval;
+          }
+          else {
+
+            // We are dragging a side while out of parallelogram, or we just released all sides and vertices. Do NOT
+            // change the angleToleranceInterval because we don't want the quadrilateral to suddenly appear out of
+            // parallelogram at the end of the interaction. The ternary handles initialization.
+            toleranceInterval = this.angleToleranceIntervalProperty ? this.angleToleranceIntervalProperty.value : QuadrilateralQueryParameters.angleToleranceInterval;
+          }
         }
 
         return toleranceInterval;
