@@ -161,6 +161,8 @@ class QuadrilateralShapeModel {
           toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval * QuadrilateralQueryParameters.angleToleranceIntervalScaleFactor;
         }
         else {
+
+          // remaining cases apply to mouse, touch, and keyboard input
           if ( anySidesPressed && this.isParallelogramProperty.value ) {
 
             // A side has been picked up while the shape is a parallelogram - it should be impossible for the shape
