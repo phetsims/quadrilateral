@@ -111,6 +111,7 @@ class QuadrilateralSoundOptionsNode extends Panel {
 
     // a checkbox to control the behavior of the maintenance sound
     const maintenanceOptionLabel = new Text( 'Constant lengths for maintenance sound', LABEL_TEXT_OPTIONS );
+
     const maintenanceSoundCheckbox = new Checkbox( maintenanceOptionLabel, model.maintenanceSoundRequiresEqualLengthsProperty, {
       tandem: tandem.createTandem( 'maintenanceSoundCheckbox' )
     } );
@@ -168,7 +169,7 @@ class LabelledRadioButtonGroup extends VBox {
    * @param labelString
    * @param tandem
    */
-  constructor( property: any, items: AquaRadioButtonGroupItem<QuartetSoundFile|SuccessSoundFile>[], labelString: string, tandem: Tandem ) {
+  constructor( property: any, items: AquaRadioButtonGroupItem<QuartetSoundFile | SuccessSoundFile>[], labelString: string, tandem: Tandem ) {
     const labelText = new Text( labelString, TITLE_TEXT_OPTIONS );
     const radioButtonGroup = new VerticalAquaRadioButtonGroup( property, items, {
       tandem: tandem.createTandem( 'radioButtonGroup' )

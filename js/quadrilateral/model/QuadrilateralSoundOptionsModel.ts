@@ -30,6 +30,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 
 // constants
 // Enumeration for named sound designs, each with their own options and parameters
@@ -144,7 +145,7 @@ class QuadrilateralSoundOptionsModel {
     // For the "Success" sound prototype, when true the "maintenance" sound will only play when the
     // quadrilateral changes shape, remains a parallelogram, AND the lengths remain the same
     // during the interaction.
-    this.maintenanceSoundRequiresEqualLengthsProperty = new BooleanProperty( false );
+    this.maintenanceSoundRequiresEqualLengthsProperty = new BooleanProperty( QuadrilateralQueryParameters.equalLengthsForMaintenanceSound );
   }
 }
 
