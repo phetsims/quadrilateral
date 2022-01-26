@@ -108,22 +108,17 @@ class VertexNode extends Rectangle {
     // notify when this vertex is pressed
     dragListener.isPressedProperty.link( isPressed => vertex.isPressedProperty.set( isPressed ) );
 
-    if ( QuadrilateralQueryParameters.showDragAreas ) {
-
-      // Updating the isPressedProperty with focus/blur will show the drag areas
-      // with those events. I am not sure if the isPressedProperty should be set here
-      // anyway, but it may not be necessary. It should probably be set by the
-      // KeyboardDragListener on start/end drag, or the KeyboardDRagListener should
-      // have its own isPressedProperty to match the API of the DragListener.
-      this.addInputListener( {
-        focus: () => {
-          vertex.isPressedProperty.value = true;
-        },
-        blur: () => {
-          vertex.isPressedProperty.value = false;
-        }
-      } );
-    }
+    // I am not sure if the isPressedProperty should be set here, but it may not be necessary. It should probably be set by the
+    // KeyboardDragListener on start/end drag, or the KeyboardDRagListener should
+    // have its own isPressedProperty to match the API of the DragListener.
+    this.addInputListener( {
+      focus: () => {
+        vertex.isPressedProperty.value = true;
+      },
+      blur: () => {
+        vertex.isPressedProperty.value = false;
+      }
+    } );
 
     this.mutate( options );
   }

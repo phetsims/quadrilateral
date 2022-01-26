@@ -94,7 +94,6 @@ class SuccessSoundView {
     };
     shapeModel.isParallelogramProperty.lazyLink( isParallelogramListener );
 
-    const vertices = [ shapeModel.vertex1, shapeModel.vertex2, shapeModel.vertex3, shapeModel.vertex4 ];
     const shapeListener = () => {
 
       // The maintenance sounds should only play when more than one vertex is moving at a time.
@@ -102,7 +101,7 @@ class SuccessSoundView {
       // or a side is being dragged, or the shape is changing from some external device. The countObject will
       // have keys `true` and `false`, with values corresponding to the number of vertices that are currently
       // pressed.
-      const countObject = _.countBy( vertices, vertex => {
+      const countObject = _.countBy( shapeModel.vertices, vertex => {
         return vertex.isPressedProperty.value;
       } );
 
