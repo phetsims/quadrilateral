@@ -17,6 +17,15 @@ const MAX_OUTPUT_LEVEL = 0.2;
 // for maintaining a parallelogram while keeping sides equal. We will wait this long before
 const DELAY_FOR_MAINTENANCE_SOUND = 1.5;
 
+// The delay between when the "in parallelogram" sound plays and the "maintenance" sound plays, when moving
+// more than one vertex at a time. We want a little delay between the "maintenance" and "in parallelogram" sound
+// so that we don't immediately start playing the "maintenance" sound when we enter parallelogram.
+// NOTE: Another solution for this would be to only play the maintenance sound when we detect that two vertices
+// are moving at the same time. "pressed" state is not enough, they both have to actually be moving. I think we need
+// a Vertex velocityProperty for this. If we implement a velocity this delay can be removed, and we can improve
+// the sound implementation.
+const SUCCESS_MAINTENANCE_SOUND_DELAY = 0.5;
+
 class SuccessSoundView {
   private successSoundClip: null | SoundClip;
   private failureSoundClip: null | SoundClip;
@@ -27,6 +36,8 @@ class SuccessSoundView {
   private model: QuadrilateralModel;
   private remainingMaintenancePlayTime: number;
   private maintenanceSoundClipPlaying: boolean;
+
+  private timeSinceSuccessSound: number;
 
   private remainingDelayForMaintenanceSound: number;
 
@@ -47,6 +58,8 @@ class SuccessSoundView {
     this.remainingMaintenancePlayTime = 0;
 
     this.remainingDelayForMaintenanceSound = 0;
+
+    this.timeSinceSuccessSound = 0;
 
     // Whether the maintenance sound clip is currently playing, so we know whether to decrement the
     // remainingMaintenancePlayTime or stop playing the maintenance sound.
@@ -71,6 +84,8 @@ class SuccessSoundView {
       if ( isParallelogram ) {
         failureSoundClip.stop();
         successSoundClip.play();
+
+        this.timeSinceSuccessSound = 0;
       }
       else {
         successSoundClip.stop();
@@ -95,7 +110,6 @@ class SuccessSoundView {
       // maintain equal lengths through the interaction.
       if ( soundOptionsModel.maintenanceSoundRequiresEqualLengthsProperty.value ) {
 
-        // In this mode, we will
         if ( shapeModel.isParallelogramProperty.value && countObject.true !== 1 && shapeModel.lengthsEqualToSavedProperty.value && this.remainingDelayForMaintenanceSound < 0 ) {
           this.startPlayingMaintenanceSoundClip();
         }
@@ -158,9 +172,15 @@ class SuccessSoundView {
     // when the model changes while it is a parallelogram, play the
     if (
       !maintenanceSoundClip.isPlayingProperty.value &&
-      !successSoundClip.isPlayingProperty.value &&
+      this.timeSinceSuccessSound > SUCCESS_MAINTENANCE_SOUND_DELAY &&
+      // !successSoundClip.isPlayingProperty.value &&
       !failureSoundClip.isPlayingProperty.value
     ) {
+
+      // stop playing the "success" sound if we start playing the "maintenance" sound immediately after
+      // reaching parallelogram
+      successSoundClip.stop();
+
       maintenanceSoundClip.play();
     }
   }
@@ -250,6 +270,8 @@ class SuccessSoundView {
    */
   step( dt: number ) {
     this.remainingDelayForMaintenanceSound -= dt;
+
+    this.timeSinceSuccessSound += dt;
 
     if ( this.maintenanceSoundClipPlaying ) {
       this.remainingMaintenancePlayTime -= dt;
