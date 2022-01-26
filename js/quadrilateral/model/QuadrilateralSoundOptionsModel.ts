@@ -67,10 +67,10 @@ class SuccessSoundFile extends EnumerationValue {
 
 // Maps QuartetSoundFile to the WrappedAudioBuffer for the SoundClip
 const AUDIO_BUFFER_MAP = new Map();
-AUDIO_BUFFER_MAP.set( 'ONE', quadLoop01_mp3 );
-AUDIO_BUFFER_MAP.set( 'TWO', quadLoop02_mp3 );
-AUDIO_BUFFER_MAP.set( 'THREE', quadLoop03_mp3 );
-AUDIO_BUFFER_MAP.set( 'FOUR', quadLoop04_mp3 );
+AUDIO_BUFFER_MAP.set( QuartetSoundFile.ONE, quadLoop01_mp3 );
+AUDIO_BUFFER_MAP.set( QuartetSoundFile.TWO, quadLoop02_mp3 );
+AUDIO_BUFFER_MAP.set( QuartetSoundFile.THREE, quadLoop03_mp3 );
+AUDIO_BUFFER_MAP.set( QuartetSoundFile.FOUR, quadLoop04_mp3 );
 
 /**
  * An inner class that collects a group of sounds that go together for one of the options of the "Success" prototype.
