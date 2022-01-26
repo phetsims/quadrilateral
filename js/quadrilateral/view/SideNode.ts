@@ -21,17 +21,13 @@ import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 
-class SideNode extends Path {
+class SideNode extends Voicing( Path ) {
   private side: Side;
   private scratchSide: Side;
   private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
   private scratchShapeModel: QuadrilateralShapeModel;
   private quadrilateralModel: QuadrilateralModel;
 
-  /**
-   * // TODO: How to do Voicing mixin?
-   * @mixes Voicing
-   */
   public constructor( quadrilateralModel: QuadrilateralModel, side: Side, scratchSide: Side, modelViewTransform: ModelViewTransform2, options?: any ) {
 
     options = merge( {
@@ -64,11 +60,7 @@ class SideNode extends Path {
     // A scratch model so we can test vertex positions before setting them with input
     this.scratchShapeModel = quadrilateralModel.quadrilateralTestShapeModel;
 
-    // initialize the voicing trait
-    // @ts-ignore - TODO: How to do mixin/Trait pattern?
-    this.initializeVoicing();
-
-    // Mutate options eagerly, but after voicing is initialized
+    // Mutate options eagerly, but not in super because that doesn't work with the Voicing trait
     this.mutate( options );
 
     // pdom - make the focus highlight tightly surround the line so that it is easier to see the shape
@@ -229,9 +221,6 @@ class SideNode extends Path {
     }
   }
 }
-
-// @ts-ignore - TODO: How to do mixin/trait with TypeScript?
-Voicing.compose( SideNode );
 
 quadrilateral.register( 'SideNode', SideNode );
 export default SideNode;

@@ -18,7 +18,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 
-class VertexNode extends Rectangle {
+class VertexNode extends Voicing( Rectangle ) {
   private readonly model: QuadrilateralModel;
 
   constructor( vertex: Vertex, model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, options?: Object ) {
@@ -36,9 +36,6 @@ class VertexNode extends Rectangle {
     super( viewBounds );
 
     this.model = model;
-
-    // @ts-ignore - how do we deal with mixin?
-    this.initializeVoicing();
 
     // debugging = to show the positions of the vertices while we don't have a graphical display
     let showVerticesPath: null | Path = null;
@@ -123,9 +120,6 @@ class VertexNode extends Rectangle {
     this.mutate( options );
   }
 }
-
-// @ts-ignore - TODO: What to do with trait? See #27
-Voicing.compose( VertexNode );
 
 quadrilateral.register( 'VertexNode', VertexNode );
 export default VertexNode;
