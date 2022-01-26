@@ -17,7 +17,7 @@ import quadLoop01_mp3 from '../../../sounds/quadLoop01_mp3.js';
 import quadLoop02_mp3 from '../../../sounds/quadLoop02_mp3.js';
 import quadLoop03_mp3 from '../../../sounds/quadLoop03_mp3.js';
 import quadLoop04_mp3 from '../../../sounds/quadLoop04_mp3.js';
-import quadMovingInParallelSuccessLoop001_mp3 from '../../../sounds/quadMovingInParallelSuccessLoop001_mp3.js';
+import quadMovingInParallelSuccessLoop001_wav from '../../../sounds/quadMovingInParallelSuccessLoop001_wav.js';
 import quadMovingInParallelSuccessLoop002_mp3 from '../../../sounds/quadMovingInParallelSuccessLoop002_mp3.js';
 import quadMovingInParallelSuccessLoop003_mp3 from '../../../sounds/quadMovingInParallelSuccessLoop003_mp3.js';
 import quadMovingInParallelSuccessLoop004_mp3 from '../../../sounds/quadMovingInParallelSuccessLoop004_mp3.js';
@@ -104,7 +104,7 @@ class SuccessSoundCollection {
 const SUCCESS_SOUND_COLLECTION_MAP = new Map();
 
 // @ts-ignore
-SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.ONE, new SuccessSoundCollection( quadIntoParallel001_mp3, quadOutOfParallel001_mp3, quadMovingInParallelSuccessLoop001_mp3 ) );
+SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.ONE, new SuccessSoundCollection( quadIntoParallel001_mp3, quadOutOfParallel001_mp3, quadMovingInParallelSuccessLoop001_wav ) );
 
 // @ts-ignore
 SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.TWO, new SuccessSoundCollection( quadIntoParallel002_mp3, quadOutOfParallel002_mp3, quadMovingInParallelSuccessLoop002_mp3 ) );
