@@ -7,7 +7,6 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import merge from '../../../../phet-core/js/merge.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import quadrilateral from '../../quadrilateral.js';
@@ -18,10 +17,15 @@ import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import { Line } from '../../../../scenery/js/imports.js';
 import Shape from '../../../../kite/js/Shape.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 
 // in model coordinates, the width of a side - Sides exist in model space to apply rules that vertices and
 // sides can never overlap
 const SIDE_WIDTH = 0.05;
+
+type SideOptions = {
+  offsetVectorForTiltCalculation?: Vector2
+};
 
 class Side {
   public vertex1: Vertex;
@@ -37,13 +41,16 @@ class Side {
    * @param vertex1 - The first vertex of this Side.
    * @param vertex2 - The second vertex of this Side.
    * @param tandem
-   * @param [options]
+   * @param [providedOptions]
    */
-  constructor( vertex1: Vertex, vertex2: Vertex, tandem: Tandem, options?: any ) {
+  constructor( vertex1: Vertex, vertex2: Vertex, tandem: Tandem, providedOptions?: SideOptions ) {
 
-    options = merge( {
+    const options = optionize<SideOptions, SideOptions>( {
+
+      // Offsets the initial tilt by this Vector so that the tilt values can be the same for each side even
+      // if they have different orientations.
       offsetVectorForTiltCalculation: new Vector2( 1, 0 )
-    }, options );
+    }, providedOptions );
 
     this.vertex1 = vertex1;
     this.vertex2 = vertex2;
