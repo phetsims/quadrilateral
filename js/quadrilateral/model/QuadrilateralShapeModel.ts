@@ -11,13 +11,11 @@
 
 import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import NamedQuadrilateral from './NamedQuadrilateral.js';
 import Side from './Side.js';
 import Range from '../../../../dot/js/Range.js';
 import Vertex from './Vertex.js';
-import merge from '../../../../phet-core/js/merge.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import Line from '../../../../kite/js/segments/Line.js';
@@ -32,6 +30,8 @@ import Shape from '../../../../kite/js/Shape.js';
 import SideLengths from './SideLengths.js';
 import VertexLabel from './VertexLabel.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 
 // constants
 // Bounds used for calculations, but a single instance to reduce garbage.
@@ -45,6 +45,11 @@ type LineIntersectionPair = {
   line: Line;
   intersectionPoint: Vector2
 }
+
+type QuadrilateralShapeModelOptions = {
+  validateShape?: boolean,
+  tandem?: Tandem
+};
 
 class QuadrilateralShapeModel {
   public vertex1: Vertex;
@@ -78,9 +83,9 @@ class QuadrilateralShapeModel {
 
   public savedSideLengths: SideLengths;
 
-  constructor( model: QuadrilateralModel, options?: any ) {
+  constructor( model: QuadrilateralModel, providedOptions?: QuadrilateralShapeModelOptions ) {
 
-    options = merge( {
+    const options = optionize<QuadrilateralShapeModelOptions, QuadrilateralShapeModelOptions>( {
 
       // If true, validation will be done to ensure that the quadrilateral shape is reasonable. But this may be
       // undesireable if you want to use this QuadrilateralShapeModel to determine if the proposed shape is
@@ -89,7 +94,7 @@ class QuadrilateralShapeModel {
 
       // phet-io
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     this.validateShape = options.validateShape;
 
