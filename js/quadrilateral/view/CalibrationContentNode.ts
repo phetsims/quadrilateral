@@ -10,18 +10,18 @@
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
-import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import { Circle, Line, Rectangle, Text, VBox } from '../../../../scenery/js/imports.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 
 class CalibrationContentNode extends VBox {
-  constructor( model: QuadrilateralModel, options?: any ) {
+  constructor( model: QuadrilateralModel, providedOptions?: LayoutBoxOptions ) {
 
-    options = merge( {
+    const options = optionize<LayoutBoxOptions, LayoutBoxOptions>( {
       align: 'center'
-    }, options );
+    }, providedOptions );
 
     const calibrateHintText = new Text( 'Make the device as large as you can, then close the dialog.', {
       font: new PhetFont( 24 )
