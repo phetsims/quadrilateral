@@ -5,8 +5,7 @@
  */
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import merge from '../../../../phet-core/js/merge.js';
-import { Node } from '../../../../scenery/js/imports.js';
+import { Node, NodeOptions } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import quadrilateralStrings from '../../quadrilateralStrings.js';
@@ -15,6 +14,7 @@ import VertexNode from './VertexNode.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 
 // constants
 const vertex1String = quadrilateralStrings.a11y.voicing.corner1;
@@ -26,17 +26,23 @@ const rightSideString = quadrilateralStrings.a11y.voicing.rightSide;
 const bottomSideString = quadrilateralStrings.a11y.voicing.bottomSide;
 const leftSideString = quadrilateralStrings.a11y.voicing.leftSide;
 
+type QuadrilateralNodeSelfOptions = {
+  tandem?: Tandem
+};
+
+type QuadrilateralNodeOptions = QuadrilateralNodeSelfOptions & NodeOptions;
+
 class QuadrilateralNode extends Node {
   private readonly model: QuadrilateralModel;
   private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
   private readonly scratchShapeModel: QuadrilateralShapeModel;
   private readonly modelViewTransform: ModelViewTransform2
 
-  public constructor( quadrilateralModel: QuadrilateralModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, options?: any ) {
+  public constructor( quadrilateralModel: QuadrilateralModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, providedOptions?: QuadrilateralNodeOptions ) {
 
-    options = merge( {
+    const options = optionize<QuadrilateralNodeOptions, QuadrilateralNodeSelfOptions, NodeOptions>( {
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super( options );
 
