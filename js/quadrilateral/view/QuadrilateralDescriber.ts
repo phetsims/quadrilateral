@@ -29,30 +29,14 @@ const youLostYourParallelogramPatternString = quadrilateralStrings.a11y.voicing.
 const proximityToParallelPatternString = quadrilateralStrings.a11y.voicing.transformations.proximityToParallelogramPattern;
 const youMadeAParallelogramString = quadrilateralStrings.a11y.voicing.transformations.youMadeAParallelogram;
 
-const shapeNameMap = new Map<unknown, string>();
-
-// @ts-ignore - TODO: How to do enumeration
+const shapeNameMap = new Map<NamedQuadrilateral, string>();
 shapeNameMap.set( NamedQuadrilateral.SQUARE, quadrilateralStrings.a11y.voicing.shapeNames.square );
-
-// @ts-ignore - TODO: How to do enumeration
 shapeNameMap.set( NamedQuadrilateral.RECTANGLE, quadrilateralStrings.a11y.voicing.shapeNames.rectangle );
-
-// @ts-ignore - TODO: How to do enumeration
 shapeNameMap.set( NamedQuadrilateral.RHOMBUS, quadrilateralStrings.a11y.voicing.shapeNames.rhombus );
-
-// @ts-ignore - TODO: How to do enumeration
 shapeNameMap.set( NamedQuadrilateral.KITE, quadrilateralStrings.a11y.voicing.shapeNames.kite );
-
-// @ts-ignore - TODO: How to do enumeration
 shapeNameMap.set( NamedQuadrilateral.ISOSCELES_TRAPEZOID, quadrilateralStrings.a11y.voicing.shapeNames.isoscelesTrapezoid );
-
-// @ts-ignore - TODO: How to do enumeration
 shapeNameMap.set( NamedQuadrilateral.RIGHT_ANGLED_TRAPEZOID, quadrilateralStrings.a11y.voicing.shapeNames.rightAngledTrapezoid );
-
-// @ts-ignore - TODO: How to do enumeration
 shapeNameMap.set( NamedQuadrilateral.TRAPEZOID, quadrilateralStrings.a11y.voicing.shapeNames.trapezoid );
-
-// @ts-ignore - TODO: How to do enumeration
 shapeNameMap.set( NamedQuadrilateral.CONCAVE, quadrilateralStrings.a11y.voicing.shapeNames.concaveQuadrilateral );
 
 class QuadrilateralDescriber {
@@ -334,7 +318,10 @@ class QuadrilateralDescriber {
     return descriptionString;
   }
 
-  getShapeNameDescription( shapeName: unknown ) {
+  /**
+   * Returns the actual name of the NamedQuadrilateral.
+   */
+  public getShapeNameDescription( shapeName: NamedQuadrilateral ) {
     return shapeNameMap.get( shapeName );
   }
 }

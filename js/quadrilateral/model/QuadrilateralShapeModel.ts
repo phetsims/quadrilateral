@@ -74,8 +74,7 @@ class QuadrilateralShapeModel {
 
   public isParallelogramProperty: Property<boolean>;
 
-  // TODO: this should eventually be a NamedQuadrilateral or null
-  public readonly shapeNameProperty: Property<unknown>;
+  public readonly shapeNameProperty: Property<NamedQuadrilateral | null>;
 
   public savedSideLengths: SideLengths;
 
@@ -290,8 +289,7 @@ class QuadrilateralShapeModel {
    * Returns the name of the quadrilateral, one of NamedQuadrilateral enumeration. If the quadrilateral is in a shape
    * that is not named, returns null.
    */
-  // @ts-ignore - TODO: This should return an Enumeration value NamedQuadrilateral
-  public getShapeName(): unknown {
+  public getShapeName(): NamedQuadrilateral | null {
     let namedQuadrilateral = null;
 
     const topSideLengthEqualToRightSideLength = this.topSide.isLengthEqualToOther( this.rightSide );
@@ -312,8 +310,6 @@ class QuadrilateralShapeModel {
 
     // If any angles are larger than PI it is a concave shape.
     if ( _.some( this.vertices, vertex => vertex.angleProperty!.value > Math.PI ) ) {
-
-      // @ts-ignore TODO: How to do enumeration.
       namedQuadrilateral = NamedQuadrilateral.CONCAVE;
     }
     else if ( this.isParallelogramProperty.value ) {
@@ -329,15 +325,12 @@ class QuadrilateralShapeModel {
         // For a parallelogram, opposite sides are equal in length, so if adjacent sides are equal in length as well
         // it must be a square.
         if ( topSideLengthEqualToRightSideLength ) {
-
-          // @ts-ignore TODO - How to do enumeration
           namedQuadrilateral = NamedQuadrilateral.SQUARE;
         }
         else {
 
           // Adjacent side lengths are not equal, but opposite side lengths are. All angles are equal - we must be a
           // rectangle.
-          // @ts-ignore TODO - How to do enumeration
           namedQuadrilateral = NamedQuadrilateral.RECTANGLE;
         }
       }
@@ -346,7 +339,6 @@ class QuadrilateralShapeModel {
         // Adjacent angles are different for the parallelogram and adjacent sides are equal in length. Since it is
         // a parallelogram, if the top and right sides are equal in length, the bottom and left sides must be equal
         // as well.
-        // @ts-ignore TODO: How to do enumeration
         namedQuadrilateral = NamedQuadrilateral.RHOMBUS;
       }
     }
@@ -373,25 +365,18 @@ class QuadrilateralShapeModel {
 
         // If one of the pairs of sides share the same length, it must be an isosceles trapezoid
         if ( isoscelesRequirement ) {
-
-          // @ts-ignore TODO: How to do enumeration
           namedQuadrilateral = NamedQuadrilateral.ISOSCELES_TRAPEZOID;
         }
         else if ( rightAngledTrapezoidRequirement ) {
-
-          // @ts-ignore TODO: How to do enumeration
           namedQuadrilateral = NamedQuadrilateral.RIGHT_ANGLED_TRAPEZOID;
         }
         else {
-
-          // @ts-ignore TODO: How to do enumeration
           namedQuadrilateral = NamedQuadrilateral.TRAPEZOID;
         }
       }
       else if ( vertex1AngleEqualsVertex3Angle !== vertex2AngleEqualsVertex4Angle ) {
 
         // Only one pair of opposite angles is equal while the other is not - we must be a kite.
-        // @ts-ignore TODO: How to do enumeration
         namedQuadrilateral = NamedQuadrilateral.KITE;
       }
     }

@@ -7,19 +7,19 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
+import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import quadrilateral from '../../quadrilateral.js';
 
-const NamedQuadrilateral = EnumerationDeprecated.byKeys( [
-  'SQUARE',
-  'RECTANGLE',
-  'RHOMBUS',
-  'KITE',
-  'RIGHT_ANGLED_TRAPEZOID',
-  'ISOSCELES_TRAPEZOID',
-  'TRAPEZOID',
-  'CONCAVE'
-] );
+class NamedQuadrilateral extends EnumerationValue {
+  static SQUARE = new NamedQuadrilateral();
+  static RECTANGLE = new NamedQuadrilateral();
+  static RHOMBUS = new NamedQuadrilateral();
+  static KITE = new NamedQuadrilateral();
+  static RIGHT_ANGLED_TRAPEZOID = new NamedQuadrilateral();
+  static ISOSCELES_TRAPEZOID = new NamedQuadrilateral();
+  static TRAPEZOID = new NamedQuadrilateral();
+  static CONCAVE = new NamedQuadrilateral();
+}
 
 quadrilateral.register( 'NamedQuadrilateral', NamedQuadrilateral );
 export default NamedQuadrilateral;
