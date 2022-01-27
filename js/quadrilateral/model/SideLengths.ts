@@ -11,7 +11,6 @@ import quadrilateral from '../../quadrilateral.js';
 
 class SideLengths {
 
-  // This is a
   public readonly topSideLength: number;
   public readonly rightSideLength: number;
   public readonly bottomSideLength: number;
