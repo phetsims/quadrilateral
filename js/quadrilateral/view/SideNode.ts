@@ -21,7 +21,7 @@ import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 
-class SideNode extends Voicing( Path ) {
+class SideNode extends Voicing( Path, 1 ) {
   private side: Side;
   private scratchSide: Side;
   private readonly quadrilateralShapeModel: QuadrilateralShapeModel;

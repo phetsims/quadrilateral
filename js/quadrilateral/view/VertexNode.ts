@@ -18,7 +18,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 
-class VertexNode extends Voicing( Rectangle ) {
+class VertexNode extends Voicing( Rectangle, 1 ) {
   private readonly model: QuadrilateralModel;
 
   constructor( vertex: Vertex, model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, options?: Object ) {
