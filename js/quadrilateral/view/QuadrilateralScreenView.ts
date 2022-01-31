@@ -32,6 +32,7 @@ import PhetColorScheme from '../../../../scenery-phet/js/PhetColorScheme.js';
 import QuadrilateralModelValuePanel from './QuadrilateralModelValuePanel.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import SideLengthAreaNode from './SideLengthAreaNode.js';
+import QuadrilateralMarkerInput from './QuadrilateralMarkerInput.js';
 
 const MODEL_BOUNDS = QuadrilateralQueryParameters.calibrationDemoDevice ? new Bounds2( -4.5, -4.5, 4.5, 4.5 ) :
                      new Bounds2( -1, -1, 1, 1 );
@@ -45,6 +46,7 @@ class QuadrilateralScreenView extends ScreenView {
   private readonly quadrilateralDescriber: QuadrilateralDescriber;
   private readonly quadrilateralAlerter: QuadrilateralAlerter;
   private readonly resetAllButton: ResetAllButton;
+  private readonly quadrilateralMarkerInput: QuadrilateralMarkerInput | null;
 
   public constructor( model: QuadrilateralModel, soundOptionsModel: QuadrilateralSoundOptionsModel, tandem: Tandem ) {
     super( {
@@ -132,6 +134,11 @@ class QuadrilateralScreenView extends ScreenView {
       this.addChild( new SideLengthAreaNode( shapeModel, shapeModel.rightSide, shapeModel.leftSide, shapeModel.topSide, modelViewTransform, { drawRotation: -Math.PI / 2 } ) );
       this.addChild( new SideLengthAreaNode( shapeModel, shapeModel.bottomSide, shapeModel.topSide, shapeModel.rightSide, modelViewTransform, { drawRotation: Math.PI } ) );
       this.addChild( new SideLengthAreaNode( shapeModel, shapeModel.leftSide, shapeModel.rightSide, shapeModel.bottomSide, modelViewTransform, { drawRotation: Math.PI / 2 } ) );
+    }
+
+    this.quadrilateralMarkerInput = null;
+    if ( QuadrilateralQueryParameters.markerInput ) {
+      this.quadrilateralMarkerInput = new QuadrilateralMarkerInput( model.rotationMarkerDetectedProperty, model.markerRotationProperty );
     }
 
     if ( QuadrilateralQueryParameters.deviceConnection ) {
@@ -240,6 +247,9 @@ class QuadrilateralScreenView extends ScreenView {
     }
     if ( this.demonstrationNode ) {
       this.demonstrationNode.step( dt );
+    }
+    if ( this.quadrilateralMarkerInput ) {
+      this.quadrilateralMarkerInput.step( dt );
     }
 
     this.quadrilateralAlerter.step( dt );

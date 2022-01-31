@@ -17,6 +17,7 @@ import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
 import Vertex from './Vertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 
 class QuadrilateralModel {
   public modelBoundsProperty: Property<Bounds2 | null>;
@@ -24,6 +25,8 @@ class QuadrilateralModel {
   public resetNotInProgressProperty: BooleanProperty;
   public isCalibratingProperty: BooleanProperty;
   public showDebugValuesProperty: BooleanProperty;
+  public rotationMarkerDetectedProperty: BooleanProperty;
+  public markerRotationProperty: NumberProperty;
 
   public quadrilateralShapeModel: QuadrilateralShapeModel;
   public quadrilateralTestShapeModel: QuadrilateralShapeModel;
@@ -53,6 +56,15 @@ class QuadrilateralModel {
     this.resetNotInProgressProperty = new BooleanProperty( true, {
       tandem: tandem.createTandem( 'resetNotInProgressProperty' )
     } );
+
+    // Whether or not a marker is detected for physical device rotation. Only useful when used in
+    // combination with the ?markerInput query parameter, which enables the experimental marker feature.
+    this.rotationMarkerDetectedProperty = new BooleanProperty( false );
+
+    // The amount of rotation in radians of the marker. Only useful when the ?markerInput
+    // is used. This is an experimental feature that will support rotating the shape when
+    // a marker is attached to the physical device.
+    this.markerRotationProperty = new NumberProperty( 0 );
 
     // This is the centrail quadrilateral shape for the simulation.
     this.quadrilateralShapeModel = new QuadrilateralShapeModel( this, {

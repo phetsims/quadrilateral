@@ -18,6 +18,12 @@
       "phet-io",
       "adapted-from-phet"
     ],
+    "phetLibs": [
+      "tangible"
+    ],
+    "preload": [
+      "../sherpa/lib/beholder-detection-1.1.12.js"
+    ],
     "simFeatures": {
       "supportsInteractiveDescription": true,
       "supportsVoicing": true,

@@ -65,11 +65,19 @@ class QuadrilateralModelValuePanel extends Panel {
       align: 'left'
     } );
 
+    const markerDetectedText = new Text( '', TEXT_OPTIONS );
+    const markerRotationText = new Text( '', TEXT_OPTIONS );
+    const markerBox = new VBox( {
+      children: [ markerDetectedText, markerRotationText ],
+      align: 'left'
+    } );
+
     const content = new VBox( {
       children: [
         lengthBox,
         angleBox,
-        parallelogramBox
+        parallelogramBox,
+        markerBox
       ],
       align: 'left',
       spacing: 15
@@ -95,6 +103,10 @@ class QuadrilateralModelValuePanel extends Panel {
 
     // angleToleranceInterval
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.angleToleranceIntervalProperty, parallelogramToleranceIntervalText, 'angleToleranceInterval' );
+
+    // marker detection
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.rotationMarkerDetectedProperty, markerDetectedText, 'Marker detected' );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.markerRotationProperty, markerRotationText, 'Marker rotation' );
   }
 
   private static addRedrawValueTextListener( property: IReadOnlyProperty<number> | IProperty<boolean>, text: Text, label: string ) {
