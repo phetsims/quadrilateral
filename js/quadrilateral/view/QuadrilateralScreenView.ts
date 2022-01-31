@@ -157,7 +157,7 @@ class QuadrilateralScreenView extends ScreenView {
       }
     }
 
-    if ( QuadrilateralQueryParameters.deviceConnection ) {
+    if ( QuadrilateralQueryParameters.deviceConnection && !QuadrilateralQueryParameters.calibrationDemoDevice ) {
 
       // Add a Dialog that will calibrate the device to the simulation (mapping physical data to modelled data).
       const calibrationDialog = new Dialog( new CalibrationContentNode( model ), {

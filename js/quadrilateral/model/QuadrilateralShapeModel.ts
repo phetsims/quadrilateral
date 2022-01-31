@@ -884,7 +884,7 @@ class QuadrilateralShapeModel {
       // the physical device lengths can only become half as long as the largest length, so map to the sim model
       // with that constraint as well so that the smallest shape on the physical device doesn't bring vertices
       // all the way to the center of the screen (0, 0).
-      const deviceLengthToSimLength = new LinearFunction( 0, this.model.physicalModelBoundsProperty.value.width, 0, this.model.modelBoundsProperty.value.width / 2 );
+      const deviceLengthToSimLength = new LinearFunction( 0, this.model.physicalModelBoundsProperty.value.width, 0, this.model.modelBoundsProperty.value.width / 3 );
 
       const mappedTopLength = deviceLengthToSimLength.evaluate( topLength );
       const mappedRightLength = deviceLengthToSimLength.evaluate( rightLength );
