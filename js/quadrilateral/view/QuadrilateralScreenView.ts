@@ -139,6 +139,22 @@ class QuadrilateralScreenView extends ScreenView {
     this.quadrilateralMarkerInput = null;
     if ( QuadrilateralQueryParameters.markerInput ) {
       this.quadrilateralMarkerInput = new QuadrilateralMarkerInput( model.rotationMarkerDetectedProperty, model.markerRotationProperty );
+
+      // If we are NOT connected to a device, rotate the quadrilateral shape from the marker rotation.
+      // If we are connected to a device the rotation will be applied for us when we set from device data.
+      if ( !QuadrilateralQueryParameters.deviceConnection ) {
+        model.markerRotationProperty.lazyLink( rotation => {
+          model.quadrilateralShapeModel.setPositionsFromLengthsAndAngles(
+            model.quadrilateralShapeModel.topSide.lengthProperty.value,
+            model.quadrilateralShapeModel.rightSide.lengthProperty.value,
+            model.quadrilateralShapeModel.leftSide.lengthProperty.value,
+            model.quadrilateralShapeModel.vertex1.angleProperty!.value,
+            model.quadrilateralShapeModel.vertex2.angleProperty!.value,
+            model.quadrilateralShapeModel.vertex3.angleProperty!.value,
+            model.quadrilateralShapeModel.vertex4.angleProperty!.value
+          );
+        } );
+      }
     }
 
     if ( QuadrilateralQueryParameters.deviceConnection ) {

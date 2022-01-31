@@ -890,50 +890,56 @@ class QuadrilateralShapeModel {
       const mappedRightLength = deviceLengthToSimLength.evaluate( rightLength );
       const mappedLeftLength = deviceLengthToSimLength.evaluate( leftLength );
 
-      // vertex1 and the topLine are anchored, the rest of the shape is relative to this
-      const vector1Position = new Vector2( this.model.modelBoundsProperty.value.minX, this.model.modelBoundsProperty.value.maxX );
-      const vector2Position = new Vector2( vector1Position.x + mappedTopLength, vector1Position.y );
-
-      const vector4Offset = new Vector2( Math.cos( -p1Angle ), Math.sin( -p1Angle ) ).timesScalar( mappedLeftLength );
-      const vector4Position = vector1Position.plus( vector4Offset );
-
-      const vector3Offset = new Vector2( Math.cos( Math.PI + p2Angle ), Math.sin( Math.PI + p2Angle ) ).timesScalar( mappedRightLength );
-      const vector3Position = vector2Position.plus( vector3Offset );
-
-      // make sure that the proposed positions are within bounds defined in the simulation model
-      const proposedPositions = [ vector1Position, vector2Position, vector3Position, vector4Position ];
-
-      // we have the vertex positions to recreate the shape, but shift them so that the centroid of the quadrilateral is
-      // in the center of the model space
-      const centroidPosition = this.getCentroidFromPositions( proposedPositions );
-      const centroidOffset = centroidPosition.negated();
-      const shiftedPositions = _.map( proposedPositions, shapePosition => shapePosition.plus( centroidOffset ) );
-
-      // make sure that all positions are within model bounds
-      const constrainedPositions = _.map( shiftedPositions, position => this.model.modelBoundsProperty.value?.closestPointTo( position ) );
-
-      // TODO: Validate these positions...
-      // FOR NEXT TIME: Start here.
-      // 1) Set positions to a scratch model
-      // 2) Query the positions and make sure vertices are OK for the quad
-      // In model bounds, not overlapping, in respective drag areas
-      this.vertex1.positionProperty.set( constrainedPositions[ 0 ]! );
-      this.vertex2.positionProperty.set( constrainedPositions[ 1 ]! );
-      this.vertex3.positionProperty.set( constrainedPositions[ 2 ]! );
-      this.vertex4.positionProperty.set( constrainedPositions[ 3 ]! );
-
-      // // only set the new positions if they are valid
-      // if ( this.vertex1.dragAreaProperty.value?.containsPoint( shiftedPositions[ 0 ] ) &&
-      //      this.vertex2.dragAreaProperty.value?.containsPoint( shiftedPositions[ 1 ] ) &&
-      //      this.vertex3.dragAreaProperty.value?.containsPoint( shiftedPositions[ 2 ] ) &&
-      //      this.vertex4.dragAreaProperty.value?.containsPoint( shiftedPositions[ 3 ] ) ) {
-      //
-      //   this.vertex1.positionProperty.set( shiftedPositions[ 0 ] );
-      //   this.vertex2.positionProperty.set( shiftedPositions[ 1 ] );
-      //   this.vertex3.positionProperty.set( shiftedPositions[ 2 ] );
-      //   this.vertex4.positionProperty.set( shiftedPositions[ 3 ] );
-      // }
+      this.setPositionsFromLengthsAndAngles( mappedTopLength, mappedRightLength, mappedLeftLength, p1Angle, p2Angle, p3Angle, p4Angle );
     }
+  }
+
+  /**
+   * Set positions from the length and angle data provided. Useful when working with a tangible device that is
+   * providing length and angle data. When reconstructing the shape we start by making the top side parallel
+   * with the top of model bounds. The remaining vertices are positioned acordingly. Finally, if there is some
+   * rotation to apply (from the experimental marker input), that rotation is applied.
+   */
+  public setPositionsFromLengthsAndAngles( topLength: number, rightLength: number, leftLength: number, p1Angle: number, p2Angle: number, p3Angle: number, p4Angle: number ): void {
+
+    assert && assert( this.model.modelBoundsProperty.value, 'setPositionsFromLengthsAndAngles can only be used when modelBounds are defined' );
+    const modelBounds = this.model.modelBoundsProperty.value!;
+
+    // vertex1 and the topLine are anchored, the rest of the shape is relative to this
+    const vector1Position = new Vector2( modelBounds.minX, modelBounds.maxX );
+    const vector2Position = new Vector2( vector1Position.x + topLength, vector1Position.y );
+
+    const vector4Offset = new Vector2( Math.cos( -p1Angle ), Math.sin( -p1Angle ) ).timesScalar( leftLength );
+    const vector4Position = vector1Position.plus( vector4Offset );
+
+    const vector3Offset = new Vector2( Math.cos( Math.PI + p2Angle ), Math.sin( Math.PI + p2Angle ) ).timesScalar( rightLength );
+    const vector3Position = vector2Position.plus( vector3Offset );
+
+    // make sure that the proposed positions are within bounds defined in the simulation model
+    const proposedPositions = [ vector1Position, vector2Position, vector3Position, vector4Position ];
+
+    // we have the vertex positions to recreate the shape, but shift them so that the centroid of the quadrilateral is
+    // in the center of the model space
+    const centroidPosition = this.getCentroidFromPositions( proposedPositions );
+    const centroidOffset = centroidPosition.negated();
+    const shiftedPositions = _.map( proposedPositions, shapePosition => shapePosition.plus( centroidOffset ) );
+
+    // If there is some marker input, rotate positions to match the marker. Negate the rotation value to mirror the
+    // rotation of the device
+    const rotatedPositions = _.map( shiftedPositions, shiftedPosition => shiftedPosition.rotated( -this.model.markerRotationProperty.value ) );
+
+    // make sure that all positions are within model bounds
+    const constrainedPositions = _.map( rotatedPositions, position => this.model.modelBoundsProperty.value?.closestPointTo( position ) );
+
+    // TODO: Validate these positions...
+    // FOR NEXT TIME: Start here.
+    // 1) Set positions to a scratch model
+    // 2) Query the positions and make sure vertices are OK for the quad
+    // In model bounds, not overlapping, in respective drag areas
+    this.vertex1.positionProperty.set( constrainedPositions[ 0 ]! );
+    this.vertex2.positionProperty.set( constrainedPositions[ 1 ]! );
+    this.vertex3.positionProperty.set( constrainedPositions[ 2 ]! );
+    this.vertex4.positionProperty.set( constrainedPositions[ 3 ]! );
   }
 
   /**
