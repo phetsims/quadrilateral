@@ -29,7 +29,16 @@ class QuadrilateralMarkerInput extends MarkerInput {
    */
   public step( dt: number ): void {
     this.rotationMarkerDetectedProperty.value = this.Beholder.getMarker( BASE_MARKER ).present;
-    this.markerRotationProperty.value = this.Beholder.getMarker( BASE_MARKER ).rotation;
+
+    if ( this.rotationMarkerDetectedProperty.value ) {
+      const rotation = this.Beholder.getMarker( BASE_MARKER ).rotation;
+
+      // There is a lot of noise in changing rotation every frame - only update if the change is large enough, otherwise
+      // we might go back and forth between two close values which looks like jitter
+      if ( Math.abs( rotation - this.markerRotationProperty.value ) > 0.05 ) {
+        this.markerRotationProperty.value = this.Beholder.getMarker( BASE_MARKER ).rotation;
+      }
+    }
   }
 }
 
