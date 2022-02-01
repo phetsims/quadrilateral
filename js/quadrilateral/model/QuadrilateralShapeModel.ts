@@ -173,6 +173,12 @@ class QuadrilateralShapeModel {
             // to go "out" of parallelogram in this case because none of the angles should be changing.
             toleranceInterval = Number.POSITIVE_INFINITY;
           }
+          else if ( anySidesPressed && !this.isParallelogramProperty.value ) {
+
+            // A side as been picked up while the shape is NOT a parallelogram - it should be impossible for the
+            // shape to become a parallelogram while it is being dragged.
+            toleranceInterval = Number.NEGATIVE_INFINITY;
+          }
           else if ( numberOfVerticesPressed >= 2 ) {
 
             // Two or more vertices pressed at once, increase the tolerance interval by a scale factor so that
