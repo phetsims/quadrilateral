@@ -6,21 +6,21 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import merge from '../../../../phet-core/js/merge.js';
 import { Path, PathOptions } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vertex from '../model/Vertex.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Side from '../model/Side.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 
 class VertexDragAreaNode extends Path {
 
-  constructor( vertex: Vertex, sides: Side[], modelViewTransform: ModelViewTransform2, options?: PathOptions ) {
+  constructor( vertex: Vertex, sides: Side[], modelViewTransform: ModelViewTransform2, providedOptions?: PathOptions ) {
 
-    options = merge( {
+    const options = optionize<PathOptions>( {
       fill: `rgba(${dotRandom.nextInt( 255 )},${dotRandom.nextInt( 255 )},${dotRandom.nextInt( 255 )},0.5)`
-    }, options );
+    }, providedOptions );
 
     super( null, options );
 

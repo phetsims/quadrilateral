@@ -9,23 +9,29 @@
 
 import quadrilateral from '../../quadrilateral.js';
 import Side from '../model/Side.js';
-import { Node, Path } from '../../../../scenery/js/imports.js';
+import { Node, NodeOptions, Path } from '../../../../scenery/js/imports.js';
 import Shape from '../../../../kite/js/Shape.js';
-import merge from '../../../../phet-core/js/merge.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralUtils from '../../common/QuadrilateralUtils.js';
 import Property from '../../../../axon/js/Property.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+
+type SideLengthAreaNodeSelfOptions = {
+  drawRotation?: number
+};
+
+type SideLengthAreaNodeOptions = SideLengthAreaNodeSelfOptions & NodeOptions;
 
 class SideLengthAreaNode extends Node {
-  constructor( shapeModel: QuadrilateralShapeModel, dragSide: Side, oppositeSide: Side, lengthSide: Side, modelViewTransform: ModelViewTransform2, options?: any ) {
+  constructor( shapeModel: QuadrilateralShapeModel, dragSide: Side, oppositeSide: Side, lengthSide: Side, modelViewTransform: ModelViewTransform2, providedOptions?: SideLengthAreaNodeOptions ) {
 
-    options = merge( {
+    const options = optionize<SideLengthAreaNodeOptions, SideLengthAreaNodeSelfOptions, NodeOptions>( {
 
       // Additional rotation to apply to the arcs so they generally look as expected
       drawRotation: 0
-    }, options );
+    }, providedOptions );
     super( options );
 
     // Vertices must stay within this width for the success case - doing so means that the side lengths are not

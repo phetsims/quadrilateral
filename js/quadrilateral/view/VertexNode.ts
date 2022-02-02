@@ -21,6 +21,7 @@ import QuadrilateralModel from '../model/QuadrilateralModel.js';
 class VertexNode extends Voicing( Rectangle, 1 ) {
   private readonly model: QuadrilateralModel;
 
+  // TODO: Options pattern cannot be used yet because of the trait pattern
   constructor( vertex: Vertex, model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, options?: Object ) {
     options = merge( {
 

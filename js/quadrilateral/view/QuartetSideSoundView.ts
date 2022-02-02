@@ -251,10 +251,10 @@ class SoundClipCollection extends SoundGenerator {
    * @param defaultPlaybackRate - The middle octave playbackRate for this collection. The collection will
    *                                       contain clips with playback rates that are one octave above and one octave
    *                                       below this rate.
-   * @param [options] - TODO: How to do options?
+   * @param providedOptions
    */
-  constructor( wrappedAudioBuffer: WrappedAudioBuffer, resetNotInProgressProperty: BooleanProperty, defaultPlaybackRate: number, options?: any ) {
-    super( options );
+  constructor( wrappedAudioBuffer: WrappedAudioBuffer, resetNotInProgressProperty: BooleanProperty, defaultPlaybackRate: number, providedOptions?: SoundGeneratorOptions ) {
+    super( providedOptions );
 
     this.defaultPlaybackRate = defaultPlaybackRate;
     this.resetNotInProgressProperty = resetNotInProgressProperty;

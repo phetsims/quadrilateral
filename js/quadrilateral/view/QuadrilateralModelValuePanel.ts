@@ -16,19 +16,19 @@ import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import IProperty from '../../../../axon/js/IProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 
 const TEXT_OPTIONS = { fontSize: 16 };
 const valuePatternString = '{{label}}: {{value}}';
 
 class QuadrilateralModelValuePanel extends Panel {
-  constructor( model: QuadrilateralModel, options?: PanelOptions ) {
+  constructor( model: QuadrilateralModel, providedOptions?: PanelOptions ) {
 
-    options = merge( {
+    const options = optionize<PanelOptions>( {
 
       // looks good for debugging without the panel resizing frequently
       minWidth: 250
-    }, options );
+    }, providedOptions );
 
     const topSideLengthText = new Text( '', TEXT_OPTIONS );
     const rightSideLengthText = new Text( '', TEXT_OPTIONS );

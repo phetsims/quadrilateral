@@ -26,8 +26,8 @@ class SideDemonstrationNode extends Node {
   private readonly topSideSoundView: QuartetSideSoundView | null;
 
 
-  constructor( model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, soundOptionsModel: QuadrilateralSoundOptionsModel, options?: NodeOptions ) {
-    super( options );
+  constructor( model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, soundOptionsModel: QuadrilateralSoundOptionsModel, providedOptions?: NodeOptions ) {
+    super( providedOptions );
 
     const shapeModel = model.quadrilateralShapeModel;
     const scratchShapeModel = model.quadrilateralTestShapeModel;

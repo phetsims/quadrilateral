@@ -28,6 +28,7 @@ class SideNode extends Voicing( Path, 1 ) {
   private scratchShapeModel: QuadrilateralShapeModel;
   private quadrilateralModel: QuadrilateralModel;
 
+  // TODO: Options pattern cannot be used yet because of Voicing trait
   public constructor( quadrilateralModel: QuadrilateralModel, side: Side, scratchSide: Side, modelViewTransform: ModelViewTransform2, options?: any ) {
 
     options = merge( {
