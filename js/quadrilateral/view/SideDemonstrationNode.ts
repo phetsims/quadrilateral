@@ -8,7 +8,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { Node } from '../../../../scenery/js/imports.js';
+import { Node, NodeOptions } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuartetSideSoundView from './QuartetSideSoundView.js';
@@ -26,7 +26,7 @@ class SideDemonstrationNode extends Node {
   private readonly topSideSoundView: QuartetSideSoundView | null;
 
 
-  constructor( model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, soundOptionsModel: QuadrilateralSoundOptionsModel, options?: any ) {
+  constructor( model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, soundOptionsModel: QuadrilateralSoundOptionsModel, options?: NodeOptions ) {
     super( options );
 
     const shapeModel = model.quadrilateralShapeModel;

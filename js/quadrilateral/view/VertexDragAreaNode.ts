@@ -7,7 +7,7 @@
  */
 
 import merge from '../../../../phet-core/js/merge.js';
-import { Path } from '../../../../scenery/js/imports.js';
+import { Path, PathOptions } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vertex from '../model/Vertex.js';
@@ -16,7 +16,7 @@ import Side from '../model/Side.js';
 
 class VertexDragAreaNode extends Path {
 
-  constructor( vertex: Vertex, sides: Side[], modelViewTransform: ModelViewTransform2, options?: any ) {
+  constructor( vertex: Vertex, sides: Side[], modelViewTransform: ModelViewTransform2, options?: PathOptions ) {
 
     options = merge( {
       fill: `rgba(${dotRandom.nextInt( 255 )},${dotRandom.nextInt( 255 )},${dotRandom.nextInt( 255 )},0.5)`

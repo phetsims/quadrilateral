@@ -19,6 +19,7 @@ import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralSoundOptionsModel, { QuartetSoundFile, SoundDesign, SuccessSoundFile } from '../model/QuadrilateralSoundOptionsModel.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import { AquaRadioButtonGroupItem } from '../../../../sun/js/AquaRadioButtonGroup.js';
+import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 
 const LABEL_TEXT_OPTIONS = {
   font: new PhetFont( { size: 16 } )
@@ -162,14 +163,7 @@ class QuadrilateralSoundOptionsNode extends Panel {
  * radio buttons are often sub-options under one of the sound design prototypes.
  */
 class LabelledRadioButtonGroup extends VBox {
-
-  /**
-   * @param property - a Property of QuadrilateralSoundOptionsModel TODO: type, see #27
-   * @param items
-   * @param labelString
-   * @param tandem
-   */
-  constructor( property: any, items: AquaRadioButtonGroupItem<QuartetSoundFile | SuccessSoundFile>[], labelString: string, tandem: Tandem ) {
+  constructor( property: EnumerationProperty<QuartetSoundFile|SuccessSoundFile>, items: AquaRadioButtonGroupItem<QuartetSoundFile | SuccessSoundFile>[], labelString: string, tandem: Tandem ) {
     const labelText = new Text( labelString, TITLE_TEXT_OPTIONS );
     const radioButtonGroup = new VerticalAquaRadioButtonGroup( property, items, {
       tandem: tandem.createTandem( 'radioButtonGroup' )

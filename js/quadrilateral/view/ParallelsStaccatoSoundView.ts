@@ -7,7 +7,7 @@
 import Property from '../../../../axon/js/Property.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';
 import Range from '../../../../dot/js/Range.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import SoundGenerator from '../../../../tambo/js/sound-generators/SoundGenerator.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
 import quadrilateral from '../../quadrilateral.js';
@@ -147,6 +147,13 @@ class ParallelsStaccatoSoundView {
   }
 }
 
+type QuadrilateralPitchedPopGeneratorSelfOptions = {
+  pitchRange?: Range,
+  numPopGenerators?: number
+};
+
+type QuadrilateralPitchedPopGeneratorOptions = QuadrilateralPitchedPopGeneratorSelfOptions & SoundGeneratorOptions;
+
 /**
  * A PitchedPopGenerator with some slight modifications to create the desired effects in Quadrilateral.
  * This is almost a complete copy and past from PitchedPopGenerator with some variables replaced, though
@@ -157,16 +164,16 @@ class QuadrilateralPitchedPopGenerator extends SoundGenerator {
   private readonly soundSources: OscillatorWithGainNode[];
   private nextSoundSourceIndex: number;
 
-  public constructor( options?: any ) {
+  public constructor( providedOptions?: QuadrilateralPitchedPopGeneratorOptions ) {
 
-    options = merge( {
+    const options = optionize<QuadrilateralPitchedPopGeneratorOptions, QuadrilateralPitchedPopGeneratorSelfOptions, SoundGeneratorOptions>( {
 
       // the range of pitches that this pop generator will produce, in Hz
       pitchRange: new Range( 220, 660 ),
 
       // the number of pop generators to create and pool, use more if generating lots of pops close together, less if not
       numPopGenerators: 8
-    }, options );
+    }, providedOptions );
 
     super( options );
 

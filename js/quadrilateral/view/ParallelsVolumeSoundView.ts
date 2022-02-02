@@ -19,6 +19,7 @@ import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import QuadrilateralSoundOptionsModel, { SuccessSoundFile } from '../model/QuadrilateralSoundOptionsModel.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import Side from '../model/Side.js';
+import WrappedAudioBuffer from '../../../../tambo/js/WrappedAudioBuffer.js';
 
 // Maps the difference in tilt between pairs of sides to output level. When tilt is equal difference will be zero
 // and sound will play at highest output level. Fades out as difference grows, and eventually goes silent.
@@ -60,7 +61,9 @@ class ParallelsVolumeSoundView {
 
     const createSoundClipsListener = ( soundFile: SuccessSoundFile ) => {
       const audioBuffer = QuadrilateralSoundOptionsModel.AUDIO_BUFFER_MAP.get( soundFile );
-      this.createSoundClips( audioBuffer );
+
+      assert && assert( audioBuffer, 'No WrappedAudioBuffer found for soundFile' );
+      this.createSoundClips( audioBuffer! );
     };
     soundOptionsModel.baseSoundFileProperty.link( createSoundClipsListener );
 
@@ -149,7 +152,7 @@ class ParallelsVolumeSoundView {
    * Create new SoundClips for the audioBuffer. Only necessary because we are playing around with different "base"
    * sounds for this prototype.
    */
-  private createSoundClips( audioBuffer: AudioBuffer ): void {
+  private createSoundClips( audioBuffer: WrappedAudioBuffer ): void {
 
     this.disposeSoundClips();
 

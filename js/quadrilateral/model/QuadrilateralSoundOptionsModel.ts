@@ -123,9 +123,9 @@ class QuadrilateralSoundOptionsModel {
 
   public static SoundDesign: SoundDesign;
   public static QuartetSoundFile: QuartetSoundFile;
-  public static SuccessSoundFile: any;
-  public static AUDIO_BUFFER_MAP: any;
-  public static SUCCESS_SOUND_COLLECTION_MAP: any;
+  public static SuccessSoundFile: SuccessSoundFile;
+  public static AUDIO_BUFFER_MAP: Map<QuartetSoundFile, WrappedAudioBuffer>;
+  public static SUCCESS_SOUND_COLLECTION_MAP: Map<SuccessSoundFile, SuccessSoundCollection>;
 
   constructor() {
 

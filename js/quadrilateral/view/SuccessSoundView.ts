@@ -66,10 +66,11 @@ class SuccessSoundView {
     this.maintenanceSoundClipPlaying = false;
 
     // link is called eagerly so that we have SoundClips to play in the following listeners
-    // @ts-ignore - TODO: How to do
     soundOptionsModel.successSoundFileProperty.link( successSoundFile => {
       const successSoundCollection = QuadrilateralSoundOptionsModel.SUCCESS_SOUND_COLLECTION_MAP.get( successSoundFile );
-      this.createSoundClips( successSoundCollection );
+
+      assert && assert( successSoundCollection, 'No sound collection found for successSoundFile' );
+      this.createSoundClips( successSoundCollection! );
     } );
 
     const isParallelogramListener = ( isParallelogram: boolean ) => {
