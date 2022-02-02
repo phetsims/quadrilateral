@@ -22,7 +22,7 @@ const TEXT_OPTIONS = { fontSize: 16 };
 const valuePatternString = '{{label}}: {{value}}';
 
 class QuadrilateralModelValuePanel extends Panel {
-  constructor( model: QuadrilateralModel, options?: any ) {
+  constructor( model: QuadrilateralModel, options?: PanelOptions ) {
 
     options = merge( {
 
