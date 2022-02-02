@@ -101,18 +101,10 @@ class SuccessSoundCollection {
 // But typescript complains:  "TS2749: 'SuccessSoundFile' refers to a value, but is being used as a type here. Did you
 // mean 'typeof SuccessSoundFile'?"
 // See https://github.com/phetsims/quadrilateral/issues/27
-const SUCCESS_SOUND_COLLECTION_MAP = new Map();
-
-// @ts-ignore
+const SUCCESS_SOUND_COLLECTION_MAP: Map<SuccessSoundFile, SuccessSoundCollection> = new Map();
 SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.ONE, new SuccessSoundCollection( quadIntoParallel001_mp3, quadOutOfParallel001_mp3, quadMovingInParallelSuccessLoop001_wav ) );
-
-// @ts-ignore
 SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.TWO, new SuccessSoundCollection( quadIntoParallel002_mp3, quadOutOfParallel002_mp3, quadMovingInParallelSuccessLoop002_mp3 ) );
-
-// @ts-ignore
 SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.THREE, new SuccessSoundCollection( quadIntoParallel003_mp3, quadOutOfParallel003_mp3, quadMovingInParallelSuccessLoop003_mp3 ) );
-
-// @ts-ignore
 SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.FOUR, new SuccessSoundCollection( quadIntoParallel004_mp3, quadOutOfParallel004_mp3, quadMovingInParallelSuccessLoop004_mp3 ) );
 
 class QuadrilateralSoundOptionsModel {

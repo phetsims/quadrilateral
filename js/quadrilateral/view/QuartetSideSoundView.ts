@@ -413,7 +413,7 @@ class SoundClipCollection extends SoundGenerator {
         }
       }
 
-      // @ts-ignore - TODO: `gain` does not exist on AudioParam, see https://github.com/phetsims/quadrilateral/issues/27
+      // @ts-ignore - TODO: How to do phetAudioContext, see https://github.com/phetsims/quadrilateral/issues/27
       this.outputLevelGainNode.gain.value = this.clipOutputLevel;
 
       // we haven't started playing yet, start now
