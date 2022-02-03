@@ -55,14 +55,33 @@ class QuadrilateralScreenView extends ScreenView {
       tandem: tandem
     } );
 
-    const viewHeight = this.layoutBounds.height - 2 * QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN;
+    this.resetAllButton = new ResetAllButton( {
+      listener: () => {
+        this.interruptSubtreeInput(); // cancel interactions that may be in progress
+        model.reset();
+        this.reset();
+      },
+      right: this.layoutBounds.maxX - QuadrilateralConstants.SCREEN_VIEW_X_MARGIN,
+      bottom: this.layoutBounds.maxY - QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN,
+      tandem: tandem.createTandem( 'resetAllButton' )
+    } );
+
+    // the model bounds are defined by available view space. Some padding is added around the screen and we make
+    // sure that the vertices cannot overlap with simulation controls (at this time, just the ResetAllButton).
+    // Otherwise the quadrilateral can move around freely in the play area.
+    let reducedViewBounds = this.layoutBounds.eroded( QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN );
+    reducedViewBounds = reducedViewBounds.withMaxX( reducedViewBounds.maxX - this.resetAllButton.width - QuadrilateralConstants.SCREEN_VIEW_X_MARGIN );
+
     const modelViewTransform = ModelViewTransform2.createRectangleInvertedYMapping(
       MODEL_BOUNDS,
+
+      // A square in view space such that -1 is at the top and 1 is at the bottom. View space layout bounds are
+      // wider than they are all so available model boundds will have a width GREATER than MODEL_BOUNDS.width
       new Bounds2(
-        this.layoutBounds.centerX - viewHeight / 2,
-        QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN,
-        this.layoutBounds.centerX + viewHeight / 2,
-        viewHeight
+        reducedViewBounds.centerX - reducedViewBounds.height / 2,
+        reducedViewBounds.top,
+        reducedViewBounds.centerX + reducedViewBounds.height / 2,
+        reducedViewBounds.height
       )
     );
 
@@ -274,9 +293,6 @@ class QuadrilateralScreenView extends ScreenView {
   public override layout( viewBounds: Bounds2 ): void {
     super.layout( viewBounds );
 
-    // the model bounds are defined by available view space. Some padding is added around the screen and we make
-    // sure that the vertices cannot overlap with simulation controls (at this time, just the ResetAllButton).
-    // Otherwise the quadrilateral can move around freely in model space.
     let reducedViewBounds = this.layoutBounds.eroded( QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN );
     reducedViewBounds = reducedViewBounds.withMaxX( reducedViewBounds.maxX - this.resetAllButton.width - QuadrilateralConstants.SCREEN_VIEW_X_MARGIN );
 
