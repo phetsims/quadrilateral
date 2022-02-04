@@ -125,37 +125,6 @@ class QuadrilateralNode extends Node {
       topSideNode, rightSideNode, bottomSideNode, leftSideNode
     ];
   }
-
-  /**
-   * When the layout bounds change, update the available drag bounds for each vertex.
-   */
-  public layout( layoutBounds: Bounds2 ): void {
-    // this.model.vertex1.dragBoundsProperty.value = new Bounds2(
-    //   this.modelViewTransform.viewToModelX( layoutBounds.minX ), 0.05,
-    //   -0.05, this.modelViewTransform.viewToModelY( layoutBounds.minY )
-    // );
-    //
-    // this.model.vertex2.dragBoundsProperty.value = new Bounds2(
-    //   0.05, 0.05,
-    //   this.modelViewTransform.viewToModelX( layoutBounds.maxX ), this.modelViewTransform.viewToModelY( layoutBounds.minY )
-    // );
-    //
-    // this.model.vertex3.dragBoundsProperty.value = new Bounds2(
-    //   0.05, this.modelViewTransform.viewToModelY( layoutBounds.maxY ),
-    //   this.modelViewTransform.viewToModelX( layoutBounds.maxX ), -0.05
-    // );
-    //
-    // this.model.vertex4.dragBoundsProperty.value = new Bounds2(
-    //   this.modelViewTransform.viewToModelX( layoutBounds.minX ), this.modelViewTransform.viewToModelY( layoutBounds.maxY ),
-    //   -0.05, -0.05
-    // );
-
-    // For now, the bounds can be anything, until we we have https://github.com/phetsims/quadrilateral/issues/15 done
-    this.quadrilateralShapeModel.vertex1.dragBoundsProperty.value = Bounds2.EVERYTHING;
-    this.quadrilateralShapeModel.vertex2.dragBoundsProperty.value = Bounds2.EVERYTHING;
-    this.quadrilateralShapeModel.vertex3.dragBoundsProperty.value = Bounds2.EVERYTHING;
-    this.quadrilateralShapeModel.vertex4.dragBoundsProperty.value = Bounds2.EVERYTHING;
-  }
 }
 
 quadrilateral.register( 'QuadrilateralNode', QuadrilateralNode );
