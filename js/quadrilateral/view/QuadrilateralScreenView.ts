@@ -88,6 +88,9 @@ class QuadrilateralScreenView extends ScreenView {
     this.model = model;
     this.modelViewTransform = modelViewTransform;
 
+    // The available model bounds are determined by the size of the view
+    model.modelBoundsProperty.value = this.modelViewTransform.viewToModelBounds( reducedViewBounds );
+
     const shapeModel = model.quadrilateralShapeModel;
 
     // Responsible for generating descriptions of the state of the quadrilateral for accessibility.
@@ -288,16 +291,6 @@ class QuadrilateralScreenView extends ScreenView {
     }
 
     this.quadrilateralAlerter.step( dt );
-  }
-
-  public override layout( viewBounds: Bounds2 ): void {
-    super.layout( viewBounds );
-
-    let reducedViewBounds = this.layoutBounds.eroded( QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN );
-    reducedViewBounds = reducedViewBounds.withMaxX( reducedViewBounds.maxX - this.resetAllButton.width - QuadrilateralConstants.SCREEN_VIEW_X_MARGIN );
-
-    this.quadrilateralNode && this.quadrilateralNode.layout( reducedViewBounds );
-    this.model.modelBoundsProperty.value = this.modelViewTransform.viewToModelBounds( reducedViewBounds );
   }
 }
 
