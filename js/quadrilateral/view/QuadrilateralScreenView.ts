@@ -138,12 +138,8 @@ class QuadrilateralScreenView extends ScreenView {
 
     // Add a rectangle that shows the available model bounds, as requested in
     // https://github.com/phetsims/quadrilateral/issues/49
-    const boundsRectangle = new Rectangle( { stroke: 'white', lineWidth: 2 } );
+    const boundsRectangle = new Rectangle( modelViewTransform.modelToViewBounds( this.model.modelBoundsProperty.value ), { stroke: 'white', lineWidth: 2 } );
     this.addChild( boundsRectangle );
-
-    this.model.modelBoundsProperty.lazyLink( modelBounds => {
-      boundsRectangle.setRectBounds( modelViewTransform.modelToViewBounds( modelBounds ) );
-    } );
 
     if ( QuadrilateralQueryParameters.showDragAreas ) {
       this.addChild( new VertexDragAreaNode( shapeModel.vertex1, [ shapeModel.leftSide, shapeModel.topSide ], modelViewTransform ) );
