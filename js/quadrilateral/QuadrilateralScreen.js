@@ -7,7 +7,7 @@
 import Screen from '../../../joist/js/Screen.js';
 import merge from '../../../phet-core/js/merge.js';
 import Tandem from '../../../tandem/js/Tandem.js';
-import quadrilateralColors from '../common/QuadrilateralColors.js';
+import QuadrilateralColors from '../common/QuadrilateralColors.js';
 import quadrilateral from '../quadrilateral.js';
 import QuadrilateralModel from './model/QuadrilateralModel.js';
 import QuadrilateralScreenView from './view/QuadrilateralScreenView.js';
@@ -22,7 +22,7 @@ class QuadrilateralScreen extends Screen {
 
     options = merge( {
       //TODO if you include homeScreenIcon or navigationBarIcon, use JOIST/ScreenIcon
-      backgroundColorProperty: quadrilateralColors.screenBackgroundColorProperty,
+      backgroundColorProperty: QuadrilateralColors.screenBackgroundColorProperty,
       tandem: Tandem.REQUIRED
     }, options );
 

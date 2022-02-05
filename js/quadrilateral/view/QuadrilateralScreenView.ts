@@ -14,7 +14,6 @@ import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import { Rectangle, Text } from '../../../../scenery/js/imports.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
-import quadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralNode from './QuadrilateralNode.js';
 import QuadrilateralSoundView from './QuadrilateralSoundView.js';
 import SideDemonstrationNode from './SideDemonstrationNode.js';
@@ -234,7 +233,7 @@ class QuadrilateralScreenView extends ScreenView {
       debugValuesPanel.visible = showValues;
     } );
 
-    if ( quadrilateralQueryParameters.showModelValues ) {
+    if ( QuadrilateralQueryParameters.showModelValues ) {
       this.addChild( new QuadrilateralModelValuePanel( model, {
         leftTop: new Vector2( QuadrilateralConstants.SCREEN_VIEW_X_MARGIN, QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN )
       } ) );
