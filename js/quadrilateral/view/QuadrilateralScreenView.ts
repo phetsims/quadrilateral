@@ -64,6 +64,7 @@ class QuadrilateralScreenView extends ScreenView {
       bottom: this.layoutBounds.maxY - QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN,
       tandem: tandem.createTandem( 'resetAllButton' )
     } );
+    this.addChild( this.resetAllButton );
 
     // the model bounds are defined by available view space. Some padding is added around the screen and we make
     // sure that the vertices cannot overlap with simulation controls (at this time, just the ResetAllButton).
@@ -122,18 +123,6 @@ class QuadrilateralScreenView extends ScreenView {
 
       this.quadrilateralSoundView = new QuadrilateralSoundView( model, soundOptionsModel );
     }
-
-    this.resetAllButton = new ResetAllButton( {
-      listener: () => {
-        this.interruptSubtreeInput(); // cancel interactions that may be in progress
-        model.reset();
-        this.reset();
-      },
-      right: this.layoutBounds.maxX - QuadrilateralConstants.SCREEN_VIEW_X_MARGIN,
-      bottom: this.layoutBounds.maxY - QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN,
-      tandem: tandem.createTandem( 'resetAllButton' )
-    } );
-    this.addChild( this.resetAllButton );
 
     // Add a rectangle that shows the available model bounds, as requested in
     // https://github.com/phetsims/quadrilateral/issues/49
