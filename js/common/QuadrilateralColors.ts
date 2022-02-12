@@ -14,14 +14,14 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { ProfileColorProperty } from '../../../scenery/js/imports.js';
+import { Color, ProfileColorProperty } from '../../../scenery/js/imports.js';
 import quadrilateral from '../quadrilateral.js';
 
 const quadrilateralColors = {
 
   // Background color that for screens in this sim
   screenBackgroundColorProperty: new ProfileColorProperty( quadrilateral, 'background', {
-    default: 'darkblue'
+    default: new Color( 167, 167, 255 )
   } )
 };
 
