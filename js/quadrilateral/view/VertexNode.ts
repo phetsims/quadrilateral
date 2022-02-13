@@ -54,7 +54,7 @@ class VertexNode extends Voicing( Circle, 1 ) {
       this.center = modelViewTransform.modelToViewPosition( position );
     } );
 
-    model.cornerLabelsVisibleProperty.link( vertexLabelsVisible => {
+    model.vertexLabelsVisibleProperty.link( vertexLabelsVisible => {
       vertexLabelText.visible = vertexLabelsVisible;
     } );
 
