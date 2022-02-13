@@ -124,9 +124,10 @@ class QuadrilateralScreenView extends ScreenView {
       this.quadrilateralSoundView = new QuadrilateralSoundView( model, soundOptionsModel );
     }
 
-    // Add a rectangle that shows the available model bounds, as requested in
-    // https://github.com/phetsims/quadrilateral/issues/49
-    const boundsRectangle = new Rectangle( modelViewTransform.modelToViewBounds( this.model.modelBoundsProperty.value ), { stroke: 'white', lineWidth: 2 } );
+    // Rectangle showing available model bounds, requested in https://github.com/phetsims/quadrilateral/issues/49.
+    // Rounded corners to look nice, but actual model bounds are pure Bounds2.
+    const playAreaViewBounds = modelViewTransform.modelToViewBounds( this.model.modelBoundsProperty.value );
+    const boundsRectangle = new Rectangle( playAreaViewBounds, 5, 5, { stroke: 'white', lineWidth: 2 } );
     this.addChild( boundsRectangle );
 
     if ( QuadrilateralQueryParameters.showDragAreas ) {
