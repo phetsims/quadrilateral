@@ -20,6 +20,9 @@ import Vertex from '../model/Vertex.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
+import Line from '../../../../kite/js/segments/Line.js';
+import Shape from '../../../../kite/js/Shape.js';
+import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 
 class SideNode extends Voicing( Path, 1 ) {
   private side: Side;
@@ -32,7 +35,8 @@ class SideNode extends Voicing( Path, 1 ) {
   public constructor( quadrilateralModel: QuadrilateralModel, side: Side, scratchSide: Side, modelViewTransform: ModelViewTransform2, options?: any ) {
 
     options = merge( {
-      lineWidth: 20,
+      fill: QuadrilateralColors.quadrilateralShapeColorProperty,
+      stroke: QuadrilateralColors.quadrilateralShapeStrokeColorProperty,
 
       // pdom
       tagName: 'div',
@@ -68,35 +72,73 @@ class SideNode extends Voicing( Path, 1 ) {
     // @ts-ignore - TODO: Setters added by scenery mixins are not available, see https://github.com/phetsims/quadrilateral/issues/27
     this.focusHighlight = new FocusHighlightPath( null );
 
-    side.shapeProperty.link( modelShape => {
-      const viewShape = modelViewTransform.modelToViewShape( modelShape );
-
-      this.setShape( viewShape );
-
-      // FOR NOW: Instead of a graphical sim you can "see" sides through these pointer areas.
-      // These can be removed once a graphical design is complete.
-      this.mouseArea = viewShape;
-      this.touchArea = viewShape;
-
-      const highlight = this.focusHighlight as FocusHighlightPath;
-      highlight.setShape( viewShape );
-    } );
+    // side.shapeProperty.link( modelShape => {
+    //   // const viewShape = modelViewTransform.modelToViewShape( modelShape );
+    //   // this.setShape( viewShape );
+    //
+    //   // we might still need this because Line may not be clickable
+    //   this.mouseArea = viewShape;
+    //   this.touchArea = viewShape;
+    //
+    //   const highlight = this.focusHighlight as FocusHighlightPath;
+    //   highlight.setShape( viewShape );
+    // } );
 
     // listeners
     Property.multilink( [ side.vertex1.positionProperty, side.vertex2.positionProperty ], ( vertex1Position: Vector2, vertex2Position: Vector2 ) => {
-      // const vertex1ViewPosition = modelViewTransform.modelToViewPosition( vertex1Position );
-      // const vertex2ViewPosition = modelViewTransform.modelToViewPosition( vertex2Position );
-      // this.setLine( vertex1ViewPosition.x, vertex1ViewPosition.y, vertex2ViewPosition.x, vertex2ViewPosition.y );
-      //
-      // // set the focus highlight shape
-      // // @ts-ignore - TODO: Setters added by scenery mixins are not available, see https://github.com/phetsims/quadrilateral/issues/27
-      // this.focusHighlight.setShape( this.getStrokedShape() );
-      //
-      // // TODO: For now we are showing pointer areas instead of a graphical sim. These are used just to indicate
-      // // where you can press while we discuss multitouch considerations. We don't want something more permanent because
-      // // we are afraid a graphical design will influence other modalities.
-      // this.mouseArea = this.getStrokedShape();
-      // this.touchArea = this.mouseArea;
+
+      // create a single line that will then be divided into segments
+      const fullLine = new Line( vertex1Position, vertex2Position );
+
+      // break the viewLine into multiple lines that are of the segment length
+      const lineSegments = [];
+
+      // The length of a segment parametrically relative to the full line length
+      const parametricSegmentLength = Side.SIDE_SEGMENT_LENGTH / fullLine.getArcLength();
+
+      const numberOfFullSegments = Math.floor( 1 / parametricSegmentLength );
+      let t = 0;
+      for ( let i = 0; i < numberOfFullSegments; i++ ) {
+        const nextPosition = t + parametricSegmentLength;
+        lineSegments.push( new Line( fullLine.positionAt( t ), fullLine.positionAt( nextPosition ) ) );
+        t = nextPosition;
+      }
+
+      // the final segment should be the remainder from 1 (parametric end) to the last full segment
+      assert && assert( 1 - t >= 0, 'we cannot have gone beyond the end of the full line parametrically' );
+
+      // add the remainder as the final segment, if there is one
+      if ( 1 - t > 0 ) {
+        lineSegments.push( new Line( fullLine.positionAt( t ), fullLine.positionAt( 1 ) ) );
+      }
+
+      const rightStrokes: Line[] = [];
+      const leftStrokes: Line[] = [];
+      lineSegments.forEach( ( lineSegment, index ) => {
+        const segmentWidth = Math.max( Vertex.VERTEX_WIDTH * 0.80 - index * Vertex.VERTEX_WIDTH * 0.05, 0 );
+
+        // stroke functions divide width for us
+        const strokeRight = lineSegment.strokeRight( segmentWidth );
+        const strokeLeft = lineSegment.strokeLeft( segmentWidth );
+
+        rightStrokes.push( strokeRight[ 0 ] );
+        leftStrokes.push( strokeLeft[ 0 ] );
+      } );
+
+      const lineShape = new Shape();
+
+      rightStrokes.forEach( ( rightStroke, index ) => {
+        lineShape.moveToPoint( rightStroke.start );
+        lineShape.lineToPoint( rightStroke.end );
+        lineShape.lineToPoint( leftStrokes[ index ].start );
+        lineShape.lineToPoint( leftStrokes[ index ].end );
+
+        // so that fill will fill each segment individually and so we see strokes in between each segment
+        lineShape.close();
+      } );
+
+      // transform shape to view coordinates
+      this.shape = modelViewTransform.modelToViewShape( lineShape );
     } );
 
     // supports keyboard dragging, attempts to move both vertices in the direction of motion of the line

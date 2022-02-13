@@ -19,8 +19,7 @@ import Shape from '../../../../kite/js/Shape.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import VertexLabel from './VertexLabel.js';
 
-// in model coordinates, the bounds of the vertex - necessary because we need to calculate vertex/vertex and
-// vertex/side collisions
+
 const VERTEX_BOUNDS = new Bounds2( 0, 0, 0.1, 0.1 );
 const HALF_WIDTH = VERTEX_BOUNDS.width / 2;
 const HALF_HEIGHT = VERTEX_BOUNDS.height / 2;
@@ -34,7 +33,12 @@ class Vertex {
   public isPressedProperty: Property<boolean>;
   public modelBoundsProperty: IReadOnlyProperty<Bounds2>;
   private tandem: Tandem;
-  public static VERTEX_BOUNDS: Bounds2;
+
+  // in model coordinates, the bounds of the vertex - necessary because we need to calculate vertex/vertex and
+  // vertex/side collisions
+  public static readonly VERTEX_BOUNDS = VERTEX_BOUNDS;
+  public static readonly VERTEX_WIDTH = VERTEX_BOUNDS.width;
+
 
   /**
    * @param initialPosition - The initial position for the Vertex in model coordinates.
@@ -187,8 +191,6 @@ class Vertex {
     return Math.acos( argument );
   }
 }
-
-Vertex.VERTEX_BOUNDS = VERTEX_BOUNDS;
 
 quadrilateral.register( 'Vertex', Vertex );
 export default Vertex;

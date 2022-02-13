@@ -19,10 +19,6 @@ import { Line } from '../../../../scenery/js/imports.js';
 import Shape from '../../../../kite/js/Shape.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 
-// in model coordinates, the width of a side - Sides exist in model space to apply rules that vertices and
-// sides can never overlap
-const SIDE_WIDTH = 0.05;
-
 type SideOptions = {
   offsetVectorForTiltCalculation?: Vector2
 };
@@ -36,6 +32,14 @@ class Side {
   public readonly isPressedProperty: BooleanProperty;
   public shapeProperty: IReadOnlyProperty<Shape>;
   public readonly lengthToleranceIntervalProperty: IReadOnlyProperty<number>;
+
+  // In model coordinates, the length of a side segment in model coordinates. The full side is divided into segments of
+  // this length with the final segment length being the remainder.
+  public static readonly SIDE_SEGMENT_LENGTH = 0.25;
+
+  // in model coordinates, the width of a side - Sides exist in model space to apply rules that vertices and
+  // sides can never overlap
+  public static readonly SIDE_WIDTH = 0.05;
 
   /**
    * @param vertex1 - The first vertex of this Side.
@@ -87,7 +91,7 @@ class Side {
 
         // TODO: make reusable
         const lineShape = new Line( position1.x, position1.y, position2.x, position2.y, {
-          lineWidth: SIDE_WIDTH
+          lineWidth: Side.SIDE_WIDTH
         } );
 
         return lineShape.getStrokedShape();
@@ -99,6 +103,23 @@ class Side {
     this.lengthToleranceIntervalProperty = new DerivedProperty( [ this.lengthProperty ], ( length: number ) => {
       return length * QuadrilateralQueryParameters.lengthToleranceIntervalScaleFactor;
     } );
+  }
+
+  /**
+   * Returns the number of segments used for this side. The length is broken up into SIDE_SEGMENT_LENGTH and this
+   * is used for many kinds of views.
+   */
+  public getNumberOfSegments(): number {
+    return Math.floor( this.lengthProperty.value / Side.SIDE_SEGMENT_LENGTH );
+  }
+
+
+  /**
+   * Get the length of the final segment. The length is divided into segments, this is the remainder for the final
+   * segment.
+   */
+  public getFinalSegmentLength(): number {
+    return this.lengthProperty.value % Side.SIDE_SEGMENT_LENGTH;
   }
 
   /**
