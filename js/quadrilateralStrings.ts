@@ -11,6 +11,8 @@ type StringsType = {
   'quadrilateral': {
     'title': string
   },
+  'cornerLabels': string,
+  'angleGuide': string,
   'a11y': {
     'voicing': {
       'corner1': string,

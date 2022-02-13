@@ -32,6 +32,7 @@ import QuadrilateralModelValuePanel from './QuadrilateralModelValuePanel.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import SideLengthAreaNode from './SideLengthAreaNode.js';
 import QuadrilateralMarkerInput from './QuadrilateralMarkerInput.js';
+import QuadrilateralVisibilityControls from './QuadrilateralVisibilityControls.js';
 
 const MODEL_BOUNDS = QuadrilateralQueryParameters.calibrationDemoDevice ? new Bounds2( -4.5, -4.5, 4.5, 4.5 ) :
                      new Bounds2( -1, -1, 1, 1 );
@@ -54,13 +55,18 @@ class QuadrilateralScreenView extends ScreenView {
       tandem: tandem
     } );
 
+    const visibilityControls = new QuadrilateralVisibilityControls( model.cornerLabelsVisibleProperty, model.angleGuideVisibleProperty, {
+      rightCenter: this.layoutBounds.rightCenter.minusXY( QuadrilateralConstants.SCREEN_VIEW_X_MARGIN, 0 )
+    } );
+    this.addChild( visibilityControls );
+
     this.resetAllButton = new ResetAllButton( {
       listener: () => {
         this.interruptSubtreeInput(); // cancel interactions that may be in progress
         model.reset();
         this.reset();
       },
-      right: this.layoutBounds.maxX - QuadrilateralConstants.SCREEN_VIEW_X_MARGIN,
+      left: visibilityControls.left,
       bottom: this.layoutBounds.maxY - QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN,
       tandem: tandem.createTandem( 'resetAllButton' )
     } );
@@ -70,7 +76,7 @@ class QuadrilateralScreenView extends ScreenView {
     // sure that the vertices cannot overlap with simulation controls (at this time, just the ResetAllButton).
     // Otherwise the quadrilateral can move around freely in the play area.
     let reducedViewBounds = this.layoutBounds.eroded( QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN );
-    reducedViewBounds = reducedViewBounds.withMaxX( reducedViewBounds.maxX - this.resetAllButton.width - QuadrilateralConstants.SCREEN_VIEW_X_MARGIN );
+    reducedViewBounds = reducedViewBounds.withMaxX( this.resetAllButton.left - QuadrilateralConstants.SCREEN_VIEW_X_MARGIN );
 
     const modelViewTransform = ModelViewTransform2.createRectangleInvertedYMapping(
       MODEL_BOUNDS,

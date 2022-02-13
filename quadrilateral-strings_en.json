@@ -2,6 +2,12 @@
   "quadrilateral.title": {
     "value": "Quadrilateral"
   },
+  "cornerLabels": {
+    "value": "Corner Labels"
+  },
+  "angleGuide": {
+    "value": "Angle Guide"
+  },
   "a11y": {
     "voicing": {
       "corner1": {
