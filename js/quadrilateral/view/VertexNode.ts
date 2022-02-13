@@ -7,23 +7,25 @@
  */
 
 import merge from '../../../../phet-core/js/merge.js';
-import { DragListener, KeyboardDragListener, Path, Rectangle, SceneryEvent, Voicing } from '../../../../scenery/js/imports.js';
-import timesSolidShape from '../../../../sherpa/js/fontawesome-5/timesSolidShape.js';
+import { Circle, DragListener, KeyboardDragListener, SceneryEvent, Voicing } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vertex from '../model/Vertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
+import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 
-class VertexNode extends Voicing( Rectangle, 1 ) {
+class VertexNode extends Voicing( Circle, 1 ) {
   private readonly model: QuadrilateralModel;
 
   // TODO: Options pattern cannot be used yet because of the trait pattern
   constructor( vertex: Vertex, model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, options?: Object ) {
     options = merge( {
+
+      fill: QuadrilateralColors.quadrilateralShapeColorProperty,
+      stroke: QuadrilateralColors.quadrilateralShapeStrokeColorProperty,
 
       // pdom
       tagName: 'div',
@@ -33,31 +35,13 @@ class VertexNode extends Voicing( Rectangle, 1 ) {
       tandem: Tandem.REQUIRED
     }, options );
 
-    const viewBounds = modelViewTransform.modelToViewBounds( vertex.modelBoundsProperty.value );
-    super( viewBounds );
+    const viewRadius = modelViewTransform.modelToViewBounds( vertex.modelBoundsProperty.value ).width / 2;
+    super( viewRadius );
 
     this.model = model;
 
-    // debugging = to show the positions of the vertices while we don't have a graphical display
-    let showVerticesPath: null | Path = null;
-    if ( QuadrilateralQueryParameters.showVertices ) {
-      showVerticesPath = new Path( timesSolidShape, {
-        fill: 'red',
-        scale: 0.05,
-        center: this.center
-      } );
-      this.addChild( showVerticesPath );
-    }
-
-    vertex.modelBoundsProperty.link( modelBounds => {
-      const viewBounds = modelViewTransform.modelToViewBounds( modelBounds );
-      this.setRectBounds( viewBounds );
-
-      // Since we are a purely graphical sim for now, these allow us to
-      this.mouseArea = viewBounds;
-      this.touchArea = this.mouseArea;
-
-      showVerticesPath && showVerticesPath.setCenter( viewBounds.center );
+    vertex.positionProperty.link( position => {
+      this.center = modelViewTransform.modelToViewPosition( position );
     } );
 
     // A basic keyboard input listener.

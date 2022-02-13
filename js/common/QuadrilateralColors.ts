@@ -17,13 +17,22 @@
 import { Color, ProfileColorProperty } from '../../../scenery/js/imports.js';
 import quadrilateral from '../quadrilateral.js';
 
-const quadrilateralColors = {
+const QuadrilateralColors = {
 
   // Background color that for screens in this sim
   screenBackgroundColorProperty: new ProfileColorProperty( quadrilateral, 'background', {
     default: new Color( 167, 167, 255 )
+  } ),
+
+  // Color for vertices and sides of the quadrilateral shape.
+  quadrilateralShapeColorProperty: new ProfileColorProperty( quadrilateral, 'quadrilateralShape', {
+    default: new Color( 250, 51, 141 )
+  } ),
+
+  quadrilateralShapeStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'quadrilateralShapeStroke', {
+    default: 'black'
   } )
 };
 
-quadrilateral.register( 'quadrilateralColors', quadrilateralColors );
-export default quadrilateralColors;
+quadrilateral.register( 'QuadrilateralColors', QuadrilateralColors );
+export default QuadrilateralColors;
