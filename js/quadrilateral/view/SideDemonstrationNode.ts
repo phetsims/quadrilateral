@@ -32,10 +32,10 @@ class SideDemonstrationNode extends Node {
     const shapeModel = model.quadrilateralShapeModel;
     const scratchShapeModel = model.quadrilateralTestShapeModel;
 
-    const vertex1Node = new VertexNode( shapeModel.vertex1, model, modelViewTransform );
-    const vertex2Node = new VertexNode( shapeModel.vertex2, model, modelViewTransform );
-    const vertex3Node = new VertexNode( shapeModel.vertex3, model, modelViewTransform );
-    const vertex4Node = new VertexNode( shapeModel.vertex4, model, modelViewTransform );
+    const vertex1Node = new VertexNode( shapeModel.vertex1, '1', model, modelViewTransform );
+    const vertex2Node = new VertexNode( shapeModel.vertex2, '2', model, modelViewTransform );
+    const vertex3Node = new VertexNode( shapeModel.vertex3, '3', model, modelViewTransform );
+    const vertex4Node = new VertexNode( shapeModel.vertex4, '4', model, modelViewTransform );
 
     // references to SideViews, only created if requested by query parameter
     this.rightSideSoundView = null;

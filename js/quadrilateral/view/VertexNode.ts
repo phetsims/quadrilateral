@@ -7,7 +7,7 @@
  */
 
 import merge from '../../../../phet-core/js/merge.js';
-import { Circle, DragListener, KeyboardDragListener, SceneryEvent, Voicing } from '../../../../scenery/js/imports.js';
+import { Circle, DragListener, KeyboardDragListener, SceneryEvent, Text, Voicing } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -16,12 +16,16 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+
+// constants
+const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
 
 class VertexNode extends Voicing( Circle, 1 ) {
   private readonly model: QuadrilateralModel;
 
   // TODO: Options pattern cannot be used yet because of the trait pattern
-  constructor( vertex: Vertex, model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, options?: Object ) {
+  constructor( vertex: Vertex, vertexLabel: string, model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, options?: Object ) {
     options = merge( {
 
       fill: QuadrilateralColors.quadrilateralShapeColorProperty,
@@ -40,8 +44,18 @@ class VertexNode extends Voicing( Circle, 1 ) {
 
     this.model = model;
 
+    const vertexLabelText = new Text( vertexLabel, {
+      center: this.center,
+      font: LABEL_TEXT_FONT
+    } );
+    this.addChild( vertexLabelText );
+
     vertex.positionProperty.link( position => {
       this.center = modelViewTransform.modelToViewPosition( position );
+    } );
+
+    model.cornerLabelsVisibleProperty.link( vertexLabelsVisible => {
+      vertexLabelText.visible = vertexLabelsVisible;
     } );
 
     // A basic keyboard input listener.
