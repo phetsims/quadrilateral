@@ -69,8 +69,8 @@ class SideNode extends Voicing( Path, 1 ) {
     this.mutate( options );
 
     // pdom - make the focus highlight tightly surround the line so that it is easier to see the shape
-    // @ts-ignore - TODO: Setters added by scenery mixins are not available, see https://github.com/phetsims/quadrilateral/issues/27
-    this.focusHighlight = new FocusHighlightPath( null );
+    const sideFocusHighlight = new FocusHighlightPath( null );
+    this.focusHighlight = sideFocusHighlight;
 
     // side.shapeProperty.link( modelShape => {
     //   // const viewShape = modelViewTransform.modelToViewShape( modelShape );
@@ -143,6 +143,9 @@ class SideNode extends Voicing( Path, 1 ) {
       // The mouse/touch areas for the SideNode should match the model bounds, ignoring the taper
       this.mouseArea = modelViewTransform.modelToViewShape( side.shapeProperty.value );
       this.touchArea = this.mouseArea;
+
+      const focusHighlightShape = this.mouseArea as Shape;
+      sideFocusHighlight.setShape( focusHighlightShape );
     } );
 
     // supports keyboard dragging, attempts to move both vertices in the direction of motion of the line

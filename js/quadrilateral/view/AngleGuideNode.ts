@@ -27,7 +27,7 @@ import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 const SLICE_SIZE_RADIANS = Utils.toRadians( 30 );
 
 // in model coordinates, how long the arc of the
-const SLICE_RADIAL_LENGTH = 0.05;
+const SLICE_RADIAL_LENGTH = 0.1;
 
 // The radii of the annulus
 const INNER_RADIUS = Vertex.VERTEX_WIDTH / 2;
