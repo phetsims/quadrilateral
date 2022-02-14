@@ -39,6 +39,7 @@ class QuadrilateralSoundOptionsNode extends Panel {
 
     const optionsParentNode = new Node();
     const designComboBox = new ComboBox( [
+      new ComboBoxItem( new Text( 'Maintenance Sounds', LABEL_TEXT_OPTIONS ), SoundDesign.MAINTENANCE_SOUNDS, { tandemName: 'successWithMaintenanceItem' } ),
       new ComboBoxItem( new Text( 'Success Sounds', LABEL_TEXT_OPTIONS ), SoundDesign.SUCCESS_SOUNDS, { tandemName: 'successItem' } ),
       new ComboBoxItem( new Text( 'Quartet', LABEL_TEXT_OPTIONS ), SoundDesign.QUARTET, { tandemName: 'quartetItem' } ),
       new ComboBoxItem( new Text( 'Parallels Volume', LABEL_TEXT_OPTIONS ), SoundDesign.PARALLELS_VOLUME, { tandemName: 'parallelsVolumeItem' } ),
@@ -52,9 +53,6 @@ class QuadrilateralSoundOptionsNode extends Panel {
       children: [ soundDesignLabelText, designComboBox ],
       spacing: TITLE_SPACING
     } );
-    // const comboBoxWithParentNode = new Node( {
-    //   children: [ labelledComboBox, optionsParentNode ]
-    // } );
 
     const baseSoundRadioButtonItems = [
       {
@@ -119,7 +117,6 @@ class QuadrilateralSoundOptionsNode extends Panel {
 
     const content = new VBox( {
       children: [
-        // comboBoxWithParentNode,
         labelledComboBox,
         labelledBaseSoundRadioButtonGroup
       ],
@@ -144,13 +141,18 @@ class QuadrilateralSoundOptionsNode extends Panel {
         // "Quartet" and "Parallels Volume" use a base sound for all output which can be changed
         children.push( labelledBaseSoundRadioButtonGroup );
       }
-      else if ( design === SoundDesign.SUCCESS_SOUNDS ) {
+      else if ( design === SoundDesign.SUCCESS_SOUNDS || design === SoundDesign.MAINTENANCE_SOUNDS ) {
 
-        // there are different sets of "success" sounds in this prototype
+        // there are different sets of "success" sounds for these prototypes
         children.push( labelledSuccessSoundRadioButtonGroup );
 
-        // The "success" design has options for how the maintenance sound behaves
-        children.push( maintenanceSoundCheckbox );
+        // Not available for the "maintenance" design because that design alreadyd includes
+        // what this checkbox provides by default
+        if ( design === SoundDesign.SUCCESS_SOUNDS ) {
+
+          // The "success" design has options for how the maintenance sound behaves
+          children.push( maintenanceSoundCheckbox );
+        }
       }
 
       content.children = children;
@@ -163,7 +165,7 @@ class QuadrilateralSoundOptionsNode extends Panel {
  * radio buttons are often sub-options under one of the sound design prototypes.
  */
 class LabelledRadioButtonGroup extends VBox {
-  constructor( property: EnumerationProperty<QuartetSoundFile|SuccessSoundFile>, items: AquaRadioButtonGroupItem<QuartetSoundFile | SuccessSoundFile>[], labelString: string, tandem: Tandem ) {
+  constructor( property: EnumerationProperty<QuartetSoundFile | SuccessSoundFile>, items: AquaRadioButtonGroupItem<QuartetSoundFile | SuccessSoundFile>[], labelString: string, tandem: Tandem ) {
     const labelText = new Text( labelString, TITLE_TEXT_OPTIONS );
     const radioButtonGroup = new VerticalAquaRadioButtonGroup( property, items, {
       tandem: tandem.createTandem( 'radioButtonGroup' )

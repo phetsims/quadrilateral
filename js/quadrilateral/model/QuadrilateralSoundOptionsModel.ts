@@ -39,6 +39,7 @@ class SoundDesign extends EnumerationValue {
   static PARALLELS_VOLUME = new SoundDesign();
   static PARALLELS_STACCATO = new SoundDesign();
   static SUCCESS_SOUNDS = new SoundDesign();
+  static MAINTENANCE_SOUNDS = new SoundDesign();
 
   // gets a list of keys, values and mapping between them for EnumerationProperty and PhET-iO
   static enumeration = new Enumeration( SoundDesign );
@@ -122,7 +123,7 @@ class QuadrilateralSoundOptionsModel {
   constructor() {
 
     // The selected sound design, changing this will change the entire design.
-    this.soundDesignProperty = new EnumerationProperty( SoundDesign.SUCCESS_SOUNDS );
+    this.soundDesignProperty = new EnumerationProperty( SoundDesign.MAINTENANCE_SOUNDS );
 
     // Property that controls the base sound for a few of the prototypes. Some prototypes have a base sound and
     // the state of the sim changes the frequency and layering of the base sound. But there are a few base

@@ -44,6 +44,9 @@ class QuadrilateralSoundView {
       else if ( soundDesign === SoundDesign.SUCCESS_SOUNDS ) {
         this.activeSoundView = new SuccessSoundView( model, soundOptionsModel );
       }
+      else if ( soundDesign === SoundDesign.MAINTENANCE_SOUNDS ) {
+        this.activeSoundView = new SuccessSoundView( model, soundOptionsModel );
+      }
     } );
   }
 

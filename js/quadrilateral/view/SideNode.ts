@@ -72,18 +72,6 @@ class SideNode extends Voicing( Path, 1 ) {
     const sideFocusHighlight = new FocusHighlightPath( null );
     this.focusHighlight = sideFocusHighlight;
 
-    // side.shapeProperty.link( modelShape => {
-    //   // const viewShape = modelViewTransform.modelToViewShape( modelShape );
-    //   // this.setShape( viewShape );
-    //
-    //   // we might still need this because Line may not be clickable
-    //   this.mouseArea = viewShape;
-    //   this.touchArea = viewShape;
-    //
-    //   const highlight = this.focusHighlight as FocusHighlightPath;
-    //   highlight.setShape( viewShape );
-    // } );
-
     // listeners
     Property.multilink( [ side.vertex1.positionProperty, side.vertex2.positionProperty ], ( vertex1Position: Vector2, vertex2Position: Vector2 ) => {
 

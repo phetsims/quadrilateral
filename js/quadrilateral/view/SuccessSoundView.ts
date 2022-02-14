@@ -9,7 +9,7 @@ import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import QuadrilateralSoundOptionsModel, { SuccessSoundCollection } from '../model/QuadrilateralSoundOptionsModel.js';
+import QuadrilateralSoundOptionsModel, { SoundDesign, SuccessSoundCollection, SuccessSoundFile } from '../model/QuadrilateralSoundOptionsModel.js';
 
 const MAX_OUTPUT_LEVEL = 0.2;
 
@@ -30,6 +30,9 @@ class SuccessSoundView {
   private successSoundClip: null | SoundClip;
   private failureSoundClip: null | SoundClip;
   private maintenanceSoundClip: null | SoundClip;
+  private lengthMaintenanceSoundClip: null | SoundClip;
+  private lengthMaintenanceSoundClipPlaying: boolean;
+  private remainingLengthMaintenancePlayTime: number;
 
   private readonly disposeSuccessSoundView: () => void;
 
@@ -54,16 +57,27 @@ class SuccessSoundView {
     this.failureSoundClip = null;
     this.maintenanceSoundClip = null;
 
+    // A sound that plays specifically with the "Maintenance Sound" design paradigm. With this design,
+    // the maintenanceSoundClip is played when the shape changes keeping a parallelogram and the
+    // lengthMaintenanceSoundClip plays when changing the shape such that the parallelogram stays a parallelogram
+    // AND has non-changing sides. In this paradigm this sound clip is not configurable. We use "Collection one" for
+    // maintaining parallelogram adn "Collection four" for maintaining lengths.
+    this.lengthMaintenanceSoundClip = null;
+
     // The amount of time left to continue playing the "maintenance" sounds.
     this.remainingMaintenancePlayTime = 0;
 
     this.remainingDelayForMaintenanceSound = 0;
-
     this.timeSinceSuccessSound = 0;
 
     // Whether the maintenance sound clip is currently playing, so we know whether to decrement the
     // remainingMaintenancePlayTime or stop playing the maintenance sound.
     this.maintenanceSoundClipPlaying = false;
+
+    // Whether or not the length maintenance clip is currently playing, so we knwo whether to decrement the
+    // counting variables for it
+    this.lengthMaintenanceSoundClipPlaying = false;
+    this.remainingLengthMaintenancePlayTime = 0;
 
     // link is called eagerly so that we have SoundClips to play in the following listeners
     soundOptionsModel.successSoundFileProperty.link( successSoundFile => {
@@ -106,15 +120,32 @@ class SuccessSoundView {
         return vertex.isPressedProperty.value;
       } );
 
-      // If testing equal lengths, the maintenance sound is only played when we stay a parallelogram but
-      // maintain equal lengths through the interaction.
       if ( soundOptionsModel.maintenanceSoundRequiresEqualLengthsProperty.value ) {
 
+        // If testing equal lengths, the maintenance sound is only played when we stay a parallelogram but
+        // maintain equal lengths through the interaction.
         if ( shapeModel.isParallelogramProperty.value && countObject.true !== 1 && shapeModel.lengthsEqualToSavedProperty.value && this.remainingDelayForMaintenanceSound < 0 ) {
           this.startPlayingMaintenanceSoundClip();
         }
         else {
           this.stopPlayingMaintenanceSoundClip();
+        }
+      }
+      else if ( soundOptionsModel.soundDesignProperty.value === SoundDesign.MAINTENANCE_SOUNDS ) {
+
+        // in this design we play the maintenance sound if we are in parallelogram and the lengthMaintenanceSoundClip
+        // if we are maintaining equal lengths
+        if ( shapeModel.isParallelogramProperty.value && countObject.true !== 1 && shapeModel.lengthsEqualToSavedProperty.value && this.remainingDelayForMaintenanceSound < 0 ) {
+          this.startPlayingLengthMaintenanceSoundClip();
+          this.stopPlayingMaintenanceSoundClip();
+        }
+        else if ( shapeModel.isParallelogramProperty.value && countObject.true !== 1 ) {
+          this.startPlayingMaintenanceSoundClip();
+          this.stopPlayingLengthMaintenanceSoundClip();
+        }
+        else {
+          this.stopPlayingMaintenanceSoundClip();
+          this.stopPlayingLengthMaintenanceSoundClip();
         }
       }
       else {
@@ -158,6 +189,9 @@ class SuccessSoundView {
     assert && assert( this.maintenanceSoundClip, 'maintenanceSoundClip must be constructed to play' );
     const maintenanceSoundClip = this.maintenanceSoundClip!;
 
+    assert && assert( this.lengthMaintenanceSoundClip, 'lengthMaintenanceSoundClip must be constructed to play' );
+    const lengthMaintenanceSoundClip = this.lengthMaintenanceSoundClip!;
+
     assert && assert( this.successSoundClip, 'successSoundClip must be constructed to play' );
     const successSoundClip = this.successSoundClip!;
 
@@ -173,7 +207,6 @@ class SuccessSoundView {
     if (
       !maintenanceSoundClip.isPlayingProperty.value &&
       this.timeSinceSuccessSound > SUCCESS_MAINTENANCE_SOUND_DELAY &&
-      // !successSoundClip.isPlayingProperty.value &&
       !failureSoundClip.isPlayingProperty.value
     ) {
 
@@ -181,7 +214,49 @@ class SuccessSoundView {
       // reaching parallelogram
       successSoundClip.stop();
 
+      // stop playing the "length" maintenance sound since we are playing this sound clip isntead
+      lengthMaintenanceSoundClip.stop();
+
       maintenanceSoundClip.play();
+    }
+  }
+
+  /**
+   * Start playing the sound clip for the maintining quadrilateral side lengths while also maintaining
+   * parallelogram.
+   */
+  private startPlayingLengthMaintenanceSoundClip() {
+    assert && assert( this.maintenanceSoundClip, 'maintenanceSoundClip must be constructed to play' );
+    const maintenanceSoundClip = this.maintenanceSoundClip!;
+
+    assert && assert( this.lengthMaintenanceSoundClip, 'lengthMaintenanceSoundClip must be constructed to play' );
+    const lengthMaintenanceSoundClip = this.lengthMaintenanceSoundClip!;
+
+    assert && assert( this.successSoundClip, 'successSoundClip must be constructed to play' );
+    const successSoundClip = this.successSoundClip!;
+
+    assert && assert( this.failureSoundClip, 'failureSoundClip must be constructed to play' );
+    const failureSoundClip = this.failureSoundClip!;
+
+    this.lengthMaintenanceSoundClipPlaying = true;
+    this.remainingLengthMaintenancePlayTime = 1;
+
+    lengthMaintenanceSoundClip.setOutputLevel( MAX_OUTPUT_LEVEL );
+
+    if (
+      !lengthMaintenanceSoundClip.isPlayingProperty.value &&
+      this.timeSinceSuccessSound > SUCCESS_MAINTENANCE_SOUND_DELAY &&
+      !failureSoundClip.isPlayingProperty.value
+    ) {
+
+      // stop playing the "success" sound if we start playing the "maintenance" sound immediately after
+      // reaching parallelogram
+      successSoundClip.stop();
+
+      // stop playing the "maintenance" sound since we are playing the length maintenance sound instead
+      maintenanceSoundClip.stop();
+
+      lengthMaintenanceSoundClip.play();
     }
   }
 
@@ -202,10 +277,25 @@ class SuccessSoundView {
   }
 
   /**
+   * Stop playing sounds related to the "length" maintenance with the Maintenance sound design.
+   */
+  stopPlayingLengthMaintenanceSoundClip() {
+    assert && assert( this.lengthMaintenanceSoundClip, 'lengthMaintenanceSoundClip needs to be constructed before stopping play' );
+    const lengthMaintenanceSoundClip = this.lengthMaintenanceSoundClip!;
+
+    this.lengthMaintenanceSoundClipPlaying = false;
+    this.remainingLengthMaintenancePlayTime = 0;
+
+    lengthMaintenanceSoundClip.setOutputLevel( 0, 0.1 );
+    lengthMaintenanceSoundClip.stop();
+  }
+
+  /**
    * Reset this SoundView, stopping all sounds and resetting SoundClips.
    */
   public reset(): void {
     this.stopPlayingMaintenanceSoundClip();
+    this.stopPlayingLengthMaintenanceSoundClip();
   }
 
   /**
@@ -235,6 +325,12 @@ class SuccessSoundView {
       loop: true
     } ) );
     soundManager.addSoundGenerator( this.maintenanceSoundClip );
+
+    assert && assert( QuadrilateralSoundOptionsModel.SUCCESS_SOUND_COLLECTION_MAP.get( SuccessSoundFile.FOUR ), 'maintenance sound design assumes that SuccessSoundFile.FOUR is available ' );
+    this.lengthMaintenanceSoundClip = new SoundClip( QuadrilateralSoundOptionsModel.SUCCESS_SOUND_COLLECTION_MAP.get( SuccessSoundFile.FOUR )!.maintenanceSound, merge( {}, soundClipOptions, {
+      loop: true
+    } ) );
+    soundManager.addSoundGenerator( this.lengthMaintenanceSoundClip );
   }
 
   /**
@@ -260,6 +356,11 @@ class SuccessSoundView {
 
       this.maintenanceSoundClip = null;
     }
+    if ( this.lengthMaintenanceSoundClip ) {
+      this.lengthMaintenanceSoundClip.dispose();
+
+      this.lengthMaintenanceSoundClip = null;
+    }
   }
 
   /**
@@ -280,6 +381,15 @@ class SuccessSoundView {
         assert && assert( this.maintenanceSoundClip, 'maintenanceSoundClip needs to be created to set output level in step' );
         this.maintenanceSoundClip!.setOutputLevel( 0, 0.1 );
         this.maintenanceSoundClipPlaying = false;
+      }
+    }
+    if ( this.lengthMaintenanceSoundClipPlaying ) {
+      this.remainingLengthMaintenancePlayTime -= dt;
+
+      if ( this.remainingLengthMaintenancePlayTime <= 0 ) {
+        assert && assert( this.lengthMaintenanceSoundClip, 'lengthMaintenanceSoundClip needs to be created to set output level in step' );
+        this.lengthMaintenanceSoundClip!.setOutputLevel( 0, 0.1 );
+        this.lengthMaintenanceSoundClipPlaying = false;
       }
     }
   }
