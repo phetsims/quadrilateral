@@ -115,7 +115,7 @@ class SideNode extends Voicing( Path, 1 ) {
       const rightStrokes: Line[] = [];
       const leftStrokes: Line[] = [];
       lineSegments.forEach( ( lineSegment, index ) => {
-        const segmentWidth = Math.max( Vertex.VERTEX_WIDTH * 0.80 - index * Vertex.VERTEX_WIDTH * 0.05, 0 );
+        const segmentWidth = Math.max( Side.SIDE_WIDTH - index * Vertex.VERTEX_WIDTH * 0.05, 0 );
 
         // stroke functions divide width for us
         const strokeRight = lineSegment.strokeRight( segmentWidth );
@@ -139,6 +139,10 @@ class SideNode extends Voicing( Path, 1 ) {
 
       // transform shape to view coordinates
       this.shape = modelViewTransform.modelToViewShape( lineShape );
+
+      // The mouse/touch areas for the SideNode should match the model bounds, ignoring the taper
+      this.mouseArea = modelViewTransform.modelToViewShape( side.shapeProperty.value );
+      this.touchArea = this.mouseArea;
     } );
 
     // supports keyboard dragging, attempts to move both vertices in the direction of motion of the line
