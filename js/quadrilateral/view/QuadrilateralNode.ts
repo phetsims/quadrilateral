@@ -15,6 +15,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import AngleGuideNode from './AngleGuideNode.js';
 
 // constants
 const vertex1String = quadrilateralStrings.a11y.voicing.corner1;
@@ -108,11 +109,23 @@ class QuadrilateralNode extends Node {
       voicingNameResponse: leftSideString
     } );
 
+    // angle guides, added here so that they can be layered on top of everything
+    const vertex1AngleGuideNode = new AngleGuideNode( this.model.quadrilateralShapeModel.vertex1, this.model.quadrilateralShapeModel.vertex2, this.model.angleGuideVisibleProperty, modelViewTransform );
+    const vertex2AngleGuideNode = new AngleGuideNode( this.model.quadrilateralShapeModel.vertex2, this.model.quadrilateralShapeModel.vertex3, this.model.angleGuideVisibleProperty, modelViewTransform );
+    const vertex3AngleGuideNode = new AngleGuideNode( this.model.quadrilateralShapeModel.vertex3, this.model.quadrilateralShapeModel.vertex4, this.model.angleGuideVisibleProperty, modelViewTransform );
+    const vertex4AngleGuideNode = new AngleGuideNode( this.model.quadrilateralShapeModel.vertex4, this.model.quadrilateralShapeModel.vertex1, this.model.angleGuideVisibleProperty, modelViewTransform );
+
     // add children - sides first because we want vertices to catch all input
     this.addChild( topSideNode );
     this.addChild( rightSideNode );
     this.addChild( bottomSideNode );
     this.addChild( leftSideNode );
+
+    // guide nodes should not be occluded by sides
+    this.addChild( vertex1AngleGuideNode );
+    this.addChild( vertex2AngleGuideNode );
+    this.addChild( vertex3AngleGuideNode );
+    this.addChild( vertex4AngleGuideNode );
 
     this.addChild( vertexNode1 );
     this.addChild( vertexNode2 );

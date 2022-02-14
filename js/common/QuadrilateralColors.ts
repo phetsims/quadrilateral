@@ -29,7 +29,22 @@ const QuadrilateralColors = {
     default: new Color( 250, 51, 141 )
   } ),
 
+  // Color for strokes of the quadrilateral shape
   quadrilateralShapeStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'quadrilateralShapeStroke', {
+    default: 'black'
+  } ),
+
+  // Color for the dark segments of the angle guides
+  angleGuideDarkColorProperty: new ProfileColorProperty( quadrilateral, 'angleGuideDark', {
+    default: new Color( 100, 100, 100 )
+  } ),
+
+  // Color for the light segments of the angle guides
+  angleGuideLightColorProperty: new ProfileColorProperty( quadrilateral, 'angleGuideLight', {
+    default: 'white'
+  } ),
+
+  angleGuideStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'angleGuideStroke', {
     default: 'black'
   } )
 };
