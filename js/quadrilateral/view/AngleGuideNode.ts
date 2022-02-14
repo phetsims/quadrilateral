@@ -61,7 +61,7 @@ class AngleGuideNode extends Node {
       let firstInnerPoint = line.positionAt( startT );
 
       // next point of the shape, edge of the vertex plus the size of the annulus parametrically along the line
-      const endT = ( OUTER_RADIUS ) / line.getArcLength();
+      const endT = Math.min( ( OUTER_RADIUS ) / line.getArcLength(), 1 );
       let firstOuterPoint = line.positionAt( endT );
 
       const lightShape = new Shape();
