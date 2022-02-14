@@ -60,7 +60,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   lengthToleranceIntervalScaleFactor: {
     type: 'number',
     isValidValue: value => value <= 1 && value >= 0,
-    defaultValue: 0.1
+    defaultValue: 0.05
   },
 
   // A tolerance interval for detecting changes in length. If the length changes less than this value the model
