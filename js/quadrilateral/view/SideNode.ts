@@ -95,9 +95,14 @@ class SideNode extends Voicing( Path, 1 ) {
       // the final segment should be the remainder from 1 (parametric end) to the last full segment
       assert && assert( 1 - t >= 0, 'we cannot have gone beyond the end of the full line parametrically' );
 
-      // add the remainder as the final segment, if there is one
-      if ( 1 - t > 0 ) {
-        lineSegments.push( new Line( fullLine.positionAt( t ), fullLine.positionAt( 1 ) ) );
+      // Ad the remaining portion of a segment if there is one. t might not be exactly one but close enough
+      // that line.positionAt produces a line with zero length, so we only add another segment if it is large enough.
+      if ( 1 - t > 0.0005 ) {
+        const remainderLine = new Line( fullLine.positionAt( t ), fullLine.positionAt( 1 ) );
+        lineSegments.push( remainderLine );
+
+        // ensure that t was large enough that we didnt create a zero-length line
+        assert && assert( !remainderLine.start.equals( remainderLine.end ), 'Should be a non-zero length remainder for the line in this case' );
       }
 
       const rightStrokes: Line[] = [];
