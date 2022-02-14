@@ -44,6 +44,7 @@ const QuadrilateralColors = {
     default: 'white'
   } ),
 
+  // Color for the stroke around angle guide shapes
   angleGuideStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'angleGuideStroke', {
     default: 'black'
   } )
