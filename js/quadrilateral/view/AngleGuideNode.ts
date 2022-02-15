@@ -57,7 +57,7 @@ class AngleGuideNode extends Node {
       const line = new Line( vertex1.positionProperty.value, vertex2.positionProperty.value );
 
       // start of the shape, the edge of the vertex along the line parametrically
-      const startT = ( INNER_RADIUS ) / line.getArcLength();
+      const startT = Math.min( ( INNER_RADIUS ) / line.getArcLength(), 1 );
       let firstInnerPoint = line.positionAt( startT );
 
       // next point of the shape, edge of the vertex plus the size of the annulus parametrically along the line
