@@ -26,7 +26,7 @@ const QuadrilateralColors = {
 
   // Color for vertices and sides of the quadrilateral shape.
   quadrilateralShapeColorProperty: new ProfileColorProperty( quadrilateral, 'quadrilateralShape', {
-    default: new Color( 250, 51, 141 )
+    default: new Color( 255, 217, 102 )
   } ),
 
   // Color for strokes of the quadrilateral shape
