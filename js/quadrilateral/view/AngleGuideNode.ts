@@ -26,8 +26,8 @@ import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 // The size of each slice of the angle guide, in radians
 const SLICE_SIZE_RADIANS = Utils.toRadians( 30 );
 
-// in model coordinates, how long the arc of the
-const SLICE_RADIAL_LENGTH = 0.1;
+// in model coordinates, width of the arc (outer radius - inner radius of the annulus)
+const SLICE_RADIAL_LENGTH = 0.05;
 
 // The radii of the annulus
 const INNER_RADIUS = Vertex.VERTEX_WIDTH / 2;

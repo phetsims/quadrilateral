@@ -7,6 +7,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import quadrilateral from '../../quadrilateral.js';
 
@@ -19,6 +20,11 @@ class NamedQuadrilateral extends EnumerationValue {
   static ISOSCELES_TRAPEZOID = new NamedQuadrilateral();
   static TRAPEZOID = new NamedQuadrilateral();
   static CONCAVE = new NamedQuadrilateral();
+
+  // Gets a list of keys, values and mapping between them.  For use in EnumerationProperty and PhET-iO
+  static enumeration = new Enumeration( NamedQuadrilateral, {
+    phetioDocumentation: 'Possible named shapes for the quadrilateral.'
+  } );
 }
 
 quadrilateral.register( 'NamedQuadrilateral', NamedQuadrilateral );
