@@ -52,7 +52,7 @@ class QuadrilateralNode extends Node {
     this.scratchShapeModel = this.model.quadrilateralTestShapeModel;
     this.modelViewTransform = modelViewTransform;
 
-    const vertexNode1 = new VertexNode( this.quadrilateralShapeModel.vertex1, '1', quadrilateralModel, modelViewTransform, {
+    const vertexNode1 = new VertexNode( this.quadrilateralShapeModel.vertex1, 'A', quadrilateralModel, modelViewTransform, {
 
       // voicing
       voicingNameResponse: vertex1String,
@@ -61,7 +61,7 @@ class QuadrilateralNode extends Node {
       tandem: options.tandem.createTandem( 'vertex1Node' )
     } );
 
-    const vertexNode2 = new VertexNode( this.quadrilateralShapeModel.vertex2, '2', quadrilateralModel, modelViewTransform, {
+    const vertexNode2 = new VertexNode( this.quadrilateralShapeModel.vertex2, 'B', quadrilateralModel, modelViewTransform, {
 
       // voicing
       voicingNameResponse: vertex2String,
@@ -70,7 +70,7 @@ class QuadrilateralNode extends Node {
       tandem: options.tandem.createTandem( 'vertex2Node' )
     } );
 
-    const vertexNode3 = new VertexNode( this.quadrilateralShapeModel.vertex3, '3', quadrilateralModel, modelViewTransform, {
+    const vertexNode3 = new VertexNode( this.quadrilateralShapeModel.vertex3, 'C', quadrilateralModel, modelViewTransform, {
 
       // voicing
       voicingNameResponse: vertex3String,
@@ -79,7 +79,7 @@ class QuadrilateralNode extends Node {
       tandem: options.tandem.createTandem( 'vertex3Node' )
     } );
 
-    const vertexNode4 = new VertexNode( this.quadrilateralShapeModel.vertex4, '4', quadrilateralModel, modelViewTransform, {
+    const vertexNode4 = new VertexNode( this.quadrilateralShapeModel.vertex4, 'D', quadrilateralModel, modelViewTransform, {
 
       // voicing
       voicingNameResponse: vertex4String,
