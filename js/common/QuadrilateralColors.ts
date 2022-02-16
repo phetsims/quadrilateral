@@ -29,6 +29,11 @@ const QuadrilateralColors = {
     default: new Color( 255, 217, 102 )
   } ),
 
+  // Color for vertices and sides of the quadrilateral shape when we are a parallelogram.
+  quadrilateralParallelogramShapeColorProperty: new ProfileColorProperty( quadrilateral, 'quadrilateralShapeParallelogram', {
+    default: new Color( 21, 255, 127 )
+  } ),
+
   // Color for strokes of the quadrilateral shape
   quadrilateralShapeStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'quadrilateralShapeStroke', {
     default: 'black'

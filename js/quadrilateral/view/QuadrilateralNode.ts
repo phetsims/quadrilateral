@@ -16,6 +16,7 @@ import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import AngleGuideNode from './AngleGuideNode.js';
+import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 
 // constants
 const vertex1String = quadrilateralStrings.a11y.voicing.corner1;
@@ -132,7 +133,16 @@ class QuadrilateralNode extends Node {
     this.addChild( vertexNode3 );
     this.addChild( vertexNode4 );
 
-    // @ts-ignore - TODO: How do we do mixin/trait?
+    // listeners
+    // Change colors when we have become a parallelogram
+    const vertexNodes = [ vertexNode1, vertexNode2, vertexNode3, vertexNode4 ];
+    const sideNodes = [ topSideNode, rightSideNode, bottomSideNode, leftSideNode ];
+    this.quadrilateralShapeModel.isParallelogramProperty.link( isParallelogram => {
+      const fillProperty = isParallelogram ? QuadrilateralColors.quadrilateralParallelogramShapeColorProperty : QuadrilateralColors.quadrilateralShapeColorProperty;
+      vertexNodes.forEach( vertexNode => { vertexNode.fill = fillProperty; } );
+      sideNodes.forEach( sideNode => { sideNode.fill = fillProperty; } );
+    } );
+
     this.pdomOrder = [
       vertexNode1, vertexNode2, vertexNode3, vertexNode4,
       topSideNode, rightSideNode, bottomSideNode, leftSideNode
