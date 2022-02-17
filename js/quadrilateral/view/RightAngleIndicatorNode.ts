@@ -35,7 +35,7 @@ class RightAngleIndicatorNode extends Path {
 
     assert && assert( vertex1.angleProperty, 'angleProperty must be defined to draw indicator' );
     vertex1.angleProperty!.link( angle => {
-      this.visible = shapeModel.isAngleEqualToOther( angle, Math.PI / 2 );
+      this.visible = shapeModel.isRightAngle( angle );
 
       // if we have become visible, we need to redraw the shape
       if ( this.visible ) {

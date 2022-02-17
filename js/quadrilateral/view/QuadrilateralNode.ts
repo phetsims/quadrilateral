@@ -122,10 +122,10 @@ class QuadrilateralNode extends Node {
     } );
 
     // angle guides
-    const vertex1AngleGuideNode = new AngleGuideNode( vertex1, vertex2, this.model.angleGuideVisibleProperty, modelViewTransform );
-    const vertex2AngleGuideNode = new AngleGuideNode( vertex2, vertex3, this.model.angleGuideVisibleProperty, modelViewTransform );
-    const vertex3AngleGuideNode = new AngleGuideNode( vertex3, vertex4, this.model.angleGuideVisibleProperty, modelViewTransform );
-    const vertex4AngleGuideNode = new AngleGuideNode( vertex4, vertex1, this.model.angleGuideVisibleProperty, modelViewTransform );
+    const vertex1AngleGuideNode = new AngleGuideNode( vertex1, vertex2, this.model.angleGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertex2AngleGuideNode = new AngleGuideNode( vertex2, vertex3, this.model.angleGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertex3AngleGuideNode = new AngleGuideNode( vertex3, vertex4, this.model.angleGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertex4AngleGuideNode = new AngleGuideNode( vertex4, vertex1, this.model.angleGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
 
     // right angle indicators, visible when a vertex has a right angle
     const vertex1RightAngleIndicator = new RightAngleIndicatorNode( vertex1, vertex2, vertex4, this.model.quadrilateralShapeModel, modelViewTransform );

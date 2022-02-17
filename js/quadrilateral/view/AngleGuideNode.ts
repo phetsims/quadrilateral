@@ -20,7 +20,9 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import Shape from '../../../../kite/js/Shape.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
+import Property from '../../../../axon/js/Property.js';
 
 // constants
 // The size of each slice of the angle guide, in radians
@@ -34,7 +36,7 @@ const INNER_RADIUS = Vertex.VERTEX_WIDTH / 2;
 const OUTER_RADIUS = Vertex.VERTEX_WIDTH / 2 + SLICE_RADIAL_LENGTH;
 
 class AngleGuideNode extends Node {
-  constructor( vertex1: Vertex, vertex2: Vertex, visibleProperty: IReadOnlyProperty<boolean>, modelViewTransform: ModelViewTransform2 ) {
+  constructor( vertex1: Vertex, vertex2: Vertex, visibleProperty: BooleanProperty, shapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2 ) {
     super();
 
     // The guide looks like alternating dark and light slices along the annulus, we accomplish this with two paths
@@ -100,9 +102,10 @@ class AngleGuideNode extends Node {
 
     this.children = [ darkAnglePath, lightAnglePath ];
 
-    // listeners - this is only visible from user control
-    visibleProperty.link( visible => {
-      this.visible = visible;
+    // listeners - This Node is only visible when "Angle Guides" are visible by the user and the angle is NOT a right
+    // angle. In that case, the RightAngleIndicatorNode will display the angle.
+    Property.multilink( [ visibleProperty, vertex1.angleProperty! ], ( visible: boolean, angle: number ) => {
+      this.visible = visible && !shapeModel.isRightAngle( angle );
     } );
   }
 
