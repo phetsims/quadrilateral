@@ -46,9 +46,7 @@ class SideNode extends Voicing( Path, 1 ) {
       tandem: Tandem.OPTIONAL
     }, options );
 
-    super( side.shapeProperty.value, {
-      // fill: 'red'
-    } );
+    super( side.shapeProperty.value );
 
     // A reference to the model component.
     this.side = side;
@@ -108,7 +106,12 @@ class SideNode extends Voicing( Path, 1 ) {
       const rightStrokes: Line[] = [];
       const leftStrokes: Line[] = [];
       lineSegments.forEach( ( lineSegment, index ) => {
-        const segmentWidth = Math.max( Side.SIDE_WIDTH - index * Vertex.VERTEX_WIDTH * 0.05, 0 );
+
+        // The "taper" effect has been removed, but this line makes each segment more narrow than the previous one
+        // and is the reason for such complicated Shape/drawing code. It might be needed again so I am not removing it.
+        // But for now a constant width was requested.
+        // const segmentWidth = Math.max( Side.SIDE_WIDTH - index * Vertex.VERTEX_WIDTH * 0.05, 0 );
+        const segmentWidth = Side.SIDE_WIDTH;
 
         // stroke functions divide width for us
         const strokeRight = lineSegment.strokeRight( segmentWidth );
@@ -132,10 +135,6 @@ class SideNode extends Voicing( Path, 1 ) {
 
       // transform shape to view coordinates
       this.shape = modelViewTransform.modelToViewShape( lineShape );
-
-      // The mouse/touch areas for the SideNode should match the model bounds, ignoring the taper
-      this.mouseArea = modelViewTransform.modelToViewShape( side.shapeProperty.value );
-      this.touchArea = this.mouseArea;
 
       const focusHighlightShape = this.mouseArea as Shape;
       sideFocusHighlight.setShape( focusHighlightShape );
