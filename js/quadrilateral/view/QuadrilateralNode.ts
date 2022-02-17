@@ -18,6 +18,7 @@ import optionize from '../../../../phet-core/js/optionize.js';
 import AngleGuideNode from './AngleGuideNode.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
+import RightAngleIndicatorNode from './RightAngleIndicatorNode.js';
 
 // constants
 const vertex1String = quadrilateralStrings.a11y.voicing.corner1;
@@ -57,7 +58,13 @@ class QuadrilateralNode extends Node {
     this.scratchShapeModel = this.model.quadrilateralTestShapeModel;
     this.modelViewTransform = modelViewTransform;
 
-    const vertexNode1 = new VertexNode( this.quadrilateralShapeModel.vertex1, 'A', quadrilateralModel, modelViewTransform, {
+    // for readability
+    const vertex1 = this.quadrilateralShapeModel.vertex1;
+    const vertex2 = this.quadrilateralShapeModel.vertex2;
+    const vertex3 = this.quadrilateralShapeModel.vertex3;
+    const vertex4 = this.quadrilateralShapeModel.vertex4;
+
+    const vertexNode1 = new VertexNode( vertex1, 'A', quadrilateralModel, modelViewTransform, {
 
       // voicing
       voicingNameResponse: vertex1String,
@@ -66,7 +73,7 @@ class QuadrilateralNode extends Node {
       tandem: options.tandem.createTandem( 'vertex1Node' )
     } );
 
-    const vertexNode2 = new VertexNode( this.quadrilateralShapeModel.vertex2, 'B', quadrilateralModel, modelViewTransform, {
+    const vertexNode2 = new VertexNode( vertex2, 'B', quadrilateralModel, modelViewTransform, {
 
       // voicing
       voicingNameResponse: vertex2String,
@@ -75,7 +82,7 @@ class QuadrilateralNode extends Node {
       tandem: options.tandem.createTandem( 'vertex2Node' )
     } );
 
-    const vertexNode3 = new VertexNode( this.quadrilateralShapeModel.vertex3, 'C', quadrilateralModel, modelViewTransform, {
+    const vertexNode3 = new VertexNode( vertex3, 'C', quadrilateralModel, modelViewTransform, {
 
       // voicing
       voicingNameResponse: vertex3String,
@@ -84,7 +91,7 @@ class QuadrilateralNode extends Node {
       tandem: options.tandem.createTandem( 'vertex3Node' )
     } );
 
-    const vertexNode4 = new VertexNode( this.quadrilateralShapeModel.vertex4, 'D', quadrilateralModel, modelViewTransform, {
+    const vertexNode4 = new VertexNode( vertex4, 'D', quadrilateralModel, modelViewTransform, {
 
       // voicing
       voicingNameResponse: vertex4String,
@@ -114,11 +121,17 @@ class QuadrilateralNode extends Node {
       voicingNameResponse: leftSideString
     } );
 
-    // angle guides, added here so that they can be layered on top of everything
-    const vertex1AngleGuideNode = new AngleGuideNode( this.model.quadrilateralShapeModel.vertex1, this.model.quadrilateralShapeModel.vertex2, this.model.angleGuideVisibleProperty, modelViewTransform );
-    const vertex2AngleGuideNode = new AngleGuideNode( this.model.quadrilateralShapeModel.vertex2, this.model.quadrilateralShapeModel.vertex3, this.model.angleGuideVisibleProperty, modelViewTransform );
-    const vertex3AngleGuideNode = new AngleGuideNode( this.model.quadrilateralShapeModel.vertex3, this.model.quadrilateralShapeModel.vertex4, this.model.angleGuideVisibleProperty, modelViewTransform );
-    const vertex4AngleGuideNode = new AngleGuideNode( this.model.quadrilateralShapeModel.vertex4, this.model.quadrilateralShapeModel.vertex1, this.model.angleGuideVisibleProperty, modelViewTransform );
+    // angle guides
+    const vertex1AngleGuideNode = new AngleGuideNode( vertex1, vertex2, this.model.angleGuideVisibleProperty, modelViewTransform );
+    const vertex2AngleGuideNode = new AngleGuideNode( vertex2, vertex3, this.model.angleGuideVisibleProperty, modelViewTransform );
+    const vertex3AngleGuideNode = new AngleGuideNode( vertex3, vertex4, this.model.angleGuideVisibleProperty, modelViewTransform );
+    const vertex4AngleGuideNode = new AngleGuideNode( vertex4, vertex1, this.model.angleGuideVisibleProperty, modelViewTransform );
+
+    // right angle indicators, visible when a vertex has a right angle
+    const vertex1RightAngleIndicator = new RightAngleIndicatorNode( vertex1, vertex2, vertex4, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertex2RightAngleIndicator = new RightAngleIndicatorNode( vertex2, vertex3, vertex1, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertex3RightAngleIndicator = new RightAngleIndicatorNode( vertex3, vertex4, vertex2, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertex4RightAngleIndicator = new RightAngleIndicatorNode( vertex4, vertex1, vertex3, this.model.quadrilateralShapeModel, modelViewTransform );
 
     // add children - sides first because we want vertices to catch all input
     this.addChild( topSideNode );
@@ -131,6 +144,12 @@ class QuadrilateralNode extends Node {
     this.addChild( vertex2AngleGuideNode );
     this.addChild( vertex3AngleGuideNode );
     this.addChild( vertex4AngleGuideNode );
+
+    // angle indicators should not be occluded by sides
+    this.addChild( vertex1RightAngleIndicator );
+    this.addChild( vertex2RightAngleIndicator );
+    this.addChild( vertex3RightAngleIndicator );
+    this.addChild( vertex4RightAngleIndicator );
 
     this.addChild( vertexNode1 );
     this.addChild( vertexNode2 );

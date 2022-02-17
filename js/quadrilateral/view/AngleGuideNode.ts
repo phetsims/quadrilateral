@@ -19,8 +19,8 @@ import Line from '../../../../kite/js/segments/Line.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
+import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 
 // constants
 // The size of each slice of the angle guide, in radians
@@ -34,7 +34,7 @@ const INNER_RADIUS = Vertex.VERTEX_WIDTH / 2;
 const OUTER_RADIUS = Vertex.VERTEX_WIDTH / 2 + SLICE_RADIAL_LENGTH;
 
 class AngleGuideNode extends Node {
-  constructor( vertex1: Vertex, vertex2: Vertex, visibleProperty: BooleanProperty, modelViewTransform: ModelViewTransform2 ) {
+  constructor( vertex1: Vertex, vertex2: Vertex, visibleProperty: IReadOnlyProperty<boolean>, modelViewTransform: ModelViewTransform2 ) {
     super();
 
     // The guide looks like alternating dark and light slices along the annulus, we accomplish this with two paths

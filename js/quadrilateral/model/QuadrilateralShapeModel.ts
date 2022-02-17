@@ -786,6 +786,10 @@ class QuadrilateralShapeModel {
     return Utils.equalsEpsilon( angle1, angle2, this.angleToleranceIntervalProperty.value );
   }
 
+  public isRightAngle( angle: number ): boolean {
+    return Utils.equalsEpsilon( angle, Math.PI / 2, this.angleToleranceIntervalProperty.value );
+  }
+
   /**
    * Returns true if two angles are close enough together that they should be considered equal. This uses the
    * shapeAngleToleranceProperty, the most strict interval available. The angleToleranceInterval can be set

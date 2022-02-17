@@ -52,6 +52,11 @@ const QuadrilateralColors = {
   // Color for the stroke around angle guide shapes
   angleGuideStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'angleGuideStroke', {
     default: 'black'
+  } ),
+
+  // Color for the stroke around right angle indicator
+  rightAngleIndicatorStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'rightAngleIndicatorStroke', {
+    default: 'black'
   } )
 };
 
