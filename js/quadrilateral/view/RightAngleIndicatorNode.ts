@@ -15,7 +15,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 
 // in model coordinates, length of a side of the indicator from the edge of a line between two vertices
-const SIDE_LENGTH = 0.05;
+const SIDE_LENGTH = 0.12;
 
 class RightAngleIndicatorNode extends Path {
 
