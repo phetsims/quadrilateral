@@ -74,7 +74,6 @@ class QuadrilateralShapeModel {
   public angleToleranceIntervalProperty: DerivedProperty<number, boolean[]>;
   public tiltToleranceIntervalProperty: Property<number>;
   public shapeAngleToleranceIntervalProperty: Property<number>;
-  public rightAngleIndicatorToleranceIntervalProperty: Property<number>;
 
   public shapeChangedEmitter: Emitter<[]>;
 
@@ -207,13 +206,6 @@ class QuadrilateralShapeModel {
 
     this.shapeAngleToleranceIntervalProperty = new NumberProperty( QuadrilateralQueryParameters.shapeAngleToleranceInterval, {
       tandem: options.tandem.createTandem( 'shapeAngleToleranceIntervalProperty' ),
-      range: new Range( 0, 2 * Math.PI )
-    } );
-
-    // The tolerance for when angle equality checks used to determine when to display information related to
-    // a single vertex having a right angle.
-    this.rightAngleIndicatorToleranceIntervalProperty = new NumberProperty( QuadrilateralQueryParameters.rightAngleIndicatorToleranceInterval, {
-      tandem: options.tandem.createTandem( 'rightAngleIndicatorToleranceIntervalProperty' ),
       range: new Range( 0, 2 * Math.PI )
     } );
 
@@ -783,16 +775,6 @@ class QuadrilateralShapeModel {
    */
   public isAngleEqualToOther( angle1: number, angle2: number ): boolean {
     return Utils.equalsEpsilon( angle1, angle2, this.angleToleranceIntervalProperty.value );
-  }
-
-  /**
-   * Returns true if the angle is a right angle within its tolerance. This is used to determine if various
-   * indicators for a right angle should be displayed. It has its own tolerance interval because the tolerance
-   * interval needs to be more strict compared to other angle equalities.
-   * @param angle
-   */
-  public isRightAngle( angle: number ): boolean {
-    return Utils.equalsEpsilon( angle, Math.PI / 2, this.rightAngleIndicatorToleranceIntervalProperty.value );
   }
 
   /**

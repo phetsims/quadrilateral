@@ -47,16 +47,6 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     defaultValue: 0.05
   },
 
-  // A tolerance interval used to determine equality of angles with 90 degrees, and when to display the
-  // RightAngleIndicatorNodes. The need to be less than the angleToleranceInterval because we need to avoid the
-  // case where the angleToleranceInterval says that the shape is NOT a parallelogram, but the angles are close
-  // enough to 90 degrees such that the RightAngleIndicatorNodes are displayed.
-  rightAngleIndicatorToleranceInterval: {
-    type: 'number',
-    isValidValue: value => value <= ( 2 * Math.PI ) && value >= 0,
-    defaultValue: 0.025
-  },
-
   // The tolerance interval for the angle of tilt for sides.
   tiltToleranceInterval: {
     type: 'number',
