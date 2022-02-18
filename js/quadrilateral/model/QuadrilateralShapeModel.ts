@@ -794,8 +794,13 @@ class QuadrilateralShapeModel {
     return Utils.equalsEpsilon( angle1, angle2, this.angleToleranceIntervalProperty.value );
   }
 
+  /**
+   * Returns true if the angle is a right angle within its tolerance. This is used to determine if various
+   * indicators for a right angle should be displayed. It has its own tolerance interval because the tolerance
+   * interval needs to be more strict compared to other angle equalities.
+   * @param angle
+   */
   public isRightAngle( angle: number ): boolean {
-    console.log( this.rightAngleIndicatorToleranceIntervalProperty.value );
     return Utils.equalsEpsilon( angle, Math.PI / 2, this.rightAngleIndicatorToleranceIntervalProperty.value );
   }
 
