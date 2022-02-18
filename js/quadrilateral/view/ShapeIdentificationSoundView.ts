@@ -25,7 +25,12 @@ class ShapeIdentificationSoundView {
 
     shapeNameProperty.link( name => {
       if ( !isParallelogramProperty.value && name ) {
-        this.shapeSoundClip.play();
+
+        // Design request that this sound should not play when it is a concave shape. See
+        // https://github.com/phetsims/quadrilateral/issues/57
+        if ( name !== NamedQuadrilateral.CONCAVE ) {
+          this.shapeSoundClip.play();
+        }
       }
     } );
   }
