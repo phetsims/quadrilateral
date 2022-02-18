@@ -23,6 +23,7 @@ import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import Property from '../../../../axon/js/Property.js';
+import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 
 // constants
 // The size of each slice of the angle guide, in radians
@@ -104,8 +105,9 @@ class AngleGuideNode extends Node {
 
     // listeners - This Node is only visible when "Angle Guides" are visible by the user and the angle is NOT a right
     // angle. In that case, the RightAngleIndicatorNode will display the angle.
-    Property.multilink( [ visibleProperty, vertex1.angleProperty! ], ( visible: boolean, angle: number ) => {
-      this.visible = visible && !shapeModel.isRightAngle( angle );
+    Property.multilink( [ visibleProperty, shapeModel.shapeNameProperty ], ( visible: boolean, shapeName: NamedQuadrilateral | null ) => {
+      const currentShape = shapeModel.shapeNameProperty.value;
+      this.visible = visible && currentShape !== NamedQuadrilateral.SQUARE && currentShape !== NamedQuadrilateral.RECTANGLE;
     } );
   }
 

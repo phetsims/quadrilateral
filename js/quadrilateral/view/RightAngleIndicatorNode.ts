@@ -13,6 +13,8 @@ import Side from '../model/Side.js';
 import Shape from '../../../../kite/js/Shape.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
+import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
+import Property from '../../../../axon/js/Property.js';
 
 // in model coordinates, length of a side of the indicator from the edge of a line between two vertices
 const SIDE_LENGTH = 0.12;
@@ -27,15 +29,20 @@ class RightAngleIndicatorNode extends Path {
    * @param modelViewTransform
    */
   constructor( vertex1: Vertex, vertex2: Vertex, vertex3: Vertex, shapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2 ) {
-
     super( null, {
       stroke: QuadrilateralColors.rightAngleIndicatorStrokeColorProperty,
       lineWidth: 2
     } );
 
+    // The indicators are only visible when all angles are 90 degrees (square or rectangle), but we need to draw
+    // the shape every time the angle changes because we may be a square or rectangle within tolerances (angles
+    // can adjust slightly). Linked to the shape name (instead of checking equality with 90 degrees) so that the
+    // indicator visibility matches how we name shapes.
     assert && assert( vertex1.angleProperty, 'angleProperty must be defined to draw indicator' );
-    vertex1.angleProperty!.link( angle => {
-      this.visible = shapeModel.isRightAngle( angle );
+    Property.multilink( [ shapeModel.shapeNameProperty, vertex1.angleProperty! ], ( shapeName, angle ) => {
+
+      const currentShape = shapeModel.shapeNameProperty.value;
+      this.visible = currentShape === NamedQuadrilateral.SQUARE || currentShape === NamedQuadrilateral.RECTANGLE;
 
       // if we have become visible, we need to redraw the shape
       if ( this.visible ) {
