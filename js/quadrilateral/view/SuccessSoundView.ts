@@ -10,6 +10,7 @@ import soundManager from '../../../../tambo/js/soundManager.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import QuadrilateralSoundOptionsModel, { SoundDesign, SuccessSoundCollection, SuccessSoundFile } from '../model/QuadrilateralSoundOptionsModel.js';
+import ShapeIdentificationSoundView from './ShapeIdentificationSoundView.js';
 
 const MAX_OUTPUT_LEVEL = 0.2;
 
@@ -44,11 +45,16 @@ class SuccessSoundView {
 
   private remainingDelayForMaintenanceSound: number;
 
+  private readonly shapeIdentificationSound: ShapeIdentificationSoundView;
+
   public constructor( model: QuadrilateralModel, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
 
     this.model = model;
 
     const shapeModel = model.quadrilateralShapeModel;
+
+    // The sound view that plays an indication sound when we detect a new named shape
+    this.shapeIdentificationSound = new ShapeIdentificationSoundView( shapeModel.isParallelogramProperty, shapeModel.shapeNameProperty );
 
     // The SoundClips are null until a SuccessSoundFile is selected by the user. There are several to choose
     // from for now while we experiment with different prototypes, but we expect a single design at some point. At
@@ -399,6 +405,8 @@ class SuccessSoundView {
    * @public
    */
   dispose() {
+    this.shapeIdentificationSound.dispose();
+
     this.disposeSuccessSoundView();
     this.disposeSoundClips();
   }

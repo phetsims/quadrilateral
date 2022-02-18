@@ -17,6 +17,8 @@ import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import IProperty from '../../../../axon/js/IProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
+import Property from '../../../../axon/js/Property.js';
 
 const TEXT_OPTIONS = { fontSize: 16 };
 const valuePatternString = '{{label}}: {{value}}';
@@ -27,7 +29,7 @@ class QuadrilateralModelValuePanel extends Panel {
     const options = optionize<PanelOptions>( {
 
       // looks good for debugging without the panel resizing frequently
-      minWidth: 250
+      minWidth: 400
     }, providedOptions );
 
     const topSideLengthText = new Text( '', TEXT_OPTIONS );
@@ -65,6 +67,8 @@ class QuadrilateralModelValuePanel extends Panel {
       align: 'left'
     } );
 
+    const shapeNameText = new Text( '', TEXT_OPTIONS );
+
     const markerDetectedText = new Text( '', TEXT_OPTIONS );
     const markerRotationText = new Text( '', TEXT_OPTIONS );
     const markerBox = new VBox( {
@@ -77,6 +81,7 @@ class QuadrilateralModelValuePanel extends Panel {
         lengthBox,
         angleBox,
         parallelogramBox,
+        shapeNameText,
         markerBox
       ],
       align: 'left',
@@ -104,12 +109,15 @@ class QuadrilateralModelValuePanel extends Panel {
     // angleToleranceInterval
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.angleToleranceIntervalProperty, parallelogramToleranceIntervalText, 'angleToleranceInterval' );
 
+    // shape name
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.shapeNameProperty, shapeNameText, 'shape name' );
+
     // marker detection
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.rotationMarkerDetectedProperty, markerDetectedText, 'Marker detected' );
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.markerRotationProperty, markerRotationText, 'Marker rotation' );
   }
 
-  private static addRedrawValueTextListener( property: IReadOnlyProperty<number> | IProperty<boolean>, text: Text, label: string ) {
+  private static addRedrawValueTextListener( property: IReadOnlyProperty<number> | IProperty<boolean> | Property<NamedQuadrilateral | null>, text: Text, label: string ) {
     property.link( value => {
 
       let formattedValue = value;

@@ -55,6 +55,15 @@ class QuadrilateralScreenView extends ScreenView {
       tandem: tandem
     } );
 
+    // A panel that displays model values, useful for debugging, useful for debugging. Should be below everything
+    const debugValuesPanel = new QuadrilateralModelValuePanel( model, {
+      leftTop: new Vector2( QuadrilateralConstants.SCREEN_VIEW_X_MARGIN, QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN )
+    } );
+    this.addChild( debugValuesPanel );
+    model.showDebugValuesProperty.link( showValues => {
+      debugValuesPanel.visible = showValues;
+    } );
+
     const visibilityControls = new QuadrilateralVisibilityControls( model.vertexLabelsVisibleProperty, model.angleGuideVisibleProperty, {
       rightCenter: this.layoutBounds.rightCenter.minusXY( QuadrilateralConstants.SCREEN_VIEW_X_MARGIN, 0 ),
       tandem: tandem.createTandem( 'visibilityControls' )
@@ -219,21 +228,6 @@ class QuadrilateralScreenView extends ScreenView {
       } );
 
       this.addChild( calibrationButton );
-    }
-
-    // A panel that displays model values, useful for debugging.
-    const debugValuesPanel = new QuadrilateralModelValuePanel( model, {
-      leftTop: new Vector2( QuadrilateralConstants.SCREEN_VIEW_X_MARGIN, QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN )
-    } );
-    this.addChild( debugValuesPanel );
-    model.showDebugValuesProperty.link( showValues => {
-      debugValuesPanel.visible = showValues;
-    } );
-
-    if ( QuadrilateralQueryParameters.showModelValues ) {
-      this.addChild( new QuadrilateralModelValuePanel( model, {
-        leftTop: new Vector2( QuadrilateralConstants.SCREEN_VIEW_X_MARGIN, QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN )
-      } ) );
     }
   }
 
