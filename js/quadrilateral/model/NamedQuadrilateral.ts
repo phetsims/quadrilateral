@@ -16,7 +16,6 @@ class NamedQuadrilateral extends EnumerationValue {
   static RECTANGLE = new NamedQuadrilateral();
   static RHOMBUS = new NamedQuadrilateral();
   static KITE = new NamedQuadrilateral();
-  static RIGHT_ANGLED_TRAPEZOID = new NamedQuadrilateral();
   static ISOSCELES_TRAPEZOID = new NamedQuadrilateral();
   static TRAPEZOID = new NamedQuadrilateral();
   static CONCAVE = new NamedQuadrilateral();
