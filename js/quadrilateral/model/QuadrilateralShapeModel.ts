@@ -74,6 +74,7 @@ class QuadrilateralShapeModel {
   public angleToleranceIntervalProperty: DerivedProperty<number, boolean[]>;
   public tiltToleranceIntervalProperty: Property<number>;
   public shapeAngleToleranceIntervalProperty: Property<number>;
+  public rightAngleIndicatorToleranceIntervalProperty: Property<number>;
 
   public shapeChangedEmitter: Emitter<[]>;
 
@@ -206,6 +207,13 @@ class QuadrilateralShapeModel {
 
     this.shapeAngleToleranceIntervalProperty = new NumberProperty( QuadrilateralQueryParameters.shapeAngleToleranceInterval, {
       tandem: options.tandem.createTandem( 'shapeAngleToleranceIntervalProperty' ),
+      range: new Range( 0, 2 * Math.PI )
+    } );
+
+    // The tolerance for when angle equality checks used to determine when to display information related to
+    // a single vertex having a right angle.
+    this.rightAngleIndicatorToleranceIntervalProperty = new NumberProperty( QuadrilateralQueryParameters.rightAngleIndicatorToleranceInterval, {
+      tandem: options.tandem.createTandem( 'rightAngleIndicatorToleranceIntervalProperty' ),
       range: new Range( 0, 2 * Math.PI )
     } );
 
@@ -787,7 +795,8 @@ class QuadrilateralShapeModel {
   }
 
   public isRightAngle( angle: number ): boolean {
-    return Utils.equalsEpsilon( angle, Math.PI / 2, this.angleToleranceIntervalProperty.value );
+    console.log( this.rightAngleIndicatorToleranceIntervalProperty.value );
+    return Utils.equalsEpsilon( angle, Math.PI / 2, this.rightAngleIndicatorToleranceIntervalProperty.value );
   }
 
   /**
