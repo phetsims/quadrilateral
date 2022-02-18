@@ -10,7 +10,7 @@
 
 import Property from '../../../../axon/js/Property.js';
 import merge from '../../../../phet-core/js/merge.js';
-import { DragListener, FocusHighlightPath, KeyboardDragListener, Path, SceneryEvent, Voicing } from '../../../../scenery/js/imports.js';
+import { DragListener, KeyboardDragListener, Path, SceneryEvent, Voicing } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import Side from '../model/Side.js';
@@ -65,10 +65,6 @@ class SideNode extends Voicing( Path, 1 ) {
 
     // Mutate options eagerly, but not in super because that doesn't work with the Voicing trait
     this.mutate( options );
-
-    // pdom - make the focus highlight tightly surround the line so that it is easier to see the shape
-    const sideFocusHighlight = new FocusHighlightPath( null );
-    this.focusHighlight = sideFocusHighlight;
 
     // listeners
     Property.multilink( [ side.vertex1.positionProperty, side.vertex2.positionProperty ], ( vertex1Position: Vector2, vertex2Position: Vector2 ) => {
@@ -135,9 +131,6 @@ class SideNode extends Voicing( Path, 1 ) {
 
       // transform shape to view coordinates
       this.shape = modelViewTransform.modelToViewShape( lineShape );
-
-      const focusHighlightShape = this.mouseArea as Shape;
-      sideFocusHighlight.setShape( focusHighlightShape );
     } );
 
     // supports keyboard dragging, attempts to move both vertices in the direction of motion of the line
