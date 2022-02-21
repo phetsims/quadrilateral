@@ -8,6 +8,10 @@
  * The annulus always starts at the same side so that the whole Node rotates with the entire quadrilateral so that the
  * guide always looks the same regardless of quadrilateral rotation.
  *
+ * It also includes a set of dashed lines that run through the vertex and along the connected sides to give a
+ * visualization of the internal angle (that is displayed by the arcs of the angle guide) and the external angle
+ * that is outside of the quadrilateral shape. See https://github.com/phetsims/quadrilateral/issues/73.
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
@@ -36,6 +40,8 @@ const SLICE_RADIAL_LENGTH = 0.05;
 const INNER_RADIUS = Vertex.VERTEX_WIDTH / 2;
 const OUTER_RADIUS = Vertex.VERTEX_WIDTH / 2 + SLICE_RADIAL_LENGTH;
 
+const EXTERNAL_ANGLE_GUIDE_LENGTH = SLICE_RADIAL_LENGTH * 8;
+
 class AngleGuideNode extends Node {
   constructor( vertex1: Vertex, vertex2: Vertex, visibleProperty: BooleanProperty, shapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2 ) {
     super();
@@ -48,6 +54,11 @@ class AngleGuideNode extends Node {
     const lightAnglePath = new Path( null, {
       fill: QuadrilateralColors.angleGuideLightColorProperty,
       stroke: QuadrilateralColors.angleGuideStrokeColorProperty
+    } );
+
+    const crosshairPath = new Path( null, {
+      stroke: QuadrilateralColors.angleGuideStrokeColorProperty,
+      lineDash: [ 5, 5 ]
     } );
 
     assert && assert( vertex1.angleProperty, 'angleProperty needs to be defined to add listeners in AngleGuideNode' );
@@ -99,9 +110,27 @@ class AngleGuideNode extends Node {
 
       darkAnglePath.shape = modelViewTransform.modelToViewShape( lightShape );
       lightAnglePath.shape = modelViewTransform.modelToViewShape( darkShape );
+
+      // now draw the line so that we can update the angle
+      // start of the first guiding line, along the line between vertices parametrically
+      const innerT = Math.min( ( EXTERNAL_ANGLE_GUIDE_LENGTH / 2 ) / line.getArcLength(), 1 );
+      const firstCrosshairPoint = AngleGuideNode.customPositionAt( line, innerT );
+      const secondCrosshairPoint = AngleGuideNode.customPositionAt( line, -innerT );
+
+      // for the points on the second crosshair line rotate by the angle around the center of the vertex
+      const thirdCrosshairPoint = firstCrosshairPoint.rotatedAboutPoint( vertexCenter, 2 * Math.PI - angle );
+      const fourthCrosshairPoint = secondCrosshairPoint.rotatedAboutPoint( vertexCenter, 2 * Math.PI - angle );
+
+      const crosshairShape = new Shape();
+      crosshairShape.moveToPoint( firstCrosshairPoint );
+      crosshairShape.lineToPoint( secondCrosshairPoint );
+      crosshairShape.moveToPoint( thirdCrosshairPoint );
+      crosshairShape.lineToPoint( fourthCrosshairPoint );
+
+      crosshairPath.shape = modelViewTransform.modelToViewShape( crosshairShape );
     } );
 
-    this.children = [ darkAnglePath, lightAnglePath ];
+    this.children = [ darkAnglePath, lightAnglePath, crosshairPath ];
 
     // listeners - This Node is only visible when "Angle Guides" are visible by the user and the angle is NOT a right
     // angle. In that case, the RightAngleIndicatorNode will display the angle.
@@ -109,6 +138,14 @@ class AngleGuideNode extends Node {
       const currentShape = shapeModel.shapeNameProperty.value;
       this.visible = visible && currentShape !== NamedQuadrilateral.SQUARE && currentShape !== NamedQuadrilateral.RECTANGLE;
     } );
+  }
+
+  /**
+   * Returns the parametric position along a line at the position t. Modified from Line.positionAt to support
+   * positions outside of the range [0, 1] which is necessary for drawing code in this component.
+   */
+  private static customPositionAt( line: Line, t: number ) {
+    return line.start.plus( line.end.minus( line.start ).times( t ) );
   }
 
   /**
