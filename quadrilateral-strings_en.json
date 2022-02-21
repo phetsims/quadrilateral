@@ -8,6 +8,18 @@
   "angleGuide": {
     "value": "Angle Guide"
   },
+  "vertexA": {
+    "value": "A"
+  },
+  "vertexB": {
+    "value": "B"
+  },
+  "vertexC": {
+    "value": "C"
+  },
+  "vertexD": {
+    "value": "D"
+  },
   "a11y": {
     "voicing": {
       "cornerA": {

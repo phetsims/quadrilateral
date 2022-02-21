@@ -13,6 +13,10 @@ type StringsType = {
   },
   'cornerLabels': string,
   'angleGuide': string,
+  'vertexA': string,
+  'vertexB': string,
+  'vertexC': string,
+  'vertexD': string,
   'a11y': {
     'voicing': {
       'cornerA': string,

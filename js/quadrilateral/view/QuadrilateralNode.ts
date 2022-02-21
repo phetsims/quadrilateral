@@ -21,14 +21,18 @@ import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import RightAngleIndicatorNode from './RightAngleIndicatorNode.js';
 
 // constants
-const vertexAString = quadrilateralStrings.a11y.voicing.cornerA;
-const vertexBString = quadrilateralStrings.a11y.voicing.cornerB;
-const vertexCString = quadrilateralStrings.a11y.voicing.cornerC;
-const vertexDString = quadrilateralStrings.a11y.voicing.cornerD;
+const cornerAString = quadrilateralStrings.a11y.voicing.cornerA;
+const cornerBString = quadrilateralStrings.a11y.voicing.cornerB;
+const cornerCString = quadrilateralStrings.a11y.voicing.cornerC;
+const cornerDString = quadrilateralStrings.a11y.voicing.cornerD;
 const topSideString = quadrilateralStrings.a11y.voicing.topSide;
 const rightSideString = quadrilateralStrings.a11y.voicing.rightSide;
 const bottomSideString = quadrilateralStrings.a11y.voicing.bottomSide;
 const leftSideString = quadrilateralStrings.a11y.voicing.leftSide;
+const vertexAString = quadrilateralStrings.vertexA;
+const vertexBString = quadrilateralStrings.vertexB;
+const vertexCString = quadrilateralStrings.vertexC;
+const vertexDString = quadrilateralStrings.vertexD;
 
 const EQUAL_SIDES_SEGMENT_LINE_WIDTH = 2;
 const DEFAULT_SIDES_SEGMENT_LINE_WIDTH = 1;
@@ -64,37 +68,37 @@ class QuadrilateralNode extends Node {
     const vertexC = this.quadrilateralShapeModel.vertexC;
     const vertexD = this.quadrilateralShapeModel.vertexD;
 
-    const vertexNode1 = new VertexNode( vertexA, 'A', quadrilateralModel, modelViewTransform, {
+    const vertexNode1 = new VertexNode( vertexA, vertexAString, quadrilateralModel, modelViewTransform, {
 
       // voicing
-      voicingNameResponse: vertexAString,
+      voicingNameResponse: cornerAString,
 
       // phet-io
       tandem: options.tandem.createTandem( 'vertexANode' )
     } );
 
-    const vertexNode2 = new VertexNode( vertexB, 'B', quadrilateralModel, modelViewTransform, {
+    const vertexNode2 = new VertexNode( vertexB, vertexBString, quadrilateralModel, modelViewTransform, {
 
       // voicing
-      voicingNameResponse: vertexBString,
+      voicingNameResponse: cornerBString,
 
       // phet-io
       tandem: options.tandem.createTandem( 'vertexBNode' )
     } );
 
-    const vertexNode3 = new VertexNode( vertexC, 'C', quadrilateralModel, modelViewTransform, {
+    const vertexNode3 = new VertexNode( vertexC, vertexCString, quadrilateralModel, modelViewTransform, {
 
       // voicing
-      voicingNameResponse: vertexCString,
+      voicingNameResponse: cornerCString,
 
       // phet-io
       tandem: options.tandem.createTandem( 'vertexCNode' )
     } );
 
-    const vertexNode4 = new VertexNode( vertexD, 'D', quadrilateralModel, modelViewTransform, {
+    const vertexNode4 = new VertexNode( vertexD, vertexDString, quadrilateralModel, modelViewTransform, {
 
       // voicing
-      voicingNameResponse: vertexDString,
+      voicingNameResponse: cornerDString,
 
       // phet-io
       tandem: options.tandem.createTandem( 'vertexDNode' )

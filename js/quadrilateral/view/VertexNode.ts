@@ -46,7 +46,10 @@ class VertexNode extends Voicing( Circle, 1 ) {
 
     const vertexLabelText = new Text( vertexLabel, {
       center: this.center,
-      font: LABEL_TEXT_FONT
+      font: LABEL_TEXT_FONT,
+
+      // i18n
+      maxWidth: 12 // by inspection
     } );
     this.addChild( vertexLabelText );
 
