@@ -27,7 +27,7 @@ class QuadrilateralModel {
   public showDebugValuesProperty: BooleanProperty;
   public rotationMarkerDetectedProperty: BooleanProperty;
   public markerRotationProperty: NumberProperty;
-  public angleGuideVisibleProperty: BooleanProperty;
+  public cornerGuideVisibleProperty: BooleanProperty;
   public vertexLabelsVisibleProperty: BooleanProperty;
 
   public quadrilateralShapeModel: QuadrilateralShapeModel;
@@ -87,8 +87,8 @@ class QuadrilateralModel {
 
 
     // Whether the angle guide graphics are visible at each vertex.
-    this.angleGuideVisibleProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'angleGuideVisibleProperty' )
+    this.cornerGuideVisibleProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'cornerGuideVisibleProperty' )
     } );
 
     if ( QuadrilateralQueryParameters.deviceConnection ) {

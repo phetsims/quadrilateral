@@ -15,7 +15,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import AngleGuideNode from './AngleGuideNode.js';
+import CornerGuideNode from './CornerGuideNode.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import RightAngleIndicatorNode from './RightAngleIndicatorNode.js';
@@ -126,10 +126,10 @@ class QuadrilateralNode extends Node {
     } );
 
     // angle guides
-    const vertexAAngleGuideNode = new AngleGuideNode( vertexA, vertexB, this.model.angleGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
-    const vertexBAngleGuideNode = new AngleGuideNode( vertexB, vertexC, this.model.angleGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
-    const vertexCAngleGuideNode = new AngleGuideNode( vertexC, vertexD, this.model.angleGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
-    const vertexDAngleGuideNode = new AngleGuideNode( vertexD, vertexA, this.model.angleGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertexACornerGuideNode = new CornerGuideNode( vertexA, vertexB, this.model.cornerGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertexBCornerGuideNode = new CornerGuideNode( vertexB, vertexC, this.model.cornerGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertexCCornerGuideNode = new CornerGuideNode( vertexC, vertexD, this.model.cornerGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertexDCornerGuideNode = new CornerGuideNode( vertexD, vertexA, this.model.cornerGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
 
     // right angle indicators, visible when a vertex has a right angle
     const vertexARightAngleIndicator = new RightAngleIndicatorNode( vertexA, vertexB, vertexD, this.model.quadrilateralShapeModel, modelViewTransform );
@@ -144,10 +144,10 @@ class QuadrilateralNode extends Node {
     this.addChild( leftSideNode );
 
     // guide nodes should not be occluded by sides
-    this.addChild( vertexAAngleGuideNode );
-    this.addChild( vertexBAngleGuideNode );
-    this.addChild( vertexCAngleGuideNode );
-    this.addChild( vertexDAngleGuideNode );
+    this.addChild( vertexACornerGuideNode );
+    this.addChild( vertexBCornerGuideNode );
+    this.addChild( vertexCCornerGuideNode );
+    this.addChild( vertexDCornerGuideNode );
 
     // angle indicators should not be occluded by sides
     this.addChild( vertexARightAngleIndicator );

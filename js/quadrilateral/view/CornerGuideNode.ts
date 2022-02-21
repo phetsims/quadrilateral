@@ -42,28 +42,28 @@ const OUTER_RADIUS = Vertex.VERTEX_WIDTH / 2 + SLICE_RADIAL_LENGTH;
 
 const EXTERNAL_ANGLE_GUIDE_LENGTH = SLICE_RADIAL_LENGTH * 8;
 
-class AngleGuideNode extends Node {
+class CornerGuideNode extends Node {
   constructor( vertex1: Vertex, vertex2: Vertex, visibleProperty: BooleanProperty, shapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2 ) {
     super();
 
     // The guide looks like alternating dark and light slices along the annulus, we accomplish this with two paths
     const darkAnglePath = new Path( null, {
-      fill: QuadrilateralColors.angleGuideDarkColorProperty,
-      stroke: QuadrilateralColors.angleGuideStrokeColorProperty
+      fill: QuadrilateralColors.cornerGuideDarkColorProperty,
+      stroke: QuadrilateralColors.cornerGuideStrokeColorProperty
     } );
     const lightAnglePath = new Path( null, {
-      fill: QuadrilateralColors.angleGuideLightColorProperty,
-      stroke: QuadrilateralColors.angleGuideStrokeColorProperty
+      fill: QuadrilateralColors.cornerGuideLightColorProperty,
+      stroke: QuadrilateralColors.cornerGuideStrokeColorProperty
     } );
 
     const crosshairPath = new Path( null, {
-      stroke: QuadrilateralColors.angleGuideStrokeColorProperty,
+      stroke: QuadrilateralColors.cornerGuideStrokeColorProperty,
       lineDash: [ 5, 5 ]
     } );
 
-    assert && assert( vertex1.angleProperty, 'angleProperty needs to be defined to add listeners in AngleGuideNode' );
+    assert && assert( vertex1.angleProperty, 'angleProperty needs to be defined to add listeners in CornerGuideNode' );
     vertex1.angleProperty!.link( angle => {
-      assert && assert( angle > 0, 'AngleGuideNodes cannot support angles at or less than zero' );
+      assert && assert( angle > 0, 'CornerGuideNodes cannot support angles at or less than zero' );
       const vertexCenter = vertex1.positionProperty.value;
 
       // Line helps us find where we should start drawing the shape, the annulus is "anchored" to one side so that
@@ -88,7 +88,7 @@ class AngleGuideNode extends Node {
         const nextInnerPoint = firstInnerPoint.rotatedAboutPoint( vertexCenter, -SLICE_SIZE_RADIANS );
         const nextOuterPoint = firstOuterPoint.rotatedAboutPoint( vertexCenter, -SLICE_SIZE_RADIANS );
 
-        AngleGuideNode.drawAngleSegment( nextShape, firstInnerPoint, firstOuterPoint, nextInnerPoint, nextOuterPoint );
+        CornerGuideNode.drawAngleSegment( nextShape, firstInnerPoint, firstOuterPoint, nextInnerPoint, nextOuterPoint );
 
         firstInnerPoint = nextInnerPoint;
         firstOuterPoint = nextOuterPoint;
@@ -105,7 +105,7 @@ class AngleGuideNode extends Node {
         const nextInnerPoint = firstInnerPoint.rotatedAboutPoint( vertexCenter, -remainingAngle );
         const nextOuterPoint = firstOuterPoint.rotatedAboutPoint( vertexCenter, -remainingAngle );
 
-        AngleGuideNode.drawAngleSegment( remainderShape, firstInnerPoint, firstOuterPoint, nextInnerPoint, nextOuterPoint );
+        CornerGuideNode.drawAngleSegment( remainderShape, firstInnerPoint, firstOuterPoint, nextInnerPoint, nextOuterPoint );
       }
 
       darkAnglePath.shape = modelViewTransform.modelToViewShape( lightShape );
@@ -114,8 +114,8 @@ class AngleGuideNode extends Node {
       // now draw the line so that we can update the angle
       // start of the first guiding line, along the line between vertices parametrically
       const innerT = Math.min( ( EXTERNAL_ANGLE_GUIDE_LENGTH / 2 ) / line.getArcLength(), 1 );
-      const firstCrosshairPoint = AngleGuideNode.customPositionAt( line, innerT );
-      const secondCrosshairPoint = AngleGuideNode.customPositionAt( line, -innerT );
+      const firstCrosshairPoint = CornerGuideNode.customPositionAt( line, innerT );
+      const secondCrosshairPoint = CornerGuideNode.customPositionAt( line, -innerT );
 
       // for the points on the second crosshair line rotate by the angle around the center of the vertex
       const thirdCrosshairPoint = firstCrosshairPoint.rotatedAboutPoint( vertexCenter, 2 * Math.PI - angle );
@@ -162,5 +162,5 @@ class AngleGuideNode extends Node {
   }
 }
 
-quadrilateral.register( 'AngleGuideNode', AngleGuideNode );
-export default AngleGuideNode;
+quadrilateral.register( 'CornerGuideNode', CornerGuideNode );
+export default CornerGuideNode;

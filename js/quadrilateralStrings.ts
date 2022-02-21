@@ -12,7 +12,7 @@ type StringsType = {
     'title': string
   },
   'cornerLabels': string,
-  'angleGuide': string,
+  'cornerGuide': string,
   'vertexA': string,
   'vertexB': string,
   'vertexC': string,

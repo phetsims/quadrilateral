@@ -29,7 +29,7 @@ type QuadrilateralVisibilityControlsSelfOptions = {
 type QuadrilateralVisibilityControlsOptions = QuadrilateralVisibilityControlsSelfOptions & Omit<VBoxOptions, 'children'>
 
 class QuadrilateralVisibilityControls extends VBox {
-  constructor( cornerLabelsVisibleProperty: BooleanProperty, angleGuideVisibleProperty: BooleanProperty, providedOptions?: QuadrilateralVisibilityControlsOptions ) {
+  constructor( cornerLabelsVisibleProperty: BooleanProperty, cornerGuideVisibleProperty: BooleanProperty, providedOptions?: QuadrilateralVisibilityControlsOptions ) {
 
     const options = optionize<QuadrilateralVisibilityControlsOptions, QuadrilateralVisibilityControlsSelfOptions, VBoxOptions>( {
       align: 'left',
@@ -43,12 +43,12 @@ class QuadrilateralVisibilityControls extends VBox {
       tandem: options.tandem.createTandem( 'cornerLabelsCheckbox' )
     } );
 
-    const angleGuideText = new Text( quadrilateralStrings.angleGuide, TEXT_OPTIONS );
-    const angleGuideCheckbox = new Checkbox( angleGuideText, angleGuideVisibleProperty, {
-      tandem: options.tandem.createTandem( 'angleGuideCheckbox' )
+    const cornerGuideText = new Text( quadrilateralStrings.cornerGuide, TEXT_OPTIONS );
+    const cornerGuideCheckbox = new Checkbox( cornerGuideText, cornerGuideVisibleProperty, {
+      tandem: options.tandem.createTandem( 'cornerGuideCheckbox' )
     } );
 
-    options.children = [ cornerLabelsCheckbox, angleGuideCheckbox ];
+    options.children = [ cornerLabelsCheckbox, cornerGuideCheckbox ];
 
     super( options );
   }
