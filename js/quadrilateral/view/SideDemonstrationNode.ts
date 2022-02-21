@@ -32,10 +32,10 @@ class SideDemonstrationNode extends Node {
     const shapeModel = model.quadrilateralShapeModel;
     const scratchShapeModel = model.quadrilateralTestShapeModel;
 
-    const vertex1Node = new VertexNode( shapeModel.vertex1, '1', model, modelViewTransform );
-    const vertex2Node = new VertexNode( shapeModel.vertex2, '2', model, modelViewTransform );
-    const vertex3Node = new VertexNode( shapeModel.vertex3, '3', model, modelViewTransform );
-    const vertex4Node = new VertexNode( shapeModel.vertex4, '4', model, modelViewTransform );
+    const vertexANode = new VertexNode( shapeModel.vertexA, 'A', model, modelViewTransform );
+    const vertexBNode = new VertexNode( shapeModel.vertexB, 'B', model, modelViewTransform );
+    const vertexCNode = new VertexNode( shapeModel.vertexC, 'C', model, modelViewTransform );
+    const vertexDNode = new VertexNode( shapeModel.vertexD, 'D', model, modelViewTransform );
 
     // references to SideViews, only created if requested by query parameter
     this.rightSideSoundView = null;
@@ -85,16 +85,16 @@ class SideDemonstrationNode extends Node {
 
     // add vertex children depending on sides requested
     if ( QuadrilateralQueryParameters.leftSide || QuadrilateralQueryParameters.topSide ) {
-      this.addChild( vertex1Node );
+      this.addChild( vertexANode );
     }
     if ( QuadrilateralQueryParameters.rightSide || QuadrilateralQueryParameters.topSide ) {
-      this.addChild( vertex2Node );
+      this.addChild( vertexBNode );
     }
     if ( QuadrilateralQueryParameters.rightSide || QuadrilateralQueryParameters.bottomSide ) {
-      this.addChild( vertex3Node );
+      this.addChild( vertexCNode );
     }
     if ( QuadrilateralQueryParameters.bottomSide || QuadrilateralQueryParameters.leftSide ) {
-      this.addChild( vertex4Node );
+      this.addChild( vertexDNode );
     }
   }
 

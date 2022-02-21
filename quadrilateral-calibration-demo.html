@@ -81,10 +81,10 @@
           const bottomLength = deviceShapeModel.bottomSide.lengthProperty.value;
           const leftLength = deviceShapeModel.leftSide.lengthProperty.value;
 
-          const p1Angle = deviceShapeModel.vertex1.angleProperty.value;
-          const p2Angle = deviceShapeModel.vertex2.angleProperty.value;
-          const p3Angle = deviceShapeModel.vertex3.angleProperty.value;
-          const p4Angle = deviceShapeModel.vertex4.angleProperty.value;
+          const p1Angle = deviceShapeModel.vertexA.angleProperty.value;
+          const p2Angle = deviceShapeModel.vertexB.angleProperty.value;
+          const p3Angle = deviceShapeModel.vertexC.angleProperty.value;
+          const p4Angle = deviceShapeModel.vertexD.angleProperty.value;
 
           // we are in a "calibration" stage, use device data to provide physical model bounds
           if ( simulationModel.isCalibratingProperty.value ) {
@@ -104,10 +104,10 @@
           const bottomLength = deviceShapeModel.bottomSide.lengthProperty.value;
           const leftLength = deviceShapeModel.leftSide.lengthProperty.value;
 
-          const p1Angle = deviceShapeModel.vertex1.angleProperty.value;
-          const p2Angle = deviceShapeModel.vertex2.angleProperty.value;
-          const p3Angle = deviceShapeModel.vertex3.angleProperty.value;
-          const p4Angle = deviceShapeModel.vertex4.angleProperty.value;
+          const p1Angle = deviceShapeModel.vertexA.angleProperty.value;
+          const p2Angle = deviceShapeModel.vertexB.angleProperty.value;
+          const p3Angle = deviceShapeModel.vertexC.angleProperty.value;
+          const p4Angle = deviceShapeModel.vertexD.angleProperty.value;
 
           simulationModel.setPhysicalModelBounds( topLength, rightLength, bottomLength, leftLength );
         } );

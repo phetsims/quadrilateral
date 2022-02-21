@@ -15,10 +15,10 @@ type StringsType = {
   'angleGuide': string,
   'a11y': {
     'voicing': {
-      'corner1': string,
-      'corner2': string,
-      'corner3': string,
-      'corner4': string,
+      'cornerA': string,
+      'cornerB': string,
+      'cornerC': string,
+      'cornerD': string,
       'topSide': string,
       'rightSide': string,
       'bottomSide': string,
@@ -36,7 +36,6 @@ type StringsType = {
         'rhombus': string,
         'kite': string,
         'isoscelesTrapezoid': string,
-        'rightAngledTrapezoid': string,
         'trapezoid': string,
         'concaveQuadrilateral': string
       },

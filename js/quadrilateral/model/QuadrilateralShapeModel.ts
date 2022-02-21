@@ -52,10 +52,10 @@ type QuadrilateralShapeModelOptions = {
 };
 
 class QuadrilateralShapeModel {
-  public vertex1: Vertex;
-  public vertex2: Vertex;
-  public vertex3: Vertex;
-  public vertex4: Vertex;
+  public vertexA: Vertex;
+  public vertexB: Vertex;
+  public vertexC: Vertex;
+  public vertexD: Vertex;
 
   public topSide: Side;
   public rightSide: Side;
@@ -99,23 +99,23 @@ class QuadrilateralShapeModel {
     this.validateShape = options.validateShape;
 
     // vertices of the quadrilateral
-    this.vertex1 = new Vertex( new Vector2( -0.25, 0.25 ), VertexLabel.VERTEX1, options.tandem.createTandem( 'vertex1' ) );
-    this.vertex2 = new Vertex( new Vector2( 0.25, 0.25 ), VertexLabel.VERTEX2, options.tandem.createTandem( 'vertex2' ) );
-    this.vertex3 = new Vertex( new Vector2( 0.25, -0.25 ), VertexLabel.VERTEX3, options.tandem.createTandem( 'vertex3' ) );
-    this.vertex4 = new Vertex( new Vector2( -0.25, -0.25 ), VertexLabel.VERTEX4, options.tandem.createTandem( 'vertex4' ) );
+    this.vertexA = new Vertex( new Vector2( -0.25, 0.25 ), VertexLabel.VERTEX_A, options.tandem.createTandem( 'vertexA' ) );
+    this.vertexB = new Vertex( new Vector2( 0.25, 0.25 ), VertexLabel.VERTEX_B, options.tandem.createTandem( 'vertexB' ) );
+    this.vertexC = new Vertex( new Vector2( 0.25, -0.25 ), VertexLabel.VERTEX_C, options.tandem.createTandem( 'vertexC' ) );
+    this.vertexD = new Vertex( new Vector2( -0.25, -0.25 ), VertexLabel.VERTEX_D, options.tandem.createTandem( 'vertexD' ) );
 
     // Collection of the vertices which should be easy to iterate over
-    this.vertices = [ this.vertex1, this.vertex2, this.vertex3, this.vertex4 ];
+    this.vertices = [ this.vertexA, this.vertexB, this.vertexC, this.vertexD ];
 
     // create the sides of the quadrilateral
-    this.topSide = new Side( this.vertex1, this.vertex2, options.tandem.createTandem( 'topSide' ), {
+    this.topSide = new Side( this.vertexA, this.vertexB, options.tandem.createTandem( 'topSide' ), {
       offsetVectorForTiltCalculation: new Vector2( 0, 1 )
     } );
-    this.rightSide = new Side( this.vertex2, this.vertex3, options.tandem.createTandem( 'rightSide' ) );
-    this.bottomSide = new Side( this.vertex3, this.vertex4, options.tandem.createTandem( 'bottomSide' ), {
+    this.rightSide = new Side( this.vertexB, this.vertexC, options.tandem.createTandem( 'rightSide' ) );
+    this.bottomSide = new Side( this.vertexC, this.vertexD, options.tandem.createTandem( 'bottomSide' ), {
       offsetVectorForTiltCalculation: new Vector2( 0, -1 )
     } );
-    this.leftSide = new Side( this.vertex4, this.vertex1, options.tandem.createTandem( 'leftSide' ), {
+    this.leftSide = new Side( this.vertexD, this.vertexA, options.tandem.createTandem( 'leftSide' ), {
       offsetVectorForTiltCalculation: new Vector2( -1, 0 )
     } );
 
@@ -143,14 +143,14 @@ class QuadrilateralShapeModel {
     // finest control.
     this.angleToleranceIntervalProperty = new DerivedProperty(
       [
-        this.vertex1.isPressedProperty, this.vertex2.isPressedProperty, this.vertex3.isPressedProperty, this.vertex4.isPressedProperty,
+        this.vertexA.isPressedProperty, this.vertexB.isPressedProperty, this.vertexC.isPressedProperty, this.vertexD.isPressedProperty,
         this.topSide.isPressedProperty, this.rightSide.isPressedProperty, this.bottomSide.isPressedProperty, this.leftSide.isPressedProperty
       ],
       (
-        vertex1Pressed, vertex2Pressed, vertex3Pressed, vertex4Pressed,
+        vertexAPressed, vertexBPressed, vertexCPressed, vertexDPressed,
         topSidePressed, rightSidePressed, bottomSidePressed, leftSidePressed
       ) => {
-        const verticesPressedArray = [ vertex1Pressed, vertex2Pressed, vertex3Pressed, vertex4Pressed ];
+        const verticesPressedArray = [ vertexAPressed, vertexBPressed, vertexCPressed, vertexDPressed ];
         const sidesPressedArray = [ topSidePressed, rightSidePressed, bottomSidePressed, leftSidePressed ];
 
         const numberOfVerticesPressed = _.countBy( verticesPressedArray ).true;
@@ -256,10 +256,10 @@ class QuadrilateralShapeModel {
     } );
 
     Property.multilink( [
-        this.vertex1.positionProperty,
-        this.vertex2.positionProperty,
-        this.vertex3.positionProperty,
-        this.vertex4.positionProperty ],
+        this.vertexA.positionProperty,
+        this.vertexB.positionProperty,
+        this.vertexC.positionProperty,
+        this.vertexD.positionProperty ],
       ( position1: Vector2, position2: Vector2, position3: Vector2, position4: Vector2 ) => {
         this.shapeChangedEmitter.emit();
 
@@ -307,13 +307,13 @@ class QuadrilateralShapeModel {
 
     // equalities for adjacent vertices
     const adjacentVertexAngles = [
-      [ this.vertex1.angleProperty!.value, this.vertex2.angleProperty!.value ],
-      [ this.vertex2.angleProperty!.value, this.vertex3.angleProperty!.value ],
-      [ this.vertex3.angleProperty!.value, this.vertex4.angleProperty!.value ],
-      [ this.vertex4.angleProperty!.value, this.vertex1.angleProperty!.value ]
+      [ this.vertexA.angleProperty!.value, this.vertexB.angleProperty!.value ],
+      [ this.vertexB.angleProperty!.value, this.vertexC.angleProperty!.value ],
+      [ this.vertexC.angleProperty!.value, this.vertexD.angleProperty!.value ],
+      [ this.vertexD.angleProperty!.value, this.vertexA.angleProperty!.value ]
     ];
-    const vertex1AngleEqualsVertex2Angle = this.isShapeAngleEqualToOther( this.vertex1.angleProperty!.value, this.vertex2.angleProperty!.value );
-    const vertex2AngleEqualsVertex3Angle = this.isShapeAngleEqualToOther( this.vertex2.angleProperty!.value, this.vertex3.angleProperty!.value );
+    const vertexAAngleEqualsVertexBAngle = this.isShapeAngleEqualToOther( this.vertexA.angleProperty!.value, this.vertexB.angleProperty!.value );
+    const vertex2AngleEqualsVertex3Angle = this.isShapeAngleEqualToOther( this.vertexB.angleProperty!.value, this.vertexC.angleProperty!.value );
 
     // If any angles are larger than PI it is a concave shape.
     if ( _.some( this.vertices, vertex => vertex.angleProperty!.value > Math.PI ) ) {
@@ -327,7 +327,7 @@ class QuadrilateralShapeModel {
 
       // because this is a parallelogram, we only have to check that the adjacent angles are equal, because to be
       // a parallelogram the angles at opposite vertices must also be equal.
-      if ( vertex1AngleEqualsVertex2Angle && vertex2AngleEqualsVertex3Angle ) {
+      if ( vertexAAngleEqualsVertexBAngle && vertex2AngleEqualsVertex3Angle ) {
 
         // For a parallelogram, opposite sides are equal in length, so if adjacent sides are equal in length as well
         // it must be a square.
@@ -771,8 +771,8 @@ class QuadrilateralShapeModel {
    * angleToleranceIntervalProperty.
    */
   public getIsParallelogram(): boolean {
-    const angle1DiffAngle3 = Math.abs( this.vertex1.angleProperty!.value - this.vertex3.angleProperty!.value );
-    const angle2DiffAngle4 = Math.abs( this.vertex2.angleProperty!.value - this.vertex4.angleProperty!.value );
+    const angle1DiffAngle3 = Math.abs( this.vertexA.angleProperty!.value - this.vertexC.angleProperty!.value );
+    const angle2DiffAngle4 = Math.abs( this.vertexB.angleProperty!.value - this.vertexD.angleProperty!.value );
     const epsilon = this.angleToleranceIntervalProperty.value;
 
     return angle1DiffAngle3 < epsilon && angle2DiffAngle4 < epsilon;
@@ -837,10 +837,10 @@ class QuadrilateralShapeModel {
    * Sets this model to be the same as the provided QuadrilateralShapeModel, but setting Vertex positions.
    */
   public set( other: QuadrilateralShapeModel ): void {
-    this.vertex1.positionProperty.set( other.vertex1.positionProperty.value );
-    this.vertex2.positionProperty.set( other.vertex2.positionProperty.value );
-    this.vertex3.positionProperty.set( other.vertex3.positionProperty.value );
-    this.vertex4.positionProperty.set( other.vertex4.positionProperty.value );
+    this.vertexA.positionProperty.set( other.vertexA.positionProperty.value );
+    this.vertexB.positionProperty.set( other.vertexB.positionProperty.value );
+    this.vertexC.positionProperty.set( other.vertexC.positionProperty.value );
+    this.vertexD.positionProperty.set( other.vertexD.positionProperty.value );
   }
 
   /**
@@ -858,7 +858,7 @@ class QuadrilateralShapeModel {
    * of each side from the hardware. We need to convert that to vertex positions in model space.
    *
    * With angle and length data alone we do not know the orientation or position in space of the shape. So the
-   * shape is constructed with the top left vertex (vertex1) and top side (topSide) anchored  while the rest
+   * shape is constructed with the top left vertex (vertexA) and top side (topSide) anchored  while the rest
    * of the vertices are relatively positioned from the angle and length data. Once the shape is constructed it is
    * translated so that the centroid of the shape is in the center of model space (0, 0). The final result is that only
    * the tilt of the top side remains anchored. Perhaps if a gyroscope is added in the future we may be able to rotate
@@ -879,10 +879,10 @@ class QuadrilateralShapeModel {
     }
 
     // this function cannot be called until the bounds of movement for each vertex has been established
-    assert && assert( this.vertex1.dragBoundsProperty.value );
-    assert && assert( this.vertex2.dragBoundsProperty.value );
-    assert && assert( this.vertex3.dragBoundsProperty.value );
-    assert && assert( this.vertex4.dragBoundsProperty.value );
+    assert && assert( this.vertexA.dragBoundsProperty.value );
+    assert && assert( this.vertexB.dragBoundsProperty.value );
+    assert && assert( this.vertexC.dragBoundsProperty.value );
+    assert && assert( this.vertexD.dragBoundsProperty.value );
 
     // you must calibrate before setting positions from a physical device
     if ( this.model.physicalModelBoundsProperty.value !== null && !this.model.isCalibratingProperty.value && this.model.modelBoundsProperty.value ) {
@@ -911,7 +911,7 @@ class QuadrilateralShapeModel {
     assert && assert( this.model.modelBoundsProperty.value, 'setPositionsFromLengthsAndAngles can only be used when modelBounds are defined' );
     const modelBounds = this.model.modelBoundsProperty.value!;
 
-    // vertex1 and the topLine are anchored, the rest of the shape is relative to this
+    // vertexA and the topLine are anchored, the rest of the shape is relative to this
     const vector1Position = new Vector2( modelBounds.minX, modelBounds.maxX );
     const vector2Position = new Vector2( vector1Position.x + topLength, vector1Position.y );
 
@@ -942,10 +942,10 @@ class QuadrilateralShapeModel {
     // 1) Set positions to a scratch model
     // 2) Query the positions and make sure vertices are OK for the quad
     // In model bounds, not overlapping, in respective drag areas
-    this.vertex1.positionProperty.set( constrainedPositions[ 0 ]! );
-    this.vertex2.positionProperty.set( constrainedPositions[ 1 ]! );
-    this.vertex3.positionProperty.set( constrainedPositions[ 2 ]! );
-    this.vertex4.positionProperty.set( constrainedPositions[ 3 ]! );
+    this.vertexA.positionProperty.set( constrainedPositions[ 0 ]! );
+    this.vertexB.positionProperty.set( constrainedPositions[ 1 ]! );
+    this.vertexC.positionProperty.set( constrainedPositions[ 2 ]! );
+    this.vertexD.positionProperty.set( constrainedPositions[ 3 ]! );
   }
 
   /**
@@ -963,17 +963,17 @@ class QuadrilateralShapeModel {
    * @private
    */
   setVertexDragAreas() {
-    this.vertex1.dragAreaProperty.set( this.createVertexArea( this.model.modelBoundsProperty.value!, this.vertex1, this.vertex2, this.vertex3, this.vertex4 ) );
-    this.vertex2.dragAreaProperty.set( this.createVertexArea( this.model.modelBoundsProperty.value!, this.vertex2, this.vertex3, this.vertex4, this.vertex1 ) );
-    this.vertex3.dragAreaProperty.set( this.createVertexArea( this.model.modelBoundsProperty.value!, this.vertex3, this.vertex4, this.vertex1, this.vertex2 ) );
-    this.vertex4.dragAreaProperty.set( this.createVertexArea( this.model.modelBoundsProperty.value!, this.vertex4, this.vertex1, this.vertex2, this.vertex3 ) );
+    this.vertexA.dragAreaProperty.set( this.createVertexArea( this.model.modelBoundsProperty.value!, this.vertexA, this.vertexB, this.vertexC, this.vertexD ) );
+    this.vertexB.dragAreaProperty.set( this.createVertexArea( this.model.modelBoundsProperty.value!, this.vertexB, this.vertexC, this.vertexD, this.vertexA ) );
+    this.vertexC.dragAreaProperty.set( this.createVertexArea( this.model.modelBoundsProperty.value!, this.vertexC, this.vertexD, this.vertexA, this.vertexB ) );
+    this.vertexD.dragAreaProperty.set( this.createVertexArea( this.model.modelBoundsProperty.value!, this.vertexD, this.vertexA, this.vertexB, this.vertexC ) );
   }
 
   public reset(): void {
-    this.vertex1.reset();
-    this.vertex2.reset();
-    this.vertex3.reset();
-    this.vertex4.reset();
+    this.vertexA.reset();
+    this.vertexB.reset();
+    this.vertexC.reset();
+    this.vertexD.reset();
   }
 }
 

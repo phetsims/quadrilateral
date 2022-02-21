@@ -147,10 +147,10 @@ class QuadrilateralScreenView extends ScreenView {
     this.addChild( boundsRectangle );
 
     if ( QuadrilateralQueryParameters.showDragAreas ) {
-      this.addChild( new VertexDragAreaNode( shapeModel.vertex1, [ shapeModel.leftSide, shapeModel.topSide ], modelViewTransform ) );
-      this.addChild( new VertexDragAreaNode( shapeModel.vertex2, [ shapeModel.topSide, shapeModel.rightSide ], modelViewTransform ) );
-      this.addChild( new VertexDragAreaNode( shapeModel.vertex3, [ shapeModel.rightSide, shapeModel.bottomSide ], modelViewTransform ) );
-      this.addChild( new VertexDragAreaNode( shapeModel.vertex4, [ shapeModel.bottomSide, shapeModel.leftSide ], modelViewTransform ) );
+      this.addChild( new VertexDragAreaNode( shapeModel.vertexA, [ shapeModel.leftSide, shapeModel.topSide ], modelViewTransform ) );
+      this.addChild( new VertexDragAreaNode( shapeModel.vertexB, [ shapeModel.topSide, shapeModel.rightSide ], modelViewTransform ) );
+      this.addChild( new VertexDragAreaNode( shapeModel.vertexC, [ shapeModel.rightSide, shapeModel.bottomSide ], modelViewTransform ) );
+      this.addChild( new VertexDragAreaNode( shapeModel.vertexD, [ shapeModel.bottomSide, shapeModel.leftSide ], modelViewTransform ) );
     }
     if ( QuadrilateralQueryParameters.showLengthAreas ) {
       this.addChild( new SideLengthAreaNode( shapeModel, shapeModel.topSide, shapeModel.bottomSide, shapeModel.leftSide, modelViewTransform ) );
@@ -171,10 +171,10 @@ class QuadrilateralScreenView extends ScreenView {
             model.quadrilateralShapeModel.topSide.lengthProperty.value,
             model.quadrilateralShapeModel.rightSide.lengthProperty.value,
             model.quadrilateralShapeModel.leftSide.lengthProperty.value,
-            model.quadrilateralShapeModel.vertex1.angleProperty!.value,
-            model.quadrilateralShapeModel.vertex2.angleProperty!.value,
-            model.quadrilateralShapeModel.vertex3.angleProperty!.value,
-            model.quadrilateralShapeModel.vertex4.angleProperty!.value
+            model.quadrilateralShapeModel.vertexA.angleProperty!.value,
+            model.quadrilateralShapeModel.vertexB.angleProperty!.value,
+            model.quadrilateralShapeModel.vertexC.angleProperty!.value,
+            model.quadrilateralShapeModel.vertexD.angleProperty!.value
           );
         } );
       }

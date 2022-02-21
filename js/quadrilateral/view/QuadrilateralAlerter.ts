@@ -150,12 +150,12 @@ class QuadrilateralAlerter extends Alerter {
 
   private vertexPositionsIndicateDirty( snapshot: ShapeSnapshot ): boolean {
 
-    const vertex1Distance = Vector2.getDistanceBetweenVectors( snapshot.vertex1Position, this.shapeSnapshot.vertex1Position );
-    const vertex2Distance = Vector2.getDistanceBetweenVectors( snapshot.vertex2Position, this.shapeSnapshot.vertex2Position );
-    const vertex3Distance = Vector2.getDistanceBetweenVectors( snapshot.vertex3Position, this.shapeSnapshot.vertex3Position );
-    const vertex4Distance = Vector2.getDistanceBetweenVectors( snapshot.vertex4Position, this.shapeSnapshot.vertex4Position );
+    const vertexADistance = Vector2.getDistanceBetweenVectors( snapshot.vertexAPosition, this.shapeSnapshot.vertexAPosition );
+    const vertexBDistance = Vector2.getDistanceBetweenVectors( snapshot.vertexBPosition, this.shapeSnapshot.vertexBPosition );
+    const vertexCDistance = Vector2.getDistanceBetweenVectors( snapshot.vertexCPosition, this.shapeSnapshot.vertexCPosition );
+    const vertexDDistance = Vector2.getDistanceBetweenVectors( snapshot.vertexDPosition, this.shapeSnapshot.vertexDPosition );
 
-    const distances = [ vertex1Distance, vertex2Distance, vertex3Distance, vertex4Distance ];
+    const distances = [ vertexADistance, vertexBDistance, vertexCDistance, vertexDDistance ];
     return _.some( distances, distance => distance > 0.1 );
   }
 }

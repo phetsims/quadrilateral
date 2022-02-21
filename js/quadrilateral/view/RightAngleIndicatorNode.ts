@@ -23,8 +23,8 @@ class RightAngleIndicatorNode extends Path {
 
   /**
    * @param vertex1 - The Vertex being represented, indicator will be visible when angle at this vertex is 90 degrees
-   * @param vertex2 - Vertex with a side connected to vertex1 in the clockwise direction
-   * @param vertex3 - Vertex with a side connected to vertex2 in the counterclockwise direction
+   * @param vertex2 - Vertex with a side connected to vertexA in the clockwise direction
+   * @param vertex3 - Vertex with a side connected to vertexB in the counterclockwise direction
    * @param shapeModel
    * @param modelViewTransform
    */
@@ -47,10 +47,10 @@ class RightAngleIndicatorNode extends Path {
       // if we have become visible, we need to redraw the shape
       if ( this.visible ) {
 
-        // The line from vertex1 to vertex2 (clockwise connected side)
+        // The line from vertexA to vertexB (clockwise connected side)
         const firstLine = new Line( vertex1.positionProperty.value, vertex2.positionProperty.value );
 
-        // the line from vertex1 to vertex3 (counterclockwise connected side)
+        // the line from vertexA to vertexC (counterclockwise connected side)
         const secondLine = new Line( vertex1.positionProperty.value, vertex3.positionProperty.value );
 
         // stroke right starts at the end point, we need to reverse it

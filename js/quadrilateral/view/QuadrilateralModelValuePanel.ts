@@ -98,10 +98,10 @@ class QuadrilateralModelValuePanel extends Panel {
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.leftSide.lengthProperty, leftSideLengthText, 'Left side' );
 
     // angle
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertex1.angleProperty!, leftTopAngleText, 'Left top angle' );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertex2.angleProperty!, rightTopAngleText, 'Right top angle' );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertex3.angleProperty!, rightBottomAngleText, 'Right bottom angle' );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertex4.angleProperty!, leftBottomAngleText, 'Left bottom angle' );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexA.angleProperty!, leftTopAngleText, 'Left top angle' );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexB.angleProperty!, rightTopAngleText, 'Right top angle' );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexC.angleProperty!, rightBottomAngleText, 'Right bottom angle' );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexD.angleProperty!, leftBottomAngleText, 'Left bottom angle' );
 
     // isParallelogramProperty
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.isParallelogramProperty, isParallelogramText, 'Is parallelogram' );

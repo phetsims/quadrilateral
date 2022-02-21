@@ -14,10 +14,10 @@ class ShapeSnapshot {
   public readonly bottomSideTilt: number;
   public readonly leftSideTilt: number;
   public readonly isParallelogram: boolean;
-  public readonly vertex1Position: Vector2;
-  public readonly vertex2Position: Vector2;
-  public readonly vertex3Position: Vector2;
-  public readonly vertex4Position: Vector2;
+  public readonly vertexAPosition: Vector2;
+  public readonly vertexBPosition: Vector2;
+  public readonly vertexCPosition: Vector2;
+  public readonly vertexDPosition: Vector2;
   public readonly topSideLength: number;
   public readonly rightSideLength: number;
   public readonly leftSideLength: number;
@@ -29,10 +29,10 @@ class ShapeSnapshot {
     this.bottomSideTilt = shapeModel.bottomSide.tiltProperty.value;
     this.leftSideTilt = shapeModel.leftSide.tiltProperty.value;
     this.isParallelogram = shapeModel.isParallelogramProperty.value;
-    this.vertex1Position = shapeModel.vertex1.positionProperty.value;
-    this.vertex2Position = shapeModel.vertex2.positionProperty.value;
-    this.vertex3Position = shapeModel.vertex3.positionProperty.value;
-    this.vertex4Position = shapeModel.vertex4.positionProperty.value;
+    this.vertexAPosition = shapeModel.vertexA.positionProperty.value;
+    this.vertexBPosition = shapeModel.vertexB.positionProperty.value;
+    this.vertexCPosition = shapeModel.vertexC.positionProperty.value;
+    this.vertexDPosition = shapeModel.vertexD.positionProperty.value;
 
     this.topSideLength = shapeModel.topSide.lengthProperty.value;
     this.rightSideLength = shapeModel.rightSide.lengthProperty.value;

@@ -121,7 +121,7 @@ class Vertex {
    *          /       \
    *   sideA /         \ sideB
    *        /           \
-   *     vertex1 ----- vertex2
+   *     vertexA ----- vertexB
    *             sideC
    *
    * @public
@@ -155,23 +155,23 @@ class Vertex {
   }
 
   /**
-   * Calculates the angle between three vertices, returning the angle at vertex2. The returned angle will
+   * Calculates the angle between three vertices, returning the angle at vertexB. The returned angle will
    * be between -PI and PI.
    *
    * Uses the law of cosines to calculate the angle, assuming vertex positions like this:
    *
-   *        vertex2Position
+   *        vertexBPosition
    *          /           \
    *   sideA /             \ sideB
    *        /               \
-   * vertex1Position -------- vertex3Position
+   * vertexAPosition -------- vertexCPosition
    *                   sideC
    *
    * See https://en.wikipedia.org/wiki/Law_of_cosines
    * @public
    *
    * @param {Vector2} vertex1Position
-   * @param {Vector2} vertex2Position - returns angle at this vertex, between vertex1Position and vertex3Position
+   * @param {Vector2} vertex2Position - returns angle at this vertex, between vertexAPosition and vertexCPosition
    * @param {Vector2} vertex3Position
    */
   static calculateAngle( vertex1Position: Vector2, vertex2Position: Vector2, vertex3Position: Vector2 ) {

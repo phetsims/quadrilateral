@@ -34,19 +34,19 @@ class CalibrationContentNode extends VBox {
     } );
 
     // vertices
-    const vertex1Circle = new Circle( 5, {
+    const vertexACircle = new Circle( 5, {
       center: viewBounds.leftTop
     } );
-    const vertex2Circle = new Circle( 5, {
+    const vertexBCircle = new Circle( 5, {
       center: viewBounds.rightTop
     } );
-    const vertex3Circle = new Circle( 5, {
+    const vertexCCircle = new Circle( 5, {
       center: viewBounds.rightBottom
     } );
-    const vertex4Circle = new Circle( 5, {
+    const vertexDCircle = new Circle( 5, {
       center: viewBounds.leftBottom
     } );
-    calibrationRectangle.children = [ vertex1Circle, vertex2Circle, vertex3Circle, vertex4Circle ];
+    calibrationRectangle.children = [ vertexACircle, vertexBCircle, vertexCCircle, vertexDCircle ];
 
     // display of coordinates
     const dimensionLineOptions = { stroke: 'grey' };

@@ -10,17 +10,17 @@
   },
   "a11y": {
     "voicing": {
-      "corner1": {
-        "value": "Corner 1"
+      "cornerA": {
+        "value": "Corner A"
       },
-      "corner2": {
-        "value": "Corner 2"
+      "cornerB": {
+        "value": "Corner B"
       },
-      "corner3": {
-        "value": "Corner 3"
+      "cornerC": {
+        "value": "Corner C"
       },
-      "corner4": {
-        "value": "Corner 4"
+      "cornerD": {
+        "value": "Corner D"
       },
       "topSide": {
         "value": "Top Side"
