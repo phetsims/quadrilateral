@@ -354,14 +354,14 @@ class QuadrilateralShapeModel {
       // According to https://en.wikipedia.org/wiki/Trapezoid#Characterizations a trapezoid has two adjacent
       // angles that add up to Math.PI.
       const trapezoidRequirement = _.some( adjacentVertexAngles, anglePair => {
-        return this.isAngleEqualToOther( anglePair[ 0 ] + anglePair[ 1 ], Math.PI );
+        return this.isShapeAngleEqualToOther( anglePair[ 0 ] + anglePair[ 1 ], Math.PI );
       } );
 
       if ( trapezoidRequirement ) {
 
         // An isosceles trapezoid will have two pairs of adjacent angles that are equal.
         const isoscelesRequirement = _.countBy( adjacentVertexAngles, anglePair => {
-          return this.isAngleEqualToOther( anglePair[ 0 ], anglePair[ 1 ] );
+          return this.isShapeAngleEqualToOther( anglePair[ 0 ], anglePair[ 1 ] );
         } ).true === 2;
 
         // If one of the pairs of sides share the same length, it must be an isosceles trapezoid
