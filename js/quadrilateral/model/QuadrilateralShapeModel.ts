@@ -315,10 +315,6 @@ class QuadrilateralShapeModel {
     const vertex1AngleEqualsVertex2Angle = this.isShapeAngleEqualToOther( this.vertex1.angleProperty!.value, this.vertex2.angleProperty!.value );
     const vertex2AngleEqualsVertex3Angle = this.isShapeAngleEqualToOther( this.vertex2.angleProperty!.value, this.vertex3.angleProperty!.value );
 
-    // equalities for opposite vertices
-    const vertex1AngleEqualsVertex3Angle = this.isShapeAngleEqualToOther( this.vertex1.angleProperty!.value, this.vertex3.angleProperty!.value );
-    const vertex2AngleEqualsVertex4Angle = this.isShapeAngleEqualToOther( this.vertex2.angleProperty!.value, this.vertex4.angleProperty!.value );
-
     // If any angles are larger than PI it is a concave shape.
     if ( _.some( this.vertices, vertex => vertex.angleProperty!.value > Math.PI ) ) {
       namedQuadrilateral = NamedQuadrilateral.CONCAVE;
@@ -376,10 +372,23 @@ class QuadrilateralShapeModel {
           namedQuadrilateral = NamedQuadrilateral.TRAPEZOID;
         }
       }
-      else if ( vertex1AngleEqualsVertex3Angle !== vertex2AngleEqualsVertex4Angle ) {
+      else {
 
-        // Only one pair of opposite angles is equal while the other is not - we must be a kite.
-        namedQuadrilateral = NamedQuadrilateral.KITE;
+        // TODO: Define in constructor to reduce allocation?
+        const adjacentSides = [
+          [ this.topSide, this.rightSide ],
+          [ this.rightSide, this.bottomSide ],
+          [ this.bottomSide, this.leftSide ],
+          [ this.leftSide, this.topSide ]
+        ];
+
+        const kiteRequirement = _.countBy( adjacentSides, ( sidePair: Side[] ) => {
+          return sidePair[ 0 ].isLengthEqualToOther( sidePair[ 1 ] );
+        } ).true === 2;
+
+        if ( kiteRequirement ) {
+          namedQuadrilateral = NamedQuadrilateral.KITE;
+        }
       }
     }
 
