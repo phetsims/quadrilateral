@@ -21,18 +21,24 @@ class ShapeIdentificationSoundView {
   private readonly allRightAnglesSoundClip: SoundClip;
   private readonly allLengthsEqualSoundClip: SoundClip;
 
-  constructor( isParallelogramProperty: IReadOnlyProperty<boolean>, shapeNameProperty: Property<NamedQuadrilateral | null> ) {
+  constructor( isParallelogramProperty: IReadOnlyProperty<boolean>, shapeNameProperty: Property<NamedQuadrilateral | null>, resetNotInProgressProperty: IReadOnlyProperty<boolean> ) {
 
-    this.shapeSoundClip = new SoundClip( shapeIdentificationWhenNotAParallelogram_mp3 );
+    const soundClipOptions = {
+      // don't play sounds while model reset is in progress
+      enableControlProperties: [ resetNotInProgressProperty ]
+    };
+
+    this.shapeSoundClip = new SoundClip( shapeIdentificationWhenNotAParallelogram_mp3, soundClipOptions );
     soundManager.addSoundGenerator( this.shapeSoundClip );
 
-    this.allRightAnglesSoundClip = new SoundClip( allAnglesAreRightAngles_mp3 );
+    this.allRightAnglesSoundClip = new SoundClip( allAnglesAreRightAngles_mp3, soundClipOptions );
     soundManager.addSoundGenerator( this.allRightAnglesSoundClip );
 
-    this.allLengthsEqualSoundClip = new SoundClip( allSideLengthsAreEqual_mp3 );
+    this.allLengthsEqualSoundClip = new SoundClip( allSideLengthsAreEqual_mp3, soundClipOptions );
     soundManager.addSoundGenerator( this.allLengthsEqualSoundClip );
 
-    shapeNameProperty.link( name => {
+    // lazy, don't play on startup
+    shapeNameProperty.lazyLink( name => {
 
       // Generic indication that we have achieved a new named shape other some special shapes like square/rhombus.
       // If the shape is a parallelogram prevent sounds, there are other parallelogram sounds that are more important

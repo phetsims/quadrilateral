@@ -9,8 +9,7 @@
 import PreferencesConfiguration from '../../joist/js/preferences/PreferencesConfiguration.js';
 import Sim from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
-import { Color } from '../../scenery/js/imports.js';
-import { ColorProperty } from '../../scenery/js/imports.js';
+import { Color, ColorProperty } from '../../scenery/js/imports.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import QuadrilateralSoundOptionsModel from './quadrilateral/model/QuadrilateralSoundOptionsModel.js';
 import QuadrilateralQueryParameters from './quadrilateral/QuadrilateralQueryParameters.js';

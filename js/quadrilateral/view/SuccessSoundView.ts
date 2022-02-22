@@ -55,7 +55,7 @@ class SuccessSoundView {
     const shapeModel = model.quadrilateralShapeModel;
 
     // The sound view that plays an indication sound when we detect a new named shape
-    this.shapeIdentificationSound = new ShapeIdentificationSoundView( shapeModel.isParallelogramProperty, shapeModel.shapeNameProperty );
+    this.shapeIdentificationSound = new ShapeIdentificationSoundView( shapeModel.isParallelogramProperty, shapeModel.shapeNameProperty, model.resetNotInProgressProperty );
 
     // The SoundClips are null until a SuccessSoundFile is selected by the user. There are several to choose
     // from for now while we experiment with different prototypes, but we expect a single design at some point. At
