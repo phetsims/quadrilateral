@@ -238,7 +238,7 @@ class QuadrilateralShapeModel {
     // Whether the current angles are equal to the saved set of savedVertexAngles. The savedVertexAngles are updated
     // every time the quadrilateral side lengths change, so that we can track the condition that both the sides
     // are remaining constant AND the angles are changing.
-    this.anglesEqualToSavedProperty = new BooleanProperty( false, {
+    this.anglesEqualToSavedProperty = new BooleanProperty( true, {
       tandem: options.tandem?.createTandem( 'anglesEqualToSavedProperty' )
     } );
 
@@ -929,10 +929,19 @@ class QuadrilateralShapeModel {
       // that the side lengths will be equal to the newly saved set AND the angles are changing during quadrilateral
       // shape changes
       this.saveVertexAngles();
+
+      // After saving the new set of new vertex angles, the angles must be equal to the saved set. This is
+      // necessary because we will only update this Property again once after it is set to false for a set
+      // of equal side lengths
+      this.anglesEqualToSavedProperty.set( true );
     }
 
     // after potentially updating savedVertexAngles, see if current angles are equal to savedVertexAngles
-    this.anglesEqualToSavedProperty.set( this.getVertexAnglesEqualToSaved( this.getVertexAngles() ) );
+    // Once this is set to false for a set of saved side lengths, we don't want it to become true again until
+    // a new set of side lengths are saved because if the angles are brought back to the
+    if ( this.anglesEqualToSavedProperty.value ) {
+      this.anglesEqualToSavedProperty.set( this.getVertexAnglesEqualToSaved( this.getVertexAngles() ) );
+    }
 
     // After we have detected whether or not we are a parallelogram, and after all vertices are positioned, calculate
     // the name of the current quadrilateral shape.

@@ -4,7 +4,6 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import merge from '../../../../phet-core/js/merge.js';
 import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
@@ -174,18 +173,6 @@ class SuccessSoundView {
     // reset the delay timing variable when we are no longer in the range of saved values.
     shapeModel.lengthsEqualToSavedProperty.link( equalToSaved => {
       if ( !equalToSaved ) {
-        this.remainingDelayForMaintenanceSound = DELAY_FOR_MAINTENANCE_SOUND;
-      }
-    } );
-
-    // Whenever interaction starts with any side or vertex, reset the remainingDelayForMaintenanceSound so that
-    // we don't play the "maintaining equal lengths" sound until the user has made an effort to keep lengths the same
-    const anyInteractionProperty = DerivedProperty.or( [
-      shapeModel.vertexA.isPressedProperty, shapeModel.vertexB.isPressedProperty, shapeModel.vertexC.isPressedProperty, shapeModel.vertexD.isPressedProperty,
-      shapeModel.topSide.isPressedProperty, shapeModel.rightSide.isPressedProperty, shapeModel.bottomSide.isPressedProperty, shapeModel.leftSide.isPressedProperty
-    ] );
-    anyInteractionProperty.link( anyInteraction => {
-      if ( anyInteraction ) {
         this.remainingDelayForMaintenanceSound = DELAY_FOR_MAINTENANCE_SOUND;
       }
     } );
