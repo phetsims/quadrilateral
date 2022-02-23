@@ -5,8 +5,8 @@
   "cornerLabels": {
     "value": "Corner Labels"
   },
-  "cornerGuide": {
-    "value": "Corner Guide"
+  "cornerGuides": {
+    "value": "Corner Guides"
   },
   "vertexA": {
     "value": "A"

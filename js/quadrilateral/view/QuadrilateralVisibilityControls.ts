@@ -43,7 +43,7 @@ class QuadrilateralVisibilityControls extends VBox {
       tandem: options.tandem.createTandem( 'cornerLabelsCheckbox' )
     } );
 
-    const cornerGuideText = new Text( quadrilateralStrings.cornerGuide, TEXT_OPTIONS );
+    const cornerGuideText = new Text( quadrilateralStrings.cornerGuides, TEXT_OPTIONS );
     const cornerGuideCheckbox = new Checkbox( cornerGuideText, cornerGuideVisibleProperty, {
       tandem: options.tandem.createTandem( 'cornerGuideCheckbox' )
     } );
