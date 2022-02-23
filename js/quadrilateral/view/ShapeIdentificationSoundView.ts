@@ -7,7 +7,6 @@
  */
 
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
-import Property from '../../../../axon/js/Property.js';
 import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
 import quadrilateral from '../../quadrilateral.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
@@ -15,13 +14,14 @@ import soundManager from '../../../../tambo/js/soundManager.js';
 import shapeIdentificationWhenNotAParallelogram_mp3 from '../../../sounds/shapeIdentificationWhenNotAParallelogram_mp3.js';
 import allAnglesAreRightAngles_mp3 from '../../../sounds/allAnglesAreRightAngles_mp3.js';
 import allSideLengthsAreEqual_mp3 from '../../../sounds/allSideLengthsAreEqual_mp3.js';
+import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 
 class ShapeIdentificationSoundView {
   private readonly shapeSoundClip: SoundClip;
   private readonly allRightAnglesSoundClip: SoundClip;
   private readonly allLengthsEqualSoundClip: SoundClip;
 
-  constructor( isParallelogramProperty: IReadOnlyProperty<boolean>, shapeNameProperty: Property<NamedQuadrilateral | null>, resetNotInProgressProperty: IReadOnlyProperty<boolean> ) {
+  constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: IReadOnlyProperty<boolean> ) {
 
     const soundClipOptions = {
       // don't play sounds while model reset is in progress
@@ -38,11 +38,11 @@ class ShapeIdentificationSoundView {
     soundManager.addSoundGenerator( this.allLengthsEqualSoundClip );
 
     // lazy, don't play on startup
-    shapeNameProperty.lazyLink( name => {
+    shapeModel.shapeNameProperty.lazyLink( name => {
 
       // Generic indication that we have achieved a new named shape other some special shapes like square/rhombus.
       // If the shape is a parallelogram prevent sounds, there are other parallelogram sounds that are more important
-      if ( !isParallelogramProperty.value && name ) {
+      if ( !shapeModel.isParallelogramProperty.value && name ) {
 
         // Design request that this sound should not play when it is a concave shape. See
         // https://github.com/phetsims/quadrilateral/issues/57
@@ -50,29 +50,19 @@ class ShapeIdentificationSoundView {
           this.shapeSoundClip.play();
         }
       }
-      else {
+    } );
 
-        // Unique sounds indicating that all angles ore lengths are equal. We do this when we achieve the appropriate
-        // shapes so that these sounds match the shape detection of the model. If we linked this to angle or length
-        // values, we may encounter cases where a sound is played indicating that all angles are the same but
-        // the model is also not a square/rectangle because of tolerance values in the calculations.
-        if ( name === NamedQuadrilateral.RECTANGLE ) {
+    // Unique sound that should play when all angles are right.
+    shapeModel.allAnglesRightProperty.link( allAnglesRight => {
+      if ( allAnglesRight ) {
+        this.allRightAnglesSoundClip.play();
+      }
+    } );
 
-          // a unique sound indicating that all angles are the same
-          this.allRightAnglesSoundClip.play();
-
-        }
-        else if ( name === NamedQuadrilateral.RHOMBUS ) {
-
-          // a unique sound indicating all lengths are the same
-          this.allLengthsEqualSoundClip.play();
-        }
-        else if ( name === NamedQuadrilateral.SQUARE ) {
-
-          // both angles and lengths are all the same
-          this.allRightAnglesSoundClip.play();
-          this.allLengthsEqualSoundClip.play();
-        }
+    // Unique sound that should play when all lengths are equal.
+    shapeModel.allLengthsEqualProperty.link( allLengthsEqual => {
+      if ( allLengthsEqual ) {
+        this.allLengthsEqualSoundClip.play();
       }
     } );
   }

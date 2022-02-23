@@ -79,6 +79,9 @@ class QuadrilateralShapeModel {
 
   public isParallelogramProperty: Property<boolean>;
 
+  public allAnglesRightProperty: Property<boolean>;
+  public allLengthsEqualProperty: Property<boolean>;
+
   public readonly shapeNameProperty: Property<NamedQuadrilateral | null>;
 
   public savedSideLengths: SideLengths;
@@ -233,6 +236,20 @@ class QuadrilateralShapeModel {
     // with this work resolves the problem.
     this.isParallelogramProperty = new BooleanProperty( false, {
       tandem: options.tandem.createTandem( 'isParallelogramProperty' )
+    } );
+
+    // Whether or not all angles of the quadrilateral are right angles within shapeAngleToleranceInterval.
+    // This is set in step because we need to wait until all vertices are positioned during model
+    // updates.
+    this.allAnglesRightProperty = new BooleanProperty( false, {
+      tandem: options.tandem.createTandem( 'allAnglesRightProperty' )
+    } );
+
+    // Whether or not all lenghts of the quadrilateral are equal within the lengthToleranceInterval.
+    // Updated asychronously because we need to make sure that the positions of vertices have stabilized
+    // after model updates.
+    this.allLengthsEqualProperty = new BooleanProperty( false, {
+      tandem: options.tandem.createTandem( 'allLengthsEqualProperty' )
     } );
 
     // The name of the quadrilateral (like square/rhombus/trapezoid, etc). Will be null if it is a random
@@ -779,6 +796,32 @@ class QuadrilateralShapeModel {
   }
 
   /**
+   * Returns true when all angles are right. Uses the current named shape to detect this state. This way
+   * the detected shape will always match whether all angles are right, so for all angles to be right
+   * we must be a square or rectangle. If there was a different calculation here with unique tolerances
+   * we might run into a situation where we have all right angles but we are not a square/rectangle (or vice versa).
+   *
+   * The drawback is that this must be called AFTER the quadrilateral shape is determined by getShapeName().
+   */
+  public getAreAllAnglesRight(): boolean {
+    return this.shapeNameProperty.value === NamedQuadrilateral.RECTANGLE ||
+           this.shapeNameProperty.value === NamedQuadrilateral.SQUARE;
+  }
+
+  /**
+   * Returns true when all lengths are equal. Uses the current named shape to detect this state. This way
+   * the detected shape will always match whether all lengths are equal, so for all lengths to be equal
+   * we must be a square or rhombus. If there was a different calculation here with unique tolerances we
+   * might run into a situation where all lengths are equal but we are not a square/rhombus (or vice versa).
+   *
+   * The drawback is that this must be called AFTER the quadrilateral shape is determined by getShapeName().
+   */
+  public getAreAllLengthsEqual(): boolean {
+    return this.shapeNameProperty.value === NamedQuadrilateral.RHOMBUS ||
+           this.shapeNameProperty.value === NamedQuadrilateral.SQUARE;
+  }
+
+  /**
    * Returns true if two angles are close enough to each other that they should be considered equal. They are close
    * enough if they are within the angleToleranceIntervalProperty.
    */
@@ -831,6 +874,10 @@ class QuadrilateralShapeModel {
     // After we have detected whether or not we are a parallelogram, and after all vertices are positioned, calculate
     // the name of the current quadrilateral shape.
     this.shapeNameProperty.set( this.getShapeName() );
+
+    // Uses detected shape name so must be called AFTER the shapeNameProperty is set above.
+    this.allAnglesRightProperty.set( this.getAreAllAnglesRight() );
+    this.allLengthsEqualProperty.set( this.getAreAllLengthsEqual() );
   }
 
   /**
