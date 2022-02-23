@@ -32,6 +32,7 @@ import VertexLabel from './VertexLabel.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import VertexAngles from './VertexAngles.js';
 
 // constants
 // Bounds used for calculations, but a single instance to reduce garbage.
@@ -68,6 +69,7 @@ class QuadrilateralShapeModel {
   private readonly validateShape: boolean;
 
   public readonly lengthsEqualToSavedProperty: BooleanProperty;
+  public readonly anglesEqualToSavedProperty: BooleanProperty;
 
   public readonly model: QuadrilateralModel;
 
@@ -85,6 +87,7 @@ class QuadrilateralShapeModel {
   public readonly shapeNameProperty: Property<NamedQuadrilateral | null>;
 
   public savedSideLengths: SideLengths;
+  private savedVertexAngles: VertexAngles;
 
   constructor( model: QuadrilateralModel, providedOptions?: QuadrilateralShapeModelOptions ) {
 
@@ -221,12 +224,22 @@ class QuadrilateralShapeModel {
     // quadrilateral. Allows us to monitor the change in Side lengths during interaction.
     this.savedSideLengths = this.getSideLengths();
 
+    // A collection of the vertex angles at a point in time. Updated whenever the quadrilateral changes.
+    this.savedVertexAngles = this.getVertexAngles();
+
     // Whether the Side lengths have changed relative to the saved side lengths that were stored at the beginning
     // of an interaction. This helps accomplish a learning goal of determining if the quad remains a parallelogram
     // while also keeping side lengths the same. This is set in the step function asynchronously(!!) so that
     // it can be calculated only after all vertex positions have been set by listeners.
     this.lengthsEqualToSavedProperty = new BooleanProperty( false, {
       tandem: options.tandem.createTandem( 'lengthsEqualToSavedProperty' )
+    } );
+
+    // Whether the current angles are equal to the saved set of savedVertexAngles. The savedVertexAngles are updated
+    // every time the quadrilateral side lengths change, so that we can track the condition that both the sides
+    // are remaining constant AND the angles are changing.
+    this.anglesEqualToSavedProperty = new BooleanProperty( false, {
+      tandem: options.tandem?.createTandem( 'anglesEqualToSavedProperty' )
     } );
 
     // Whether the quadrilateral is a parallelogram. This Property updates async in the step function! We need to
@@ -299,7 +312,11 @@ class QuadrilateralShapeModel {
     );
   }
 
-  public getSideLengthsChanged( currentSideLengths: SideLengths ) {
+  /**
+   * Returns true if the side lengths have changed relative to the savedSideLengths.
+   * @param currentSideLengths
+   */
+  public getSideLengthsEqualToSaved( currentSideLengths: SideLengths ) {
     return Utils.equalsEpsilon( currentSideLengths.topSideLength, this.savedSideLengths.topSideLength, this.topSide.lengthToleranceIntervalProperty.value ) &&
            Utils.equalsEpsilon( currentSideLengths.rightSideLength, this.savedSideLengths.rightSideLength, this.rightSide.lengthToleranceIntervalProperty.value ) &&
            Utils.equalsEpsilon( currentSideLengths.bottomSideLength, this.savedSideLengths.bottomSideLength, this.bottomSide.lengthToleranceIntervalProperty.value ) &&
@@ -311,6 +328,42 @@ class QuadrilateralShapeModel {
    */
   public saveSideLengths(): void {
     this.savedSideLengths = this.getSideLengths();
+  }
+
+  private getVertexAngles(): VertexAngles {
+    if ( assert ) {
+      this.vertices.forEach( vertex => assert && assert( vertex.angleProperty, 'angle Properties need to be initialized' ) );
+    }
+
+    return new VertexAngles(
+      this.vertexA.angleProperty!.value,
+      this.vertexB.angleProperty!.value,
+      this.vertexC.angleProperty!.value,
+      this.vertexD.angleProperty!.value
+    );
+  }
+
+  /**
+   * Returns true if the current vertex angles are equal to the angles stored in savedVertexAngles, within a unique
+   * tolerance interval. Used to determine if any of the angles have changed during an interaction.
+   */
+  getVertexAnglesEqualToSaved( currentVertexAngles: VertexAngles ): boolean {
+
+    // A value requested by https://github.com/phetsims/quadrilateral/issues/59#issuecomment-1048004794
+    const vertexAnglesToleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval * 2;
+
+    return Utils.equalsEpsilon( currentVertexAngles.vertexAAngle, this.savedVertexAngles.vertexAAngle, vertexAnglesToleranceInterval ) &&
+           Utils.equalsEpsilon( currentVertexAngles.vertexBAngle, this.savedVertexAngles.vertexBAngle, vertexAnglesToleranceInterval ) &&
+           Utils.equalsEpsilon( currentVertexAngles.vertexCAngle, this.savedVertexAngles.vertexCAngle, vertexAnglesToleranceInterval ) &&
+           Utils.equalsEpsilon( currentVertexAngles.vertexDAngle, this.savedVertexAngles.vertexDAngle, vertexAnglesToleranceInterval );
+  }
+
+  /**
+   * Save the current set of vertex angles to this.savedVertexAngles.
+   * @private
+   */
+  private saveVertexAngles(): void {
+    this.savedVertexAngles = this.getVertexAngles();
   }
 
   /**
@@ -865,11 +918,21 @@ class QuadrilateralShapeModel {
 
     // We need to determine if side lengths have changed in the step function because we need to calculate
     // lengths after all positions have been set.
-    this.lengthsEqualToSavedProperty.set( this.getSideLengthsChanged( this.getSideLengths() ) );
+    this.lengthsEqualToSavedProperty.set( this.getSideLengthsEqualToSaved( this.getSideLengths() ) );
 
     if ( !this.lengthsEqualToSavedProperty.value ) {
+
+      // eagerly save a new set of side lengths to compare for the next iteration
       this.saveSideLengths();
+
+      // when we save a new set of side lengths, we also want to save a new set of angles so that we can make sure
+      // that the side lengths will be equal to the newly saved set AND the angles are changing during quadrilateral
+      // shape changes
+      this.saveVertexAngles();
     }
+
+    // after potentially updating savedVertexAngles, see if current angles are equal to savedVertexAngles
+    this.anglesEqualToSavedProperty.set( this.getVertexAnglesEqualToSaved( this.getVertexAngles() ) );
 
     // After we have detected whether or not we are a parallelogram, and after all vertices are positioned, calculate
     // the name of the current quadrilateral shape.

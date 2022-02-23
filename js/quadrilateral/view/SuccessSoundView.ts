@@ -127,11 +127,18 @@ class SuccessSoundView {
         return vertex.isPressedProperty.value;
       } );
 
+      // Condition to play a sound indicating that the shape is changing while quadrilateral side lengths do not change
+      const lengthMaintenanceCondition = shapeModel.isParallelogramProperty.value &&
+                                         countObject.true !== 1 && // don't play this sound when only moving a single vertex
+                                         shapeModel.lengthsEqualToSavedProperty.value && // lengths must be remaining constant during interaction
+                                         !shapeModel.anglesEqualToSavedProperty.value && // the angles must have changed from the angles saved when side lengths changed
+                                         this.remainingDelayForMaintenanceSound < 0; // Must be moving for a certain amount of time to demonstrate dedicated movement
+
       if ( soundOptionsModel.maintenanceSoundRequiresEqualLengthsProperty.value ) {
 
         // If testing equal lengths, the maintenance sound is only played when we stay a parallelogram but
         // maintain equal lengths through the interaction.
-        if ( shapeModel.isParallelogramProperty.value && countObject.true !== 1 && shapeModel.lengthsEqualToSavedProperty.value && this.remainingDelayForMaintenanceSound < 0 ) {
+        if ( lengthMaintenanceCondition ) {
           this.startPlayingMaintenanceSoundClip();
         }
         else {
@@ -142,7 +149,7 @@ class SuccessSoundView {
 
         // in this design we play the maintenance sound if we are in parallelogram and the lengthMaintenanceSoundClip
         // if we are maintaining equal lengths
-        if ( shapeModel.isParallelogramProperty.value && countObject.true !== 1 && shapeModel.lengthsEqualToSavedProperty.value && this.remainingDelayForMaintenanceSound < 0 ) {
+        if ( lengthMaintenanceCondition ) {
           this.startPlayingLengthMaintenanceSoundClip();
           this.stopPlayingMaintenanceSoundClip();
         }
