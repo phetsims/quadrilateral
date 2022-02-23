@@ -1,5 +1,5 @@
 {
-  "comment": "# quadrilateral 1.0.0-dev.20 Wed Feb 23 2022 10:03:44 GMT-0500 (Eastern Standard Time)",
+  "comment": "# quadrilateral 1.0.0-dev.21 Wed Feb 23 2022 13:22:10 GMT-0500 (Eastern Standard Time)",
   "assert": {
     "sha": "767b2f345518ceca5144a152ecf40cd4f9206136",
     "branch": "master"
@@ -13,7 +13,7 @@
     "branch": "master"
   },
   "chipper": {
-    "sha": "e32440b9d0beb74a990bf4c96f4ff5a6a7476a51",
+    "sha": "7611e7daddac13b288b273c322176a1aa65ba578",
     "branch": "master"
   },
   "dot": {
@@ -57,7 +57,7 @@
     "branch": "master"
   },
   "quadrilateral": {
-    "sha": "7ff49262f8de82a6ab8a222374d88a88a9cd1d3f",
+    "sha": "74fe8701607c8ac9cb552bda0a615c8efdd97054",
     "branch": "master"
   },
   "query-string-machine": {
@@ -101,7 +101,7 @@
     "branch": "master"
   },
   "utterance-queue": {
-    "sha": "d2ce8286a4c3e93d39ecd3703d87ba308bfa759f",
+    "sha": "ef60adedc96ada8ebf1998114ffaa1de36a33c05",
     "branch": "master"
   }
 }
