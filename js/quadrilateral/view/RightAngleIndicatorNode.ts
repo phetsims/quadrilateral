@@ -59,7 +59,7 @@ class RightAngleIndicatorNode extends Path {
 
         // the intersection point of those lines is where we start drawing our indicator
         const cornerIntersectionSegments = Line.intersectOther( firstInnerLine, secondInnerLine );
-        assert && assert( cornerIntersectionSegments.length === 1, 'Must one one and only one intersection between lines' );
+        assert && assert( cornerIntersectionSegments.length === 1, 'Must be one and only one intersection between lines' );
         const intersectionPoint = cornerIntersectionSegments[ 0 ].point;
 
         // @ts-ignore - Need Line.js in TypeScript
