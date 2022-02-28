@@ -15,6 +15,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import Property from '../../../../axon/js/Property.js';
+import Utils from '../../../../dot/js/Utils.js';
 
 // in model coordinates, length of a side of the indicator from the edge of a line between two vertices
 const SIDE_LENGTH = 0.12;
@@ -39,10 +40,17 @@ class RightAngleIndicatorNode extends Path {
     // can adjust slightly). Linked to the shape name (instead of checking equality with 90 degrees) so that the
     // indicator visibility matches how we name shapes.
     assert && assert( vertex1.angleProperty, 'angleProperty must be defined to draw indicator' );
-    Property.multilink( [ shapeModel.shapeNameProperty, vertex1.angleProperty! ], ( shapeName, angle ) => {
+    Property.multilink( [ shapeModel.shapeNameProperty, vertex1.angleProperty! ], ( shapeName: NamedQuadrilateral | null, angle: number ) => {
 
-      const currentShape = shapeModel.shapeNameProperty.value;
-      this.visible = currentShape === NamedQuadrilateral.SQUARE || currentShape === NamedQuadrilateral.RECTANGLE;
+      // It is possible that the angles are wildly different then Math.PI because of the dependency Properties. The
+      // indicator is redrawn every angle change, and that may happen before the shape name is updated. So we could
+      // run into cases where the angle is much less or greater than Math.PI / 2 and the drawing code breaks. At this
+      // time I couldn't think of another way to only draw this when the shape has all angles right, but also
+      // redraw this in those conditions whenever the angle changes. Using this value makes sure that the angle is
+      // close enough to right for assumptions in the drawing code to be legitimate.
+      const angleReasonable = Utils.equalsEpsilon( angle, Math.PI / 2, Math.PI / 4 );
+
+      this.visible = ( shapeName === NamedQuadrilateral.SQUARE || shapeName === NamedQuadrilateral.RECTANGLE ) && angleReasonable;
 
       // if we have become visible, we need to redraw the shape
       if ( this.visible ) {
