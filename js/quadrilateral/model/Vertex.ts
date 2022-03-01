@@ -102,6 +102,15 @@ class Vertex {
     return other.modelBoundsProperty.value.intersectsBounds( this.modelBoundsProperty.value );
   }
 
+
+  /**
+   * Set Properties that need to be updated all at once for the quadrilateral shape to a deferred state so that
+   * they can be updated together without calling listeners with bad transient states during updates.
+   */
+  public setPropertiesDeferred( deferred: boolean ): ( () => void ) | null {
+    return this.positionProperty.setDeferred( deferred );
+  }
+
   /**
    * Reset this vertex.
    * @public

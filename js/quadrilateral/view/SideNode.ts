@@ -199,8 +199,10 @@ class SideNode extends Voicing( Path, 1 ) {
 
           // only update positions if both are allowed
           if ( quadrilateralModel.areVertexPositionsAllowed( side.vertex1, proposedVertex1Position, side.vertex2, proposedVertex2Position ) ) {
-            side.vertex1.positionProperty.value = proposedVertex1Position;
-            side.vertex2.positionProperty.value = proposedVertex2Position;
+            this.quadrilateralShapeModel.setVertexPositions( [
+              { vertex: side.vertex1, proposedPosition: proposedVertex1Position },
+              { vertex: side.vertex2, proposedPosition: proposedVertex2Position }
+            ] );
           }
         }
         else if ( vertex1Pressed !== vertex2Pressed ) {
@@ -264,12 +266,16 @@ class SideNode extends Voicing( Path, 1 ) {
     // moving two vertices at the same time we need to check the validity after both have moved, checking the shape
     // moving one vertex at a time may result in incorrect results since that is not the shape we are ultimately
     // going to create with this change.
-    this.scratchSide.vertex1.positionProperty.set( proposedVertex1Position );
-    this.scratchSide.vertex2.positionProperty.set( proposedVertex2Position );
+    this.scratchShapeModel.setVertexPositions( [
+      { vertex: this.scratchSide.vertex1, proposedPosition: proposedVertex1Position },
+      { vertex: this.scratchSide.vertex2, proposedPosition: proposedVertex2Position }
+    ] );
 
     if ( this.scratchShapeModel.isQuadrilateralShapeAllowed() ) {
-      this.side.vertex1.positionProperty.set( proposedVertex1Position );
-      this.side.vertex2.positionProperty.set( proposedVertex2Position );
+      this.quadrilateralShapeModel.setVertexPositions( [
+        { vertex: this.side.vertex1, proposedPosition: proposedVertex1Position },
+        { vertex: this.side.vertex2, proposedPosition: proposedVertex2Position }
+      ] );
     }
   }
 

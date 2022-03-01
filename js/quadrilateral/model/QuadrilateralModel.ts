@@ -124,19 +124,18 @@ class QuadrilateralModel {
    */
   public areVertexPositionsAllowed( vertex1: Vertex, vertex1ProposedPosition: Vector2, vertex2: Vertex, vertex2ProposedPosition: Vector2 ): boolean {
 
+    // Setting multiple vertex positions at once, we need to wait to call listeners until all values are ready
+    this.quadrilateralTestShapeModel.setPropertiesDeferred( true );
+
     // set the proposed positions to the test quadrilateral without calling listeners
     const testVertex1 = this.quadrilateralTestShapeModel.getLabelledVertex( vertex1.vertexLabel );
     const testVertex2 = this.quadrilateralTestShapeModel.getLabelledVertex( vertex2.vertexLabel );
 
-    // update both positions without calling listeners, we don't want to validate until both have been updated
-    testVertex1.positionProperty.setDeferred( true );
-    testVertex2.positionProperty.setDeferred( true );
     testVertex1.positionProperty.set( vertex1ProposedPosition );
     testVertex2.positionProperty.set( vertex2ProposedPosition );
-    const testVertex1PositionListeners = testVertex1.positionProperty.setDeferred( false );
-    const testVertex2PositionListeners = testVertex2.positionProperty.setDeferred( false );
-    testVertex1PositionListeners && testVertex1PositionListeners();
-    testVertex2PositionListeners && testVertex2PositionListeners();
+
+    // This will un-defer and call listeners for us
+    this.quadrilateralTestShapeModel.setPropertiesDeferred( false );
 
     return this.quadrilateralTestShapeModel.isQuadrilateralShapeAllowed();
   }

@@ -43,6 +43,11 @@ type LineIntersectionPair = {
   intersectionPoint: Vector2
 }
 
+type VertexWithProposedPosition = {
+  vertex: Vertex,
+  proposedPosition: Vector2
+};
+
 type QuadrilateralShapeModelOptions = {
   validateShape?: boolean,
   tandem?: Tandem
@@ -68,6 +73,8 @@ class QuadrilateralShapeModel {
   public readonly anglesEqualToSavedProperty: BooleanProperty;
 
   public readonly model: QuadrilateralModel;
+
+  private propertiesDeferred: boolean;
 
   public angleToleranceIntervalProperty: DerivedProperty<number, boolean[]>;
   public tiltToleranceIntervalProperty: Property<number>;
@@ -279,6 +286,10 @@ class QuadrilateralShapeModel {
 
     // referenced for private use in functions
     this.model = model;
+
+    // Whether or not the Properties of the shape are currently being deferred, preventing listeners
+    // from being called and new values from being set.
+    this.propertiesDeferred = false;
 
     model.modelBoundsProperty.link( modelBounds => {
       if ( modelBounds ) {
@@ -815,6 +826,24 @@ class QuadrilateralShapeModel {
   }
 
   /**
+   * Set multiple vertex positions at once, updating each and then calling relevant Property listeners after
+   * all are set. This way you can safely set multiple at a time without transient states where the shape is
+   * not valid.
+   */
+  public setVertexPositions( verticesWithProposedPositions: VertexWithProposedPosition[] ) {
+
+    this.setPropertiesDeferred( true );
+
+    // set all positions
+    verticesWithProposedPositions.forEach( vertexWithProposedPosition => {
+      vertexWithProposedPosition.vertex.positionProperty.set( vertexWithProposedPosition.proposedPosition );
+    } );
+
+    // un-defer all so that all Properties and calls callbacks
+    this.setPropertiesDeferred( false );
+  }
+
+  /**
    * Step the model forward in time.
    * @param dt - in seconds
    */
@@ -825,8 +854,9 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Update Properties that need to be updated only after other model Properties are set. For example, we only
-   * determine whether the quadrilateral is a parallelogram after all vertex positions have been set.
+   * Update Properties that need to be updated only after other model Properties are set. This also controls the order
+   * in which Properties are set, which is very important in this sim. Positions need to update, then angles, then
+   * parallelogram state, and finally shape name.
    */
   updateDeferredProperties() {
 
@@ -870,13 +900,20 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Sets this model to be the same as the provided QuadrilateralShapeModel, but setting Vertex positions.
+   * Sets this model to be the same as the provided QuadrilateralShapeModel by setting Vertex positions.
    */
   public set( other: QuadrilateralShapeModel ): void {
+
+    // since we are updating many vertices at once we need to defer callbacks while vertices could create a bad
+    // shape as we set each one
+    this.setPropertiesDeferred( true );
+
     this.vertexA.positionProperty.set( other.vertexA.positionProperty.value );
     this.vertexB.positionProperty.set( other.vertexB.positionProperty.value );
     this.vertexC.positionProperty.set( other.vertexC.positionProperty.value );
     this.vertexD.positionProperty.set( other.vertexD.positionProperty.value );
+
+    this.setPropertiesDeferred( false );
   }
 
   /**
@@ -978,10 +1015,16 @@ class QuadrilateralShapeModel {
     // 1) Set positions to a scratch model
     // 2) Query the positions and make sure vertices are OK for the quad
     // In model bounds, not overlapping, in respective drag areas
+
+    // wait to update until all vertices are positioned so we know the quadrilateral is in a good state
+    this.setPropertiesDeferred( true );
+
     this.vertexA.positionProperty.set( constrainedPositions[ 0 ]! );
     this.vertexB.positionProperty.set( constrainedPositions[ 1 ]! );
     this.vertexC.positionProperty.set( constrainedPositions[ 2 ]! );
     this.vertexD.positionProperty.set( constrainedPositions[ 3 ]! );
+
+    this.setPropertiesDeferred( false );
   }
 
   /**
@@ -1005,11 +1048,30 @@ class QuadrilateralShapeModel {
     this.vertexD.dragAreaProperty.set( this.createVertexArea( this.model.modelBoundsProperty.value!, this.vertexD, this.vertexA, this.vertexB, this.vertexC ) );
   }
 
+  public setPropertiesDeferred( deferred: boolean ): void {
+    assert && assert( deferred !== this.propertiesDeferred, 'deferred state must be changing, you may have not un-deferred Properties' );
+    this.propertiesDeferred = deferred;
+
+    // set deferred for all Properties first so that their values are up to date by the time we call listeners
+    const deferredVertexListeners = this.vertices.map( vertex => vertex.setPropertiesDeferred( deferred ) );
+
+    // call any deferred callbacks if no longer deferred
+    if ( !deferred ) {
+      deferredVertexListeners.forEach( deferredListener => deferredListener && deferredListener() );
+    }
+  }
+
   public reset(): void {
+
+    // set necessary Properties deferred so that we can update everything together
+    this.setPropertiesDeferred( true );
+
     this.vertexA.reset();
     this.vertexB.reset();
     this.vertexC.reset();
     this.vertexD.reset();
+
+    this.setPropertiesDeferred( false );
   }
 }
 
