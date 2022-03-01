@@ -34,6 +34,8 @@ class QuadrilateralModel {
   public quadrilateralShapeModel: QuadrilateralShapeModel;
   public quadrilateralTestShapeModel: QuadrilateralShapeModel;
 
+  private firstModelStep: boolean;
+
   // The spacing of the model "grid" along both x and y axes. The Quadrilateral vertex positions will be constrained to
   // intervals of these values in model coordinates.
   public static MAJOR_GRID_SPACING: number = 0.05;
@@ -96,6 +98,11 @@ class QuadrilateralModel {
     this.cornerGuideVisibleProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'cornerGuideVisibleProperty' )
     } );
+
+    // The first model step we will disable all sounds. This simulation updates certain Properties in the animation
+    // frame so we wait until after the sim has loaded to start playing any sounds (lazyLink is not sufficient when
+    // Properties are updated the following frame).
+    this.firstModelStep = true;
 
     if ( QuadrilateralQueryParameters.deviceConnection ) {
 
@@ -182,7 +189,18 @@ class QuadrilateralModel {
    * @param dt - time step, in seconds
    */
   public step( dt: number ): void {
+
+    // First model step prevent sounds from coming through as we call updateOrderDependentProperties
+    if ( this.firstModelStep ) {
+      this.resetNotInProgressProperty.value = false;
+    }
+
     this.quadrilateralShapeModel.step( dt );
+
+    if ( this.firstModelStep ) {
+      this.firstModelStep = false;
+      this.resetNotInProgressProperty.value = true;
+    }
   }
 
   /**
