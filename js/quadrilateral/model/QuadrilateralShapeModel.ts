@@ -850,15 +850,18 @@ class QuadrilateralShapeModel {
   public step( dt: number ): void {
 
     // Update Properties that need to be set only after vertex positions have been updated.
-    this.updateDeferredProperties();
+    this.updateOrderDependentProperties();
   }
 
   /**
    * Update Properties that need to be updated only after other model Properties are set. This also controls the order
    * in which Properties are set, which is very important in this sim. Positions need to update, then angles, then
    * parallelogram state, and finally shape name.
+   *
+   * TODO: It might be better to do a listener based approach where each of these are called in order every time
+   * the shape changes from shapeChangedEmitter.
    */
-  updateDeferredProperties() {
+  updateOrderDependentProperties(): void {
 
     // The isParallelogramProperty needs to be set asynchronously, see the documentation for isParallelogramProperty.
     this.isParallelogramProperty.set( this.getIsParallelogram() );
