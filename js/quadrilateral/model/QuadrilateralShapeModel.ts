@@ -34,10 +34,6 @@ import optionize from '../../../../phet-core/js/optionize.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import VertexAngles from './VertexAngles.js';
 
-// constants
-// Bounds used for calculations, but a single instance to reduce garbage.
-const SCRATCH_BOUNDS = new Bounds2( 0, 0, 0, 0 );
-
 // A useful type for calculations for the vertex Shapes which define where the Vertex can move depending on
 // the positions of the other vertices. Lines are along the bounds of model space and RayIntersections
 // are the intersections between rays formed by adjacent vertices and the Line. See createVertexAreas for
@@ -676,94 +672,6 @@ class QuadrilateralShapeModel {
     points.push( secondLineIntersectionPair!.intersectionPoint );
 
     return points;
-  }
-
-
-  /**
-   * Returns true if the provided Vertex is allowed to exist in the proposed position. The Vertex is not allowed
-   * to overlap any other Vertex of the model. It also must be within the drag area that is defined by the positions
-   * of other vertices in the model, which prevents the shape from becoming twisted.
-   *
-   * TODO: Remove this and use the other function everywhere.
-   *
-   * @param vertex - The vertex in question, so we don't compare it to itself
-   * @param proposedPosition
-   */
-  public isVertexPositionAllowed( vertex: Vertex, proposedPosition: Vector2 ): boolean {
-    let positionAllowed = true;
-
-    SCRATCH_BOUNDS.setMinMax(
-      proposedPosition.x - Vertex.VERTEX_BOUNDS.width / 2,
-      proposedPosition.y - Vertex.VERTEX_BOUNDS.height / 2,
-      proposedPosition.x + Vertex.VERTEX_BOUNDS.width / 2,
-      proposedPosition.y + Vertex.VERTEX_BOUNDS.height / 2
-    );
-
-    // the vertex must be completely within the model bounds - this check is necessary in addition
-    // to the dragAreaProperty check below because that only checks the vertex point (not the vertex bounds)
-    assert && assert( this.model.modelBoundsProperty.value, 'modelBounds must be defined' );
-    positionAllowed = this.model.modelBoundsProperty.value!.containsBounds( SCRATCH_BOUNDS );
-
-    if ( positionAllowed ) {
-
-      // vertex cannot overlap any others
-      for ( let i = 0; i < this.vertices.length; i++ ) {
-        const otherVertex = this.vertices[ i ];
-        if ( vertex !== otherVertex && otherVertex.boundsOverlapsVertex( SCRATCH_BOUNDS ) ) {
-          positionAllowed = false;
-          break;
-        }
-      }
-    }
-
-    if ( positionAllowed ) {
-
-      // vertex cannot overlap any sides
-      for ( let j = 0; j < this.sides.length; j++ ) {
-        const side = this.sides[ j ];
-
-        for ( let i = 0; i < this.vertices.length; i++ ) {
-          const otherVertex = this.vertices[ i ];
-
-          // Vertices of a Side are allowed to overlap with that side
-          if ( !side.includesVertex( otherVertex ) ) {
-
-            // If the vertex is the one we are questioning its new position is being proposed so we need to
-            // check sratch bounds - otherwise we can check the current value of bounds for the other vertices
-            const boundsToCheck = otherVertex === vertex ? SCRATCH_BOUNDS : otherVertex.modelBoundsProperty.value;
-            positionAllowed = !side.shapeProperty.value.intersectsBounds( boundsToCheck );
-          }
-
-          if ( !positionAllowed ) {
-            break;
-          }
-        }
-
-        if ( !positionAllowed ) {
-          break;
-        }
-      }
-    }
-
-    // if the position is still allowed, check to see if the position is within the valid shape of the
-    // vertex
-    if ( positionAllowed ) {
-      assert && assert( vertex.dragAreaProperty.value, 'Drag area must be defined for the Vertex' );
-
-      // A workaround for https://github.com/phetsims/kite/issues/94 - If the proposed position perfectly aligns
-      // with one of the start/end points of a shape segment along the Ray2 used for the winding number calculation,
-      // intersection with the ray will be undefined and the point may incorrectly be counted as inside the Shape.
-      // For now we make sure that the BOTH the top right and bottom right points of the Vertex bounds are within
-      // the Shape. This will work for now because Shape.containsPoint uses a Ray that extends in the +x direction
-      // for the winding number. If the two points we are checking are not vertically aligned it is impossible
-      // that both points align vertically with a Shape start/end point.
-      // When kite #94 is fixed we can replace this with a single check to see if the proposedPosition is within
-      // the Vertex dragArea.
-      positionAllowed = vertex.dragAreaProperty.value!.containsPoint( SCRATCH_BOUNDS.rightTop ) &&
-                        vertex.dragAreaProperty.value!.containsPoint( SCRATCH_BOUNDS.rightBottom );
-    }
-
-    return positionAllowed;
   }
 
   /**

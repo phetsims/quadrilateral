@@ -285,7 +285,7 @@ class SideNode extends Voicing( Path, 1 ) {
   private rotateVertexAroundOther( anchorVertex: Vertex, armVertex: Vertex, modelDelta: Vector2 ) {
     const modelPosition = armVertex.positionProperty.get().plus( modelDelta );
     const proposedPosition = QuadrilateralModel.getClosestMinorGridPosition( modelPosition );
-    if ( this.quadrilateralShapeModel.isVertexPositionAllowed( armVertex, proposedPosition ) ) {
+    if ( this.quadrilateralModel.isVertexPositionAllowed( armVertex, proposedPosition ) ) {
       armVertex.positionProperty.value = proposedPosition;
     }
   }
