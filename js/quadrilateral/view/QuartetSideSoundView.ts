@@ -164,7 +164,7 @@ class QuartetSideSoundView {
    * @public
    */
   startPlayingSounds() {
-
+    assert && assert( this.side.tiltProperty.value !== Number.POSITIVE_INFINITY, 'tilts cannot be infinite in sound design' );
     const exponential = Utils.roundToInterval( this.tiltToPlaybackExponential.evaluate( this.side.tiltProperty.value ), 1 );
     const playbackRate = Math.pow( 2, exponential / 12 );
 

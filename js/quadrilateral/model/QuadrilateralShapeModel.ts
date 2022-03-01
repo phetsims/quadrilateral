@@ -115,14 +115,19 @@ class QuadrilateralShapeModel {
 
     // create the sides of the quadrilateral
     this.topSide = new Side( this.vertexA, this.vertexB, options.tandem.createTandem( 'topSide' ), {
-      offsetVectorForTiltCalculation: new Vector2( 0, 1 )
+      offsetVectorForTiltCalculation: new Vector2( 0, 1 ),
+      validateShape: options.validateShape
     } );
-    this.rightSide = new Side( this.vertexB, this.vertexC, options.tandem.createTandem( 'rightSide' ) );
+    this.rightSide = new Side( this.vertexB, this.vertexC, options.tandem.createTandem( 'rightSide' ), {
+      validateShape: options.validateShape
+    } );
     this.bottomSide = new Side( this.vertexC, this.vertexD, options.tandem.createTandem( 'bottomSide' ), {
-      offsetVectorForTiltCalculation: new Vector2( 0, -1 )
+      offsetVectorForTiltCalculation: new Vector2( 0, -1 ),
+      validateShape: options.validateShape
     } );
     this.leftSide = new Side( this.vertexD, this.vertexA, options.tandem.createTandem( 'leftSide' ), {
-      offsetVectorForTiltCalculation: new Vector2( -1, 0 )
+      offsetVectorForTiltCalculation: new Vector2( -1, 0 ),
+      validateShape: options.validateShape
     } );
 
     // Collection of the Sides of the quadrilateral for easy iteration

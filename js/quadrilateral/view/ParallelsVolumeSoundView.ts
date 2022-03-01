@@ -221,6 +221,7 @@ class ParallelsVolumeSoundView {
       [ sideA.tiltProperty, sideB.tiltProperty ],
       ( leftTilt: number, rightTilt: number ) => {
 
+        assert && assert( leftTilt !== Number.POSITIVE_INFINITY && rightTilt !== Number.POSITIVE_INFINITY, 'tilts cannot be infinite in sound design' );
         const outputLevel = TILT_DIFFERENCE_TO_OUTPUT_LEVEL.evaluate( Math.abs( leftTilt - rightTilt ) );
         applyOutputLevel( outputLevel );
       }

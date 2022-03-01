@@ -173,22 +173,34 @@ class Vertex {
    * @param {Vector2} vertex1Position
    * @param {Vector2} vertex2Position - returns angle at this vertex, between vertexAPosition and vertexCPosition
    * @param {Vector2} vertex3Position
+   * @param {boolean} validateShape
    */
-  static calculateAngle( vertex1Position: Vector2, vertex2Position: Vector2, vertex3Position: Vector2 ) {
+  static calculateAngle( vertex1Position: Vector2, vertex2Position: Vector2, vertex3Position: Vector2, validateShape = true ) {
 
     const sideA = vertex1Position.distance( vertex2Position );
     const sideB = vertex3Position.distance( vertex2Position );
     const sideC = vertex3Position.distance( vertex1Position );
 
-    assert && assert( sideA !== 0 && sideB !== 0, 'law of cosines will not work when sides are of zero length' );
+    const sidesNonZero = sideA !== 0 && sideB !== 0;
+    if ( validateShape ) {
+      assert && assert( sidesNonZero, 'law of cosines will not work when sides are of zero length' );
+    }
 
-    // the absolute value of the arcos argument must be less than one to be defined, but it may have exceeded 1 due
-    // to precision errors
-    let argument = ( ( sideA * sideA ) + ( sideB * sideB ) - ( sideC * sideC ) ) / ( 2 * sideA * sideB );
-    argument = argument > 1 ? 1 :
-               argument < -1 ? -1 :
-               argument;
-    return Math.acos( argument );
+    if ( sidesNonZero ) {
+
+      // the absolute value of the arcos argument must be less than one to be defined, but it may have exceeded 1 due
+      // to precision errors
+      let argument = ( ( sideA * sideA ) + ( sideB * sideB ) - ( sideC * sideC ) ) / ( 2 * sideA * sideB );
+      argument = argument > 1 ? 1 :
+                 argument < -1 ? -1 :
+                 argument;
+      return Math.acos( argument );
+    }
+    else {
+
+      // fallback case when we need to gracefully signify that a side is of zero length
+      return Number.POSITIVE_INFINITY;
+    }
   }
 }
 

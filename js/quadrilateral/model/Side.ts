@@ -20,7 +20,8 @@ import Shape from '../../../../kite/js/Shape.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 
 type SideOptions = {
-  offsetVectorForTiltCalculation?: Vector2
+  offsetVectorForTiltCalculation?: Vector2,
+  validateShape?: boolean
 };
 
 class Side {
@@ -53,7 +54,12 @@ class Side {
 
       // Offsets the initial tilt by this Vector so that the tilt values can be the same for each side even
       // if they have different orientations.
-      offsetVectorForTiltCalculation: new Vector2( 1, 0 )
+      offsetVectorForTiltCalculation: new Vector2( 1, 0 ),
+
+      // If true, assertions will be made about the state of the side. But you may not always want them because
+      // we may be trying to identify if a particular configuration of the quadrilateral is valid and we need to
+      // gracefully notify that state is not allowed.
+      validateShape: true
     }, providedOptions );
 
     this.vertex1 = vertex1;
@@ -69,7 +75,7 @@ class Side {
     // initial positions, used to determine the amount of tilt of the line.
     this.tiltProperty = new DerivedProperty( [ this.vertex1.positionProperty, this.vertex2.positionProperty ],
       ( vertex1Position: Vector2, vertex2Position: Vector2 ) => {
-        return Vertex.calculateAngle( vertex1Position, vertex2Position, vertex2Position.plus( options.offsetVectorForTiltCalculation ) );
+        return Vertex.calculateAngle( vertex1Position, vertex2Position, vertex2Position.plus( options.offsetVectorForTiltCalculation ), options.validateShape );
       }, {
         tandem: tandem.createTandem( 'tiltProperty' ),
         phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
