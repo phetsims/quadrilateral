@@ -148,7 +148,8 @@ class SideNode extends Voicing( Path, 1 ) {
       downDelta: viewDragDelta,
       shiftDownDelta: viewDragDelta / 2,
       moveOnHoldDelay: 750,
-      moveOnHoldInterval: 50
+      moveOnHoldInterval: 50,
+      tandem: options.tandem.createTandem( 'keyboardDragListener' )
     } ) );
 
     this.addInputListener( new DragListener( {

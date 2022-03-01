@@ -25,7 +25,7 @@ class VertexNode extends Voicing( Circle, 1 ) {
   private readonly model: QuadrilateralModel;
 
   // TODO: Options pattern cannot be used yet because of the trait pattern
-  constructor( vertex: Vertex, vertexLabel: string, model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, options?: Object ) {
+  constructor( vertex: Vertex, vertexLabel: string, model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, options?: any ) {
     options = merge( {
 
       fill: QuadrilateralColors.quadrilateralShapeColorProperty,
@@ -81,7 +81,8 @@ class VertexNode extends Voicing( Circle, 1 ) {
       downDelta: viewDragDelta,
       shiftDownDelta: viewDragDelta / 2,
       moveOnHoldDelay: 750,
-      moveOnHoldInterval: 50
+      moveOnHoldInterval: 50,
+      tandem: options.tandem.createTandem( 'keyboardDragListener' )
     } );
     this.addInputListener( keyboardDragListener );
 
