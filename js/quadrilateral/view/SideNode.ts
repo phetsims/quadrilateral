@@ -152,12 +152,25 @@ class SideNode extends Voicing( Path, 1 ) {
       tandem: options.tandem.createTandem( 'keyboardDragListener' )
     } ) );
 
+    // Vectors between the start position during drag and each vertex so that we can translate vertex positions
+    // relative to a pointer position on a side.
+    let vectorToVertex1: null | Vector2 = null;
+    let vectorToVertex2: null | Vector2 = null;
+
     this.addInputListener( new DragListener( {
       transform: modelViewTransform,
-      start: event => {
+      start: ( event, listener ) => {
 
         // FOR DEBUGGING, when the side is pressed, show debug areas
         side.isPressedProperty.value = true;
+
+        // point in the coordinate frame of the play area, then in model coordinates
+        assert && assert( event.pointer.point, 'How could there not be a point from an event?' );
+        const parentPoint = this.globalToParentPoint( event.pointer.point! );
+        const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
+
+        vectorToVertex1 = ( side.vertex1.positionProperty.value ).minus( modelPoint );
+        vectorToVertex2 = ( side.vertex2.positionProperty.value ).minus( modelPoint );
       },
       end: () => {
 
@@ -171,8 +184,24 @@ class SideNode extends Voicing( Path, 1 ) {
 
         if ( !vertex1Pressed && !vertex2Pressed ) {
 
-          // neither vertex is pressed, move both vertices together as you drag a side
-          this.moveVerticesFromModelDelta( listener.modelDelta );
+          // point in the coordinate frame of the play area, then in model coordinates
+          const parentPoint = this.globalToParentPoint( event.pointer.point! );
+          const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
+
+          assert && assert( vectorToVertex1, 'vectorToVertex1 should have been defined at start of drag' );
+          assert && assert( vectorToVertex2, 'vectorToVertex1 should have been defined at start of drag' );
+          const modelVertex1Position = modelPoint.plus( vectorToVertex1! );
+          const modelVertex2Position = modelPoint.plus( vectorToVertex2! );
+
+          // constrain each to the model grid
+          const proposedVertex1Position = QuadrilateralModel.getClosestMinorGridPosition( modelVertex1Position );
+          const proposedVertex2Position = QuadrilateralModel.getClosestMinorGridPosition( modelVertex2Position );
+
+          // only update positions if both are allowed
+          if ( quadrilateralModel.isVertexPositionAllowed( side.vertex1, proposedVertex1Position ) && quadrilateralModel.isVertexPositionAllowed( side.vertex2, proposedVertex2Position ) ) {
+            side.vertex1.positionProperty.value = proposedVertex1Position;
+            side.vertex2.positionProperty.value = proposedVertex2Position;
+          }
         }
         else if ( vertex1Pressed !== vertex2Pressed ) {
 
@@ -254,8 +283,8 @@ class SideNode extends Voicing( Path, 1 ) {
    * @param modelDelta - The amount of movement of the arm drag in model coordinates
    */
   private rotateVertexAroundOther( anchorVertex: Vertex, armVertex: Vertex, modelDelta: Vector2 ) {
-    const proposedPosition = armVertex.positionProperty.get().plus( modelDelta );
-
+    const modelPosition = armVertex.positionProperty.get().plus( modelDelta );
+    const proposedPosition = QuadrilateralModel.getClosestMinorGridPosition( modelPosition );
     if ( this.quadrilateralShapeModel.isVertexPositionAllowed( armVertex, proposedPosition ) ) {
       armVertex.positionProperty.value = proposedPosition;
     }
