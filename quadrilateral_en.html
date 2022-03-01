@@ -41,7 +41,8 @@
           "adapted-from-phet"
         ],
         "phetLibs": [
-          "tangible"
+          "tangible",
+          "bamboo"
         ],
         "preload": [
           "../sherpa/lib/beholder-detection-1.1.12.js"
@@ -59,6 +60,10 @@
     };
   window.phet.chipper.stringRepos =
     [
+      {
+        "repo": "bamboo",
+        "requirejsNamespace": "BAMBOO"
+      },
       {
         "repo": "joist",
         "requirejsNamespace": "JOIST"

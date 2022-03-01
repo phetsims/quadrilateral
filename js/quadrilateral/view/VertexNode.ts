@@ -82,6 +82,7 @@ class VertexNode extends Voicing( Circle, 1 ) {
       shiftDownDelta: viewDragDelta / 2,
       moveOnHoldDelay: 750,
       moveOnHoldInterval: 50,
+      alwaysMoveByDownDelta: true,
       tandem: options.tandem.createTandem( 'keyboardDragListener' )
     } );
     this.addInputListener( keyboardDragListener );
@@ -94,9 +95,11 @@ class VertexNode extends Voicing( Circle, 1 ) {
         const parentPoint = this.globalToParentPoint( pointerPoint! );
         const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
 
-        const proposedPosition = modelPoint;
-        if ( model.isVertexPositionAllowed( vertex, proposedPosition ) ) {
-          vertex.positionProperty.value = proposedPosition;
+        // constrain to the allowable positions in the model along the grid
+        const constrainedPosition = QuadrilateralModel.getClosestMinorGridPosition( modelPoint );
+
+        if ( model.isVertexPositionAllowed( vertex, constrainedPosition ) ) {
+          vertex.positionProperty.value = constrainedPosition;
         }
       },
 

@@ -154,7 +154,7 @@ class SideNode extends Voicing( Path, 1 ) {
 
     this.addInputListener( new DragListener( {
       transform: modelViewTransform,
-      start: () => {
+      start: event => {
 
         // FOR DEBUGGING, when the side is pressed, show debug areas
         side.isPressedProperty.value = true;
@@ -211,8 +211,12 @@ class SideNode extends Voicing( Path, 1 ) {
   private moveVerticesFromModelDelta( deltaVector: Vector2 ) {
 
     // vectorDelta is in model coordinates already since we provided a transform to the listener
-    const proposedVertex1Position = this.side.vertex1.positionProperty.get().plus( deltaVector );
-    const proposedVertex2Position = this.side.vertex2.positionProperty.get().plus( deltaVector );
+    let proposedVertex1Position = this.side.vertex1.positionProperty.get().plus( deltaVector );
+    let proposedVertex2Position = this.side.vertex2.positionProperty.get().plus( deltaVector );
+
+    // constrain positions to the "grid" of the model
+    proposedVertex1Position = QuadrilateralModel.getClosestMinorGridPosition( proposedVertex1Position );
+    proposedVertex2Position = QuadrilateralModel.getClosestMinorGridPosition( proposedVertex2Position );
 
     // if the positions are outside of model bounds, the shape is not allowed
     // TODO: I am not sure how to put this in the isQuadrilateralShapeAllowed, because to set the shape

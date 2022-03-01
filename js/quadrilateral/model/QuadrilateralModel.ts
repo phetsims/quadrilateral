@@ -18,6 +18,7 @@ import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
 import Vertex from './Vertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Utils from '../../../../dot/js/Utils.js';
 
 class QuadrilateralModel {
   public modelBoundsProperty: Property<Bounds2 | null>;
@@ -32,6 +33,11 @@ class QuadrilateralModel {
 
   public quadrilateralShapeModel: QuadrilateralShapeModel;
   public quadrilateralTestShapeModel: QuadrilateralShapeModel;
+
+  // The spacing of the model "grid" along both x and y axes. The Quadrilateral vertex positions will be constrained to
+  // intervals of these values in model coordinates.
+  public static MAJOR_GRID_SPACING: number = 0.05;
+  public static MINOR_GRID_SPACING: number = 0.025;
 
   /**
    * @param {Tandem} tandem
@@ -156,6 +162,15 @@ class QuadrilateralModel {
    */
   public step( dt: number ): void {
     this.quadrilateralShapeModel.step( dt );
+  }
+
+  /**
+   * Returns the closest position in the model from the point provided that will be constrained to the minor lines
+   * of the model "grid".
+   */
+  public static getClosestMinorGridPosition( position: Vector2 ): Vector2 {
+    const interval = QuadrilateralModel.MINOR_GRID_SPACING;
+    return new Vector2( Utils.roundToInterval( position.x, interval ), Utils.roundToInterval( position.y, interval ) );
   }
 }
 

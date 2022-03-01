@@ -33,6 +33,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import SideLengthAreaNode from './SideLengthAreaNode.js';
 import QuadrilateralMarkerInput from './QuadrilateralMarkerInput.js';
 import QuadrilateralVisibilityControls from './QuadrilateralVisibilityControls.js';
+import QuadrilateralGridNode from './QuadrilateralGridNode.js';
 
 const MODEL_BOUNDS = QuadrilateralQueryParameters.calibrationDemoDevice ? new Bounds2( -4.5, -4.5, 4.5, 4.5 ) :
                      new Bounds2( -1, -1, 1, 1 );
@@ -88,17 +89,21 @@ class QuadrilateralScreenView extends ScreenView {
     let reducedViewBounds = this.layoutBounds.eroded( QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN );
     reducedViewBounds = reducedViewBounds.withMaxX( this.resetAllButton.left - QuadrilateralConstants.SCREEN_VIEW_X_MARGIN );
 
+    // The bounds used for the ModelViewTransform2 are a square set of bounds constrained by the limiting dimension
+    // of the reducedViewBounds and centered around the reducedViewBounds. Must be square so that the deltas in x and y
+    // directions are the same when moving between model and view coordinates. Produces a square in view space
+    // such that -1 is at the top and 1 is at the bottom.
+    const largestDimension = reducedViewBounds.height; // layoutBounds are wider than they are tall
+    const viewBoundsForTransform = new Bounds2(
+      reducedViewBounds.centerX - largestDimension / 2,
+      reducedViewBounds.centerY - largestDimension / 2,
+      reducedViewBounds.centerX + largestDimension / 2,
+      reducedViewBounds.centerY + largestDimension / 2
+    );
+
     const modelViewTransform = ModelViewTransform2.createRectangleInvertedYMapping(
       MODEL_BOUNDS,
-
-      // A square in view space such that -1 is at the top and 1 is at the bottom. View space layout bounds are
-      // wider than they are all so available model boundds will have a width GREATER than MODEL_BOUNDS.width
-      new Bounds2(
-        reducedViewBounds.centerX - reducedViewBounds.height / 2,
-        reducedViewBounds.top,
-        reducedViewBounds.centerX + reducedViewBounds.height / 2,
-        reducedViewBounds.height
-      )
+      viewBoundsForTransform
     );
 
     this.model = model;
@@ -157,6 +162,11 @@ class QuadrilateralScreenView extends ScreenView {
       this.addChild( new SideLengthAreaNode( shapeModel, shapeModel.rightSide, shapeModel.leftSide, shapeModel.topSide, modelViewTransform, { drawRotation: -Math.PI / 2 } ) );
       this.addChild( new SideLengthAreaNode( shapeModel, shapeModel.bottomSide, shapeModel.topSide, shapeModel.rightSide, modelViewTransform, { drawRotation: Math.PI } ) );
       this.addChild( new SideLengthAreaNode( shapeModel, shapeModel.leftSide, shapeModel.rightSide, shapeModel.bottomSide, modelViewTransform, { drawRotation: Math.PI / 2 } ) );
+    }
+    if ( QuadrilateralQueryParameters.showGrid ) {
+      const gridNode = new QuadrilateralGridNode( model.modelBoundsProperty, this.modelViewTransform );
+      gridNode.leftTop = boundsRectangle.leftTop;
+      this.addChild( gridNode );
     }
 
     this.quadrilateralMarkerInput = null;

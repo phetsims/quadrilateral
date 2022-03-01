@@ -6,6 +6,9 @@
     },
     {
       "path": "../tangible"
+    },
+    {
+      "path": "../bamboo/tsconfig-module.json"
     }
   ],
   "include": [
