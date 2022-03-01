@@ -120,6 +120,28 @@ class QuadrilateralModel {
   }
 
   /**
+   * Returns true if the two vertex positions are allowed for the quadrilateral.
+   */
+  public areVertexPositionsAllowed( vertex1: Vertex, vertex1ProposedPosition: Vector2, vertex2: Vertex, vertex2ProposedPosition: Vector2 ): boolean {
+
+    // set the proposed positions to the test quadrilateral without calling listeners
+    const testVertex1 = this.quadrilateralTestShapeModel.getLabelledVertex( vertex1.vertexLabel );
+    const testVertex2 = this.quadrilateralTestShapeModel.getLabelledVertex( vertex2.vertexLabel );
+
+    // update both positions without calling listeners, we don't want to validate until both have been updated
+    testVertex1.positionProperty.setDeferred( true );
+    testVertex2.positionProperty.setDeferred( true );
+    testVertex1.positionProperty.set( vertex1ProposedPosition );
+    testVertex2.positionProperty.set( vertex2ProposedPosition );
+    const testVertex1PositionListeners = testVertex1.positionProperty.setDeferred( false );
+    const testVertex2PositionListeners = testVertex2.positionProperty.setDeferred( false );
+    testVertex1PositionListeners && testVertex1PositionListeners();
+    testVertex2PositionListeners && testVertex2PositionListeners();
+
+    return this.quadrilateralTestShapeModel.isQuadrilateralShapeAllowed();
+  }
+
+  /**
    * Set the physical model bounds from the device bounds. For now, we assume that the devices is like
    * one provided by CHROME lab, where sides are created from a socket and arm such that the largest length
    * of one side is when the arm is as far out of the socket as possible and the smallest length is when the

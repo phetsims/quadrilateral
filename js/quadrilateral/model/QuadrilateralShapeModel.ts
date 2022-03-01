@@ -479,11 +479,15 @@ class QuadrilateralShapeModel {
   createVertexArea( modelBounds: Bounds2, vertexA: Vertex, vertexB: Vertex, vertexC: Vertex, vertexD: Vertex ): Shape {
 
     const allVerticesInBounds = _.every( [ vertexA, vertexB, vertexC, vertexD ], vertex => modelBounds.containsPoint( vertex.positionProperty.value ) );
+    const vertexPositionsUnique = _.uniqBy( [ vertexA, vertexB, vertexC, vertexD ].map( vertex => vertex.positionProperty.value.toString() ), positionString => {
+      return positionString;
+    } ).length === 4;
     if ( this.validateShape ) {
       assert && assert( allVerticesInBounds, 'A vertex is not contained by modelBounds!' );
+      assert && assert( vertexPositionsUnique, 'There are two vertices that overlap! That would create lines of zero length and break this algorithm' );
     }
 
-    if ( !allVerticesInBounds ) {
+    if ( !allVerticesInBounds || !vertexPositionsUnique ) {
 
       // The shape creation algorithm requires that all vertices are in bounds - we may need to handle this gracefully
       // so just return an empty shape in this case

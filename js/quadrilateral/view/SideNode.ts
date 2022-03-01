@@ -198,7 +198,7 @@ class SideNode extends Voicing( Path, 1 ) {
           const proposedVertex2Position = QuadrilateralModel.getClosestMinorGridPosition( modelVertex2Position );
 
           // only update positions if both are allowed
-          if ( quadrilateralModel.isVertexPositionAllowed( side.vertex1, proposedVertex1Position ) && quadrilateralModel.isVertexPositionAllowed( side.vertex2, proposedVertex2Position ) ) {
+          if ( quadrilateralModel.areVertexPositionsAllowed( side.vertex1, proposedVertex1Position, side.vertex2, proposedVertex2Position ) ) {
             side.vertex1.positionProperty.value = proposedVertex1Position;
             side.vertex2.positionProperty.value = proposedVertex2Position;
           }
