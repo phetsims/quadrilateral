@@ -39,7 +39,7 @@ class QuadrilateralModel {
   // The spacing of the model "grid" along both x and y axes. The Quadrilateral vertex positions will be constrained to
   // intervals of these values in model coordinates.
   public static MAJOR_GRID_SPACING: number = 0.05;
-  public static MINOR_GRID_SPACING: number = 0.025;
+  public static MINOR_GRID_SPACING: number = QuadrilateralModel.MAJOR_GRID_SPACING / 4;
 
   /**
    * @param {Tandem} tandem

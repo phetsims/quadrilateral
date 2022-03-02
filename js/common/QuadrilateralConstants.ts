@@ -13,10 +13,6 @@ const QuadrilateralConstants = {
   SCREEN_VIEW_X_MARGIN: 15,
   SCREEN_VIEW_Y_MARGIN: 15,
 
-  MAJOR_GRID_SPACING: 0.05,
-  MINOR_GRID_SPACING: 0.001,
-
-
   // {number} - The amount of movement per key press in model coordinates for vertices and sides.
   MOVEMENT_PER_KEY_PRESS: 0.05
 };

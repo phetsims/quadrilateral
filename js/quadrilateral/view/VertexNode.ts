@@ -13,7 +13,6 @@ import quadrilateral from '../../quadrilateral.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vertex from '../model/Vertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -62,7 +61,8 @@ class VertexNode extends Voicing( Circle, 1 ) {
     } );
 
     // A basic keyboard input listener.
-    const viewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralConstants.MOVEMENT_PER_KEY_PRESS );
+    const largeViewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralModel.MAJOR_GRID_SPACING );
+    const smallViewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralModel.MINOR_GRID_SPACING );
     const keyboardDragListener = new KeyboardDragListener( {
       transform: modelViewTransform,
       drag: ( modelDelta: Vector2 ) => {
@@ -74,12 +74,12 @@ class VertexNode extends Voicing( Circle, 1 ) {
       },
 
       // velocity defined in view coordinates per second, assuming 60 fps
-      dragVelocity: viewDragDelta * 60,
-      shiftDragVelocity: ( viewDragDelta / 2 ) * 60,
+      dragVelocity: largeViewDragDelta * 60,
+      shiftDragVelocity: smallViewDragDelta * 60,
       dragBoundsProperty: vertex.dragBoundsProperty,
 
-      downDelta: viewDragDelta,
-      shiftDownDelta: viewDragDelta / 2,
+      downDelta: largeViewDragDelta,
+      shiftDownDelta: smallViewDragDelta,
       moveOnHoldDelay: 750,
       moveOnHoldInterval: 50,
       alwaysMoveByDownDelta: true,

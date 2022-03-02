@@ -17,7 +17,6 @@ import Side from '../model/Side.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vertex from '../model/Vertex.js';
-import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import Line from '../../../../kite/js/segments/Line.js';
@@ -134,7 +133,7 @@ class SideNode extends Voicing( Path, 1 ) {
     } );
 
     // supports keyboard dragging, attempts to move both vertices in the direction of motion of the line
-    const viewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralConstants.MOVEMENT_PER_KEY_PRESS );
+    const viewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralModel.MINOR_GRID_SPACING );
     this.addInputListener( new KeyboardDragListener( {
       transform: modelViewTransform,
       drag: ( vectorDelta: Vector2 ) => {
