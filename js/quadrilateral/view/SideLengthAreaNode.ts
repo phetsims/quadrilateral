@@ -10,7 +10,7 @@
 import quadrilateral from '../../quadrilateral.js';
 import Side from '../model/Side.js';
 import { Node, NodeOptions, Path } from '../../../../scenery/js/imports.js';
-import Shape from '../../../../kite/js/Shape.js';
+import { Shape } from '../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';

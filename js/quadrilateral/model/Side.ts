@@ -16,7 +16,7 @@ import Utils from '../../../../dot/js/Utils.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import { Line } from '../../../../scenery/js/imports.js';
-import Shape from '../../../../kite/js/Shape.js';
+import { Shape } from '../../../../kite/js/imports.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 
 type SideOptions = {
