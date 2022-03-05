@@ -18,7 +18,7 @@ import Utils from '../../../../dot/js/Utils.js';
 // @ts-ignore - TODO: Variable 'phetAudioContext' implicitly has type 'any' in some locations where its type cannot be determined.
 import phetAudioContext from '../../../../tambo/js/phetAudioContext.js';
 import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
-import SoundGenerator from '../../../../tambo/js/sound-generators/SoundGenerator.js';
+import SoundGenerator, { SoundGeneratorOptions } from '../../../../tambo/js/sound-generators/SoundGenerator.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
 import quadLoop01_mp3 from '../../../sounds/quadLoop01_mp3.js';
 import quadLoop02_mp3 from '../../../sounds/quadLoop02_mp3.js';
