@@ -79,8 +79,8 @@ class SideNode extends Voicing( Path, 1 ) {
 
       const numberOfFullSegments = Math.floor( 1 / parametricSegmentLength );
       let t = 0;
-      for ( let i = 0; i < numberOfFullSegments; i++ ) {
-        const nextPosition = t + parametricSegmentLength;
+      for ( let i = 0; i < numberOfFullSegments && t < 1; i++ ) {
+        const nextPosition = Math.min( t + parametricSegmentLength, 1 );
         lineSegments.push( new Line( fullLine.positionAt( t ), fullLine.positionAt( nextPosition ) ) );
         t = nextPosition;
       }
