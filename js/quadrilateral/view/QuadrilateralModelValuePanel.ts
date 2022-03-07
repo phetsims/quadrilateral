@@ -11,7 +11,7 @@
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import { Text, VBox } from '../../../../scenery/js/imports.js';
-import Panel from '../../../../sun/js/Panel.js';
+import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import IProperty from '../../../../axon/js/IProperty.js';
@@ -26,7 +26,7 @@ const valuePatternString = '{{label}}: {{value}}';
 class QuadrilateralModelValuePanel extends Panel {
   constructor( model: QuadrilateralModel, providedOptions?: PanelOptions ) {
 
-    const options = optionize<PanelOptions>( {
+    const options = optionize<PanelOptions, {}>( {
 
       // looks good for debugging without the panel resizing frequently
       minWidth: 400

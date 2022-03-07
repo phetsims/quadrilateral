@@ -13,13 +13,13 @@ import Utils from '../../../../dot/js/Utils.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import { Circle, Line, Rectangle, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Circle, Line, Rectangle, Text, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 
 class CalibrationContentNode extends VBox {
-  constructor( model: QuadrilateralModel, providedOptions?: LayoutBoxOptions ) {
+  constructor( model: QuadrilateralModel, providedOptions?: VBoxOptions ) {
 
-    const options = optionize<LayoutBoxOptions, LayoutBoxOptions>( {
+    const options = optionize<VBoxOptions, {}>( {
       align: 'center'
     }, providedOptions );
 
