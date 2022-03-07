@@ -158,11 +158,13 @@ class QuadrilateralShapeModel {
     this.angleToleranceIntervalProperty = new DerivedProperty(
       [
         this.vertexA.isPressedProperty, this.vertexB.isPressedProperty, this.vertexC.isPressedProperty, this.vertexD.isPressedProperty,
-        this.topSide.isPressedProperty, this.rightSide.isPressedProperty, this.bottomSide.isPressedProperty, this.leftSide.isPressedProperty
+        this.topSide.isPressedProperty, this.rightSide.isPressedProperty, this.bottomSide.isPressedProperty, this.leftSide.isPressedProperty,
+        model.resetNotInProgressProperty
       ],
       (
         vertexAPressed, vertexBPressed, vertexCPressed, vertexDPressed,
-        topSidePressed, rightSidePressed, bottomSidePressed, leftSidePressed
+        topSidePressed, rightSidePressed, bottomSidePressed, leftSidePressed,
+        resetNotInProgress
       ) => {
         const verticesPressedArray = [ vertexAPressed, vertexBPressed, vertexCPressed, vertexDPressed ];
         const sidesPressedArray = [ topSidePressed, rightSidePressed, bottomSidePressed, leftSidePressed ];
@@ -177,6 +179,11 @@ class QuadrilateralShapeModel {
           // The simulation is connected to device hardware, so we use a larger tolerance interval because control
           // with the hardware is more erratic and less fine-grained.
           toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval * QuadrilateralQueryParameters.angleToleranceIntervalScaleFactor;
+        }
+        else if ( !resetNotInProgress ) {
+
+          // A reset has just begun, set the tolerance interval back to its initial value on load
+          toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval;
         }
         else {
 
