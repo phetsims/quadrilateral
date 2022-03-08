@@ -12,7 +12,7 @@ import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import QuadrilateralSoundOptionsModel, { SoundDesign, SuccessSoundCollection, SuccessSoundFile } from '../model/QuadrilateralSoundOptionsModel.js';
 import ShapeIdentificationSoundView from './ShapeIdentificationSoundView.js';
 
-const MAX_OUTPUT_LEVEL = 0.2;
+const MAX_OUTPUT_LEVEL = 0.1;
 
 // In seconds - after lengths are no longer equal to saved side lengths we have lost the "success" case
 // for maintaining a parallelogram while keeping sides equal. We will wait this long before
