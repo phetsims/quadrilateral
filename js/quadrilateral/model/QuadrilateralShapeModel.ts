@@ -392,7 +392,7 @@ class QuadrilateralShapeModel {
   public getShapeName(): NamedQuadrilateral | null {
     let namedQuadrilateral = null;
 
-    const topSideLengthEqualToRightSideLength = this.topSide.isLengthEqualToOther( this.rightSide );
+    const topSideLengthEqualToRightSideLength = this.topSide.isShapeLengthEqualToOther( this.rightSide );
 
     // equalities for adjacent vertices
     const adjacentVertexAngles = [
@@ -472,7 +472,7 @@ class QuadrilateralShapeModel {
         ];
 
         const kiteRequirement = _.countBy( adjacentSides, ( sidePair: Side[] ) => {
-          return sidePair[ 0 ].isLengthEqualToOther( sidePair[ 1 ] );
+          return sidePair[ 0 ].isShapeLengthEqualToOther( sidePair[ 1 ] );
         } ).true === 2;
 
         if ( kiteRequirement ) {

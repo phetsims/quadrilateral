@@ -66,10 +66,8 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     defaultValue: 0.05
   },
 
-  // A tolerance interval for detecting changes in length. If the length changes less than this value the model
-  // consideres the quadrilateral lengths to be unchanged. This accomplishes a learning goal of manipulating the
-  // quadrilateral shape while maintaining a parallelogram without changing side lengths.
-  constantLengthToleranceInterval: {
+  // A tolerance interval for comparing lengths for the purposes of shape detection.
+  shapeLengthToleranceInterval: {
     type: 'number',
     defaultValue: 0.1
   },
