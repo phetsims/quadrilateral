@@ -131,6 +131,9 @@ class QuadrilateralModel {
    */
   public areVertexPositionsAllowed( vertex1: Vertex, vertex1ProposedPosition: Vector2, vertex2: Vertex, vertex2ProposedPosition: Vector2 ): boolean {
 
+    // Set the test shape to the current value of the actual shape before proposed positions
+    this.quadrilateralTestShapeModel.set( this.quadrilateralShapeModel );
+
     // Setting multiple vertex positions at once, we need to wait to call listeners until all values are ready
     this.quadrilateralTestShapeModel.setPropertiesDeferred( true );
 

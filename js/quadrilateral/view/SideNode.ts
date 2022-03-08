@@ -19,8 +19,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Vertex from '../model/Vertex.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import { Line } from '../../../../kite/js/imports.js';
-import { Shape } from '../../../../kite/js/imports.js';
+import { Line, Shape } from '../../../../kite/js/imports.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 
 class SideNode extends Voicing( Path, 1 ) {
