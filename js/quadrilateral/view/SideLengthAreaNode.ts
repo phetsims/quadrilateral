@@ -12,7 +12,6 @@ import Side from '../model/Side.js';
 import { Node, NodeOptions, Path } from '../../../../scenery/js/imports.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralUtils from '../../common/QuadrilateralUtils.js';
 import Property from '../../../../axon/js/Property.js';
@@ -34,17 +33,11 @@ class SideLengthAreaNode extends Node {
     }, providedOptions );
     super( options );
 
-    // Vertices must stay within this width for the success case - doing so means that the side lengths are not
-    // changing.
-    const lineWidth = modelViewTransform.modelToViewDeltaX( QuadrilateralQueryParameters.shapeLengthToleranceInterval );
-
     const vertex1Path = new Path( null, {
-      stroke: 'black',
-      lineWidth: lineWidth
+      stroke: 'black'
     } );
     const vertex2Path = new Path( null, {
-      stroke: 'black',
-      lineWidth: lineWidth
+      stroke: 'black'
     } );
 
     this.children = [ vertex1Path, vertex2Path ];
@@ -67,6 +60,11 @@ class SideLengthAreaNode extends Node {
 
         vertex1Path.shape = modelViewTransform.modelToViewShape( vertex1Shape );
         vertex2Path.shape = modelViewTransform.modelToViewShape( vertex2Shape );
+
+        // multiply by two because the tolerance interval is allowable different in only one dimension (arc is two)
+        const lineWidth = modelViewTransform.modelToViewDeltaX( shapeModel.getLargestLengthToleranceInterval() ) * 2;
+        vertex1Path.lineWidth = lineWidth;
+        vertex2Path.lineWidth = lineWidth;
 
         const nextColor = QuadrilateralUtils.getRandomColor();
         vertex1Path.stroke = nextColor;

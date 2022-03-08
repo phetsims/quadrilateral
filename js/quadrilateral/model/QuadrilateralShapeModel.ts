@@ -298,6 +298,8 @@ class QuadrilateralShapeModel {
     // from being called and new values from being set.
     this.propertiesDeferred = false;
 
+    this.saveSideLengths();
+
     model.modelBoundsProperty.link( modelBounds => {
       if ( modelBounds ) {
         this.setVertexDragAreas();
@@ -336,10 +338,27 @@ class QuadrilateralShapeModel {
    * @param currentSideLengths
    */
   public getSideLengthsEqualToSaved( currentSideLengths: SideLengths ) {
-    return Utils.equalsEpsilon( currentSideLengths.topSideLength, this.savedSideLengths.topSideLength, this.topSide.lengthToleranceIntervalProperty.value ) &&
-           Utils.equalsEpsilon( currentSideLengths.rightSideLength, this.savedSideLengths.rightSideLength, this.rightSide.lengthToleranceIntervalProperty.value ) &&
-           Utils.equalsEpsilon( currentSideLengths.bottomSideLength, this.savedSideLengths.bottomSideLength, this.bottomSide.lengthToleranceIntervalProperty.value ) &&
-           Utils.equalsEpsilon( currentSideLengths.leftSideLength, this.savedSideLengths.leftSideLength, this.leftSide.lengthToleranceIntervalProperty.value );
+
+    // TODO: For the usages of this function It might be best to compare using lengthToleranceIntervalProperty of the
+    // sides that intersect with the moving sides, but that is more complicated and it isn't clear if this will be
+    // necessary at all. Doing something easy for now.
+    const toleranceInterval = this.getLargestLengthToleranceInterval();
+
+    return Utils.equalsEpsilon( currentSideLengths.topSideLength, this.savedSideLengths.topSideLength, toleranceInterval ) &&
+           Utils.equalsEpsilon( currentSideLengths.rightSideLength, this.savedSideLengths.rightSideLength, toleranceInterval ) &&
+           Utils.equalsEpsilon( currentSideLengths.bottomSideLength, this.savedSideLengths.bottomSideLength, toleranceInterval ) &&
+           Utils.equalsEpsilon( currentSideLengths.leftSideLength, this.savedSideLengths.leftSideLength, toleranceInterval );
+  }
+
+  /**
+   * The length tolerance interval is dependent on side length. Get the largest value of all sides for comparisons
+   * that only care about the largest value.
+   */
+  public getLargestLengthToleranceInterval(): number {
+    const sideWithLargestInterval = _.maxBy( this.sides, side => side.lengthToleranceIntervalProperty.value );
+
+    assert && assert( sideWithLargestInterval, 'failed to find a side with a lengthToleranceIntervalProperty value' );
+    return sideWithLargestInterval!.lengthToleranceIntervalProperty.value;
   }
 
   /**
