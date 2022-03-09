@@ -31,7 +31,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   angleToleranceInterval: {
     type: 'number',
     isValidValue: value => value <= ( 2 * Math.PI ) && value >= 0,
-    defaultValue: 0.05
+    defaultValue: 0.01
   },
 
   // A scale factor to apply to the angle tolerance interval which determines when the quadrilateral is a
@@ -40,14 +40,14 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // angleToleranceInterval is larger in these cases. See QuadrilateralShapeModel for usage and more information.
   angleToleranceIntervalScaleFactor: {
     type: 'number',
-    defaultValue: 2,
+    defaultValue: 10,
     isValidValue: value => value >= 1
   },
 
   shapeAngleToleranceInterval: {
     type: 'number',
     isValidValue: value => value <= ( 2 * Math.PI ) && value >= 0,
-    defaultValue: 0.05
+    defaultValue: 0.01
   },
 
   // The tolerance interval for the angle of tilt for sides.
@@ -69,7 +69,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // A tolerance interval for comparing lengths for the purposes of shape detection.
   shapeLengthToleranceInterval: {
     type: 'number',
-    defaultValue: 0.05
+    defaultValue: 0.01
   },
 
   // A flag that controls when the "maintenance" sound is played. When provided, the success sound for maintenance
