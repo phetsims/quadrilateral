@@ -36,8 +36,12 @@ class SideNode extends Voicing( Path, 1 ) {
       fill: QuadrilateralColors.quadrilateralShapeColorProperty,
       stroke: QuadrilateralColors.quadrilateralShapeStrokeColorProperty,
 
+      // pdom and Voicing
+      nameResponse: null,
+
       // pdom
       tagName: 'div',
+      ariaRole: 'application',
       focusable: true,
 
       // phet-io
@@ -45,6 +49,11 @@ class SideNode extends Voicing( Path, 1 ) {
     }, options );
 
     super( side.shapeProperty.value );
+
+    assert && assert( options.voicingNameResponse === undefined, 'SideNode sets voicingNameResponse from nameResponse' );
+    assert && assert( options.innerContent === undefined, 'SideNode sets innerContent from nameResponse' );
+    this.voicingNameResponse = options.nameResponse;
+    this.innerContent = options.nameResponse;
 
     // A reference to the model component.
     this.side = side;

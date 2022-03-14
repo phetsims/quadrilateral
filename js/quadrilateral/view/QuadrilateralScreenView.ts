@@ -239,6 +239,10 @@ class QuadrilateralScreenView extends ScreenView {
 
       this.addChild( calibrationButton );
     }
+
+    // pdom
+    this.pdomPlayAreaNode.pdomOrder = [ this.quadrilateralNode ];
+    this.pdomControlAreaNode.pdomOrder = [ visibilityControls, this.resetAllButton ];
   }
 
   /**

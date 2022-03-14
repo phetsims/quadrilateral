@@ -32,7 +32,11 @@ class VertexNode extends Voicing( Circle, 1 ) {
 
       // pdom
       tagName: 'div',
+      ariaRole: 'application',
       focusable: true,
+
+      // a11y - for both PDOM and Voicing
+      nameResponse: null,
 
       // phet-io
       tandem: Tandem.REQUIRED
@@ -40,6 +44,11 @@ class VertexNode extends Voicing( Circle, 1 ) {
 
     const viewRadius = modelViewTransform.modelToViewBounds( vertex.modelBoundsProperty.value ).width / 2;
     super( viewRadius );
+
+    assert && assert( options.voicingNameResponse === undefined, 'VertexNode sets voicingNameResponse from nameResponse' );
+    assert && assert( options.innerContent === undefined, 'VertexNode sets innerContent from nameResponse' );
+    this.voicingNameResponse = options.nameResponse;
+    this.innerContent = options.nameResponse;
 
     this.model = model;
 

@@ -40,11 +40,29 @@ class QuadrilateralVisibilityControls extends VBox {
 
     const cornerLabelsText = new Text( quadrilateralStrings.cornerLabels, TEXT_OPTIONS );
     const cornerLabelsCheckbox = new Checkbox( cornerLabelsText, cornerLabelsVisibleProperty, {
+
+      // pdom
+      labelTagName: 'label',
+      labelContent: quadrilateralStrings.cornerLabels,
+
+      // voicing
+      voicingNameResponse: quadrilateralStrings.cornerLabels,
+
+      // phet-io
       tandem: options.tandem.createTandem( 'cornerLabelsCheckbox' )
     } );
 
     const cornerGuideText = new Text( quadrilateralStrings.cornerGuides, TEXT_OPTIONS );
     const cornerGuideCheckbox = new Checkbox( cornerGuideText, cornerGuideVisibleProperty, {
+
+      // pdom
+      labelTagName: 'label',
+      labelContent: quadrilateralStrings.cornerGuides,
+
+      // voicing
+      voicingNameResponse: quadrilateralStrings.cornerGuides,
+
+      // phet-io
       tandem: options.tandem.createTandem( 'cornerGuideCheckbox' )
     } );
 

@@ -21,14 +21,14 @@ import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import RightAngleIndicatorNode from './RightAngleIndicatorNode.js';
 
 // constants
-const cornerAString = quadrilateralStrings.a11y.voicing.cornerA;
-const cornerBString = quadrilateralStrings.a11y.voicing.cornerB;
-const cornerCString = quadrilateralStrings.a11y.voicing.cornerC;
-const cornerDString = quadrilateralStrings.a11y.voicing.cornerD;
-const topSideString = quadrilateralStrings.a11y.voicing.topSide;
-const rightSideString = quadrilateralStrings.a11y.voicing.rightSide;
-const bottomSideString = quadrilateralStrings.a11y.voicing.bottomSide;
-const leftSideString = quadrilateralStrings.a11y.voicing.leftSide;
+const cornerAString = quadrilateralStrings.a11y.cornerA;
+const cornerBString = quadrilateralStrings.a11y.cornerB;
+const cornerCString = quadrilateralStrings.a11y.cornerC;
+const cornerDString = quadrilateralStrings.a11y.cornerD;
+const topSideString = quadrilateralStrings.a11y.topSide;
+const rightSideString = quadrilateralStrings.a11y.rightSide;
+const bottomSideString = quadrilateralStrings.a11y.bottomSide;
+const leftSideString = quadrilateralStrings.a11y.leftSide;
 const vertexAString = quadrilateralStrings.vertexA;
 const vertexBString = quadrilateralStrings.vertexB;
 const vertexCString = quadrilateralStrings.vertexC;
@@ -69,60 +69,44 @@ class QuadrilateralNode extends Node {
     const vertexD = this.quadrilateralShapeModel.vertexD;
 
     const vertexNode1 = new VertexNode( vertexA, vertexAString, quadrilateralModel, modelViewTransform, {
-
-      // voicing
-      voicingNameResponse: cornerAString,
+      nameResponse: cornerAString,
 
       // phet-io
       tandem: options.tandem.createTandem( 'vertexANode' )
     } );
 
     const vertexNode2 = new VertexNode( vertexB, vertexBString, quadrilateralModel, modelViewTransform, {
-
-      // voicing
-      voicingNameResponse: cornerBString,
+      nameResponse: cornerBString,
 
       // phet-io
       tandem: options.tandem.createTandem( 'vertexBNode' )
     } );
 
     const vertexNode3 = new VertexNode( vertexC, vertexCString, quadrilateralModel, modelViewTransform, {
-
-      // voicing
-      voicingNameResponse: cornerCString,
+      nameResponse: cornerCString,
 
       // phet-io
       tandem: options.tandem.createTandem( 'vertexCNode' )
     } );
 
     const vertexNode4 = new VertexNode( vertexD, vertexDString, quadrilateralModel, modelViewTransform, {
-
-      // voicing
-      voicingNameResponse: cornerDString,
+      nameResponse: cornerDString,
 
       // phet-io
       tandem: options.tandem.createTandem( 'vertexDNode' )
     } );
 
     const topSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.topSide, this.model.quadrilateralTestShapeModel.topSide, modelViewTransform, {
-
-      // voicing
-      voicingNameResponse: topSideString
+      nameResponse: topSideString
     } );
     const rightSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.rightSide, this.model.quadrilateralTestShapeModel.rightSide, modelViewTransform, {
-
-      // voicing
-      voicingNameResponse: rightSideString
+      nameResponse: rightSideString
     } );
     const bottomSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.bottomSide, this.model.quadrilateralTestShapeModel.bottomSide, modelViewTransform, {
-
-      // voicing
-      voicingNameResponse: bottomSideString
+      nameResponse: bottomSideString
     } );
     const leftSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.leftSide, this.model.quadrilateralTestShapeModel.leftSide, modelViewTransform, {
-
-      // voicing
-      voicingNameResponse: leftSideString
+      nameResponse: leftSideString
     } );
 
     // angle guides
@@ -137,11 +121,14 @@ class QuadrilateralNode extends Node {
     const vertexCRightAngleIndicator = new RightAngleIndicatorNode( vertexC, vertexD, vertexB, this.model.quadrilateralShapeModel, modelViewTransform );
     const vertexDRightAngleIndicator = new RightAngleIndicatorNode( vertexD, vertexA, vertexC, this.model.quadrilateralShapeModel, modelViewTransform );
 
-    // add children - sides first because we want vertices to catch all input
-    this.addChild( topSideNode );
-    this.addChild( rightSideNode );
-    this.addChild( bottomSideNode );
-    this.addChild( leftSideNode );
+    // add children - parents support layering order as well as traversal order in the PDOM
+    // sides first because we want vertices to catch all input
+    const sideParentNode = new ShapeHeadingNode( quadrilateralStrings.a11y.myShapesSides );
+    sideParentNode.addChild( topSideNode );
+    sideParentNode.addChild( rightSideNode );
+    sideParentNode.addChild( bottomSideNode );
+    sideParentNode.addChild( leftSideNode );
+    this.addChild( sideParentNode );
 
     // guide nodes should not be occluded by sides
     this.addChild( vertexACornerGuideNode );
@@ -155,10 +142,13 @@ class QuadrilateralNode extends Node {
     this.addChild( vertexCRightAngleIndicator );
     this.addChild( vertexDRightAngleIndicator );
 
-    this.addChild( vertexNode1 );
-    this.addChild( vertexNode2 );
-    this.addChild( vertexNode3 );
-    this.addChild( vertexNode4 );
+    const vertexParentNode = new ShapeHeadingNode( quadrilateralStrings.a11y.myShapesCorners );
+    vertexParentNode.addChild( vertexNode1 );
+    vertexParentNode.addChild( vertexNode2 );
+    vertexParentNode.addChild( vertexNode3 );
+    vertexParentNode.addChild( vertexNode4 );
+    this.addChild( vertexParentNode );
+
 
     // listeners
     // Change colors when we have become a parallelogram
@@ -178,9 +168,23 @@ class QuadrilateralNode extends Node {
     } );
 
     this.pdomOrder = [
-      vertexNode1, vertexNode2, vertexNode3, vertexNode4,
-      topSideNode, rightSideNode, bottomSideNode, leftSideNode
+      vertexParentNode,
+      sideParentNode
     ];
+  }
+}
+
+/**
+ * A Node with options that define how a section of content describing the Shape should exist in the PDOM.
+ * Components of the quadrilateral shape are organized under a few H3s.
+ */
+class ShapeHeadingNode extends Node {
+  constructor( labelContent: string ) {
+    super( {
+      tagName: 'div',
+      labelTagName: 'h3',
+      labelContent: labelContent
+    } );
   }
 }
 

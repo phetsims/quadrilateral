@@ -21,31 +21,37 @@
     "value": "D"
   },
   "a11y": {
+    "myShapesCorners": {
+      "value": "My Shape's Corners"
+    },
+    "myShapesSides": {
+      "value": "My Shape's Sides"
+    },
+    "cornerA": {
+      "value": "Corner A"
+    },
+    "cornerB": {
+      "value": "Corner B"
+    },
+    "cornerC": {
+      "value": "Corner C"
+    },
+    "cornerD": {
+      "value": "Corner D"
+    },
+    "topSide": {
+      "value": "Side AB"
+    },
+    "rightSide": {
+      "value": "Side BC"
+    },
+    "bottomSide": {
+      "value": "Side CD"
+    },
+    "leftSide": {
+      "value": "Side DA"
+    },
     "voicing": {
-      "cornerA": {
-        "value": "Corner A"
-      },
-      "cornerB": {
-        "value": "Corner B"
-      },
-      "cornerC": {
-        "value": "Corner C"
-      },
-      "cornerD": {
-        "value": "Corner D"
-      },
-      "topSide": {
-        "value": "Top Side"
-      },
-      "rightSide": {
-        "value": "Right Side"
-      },
-      "bottomSide": {
-        "value": "Bottom Side"
-      },
-      "leftSide": {
-        "value": "Left Side"
-      },
       "overviewContent": {
         "value": "A quadrilateral is a closed four-sided shape. This quadrilateral is an interactive sim. It changes as you play with it. There are four grabbable sides and four grabbable corners. You have the power to change the shape and explore what makes a parallelogram. You can also reset the sim."
       },
