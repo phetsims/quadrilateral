@@ -91,7 +91,10 @@ class VertexNode extends Voicing( Circle, 1 ) {
       shiftDownDelta: smallViewDragDelta,
       moveOnHoldDelay: 750,
       moveOnHoldInterval: 50,
-      alwaysMoveByDownDelta: true,
+
+      // It seems that press and hold doesn't always move by downDelta. Maybe it should or maybe
+      // we need an option like this.
+      // alwaysMoveByDownDelta: true,
       tandem: options.tandem.createTandem( 'keyboardDragListener' )
     } );
     this.addInputListener( keyboardDragListener );
