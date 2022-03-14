@@ -21,6 +21,14 @@
     "value": "D"
   },
   "a11y": {
+    "screenSummary": {
+      "playAreaDescription": {
+        "value": "In the Play Area you find your closed four-sided shape. Four grabbable sides and four grabbable corners allow you to create different shapes, and explore what makes a parallelogram."
+      },
+      "controlAreaDescription": {
+        "value": "The Control Area has checkboxes to add labels and guides, and a button to reset the sim."
+      }
+    },
     "myShapesCorners": {
       "value": "My Shape's Corners"
     },

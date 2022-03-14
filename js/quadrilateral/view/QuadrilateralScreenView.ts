@@ -34,6 +34,7 @@ import SideLengthAreaNode from './SideLengthAreaNode.js';
 import QuadrilateralMarkerInput from './QuadrilateralMarkerInput.js';
 import QuadrilateralVisibilityControls from './QuadrilateralVisibilityControls.js';
 import QuadrilateralGridNode from './QuadrilateralGridNode.js';
+import QuadrilateralScreenSummaryContentNode from './QuadrilateralScreenSummaryContentNode.js';
 
 const MODEL_BOUNDS = QuadrilateralQueryParameters.calibrationDemoDevice ? new Bounds2( -4.5, -4.5, 4.5, 4.5 ) :
                      new Bounds2( -1, -1, 1, 1 );
@@ -243,6 +244,9 @@ class QuadrilateralScreenView extends ScreenView {
     // pdom
     this.pdomPlayAreaNode.pdomOrder = [ this.quadrilateralNode ];
     this.pdomControlAreaNode.pdomOrder = [ visibilityControls, this.resetAllButton ];
+
+    this.setScreenSummaryContent( new QuadrilateralScreenSummaryContentNode() );
+
   }
 
   /**

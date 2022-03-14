@@ -18,6 +18,10 @@ type StringsType = {
   'vertexC': string,
   'vertexD': string,
   'a11y': {
+    'screenSummary': {
+      'playAreaDescription': string,
+      'controlAreaDescription': string
+    },
     'myShapesCorners': string,
     'myShapesSides': string,
     'cornerA': string,
