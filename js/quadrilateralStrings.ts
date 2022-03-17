@@ -34,7 +34,10 @@ type StringsType = {
     'leftSide': string,
     'voicing': {
       'overviewContent': string,
-      'hintContent': string,
+      'hintContentPattern': string,
+      'youHaveAShapeHintPattern': string,
+      'namedShapeParalleogramHintPattern': string,
+      'namedShapeNotAParallelogramHintPattern': string,
       'detailsPattern': string,
       'notAParallelogram': string,
       'aParallelogram': string,
@@ -47,7 +50,8 @@ type StringsType = {
         'kite': string,
         'isoscelesTrapezoid': string,
         'trapezoid': string,
-        'concaveQuadrilateral': string
+        'concaveQuadrilateral': string,
+        'generalQuadrilateral': string
       },
       'transformations': {
         'tiltingPattern': string,

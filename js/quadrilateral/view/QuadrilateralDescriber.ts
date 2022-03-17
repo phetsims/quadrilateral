@@ -28,8 +28,10 @@ const keepingAParallelogramString = quadrilateralStrings.a11y.voicing.transforma
 const youLostYourParallelogramPatternString = quadrilateralStrings.a11y.voicing.transformations.youLostYourParallelogramPattern;
 const proximityToParallelPatternString = quadrilateralStrings.a11y.voicing.transformations.proximityToParallelogramPattern;
 const youMadeAParallelogramString = quadrilateralStrings.a11y.voicing.transformations.youMadeAParallelogram;
+const namedShapeParalleogramHintPatternString = quadrilateralStrings.a11y.voicing.namedShapeParalleogramHintPattern;
+const namedShapeNotAParallelogramHintPatternString = quadrilateralStrings.a11y.voicing.namedShapeNotAParallelogramHintPattern;
 
-const shapeNameMap = new Map<NamedQuadrilateral, string>();
+const shapeNameMap = new Map<NamedQuadrilateral | null, string>();
 shapeNameMap.set( NamedQuadrilateral.SQUARE, quadrilateralStrings.a11y.voicing.shapeNames.square );
 shapeNameMap.set( NamedQuadrilateral.RECTANGLE, quadrilateralStrings.a11y.voicing.shapeNames.rectangle );
 shapeNameMap.set( NamedQuadrilateral.RHOMBUS, quadrilateralStrings.a11y.voicing.shapeNames.rhombus );
@@ -37,6 +39,7 @@ shapeNameMap.set( NamedQuadrilateral.KITE, quadrilateralStrings.a11y.voicing.sha
 shapeNameMap.set( NamedQuadrilateral.ISOSCELES_TRAPEZOID, quadrilateralStrings.a11y.voicing.shapeNames.isoscelesTrapezoid );
 shapeNameMap.set( NamedQuadrilateral.TRAPEZOID, quadrilateralStrings.a11y.voicing.shapeNames.trapezoid );
 shapeNameMap.set( NamedQuadrilateral.CONCAVE, quadrilateralStrings.a11y.voicing.shapeNames.concaveQuadrilateral );
+shapeNameMap.set( null, quadrilateralStrings.a11y.voicing.shapeNames.generalQuadrilateral );
 
 class QuadrilateralDescriber {
   private readonly shapeModel: QuadrilateralShapeModel;
@@ -284,43 +287,28 @@ class QuadrilateralDescriber {
   /**
    * Get a description of the quadrilateral shape, including whether or not it is a parallelogram
    * and the name of the shape if there is one. Will return something like
-   * "not a parallelogram" or
-   * "a square, and a parallelogram" or
-   * "a concave quadrilateral, and not a parallelogram"
+   * "a parallelogram, and a rectangle" or
+   * "a trapezoid and not a parallelogram" or
+   * "a concave quadrilateral and not a parallelogram"
    */
-  getShapeDescription() {
-    let descriptionString = null;
+  getShapeDescription(): string {
 
     // of type NamedQuadrilateral enumeration
     const shapeName = this.shapeModel.shapeNameProperty.value;
+    const shapeNameString = this.getShapeNameDescription( shapeName );
 
-    const parallelogramStateString = this.shapeModel.isParallelogramProperty.value ?
-                                     quadrilateralStrings.a11y.voicing.aParallelogram : quadrilateralStrings.a11y.voicing.notAParallelogram;
+    const patternString = this.shapeModel.isParallelogramProperty.value ? namedShapeParalleogramHintPatternString :
+                          namedShapeNotAParallelogramHintPatternString;
 
-    if ( shapeName ) {
-      const nameString = this.getShapeNameDescription( shapeName );
-      assert && assert( nameString, `Detected a shape but did not find its description: ${shapeName}` );
-
-      // There is a slightly different string pattern if it is a parallelogram
-      const namedShapePattern = this.shapeModel.isParallelogramProperty.value ? quadrilateralStrings.a11y.voicing.parallelogramNamedShapePattern :
-                                quadrilateralStrings.a11y.voicing.namedShapePattern;
-
-      descriptionString = StringUtils.fillIn( namedShapePattern, {
-        name: this.getShapeNameDescription( shapeName ),
-        parallelogramState: parallelogramStateString
-      } );
-    }
-    else {
-      descriptionString = parallelogramStateString;
-    }
-
-    return descriptionString;
+    return StringUtils.fillIn( patternString, {
+      shapeName: shapeNameString
+    } );
   }
 
   /**
    * Returns the actual name of the NamedQuadrilateral.
    */
-  public getShapeNameDescription( shapeName: NamedQuadrilateral ) {
+  public getShapeNameDescription( shapeName: NamedQuadrilateral | null ) {
     return shapeNameMap.get( shapeName );
   }
 }

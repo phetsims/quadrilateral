@@ -63,23 +63,20 @@
       "overviewContent": {
         "value": "A quadrilateral is a closed four-sided shape. This quadrilateral is an interactive sim. It changes as you play with it. Four grabbable corners and four grabbable sides allow you to create different shapes, and explore what makes a parallelogram. In addition, checkboxes add labels and guides to support your exploration, and a button resets the sim."
       },
-      "hintContent": {
-        "value": "Play with sides and corners and explore what makes a parallelogram."
+      "hintContentPattern": {
+        "value": "{{shapeDescription}} Explore what makes parallelograms."
+      },
+      "youHaveAShapeHintPattern": {
+        "value": "You have {{shapeDescription}}."
+      },
+      "namedShapeParalleogramHintPattern": {
+        "value": "a parallelogram, and {{shapeName}}"
+      },
+      "namedShapeNotAParallelogramHintPattern": {
+        "value": "{{shapeName}}, not a parallelogram"
       },
       "detailsPattern": {
         "value": "Currently, your shape is {{description}}."
-      },
-      "notAParallelogram": {
-        "value": "not a parallelogram"
-      },
-      "aParallelogram": {
-        "value": "a parallelogram"
-      },
-      "parallelogramNamedShapePattern": {
-        "value": "{{parallelogramState}}, and {{name}}"
-      },
-      "namedShapePattern": {
-        "value": "{{parallelogramState}}. You have {{name}}"
       },
       "shapeNames": {
         "square": {
@@ -102,6 +99,9 @@
         },
         "concaveQuadrilateral": {
           "value": "a concave quadrilateral"
+        },
+        "generalQuadrilateral": {
+          "value": "a general quadrilateral"
         }
       },
       "transformations": {
@@ -135,12 +135,6 @@
         "right": {
           "value": "right"
         },
-        "inParallel": {
-          "value": "in parallel"
-        },
-        "notInParallel": {
-          "value": "not in parallel"
-        },
         "keepingAParallelogram": {
           "value": "Sides in parallel. Keeping a parallelogram."
         },
@@ -149,9 +143,6 @@
         },
         "youMadeAParallelogram": {
           "value": "You made a parallelogram! Opposite sides in parallel."
-        },
-        "parallelogramChangePattern": {
-          "value": ""
         },
         "extremelyFarFrom": {
           "value": "extremely far from"
