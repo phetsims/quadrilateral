@@ -284,10 +284,6 @@ class QuadrilateralShapeModel {
     // unnamed shape.
     this.shapeNameProperty = new Property( this.getShapeName() );
 
-    // The name of the quadrilateral (like square/rhombus/trapezoid, etc). Will be null if it is a random
-    // unnamed shape.
-    this.shapeNameProperty = new Property( this.getShapeName() );
-
     // @public {Emitter} - Emits an event whenever the shape of the Quadrilateral changes
     this.shapeChangedEmitter = new Emitter<[]>();
 
