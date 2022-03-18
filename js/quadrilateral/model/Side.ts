@@ -153,7 +153,6 @@ class Side {
     return Utils.equalsEpsilon( side.lengthProperty.value, this.lengthProperty.value, QuadrilateralQueryParameters.shapeLengthToleranceInterval );
   }
 
-
   /**
    * Returns true if this Side includes the provided Vertex.
    */

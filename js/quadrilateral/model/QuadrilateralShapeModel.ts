@@ -18,7 +18,7 @@ import Range from '../../../../dot/js/Range.js';
 import Vertex from './Vertex.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Emitter from '../../../../axon/js/Emitter.js';
-import { Line } from '../../../../kite/js/imports.js';
+import { Line, Shape } from '../../../../kite/js/imports.js';
 import QuadrilateralModel from './QuadrilateralModel.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
@@ -26,7 +26,6 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Ray2 from '../../../../dot/js/Ray2.js';
-import { Shape } from '../../../../kite/js/imports.js';
 import SideLengths from './SideLengths.js';
 import VertexLabel from './VertexLabel.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
@@ -47,6 +46,20 @@ type VertexWithProposedPosition = {
   vertex: Vertex,
   proposedPosition: Vector2
 };
+
+// A pair of vertices that are grouped together in some way, they are either opposite or adjacent to each other when
+// assembled in the quadrilateral shape
+type VertexPair = {
+  vertex1: Vertex,
+  vertex2: Vertex
+}
+
+// A pair of sides that have some relationship, probably either that they are adjacent or opposite to each other when
+// assembled in the quadrilateral shape.
+type SidePair = {
+  side1: Side,
+  side2: Side
+}
 
 type QuadrilateralShapeModelOptions = {
   validateShape?: boolean,
@@ -92,6 +105,31 @@ class QuadrilateralShapeModel {
   public savedSideLengths: SideLengths;
   private savedVertexAngles: VertexAngles;
 
+  // Arrays that define the relationship between vertices in the model, either opposite or adjacent once they are
+  // assembled to form the quadrilateral shape.
+  adjacentVertices: VertexPair[];
+  oppositeVertices: VertexPair[];
+
+  // Arrays that define the relationship between Sides in the model, either opposite or adjacent once they are
+  // assembled to form the Quadrilateral shape.
+  adjacentSides: SidePair[];
+  oppositeSides: SidePair[];
+
+  // An array of all the adjacent VertexPairs that currently have equal angles.
+  adjacentEqualVertexPairsProperty: Property<VertexPair[]>;
+
+  // An array of all the opposite VertexPairs that currently have equal angles.
+  oppositeEqualVertexPairsProperty: Property<VertexPair[]>;
+
+  // An array of all the adjacent SidePairs that have equal lengths.
+  adjacentEqualSidePairsProperty: Property<SidePair[]>;
+
+  // An array of all the opposite SidePairs that have equal side lengths.
+  oppositeEqualSidePairsProperty: Property<SidePair[]>;
+
+  // An array of all the (opposite) SidePairs that currently parallel with each other.
+  parallelSidePairsProperty: Property<SidePair[]>;
+
   constructor( model: QuadrilateralModel, providedOptions?: QuadrilateralShapeModelOptions ) {
 
     const options = optionize<QuadrilateralShapeModelOptions, QuadrilateralShapeModelOptions>( {
@@ -116,6 +154,19 @@ class QuadrilateralShapeModel {
     // Collection of the vertices which should be easy to iterate over
     this.vertices = [ this.vertexA, this.vertexB, this.vertexC, this.vertexD ];
 
+    // TODO: Consider removing this, the relationships are duplicated with Sides
+    this.adjacentVertices = [
+      { vertex1: this.vertexA, vertex2: this.vertexB },
+      { vertex1: this.vertexB, vertex2: this.vertexC },
+      { vertex1: this.vertexC, vertex2: this.vertexD },
+      { vertex1: this.vertexD, vertex2: this.vertexA }
+    ];
+
+    this.oppositeVertices = [
+      { vertex1: this.vertexA, vertex2: this.vertexC },
+      { vertex1: this.vertexB, vertex2: this.vertexD }
+    ];
+
     // create the sides of the quadrilateral
     this.topSide = new Side( this.vertexA, this.vertexB, options.tandem.createTandem( 'topSide' ), {
       offsetVectorForTiltCalculation: new Vector2( 0, 1 ),
@@ -136,7 +187,25 @@ class QuadrilateralShapeModel {
     // Collection of the Sides of the quadrilateral for easy iteration
     this.sides = [ this.topSide, this.rightSide, this.bottomSide, this.leftSide ];
 
-    // Connect the sides, creating the shape and giving xvertices the information they need to determine their angles.
+    this.adjacentSides = [
+      { side1: this.topSide, side2: this.rightSide },
+      { side1: this.rightSide, side2: this.bottomSide },
+      { side1: this.bottomSide, side2: this.leftSide },
+      { side1: this.leftSide, side2: this.topSide }
+    ];
+
+    this.oppositeSides = [
+      { side1: this.topSide, side2: this.bottomSide },
+      { side1: this.rightSide, side2: this.leftSide }
+    ];
+
+    this.adjacentEqualVertexPairsProperty = new Property<VertexPair[]>( [] );
+    this.oppositeEqualVertexPairsProperty = new Property<VertexPair[]>( [] );
+    this.adjacentEqualSidePairsProperty = new Property<SidePair[]>( [] );
+    this.oppositeEqualSidePairsProperty = new Property<SidePair[]>( [] );
+    this.parallelSidePairsProperty = new Property<SidePair[]>( [] );
+
+    // Connect the sides, creating the shape and giving vertices the information they need to determine their angles.
     this.rightSide.connectToSide( this.topSide );
     this.bottomSide.connectToSide( this.rightSide );
     this.leftSide.connectToSide( this.bottomSide );
@@ -882,8 +951,14 @@ class QuadrilateralShapeModel {
    *
    * TODO: It might be better to do a listener based approach where each of these are called in order every time
    * the shape changes from shapeChangedEmitter.
+   * TODO: Alternatively, consider only doing work if we detect that the shape has changed. We are doing a lot
+   * every frame for no reason.
    */
   updateOrderDependentProperties(): void {
+
+    // Update pairs of parallel sides before updating whether or not we have a parallelogram
+    // TODO: Should these sides determine if we have a paralleogram instead of getIsParallelogram?
+    this.updateParallelSidePairs();
 
     // The isParallelogramProperty needs to be set asynchronously, see the documentation for isParallelogramProperty.
     this.isParallelogramProperty.set( this.getIsParallelogram() );
@@ -915,13 +990,138 @@ class QuadrilateralShapeModel {
       this.anglesEqualToSavedProperty.set( this.getVertexAnglesEqualToSaved( this.getVertexAngles() ) );
     }
 
-    // After we have detected whether or not we are a parallelogram, and after all vertices are positioned, calculate
-    // the name of the current quadrilateral shape.
+    this.updateVertexAngleComparisons();
+    this.updateSideLengthComparisons();
+
+    // After we have detected whether or not we are a parallelogram, and after all angle and length comparisons are
+    // ready for use, calculate the name of the current quadrilateral shape.
     this.shapeNameProperty.set( this.getShapeName() );
 
     // Uses detected shape name so must be called AFTER the shapeNameProperty is set above.
     this.allAnglesRightProperty.set( this.getAreAllAnglesRight() );
     this.allLengthsEqualProperty.set( this.getAreAllLengthsEqual() );
+  }
+
+  /**
+   * Update Properties managing Angle comparisons which hold VertexPairs that have equal angles. These VertexPairs
+   * will be adjacent vertices or opposite vertices.
+   */
+  private updateVertexAngleComparisons(): void {
+    this.updateEqualVertexPairs( this.adjacentEqualVertexPairsProperty, this.adjacentVertices );
+    this.updateEqualVertexPairs( this.oppositeEqualVertexPairsProperty, this.oppositeVertices );
+  }
+
+  /**
+   * Update a particular Property watching for equal vertex angles.
+   */
+  private updateEqualVertexPairs( equalVertexPairsProperty: Property<VertexPair[]>, allVertexPairs: VertexPair[] ): void {
+    const currentVertexPairs = equalVertexPairsProperty.value;
+    for ( let i = 0; i < allVertexPairs.length; i++ ) {
+      const vertexPair = allVertexPairs[ i ];
+
+      const firstAngle = vertexPair.vertex1.angleProperty!.value;
+      const secondAngle = vertexPair.vertex2.angleProperty!.value;
+      const currentlyIncludesVertexPair = currentVertexPairs.includes( vertexPair );
+      const areAnglesEqual = this.isShapeAngleEqualToOther( firstAngle, secondAngle );
+
+      if ( currentlyIncludesVertexPair && !areAnglesEqual ) {
+
+        // the VertexPair needs to be removed because angles are no longer equal
+        currentVertexPairs.splice( currentVertexPairs.indexOf( vertexPair ), 1 );
+        equalVertexPairsProperty.notifyListenersStatic();
+      }
+      else if ( !currentlyIncludesVertexPair && areAnglesEqual ) {
+
+        // the VertexPair needs to be added because they just became equal
+        currentVertexPairs.push( vertexPair );
+        equalVertexPairsProperty.notifyListenersStatic();
+      }
+    }
+  }
+
+  /**
+   * Update Properties managing side length comparisons. Add or remove SidePairs from adjacentEqualSidePairsProperty
+   * and oppositeEqualSidePairsProperty depending on length equalities.
+   */
+  private updateSideLengthComparisons(): void {
+    this.updateEqualLengthSidePairs( this.adjacentEqualSidePairsProperty, this.adjacentSides );
+    this.updateEqualLengthSidePairs( this.oppositeEqualSidePairsProperty, this.oppositeSides );
+  }
+
+  /**
+   * Update particular Property that holds collections of SidePairs that are equal in length.
+   */
+  private updateEqualLengthSidePairs( equalSidePairsProperty: Property<SidePair[]>, allSidePairs: SidePair[] ): void {
+    const currentSidePairs = equalSidePairsProperty.value;
+    for ( let i = 0; i < allSidePairs.length; i++ ) {
+      const sidePair = allSidePairs[ i ];
+
+      const firstLength = sidePair.side1.lengthProperty.value;
+      const secondLength = sidePair.side2.lengthProperty.value;
+      const currentlyIncludesSidePair = currentSidePairs.includes( sidePair );
+      const areLengthsEqual = this.isShapeAngleEqualToOther( firstLength, secondLength );
+
+      if ( currentlyIncludesSidePair && !areLengthsEqual ) {
+
+        // the VertexPair needs to be removed because angles are no longer equal
+        currentSidePairs.splice( currentSidePairs.indexOf( sidePair ), 1 );
+        equalSidePairsProperty.notifyListenersStatic();
+      }
+      else if ( !currentlyIncludesSidePair && areLengthsEqual ) {
+
+        // the VertexPair needs to be added because they just became equal
+        currentSidePairs.push( sidePair );
+        equalSidePairsProperty.notifyListenersStatic();
+      }
+    }
+  }
+
+  /**
+   * Returns true if two Sides are parallel with eachother, withing angleToleranceInterval
+   * @param side1
+   * @param side2
+   */
+  public areSidesParallel( side1: Side, side2: Side ) {
+    assert && assert( side1.vertex1.angleProperty && side2.vertex2.angleProperty, 'angles need to be available to determine parallel state' );
+
+    // Two sides are parallel if the vertices of their connecting sides add up to Math.PI. The quadrilateral is
+    // constructed such that the Side that connects these two sides vertex1 of side1 and vertex2 of side2
+    //         side1
+    // vertex1---------------vertex2
+    //    |                   |
+    //    |                   |
+    //    |                   |
+    //    |-------------------|
+    // vertex2   side2       vertex1
+    return this.isAngleEqualToOther( side1.vertex1.angleProperty!.value + side2.vertex2.angleProperty!.value, Math.PI );
+  }
+
+  /**
+   * Update the Property monitoring if opposite sides are parallel with eachother.
+   */
+  updateParallelSidePairs() {
+    const currentParallelSides = this.parallelSidePairsProperty.value;
+
+    // only opposite sides can be parallel
+    for ( let i = 0; i < this.oppositeSides.length; i++ ) {
+      const oppositeSidePair = this.oppositeSides[ i ];
+
+      const areSidesParallel = this.areSidesParallel( oppositeSidePair.side1, oppositeSidePair.side2 );
+      const hasSidePair = currentParallelSides.includes( oppositeSidePair );
+
+      if ( hasSidePair && !areSidesParallel ) {
+
+        // the VertexPair needs to be removed because angles are no longer equal
+        currentParallelSides.splice( currentParallelSides.indexOf( oppositeSidePair ), 1 );
+        this.parallelSidePairsProperty.notifyListenersStatic();
+      }
+      else if ( !hasSidePair && areSidesParallel ) {
+
+        // the VertexPair needs to be removed because angles are no longer equal
+        currentParallelSides.push( oppositeSidePair );
+        this.parallelSidePairsProperty.notifyListenersStatic();
+      }
+    }
   }
 
   /**
