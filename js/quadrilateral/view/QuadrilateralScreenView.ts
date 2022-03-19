@@ -260,9 +260,7 @@ class QuadrilateralScreenView extends ScreenView {
    * Get the content that is spoken from the Voicing toolbar to describe this ScreenView.
    */
   public getVoicingDetailsContent(): string {
-    return StringUtils.fillIn( quadrilateralStrings.a11y.voicing.detailsPattern, {
-      description: this.quadrilateralDescriber.getShapeDescription()
-    } );
+    return '';
   }
 
   /**

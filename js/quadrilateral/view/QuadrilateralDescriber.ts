@@ -311,6 +311,42 @@ class QuadrilateralDescriber {
   public getShapeNameDescription( shapeName: NamedQuadrilateral | null ) {
     return shapeNameMap.get( shapeName );
   }
+
+  /**
+   * Returns the first details statement. Details are broken up into three categorized statements. This one is a
+   * summary about equal corner angles and equal side lengths.
+   */
+  public getFirstDetailsStatement() {
+
+    //
+    // const adjacentEqualVertexPairs = this.shapeModel.adjacentEqualVertexPairsProperty.value;
+    // const adjacentEqualSidePairs = this.shapeModel.adjacentEqualSidePairsProperty.value;
+    // if ( this.shapeModel.isParallelogramProperty.value ) {
+    //
+    //   // If all adjacent vertices are equal then all are right angles. Otherwise, opposite angles must be equal.
+    //   const cornerTypeString = adjacentEqualVertexPairs.length === 4 ? 'all' : 'opposite';
+    //   const angleEqualityString = adjacentEqualVertexPairs.length === 4 ? 'right angles' : 'equal';
+    //
+    //   // if all adjacent sides are equal in length, all sides are equal, otherwise only opposite sides are equal
+    //   const sideTypeString = adjacentEqualSidePairs.length === 4 ? 'all' : 'opposite';
+    // }
+    // else {
+    //   const oppositeEqualVertexPairs = this.shapeModel.oppositeEqualVertexPairsProperty.value;
+    //
+    //   const cornerTypeString = adjacentEqualVertexPairs.length === 2 ? 'pairs of adjacent' :
+    //                            adjacentEqualVertexPairs.length === 1 ? 'one pair of adjacent' :
+    //                            oppositeEqualVertexPairs.length === 1 ? 'one pair of opposite' :
+    //                            'no';
+    //
+    //   const angleEqualityString = adjacentEqualVertexPairs.length === 1 && this.shapeModel.isShapeAngleEqualToOther( adjacentEqualVertexPairs[ 0 ].vertex1.angleProperty!.value, Math.PI / 2 ) ? 'right angles' :
+    //                               oppositeEqualVertexPairs.length === 1 && this.shapeModel.isShapeAngleEqualToOther( oppositeEqualVertexPairs[ 0 ].vertex1.angleProperty!.value, Math.PI / 2 ) ? 'right angles' :
+    //                                 // if two pairs of adjacent angles exist but we are not parallelogram, all cannot be
+    //                                 // right angles. OR, no angles are equal.
+    //                               'equal';
+    //
+    //
+    // }
+  }
 }
 
 quadrilateral.register( 'QuadrilateralDescriber', QuadrilateralDescriber );

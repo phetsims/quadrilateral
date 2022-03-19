@@ -78,6 +78,9 @@
       "detailsPattern": {
         "value": "Currently, your shape is {{description}}."
       },
+      "firstDetailsStatementPattern": {
+        "value": "Right now, {{cornerType}} corners are {{angleEquality}}, and {{sideType}} sides are equal."
+      },
       "shapeNames": {
         "square": {
           "value": "a square"
