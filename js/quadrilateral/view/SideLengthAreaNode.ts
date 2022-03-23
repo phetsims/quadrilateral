@@ -18,7 +18,7 @@ import Property from '../../../../axon/js/Property.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 
 type SideLengthAreaNodeSelfOptions = {
-  drawRotation?: number
+  drawRotation?: number;
 };
 
 type SideLengthAreaNodeOptions = SideLengthAreaNodeSelfOptions & NodeOptions;

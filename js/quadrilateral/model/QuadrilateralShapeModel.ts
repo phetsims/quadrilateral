@@ -39,31 +39,31 @@ import VertexAngles from './VertexAngles.js';
 // more information.
 type LineIntersectionPair = {
   line: Line;
-  intersectionPoint: Vector2
+  intersectionPoint: Vector2;
 }
 
 type VertexWithProposedPosition = {
-  vertex: Vertex,
-  proposedPosition: Vector2
+  vertex: Vertex;
+  proposedPosition: Vector2;
 };
 
 // A pair of vertices that are grouped together in some way, they are either opposite or adjacent to each other when
 // assembled in the quadrilateral shape
 type VertexPair = {
-  vertex1: Vertex,
-  vertex2: Vertex
+  vertex1: Vertex;
+  vertex2: Vertex;
 }
 
 // A pair of sides that have some relationship, probably either that they are adjacent or opposite to each other when
 // assembled in the quadrilateral shape.
 type SidePair = {
-  side1: Side,
-  side2: Side
+  side1: Side;
+  side2: Side;
 }
 
 type QuadrilateralShapeModelOptions = {
-  validateShape?: boolean,
-  tandem?: Tandem
+  validateShape?: boolean;
+  tandem?: Tandem;
 };
 
 class QuadrilateralShapeModel {

@@ -38,7 +38,7 @@ const EQUAL_SIDES_SEGMENT_LINE_WIDTH = 2;
 const DEFAULT_SIDES_SEGMENT_LINE_WIDTH = 1;
 
 type QuadrilateralNodeSelfOptions = {
-  tandem?: Tandem
+  tandem?: Tandem;
 };
 
 type QuadrilateralNodeOptions = QuadrilateralNodeSelfOptions & NodeOptions;

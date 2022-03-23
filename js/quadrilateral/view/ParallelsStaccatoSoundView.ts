@@ -21,8 +21,8 @@ const TILT_DIFFERENCE_TO_PITCH = new LinearFunction( 0, 0.5, 0.5, 0, true );
 
 // A type for elements used to create Sound sources with the PitchedPopGenerator.
 type OscillatorWithGainNode = {
-  oscillator: OscillatorNode,
-  gainNode: GainNode
+  oscillator: OscillatorNode;
+  gainNode: GainNode;
 };
 
 class ParallelsStaccatoSoundView {
@@ -150,8 +150,8 @@ class ParallelsStaccatoSoundView {
 }
 
 type QuadrilateralPitchedPopGeneratorSelfOptions = {
-  pitchRange?: Range,
-  numPopGenerators?: number
+  pitchRange?: Range;
+  numPopGenerators?: number;
 };
 
 type QuadrilateralPitchedPopGeneratorOptions = QuadrilateralPitchedPopGeneratorSelfOptions & SoundGeneratorOptions;

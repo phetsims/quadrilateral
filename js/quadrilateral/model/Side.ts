@@ -20,8 +20,8 @@ import { Shape } from '../../../../kite/js/imports.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 
 type SideOptions = {
-  offsetVectorForTiltCalculation?: Vector2,
-  validateShape?: boolean
+  offsetVectorForTiltCalculation?: Vector2;
+  validateShape?: boolean;
 };
 
 class Side {

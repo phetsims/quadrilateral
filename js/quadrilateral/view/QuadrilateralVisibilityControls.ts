@@ -24,7 +24,7 @@ const TEXT_OPTIONS = {
 };
 
 type QuadrilateralVisibilityControlsSelfOptions = {
-  tandem?: Tandem
+  tandem?: Tandem;
 };
 type QuadrilateralVisibilityControlsOptions = QuadrilateralVisibilityControlsSelfOptions & Omit<VBoxOptions, 'children'>
 
