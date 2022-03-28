@@ -257,10 +257,11 @@ class QuadrilateralScreenView extends ScreenView {
   }
 
   /**
-   * Get the content that is spoken from the Voicing toolbar to describe this ScreenView.
+   * Get the details content that is spoken from the Voicing toolbar to describe details about the simulation.
    */
   public getVoicingDetailsContent(): string {
-    return '';
+    const firstStatement = this.quadrilateralDescriber.getFirstDetailsStatement();
+    return firstStatement;
   }
 
   /**

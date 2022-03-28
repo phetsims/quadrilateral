@@ -30,6 +30,7 @@ const proximityToParallelPatternString = quadrilateralStrings.a11y.voicing.trans
 const youMadeAParallelogramString = quadrilateralStrings.a11y.voicing.transformations.youMadeAParallelogram;
 const namedShapeParalleogramHintPatternString = quadrilateralStrings.a11y.voicing.namedShapeParalleogramHintPattern;
 const namedShapeNotAParallelogramHintPatternString = quadrilateralStrings.a11y.voicing.namedShapeNotAParallelogramHintPattern;
+const firstDetailsStatementPatternString = quadrilateralStrings.a11y.voicing.firstDetailsStatementPattern;
 
 const shapeNameMap = new Map<NamedQuadrilateral | null, string>();
 shapeNameMap.set( NamedQuadrilateral.SQUARE, quadrilateralStrings.a11y.voicing.shapeNames.square );
@@ -314,38 +315,54 @@ class QuadrilateralDescriber {
 
   /**
    * Returns the first details statement. Details are broken up into three categorized statements. This one is a
-   * summary about equal corner angles and equal side lengths.
+   * summary about equal corner angles and equal side lengths. Will return something like
+   * "Right now, opposite corners are equal and opposite sides are equal." or
+   * "Right now, on pair of opposite corners are equal and opposite sides are equal" or
+   * "Right now, no corners are equal and no sides are equal."
    */
   public getFirstDetailsStatement() {
 
-    //
-    // const adjacentEqualVertexPairs = this.shapeModel.adjacentEqualVertexPairsProperty.value;
-    // const adjacentEqualSidePairs = this.shapeModel.adjacentEqualSidePairsProperty.value;
-    // if ( this.shapeModel.isParallelogramProperty.value ) {
-    //
-    //   // If all adjacent vertices are equal then all are right angles. Otherwise, opposite angles must be equal.
-    //   const cornerTypeString = adjacentEqualVertexPairs.length === 4 ? 'all' : 'opposite';
-    //   const angleEqualityString = adjacentEqualVertexPairs.length === 4 ? 'right angles' : 'equal';
-    //
-    //   // if all adjacent sides are equal in length, all sides are equal, otherwise only opposite sides are equal
-    //   const sideTypeString = adjacentEqualSidePairs.length === 4 ? 'all' : 'opposite';
-    // }
-    // else {
-    //   const oppositeEqualVertexPairs = this.shapeModel.oppositeEqualVertexPairsProperty.value;
-    //
-    //   const cornerTypeString = adjacentEqualVertexPairs.length === 2 ? 'pairs of adjacent' :
-    //                            adjacentEqualVertexPairs.length === 1 ? 'one pair of adjacent' :
-    //                            oppositeEqualVertexPairs.length === 1 ? 'one pair of opposite' :
-    //                            'no';
-    //
-    //   const angleEqualityString = adjacentEqualVertexPairs.length === 1 && this.shapeModel.isShapeAngleEqualToOther( adjacentEqualVertexPairs[ 0 ].vertex1.angleProperty!.value, Math.PI / 2 ) ? 'right angles' :
-    //                               oppositeEqualVertexPairs.length === 1 && this.shapeModel.isShapeAngleEqualToOther( oppositeEqualVertexPairs[ 0 ].vertex1.angleProperty!.value, Math.PI / 2 ) ? 'right angles' :
-    //                                 // if two pairs of adjacent angles exist but we are not parallelogram, all cannot be
-    //                                 // right angles. OR, no angles are equal.
-    //                               'equal';
-    //
-    //
-    // }
+    const adjacentEqualVertexPairs = this.shapeModel.adjacentEqualVertexPairsProperty.value;
+    const adjacentEqualSidePairs = this.shapeModel.adjacentEqualSidePairsProperty.value;
+
+    let cornerTypeString;
+    let angleEqualityString;
+    let sideTypeString;
+    if ( this.shapeModel.isParallelogramProperty.value ) {
+
+      // If all adjacent vertices are equal then all are right angles. Otherwise, opposite angles must be equal.
+      cornerTypeString = adjacentEqualVertexPairs.length === 4 ? 'all' : 'opposite';
+      angleEqualityString = adjacentEqualVertexPairs.length === 4 ? 'right angles' : 'equal';
+
+      // if all adjacent sides are equal in length, all sides are equal, otherwise only opposite sides are equal
+      sideTypeString = adjacentEqualSidePairs.length === 4 ? 'all' : 'opposite';
+    }
+    else {
+      const oppositeEqualVertexPairs = this.shapeModel.oppositeEqualVertexPairsProperty.value;
+      const oppositeEqualSidePairs = this.shapeModel.oppositeEqualSidePairsProperty.value;
+
+      cornerTypeString = adjacentEqualVertexPairs.length === 2 ? 'pairs of adjacent' :
+                         adjacentEqualVertexPairs.length === 1 ? 'one pair of adjacent' :
+                         oppositeEqualVertexPairs.length === 1 ? 'one pair of opposite' :
+                         'no';
+
+      angleEqualityString = adjacentEqualVertexPairs.length === 1 && this.shapeModel.isShapeAngleEqualToOther( adjacentEqualVertexPairs[ 0 ].vertex1.angleProperty!.value, Math.PI / 2 ) ? 'right angles' :
+                            oppositeEqualVertexPairs.length === 1 && this.shapeModel.isShapeAngleEqualToOther( oppositeEqualVertexPairs[ 0 ].vertex1.angleProperty!.value, Math.PI / 2 ) ? 'right angles' :
+                              // if two pairs of adjacent angles exist but we are not parallelogram, all cannot be
+                              // right angles. OR, no angles are equal.
+                            'equal';
+
+      sideTypeString = adjacentEqualSidePairs.length === 2 ? 'pairs of adjacent' :
+                       adjacentEqualSidePairs.length === 1 ? 'one pair of adjacent' :
+                       oppositeEqualSidePairs.length === 1 ? 'one pair of opposite' :
+                       'no';
+    }
+
+    return StringUtils.fillIn( firstDetailsStatementPatternString, {
+      cornerType: cornerTypeString,
+      angleEquality: angleEqualityString,
+      sideType: sideTypeString
+    } );
   }
 }
 
