@@ -15,6 +15,7 @@ import shapeIdentificationWhenNotAParallelogram_mp3 from '../../../sounds/shapeI
 import allAnglesAreRightAngles_mp3 from '../../../sounds/allAnglesAreRightAngles_mp3.js';
 import allSideLengthsAreEqual_mp3 from '../../../sounds/allSideLengthsAreEqual_mp3.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
+import IProperty from '../../../../axon/js/IProperty.js';
 
 class ShapeIdentificationSoundView {
   private readonly shapeSoundClip: SoundClip;
@@ -25,7 +26,7 @@ class ShapeIdentificationSoundView {
 
     const soundClipOptions = {
       // don't play sounds while model reset is in progress
-      enableControlProperties: [ resetNotInProgressProperty ]
+      enableControlProperties: [ resetNotInProgressProperty as IProperty<boolean> ]
     };
 
     this.shapeSoundClip = new SoundClip( shapeIdentificationWhenNotAParallelogram_mp3, soundClipOptions );
