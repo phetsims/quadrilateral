@@ -555,9 +555,14 @@ class QuadrilateralShapeModel {
           [ this.leftSide, this.topSide ]
         ];
 
-        const kiteRequirement = _.countBy( adjacentSides, ( sidePair: Side[] ) => {
+        // We have a kite if two pairs of adjacent sides have equal lenghts and we have a pair of opposite
+        // angles that are equal. The angle check shouldn't be required but is because the lengths won't be
+        // exactly equal since they use lengthToleranceInterval in their comparison.
+        const kiteSideLengthRequirement = _.countBy( adjacentSides, ( sidePair: Side[] ) => {
           return sidePair[ 0 ].isShapeLengthEqualToOther( sidePair[ 1 ] );
         } ).true === 2;
+        const kiteAngleRequirement = this.oppositeEqualVertexPairsProperty.value.length === 1;
+        const kiteRequirement = kiteSideLengthRequirement && kiteAngleRequirement;
 
         if ( kiteRequirement ) {
           namedQuadrilateral = NamedQuadrilateral.KITE;
@@ -910,6 +915,10 @@ class QuadrilateralShapeModel {
    */
   public isShapeAngleEqualToOther( angle1: number, angle2: number ): boolean {
     return Utils.equalsEpsilon( angle1, angle2, this.shapeAngleToleranceIntervalProperty.value );
+  }
+
+  public isRightAngle( angle: number ): boolean {
+    return this.isShapeAngleEqualToOther( angle, Math.PI / 2 );
   }
 
   public isTiltEqualToOther( tilt1: number, tilt2: number ): boolean {

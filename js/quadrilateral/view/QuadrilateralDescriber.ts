@@ -12,6 +12,11 @@ import ShapeSnapshot from '../model/ShapeSnapshot.js';
 import ParallelProximityStringMap from '../../ParallelProximityStringMap.js';
 import Side from '../model/Side.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
+import Vertex from '../model/Vertex.js';
+import VertexLabel from '../model/VertexLabel.js';
+import Range from '../../../../dot/js/Range.js';
+import Utils from '../../../../dot/js/Utils.js';
+import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 
 // constants
 const oppositeSidesString = quadrilateralStrings.a11y.voicing.transformations.oppositeSides;
@@ -31,6 +36,14 @@ const youMadeAParallelogramString = quadrilateralStrings.a11y.voicing.transforma
 const namedShapeParalleogramHintPatternString = quadrilateralStrings.a11y.voicing.namedShapeParalleogramHintPattern;
 const namedShapeNotAParallelogramHintPatternString = quadrilateralStrings.a11y.voicing.namedShapeNotAParallelogramHintPattern;
 const firstDetailsStatementPatternString = quadrilateralStrings.a11y.voicing.firstDetailsStatementPattern;
+const cornerAString = quadrilateralStrings.a11y.cornerA;
+const cornerBString = quadrilateralStrings.a11y.cornerB;
+const cornerCString = quadrilateralStrings.a11y.cornerC;
+const cornerDString = quadrilateralStrings.a11y.cornerD;
+const vertexAString = quadrilateralStrings.vertexA;
+const vertexBString = quadrilateralStrings.vertexB;
+const vertexCString = quadrilateralStrings.vertexC;
+const vertexDString = quadrilateralStrings.vertexD;
 
 const shapeNameMap = new Map<NamedQuadrilateral | null, string>();
 shapeNameMap.set( NamedQuadrilateral.SQUARE, quadrilateralStrings.a11y.voicing.shapeNames.square );
@@ -41,6 +54,35 @@ shapeNameMap.set( NamedQuadrilateral.ISOSCELES_TRAPEZOID, quadrilateralStrings.a
 shapeNameMap.set( NamedQuadrilateral.TRAPEZOID, quadrilateralStrings.a11y.voicing.shapeNames.trapezoid );
 shapeNameMap.set( NamedQuadrilateral.CONCAVE, quadrilateralStrings.a11y.voicing.shapeNames.concaveQuadrilateral );
 shapeNameMap.set( null, quadrilateralStrings.a11y.voicing.shapeNames.generalQuadrilateral );
+
+// A map that goes from VertexLabel -> corner label (like "Corner A")
+const vertexCornerLabelMap = new Map<VertexLabel, string>();
+vertexCornerLabelMap.set( VertexLabel.VERTEX_A, cornerAString );
+vertexCornerLabelMap.set( VertexLabel.VERTEX_B, cornerBString );
+vertexCornerLabelMap.set( VertexLabel.VERTEX_C, cornerCString );
+vertexCornerLabelMap.set( VertexLabel.VERTEX_D, cornerDString );
+
+// A map that goes from VertexLabel -> letter label (like "Corner A")
+const vertexLabelMap = new Map<VertexLabel, string>();
+vertexLabelMap.set( VertexLabel.VERTEX_A, vertexAString );
+vertexLabelMap.set( VertexLabel.VERTEX_B, vertexBString );
+vertexLabelMap.set( VertexLabel.VERTEX_C, vertexCString );
+vertexLabelMap.set( VertexLabel.VERTEX_D, vertexDString );
+
+const angleComparisonDescriptionMap = new Map<Range, string>();
+
+const createAngleComparisonDescriptionMapEntry = ( minAngle: number, maxAngle: number, widerString: string, smallerString: string ) => {
+  angleComparisonDescriptionMap.set( new Range( minAngle, maxAngle ), widerString );
+  angleComparisonDescriptionMap.set( new Range( -maxAngle, -minAngle ), smallerString );
+};
+
+createAngleComparisonDescriptionMapEntry( Math.PI, 2 * Math.PI, 'far wider than', 'far smaller than' );
+createAngleComparisonDescriptionMapEntry( Utils.toRadians( 135 ), Math.PI, 'much much wider than', 'much much smaller than' );
+createAngleComparisonDescriptionMapEntry( Math.PI / 2, Utils.toRadians( 135 ), 'much wider than', 'much smaller than' );
+createAngleComparisonDescriptionMapEntry( Math.PI / 4, Math.PI / 2, 'somewhat wider than', 'somewhat smaller than' );
+createAngleComparisonDescriptionMapEntry( Utils.toRadians( 15 ), Math.PI / 4, 'a little wider than', 'a little smaller than' );
+createAngleComparisonDescriptionMapEntry( QuadrilateralQueryParameters.shapeAngleToleranceInterval, Utils.toRadians( 15 ), 'comparable to', 'comparable to' );
+createAngleComparisonDescriptionMapEntry( 0, QuadrilateralQueryParameters.shapeAngleToleranceInterval, 'equal to', 'equal to' );
 
 class QuadrilateralDescriber {
   private readonly shapeModel: QuadrilateralShapeModel;
@@ -363,6 +405,190 @@ class QuadrilateralDescriber {
       angleEquality: angleEqualityString,
       sideType: sideTypeString
     } );
+  }
+
+  /**
+   * Get the second statement for the details button of the Voicing toolbar. This is a detailed summary
+   * of the equal angles and how they compare to other angles in size qualitatively. There is no statement
+   * about the corners if all angles are equal (right angles).
+   */
+  getSecondDetailsStatement() {
+    let statement = null;
+
+    const adjacentEqualVertexPairs = this.shapeModel.adjacentEqualVertexPairsProperty.value;
+
+    const shapeName = this.shapeModel.shapeNameProperty.value;
+
+    // Nothing spoken if all angles are equal.
+    if ( adjacentEqualVertexPairs.length !== 4 ) {
+
+      if ( shapeName === NamedQuadrilateral.KITE ) {
+
+        // there will be one pair of equal opposite angles
+        assert && assert( this.shapeModel.oppositeEqualVertexPairsProperty.value.length === 1, 'A Kite should only have one pair of opposite equal vertex angles' );
+        const oppositeEqualVertexPairs = this.shapeModel.oppositeEqualVertexPairsProperty.value[ 0 ];
+        const orderedEqualVertices = this.getVerticesOrderedForDescription( [ oppositeEqualVertexPairs.vertex1, oppositeEqualVertexPairs.vertex2 ] );
+
+        // for the equal vertices, don't include the word "Corner" when describing them
+        const firstCornerString = this.getCornerAngleDescription( orderedEqualVertices[ 0 ], false );
+        const secondCornerString = this.getCornerAngleDescription( orderedEqualVertices[ 1 ], false );
+
+        // the vertices that are not equal still need to be described, in the decided order
+        const otherVertices = this.getUndescribedVertices( orderedEqualVertices );
+        const orderedUnequalVertices = this.getVerticesOrderedForDescription( otherVertices );
+
+        const thirdCornerString = this.getCornerAngleDescription( orderedUnequalVertices[ 0 ] );
+        const fourthCornerString = this.getCornerAngleDescription( orderedUnequalVertices[ 1 ] );
+
+        // how the equal vertex angles compare qualitatively to the fist unequal vertex
+        const firstComparisonString = this.getAngleComparisonDescription( orderedUnequalVertices[ 0 ], orderedEqualVertices[ 0 ] );
+
+        // how the equal vertex angles compare qualitatively to the second unequal vertex
+        const secondComparisonString = this.getAngleComparisonDescription( orderedUnequalVertices[ 1 ], orderedEqualVertices[ 0 ] );
+
+        const patternString = 'Equal Corners {{firstCorner}} and {{secondCorner}} are {{firstComparison}} {{thirdCorner}} and {{secondComparison}} {{fourthCorner}}.';
+        statement = StringUtils.fillIn( patternString, {
+          firstCorner: firstCornerString,
+          secondCorner: secondCornerString,
+          firstComparison: firstComparisonString,
+          thirdCorner: thirdCornerString,
+          secondComparison: secondComparisonString,
+          fourthCorner: fourthCornerString
+        } );
+      }
+      else if ( shapeName === NamedQuadrilateral.TRAPEZOID ) {
+        statement = 'Please implement details 2 for trapezoid.';
+
+      }
+      else if ( this.shapeModel.isParallelogramProperty.value ) {
+
+        // special format for parallelogram
+        // {{Equal}} Corners {{D}} and {{B} are {{somewhat smaller than}} {{equal}} Corners {{C}} and {{A}}.
+        statement = 'Please implement details 2 for parallelogram';
+      }
+      else if ( shapeName === NamedQuadrilateral.CONCAVE ) {
+
+        // might have special format for concave parallelogram, but unsure
+        statement = 'Do we need a special details 2 for a concave shape?';
+      }
+      else {
+
+        // general quadrilateral format
+        // insert "right angle" where necessary
+        // Corner {{C}} is {{somewhat smaller than}} Corner {{A}}, and Corner {{B}} is {{a little smaller than}} Corner {{D}}.
+        statement = 'Please implement details 2 for a general quadrilateral';
+      }
+    }
+
+    return statement;
+  }
+
+  /**
+   * If the corner is a right angle will describe that before the vertex label. Otherwise just returns the vertex label.
+   * Returns something like
+   * "Corner A" or
+   * "right angle Corner A"
+   *
+   * @param vertex
+   * @param includeCorner - if true, the word "Corner" will be included in the description, otherwise just the label
+   */
+  private getCornerAngleDescription( vertex: Vertex, includeCorner = true ): string {
+
+    const labelMap = includeCorner ? vertexCornerLabelMap : vertexLabelMap;
+    const labelString = labelMap.get( vertex.vertexLabel );
+    assert && assert( labelString, 'vertexLabel not in vertexLabelMap' );
+
+    let descriptionString = labelString;
+    assert && assert( vertex.angleProperty, 'Angle required for this description' );
+    if ( this.shapeModel.isRightAngle( vertex.angleProperty!.value ) ) {
+
+      // include "right angle"
+      descriptionString = StringUtils.fillIn( 'right angle {{cornerLabel}}', {
+        cornerLabel: labelString
+      } );
+    }
+
+    return descriptionString!;
+  }
+
+  /**
+   * Returns the description of comparison between two angles, using the entries of angleComparisonDescriptionMap.
+   * Description compares vertex2 to vertex1. So if vertex2 has a larger angle than vertex1 the output will be something
+   * like:
+   * "much much wider than" or
+   * "a little wider than"
+   *
+   * or if vertex2 angle is smaller than vertex1, we will return something like
+   * "much much smaller than" or
+   * "a little smaller than"
+   */
+  private getAngleComparisonDescription( vertex1: Vertex, vertex2: Vertex ): string {
+    assert && assert( vertex1.angleProperty, 'angles need to be initialized for descriptions' );
+    assert && assert( vertex2.angleProperty, 'angles need to be initialized for descriptions' );
+
+    let description: string | null = null;
+
+    const angle1 = vertex1.angleProperty!.value;
+    const angle2 = vertex2.angleProperty!.value;
+    const angleDifference = angle2 - angle1;
+
+    angleComparisonDescriptionMap.forEach( ( value, key ) => {
+      if ( key.contains( angleDifference ) ) {
+        description = value;
+      }
+    } );
+
+    assert && assert( description, `Description not found for angle difference ${angleDifference}` );
+    return description!;
+  }
+
+  /**
+   * For some reason, it was decided that the order that vertices are mentioned in descriptions need to be ordered in a
+   * unique way. This function returns the vertices in the order that they should be described in the string
+   * creation functions of this Describer.
+   */
+  getVerticesOrderedForDescription( vertices: Vertex[] ) {
+    const order = vertices.sort( ( a: Vertex, b: Vertex ) => {
+      const firstPosition = a.positionProperty.value;
+      const secondPosition = b.positionProperty.value;
+
+      let sortReturnValue = 0;
+
+      // if vertically equal, left most vertex is spoken first
+      if ( firstPosition.y === secondPosition.y ) {
+
+        // if first position is left of second position, a before b
+        sortReturnValue = firstPosition.x < secondPosition.x ? -1 : 1;
+      }
+      else {
+
+        // if first position is lower than second position, a before b
+        sortReturnValue = firstPosition.y < secondPosition.y ? -1 : 1;
+      }
+
+      return sortReturnValue;
+    } );
+
+    assert && assert( order.length === vertices.length, 'An order for vertices was not identified.' );
+    return order;
+  }
+
+  /**
+   * From an array of Vertices, all of which have been described, return a new array of Vertices that still
+   * need a description.
+   *
+   * TODO: Consider a new model Property that monitors for this instead of this function? Not sure if that
+   * is better.
+   */
+  private getUndescribedVertices( vertices: Vertex[] ): Vertex[] {
+    const unusedVertices: Vertex[] = [];
+    this.shapeModel.vertices.forEach( vertex => {
+      if ( !vertices.includes( vertex ) ) {
+        unusedVertices.push( vertex );
+      }
+    } );
+
+    return unusedVertices;
   }
 }
 

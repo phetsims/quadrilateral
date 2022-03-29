@@ -261,7 +261,12 @@ class QuadrilateralScreenView extends ScreenView {
    */
   public getVoicingDetailsContent(): string {
     const firstStatement = this.quadrilateralDescriber.getFirstDetailsStatement();
-    return firstStatement;
+    const secondStatement = this.quadrilateralDescriber.getSecondDetailsStatement();
+
+    return StringUtils.fillIn( '{{firstStatement}} {{secondStatement}}', {
+      firstStatement: firstStatement,
+      secondStatement: secondStatement
+    } );
   }
 
   /**
