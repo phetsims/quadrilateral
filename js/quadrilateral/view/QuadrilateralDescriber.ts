@@ -513,6 +513,23 @@ class QuadrilateralDescriber {
       }
       else if ( shapeName === NamedQuadrilateral.ISOSCELES_TRAPEZOID ) {
         statement = 'please implement details for isosceles trapezoid.';
+
+        assert && assert( adjacentEqualVertexPairs.length === 2, 'There should be two pairs of adjacent equal angles for an isosceles trapezoid' );
+
+        const patternString = 'Equal {{firstCorners}} are {{comparison}} equal {{secondCorners}}.';
+        const orderedVertexPairs = this.getVertexPairsOrderedForDescription( adjacentEqualVertexPairs );
+
+        const firstCornersString = this.getCornersAngleDescription( orderedVertexPairs[ 0 ].vertex1, orderedVertexPairs[ 0 ].vertex2 );
+        const secondCornersString = this.getCornersAngleDescription( orderedVertexPairs[ 1 ].vertex1, orderedVertexPairs[ 1 ].vertex2 );
+
+        // Comparing angles between first equal pair and second equal pair, relative to the first equal pair
+        const comparisonString = this.getAngleComparisonDescription( orderedVertexPairs[ 1 ].vertex1, orderedVertexPairs[ 0 ].vertex1 );
+
+        statement = StringUtils.fillIn( patternString, {
+          firstCorners: firstCornersString,
+          comparison: comparisonString,
+          secondCorners: secondCornersString
+        } );
       }
       else if ( this.shapeModel.isParallelogramProperty.value ) {
 
@@ -666,7 +683,7 @@ class QuadrilateralDescriber {
     return sortReturnValue;
   }
 
-  getVertexPairsOrderedForDescription( vertexPairs: VertexPair[] ) {
+  getVertexPairsOrderedForDescription( vertexPairs: VertexPair[] ): VertexPair[] {
 
     // Order each vertexPair provided first
     const newVertexPairs: VertexPair[] = [];
