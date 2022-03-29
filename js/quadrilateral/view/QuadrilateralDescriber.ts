@@ -521,10 +521,8 @@ class QuadrilateralDescriber {
       }
       else {
 
-        // general quadrilateral format
-        // insert "right angle" where necessary
-        // Corner {{C}} is {{somewhat smaller than}} Corner {{A}}, and Corner {{B}} is {{a little smaller than}} Corner {{D}}.
-        statement = 'Please implement details 2 for a general quadrilateral';
+        // fall back to the format for a "general" quadrilateral, see function for the details
+        statement = this.getGeneralQuadrilateralVertexDescription();
       }
     }
 
