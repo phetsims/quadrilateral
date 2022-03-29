@@ -430,9 +430,7 @@ class QuadrilateralDescriber {
         const oppositeEqualVertexPair = oppositeEqualVertexPairs[ 0 ];
         const orderedEqualVertices = this.getVerticesOrderedForDescription( [ oppositeEqualVertexPair.vertex1, oppositeEqualVertexPair.vertex2 ] );
 
-        // for the equal vertices, don't include the word "Corner" when describing them
-        const firstCornerString = this.getCornerAngleDescription( orderedEqualVertices[ 0 ], false );
-        const secondCornerString = this.getCornerAngleDescription( orderedEqualVertices[ 1 ], false );
+        const firstCornersString = this.getCornersAngleDescription( orderedEqualVertices[ 0 ], orderedEqualVertices[ 1 ] );
 
         // the vertices that are not equal still need to be described, in the decided order
         const otherVertices = this.getUndescribedVertices( orderedEqualVertices );
@@ -447,10 +445,9 @@ class QuadrilateralDescriber {
         // how the equal vertex angles compare qualitatively to the second unequal vertex
         const secondComparisonString = this.getAngleComparisonDescription( orderedUnequalVertices[ 1 ], orderedEqualVertices[ 0 ] );
 
-        const patternString = 'Equal Corners {{firstCorner}} and {{secondCorner}} are {{firstComparison}} {{thirdCorner}} and {{secondComparison}} {{fourthCorner}}.';
+        const patternString = 'Equal {{firstCorners}} are {{firstComparison}} {{thirdCorner}} and {{secondComparison}} {{fourthCorner}}.';
         statement = StringUtils.fillIn( patternString, {
-          firstCorner: firstCornerString,
-          secondCorner: secondCornerString,
+          firstCorners: firstCornersString,
           firstComparison: firstComparisonString,
           thirdCorner: thirdCornerString,
           secondComparison: secondComparisonString,
@@ -458,7 +455,61 @@ class QuadrilateralDescriber {
         } );
       }
       else if ( shapeName === NamedQuadrilateral.TRAPEZOID ) {
-        statement = 'Please implement details 2 for trapezoid.';
+
+        // TODO: Note big similarities here between KITE and TRAPEZOID, consider refactoring
+
+        // if there are two adjacent vertices with equal angles, combine them in the description
+        if ( adjacentEqualVertexPairs.length > 0 ) {
+
+          // start with the adjacent corners in the prescribed order
+          assert && assert( adjacentEqualVertexPairs.length === 1, 'should only be one adjacent vertex pair for a trapezoid' );
+          const orderedEqualVertices = this.getVerticesOrderedForDescription( [ adjacentEqualVertexPairs[ 0 ].vertex1, adjacentEqualVertexPairs[ 0 ].vertex2 ] );
+
+          const patternString = 'Equal {{firstCorners}} are {{firstComparison}} {{thirdCorner}} and {{secondComparison}} {{fourthCorner}}';
+          const firstCornersString = this.getCornersAngleDescription( orderedEqualVertices[ 0 ], orderedEqualVertices[ 1 ] );
+
+          const undescribedVertices = this.getUndescribedVertices( orderedEqualVertices );
+          const sortedUndescribedVertices = this.getVerticesOrderedForDescription( undescribedVertices );
+
+          const thirdCornerString = this.getCornerAngleDescription( sortedUndescribedVertices[ 0 ] );
+          const fourthCornerString = this.getCornerAngleDescription( sortedUndescribedVertices[ 1 ] );
+
+          // describe the relative size of the equal angles compared to eqch unequal angle
+          const firstComparisonString = this.getAngleComparisonDescription( sortedUndescribedVertices[ 0 ], orderedEqualVertices[ 0 ] );
+          const secondComparisonString = this.getAngleComparisonDescription( sortedUndescribedVertices[ 1 ], orderedEqualVertices[ 0 ] );
+
+          statement = StringUtils.fillIn( patternString, {
+            firstCorners: firstCornersString,
+            firstComparison: firstComparisonString,
+            thirdCorner: thirdCornerString,
+            secondComparison: secondComparisonString,
+            fourthCorner: fourthCornerString
+          } );
+        }
+        else {
+
+          // For a trapezoid, none of the angles will be equal. Describe opposite pairs of angles and their relative
+          // sizes in the prescribed order.
+          const orderedOppositeVertexPairs = this.getVertexPairsOrderedForDescription( this.shapeModel.oppositeVertices );
+
+          const firstCornerString = this.getCornerAngleDescription( orderedOppositeVertexPairs[ 0 ].vertex1 );
+          const secondCornerString = this.getCornerAngleDescription( orderedOppositeVertexPairs[ 0 ].vertex2 );
+          const thirdCornerString = this.getCornerAngleDescription( orderedOppositeVertexPairs[ 1 ].vertex1 );
+          const fourthCornerString = this.getCornerAngleDescription( orderedOppositeVertexPairs[ 1 ].vertex2 );
+
+          const firstComparisonString = this.getAngleComparisonDescription( orderedOppositeVertexPairs[ 0 ].vertex2, orderedOppositeVertexPairs[ 0 ].vertex1 );
+          const secondComparisonString = this.getAngleComparisonDescription( orderedOppositeVertexPairs[ 1 ].vertex2, orderedOppositeVertexPairs[ 1 ].vertex1 );
+
+          const patternString = '{{firstCorner}} is {{firstComparison}} {{secondCorner}}, and {{thirdCorner}} is {{secondComparison}} {{fourthCorner}}.';
+          statement = StringUtils.fillIn( patternString, {
+            firstCorner: firstCornerString,
+            firstComparison: firstComparisonString,
+            secondCorner: secondCornerString,
+            thirdCorner: thirdCornerString,
+            secondComparison: secondComparisonString,
+            fourthCorner: fourthCornerString
+          } );
+        }
       }
       else if ( shapeName === NamedQuadrilateral.ISOSCELES_TRAPEZOID ) {
         statement = 'please implement details for isosceles trapezoid.';
@@ -471,21 +522,17 @@ class QuadrilateralDescriber {
         // order the vertex pairs as they should be described for a parallelogram
         const orderedVertexPairs = this.getVertexPairsOrderedForDescription( oppositeEqualVertexPairs );
 
-        const firstCornerString = this.getCornerAngleDescription( orderedVertexPairs[ 0 ].vertex1, false );
-        const secondCornerString = this.getCornerAngleDescription( orderedVertexPairs[ 0 ].vertex2, false );
-        const thirdCornerString = this.getCornerAngleDescription( orderedVertexPairs[ 1 ].vertex1, false );
-        const fourthCornerString = this.getCornerAngleDescription( orderedVertexPairs[ 1 ].vertex2, false );
+        const firstCornersString = this.getCornersAngleDescription( orderedVertexPairs[ 0 ].vertex1, orderedVertexPairs[ 0 ].vertex2 );
+        const secondCornersString = this.getCornersAngleDescription( orderedVertexPairs[ 1 ].vertex1, orderedVertexPairs[ 1 ].vertex2 );
 
         // we are comparing the angles of the vertex pairs, relative to the first described pair
         const comparisonString = this.getAngleComparisonDescription( orderedVertexPairs[ 1 ].vertex1, orderedVertexPairs[ 0 ].vertex1 );
 
-        const patternString = 'Equal Corners {{firstCorner}} and {{secondCorner}} are {{comparison}} equal Corners {{thirdCorner}} and {{fourthCorner}}';
+        const patternString = 'Equal {{firstCorners}} are {{comparison}} equal {{secondCorners}}';
         statement = StringUtils.fillIn( patternString, {
-          firstCorner: firstCornerString,
-          secondCorner: secondCornerString,
+          firstCorners: firstCornersString,
           comparison: comparisonString,
-          thirdCorner: thirdCornerString,
-          fourthCorner: fourthCornerString
+          secondCorners: secondCornersString
         } );
       }
       else if ( shapeName === NamedQuadrilateral.CONCAVE ) {
@@ -510,14 +557,10 @@ class QuadrilateralDescriber {
    * Returns something like
    * "Corner A" or
    * "right angle Corner A"
-   *
-   * @param vertex
-   * @param includeCorner - if true, the word "Corner" will be included in the description, otherwise just the label
    */
-  private getCornerAngleDescription( vertex: Vertex, includeCorner = true ): string {
+  private getCornerAngleDescription( vertex: Vertex ): string {
 
-    const labelMap = includeCorner ? vertexCornerLabelMap : vertexLabelMap;
-    const labelString = labelMap.get( vertex.vertexLabel );
+    const labelString = vertexCornerLabelMap.get( vertex.vertexLabel );
     assert && assert( labelString, 'vertexLabel not in vertexLabelMap' );
 
     let descriptionString = labelString;
@@ -531,6 +574,29 @@ class QuadrilateralDescriber {
     }
 
     return descriptionString!;
+  }
+
+  private getCornersAngleDescription( vertex1: Vertex, vertex2: Vertex ): string {
+    const angle1 = vertex1.angleProperty!.value;
+    const angle2 = vertex2.angleProperty!.value;
+    assert && assert( this.shapeModel.isShapeAngleEqualToOther( angle1, angle2 ), 'Combining angle description for angles that are not equal.' );
+
+    const firstLabelString = vertexLabelMap.get( vertex1.vertexLabel );
+    const secondLabelString = vertexLabelMap.get( vertex2.vertexLabel );
+
+    const cornersPatternString = 'Corners {{firstCorner}} and {{secondCorner}}';
+
+    let descriptionString = StringUtils.fillIn( cornersPatternString, {
+      firstCorner: firstLabelString,
+      secondCorner: secondLabelString
+    } );
+    if ( this.shapeModel.isRightAngle( angle1 ) ) {
+      descriptionString = StringUtils.fillIn( 'right angle {{cornersString}}', {
+        cornersString: descriptionString
+      } );
+    }
+
+    return descriptionString;
   }
 
   /**
