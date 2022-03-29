@@ -49,7 +49,7 @@ type VertexWithProposedPosition = {
 
 // A pair of vertices that are grouped together in some way, they are either opposite or adjacent to each other when
 // assembled in the quadrilateral shape
-type VertexPair = {
+export type VertexPair = {
   vertex1: Vertex;
   vertex2: Vertex;
 }

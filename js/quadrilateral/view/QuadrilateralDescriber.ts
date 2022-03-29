@@ -11,7 +11,7 @@ import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import ShapeSnapshot from '../model/ShapeSnapshot.js';
 import ParallelProximityStringMap from '../../ParallelProximityStringMap.js';
 import Side from '../model/Side.js';
-import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
+import QuadrilateralShapeModel, { VertexPair } from '../model/QuadrilateralShapeModel.js';
 import Vertex from '../model/Vertex.js';
 import VertexLabel from '../model/VertexLabel.js';
 import Range from '../../../../dot/js/Range.js';
@@ -416,6 +416,7 @@ class QuadrilateralDescriber {
     let statement = null;
 
     const adjacentEqualVertexPairs = this.shapeModel.adjacentEqualVertexPairsProperty.value;
+    const oppositeEqualVertexPairs = this.shapeModel.oppositeEqualVertexPairsProperty.value;
 
     const shapeName = this.shapeModel.shapeNameProperty.value;
 
@@ -425,9 +426,9 @@ class QuadrilateralDescriber {
       if ( shapeName === NamedQuadrilateral.KITE ) {
 
         // there will be one pair of equal opposite angles
-        assert && assert( this.shapeModel.oppositeEqualVertexPairsProperty.value.length === 1, 'A Kite should only have one pair of opposite equal vertex angles' );
-        const oppositeEqualVertexPairs = this.shapeModel.oppositeEqualVertexPairsProperty.value[ 0 ];
-        const orderedEqualVertices = this.getVerticesOrderedForDescription( [ oppositeEqualVertexPairs.vertex1, oppositeEqualVertexPairs.vertex2 ] );
+        assert && assert( oppositeEqualVertexPairs.length === 1, 'A Kite should only have one pair of opposite equal vertex angles' );
+        const oppositeEqualVertexPair = oppositeEqualVertexPairs[ 0 ];
+        const orderedEqualVertices = this.getVerticesOrderedForDescription( [ oppositeEqualVertexPair.vertex1, oppositeEqualVertexPair.vertex2 ] );
 
         // for the equal vertices, don't include the word "Corner" when describing them
         const firstCornerString = this.getCornerAngleDescription( orderedEqualVertices[ 0 ], false );
@@ -458,13 +459,34 @@ class QuadrilateralDescriber {
       }
       else if ( shapeName === NamedQuadrilateral.TRAPEZOID ) {
         statement = 'Please implement details 2 for trapezoid.';
-
+      }
+      else if ( shapeName === NamedQuadrilateral.ISOSCELES_TRAPEZOID ) {
+        statement = 'please implement details for isosceles trapezoid.';
       }
       else if ( this.shapeModel.isParallelogramProperty.value ) {
 
-        // special format for parallelogram
-        // {{Equal}} Corners {{D}} and {{B} are {{somewhat smaller than}} {{equal}} Corners {{C}} and {{A}}.
-        statement = 'Please implement details 2 for parallelogram';
+        // there should be two pairs of equal opposite angles
+        assert && assert( oppositeEqualVertexPairs.length === 2, 'there should be two pairs of equal opposite angles for a parallelogram' );
+
+        // order the vertex pairs as they should be described for a parallelogram
+        const orderedVertexPairs = this.getVertexPairsOrderedForDescription( oppositeEqualVertexPairs );
+
+        const firstCornerString = this.getCornerAngleDescription( orderedVertexPairs[ 0 ].vertex1, false );
+        const secondCornerString = this.getCornerAngleDescription( orderedVertexPairs[ 0 ].vertex2, false );
+        const thirdCornerString = this.getCornerAngleDescription( orderedVertexPairs[ 1 ].vertex1, false );
+        const fourthCornerString = this.getCornerAngleDescription( orderedVertexPairs[ 1 ].vertex2, false );
+
+        // we are comparing the angles of the vertex pairs, relative to the first described pair
+        const comparisonString = this.getAngleComparisonDescription( orderedVertexPairs[ 1 ].vertex1, orderedVertexPairs[ 0 ].vertex1 );
+
+        const patternString = 'Equal Corners {{firstCorner}} and {{secondCorner}} are {{comparison}} equal Corners {{thirdCorner}} and {{fourthCorner}}';
+        statement = StringUtils.fillIn( patternString, {
+          firstCorner: firstCornerString,
+          secondCorner: secondCornerString,
+          comparison: comparisonString,
+          thirdCorner: thirdCornerString,
+          fourthCorner: fourthCornerString
+        } );
       }
       else if ( shapeName === NamedQuadrilateral.CONCAVE ) {
 
@@ -548,29 +570,53 @@ class QuadrilateralDescriber {
    * creation functions of this Describer.
    */
   getVerticesOrderedForDescription( vertices: Vertex[] ) {
+
     const order = vertices.sort( ( a: Vertex, b: Vertex ) => {
-      const firstPosition = a.positionProperty.value;
-      const secondPosition = b.positionProperty.value;
-
-      let sortReturnValue = 0;
-
-      // if vertically equal, left most vertex is spoken first
-      if ( firstPosition.y === secondPosition.y ) {
-
-        // if first position is left of second position, a before b
-        sortReturnValue = firstPosition.x < secondPosition.x ? -1 : 1;
-      }
-      else {
-
-        // if first position is lower than second position, a before b
-        sortReturnValue = firstPosition.y < secondPosition.y ? -1 : 1;
-      }
-
-      return sortReturnValue;
+      return this.compareVerticesForDescription( a, b );
     } );
 
     assert && assert( order.length === vertices.length, 'An order for vertices was not identified.' );
     return order;
+  }
+
+  compareVerticesForDescription( vertex1: Vertex, vertex2: Vertex ): number {
+    const firstPosition = vertex1.positionProperty.value;
+    const secondPosition = vertex2.positionProperty.value;
+
+    let sortReturnValue = 0;
+
+    // if vertically equal, left most vertex is spoken first
+    if ( firstPosition.y === secondPosition.y ) {
+
+      // if first position is left of second position, a before b
+      sortReturnValue = firstPosition.x < secondPosition.x ? -1 : 1;
+    }
+    else {
+
+      // if first position is lower than second position, a before b
+      sortReturnValue = firstPosition.y < secondPosition.y ? -1 : 1;
+    }
+
+    return sortReturnValue;
+  }
+
+  getVertexPairsOrderedForDescription( vertexPairs: VertexPair[] ) {
+
+    // Order each vertexPair provided first
+    const newVertexPairs: VertexPair[] = [];
+    vertexPairs.forEach( vertexPair => {
+      const orderedVertices = this.getVerticesOrderedForDescription( [ vertexPair.vertex1, vertexPair.vertex2 ] );
+      newVertexPairs.push( { vertex1: orderedVertices[ 0 ], vertex2: orderedVertices[ 1 ] } );
+    } );
+
+    // Now we can sort the VertexPairs based on the first vertex of each pair, since the vertices in
+    // each pair are now sorted
+    const orderedVertexPairs = newVertexPairs.sort( ( vertexPair1: VertexPair, vertexPair2: VertexPair ) => {
+      return this.compareVerticesForDescription( vertexPair1.vertex1, vertexPair2.vertex1 );
+    } );
+
+    assert && assert( vertexPairs.length === orderedVertexPairs.length, 'Did not identify an order for VertexPairs' );
+    return orderedVertexPairs;
   }
 
   /**
