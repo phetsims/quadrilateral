@@ -379,6 +379,12 @@ class QuadrilateralShapeModel {
       ( position1: Vector2, position2: Vector2, position3: Vector2, position4: Vector2 ) => {
         this.shapeChangedEmitter.emit();
 
+        // Update Properties after Vertex positions have changed. Please note the usage of
+        // setDeferred for Vertex position Properties in this sim because it is important
+        // that this be called after all Vertex positions have been set when moving several
+        // at once.
+        this.updateOrderDependentProperties();
+
         if ( model.modelBoundsProperty.value ) {
           this.setVertexDragAreas();
         }
@@ -944,26 +950,9 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Step the model forward in time.
-   * @param dt - in seconds
-   */
-  public step( dt: number ): void {
-
-    // Update Properties that need to be set only after vertex positions have been updated.
-    this.updateOrderDependentProperties();
-  }
-
-  /**
    * Update Properties that need to be updated only after other model Properties are set. This also controls the order
    * in which Properties are set, which is very important in this sim. Positions need to update, then angles, then
    * parallelogram state, and finally shape name.
-   *
-   * TODO: It might be better to do a listener based approach where each of these are called in order every time
-   * the shape changes from shapeChangedEmitter.
-   * TODO: Alternatively, consider only doing work if we detect that the shape has changed. We are doing a lot
-   * every frame for no reason.
-   *
-   * TODO: Updating Properties in the animation frame causes bad states when fuzzing, see https://github.com/phetsims/quadrilateral/issues/105
    */
   updateOrderDependentProperties(): void {
 

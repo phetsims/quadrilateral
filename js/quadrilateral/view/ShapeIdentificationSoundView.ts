@@ -53,14 +53,14 @@ class ShapeIdentificationSoundView {
     } );
 
     // Unique sound that should play when all angles are right.
-    shapeModel.allAnglesRightProperty.link( allAnglesRight => {
+    shapeModel.allAnglesRightProperty.lazyLink( allAnglesRight => {
       if ( allAnglesRight ) {
         this.allRightAnglesSoundClip.play();
       }
     } );
 
     // Unique sound that should play when all lengths are equal.
-    shapeModel.allLengthsEqualProperty.link( allLengthsEqual => {
+    shapeModel.allLengthsEqualProperty.lazyLink( allLengthsEqual => {
       if ( allLengthsEqual ) {
         this.allLengthsEqualSoundClip.play();
       }

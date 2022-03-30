@@ -194,11 +194,11 @@ class QuadrilateralModel {
   public step( dt: number ): void {
 
     // First model step prevent sounds from coming through as we call updateOrderDependentProperties
+    // TODO: This may not be necessary anymore since updateOrderDependentPRoperties was moved
+    // out of the animation frame.
     if ( this.firstModelStep ) {
       this.resetNotInProgressProperty.value = false;
     }
-
-    this.quadrilateralShapeModel.step( dt );
 
     if ( this.firstModelStep ) {
       this.firstModelStep = false;
