@@ -11,7 +11,7 @@ import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import ShapeSnapshot from '../model/ShapeSnapshot.js';
 import ParallelProximityStringMap from '../../ParallelProximityStringMap.js';
 import Side from '../model/Side.js';
-import QuadrilateralShapeModel, { VertexPair } from '../model/QuadrilateralShapeModel.js';
+import QuadrilateralShapeModel, { SidePair, VertexPair } from '../model/QuadrilateralShapeModel.js';
 import Vertex from '../model/Vertex.js';
 import VertexLabel from '../model/VertexLabel.js';
 import Range from '../../../../dot/js/Range.js';
@@ -27,8 +27,8 @@ const rightString = quadrilateralStrings.a11y.voicing.transformations.right;
 const leftString = quadrilateralStrings.a11y.voicing.transformations.left;
 const upperSideString = quadrilateralStrings.a11y.voicing.transformations.upperSide;
 const lowerSideString = quadrilateralStrings.a11y.voicing.transformations.lowerSide;
-const rightSideString = quadrilateralStrings.a11y.voicing.transformations.rightSide;
-const leftSideString = quadrilateralStrings.a11y.voicing.transformations.leftSide;
+const transformationsRightSideString = quadrilateralStrings.a11y.voicing.transformations.rightSide;
+const transformationsLeftSideString = quadrilateralStrings.a11y.voicing.transformations.leftSide;
 const keepingAParallelogramString = quadrilateralStrings.a11y.voicing.transformations.keepingAParallelogram;
 const youLostYourParallelogramPatternString = quadrilateralStrings.a11y.voicing.transformations.youLostYourParallelogramPattern;
 const proximityToParallelPatternString = quadrilateralStrings.a11y.voicing.transformations.proximityToParallelogramPattern;
@@ -40,6 +40,15 @@ const cornerAString = quadrilateralStrings.a11y.cornerA;
 const cornerBString = quadrilateralStrings.a11y.cornerB;
 const cornerCString = quadrilateralStrings.a11y.cornerC;
 const cornerDString = quadrilateralStrings.a11y.cornerD;
+const aBString = quadrilateralStrings.a11y.aB;
+const bCString = quadrilateralStrings.a11y.bC;
+const cDString = quadrilateralStrings.a11y.cD;
+const dAString = quadrilateralStrings.a11y.dA;
+const topSideString = quadrilateralStrings.a11y.topSide;
+const rightSideString = quadrilateralStrings.a11y.rightSide;
+const bottomSideString = quadrilateralStrings.a11y.bottomSide;
+const leftSideString = quadrilateralStrings.a11y.leftSide;
+
 const vertexAString = quadrilateralStrings.vertexA;
 const vertexBString = quadrilateralStrings.vertexB;
 const vertexCString = quadrilateralStrings.vertexC;
@@ -62,7 +71,7 @@ vertexCornerLabelMap.set( VertexLabel.VERTEX_B, cornerBString );
 vertexCornerLabelMap.set( VertexLabel.VERTEX_C, cornerCString );
 vertexCornerLabelMap.set( VertexLabel.VERTEX_D, cornerDString );
 
-// A map that goes from VertexLabel -> letter label (like "Corner A")
+// A map that goes from VertexLabel -> letter label (like "A")
 const vertexLabelMap = new Map<VertexLabel, string>();
 vertexLabelMap.set( VertexLabel.VERTEX_A, vertexAString );
 vertexLabelMap.set( VertexLabel.VERTEX_B, vertexBString );
@@ -84,6 +93,27 @@ createAngleComparisonDescriptionMapEntry( Utils.toRadians( 15 ), Math.PI / 4, 'a
 createAngleComparisonDescriptionMapEntry( QuadrilateralQueryParameters.shapeAngleToleranceInterval, Utils.toRadians( 15 ), 'comparable to', 'comparable to' );
 createAngleComparisonDescriptionMapEntry( 0, QuadrilateralQueryParameters.shapeAngleToleranceInterval, 'equal to', 'equal to' );
 
+// A map that will provide comparison descriptions for side lengths. Lengths in model units.
+const lengthComparisonDescriptionMap = new Map<Range, string>();
+
+// Populate entries of the lengthComparisonDescriptionMap - They are symmetric in that ranges for "longer" strings
+// have the same ranges as the "shorter" strings with values inverted. Lengths for this function are provided in the
+// number of segments, since that is how it is described in the design doc. That is converted to model units for
+// the map.
+const createLengthComparisonMapEntry = ( minSegments: number, maxSegments: number, longerString: string, shorterString: string ) => {
+  const minLength = minSegments * Side.SIDE_SEGMENT_LENGTH;
+  const maxLength = maxSegments * Side.SIDE_SEGMENT_LENGTH;
+  lengthComparisonDescriptionMap.set( new Range( minLength, maxLength ), longerString );
+  lengthComparisonDescriptionMap.set( new Range( -maxLength, -minLength ), shorterString );
+};
+
+createLengthComparisonMapEntry( 6, Number.POSITIVE_INFINITY, 'far longer than', 'far shorter than' );
+createLengthComparisonMapEntry( 4.5, 6, 'much much longer than', 'much much shorter than' );
+createLengthComparisonMapEntry( 3, 4.5, 'much longer than', 'much shorter than' );
+createLengthComparisonMapEntry( 1.5, 3, 'somewhat longer than', 'somewhat shorter than' );
+createLengthComparisonMapEntry( 0.5, 1.5, 'a little longer than', 'a little shorter than' );
+createLengthComparisonMapEntry( QuadrilateralQueryParameters.shapeLengthToleranceInterval, 0.5, 'comparable to', 'comparable to' );
+
 class QuadrilateralDescriber {
   private readonly shapeModel: QuadrilateralShapeModel;
 
@@ -91,8 +121,26 @@ class QuadrilateralDescriber {
   public readonly tiltDifferenceToleranceInterval: number;
   public readonly lengthDifferenceToleranceInterval: number;
 
+  // A map that goes from Side -> letter label (like "AB")
+  private readonly sideLabelMap: Map<Side, string>;
+
+  // A map that goes from Side -> full side label (like "Side AB")
+  private readonly sideFullLabelMap: Map<Side, string>;
+
   constructor( shapeModel: QuadrilateralShapeModel ) {
     this.shapeModel = shapeModel;
+
+    this.sideLabelMap = new Map();
+    this.sideLabelMap.set( shapeModel.topSide, aBString );
+    this.sideLabelMap.set( shapeModel.rightSide, bCString );
+    this.sideLabelMap.set( shapeModel.bottomSide, cDString );
+    this.sideLabelMap.set( shapeModel.leftSide, dAString );
+
+    this.sideFullLabelMap = new Map();
+    this.sideFullLabelMap.set( shapeModel.topSide, topSideString );
+    this.sideFullLabelMap.set( shapeModel.rightSide, rightSideString );
+    this.sideFullLabelMap.set( shapeModel.bottomSide, bottomSideString );
+    this.sideFullLabelMap.set( shapeModel.leftSide, leftSideString );
 
     // TODO: Do we need a query parameter for this?
     this.tiltDifferenceToleranceInterval = 0.2;
@@ -163,11 +211,11 @@ class QuadrilateralDescriber {
         let sideNameString: string = '';
         let directionString: string = '';
         if ( rightSideChanged ) {
-          sideNameString = rightSideString;
+          sideNameString = transformationsRightSideString;
           directionString = rightTiltDifference < 0 ? rightString : leftString;
         }
         else if ( leftSideChanged ) {
-          sideNameString = leftSideString;
+          sideNameString = transformationsLeftSideString;
           directionString = leftTiltDifference < 0 ? rightString : leftString;
         }
         else if ( topSideChanged ) {
@@ -530,6 +578,74 @@ class QuadrilateralDescriber {
   }
 
   /**
+   * Returns the third statement for the details button of the Voicing toolbar. This statement describes
+   * the relative lengths of sides. The statement will take slightly different patterns depending on the current
+   * pairs of equal or parallel sides and the shape name. If all side lengths are equal this function
+   * returns null.
+   */
+  public getThirdDetailsStatement(): null | string {
+    let statement = null;
+
+    const adjacentEqualSidePairs = this.shapeModel.adjacentEqualSidePairsProperty.value;
+    const parallelSidePairs = this.shapeModel.parallelSidePairsProperty.value;
+
+    const shapeName = this.shapeModel.shapeNameProperty.value;
+
+    // no description if all sides are equal in length
+    if ( adjacentEqualSidePairs.length < 4 ) {
+      if ( this.shapeModel.isParallelogramProperty.value ) {
+
+        assert && assert( parallelSidePairs.length === 2, 'Should be two pairs of parallel sides for a parallelogram' );
+        const orderedSidePairs = this.getSidePairsOrderedForDescription( parallelSidePairs );
+
+        // Compare the lengths of the first two parallel sides against the lengths of the second two parallel sides,
+        // relative to the first two parallel sides.
+        const comparisonString = this.getLengthComparisonDescription( orderedSidePairs[ 1 ].side1, orderedSidePairs[ 0 ].side1 );
+
+        const patternString = 'Parallel Sides {{firstSide}} and {{secondSide}} are {{comparison}} parallel Sides {{thirdSide}} and {{fourthSide}}.';
+        statement = StringUtils.fillIn( patternString, {
+          firstSide: this.getSideDescription( orderedSidePairs[ 0 ].side1 ),
+          secondSide: this.getSideDescription( orderedSidePairs[ 0 ].side2 ),
+          comparison: comparisonString,
+          thirdSide: this.getSideDescription( orderedSidePairs[ 1 ].side1 ),
+          fourthSide: this.getSideDescription( orderedSidePairs[ 1 ].side2 )
+        } );
+      }
+      else if ( shapeName === NamedQuadrilateral.KITE ) {
+
+        // TODO: Duplicated with parallelogram - only difference is teh string pattern and the SidePairs.
+        assert && assert( adjacentEqualSidePairs.length === 2, 'There should be two pairs of adjacent sides with with the same length for a kite' );
+
+        const orderedSidePairs = this.getSidePairsOrderedForDescription( adjacentEqualSidePairs );
+
+        // Compare the lengths of the first two parallel sides against the lengths of the second two parallel sides,
+        // relative to the first two parallel sides.
+        const comparisonString = this.getLengthComparisonDescription( orderedSidePairs[ 1 ].side1, orderedSidePairs[ 0 ].side1 );
+
+        const patternString = 'Equal Sides {{firstSide}} and {{secondSide}} are {{comparison}} equal Sides {{thirdSide}} and {{fourthSide}}.';
+        statement = StringUtils.fillIn( patternString, {
+          firstSide: this.getSideDescription( orderedSidePairs[ 0 ].side1 ),
+          secondSide: this.getSideDescription( orderedSidePairs[ 0 ].side2 ),
+          comparison: comparisonString,
+          thirdSide: this.getSideDescription( orderedSidePairs[ 1 ].side1 ),
+          fourthSide: this.getSideDescription( orderedSidePairs[ 1 ].side2 )
+        } );
+      }
+      else if ( shapeName === NamedQuadrilateral.TRAPEZOID || shapeName === NamedQuadrilateral.ISOSCELES_TRAPEZOID ) {
+        statement = 'Please implement third statement for trapezoids.';
+      }
+      else if ( shapeName === NamedQuadrilateral.CONCAVE ) {
+        statement = 'Please implement third statement for concave quadrilaterals.';
+      }
+      else {
+        statement = 'Please implement third statement for general quadrilaterals.';
+      }
+    }
+
+    return statement;
+  }
+
+  /**
    * Returns a description of the relative angles at vertices for a general quadrilateral. This is often
    * used as a fallback case when there aren't particular aspects of equal angles to describe. Will return
    * something like
@@ -616,7 +732,7 @@ class QuadrilateralDescriber {
     // we are comparing the angles of the vertex pairs, relative to the first described pair
     const comparisonString = this.getAngleComparisonDescription( orderedVertexPairs[ 1 ].vertex1, orderedVertexPairs[ 0 ].vertex1 );
 
-    const patternString = 'Equal {{firstCorners}} are {{comparison}} equal {{secondCorners}}';
+    const patternString = 'Equal {{firstCorners}} are {{comparison}} equal {{secondCorners}}.';
     return StringUtils.fillIn( patternString, {
       firstCorners: firstCornersString,
       comparison: comparisonString,
@@ -646,6 +762,16 @@ class QuadrilateralDescriber {
     }
 
     return descriptionString!;
+  }
+
+  /**
+   * Get the described label for a Side
+   * @param side
+   */
+  getSideDescription( side: Side ): string {
+    const label = this.sideLabelMap.get( side )!;
+    assert && assert( label, 'label not found for side' );
+    return label;
   }
 
   private getCornersAngleDescription( vertex1: Vertex, vertex2: Vertex ): string {
@@ -703,6 +829,29 @@ class QuadrilateralDescriber {
   }
 
   /**
+   * Returns a description of comparison between two sides, using entries of lengthComparisonDescriptionMap.
+   * Description compares side2 to side1. For example, if side2 is longer than side1 the output will be something
+   * like:
+   * "Side2 is much longer than side1."
+   */
+  private getLengthComparisonDescription( side1: Side, side2: Side ): string {
+    let description: string | null = null;
+
+    const length1 = side1.lengthProperty.value;
+    const length2 = side2.lengthProperty.value;
+    const lengthDifference = length2 - length1;
+
+    lengthComparisonDescriptionMap.forEach( ( value, key ) => {
+      if ( key.contains( lengthDifference ) ) {
+        description = value;
+      }
+    } );
+
+    assert && assert( description, 'Length comparison description not found for provided Sides' );
+    return description!;
+  }
+
+  /**
    * For some reason, it was decided that the order that vertices are mentioned in descriptions need to be ordered in a
    * unique way. This function returns the vertices in the order that they should be described in the string
    * creation functions of this Describer.
@@ -755,6 +904,50 @@ class QuadrilateralDescriber {
 
     assert && assert( vertexPairs.length === orderedVertexPairs.length, 'Did not identify an order for VertexPairs' );
     return orderedVertexPairs;
+  }
+
+  /**
+   * Given a collection of SidePairs, order the sides so that they are in the order that they should appear in the
+   * description. For a reason I don't fully understand, vertices and sides are described bottom to top, and left to
+   * right. First, we order each side within the SidePair with that criterion. Then we order the SidePairs for the
+   * final returned array.
+   * @param sidePairs
+   */
+  getSidePairsOrderedForDescription( sidePairs: SidePair[] ): SidePair[] {
+
+    // First we order the sides in each SidePair so that we can find the SidePair with the vertices
+    // that should come first
+    const orderedSidePairs: SidePair[] = [];
+    sidePairs.forEach( sidePair => {
+      const side1 = sidePair.side1;
+      const side2 = sidePair.side2;
+
+      let side1VertexToCompare = this.getVerticesOrderedForDescription( [ side1.vertex1, side1.vertex2 ] )[ 0 ];
+      let side2VertexToCompare = this.getVerticesOrderedForDescription( [ side2.vertex1, side2.vertex2 ] )[ 0 ];
+
+      // if the lowest vertices have the same position, we are comparing adjacent sides who share a vertex at the
+      // lowest intersection point - compare the other Side vertices instead
+      if ( side1VertexToCompare === side2VertexToCompare ) {
+        side1VertexToCompare = side1.getHighestVertex();
+        side2VertexToCompare = side2.getHighestVertex();
+      }
+
+      const sortedHighestVertices = this.getVerticesOrderedForDescription( [ side1VertexToCompare!, side2VertexToCompare! ] );
+
+      const lowestSide = sortedHighestVertices[ 0 ] === side1VertexToCompare ? side1 : side2;
+      const highestSide = sortedHighestVertices[ 0 ] === side1VertexToCompare ? side2 : side1;
+
+      orderedSidePairs.push( { side1: lowestSide, side2: highestSide } );
+    } );
+
+    // the orderedSidePairs now have SidePairs with individual sides in the correct order, so we can sort the pairs
+    // by the first side (which should always come first)
+    const order = orderedSidePairs.sort( ( sidePairA, sidePairB ) => {
+      return this.compareVerticesForDescription( sidePairA.side1.getLowestVertex(), sidePairB.side1.getLowestVertex() );
+    } );
+
+    assert && assert( sidePairs.length === order.length, 'Order not determined for sidePairs' );
+    return order;
   }
 
   /**

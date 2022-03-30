@@ -32,6 +32,10 @@ type StringsType = {
     'rightSide': string,
     'bottomSide': string,
     'leftSide': string,
+    'aB': string,
+    'bC': string,
+    'cD': string,
+    'dA': string,
     'voicing': {
       'overviewContent': string,
       'hintContentPattern': string,

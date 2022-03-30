@@ -56,7 +56,7 @@ export type VertexPair = {
 
 // A pair of sides that have some relationship, probably either that they are adjacent or opposite to each other when
 // assembled in the quadrilateral shape.
-type SidePair = {
+export type SidePair = {
   side1: Side;
   side2: Side;
 }

@@ -160,6 +160,21 @@ class Side {
     return this.vertex1 === vertex || this.vertex2 === vertex;
   }
 
+
+  /**
+   * Returns the lowest vertex between the two Vertices of this side. If the vertices have the same
+   * Y value in the model vertex1 is returned.
+   */
+  public getLowestVertex(): Vertex {
+    return this.vertex1.positionProperty.value.y <= this.vertex2.positionProperty.value.y ?
+           this.vertex1 : this.vertex2;
+  }
+
+  public getHighestVertex(): Vertex {
+    return this.vertex1.positionProperty.value.y >= this.vertex2.positionProperty.value.y ?
+           this.vertex1 : this.vertex2;
+  }
+
   /**
    * Connect this side to another to form a shape. Connects this.vertex1 to otherSide.vertex2, illustrated like this.
    * Be aware of this as you use this function to build a shape because it will change how angles are calculated.

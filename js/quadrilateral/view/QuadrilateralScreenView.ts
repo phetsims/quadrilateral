@@ -262,11 +262,36 @@ class QuadrilateralScreenView extends ScreenView {
   public getVoicingDetailsContent(): string {
     const firstStatement = this.quadrilateralDescriber.getFirstDetailsStatement();
     const secondStatement = this.quadrilateralDescriber.getSecondDetailsStatement();
+    const thirdStatement = this.quadrilateralDescriber.getThirdDetailsStatement();
+    assert && assert( firstStatement, 'there should always be a first statement for details' );
 
-    return StringUtils.fillIn( '{{firstStatement}} {{secondStatement}}', {
-      firstStatement: firstStatement,
-      secondStatement: secondStatement
-    } );
+    let contentString = firstStatement;
+
+    let patternString;
+    if ( secondStatement && thirdStatement ) {
+      patternString = '{{firstStatement}} {{secondStatement}} {{thirdStatement}}';
+      contentString = StringUtils.fillIn( patternString, {
+        firstStatement: firstStatement,
+        secondStatement: secondStatement,
+        thirdStatement: thirdStatement
+      } );
+    }
+    else if ( secondStatement ) {
+      patternString = '{{firstStatement}} {{secondStatement}}';
+      contentString = StringUtils.fillIn( patternString, {
+        firstStatement: firstStatement,
+        secondStatement: secondStatement
+      } );
+    }
+    else if ( thirdStatement ) {
+      patternString = '{{firstStatement}} {{thirdStatement}}';
+      contentString = StringUtils.fillIn( patternString, {
+        firstStatement: firstStatement,
+        thirdStatement: thirdStatement
+      } );
+    }
+
+    return contentString;
   }
 
   /**
