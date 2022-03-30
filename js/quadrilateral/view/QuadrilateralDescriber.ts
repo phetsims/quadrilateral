@@ -638,7 +638,69 @@ class QuadrilateralDescriber {
         statement = 'Please implement third statement for concave quadrilaterals.';
       }
       else {
-        statement = 'Please implement third statement for general quadrilaterals.';
+
+        // General quadrilateral - if there is one pair of adjacent sides we have this unique pattern that describes
+        // the pair of equal sides relative to the others
+        if ( adjacentEqualSidePairs.length === 1 ) {
+          const patternString = 'Equal sides {{firstSide}} and {{secondSide}} are {{firstComparison}} Side {{thirdSide}} and {{secondComparison}} {{fourthSide}}. Side {{thirdSide}} is {{thirdComparison}} {{fourthSide}}.';
+
+          const sortedAdjacentSidePairs = this.getSidePairsOrderedForDescription( adjacentEqualSidePairs );
+
+          const firstSide = sortedAdjacentSidePairs[ 0 ].side1;
+          const secondSide = sortedAdjacentSidePairs[ 0 ].side2;
+
+          const remainingSides = this.getUndescribedSides( [ firstSide, secondSide ] );
+          const remainingSidePair = { side1: remainingSides[ 0 ], side2: remainingSides[ 1 ] };
+          const orderedRemainingSides = this.getSidePairsOrderedForDescription( [ remainingSidePair ] );
+          assert && assert( orderedRemainingSides.length === 1, 'we should have one more side pair to describe for a general quadrilateral with one pair of adjacent equal sides' );
+
+          const thirdSide = orderedRemainingSides[ 0 ].side1;
+          const fourthSide = orderedRemainingSides[ 0 ].side2;
+
+          // first comparison is the equal sides against the third side, relative to the first side
+          const firstComparisonString = this.getLengthComparisonDescription( thirdSide, firstSide );
+
+          // second comparison is the equal sides aginst the fourth side, relative to the first side
+          const secondComparisonString = this.getLengthComparisonDescription( fourthSide, firstSide );
+
+          // third comparison is the fourth side against the third side, relative to the third side
+          const thirdComparisonString = this.getLengthComparisonDescription( fourthSide, thirdSide );
+
+          statement = StringUtils.fillIn( patternString, {
+            firstSide: this.getSideDescription( firstSide ),
+            secondSide: this.getSideDescription( secondSide ),
+            firstComparison: firstComparisonString,
+            thirdSide: this.getSideDescription( thirdSide ),
+            secondComparison: secondComparisonString,
+            fourthSide: this.getSideDescription( fourthSide ),
+            thirdComparison: thirdComparisonString
+          } );
+        }
+        else {
+
+          // general fallback pattern for a quadrilateral without interesting properties, describing relative lengths
+          // of opposite sides
+          const patternString = 'Side {{firstSide}} is {{firstComparison}} side {{secondSide}}. Side {{thirdSide}} is {{secondComparison}} Side {{fourthSide}}';
+          const sortedOppositeSidePairs = this.getSidePairsOrderedForDescription( this.shapeModel.oppositeSides );
+
+          const firstSide = sortedOppositeSidePairs[ 0 ].side1;
+          const secondSide = sortedOppositeSidePairs[ 0 ].side2;
+          const thirdSide = sortedOppositeSidePairs[ 1 ].side1;
+          const fourthSide = sortedOppositeSidePairs[ 1 ].side2;
+
+          // comparing the lengths of each opposite side pair, relative to the first side in the pair
+          const firstComparisonString = this.getLengthComparisonDescription( secondSide, firstSide );
+          const secondComparisonString = this.getLengthComparisonDescription( fourthSide, thirdSide );
+
+          statement = StringUtils.fillIn( patternString, {
+            firstSide: this.getSideDescription( firstSide ),
+            firstComparison: firstComparisonString,
+            secondSide: this.getSideDescription( secondSide ),
+            thirdSide: this.getSideDescription( thirdSide ),
+            secondComparison: secondComparisonString,
+            fourthSide: this.getSideDescription( fourthSide )
+          } );
+        }
       }
     }
 
@@ -952,10 +1014,8 @@ class QuadrilateralDescriber {
 
   /**
    * From an array of Vertices, all of which have been described, return a new array of Vertices that still
-   * need a description.
-   *
-   * TODO: Consider a new model Property that monitors for this instead of this function? Not sure if that
-   * is better.
+   * need a description. Useful when you have a description for a pair of adjacent/opposite vertices but don't
+   * have a reference to the remaining vertices yet.
    */
   private getUndescribedVertices( vertices: Vertex[] ): Vertex[] {
     const unusedVertices: Vertex[] = [];
@@ -966,6 +1026,23 @@ class QuadrilateralDescriber {
     } );
 
     return unusedVertices;
+  }
+
+  /**
+   * From an array of Sides which you know have been described, return a new array of Sides that still need a
+   * description. Useful when you are describing two adjacent/opposite sides and don't have a reference yet to the
+   * remaining adjacent sides.
+   */
+  private getUndescribedSides( sides: Side[] ): Side[] {
+    const unusedSides: Side[] = [];
+
+    this.shapeModel.sides.forEach( side => {
+      if ( !sides.includes( side ) ) {
+        unusedSides.push( side );
+      }
+    } );
+
+    return unusedSides;
   }
 }
 
