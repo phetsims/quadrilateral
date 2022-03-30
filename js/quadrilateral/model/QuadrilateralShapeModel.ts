@@ -962,6 +962,8 @@ class QuadrilateralShapeModel {
    * the shape changes from shapeChangedEmitter.
    * TODO: Alternatively, consider only doing work if we detect that the shape has changed. We are doing a lot
    * every frame for no reason.
+   *
+   * TODO: Updating Properties in the animation frame causes bad states when fuzzing, see https://github.com/phetsims/quadrilateral/issues/105
    */
   updateOrderDependentProperties(): void {
 
