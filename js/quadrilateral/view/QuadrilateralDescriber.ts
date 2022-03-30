@@ -596,46 +596,27 @@ class QuadrilateralDescriber {
       if ( this.shapeModel.isParallelogramProperty.value ) {
 
         assert && assert( parallelSidePairs.length === 2, 'Should be two pairs of parallel sides for a parallelogram' );
-        const orderedSidePairs = this.getSidePairsOrderedForDescription( parallelSidePairs );
-
-        // Compare the lengths of the first two parallel sides against the lengths of the second two parallel sides,
-        // relative to the first two parallel sides.
-        const comparisonString = this.getLengthComparisonDescription( orderedSidePairs[ 1 ].side1, orderedSidePairs[ 0 ].side1 );
 
         const patternString = 'Parallel Sides {{firstSide}} and {{secondSide}} are {{comparison}} parallel Sides {{thirdSide}} and {{fourthSide}}.';
-        statement = StringUtils.fillIn( patternString, {
-          firstSide: this.getSideDescription( orderedSidePairs[ 0 ].side1 ),
-          secondSide: this.getSideDescription( orderedSidePairs[ 0 ].side2 ),
-          comparison: comparisonString,
-          thirdSide: this.getSideDescription( orderedSidePairs[ 1 ].side1 ),
-          fourthSide: this.getSideDescription( orderedSidePairs[ 1 ].side2 )
-        } );
+        statement = this.getTwoSidePairsDescription( parallelSidePairs, patternString );
       }
       else if ( shapeName === NamedQuadrilateral.KITE ) {
-
-        // TODO: Duplicated with parallelogram - only difference is teh string pattern and the SidePairs.
         assert && assert( adjacentEqualSidePairs.length === 2, 'There should be two pairs of adjacent sides with with the same length for a kite' );
-
-        const orderedSidePairs = this.getSidePairsOrderedForDescription( adjacentEqualSidePairs );
-
-        // Compare the lengths of the first two parallel sides against the lengths of the second two parallel sides,
-        // relative to the first two parallel sides.
-        const comparisonString = this.getLengthComparisonDescription( orderedSidePairs[ 1 ].side1, orderedSidePairs[ 0 ].side1 );
-
         const patternString = 'Equal Sides {{firstSide}} and {{secondSide}} are {{comparison}} equal Sides {{thirdSide}} and {{fourthSide}}.';
-        statement = StringUtils.fillIn( patternString, {
-          firstSide: this.getSideDescription( orderedSidePairs[ 0 ].side1 ),
-          secondSide: this.getSideDescription( orderedSidePairs[ 0 ].side2 ),
-          comparison: comparisonString,
-          thirdSide: this.getSideDescription( orderedSidePairs[ 1 ].side1 ),
-          fourthSide: this.getSideDescription( orderedSidePairs[ 1 ].side2 )
-        } );
+        statement = this.getTwoSidePairsDescription( adjacentEqualSidePairs, patternString );
       }
       else if ( shapeName === NamedQuadrilateral.TRAPEZOID || shapeName === NamedQuadrilateral.ISOSCELES_TRAPEZOID ) {
         statement = 'Please implement third statement for trapezoids.';
       }
       else if ( shapeName === NamedQuadrilateral.CONCAVE ) {
-        statement = 'Please implement third statement for concave quadrilaterals.';
+        if ( adjacentEqualSidePairs.length === 2 ) {
+          assert && assert( adjacentEqualSidePairs.length === 2, 'There should be two pairs of adjacent sides with with the same length for a kite' );
+          const patternString = 'Equal Sides {{firstSide}} and {{secondSide}} are {{comparison}} equal Sides {{thirdSide}} and {{fourthSide}}.';
+          statement = this.getTwoSidePairsDescription( adjacentEqualSidePairs, patternString );
+        }
+        else {
+          statement = this.getGeneralQuadrilateralSideDescription();
+        }
       }
       else {
 
@@ -678,28 +659,8 @@ class QuadrilateralDescriber {
         }
         else {
 
-          // general fallback pattern for a quadrilateral without interesting properties, describing relative lengths
-          // of opposite sides
-          const patternString = 'Side {{firstSide}} is {{firstComparison}} side {{secondSide}}. Side {{thirdSide}} is {{secondComparison}} Side {{fourthSide}}';
-          const sortedOppositeSidePairs = this.getSidePairsOrderedForDescription( this.shapeModel.oppositeSides );
-
-          const firstSide = sortedOppositeSidePairs[ 0 ].side1;
-          const secondSide = sortedOppositeSidePairs[ 0 ].side2;
-          const thirdSide = sortedOppositeSidePairs[ 1 ].side1;
-          const fourthSide = sortedOppositeSidePairs[ 1 ].side2;
-
-          // comparing the lengths of each opposite side pair, relative to the first side in the pair
-          const firstComparisonString = this.getLengthComparisonDescription( secondSide, firstSide );
-          const secondComparisonString = this.getLengthComparisonDescription( fourthSide, thirdSide );
-
-          statement = StringUtils.fillIn( patternString, {
-            firstSide: this.getSideDescription( firstSide ),
-            firstComparison: firstComparisonString,
-            secondSide: this.getSideDescription( secondSide ),
-            thirdSide: this.getSideDescription( thirdSide ),
-            secondComparison: secondComparisonString,
-            fourthSide: this.getSideDescription( fourthSide )
-          } );
+          // general case, no interesting Properties about sides
+          statement = this.getGeneralQuadrilateralSideDescription();
         }
       }
     }
@@ -734,6 +695,57 @@ class QuadrilateralDescriber {
       thirdCorner: thirdCornerString,
       secondComparison: secondComparisonString,
       fourthCorner: fourthCornerString
+    } );
+  }
+
+  /**
+   * Returns a "basic" description for a quadrilateral without interesting side Properties. Describes the relative
+   * lengths of opposite sides of the quadrilateral. Sides in the descriptions are ordered by the method in
+   * getSidePairsOrderedForDescription.
+   * @private
+   */
+  private getGeneralQuadrilateralSideDescription(): string {
+
+    // general fallback pattern for a quadrilateral without interesting properties, describing relative lengths
+    // of opposite sides
+    const patternString = 'Side {{firstSide}} is {{firstComparison}} side {{secondSide}}. Side {{thirdSide}} is {{secondComparison}} Side {{fourthSide}}';
+    const sortedOppositeSidePairs = this.getSidePairsOrderedForDescription( this.shapeModel.oppositeSides );
+
+    const firstSide = sortedOppositeSidePairs[ 0 ].side1;
+    const secondSide = sortedOppositeSidePairs[ 0 ].side2;
+    const thirdSide = sortedOppositeSidePairs[ 1 ].side1;
+    const fourthSide = sortedOppositeSidePairs[ 1 ].side2;
+
+    // comparing the lengths of each opposite side pair, relative to the first side in the pair
+    const firstComparisonString = this.getLengthComparisonDescription( secondSide, firstSide );
+    const secondComparisonString = this.getLengthComparisonDescription( fourthSide, thirdSide );
+
+    return StringUtils.fillIn( patternString, {
+      firstSide: this.getSideDescription( firstSide ),
+      firstComparison: firstComparisonString,
+      secondSide: this.getSideDescription( secondSide ),
+      thirdSide: this.getSideDescription( thirdSide ),
+      secondComparison: secondComparisonString,
+      fourthSide: this.getSideDescription( fourthSide )
+    } );
+  }
+
+  getTwoSidePairsDescription( sidePairs: SidePair[], patternString: string ): string {
+    assert && assert( sidePairs.length === 2, 'getTwoSidePairsDescription assumes you are describing two pairs of sides with some interesting property' );
+
+    const orderedSidePairs = this.getSidePairsOrderedForDescription( sidePairs );
+
+    // Compare the lengths of the first two parallel sides against the lengths of the second two parallel sides,
+    // relative to the first two parallel sides.
+    const comparisonString = this.getLengthComparisonDescription( orderedSidePairs[ 1 ].side1, orderedSidePairs[ 0 ].side1 );
+
+    // const patternString = 'Equal Sides {{firstSide}} and {{secondSide}} are {{comparison}} equal Sides {{thirdSide}} and {{fourthSide}}.';
+    return StringUtils.fillIn( patternString, {
+      firstSide: this.getSideDescription( orderedSidePairs[ 0 ].side1 ),
+      secondSide: this.getSideDescription( orderedSidePairs[ 0 ].side2 ),
+      comparison: comparisonString,
+      thirdSide: this.getSideDescription( orderedSidePairs[ 1 ].side1 ),
+      fourthSide: this.getSideDescription( orderedSidePairs[ 1 ].side2 )
     } );
   }
 
@@ -968,6 +980,20 @@ class QuadrilateralDescriber {
     return orderedVertexPairs;
   }
 
+  private compareSidesForDescription( side1: Side, side2: Side ) {
+    let vertex1ToCompare = this.getVerticesOrderedForDescription( [ side1.vertex1, side1.vertex2 ] )[ 0 ];
+    let vertex2ToCompare = this.getVerticesOrderedForDescription( [ side2.vertex1, side2.vertex2 ] )[ 0 ];
+
+    // if the lowest vertices have the same position, we are comparing adjacent sides who share a vertex at the
+    // lowest intersection point - compare the other Side vertices instead
+    if ( vertex1ToCompare === vertex2ToCompare ) {
+      vertex1ToCompare = side1.getHighestVertex();
+      vertex2ToCompare = side2.getHighestVertex();
+    }
+
+    return this.compareVerticesForDescription( vertex1ToCompare, vertex2ToCompare );
+  }
+
   /**
    * Given a collection of SidePairs, order the sides so that they are in the order that they should appear in the
    * description. For a reason I don't fully understand, vertices and sides are described bottom to top, and left to
@@ -984,28 +1010,25 @@ class QuadrilateralDescriber {
       const side1 = sidePair.side1;
       const side2 = sidePair.side2;
 
-      let side1VertexToCompare = this.getVerticesOrderedForDescription( [ side1.vertex1, side1.vertex2 ] )[ 0 ];
-      let side2VertexToCompare = this.getVerticesOrderedForDescription( [ side2.vertex1, side2.vertex2 ] )[ 0 ];
+      const sideComparison = this.compareSidesForDescription( side1, side2 );
 
-      // if the lowest vertices have the same position, we are comparing adjacent sides who share a vertex at the
-      // lowest intersection point - compare the other Side vertices instead
-      if ( side1VertexToCompare === side2VertexToCompare ) {
-        side1VertexToCompare = side1.getHighestVertex();
-        side2VertexToCompare = side2.getHighestVertex();
+      let firstSide = side1;
+      let secondSide = side2;
+
+      if ( sideComparison > 0 ) {
+
+        // comparator says side2 before side1 (0 indicates no change, -1 indicates side1 before side2)
+        firstSide = side2;
+        secondSide = side1;
       }
 
-      const sortedHighestVertices = this.getVerticesOrderedForDescription( [ side1VertexToCompare!, side2VertexToCompare! ] );
-
-      const lowestSide = sortedHighestVertices[ 0 ] === side1VertexToCompare ? side1 : side2;
-      const highestSide = sortedHighestVertices[ 0 ] === side1VertexToCompare ? side2 : side1;
-
-      orderedSidePairs.push( { side1: lowestSide, side2: highestSide } );
+      orderedSidePairs.push( { side1: firstSide, side2: secondSide } );
     } );
 
     // the orderedSidePairs now have SidePairs with individual sides in the correct order, so we can sort the pairs
     // by the first side (which should always come first)
     const order = orderedSidePairs.sort( ( sidePairA, sidePairB ) => {
-      return this.compareVerticesForDescription( sidePairA.side1.getLowestVertex(), sidePairB.side1.getLowestVertex() );
+      return this.compareSidesForDescription( sidePairA.side1, sidePairB.side1 );
     } );
 
     assert && assert( sidePairs.length === order.length, 'Order not determined for sidePairs' );
