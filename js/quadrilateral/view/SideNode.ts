@@ -149,8 +149,8 @@ class SideNode extends Voicing( Path, 1 ) {
       },
 
       // velocity defined in view coordinates per second, assuming 60 fps
-      dragVelocity: viewDragDelta * 60,
-      shiftDragVelocity: ( viewDragDelta / 2 ) * 60,
+      // dragVelocity: viewDragDelta * 60,
+      // shiftDragVelocity: ( viewDragDelta / 2 ) * 60,
 
       downDelta: viewDragDelta,
       shiftDownDelta: viewDragDelta / 2,

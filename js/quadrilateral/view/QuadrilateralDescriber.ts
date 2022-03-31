@@ -535,9 +535,11 @@ class QuadrilateralDescriber {
       }
       else if ( this.shapeModel.isParallelogramProperty.value ) {
 
-        // there should be two pairs of equal opposite angles
-        assert && assert( oppositeEqualVertexPairs.length === 2, 'there should be two pairs of equal opposite angles for a parallelogram' );
-        statement = this.getTwoPairsOfEqualVerticesAngleDescription( oppositeEqualVertexPairs );
+        // there should be two pairs of equal opposite angles, but we cannot assume this because we may be in a
+        // parallelogram state without entries in oppositeEqualVertexPairs because of the behavior of
+        // angleToleranceIntervalProperty. But we describe opposite vertex pairs as if they were equal.
+        // assert && assert( oppositeEqualVertexPairs.length === 2, 'there should be two pairs of equal opposite angles for a parallelogram' );
+        statement = this.getTwoPairsOfEqualVerticesAngleDescription( this.shapeModel.oppositeVertices );
       }
       else if ( shapeName === NamedQuadrilateral.CONCAVE ) {
 
@@ -607,10 +609,14 @@ class QuadrilateralDescriber {
     if ( adjacentEqualSidePairs.length < 4 ) {
       if ( this.shapeModel.isParallelogramProperty.value ) {
 
-        assert && assert( parallelSidePairs.length === 2, 'Should be two pairs of parallel sides for a parallelogram' );
+        // We cannot nececssarily use parallelSidePairsProperty because the angleToleranceInterval can allow for
+        // a parallelogram without parallel sides within shapeAngleToleranceInterval. But we should still describe
+        // the opposite sides as if they are parallelo
+        // assert && assert( parallelSidePairs.length === 2, 'Should be two pairs of parallel sides for a parallelogram' );
+        const oppositeSides = this.shapeModel.oppositeSides;
 
         const patternString = 'Parallel Sides {{firstSide}} and {{secondSide}} are {{comparison}} parallel Sides {{thirdSide}} and {{fourthSide}}.';
-        statement = this.getTwoSidePairsDescription( parallelSidePairs, patternString );
+        statement = this.getTwoSidePairsDescription( oppositeSides, patternString );
       }
       else if ( shapeName === NamedQuadrilateral.KITE ) {
         assert && assert( adjacentEqualSidePairs.length === 2, 'There should be two pairs of adjacent sides with with the same length for a kite' );
@@ -907,11 +913,15 @@ class QuadrilateralDescriber {
     return label;
   }
 
+  /**
+   * Get a description about two angles at once, assuming that they are equal. Returns something like
+   * "Corners A and B" or
+   * "right angle Corners A and B"
+   *
+   * Note that two vertex angles may NOT be exactly equal due to the behavior of angleToleranceIntervalProperty,
+   * which allows for more lenient equality for parallelogram.
+   */
   private getCornersAngleDescription( vertex1: Vertex, vertex2: Vertex ): string {
-    const angle1 = vertex1.angleProperty!.value;
-    const angle2 = vertex2.angleProperty!.value;
-    assert && assert( this.shapeModel.isShapeAngleEqualToOther( angle1, angle2 ), 'Combining angle description for angles that are not equal.' );
-
     const firstLabelString = vertexLabelMap.get( vertex1.vertexLabel );
     const secondLabelString = vertexLabelMap.get( vertex2.vertexLabel );
 
@@ -921,6 +931,9 @@ class QuadrilateralDescriber {
       firstCorner: firstLabelString,
       secondCorner: secondLabelString
     } );
+
+    assert && assert( vertex1.angleProperty, 'angles need to be ready for use in getCornersAngleDescription' );
+    const angle1 = vertex1.angleProperty!.value;
     if ( this.shapeModel.isRightAngle( angle1 ) ) {
       descriptionString = StringUtils.fillIn( 'right angle {{cornersString}}', {
         cornersString: descriptionString
