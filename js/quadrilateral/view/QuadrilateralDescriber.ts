@@ -588,6 +588,7 @@ class QuadrilateralDescriber {
 
     const adjacentEqualSidePairs = this.shapeModel.adjacentEqualSidePairsProperty.value;
     const parallelSidePairs = this.shapeModel.parallelSidePairsProperty.value;
+    const oppositeEqualSidePairs = this.shapeModel.oppositeEqualSidePairsProperty.value;
 
     const shapeName = this.shapeModel.shapeNameProperty.value;
 
@@ -605,8 +606,31 @@ class QuadrilateralDescriber {
         const patternString = 'Equal Sides {{firstSide}} and {{secondSide}} are {{comparison}} equal Sides {{thirdSide}} and {{fourthSide}}.';
         statement = this.getTwoSidePairsDescription( adjacentEqualSidePairs, patternString );
       }
-      else if ( shapeName === NamedQuadrilateral.TRAPEZOID || shapeName === NamedQuadrilateral.ISOSCELES_TRAPEZOID ) {
+      if ( shapeName === NamedQuadrilateral.TRAPEZOID ) {
         statement = 'Please implement third statement for trapezoids.';
+      }
+      else if ( shapeName === NamedQuadrilateral.ISOSCELES_TRAPEZOID ) {
+        assert && assert( parallelSidePairs.length === 1, 'There should be one pair of parallel sides for a trapezoid' );
+        assert && assert( oppositeEqualSidePairs.length === 1, 'There should be one pair of opposite sides with equal length for an isosceles trapezoid' );
+
+        const patternString = 'Side {{firstSide}} is {{comparison}} Side {{secondSide}} and parallel. Sides {{thirdSide}} and {{fourthSide}} are equal.';
+
+        const orderedParallelSidePairs = this.getSidePairsOrderedForDescription( parallelSidePairs );
+        const orderedOppositeEqualSidePairs = this.getSidePairsOrderedForDescription( oppositeEqualSidePairs );
+
+        const firstSide = orderedParallelSidePairs[ 0 ].side1;
+        const secondSide = orderedParallelSidePairs[ 0 ].side2;
+
+        // comparing the length of the first side to the second side, relative to the first side
+        const comparisonString = this.getLengthComparisonDescription( secondSide, firstSide );
+
+        statement = StringUtils.fillIn( patternString, {
+          firstSide: this.getSideDescription( firstSide ),
+          comparison: comparisonString,
+          secondSide: this.getSideDescription( secondSide ),
+          thirdSide: this.getSideDescription( orderedOppositeEqualSidePairs[ 0 ].side1 ),
+          fourthSide: this.getSideDescription( orderedOppositeEqualSidePairs[ 0 ].side2 )
+        } );
       }
       else if ( shapeName === NamedQuadrilateral.CONCAVE ) {
         if ( adjacentEqualSidePairs.length === 2 ) {
