@@ -35,6 +35,7 @@ const proximityToParallelPatternString = quadrilateralStrings.a11y.voicing.trans
 const youMadeAParallelogramString = quadrilateralStrings.a11y.voicing.transformations.youMadeAParallelogram;
 const namedShapeParalleogramHintPatternString = quadrilateralStrings.a11y.voicing.namedShapeParalleogramHintPattern;
 const namedShapeNotAParallelogramHintPatternString = quadrilateralStrings.a11y.voicing.namedShapeNotAParallelogramHintPattern;
+const aParallelogramString = quadrilateralStrings.a11y.voicing.aParallelogram;
 const firstDetailsStatementPatternString = quadrilateralStrings.a11y.voicing.firstDetailsStatementPattern;
 const cornerAString = quadrilateralStrings.a11y.cornerA;
 const cornerBString = quadrilateralStrings.a11y.cornerB;
@@ -384,17 +385,27 @@ class QuadrilateralDescriber {
    * "a concave quadrilateral and not a parallelogram"
    */
   getShapeDescription(): string {
+    let description = '';
 
     // of type NamedQuadrilateral enumeration
     const shapeName = this.shapeModel.shapeNameProperty.value;
     const shapeNameString = this.getShapeNameDescription( shapeName );
 
-    const patternString = this.shapeModel.isParallelogramProperty.value ? namedShapeParalleogramHintPatternString :
-                          namedShapeNotAParallelogramHintPatternString;
+    if ( this.shapeModel.isParallelogramProperty.value && shapeName === null ) {
 
-    return StringUtils.fillIn( patternString, {
-      shapeName: shapeNameString
-    } );
+      // parallelogram with no name, don't include "general quadrilateral" just say parallelogram
+      description = aParallelogramString;
+    }
+    else {
+      const patternString = this.shapeModel.isParallelogramProperty.value ? namedShapeParalleogramHintPatternString :
+                            namedShapeNotAParallelogramHintPatternString;
+
+      description = StringUtils.fillIn( patternString, {
+        shapeName: shapeNameString
+      } );
+    }
+
+    return description;
   }
 
   /**

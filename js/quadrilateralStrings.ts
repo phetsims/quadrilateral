@@ -42,6 +42,7 @@ type StringsType = {
       'youHaveAShapeHintPattern': string,
       'namedShapeParalleogramHintPattern': string,
       'namedShapeNotAParallelogramHintPattern': string,
+      'aParallelogram': string,
       'detailsPattern': string,
       'firstDetailsStatementPattern': string,
       'shapeNames': {
