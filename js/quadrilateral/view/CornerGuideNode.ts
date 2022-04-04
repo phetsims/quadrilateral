@@ -19,9 +19,8 @@ import quadrilateral from '../../quadrilateral.js';
 import { Node, Path } from '../../../../scenery/js/imports.js';
 import Vertex from '../model/Vertex.js';
 import Utils from '../../../../dot/js/Utils.js';
-import { Line } from '../../../../kite/js/imports.js';
+import { Line, Shape } from '../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import { Shape } from '../../../../kite/js/imports.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
@@ -61,10 +60,12 @@ class CornerGuideNode extends Node {
       lineDash: [ 5, 5 ]
     } );
 
-    assert && assert( vertex1.angleProperty, 'angleProperty needs to be defined to add listeners in CornerGuideNode' );
-    Property.multilink( [ vertex1.angleProperty!, vertex1.positionProperty ], ( angle: number, position: Vector2 ) => {
-      assert && assert( angle > 0, 'CornerGuideNodes cannot support angles at or less than zero' );
+    Property.multilink( [ vertex1.angleProperty, vertex1.positionProperty ], ( angle: number | null, position: Vector2 ) => {
+      assert && assert( angle !== null, 'angleProperty needs to be defined to add listeners in CornerGuideNode' );
+      assert && assert( angle! > 0, 'CornerGuideNodes cannot support angles at or less than zero' );
       const vertexCenter = vertex1.positionProperty.value;
+
+      const definedAngle = angle!;
 
       // Line helps us find where we should start drawing the shape, the annulus is "anchored" to one side so that
       // it will look the same regardless of quadrilateral rotation.
@@ -81,7 +82,7 @@ class CornerGuideNode extends Node {
       const lightShape = new Shape();
       const darkShape = new Shape();
 
-      const numberOfSlices = Math.floor( angle / SLICE_SIZE_RADIANS );
+      const numberOfSlices = Math.floor( definedAngle / SLICE_SIZE_RADIANS );
       for ( let i = 0; i < numberOfSlices; i++ ) {
         const nextShape = i % 2 === 0 ? lightShape : darkShape;
 
@@ -96,7 +97,7 @@ class CornerGuideNode extends Node {
 
       // now draw the remainder - check to make sure that it is large enough to display because ellipticalArcTo doesn't
       // work with angles that are close to zero.
-      const remainingAngle = angle % SLICE_SIZE_RADIANS;
+      const remainingAngle = definedAngle % SLICE_SIZE_RADIANS;
       if ( remainingAngle > 0.0005 ) {
 
         // slices alternate from light to dark, so we can count on the remaining slice being the alternating color
@@ -118,8 +119,8 @@ class CornerGuideNode extends Node {
       const secondCrosshairPoint = CornerGuideNode.customPositionAt( line, -innerT );
 
       // for the points on the second crosshair line rotate by the angle around the center of the vertex
-      const thirdCrosshairPoint = firstCrosshairPoint.rotatedAboutPoint( vertexCenter, 2 * Math.PI - angle );
-      const fourthCrosshairPoint = secondCrosshairPoint.rotatedAboutPoint( vertexCenter, 2 * Math.PI - angle );
+      const thirdCrosshairPoint = firstCrosshairPoint.rotatedAboutPoint( vertexCenter, 2 * Math.PI - definedAngle );
+      const fourthCrosshairPoint = secondCrosshairPoint.rotatedAboutPoint( vertexCenter, 2 * Math.PI - definedAngle );
 
       const crosshairShape = new Shape();
       crosshairShape.moveToPoint( firstCrosshairPoint );

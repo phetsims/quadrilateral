@@ -18,6 +18,7 @@ import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import { Line } from '../../../../scenery/js/imports.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 
 type SideOptions = {
   offsetVectorForTiltCalculation?: Vector2;
@@ -29,7 +30,7 @@ class Side {
   public vertex2: Vertex;
   private isConnected: boolean;
   public tiltProperty: IReadOnlyProperty<number>;
-  public lengthProperty: IReadOnlyProperty<number>;
+  public lengthProperty: NumberProperty;
   public readonly isPressedProperty: BooleanProperty;
   public shapeProperty: IReadOnlyProperty<Shape>;
   public readonly lengthToleranceIntervalProperty: IReadOnlyProperty<number>;
@@ -82,13 +83,7 @@ class Side {
       } );
 
     // The distance between the two vertices, in model space.
-    this.lengthProperty = new DerivedProperty( [ this.vertex2.positionProperty, this.vertex1.positionProperty ],
-      ( vertex2Position: Vector2, vertex1Position: Vector2 ) => {
-        return Vector2.getDistanceBetweenVectors( vertex2Position, vertex1Position );
-      }, {
-        tandem: tandem.createTandem( 'lengthProperty' ),
-        phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
-      } );
+    this.lengthProperty = new NumberProperty( 0 );
 
     // The shape of the side, determined by the length and the model width.
     this.shapeProperty = new DerivedProperty(
@@ -109,6 +104,15 @@ class Side {
     this.lengthToleranceIntervalProperty = new DerivedProperty( [ this.lengthProperty ], ( length: number ) => {
       return length * QuadrilateralQueryParameters.lengthToleranceIntervalScaleFactor;
     } );
+  }
+
+  /**
+   * Update the length of this Side from vertex positions. It is unfortunate that the client has to call this
+   * to update the length, but we must only update the side after all vertex positions have been set. See
+   * updateOrderDependentProperties for more information.
+   */
+  public updateLength() {
+    this.lengthProperty.value = Vector2.getDistanceBetweenVectors( this.vertex2.positionProperty.value, this.vertex1.positionProperty.value );
   }
 
   /**

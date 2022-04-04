@@ -53,8 +53,8 @@ class RightAngleIndicatorNode extends Path {
 
   private redrawShape( vertex1: Vertex, vertex2: Vertex, vertex3: Vertex ) {
 
-    assert && assert( vertex1.angleProperty, 'Angle must be available to draw the indicator' );
-    const angle = vertex1.angleProperty!.value;
+    assert && assert( vertex1.angleProperty.value, 'Angle must be available to draw the indicator' );
+    const angle = vertex1.angleProperty.value!;
 
     // It is possible that the angles are wildly different then Math.PI because of the dependency Properties. The
     // indicator is redrawn every angle change, and that may happen before the shape name is updated. So we could

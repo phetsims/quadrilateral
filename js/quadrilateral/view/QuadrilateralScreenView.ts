@@ -182,10 +182,10 @@ class QuadrilateralScreenView extends ScreenView {
             model.quadrilateralShapeModel.topSide.lengthProperty.value,
             model.quadrilateralShapeModel.rightSide.lengthProperty.value,
             model.quadrilateralShapeModel.leftSide.lengthProperty.value,
-            model.quadrilateralShapeModel.vertexA.angleProperty!.value,
-            model.quadrilateralShapeModel.vertexB.angleProperty!.value,
-            model.quadrilateralShapeModel.vertexC.angleProperty!.value,
-            model.quadrilateralShapeModel.vertexD.angleProperty!.value
+            model.quadrilateralShapeModel.vertexA.angleProperty.value!,
+            model.quadrilateralShapeModel.vertexB.angleProperty.value!,
+            model.quadrilateralShapeModel.vertexC.angleProperty.value!,
+            model.quadrilateralShapeModel.vertexD.angleProperty.value!
           );
         } );
       }

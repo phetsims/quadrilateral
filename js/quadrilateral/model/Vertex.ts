@@ -9,7 +9,6 @@
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
-import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import quadrilateral from '../../quadrilateral.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
@@ -26,13 +25,17 @@ const HALF_HEIGHT = VERTEX_BOUNDS.height / 2;
 
 class Vertex {
   public positionProperty: Property<Vector2>;
-  public angleProperty: null | Property<number>;
+  public angleProperty: Property<number | null>;
   public readonly vertexLabel: VertexLabel;
   public dragBoundsProperty: Property<null | Bounds2>;
   public dragAreaProperty: Property<null | Shape>;
   public isPressedProperty: Property<boolean>;
   public modelBoundsProperty: IReadOnlyProperty<Bounds2>;
   private tandem: Tandem;
+
+  private vertex1: Vertex | null;
+  private vertex2: Vertex | null;
+
 
   // in model coordinates, the bounds of the vertex - necessary because we need to calculate vertex/vertex and
   // vertex/side collisions
@@ -54,10 +57,20 @@ class Vertex {
 
     // The angle at this vertex of the quadrilateral, null until this vertex is connected to two others because we
     // need three points to form the angle.
-    this.angleProperty = null;
+    this.angleProperty = new Property<null | number>( null );
 
     // The label for this vertex so we can get the same vertex on another QuadrilateralShapeModel.
     this.vertexLabel = vertexLabel;
+
+    // A reference to vertices connected to this vertex for the purposes of calculating the angle at this vertex.
+    // The orientation of vertex1 and vertex2 for angle calculations are as shown in the following diagram:
+    //        thisVertex
+    //          /       \
+    //   sideA /         \ sideB
+    //        /           \
+    // vertex1 --------- vertex2
+    this.vertex1 = null;
+    this.vertex2 = null;
 
     // The bounds in model coordinates that define where this vertex can move. NOTE: Likely this
     // is being replaced by dragAreaProperty, see next field.
@@ -120,6 +133,30 @@ class Vertex {
   }
 
   /**
+   * Update the angle at this vertex, when it is time. It is unfortunate that it is up to the client to call this,
+   * but we need to be sure that angles are up-to-date ONLY after all vertex positions have been updated. See
+   * QuadrilateralShapeModel.updateOrderDependentProperties.
+   */
+  public updateAngle(): void {
+    assert && assert( this.vertex1 && this.vertex2, 'Need connected vertices to determine an angle' );
+
+    const vector1 = this.vertex1!.positionProperty.value.minus( this.positionProperty.value );
+    const vector2 = this.vertex2!.positionProperty.value.minus( this.positionProperty.value );
+
+    const dot = vector1.x * vector2.x + vector1.y * vector2.y;
+    const det = vector1.x * vector2.y - vector2.x * vector1.y;
+    let angle = Math.atan2( det, dot );
+
+    // if the angle is less than zero, we have wrapped around Math.PI and formed a concave shape - the actual
+    // angle should be greater than PI
+    if ( angle < 0 ) {
+      angle = angle + 2 * Math.PI;
+    }
+
+    this.angleProperty.value = angle;
+  }
+
+  /**
    * Connect this vertex to two others to form an angle and sides of the quadrilateral.
    * Uses atan2 to get the angle at this vertex counter-clockwise between 0 and 2 * Math.PI. See
    * https://math.stackexchange.com/questions/878785/how-to-find-an-angle-in-range0-360-between-2-vectors
@@ -130,37 +167,11 @@ class Vertex {
    *          /       \
    *   sideA /         \ sideB
    *        /           \
-   *     vertexA ----- vertexB
-   *             sideC
-   *
-   * @public
-   *
-   * @param {Vertex} vertex1
-   * @param {Vertex} vertex2
+   * vertex1 --------- vertex2
    */
   connectToOthers( vertex1: Vertex, vertex2: Vertex ) {
-
-    this.angleProperty = new DerivedProperty(
-      [ vertex1.positionProperty, this.positionProperty, vertex2.positionProperty ],
-      ( vertex1Position: Vector2, thisPosition: Vector2, vertex2Position: Vector2 ) => {
-
-        const vector1 = vertex1.positionProperty.value.minus( this.positionProperty.value );
-        const vector2 = vertex2.positionProperty.value.minus( this.positionProperty.value );
-
-        const dot = vector1.x * vector2.x + vector1.y * vector2.y;
-        const det = vector1.x * vector2.y - vector2.x * vector1.y;
-        let angle = Math.atan2( det, dot );
-
-        // if the angle is less than zero, we have wrapped around Math.PI and formed a concave shape - the actual
-        // angle should be greater than PI
-        if ( angle < 0 ) {
-          angle = angle + 2 * Math.PI;
-        }
-        return angle;
-      }, {
-        tandem: this.tandem.createTandem( 'angleProperty' ),
-        phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
-      } );
+    this.vertex1 = vertex1;
+    this.vertex2 = vertex2;
   }
 
   /**

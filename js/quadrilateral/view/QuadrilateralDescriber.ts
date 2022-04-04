@@ -448,8 +448,8 @@ class QuadrilateralDescriber {
                          oppositeEqualVertexPairs.length === 1 ? 'one pair of opposite' :
                          'no';
 
-      angleEqualityString = adjacentEqualVertexPairs.length === 1 && this.shapeModel.isShapeAngleEqualToOther( adjacentEqualVertexPairs[ 0 ].vertex1.angleProperty!.value, Math.PI / 2 ) ? 'right angles' :
-                            oppositeEqualVertexPairs.length === 1 && this.shapeModel.isShapeAngleEqualToOther( oppositeEqualVertexPairs[ 0 ].vertex1.angleProperty!.value, Math.PI / 2 ) ? 'right angles' :
+      angleEqualityString = adjacentEqualVertexPairs.length === 1 && this.shapeModel.isShapeAngleEqualToOther( adjacentEqualVertexPairs[ 0 ].vertex1.angleProperty.value!, Math.PI / 2 ) ? 'right angles' :
+                            oppositeEqualVertexPairs.length === 1 && this.shapeModel.isShapeAngleEqualToOther( oppositeEqualVertexPairs[ 0 ].vertex1.angleProperty.value!, Math.PI / 2 ) ? 'right angles' :
                               // if two pairs of adjacent angles exist but we are not parallelogram, all cannot be
                               // right angles. OR, no angles are equal.
                             'equal';
@@ -560,8 +560,8 @@ class QuadrilateralDescriber {
         let concaveVertex: null | Vertex = null;
         let otherVertex: null | Vertex = null;
         this.shapeModel.oppositeVertices.forEach( vertexPair => {
-          const firstVertexConcave = vertexPair.vertex1.angleProperty!.value > Math.PI;
-          const secondVertexConcave = vertexPair.vertex2.angleProperty!.value > Math.PI;
+          const firstVertexConcave = vertexPair.vertex1.angleProperty.value! > Math.PI;
+          const secondVertexConcave = vertexPair.vertex2.angleProperty.value! > Math.PI;
           if ( firstVertexConcave || secondVertexConcave ) {
             concaveVertex = firstVertexConcave ? vertexPair.vertex1 : vertexPair.vertex2;
             otherVertex = firstVertexConcave ? vertexPair.vertex2 : vertexPair.vertex1;
@@ -901,7 +901,7 @@ class QuadrilateralDescriber {
 
     let descriptionString = labelString;
     assert && assert( vertex.angleProperty, 'Angle required for this description' );
-    if ( this.shapeModel.isRightAngle( vertex.angleProperty!.value ) ) {
+    if ( this.shapeModel.isRightAngle( vertex.angleProperty.value! ) ) {
 
       // include "right angle"
       descriptionString = StringUtils.fillIn( 'right angle {{cornerLabel}}', {
@@ -941,8 +941,8 @@ class QuadrilateralDescriber {
       secondCorner: secondLabelString
     } );
 
-    assert && assert( vertex1.angleProperty, 'angles need to be ready for use in getCornersAngleDescription' );
-    const angle1 = vertex1.angleProperty!.value;
+    assert && assert( vertex1.angleProperty.value !== null, 'angles need to be ready for use in getCornersAngleDescription' );
+    const angle1 = vertex1.angleProperty.value!;
     if ( this.shapeModel.isRightAngle( angle1 ) ) {
       descriptionString = StringUtils.fillIn( 'right angle {{cornersString}}', {
         cornersString: descriptionString
@@ -964,13 +964,13 @@ class QuadrilateralDescriber {
    * "a little smaller than"
    */
   private getAngleComparisonDescription( vertex1: Vertex, vertex2: Vertex ): string {
-    assert && assert( vertex1.angleProperty, 'angles need to be initialized for descriptions' );
-    assert && assert( vertex2.angleProperty, 'angles need to be initialized for descriptions' );
+    assert && assert( vertex1.angleProperty.value !== null, 'angles need to be initialized for descriptions' );
+    assert && assert( vertex2.angleProperty.value !== null, 'angles need to be initialized for descriptions' );
 
     let description: string | null = null;
 
-    const angle1 = vertex1.angleProperty!.value;
-    const angle2 = vertex2.angleProperty!.value;
+    const angle1 = vertex1.angleProperty.value!;
+    const angle2 = vertex2.angleProperty.value!;
     const angleDifference = angle2 - angle1;
 
     angleComparisonDescriptionMap.forEach( ( value, key ) => {

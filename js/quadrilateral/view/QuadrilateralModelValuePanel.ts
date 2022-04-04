@@ -98,10 +98,10 @@ class QuadrilateralModelValuePanel extends Panel {
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.leftSide.lengthProperty, leftSideLengthText, 'Left side' );
 
     // angle
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexA.angleProperty!, leftTopAngleText, 'Left top angle' );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexB.angleProperty!, rightTopAngleText, 'Right top angle' );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexC.angleProperty!, rightBottomAngleText, 'Right bottom angle' );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexD.angleProperty!, leftBottomAngleText, 'Left bottom angle' );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexA.angleProperty, leftTopAngleText, 'Left top angle' );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexB.angleProperty, rightTopAngleText, 'Right top angle' );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexC.angleProperty, rightBottomAngleText, 'Right bottom angle' );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexD.angleProperty, leftBottomAngleText, 'Left bottom angle' );
 
     // isParallelogramProperty
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.isParallelogramProperty, isParallelogramText, 'Is parallelogram' );
@@ -117,7 +117,7 @@ class QuadrilateralModelValuePanel extends Panel {
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.markerRotationProperty, markerRotationText, 'Marker rotation' );
   }
 
-  private static addRedrawValueTextListener( property: IReadOnlyProperty<number> | IProperty<boolean> | Property<NamedQuadrilateral | null>, text: Text, label: string ) {
+  private static addRedrawValueTextListener( property: IReadOnlyProperty<number | null> | IProperty<boolean> | Property<NamedQuadrilateral | null>, text: Text, label: string ) {
     property.link( value => {
 
       let formattedValue = value;

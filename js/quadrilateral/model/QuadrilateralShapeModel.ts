@@ -351,7 +351,7 @@ class QuadrilateralShapeModel {
 
     // The name of the quadrilateral (like square/rhombus/trapezoid, etc). Will be null if it is a random
     // unnamed shape.
-    this.shapeNameProperty = new Property( this.getShapeName() );
+    this.shapeNameProperty = new Property<null | NamedQuadrilateral>( null );
 
     // @public {Emitter} - Emits an event whenever the shape of the Quadrilateral changes
     this.shapeChangedEmitter = new Emitter<[]>();
@@ -445,10 +445,10 @@ class QuadrilateralShapeModel {
     }
 
     return new VertexAngles(
-      this.vertexA.angleProperty!.value,
-      this.vertexB.angleProperty!.value,
-      this.vertexC.angleProperty!.value,
-      this.vertexD.angleProperty!.value
+      this.vertexA.angleProperty.value,
+      this.vertexB.angleProperty.value,
+      this.vertexC.angleProperty.value,
+      this.vertexD.angleProperty.value
     );
   }
 
@@ -461,10 +461,10 @@ class QuadrilateralShapeModel {
     // A value requested by https://github.com/phetsims/quadrilateral/issues/59#issuecomment-1048004794
     const vertexAnglesToleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval * 2;
 
-    return Utils.equalsEpsilon( currentVertexAngles.vertexAAngle, this.savedVertexAngles.vertexAAngle, vertexAnglesToleranceInterval ) &&
-           Utils.equalsEpsilon( currentVertexAngles.vertexBAngle, this.savedVertexAngles.vertexBAngle, vertexAnglesToleranceInterval ) &&
-           Utils.equalsEpsilon( currentVertexAngles.vertexCAngle, this.savedVertexAngles.vertexCAngle, vertexAnglesToleranceInterval ) &&
-           Utils.equalsEpsilon( currentVertexAngles.vertexDAngle, this.savedVertexAngles.vertexDAngle, vertexAnglesToleranceInterval );
+    return Utils.equalsEpsilon( currentVertexAngles.vertexAAngle!, this.savedVertexAngles.vertexAAngle!, vertexAnglesToleranceInterval ) &&
+           Utils.equalsEpsilon( currentVertexAngles.vertexBAngle!, this.savedVertexAngles.vertexBAngle!, vertexAnglesToleranceInterval ) &&
+           Utils.equalsEpsilon( currentVertexAngles.vertexCAngle!, this.savedVertexAngles.vertexCAngle!, vertexAnglesToleranceInterval ) &&
+           Utils.equalsEpsilon( currentVertexAngles.vertexDAngle!, this.savedVertexAngles.vertexDAngle!, vertexAnglesToleranceInterval );
   }
 
   /**
@@ -486,16 +486,16 @@ class QuadrilateralShapeModel {
 
     // equalities for adjacent vertices
     const adjacentVertexAngles = [
-      [ this.vertexA.angleProperty!.value, this.vertexB.angleProperty!.value ],
-      [ this.vertexB.angleProperty!.value, this.vertexC.angleProperty!.value ],
-      [ this.vertexC.angleProperty!.value, this.vertexD.angleProperty!.value ],
-      [ this.vertexD.angleProperty!.value, this.vertexA.angleProperty!.value ]
+      [ this.vertexA.angleProperty.value, this.vertexB.angleProperty.value ],
+      [ this.vertexB.angleProperty.value, this.vertexC.angleProperty.value ],
+      [ this.vertexC.angleProperty.value, this.vertexD.angleProperty.value ],
+      [ this.vertexD.angleProperty.value, this.vertexA.angleProperty.value ]
     ];
-    const vertexAAngleEqualsVertexBAngle = this.isShapeAngleEqualToOther( this.vertexA.angleProperty!.value, this.vertexB.angleProperty!.value );
-    const vertex2AngleEqualsVertex3Angle = this.isShapeAngleEqualToOther( this.vertexB.angleProperty!.value, this.vertexC.angleProperty!.value );
+    const vertexAAngleEqualsVertexBAngle = this.isShapeAngleEqualToOther( this.vertexA.angleProperty.value!, this.vertexB.angleProperty.value! );
+    const vertex2AngleEqualsVertex3Angle = this.isShapeAngleEqualToOther( this.vertexB.angleProperty.value!, this.vertexC.angleProperty.value! );
 
     // If any angles are larger than PI it is a concave shape.
-    if ( _.some( this.vertices, vertex => vertex.angleProperty!.value > Math.PI ) ) {
+    if ( _.some( this.vertices, vertex => vertex.angleProperty.value! > Math.PI ) ) {
       namedQuadrilateral = NamedQuadrilateral.CONCAVE;
     }
     else if ( this.isParallelogramProperty.value ) {
@@ -533,14 +533,16 @@ class QuadrilateralShapeModel {
       // According to https://en.wikipedia.org/wiki/Trapezoid#Characterizations a trapezoid has two adjacent
       // angles that add up to Math.PI.
       const trapezoidRequirement = _.some( adjacentVertexAngles, anglePair => {
-        return this.isShapeAngleEqualToOther( anglePair[ 0 ] + anglePair[ 1 ], Math.PI );
+        assert && assert( anglePair[ 0 ] !== null && anglePair[ 1 ] !== null, 'angles need to be defined' );
+        return this.isShapeAngleEqualToOther( anglePair[ 0 ]! + anglePair[ 1 ]!, Math.PI );
       } );
 
       if ( trapezoidRequirement ) {
 
         // An isosceles trapezoid will have two pairs of adjacent angles that are equal.
         const isoscelesRequirement = _.countBy( adjacentVertexAngles, anglePair => {
-          return this.isShapeAngleEqualToOther( anglePair[ 0 ], anglePair[ 1 ] );
+          assert && assert( anglePair[ 0 ] !== null && anglePair[ 1 ] !== null, 'angles need to be defined' );
+          return this.isShapeAngleEqualToOther( anglePair[ 0 ]!, anglePair[ 1 ]! );
         } ).true === 2;
 
         // If one of the pairs of sides share the same length, it must be an isosceles trapezoid
@@ -624,7 +626,7 @@ class QuadrilateralShapeModel {
     let secondRayDirection: null | Vector2 = null;
     let secondRay: null | Ray2 = null;
 
-    if ( vertexC.angleProperty!.value > Math.PI ) {
+    if ( vertexC.angleProperty.value! > Math.PI ) {
 
       // angle is greater than Math.PI so we have a concave shape and need to use a more constrained shape to
       // prevent crossed quadrilaterals
@@ -687,7 +689,7 @@ class QuadrilateralShapeModel {
     // An array of points that will create the final shape
     let points = [];
 
-    if ( vertexC.angleProperty!.value > Math.PI ) {
+    if ( vertexC.angleProperty.value! > Math.PI ) {
 
       // angle is greater than Math.PI so we have a concave shape and need to use a more constrained shape to
       // prevent crossed quadrilaterals
@@ -871,8 +873,14 @@ class QuadrilateralShapeModel {
    * angleToleranceIntervalProperty.
    */
   public getIsParallelogram(): boolean {
-    const angle1DiffAngle3 = Math.abs( this.vertexA.angleProperty!.value - this.vertexC.angleProperty!.value );
-    const angle2DiffAngle4 = Math.abs( this.vertexB.angleProperty!.value - this.vertexD.angleProperty!.value );
+    const angleA = this.vertexA.angleProperty.value!;
+    const angleB = this.vertexB.angleProperty.value!;
+    const angleC = this.vertexC.angleProperty.value!;
+    const angleD = this.vertexD.angleProperty.value!;
+    assert && assert( angleA !== null && angleB !== null && angleC !== null && angleD !== null, 'Angles should not be null' );
+
+    const angle1DiffAngle3 = Math.abs( angleA - angleC );
+    const angle2DiffAngle4 = Math.abs( angleB - angleD );
     const epsilon = this.angleToleranceIntervalProperty.value;
 
     return angle1DiffAngle3 < epsilon && angle2DiffAngle4 < epsilon;
@@ -946,6 +954,7 @@ class QuadrilateralShapeModel {
     } );
 
     // un-defer all so that all Properties and calls callbacks
+    // debugger;
     this.setPropertiesDeferred( false );
   }
 
@@ -956,11 +965,28 @@ class QuadrilateralShapeModel {
    */
   updateOrderDependentProperties(): void {
 
+    // update angles
+    this.vertices.forEach( vertex => {
+      vertex.updateAngle();
+    } );
+
+    // update lengths
+    this.sides.forEach( side => {
+      side.updateLength();
+    } );
+
     // Update pairs of parallel sides before updating whether or not we have a parallelogram
     // TODO: Should these sides determine if we have a paralleogram instead of getIsParallelogram?
     this.updateParallelSidePairs();
 
+    // update pairs of vertices and sides
+    this.updateVertexAngleComparisons();
+    this.updateSideLengthComparisons();
+
     // The isParallelogramProperty needs to be set asynchronously, see the documentation for isParallelogramProperty.
+    if ( !this.getIsParallelogram() ) {
+      // debugger;
+    }
     this.isParallelogramProperty.set( this.getIsParallelogram() );
 
     // We need to determine if side lengths have changed in the step function because we need to calculate
@@ -990,11 +1016,17 @@ class QuadrilateralShapeModel {
       this.anglesEqualToSavedProperty.set( this.getVertexAnglesEqualToSaved( this.getVertexAngles() ) );
     }
 
-    this.updateVertexAngleComparisons();
-    this.updateSideLengthComparisons();
-
     // After we have detected whether or not we are a parallelogram, and after all angle and length comparisons are
     // ready for use, calculate the name of the current quadrilateral shape.
+    // console.log( this.getShapeName() );
+    // if ( this.validateShape ) {
+    //   if ( this.shapeNameProperty.value !== this.getShapeName() ) {
+    //     debugger;
+    //   }
+    //   if ( _.some( this.sides, side => side.lengthProperty.value > 1 ) ) {
+    //     debugger;
+    //   }
+    // }
     this.shapeNameProperty.set( this.getShapeName() );
 
     // Uses detected shape name so must be called AFTER the shapeNameProperty is set above.
@@ -1019,8 +1051,8 @@ class QuadrilateralShapeModel {
     for ( let i = 0; i < allVertexPairs.length; i++ ) {
       const vertexPair = allVertexPairs[ i ];
 
-      const firstAngle = vertexPair.vertex1.angleProperty!.value;
-      const secondAngle = vertexPair.vertex2.angleProperty!.value;
+      const firstAngle = vertexPair.vertex1.angleProperty.value!;
+      const secondAngle = vertexPair.vertex2.angleProperty.value!;
       const currentlyIncludesVertexPair = currentVertexPairs.includes( vertexPair );
       const areAnglesEqual = this.isShapeAngleEqualToOther( firstAngle, secondAngle );
 
@@ -1082,7 +1114,7 @@ class QuadrilateralShapeModel {
    * @param side2
    */
   public areSidesParallel( side1: Side, side2: Side ) {
-    assert && assert( side1.vertex1.angleProperty && side2.vertex2.angleProperty, 'angles need to be available to determine parallel state' );
+    assert && assert( side1.vertex1.angleProperty.value && side2.vertex2.angleProperty.value, 'angles need to be available to determine parallel state' );
 
     // Two sides are parallel if the vertices of their connecting sides add up to Math.PI. The quadrilateral is
     // constructed such that the Side that connects these two sides vertex1 of side1 and vertex2 of side2
@@ -1093,7 +1125,7 @@ class QuadrilateralShapeModel {
     //    |                   |
     //    |-------------------|
     // vertex2   side2       vertex1
-    return this.isAngleEqualToOther( side1.vertex1.angleProperty!.value + side2.vertex2.angleProperty!.value, Math.PI );
+    return this.isAngleEqualToOther( side1.vertex1.angleProperty.value! + side2.vertex2.angleProperty.value!, Math.PI );
   }
 
   /**

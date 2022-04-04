@@ -9,13 +9,15 @@
 
 import quadrilateral from '../../quadrilateral.js';
 
-class VertexAngles {
-  public readonly vertexAAngle: number;
-  public readonly vertexBAngle: number;
-  public readonly vertexCAngle: number;
-  public readonly vertexDAngle: number;
+type numberOrNull = number | null;
 
-  constructor( vertexAAngle: number, vertexBAngle: number, vertexCAngle: number, vertexDAngle: number ) {
+class VertexAngles {
+  public readonly vertexAAngle: numberOrNull;
+  public readonly vertexBAngle: numberOrNull;
+  public readonly vertexCAngle: numberOrNull;
+  public readonly vertexDAngle: numberOrNull;
+
+  constructor( vertexAAngle: numberOrNull, vertexBAngle: numberOrNull, vertexCAngle: numberOrNull, vertexDAngle: numberOrNull ) {
     this.vertexAAngle = vertexAAngle;
     this.vertexBAngle = vertexBAngle;
     this.vertexCAngle = vertexCAngle;

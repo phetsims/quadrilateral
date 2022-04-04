@@ -38,7 +38,9 @@ class ShapeIdentificationSoundView {
     soundManager.addSoundGenerator( this.allLengthsEqualSoundClip );
 
     // lazy, don't play on startup
-    shapeModel.shapeNameProperty.lazyLink( name => {
+    shapeModel.shapeNameProperty.lazyLink( ( name, oldName ) => {
+
+      // console.log( name, oldName );
 
       // Generic indication that we have achieved a new named shape other some special shapes like square/rhombus.
       // If the shape is a parallelogram prevent sounds, there are other parallelogram sounds that are more important
