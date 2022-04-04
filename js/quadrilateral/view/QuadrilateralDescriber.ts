@@ -624,53 +624,62 @@ class QuadrilateralDescriber {
         statement = this.getTwoSidePairsDescription( adjacentEqualSidePairs, patternString );
       }
       if ( shapeName === NamedQuadrilateral.TRAPEZOID || shapeName === NamedQuadrilateral.ISOSCELES_TRAPEZOID ) {
-        assert && assert( parallelSidePairs.length === 1, 'There should be one pair of parallel sides for a trapezoid' );
-        const orderedParallelSidePairs = this.getSidePairsOrderedForDescription( parallelSidePairs );
-        const firstSide = orderedParallelSidePairs[ 0 ].side1;
-        const secondSide = orderedParallelSidePairs[ 0 ].side2;
 
-        const otherSides = this.getUndescribedSides( [ firstSide, secondSide ] );
-        assert && assert( otherSides.length === 2, 'there should be two remaining sides to describe' );
-        const orderedOtherSidePairs = this.getSidePairsOrderedForDescription( [ { side1: otherSides[ 0 ], side2: otherSides[ 1 ] } ] );
-        const thirdSide = orderedOtherSidePairs[ 0 ].side1;
-        const fourthSide = orderedOtherSidePairs[ 0 ].side2;
+        // TODO: We cannot assert this yet because parallel sides use angleToleranceInterval which can break when
+        // the shape is not a parallelogram. See https://github.com/phetsims/quadrilateral/issues/108
+        // Replace the if statement with this assertion when that issue is resolved.
+        // assert && assert( parallelSidePairs.length === 1, 'There should be one pair of parallel sides for a trapezoid' );
+        if ( parallelSidePairs.length === 1 ) {
+          const orderedParallelSidePairs = this.getSidePairsOrderedForDescription( parallelSidePairs );
+          const firstSide = orderedParallelSidePairs[ 0 ].side1;
+          const secondSide = orderedParallelSidePairs[ 0 ].side2;
 
-        // comparing the length of the first side to the second side, relative to the first side
-        const firstComparisonString = this.getLengthComparisonDescription( secondSide, firstSide );
+          const otherSides = this.getUndescribedSides( [ firstSide, secondSide ] );
+          assert && assert( otherSides.length === 2, 'there should be two remaining sides to describe' );
+          const orderedOtherSidePairs = this.getSidePairsOrderedForDescription( [ { side1: otherSides[ 0 ], side2: otherSides[ 1 ] } ] );
+          const thirdSide = orderedOtherSidePairs[ 0 ].side1;
+          const fourthSide = orderedOtherSidePairs[ 0 ].side2;
 
-        // comparing third and fourth sides, relative to the third side
-        const secondComparisonString = this.getLengthComparisonDescription( fourthSide, thirdSide );
+          // comparing the length of the first side to the second side, relative to the first side
+          const firstComparisonString = this.getLengthComparisonDescription( secondSide, firstSide );
 
-        const trapezoidPatternString = 'Side {{firstSide}} is {{firstComparison}} Side {{secondSide}} and parallel. Side {{thirdSide}} is {{secondComparison}} Side {{fourthSide}}.';
-        const parallelSidesStatement = StringUtils.fillIn( trapezoidPatternString, {
-          firstSide: this.getSideDescription( firstSide ),
-          firstComparison: firstComparisonString,
-          secondSide: this.getSideDescription( secondSide ),
-          thirdSide: this.getSideDescription( thirdSide ),
-          secondComparison: secondComparisonString,
-          fourthSide: this.getSideDescription( fourthSide )
-        } );
+          // comparing third and fourth sides, relative to the third side
+          const secondComparisonString = this.getLengthComparisonDescription( fourthSide, thirdSide );
 
-        if ( adjacentEqualSidePairs.length === 1 ) {
-
-          // if there is one pair of adjacent sides with equal lengths, call those out at the end of the statement
-          const orderedAdjacentSides = this.getSidePairsOrderedForDescription( adjacentEqualSidePairs );
-          const firstSide = orderedAdjacentSides[ 0 ].side1;
-          const secondSide = orderedAdjacentSides[ 0 ].side2;
-
-          const equalSidesPatternString = 'Sides {{firstSide}} and {{secondSide}} are equal.';
-          const equalSidesStatement = StringUtils.fillIn( equalSidesPatternString, {
+          const trapezoidPatternString = 'Side {{firstSide}} is {{firstComparison}} Side {{secondSide}} and parallel. Side {{thirdSide}} is {{secondComparison}} Side {{fourthSide}}.';
+          const parallelSidesStatement = StringUtils.fillIn( trapezoidPatternString, {
             firstSide: this.getSideDescription( firstSide ),
-            secondSide: this.getSideDescription( secondSide )
+            firstComparison: firstComparisonString,
+            secondSide: this.getSideDescription( secondSide ),
+            thirdSide: this.getSideDescription( thirdSide ),
+            secondComparison: secondComparisonString,
+            fourthSide: this.getSideDescription( fourthSide )
           } );
 
-          statement = StringUtils.fillIn( '{{firstStatement}} {{secondStatement}}', {
-            firstStatement: parallelSidesStatement,
-            secondStatement: equalSidesStatement
-          } );
+          if ( adjacentEqualSidePairs.length === 1 ) {
+
+            // if there is one pair of adjacent sides with equal lengths, call those out at the end of the statement
+            const orderedAdjacentSides = this.getSidePairsOrderedForDescription( adjacentEqualSidePairs );
+            const firstSide = orderedAdjacentSides[ 0 ].side1;
+            const secondSide = orderedAdjacentSides[ 0 ].side2;
+
+            const equalSidesPatternString = 'Sides {{firstSide}} and {{secondSide}} are equal.';
+            const equalSidesStatement = StringUtils.fillIn( equalSidesPatternString, {
+              firstSide: this.getSideDescription( firstSide ),
+              secondSide: this.getSideDescription( secondSide )
+            } );
+
+            statement = StringUtils.fillIn( '{{firstStatement}} {{secondStatement}}', {
+              firstStatement: parallelSidesStatement,
+              secondStatement: equalSidesStatement
+            } );
+          }
+          else {
+            statement = parallelSidesStatement;
+          }
         }
         else {
-          statement = parallelSidesStatement;
+          statement = 'I cannot describe this trapezoid because of issue 108.';
         }
       }
       else if ( shapeName === NamedQuadrilateral.CONCAVE ) {
