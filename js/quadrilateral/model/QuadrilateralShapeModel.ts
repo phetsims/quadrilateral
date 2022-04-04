@@ -236,10 +236,10 @@ class QuadrilateralShapeModel {
         resetNotInProgress
       ) => {
         const verticesPressedArray = [ vertexAPressed, vertexBPressed, vertexCPressed, vertexDPressed ];
-        // const sidesPressedArray = [ topSidePressed, rightSidePressed, bottomSidePressed, leftSidePressed ];
+        const sidesPressedArray = [ topSidePressed, rightSidePressed, bottomSidePressed, leftSidePressed ];
 
         const numberOfVerticesPressed = _.countBy( verticesPressedArray ).true;
-        // const anySidesPressed = _.some( sidesPressedArray );
+        const anySidesPressed = _.some( sidesPressedArray );
 
         let toleranceInterval;
 
@@ -256,20 +256,20 @@ class QuadrilateralShapeModel {
         }
         else {
 
-          // // remaining cases apply to mouse, touch, and keyboard input
-          // if ( anySidesPressed && this.isParallelogramProperty.value ) {
-          //
-          //   // A side has been picked up while the shape is a parallelogram - it should be impossible for the shape
-          //   // to go "out" of parallelogram in this case because none of the angles should be changing.
-          //   toleranceInterval = Number.POSITIVE_INFINITY;
-          // }
-          // else if ( anySidesPressed && !this.isParallelogramProperty.value ) {
-          //
-          //   // A side as been picked up while the shape is NOT a parallelogram - it should be impossible for the
-          //   // shape to become a parallelogram while it is being dragged.
-          //   toleranceInterval = Number.NEGATIVE_INFINITY;
-          // }
-          if ( numberOfVerticesPressed >= 2 ) {
+          // remaining cases apply to mouse, touch, and keyboard input
+          if ( anySidesPressed && this.isParallelogramProperty.value ) {
+
+            // A side has been picked up while the shape is a parallelogram - it should be impossible for the shape
+            // to go "out" of parallelogram in this case because none of the angles should be changing.
+            toleranceInterval = Number.POSITIVE_INFINITY;
+          }
+          else if ( anySidesPressed && !this.isParallelogramProperty.value ) {
+
+            // A side as been picked up while the shape is NOT a parallelogram - it should be impossible for the
+            // shape to become a parallelogram while it is being dragged.
+            toleranceInterval = Number.NEGATIVE_INFINITY;
+          }
+          else if ( numberOfVerticesPressed >= 2 ) {
 
             // Two or more vertices pressed at once, increase the tolerance interval by a scale factor so that
             // it is easier to find and remain a parallelogram with this input
