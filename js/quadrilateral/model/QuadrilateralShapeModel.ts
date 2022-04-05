@@ -872,20 +872,13 @@ class QuadrilateralShapeModel {
 
   /**
    * Returns whether or not the quadrilateral shape is a parallelogram, within the tolerance defined by
-   * angleToleranceIntervalProperty.
+   * angleToleranceIntervalProperty. This function uses parallelSidePairsProperty and requires that Property
+   * value to be up to date.
    */
   public getIsParallelogram(): boolean {
-    const angleA = this.vertexA.angleProperty.value!;
-    const angleB = this.vertexB.angleProperty.value!;
-    const angleC = this.vertexC.angleProperty.value!;
-    const angleD = this.vertexD.angleProperty.value!;
-    assert && assert( angleA !== null && angleB !== null && angleC !== null && angleD !== null, 'Angles should not be null' );
 
-    const angle1DiffAngle3 = Math.abs( angleA - angleC );
-    const angle2DiffAngle4 = Math.abs( angleB - angleD );
-    const epsilon = this.angleToleranceIntervalProperty.value;
-
-    return angle1DiffAngle3 < epsilon && angle2DiffAngle4 < epsilon;
+    // We should have a quadrilateral if the shape has two pairs of parallel sides.
+    return this.parallelSidePairsProperty.value.length === 2;
   }
 
   /**
@@ -977,8 +970,8 @@ class QuadrilateralShapeModel {
       side.updateLength();
     } );
 
-    // Update pairs of parallel sides before updating whether or not we have a parallelogram
-    // TODO: Should these sides determine if we have a paralleogram instead of getIsParallelogram?
+    // Update pairs of parallel sides before updating whether or not we have a parallelogram, update before
+    // calling getIsParallelogram.
     this.updateParallelSidePairs();
 
     // update pairs of vertices and sides
