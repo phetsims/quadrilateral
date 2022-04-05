@@ -986,9 +986,6 @@ class QuadrilateralShapeModel {
     this.updateSideLengthComparisons();
 
     // The isParallelogramProperty needs to be set asynchronously, see the documentation for isParallelogramProperty.
-    if ( !this.getIsParallelogram() ) {
-      // debugger;
-    }
     this.isParallelogramProperty.set( this.getIsParallelogram() );
 
     // We need to determine if side lengths have changed in the step function because we need to calculate
