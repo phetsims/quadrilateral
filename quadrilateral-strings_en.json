@@ -29,6 +29,18 @@
         "value": "The Control Area has checkboxes to add labels and guides, and a button to reset the sim."
       }
     },
+    "cornerLabelsAddedResponse": {
+      "value": "Letters A through D added to corners."
+    },
+    "cornerLabelsRemovedResponse": {
+      "value": "Names hidden."
+    },
+    "angleGuidesAddedResponse": {
+      "value": "Angle guides added to corners."
+    },
+    "angleGuidesRemovedResponse": {
+      "value": "Guides hidden."
+    },
     "myShapesCorners": {
       "value": "My Shape's Corners"
     },

@@ -22,6 +22,10 @@ type StringsType = {
       'playAreaDescription': string,
       'controlAreaDescription': string
     },
+    'cornerLabelsAddedResponse': string,
+    'cornerLabelsRemovedResponse': string,
+    'angleGuidesAddedResponse': string,
+    'angleGuidesRemovedResponse': string,
     'myShapesCorners': string,
     'myShapesSides': string,
     'cornerA': string,

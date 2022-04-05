@@ -48,6 +48,10 @@ class QuadrilateralVisibilityControls extends VBox {
       // voicing
       voicingNameResponse: quadrilateralStrings.cornerLabels,
 
+      // a11y
+      checkedContextResponse: quadrilateralStrings.a11y.cornerLabelsAddedResponse,
+      uncheckedContextResponse: quadrilateralStrings.a11y.cornerLabelsRemovedResponse,
+
       // phet-io
       tandem: options.tandem.createTandem( 'cornerLabelsCheckbox' )
     } );
@@ -61,6 +65,10 @@ class QuadrilateralVisibilityControls extends VBox {
 
       // voicing
       voicingNameResponse: quadrilateralStrings.cornerGuides,
+
+      // a11y
+      checkedContextResponse: quadrilateralStrings.a11y.angleGuidesAddedResponse,
+      uncheckedContextResponse: quadrilateralStrings.a11y.angleGuidesRemovedResponse,
 
       // phet-io
       tandem: options.tandem.createTandem( 'cornerGuideCheckbox' )
