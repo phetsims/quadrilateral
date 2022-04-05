@@ -623,7 +623,7 @@ class QuadrilateralDescriber {
         const patternString = 'Equal Sides {{firstSide}} and {{secondSide}} are {{comparison}} equal Sides {{thirdSide}} and {{fourthSide}}.';
         statement = this.getTwoSidePairsDescription( adjacentEqualSidePairs, patternString );
       }
-      if ( shapeName === NamedQuadrilateral.TRAPEZOID || shapeName === NamedQuadrilateral.ISOSCELES_TRAPEZOID ) {
+      else if ( shapeName === NamedQuadrilateral.TRAPEZOID || shapeName === NamedQuadrilateral.ISOSCELES_TRAPEZOID ) {
 
         // TODO: We cannot assert this yet because parallel sides use angleToleranceInterval which can break when
         // the shape is not a parallelogram. See https://github.com/phetsims/quadrilateral/issues/108
