@@ -1114,7 +1114,8 @@ class QuadrilateralShapeModel {
    * @param side2
    */
   public areSidesParallel( side1: Side, side2: Side ) {
-    assert && assert( side1.vertex1.angleProperty.value && side2.vertex2.angleProperty.value, 'angles need to be available to determine parallel state' );
+    assert && assert( side1.vertex1.angleProperty.value !== null, 'angles need to be available to determine parallel state' );
+    assert && assert( side1.vertex2.angleProperty.value !== null, 'angles need to be available to determine parallel state' );
 
     // Two sides are parallel if the vertices of their connecting sides add up to Math.PI. The quadrilateral is
     // constructed such that the Side that connects these two sides vertex1 of side1 and vertex2 of side2
