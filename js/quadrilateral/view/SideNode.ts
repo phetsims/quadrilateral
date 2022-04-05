@@ -10,7 +10,7 @@
 
 import Property from '../../../../axon/js/Property.js';
 import merge from '../../../../phet-core/js/merge.js';
-import { DragListener, KeyboardDragListener, Path, SceneryEvent, Voicing } from '../../../../scenery/js/imports.js';
+import { DragListener, KeyboardDragListener, Line as LineNode, Path, SceneryEvent, Voicing } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import Side from '../model/Side.js';
@@ -21,6 +21,9 @@ import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import { Line, Shape } from '../../../../kite/js/imports.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
+
+// The dilation around side shapes when drawing the focus highlight.
+const FOCUS_HIGHLIGHT_DILATION = 15;
 
 class SideNode extends Voicing( Path, 1 ) {
   private side: Side;
@@ -72,6 +75,9 @@ class SideNode extends Voicing( Path, 1 ) {
 
     // Mutate options eagerly, but not in super because that doesn't work with the Voicing trait
     this.mutate( options );
+
+    // Reusable lineNode for calculating the shape of the focus highlight
+    const lineNode = new LineNode( 0, 0, 0, 0 );
 
     // listeners
     Property.multilink( [ side.vertex1.positionProperty, side.vertex2.positionProperty ], ( vertex1Position: Vector2, vertex2Position: Vector2 ) => {
@@ -138,6 +144,13 @@ class SideNode extends Voicing( Path, 1 ) {
 
       // transform shape to view coordinates
       this.shape = modelViewTransform.modelToViewShape( lineShape );
+
+      // Draw the custom focus highlight so that the highlight surrounds the shape of the line
+      const vertex1ViewPosition = modelViewTransform.modelToViewPosition( vertex1Position );
+      const vertex2ViewPosition = modelViewTransform.modelToViewPosition( vertex2Position );
+      lineNode.setLine( vertex1ViewPosition.x, vertex1ViewPosition.y, vertex2ViewPosition.x, vertex2ViewPosition.y );
+      lineNode.lineWidth = modelViewTransform.modelToViewDeltaX( Side.SIDE_WIDTH ) + FOCUS_HIGHLIGHT_DILATION;
+      this.focusHighlight = lineNode.getStrokedShape();
     } );
 
     // supports keyboard dragging, attempts to move both vertices in the direction of motion of the line
