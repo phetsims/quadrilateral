@@ -183,6 +183,10 @@ class QuadrilateralModel {
     // the next frame for these to be set after a reset.
     this.quadrilateralShapeModel.updateOrderDependentProperties();
 
+    // reset visibility Properties
+    this.cornerGuideVisibleProperty.reset();
+    this.vertexLabelsVisibleProperty.reset();
+
     // reset is not in progress anymore
     this.resetNotInProgressProperty.value = true;
   }
