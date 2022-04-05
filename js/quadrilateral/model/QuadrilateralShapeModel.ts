@@ -91,7 +91,6 @@ class QuadrilateralShapeModel {
 
   public angleToleranceIntervalProperty: DerivedProperty<number, boolean[]>;
   public tiltToleranceIntervalProperty: Property<number>;
-  public shapeAngleToleranceIntervalProperty: Property<number>;
 
   public shapeChangedEmitter: Emitter<[]>;
 
@@ -293,11 +292,6 @@ class QuadrilateralShapeModel {
         return toleranceInterval;
       }
     );
-
-    this.shapeAngleToleranceIntervalProperty = new NumberProperty( QuadrilateralQueryParameters.shapeAngleToleranceInterval, {
-      tandem: options.tandem.createTandem( 'shapeAngleToleranceIntervalProperty' ),
-      range: new Range( 0, 2 * Math.PI )
-    } );
 
     this.tiltToleranceIntervalProperty = new NumberProperty( QuadrilateralQueryParameters.tiltToleranceInterval, {
       tandem: options.tandem.createTandem( 'tiltToleranceIntervalProperty' ),
@@ -923,7 +917,7 @@ class QuadrilateralShapeModel {
    * very high the shape isn't incorrectly described.
    */
   public isShapeAngleEqualToOther( angle1: number, angle2: number ): boolean {
-    return Utils.equalsEpsilon( angle1, angle2, this.shapeAngleToleranceIntervalProperty.value );
+    return Utils.equalsEpsilon( angle1, angle2, QuadrilateralQueryParameters.shapeAngleToleranceInterval );
   }
 
   public isRightAngle( angle: number ): boolean {
