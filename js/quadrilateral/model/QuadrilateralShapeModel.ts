@@ -377,13 +377,15 @@ class QuadrilateralShapeModel {
         this.vertexC.positionProperty,
         this.vertexD.positionProperty ],
       ( position1: Vector2, position2: Vector2, position3: Vector2, position4: Vector2 ) => {
-        this.shapeChangedEmitter.emit();
 
         // Update Properties after Vertex positions have changed. Please note the usage of
         // setDeferred for Vertex position Properties in this sim because it is important
         // that this be called after all Vertex positions have been set when moving several
         // at once.
         this.updateOrderDependentProperties();
+
+        // so that emitter listeners arent called until after order dependent Properties are updated
+        this.shapeChangedEmitter.emit();
 
         if ( model.modelBoundsProperty.value ) {
           this.setVertexDragAreas();
