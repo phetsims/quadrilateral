@@ -472,7 +472,7 @@ class SoundClipCollection extends SoundGenerator {
   }
 
   // @private
-  dispose() {
+  override dispose() {
     this.disconnectClips();
     this.lowerOctaveClip.dispose();
     this.middleOctaveClip.dispose();
