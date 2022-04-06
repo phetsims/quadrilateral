@@ -1061,20 +1061,6 @@ class QuadrilateralDescriber {
     return orderedVertexPairs;
   }
 
-  private compareSidesForDescription( side1: Side, side2: Side ) {
-    let vertex1ToCompare = this.getVerticesOrderedForDescription( [ side1.vertex1, side1.vertex2 ] )[ 0 ];
-    let vertex2ToCompare = this.getVerticesOrderedForDescription( [ side2.vertex1, side2.vertex2 ] )[ 0 ];
-
-    // if the lowest vertices have the same position, we are comparing adjacent sides who share a vertex at the
-    // lowest intersection point - compare the other Side vertices instead
-    if ( vertex1ToCompare === vertex2ToCompare ) {
-      vertex1ToCompare = side1.getHighestVertex();
-      vertex2ToCompare = side2.getHighestVertex();
-    }
-
-    return this.compareVerticesForDescription( vertex1ToCompare, vertex2ToCompare );
-  }
-
   /**
    * Given a collection of SidePairs, order the sides so that they are in the order that they should appear in the
    * description. For a reason I don't fully understand, vertices and sides are described bottom to top, and left to
@@ -1084,14 +1070,14 @@ class QuadrilateralDescriber {
    */
   getSidePairsOrderedForDescription( sidePairs: SidePair[] ): SidePair[] {
 
-    // First we order the sides in each SidePair so that we can find the SidePair with the vertices
+    // First we order the sides within in each SidePair so that we can find the SidePair with the vertices
     // that should come first
     const orderedSidePairs: SidePair[] = [];
     sidePairs.forEach( sidePair => {
       const side1 = sidePair.side1;
       const side2 = sidePair.side2;
 
-      const sideComparison = this.compareSidesForDescription( side1, side2 );
+      const sideComparison = this.compareVerticesForDescription( side1.vertex1, side2.vertex1 );
 
       let firstSide = side1;
       let secondSide = side2;
@@ -1106,10 +1092,10 @@ class QuadrilateralDescriber {
       orderedSidePairs.push( { side1: firstSide, side2: secondSide } );
     } );
 
-    // the orderedSidePairs now have SidePairs with individual sides in the correct order, so we can sort the pairs
-    // by the first side (which should always come first)
+    // Now that Sides within each pair are ordered, SidePairs can be ordered relative to the first vertex
+    // of the first side
     const order = orderedSidePairs.sort( ( sidePairA, sidePairB ) => {
-      return this.compareSidesForDescription( sidePairA.side1, sidePairB.side1 );
+      return this.compareVerticesForDescription( sidePairA.side1.vertex1, sidePairB.side1.vertex1 );
     } );
 
     assert && assert( sidePairs.length === order.length, 'Order not determined for sidePairs' );
