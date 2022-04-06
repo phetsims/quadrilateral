@@ -154,7 +154,8 @@ class SideNode extends Voicing( Path, 1 ) {
     } );
 
     // supports keyboard dragging, attempts to move both vertices in the direction of motion of the line
-    const viewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralModel.MINOR_GRID_SPACING );
+    const viewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralModel.MAJOR_GRID_SPACING );
+    const minorViewDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralModel.MINOR_GRID_SPACING );
     this.addInputListener( new KeyboardDragListener( {
       transform: modelViewTransform,
       drag: ( vectorDelta: Vector2 ) => {
@@ -162,11 +163,11 @@ class SideNode extends Voicing( Path, 1 ) {
       },
 
       // velocity defined in view coordinates per second, assuming 60 fps
-      // dragVelocity: viewDragDelta * 60,
-      // shiftDragVelocity: ( viewDragDelta / 2 ) * 60,
+      dragVelocity: viewDragDelta * 60,
+      shiftDragVelocity: minorViewDelta * 60,
 
       downDelta: viewDragDelta,
-      shiftDownDelta: viewDragDelta / 2,
+      shiftDownDelta: minorViewDelta,
       moveOnHoldDelay: 750,
       moveOnHoldInterval: 50,
       tandem: options.tandem.createTandem( 'keyboardDragListener' )
