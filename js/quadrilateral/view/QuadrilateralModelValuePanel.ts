@@ -61,9 +61,17 @@ class QuadrilateralModelValuePanel extends Panel {
     } );
 
     const isParallelogramText = new Text( '', TEXT_OPTIONS );
-    const parallelogramToleranceIntervalText = new Text( '', TEXT_OPTIONS );
+    const sideABCDParallelText = new Text( '', TEXT_OPTIONS );
+    const sideBCDAParallelText = new Text( '', TEXT_OPTIONS );
     const parallelogramBox = new VBox( {
-      children: [ isParallelogramText, parallelogramToleranceIntervalText ],
+      children: [ isParallelogramText, sideABCDParallelText, sideBCDAParallelText ],
+      align: 'left'
+    } );
+
+    const sideABCDToleranceIntervalText = new Text( '', TEXT_OPTIONS );
+    const sideBCDAToleranceIntervalText = new Text( '', TEXT_OPTIONS );
+    const toleranceIntervalBox = new VBox( {
+      children: [ sideABCDToleranceIntervalText, sideBCDAToleranceIntervalText ],
       align: 'left'
     } );
 
@@ -81,6 +89,7 @@ class QuadrilateralModelValuePanel extends Panel {
         lengthBox,
         angleBox,
         parallelogramBox,
+        toleranceIntervalBox,
         shapeNameText,
         markerBox
       ],
@@ -103,11 +112,18 @@ class QuadrilateralModelValuePanel extends Panel {
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexC.angleProperty, rightBottomAngleText, 'Right bottom angle' );
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexD.angleProperty, leftBottomAngleText, 'Left bottom angle' );
 
-    // isParallelogramProperty
+    // parallelogram and paralle sides
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.isParallelogramProperty, isParallelogramText, 'Is parallelogram' );
+    // @ts-ignore - isParallelProperty is private, but I want to use it here as a special exception for debugging
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 0 ].isParallelProperty, sideABCDParallelText, '(AB, CD) parallel' );
+    // @ts-ignore - isParallelProperty is private, but I want to use it here as a special exception for debugging
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 1 ].isParallelProperty, sideBCDAParallelText, '(BC, DA) parallel' );
 
-    // angleToleranceInterval
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.angleToleranceIntervalProperty, parallelogramToleranceIntervalText, 'angleToleranceInterval' );
+    // angleToleranceIntervals for each opposite side pair
+    // @ts-ignore - angleToleranceInterval is private, but I want to use it here for now just for debugging
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 0 ].angleToleranceIntervalProperty, sideABCDToleranceIntervalText, '(AB, CD) angleToleranceInterval' );
+    // @ts-ignore - angleToleranceInterval is private, but I want to use it here for now just for debugging
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 1 ].angleToleranceIntervalProperty, sideBCDAToleranceIntervalText, '(BC, DA) angleToleranceInterval' );
 
     // shape name
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.shapeNameProperty, shapeNameText, 'shape name' );

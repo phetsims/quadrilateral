@@ -32,6 +32,7 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import VertexAngles from './VertexAngles.js';
+import ParallelSideChecker from './ParallelSideChecker.js';
 
 // A useful type for calculations for the vertex Shapes which define where the Vertex can move depending on
 // the positions of the other vertices. Lines are along the bounds of model space and RayIntersections
@@ -76,6 +77,8 @@ class QuadrilateralShapeModel {
   public rightSide: Side;
   public bottomSide: Side;
   public leftSide: Side;
+
+  public readonly parallelSideCheckers: ParallelSideChecker[];
 
   public readonly vertices: Vertex[];
   public readonly sides: Side[];
@@ -349,6 +352,13 @@ class QuadrilateralShapeModel {
 
     // @public {Emitter} - Emits an event whenever the shape of the Quadrilateral changes
     this.shapeChangedEmitter = new Emitter<[]>();
+
+    // ParallelSideCheckers are responsible for determining if opposite SidePairs are parallel within their dynamic
+    // angleToleranceIntervalProperty.
+    this.parallelSideCheckers = [
+      new ParallelSideChecker( this.oppositeSides[ 0 ], this.shapeChangedEmitter, model.resetNotInProgressProperty ),
+      new ParallelSideChecker( this.oppositeSides[ 1 ], this.shapeChangedEmitter, model.resetNotInProgressProperty )
+    ];
 
     // referenced for private use in functions
     this.model = model;
@@ -1095,37 +1105,17 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Returns true if two Sides are parallel with eachother, withing angleToleranceInterval
-   * @param side1
-   * @param side2
-   */
-  public areSidesParallel( side1: Side, side2: Side ) {
-    assert && assert( side1.vertex1.angleProperty.value !== null, 'angles need to be available to determine parallel state' );
-    assert && assert( side1.vertex2.angleProperty.value !== null, 'angles need to be available to determine parallel state' );
-
-    // Two sides are parallel if the vertices of their connecting sides add up to Math.PI. The quadrilateral is
-    // constructed such that the Side that connects these two sides vertex1 of side1 and vertex2 of side2
-    //         side1
-    // vertex1---------------vertex2
-    //    |                   |
-    //    |                   |
-    //    |                   |
-    //    |-------------------|
-    // vertex2   side2       vertex1
-    return this.isAngleEqualToOther( side1.vertex1.angleProperty.value! + side2.vertex2.angleProperty.value!, Math.PI );
-  }
-
-  /**
    * Update the Property monitoring if opposite sides are parallel with eachother.
    */
   updateParallelSidePairs() {
     const currentParallelSides = this.parallelSidePairsProperty.value;
 
     // only opposite sides can be parallel
-    for ( let i = 0; i < this.oppositeSides.length; i++ ) {
-      const oppositeSidePair = this.oppositeSides[ i ];
+    for ( let i = 0; i < this.parallelSideCheckers.length; i++ ) {
+      const checker = this.parallelSideCheckers[ i ];
+      const oppositeSidePair = checker.sidePair;
 
-      const areSidesParallel = this.areSidesParallel( oppositeSidePair.side1, oppositeSidePair.side2 );
+      const areSidesParallel = checker.areSidesParallel();
       const hasSidePair = currentParallelSides.includes( oppositeSidePair );
 
       if ( hasSidePair && !areSidesParallel ) {
