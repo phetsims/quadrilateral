@@ -9,11 +9,12 @@
 import PreferencesConfiguration from '../../joist/js/preferences/PreferencesConfiguration.js';
 import Sim from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
-import { Color, ColorProperty } from '../../scenery/js/imports.js';
+import { Color, ColorProperty, HBox } from '../../scenery/js/imports.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import QuadrilateralSoundOptionsModel from './quadrilateral/model/QuadrilateralSoundOptionsModel.js';
 import QuadrilateralQueryParameters from './quadrilateral/QuadrilateralQueryParameters.js';
 import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';
+import QuadrilateralBluetoothConnectionPanel from './quadrilateral/view/QuadrilateralBluetoothConnectionPanel.js';
 import QuadrilateralSoundOptionsNode from './quadrilateral/view/QuadrilateralSoundOptionsNode.js';
 import quadrilateralStrings from './quadrilateralStrings.js';
 
@@ -21,6 +22,10 @@ const quadrilateralTitleString = quadrilateralStrings.quadrilateral.title;
 const calibrationDemoString = 'Device'; // this will never be translatable, keep out of json file
 
 const soundOptionsModel = new QuadrilateralSoundOptionsModel();
+
+// if requested by query parameter, include experimental bluetooth controls in the sim settings
+const controls = [ new QuadrilateralSoundOptionsNode( soundOptionsModel, Tandem.GENERAL_VIEW ) ];
+QuadrilateralQueryParameters.bluetooth && controls.push( new QuadrilateralBluetoothConnectionPanel( Tandem.GENERAL_VIEW ) );
 
 const simOptions = {
 
@@ -38,7 +43,7 @@ const simOptions = {
   // preferences configuration with defaults from package.json
   preferencesConfiguration: new PreferencesConfiguration( {
     generalOptions: {
-      simControls: new QuadrilateralSoundOptionsNode( soundOptionsModel, Tandem.GENERAL_VIEW )
+      simControls: new HBox( { children: controls, spacing: 10, align: 'top' } )
     }
   } )
 };

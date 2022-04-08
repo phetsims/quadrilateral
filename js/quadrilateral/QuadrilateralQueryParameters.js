@@ -107,6 +107,12 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // If provided, the simulation will act as a
   showModelValues: {
     type: 'flag'
+  },
+
+  // If provided, include experimental bluetooth features to connect to an external device that will control
+  // the simulation with BLE communication.
+  bluetooth: {
+    type: 'flag'
   }
 } );
 
