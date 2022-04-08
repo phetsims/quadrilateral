@@ -85,7 +85,7 @@ class QuadrilateralBluetoothConnectionPanel extends Panel {
     if ( event.target ) {
 
       // @ts-ignore
-      console.log( event.target.value );
+      console.log( event.target.value.getUint8( 0 ) );
     }
   }
 }
