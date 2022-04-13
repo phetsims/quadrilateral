@@ -148,7 +148,8 @@ class QuadrilateralScreenView extends ScreenView {
 
     // Rectangle showing available model bounds, requested in https://github.com/phetsims/quadrilateral/issues/49.
     // Rounded corners to look nice, but actual model bounds are pure Bounds2.
-    const playAreaViewBounds = modelViewTransform.modelToViewBounds( this.model.modelBoundsProperty.value );
+    assert && assert( this.model.modelBoundsProperty.value !== null );
+    const playAreaViewBounds = modelViewTransform.modelToViewBounds( this.model.modelBoundsProperty.value! );
     const boundsRectangle = new Rectangle( playAreaViewBounds, 5, 5, { stroke: 'white', lineWidth: 2 } );
     this.addChild( boundsRectangle );
 
