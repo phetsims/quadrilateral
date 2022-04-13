@@ -44,7 +44,7 @@ class QuadrilateralAlerter extends Alerter {
     this.parallelogramChangeUtterance = new Utterance( {
       alert: new ResponsePacket(),
       announcerOptions: {
-        priority: 2
+        priority: Utterance.MEDIUM_PRIORITY
       }
     } );
 
