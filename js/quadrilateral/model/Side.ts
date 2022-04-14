@@ -192,9 +192,8 @@ class Side {
    *                                  this.vertex2
    *
    * @param {Side} otherSide
-   * @public
    */
-  connectToSide( otherSide: Side ) {
+  public connectToSide( otherSide: Side ) {
     assert && assert( !this.isConnected, 'Cannot connect a side that is already connected to another.' );
     assert && assert( otherSide !== this, 'Cannot connect a side to itself.' );
 

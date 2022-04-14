@@ -214,7 +214,6 @@ class ParallelsVolumeSoundView {
   /**
    * Creates and returns (for disposal) a multilink that sets the output level of a SoundGenerator from the
    * difference in tilts of two sides.
-   * @public
    */
   public createTiltMultilink( sideA: Side, sideB: Side, applyOutputLevel: ( outputLevel: number ) => void ) {
     return Property.multilink(

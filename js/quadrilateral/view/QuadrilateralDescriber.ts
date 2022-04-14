@@ -748,7 +748,6 @@ class QuadrilateralDescriber {
    * something like
    *
    * "Corner C is somewhat smaller than corner A and Corner B is a little smaller than Corner D."
-   * @private
    */
   private getGeneralQuadrilateralVertexDescription() {
     const orderedOppositeVertexPairs = this.getVertexPairsOrderedForDescription( this.shapeModel.oppositeVertices );
@@ -776,7 +775,6 @@ class QuadrilateralDescriber {
    * Returns a "basic" description for a quadrilateral without interesting side Properties. Describes the relative
    * lengths of opposite sides of the quadrilateral. Sides in the descriptions are ordered by the method in
    * getSidePairsOrderedForDescription.
-   * @private
    */
   private getGeneralQuadrilateralSideDescription(): string {
 
@@ -831,7 +829,6 @@ class QuadrilateralDescriber {
    *
    * The order that the vertices are described in the statement is determined by the sorting algorithm in
    * getVerticesOrderedForDescription.
-   * @private
    */
   private getTwoEqualVerticesAngleDescription( vertex1: Vertex, vertex2: Vertex ) {
 
@@ -868,7 +865,6 @@ class QuadrilateralDescriber {
    * "Equal corners D and C are much smaller than equal corners A and B."
    *
    * The order in which VertexPairs are described are defined by the algorithm of getVertexPairsOrderedForDescription.
-   * @private
    */
   private getTwoPairsOfEqualVerticesAngleDescription( vertexPairs: VertexPair[] ): string {
 
@@ -914,7 +910,6 @@ class QuadrilateralDescriber {
 
   /**
    * Get the described label for a Side
-   * @param side
    */
   getSideDescription( side: Side ): string {
     const label = this.sideLabelMap.get( side )!;
@@ -1066,8 +1061,7 @@ class QuadrilateralDescriber {
    * description. For a reason I don't fully understand, vertices and sides are described bottom to top, and left to
    * right. First, we order each side within the SidePair with that criterion. Then we order the SidePairs for the
    * final returned array.
-   * @param sidePairs
-   */
+ */
   getSidePairsOrderedForDescription( sidePairs: SidePair[] ): SidePair[] {
 
     // First we order the sides within in each SidePair so that we can find the SidePair with the vertices

@@ -126,9 +126,8 @@ class Vertex {
 
   /**
    * Reset this vertex.
-   * @public
    */
-  reset() {
+  public reset() {
     this.positionProperty.reset();
   }
 
@@ -169,7 +168,7 @@ class Vertex {
    *        /           \
    * vertex1 --------- vertex2
    */
-  connectToOthers( vertex1: Vertex, vertex2: Vertex ) {
+  public connectToOthers( vertex1: Vertex, vertex2: Vertex ) {
     this.vertex1 = vertex1;
     this.vertex2 = vertex2;
   }
@@ -188,14 +187,13 @@ class Vertex {
    *                   sideC
    *
    * See https://en.wikipedia.org/wiki/Law_of_cosines
-   * @public
    *
    * @param {Vector2} vertex1Position
    * @param {Vector2} vertex2Position - returns angle at this vertex, between vertexAPosition and vertexCPosition
    * @param {Vector2} vertex3Position
    * @param {boolean} validateShape
    */
-  static calculateAngle( vertex1Position: Vector2, vertex2Position: Vector2, vertex3Position: Vector2, validateShape = true ) {
+  public static calculateAngle( vertex1Position: Vector2, vertex2Position: Vector2, vertex3Position: Vector2, validateShape = true ) {
 
     const sideA = vertex1Position.distance( vertex2Position );
     const sideB = vertex3Position.distance( vertex2Position );

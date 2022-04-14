@@ -196,9 +196,8 @@ class SuccessSoundView {
    * Start playing the sound clips that are related to changing the quadrilateral
    * shape while it remains in parallelogram. This is only played if we are not already
    * playing any other sounds.
-   * @private
    */
-  startPlayingMaintenanceSoundClip() {
+  private startPlayingMaintenanceSoundClip() {
     assert && assert( this.maintenanceSoundClip, 'maintenanceSoundClip must be constructed to play' );
     const maintenanceSoundClip = this.maintenanceSoundClip!;
 
@@ -276,9 +275,8 @@ class SuccessSoundView {
   /**
    * Stop playing all SoundClips related to maintaining the parallelogram state
    * while changing the quadrilateral.
-   * @private
    */
-  stopPlayingMaintenanceSoundClip() {
+  private stopPlayingMaintenanceSoundClip() {
     assert && assert( this.maintenanceSoundClip, 'maintenanceSoundClip needs to be constructed before stopping play' );
     const maintenanceSoundClip = this.maintenanceSoundClip!;
 
@@ -292,7 +290,7 @@ class SuccessSoundView {
   /**
    * Stop playing sounds related to the "length" maintenance with the Maintenance sound design.
    */
-  stopPlayingLengthMaintenanceSoundClip() {
+  private stopPlayingLengthMaintenanceSoundClip() {
     assert && assert( this.lengthMaintenanceSoundClip, 'lengthMaintenanceSoundClip needs to be constructed before stopping play' );
     const lengthMaintenanceSoundClip = this.lengthMaintenanceSoundClip!;
 
@@ -314,11 +312,10 @@ class SuccessSoundView {
   /**
    * Create new sound clips for the collection of sounds. Not sure which (if any) we will use so to demonstrate
    * to the design team we are creating these options to play with.
-   * @private
    *
    * @param {SuccessSoundCollection} successSoundCollection - See QuadrilateralSoundOptionsModel
    */
-  createSoundClips( successSoundCollection: SuccessSoundCollection ) {
+  private createSoundClips( successSoundCollection: SuccessSoundCollection ) {
     this.disposeSoundClips();
 
     const soundClipOptions = {
@@ -348,9 +345,8 @@ class SuccessSoundView {
 
   /**
    * Dispose SoundClips and remove hem from the audioManager.
-   * @private
    */
-  disposeSoundClips() {
+  private disposeSoundClips() {
     if ( this.successSoundClip ) {
       soundManager.removeSoundGenerator( this.successSoundClip );
       this.successSoundClip.dispose();
@@ -378,7 +374,6 @@ class SuccessSoundView {
 
   /**
    * Required by the usage to implement. Maybe create a supertype with this.
-   * @public
    *
    * @param dt - time step for the animation, in seconds
    */
@@ -409,9 +404,8 @@ class SuccessSoundView {
 
   /**
    * Dispose this SoundView, disposing Soundclips and removing them from the soundManager.
-   * @public
    */
-  dispose() {
+  public dispose() {
     this.shapeIdentificationSound.dispose();
 
     this.disposeSuccessSoundView();

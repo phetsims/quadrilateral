@@ -54,7 +54,6 @@ class QuartetSoundView {
 
   /**
    * Step the sound view, playing sounds for their allotted time.
-   * @public
    */
   public step( dt: number ): void {
     this.topSideSoundView.step( dt );

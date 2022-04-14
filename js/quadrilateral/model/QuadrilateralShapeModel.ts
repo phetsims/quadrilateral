@@ -350,7 +350,7 @@ class QuadrilateralShapeModel {
     // unnamed shape.
     this.shapeNameProperty = new Property<null | NamedQuadrilateral>( null );
 
-    // @public {Emitter} - Emits an event whenever the shape of the Quadrilateral changes
+    // Emits an event whenever the shape of the Quadrilateral changes
     this.shapeChangedEmitter = new Emitter<[]>();
 
     // ParallelSideCheckers are responsible for determining if opposite SidePairs are parallel within their dynamic
@@ -475,7 +475,6 @@ class QuadrilateralShapeModel {
 
   /**
    * Save the current set of vertex angles to this.savedVertexAngles.
-   * @private
    */
   private saveVertexAngles(): void {
     this.savedVertexAngles = this.getVertexAngles();
@@ -589,7 +588,6 @@ class QuadrilateralShapeModel {
 
   /**
    * Create the drag area for a vertex from the positions of the others. The vertex area
-   * @private
    *
    * @param modelBounds - The bounds containing all vertices (entire model space)
    * @param vertexA - The vertex whose area we are determining
@@ -597,7 +595,7 @@ class QuadrilateralShapeModel {
    * @param vertexC - the next vertex from vertexB, moving clockwise
    * @param vertexD - the next vertex from vertexC, moving clockwise
    */
-  createVertexArea( modelBounds: Bounds2, vertexA: Vertex, vertexB: Vertex, vertexC: Vertex, vertexD: Vertex ): Shape {
+  private createVertexArea( modelBounds: Bounds2, vertexA: Vertex, vertexB: Vertex, vertexC: Vertex, vertexD: Vertex ): Shape {
 
     const allVerticesInBounds = _.every( [ vertexA, vertexB, vertexC, vertexD ], vertex => modelBounds.containsPoint( vertex.positionProperty.value ) );
     const vertexPositionsUnique = _.uniqBy( [ vertexA, vertexB, vertexC, vertexD ].map( vertex => vertex.positionProperty.value.toString() ), positionString => {
@@ -766,7 +764,6 @@ class QuadrilateralShapeModel {
    * @param directedLines
    * @param firstLineIntersectionPair
    * @param secondLineIntersectionPair
-   * @private
    */
   private static getPointsAlongBoundary( directedLines: Line[], firstLineIntersectionPair: LineIntersectionPair, secondLineIntersectionPair: LineIntersectionPair ): Vector2[] {
     const points = [];
@@ -1170,9 +1167,8 @@ class QuadrilateralShapeModel {
    * translated so that the centroid of the shape is in the center of model space (0, 0). The final result is that only
    * the tilt of the top side remains anchored. Perhaps if a gyroscope is added in the future we may be able to rotate
    * the shape correctly without anchoring the top side.
-   * @private
    */
-  setPositionsFromLengthAndAngleData( topLength: number, rightLength: number, bottomLength: number, leftLength: number, p1Angle: number, p2Angle: number, p3Angle: number, p4Angle: number ) {
+  public setPositionsFromLengthAndAngleData( topLength: number, rightLength: number, bottomLength: number, leftLength: number, p1Angle: number, p2Angle: number, p3Angle: number, p4Angle: number ) {
 
     // only try to set to sim if values look reasonable - we want to handle this gracefully, the sim shouldn't crash
     // if data isn't right
@@ -1273,9 +1269,8 @@ class QuadrilateralShapeModel {
 
   /**
    * Update the drag areas for all vertices.
-   * @private
    */
-  setVertexDragAreas() {
+  private setVertexDragAreas() {
     this.vertexA.dragAreaProperty.set( this.createVertexArea( this.model.modelBoundsProperty.value!, this.vertexA, this.vertexB, this.vertexC, this.vertexD ) );
     this.vertexB.dragAreaProperty.set( this.createVertexArea( this.model.modelBoundsProperty.value!, this.vertexB, this.vertexC, this.vertexD, this.vertexA ) );
     this.vertexC.dragAreaProperty.set( this.createVertexArea( this.model.modelBoundsProperty.value!, this.vertexC, this.vertexD, this.vertexA, this.vertexB ) );

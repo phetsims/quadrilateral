@@ -67,7 +67,7 @@ class SuccessSoundFile extends EnumerationValue {
 }
 
 // Maps QuartetSoundFile to the WrappedAudioBuffer for the SoundClip
-const AUDIO_BUFFER_MAP = new Map();
+const AUDIO_BUFFER_MAP: Map<QuartetSoundFile, WrappedAudioBuffer> = new Map();
 AUDIO_BUFFER_MAP.set( QuartetSoundFile.ONE, quadLoop01_mp3 );
 AUDIO_BUFFER_MAP.set( QuartetSoundFile.TWO, quadLoop02_mp3 );
 AUDIO_BUFFER_MAP.set( QuartetSoundFile.THREE, quadLoop03_mp3 );
@@ -83,25 +83,13 @@ class SuccessSoundCollection {
   public readonly failureSound: WrappedAudioBuffer;
   public readonly maintenanceSound: WrappedAudioBuffer;
 
-  /**
-   * @param successSound
-   * @param failureSound
-   * @param maintenanceSound
-   */
   constructor( successSound: WrappedAudioBuffer, failureSound: WrappedAudioBuffer, maintenanceSound: WrappedAudioBuffer ) {
-
-    // @public (read-only) {WrappedAudioBuffer}
     this.successSound = successSound;
     this.failureSound = failureSound;
     this.maintenanceSound = maintenanceSound;
   }
 }
 
-// TODO: How to do this? I think it should be
-// const SUCCESS_SOUND_COLLECTION_MAP: Map<SuccessSoundFile, SuccessSoundCollection> = new Map();
-// But typescript complains:  "TS2749: 'SuccessSoundFile' refers to a value, but is being used as a type here. Did you
-// mean 'typeof SuccessSoundFile'?"
-// See https://github.com/phetsims/quadrilateral/issues/27
 const SUCCESS_SOUND_COLLECTION_MAP: Map<SuccessSoundFile, SuccessSoundCollection> = new Map();
 SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.ONE, new SuccessSoundCollection( quadIntoParallel001_mp3, quadOutOfParallel001_mp3, quadMovingInParallelSuccessLoop001_wav ) );
 SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.TWO, new SuccessSoundCollection( quadIntoParallel002_mp3, quadOutOfParallel002_mp3, quadMovingInParallelSuccessLoop002_mp3 ) );
@@ -117,8 +105,8 @@ class QuadrilateralSoundOptionsModel {
   public static SoundDesign: SoundDesign;
   public static QuartetSoundFile: QuartetSoundFile;
   public static SuccessSoundFile: SuccessSoundFile;
-  public static AUDIO_BUFFER_MAP: Map<QuartetSoundFile, WrappedAudioBuffer>;
-  public static SUCCESS_SOUND_COLLECTION_MAP: Map<SuccessSoundFile, SuccessSoundCollection>;
+  public static AUDIO_BUFFER_MAP = AUDIO_BUFFER_MAP;
+  public static SUCCESS_SOUND_COLLECTION_MAP = SUCCESS_SOUND_COLLECTION_MAP;
 
   constructor() {
 
@@ -141,10 +129,6 @@ class QuadrilateralSoundOptionsModel {
     this.maintenanceSoundRequiresEqualLengthsProperty = new BooleanProperty( QuadrilateralQueryParameters.equalLengthsForMaintenanceSound );
   }
 }
-
-// @public @static
-QuadrilateralSoundOptionsModel.AUDIO_BUFFER_MAP = AUDIO_BUFFER_MAP;
-QuadrilateralSoundOptionsModel.SUCCESS_SOUND_COLLECTION_MAP = SUCCESS_SOUND_COLLECTION_MAP;
 
 quadrilateral.register( 'QuadrilateralSoundOptionsModel', QuadrilateralSoundOptionsModel );
 export { SoundDesign };

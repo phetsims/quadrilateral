@@ -97,7 +97,6 @@ class ParallelsStaccatoSoundView {
     };
     this.model.resetNotInProgressProperty.link( resetListener );
 
-    // @private {function} - for disposal
     this.disposeParallelsStaccatoSoundView = () => {
       this.model.quadrilateralShapeModel.shapeChangedEmitter.removeListener( shapeChangeListener );
       this.model.resetNotInProgressProperty.unlink( resetListener );
@@ -141,10 +140,7 @@ class ParallelsStaccatoSoundView {
     this.remainingPlayTime = 0;
   }
 
-  /**
-   * @public
-   */
-  dispose() {
+  public dispose() {
     this.disposeParallelsStaccatoSoundView();
   }
 }
@@ -179,7 +175,7 @@ class QuadrilateralPitchedPopGenerator extends SoundGenerator {
 
     super( options );
 
-    // @private {Range} - range of pitches to be produced
+    // range of pitches to be produced
     this.pitchRange = options.pitchRange;
 
     // a dynamics compressor node used to limit max output amplitude, otherwise distortion tends to occur when lots of
@@ -196,8 +192,8 @@ class QuadrilateralPitchedPopGenerator extends SoundGenerator {
     dynamicsCompressorNode.connect( this.soundSourceDestination );
 
     // create the sources - several are created so that pops can be played in rapid succession if desired
-    // @private {{oscillator:OscillatorNode, gainNode:GainNode}[]} - an array of sound source, several are created so
-    // that pops can be played in rapid succession without interfering with one another
+    // an array of sound source, several are created so that pops can be played in rapid succession without interfering
+    // with one another
     this.soundSources = [];
     _.times( options.numPopGenerators, () => {
 
@@ -220,7 +216,6 @@ class QuadrilateralPitchedPopGenerator extends SoundGenerator {
       } );
     } );
 
-    // @private
     this.nextSoundSourceIndex = 0;
   }
 

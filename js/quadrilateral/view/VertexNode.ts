@@ -99,7 +99,6 @@ class VertexNode extends Voicing( Circle, 1 ) {
     } );
     this.addInputListener( keyboardDragListener );
 
-    // @private {DragListener}
     const dragListener = new DragListener( {
       transform: modelViewTransform,
       drag: ( event: SceneryEvent, listener: DragListener ) => {

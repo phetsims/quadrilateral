@@ -303,7 +303,6 @@ class SideNode extends Voicing( Path, 1 ) {
   /**
    * Rotate one vertex around another by moving the "arm" vertex as if it were being directly dragged while keeping the
    * pressed vertex locked in place.
-   * @private
    *
    * @param anchorVertex - Anchor vertex we are rotating around.
    * @param armVertex - Vertex being repositioned.

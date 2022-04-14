@@ -80,7 +80,7 @@ class QuartetSideSoundView {
     this.side = side;
     this.resetNotInProgressProperty = resetNotInProgressProperty;
 
-    // @private {Map} - A map that goes from playback rate to the created SoundClipCollection.
+    // A map that goes from playback rate to the created SoundClipCollection.
     this.playbackRateToSoundClipCollection = new Map();
 
     // TODO: selectedSound is one of SoundFile enumeration, how do we do this?
@@ -106,7 +106,6 @@ class QuartetSideSoundView {
     // The SoundClipCollection that is currently active for the given value of the Side tiltProperty.
     this.activeSoundClipCollection = null;
 
-    // @private {function} - for disposal
     this.disposeQuartetSideSoundView = () => {
       this.resetNotInProgressProperty.unlink( resetListener );
       quartetSoundFileProperty.unlink( createSoundClipsListener );
@@ -136,9 +135,8 @@ class QuartetSideSoundView {
 
   /**
    * Dispose the active sound clips.
-   * @private
    */
-  disposeSoundClips() {
+  private disposeSoundClips() {
 
     // remove the previous sound generators
     this.playbackRateToSoundClipCollection.forEach( ( soundClipCollection, playbackRate ) => {
@@ -151,9 +149,8 @@ class QuartetSideSoundView {
 
   /**
    * Dispose the QuartetSideSoundView by removing SoundClipCollections from the soundManager and dispose them.
-   * @public
    */
-  dispose() {
+  public dispose() {
     this.disposeSoundClips();
     this.disposeQuartetSideSoundView();
   }
@@ -161,9 +158,8 @@ class QuartetSideSoundView {
   /**
    * Start playing sounds. Works by resetting the amount of time that sounds have been playing so that we will try
    * to start playing sounds in the next animation frame.
-   * @public
    */
-  startPlayingSounds() {
+  public startPlayingSounds() {
     assert && assert( this.side.tiltProperty.value !== Number.POSITIVE_INFINITY, 'tilts cannot be infinite in sound design' );
     const exponential = Utils.roundToInterval( this.tiltToPlaybackExponential.evaluate( this.side.tiltProperty.value ), 1 );
     const playbackRate = Math.pow( 2, exponential / 12 );
@@ -214,9 +210,6 @@ class QuartetSideSoundView {
 
   /**
    * Step the sound view, stopping all of the SoundClipCollections.
-   * @public
-   *
-   * @param {number} dt
    */
   public step( dt: number ): void {
     this.playbackRateToSoundClipCollection.forEach( ( value: SoundClipCollection ) => {
@@ -431,8 +424,7 @@ class SoundClipCollection extends SoundGenerator {
     }
   }
 
-  // @private
-  connectClips() {
+  public connectClips() {
     assert && assert( !this.connected, 'Cannot connect clips to an audio context if already connected.' );
 
     this.lowerOctaveClip.connect( this.outputLevelGainNode );
@@ -442,8 +434,7 @@ class SoundClipCollection extends SoundGenerator {
     this.connected = true;
   }
 
-  // @private
-  disconnectClips() {
+  public disconnectClips() {
     if ( this.connected ) {
       this.lowerOctaveClip.disconnect( this.outputLevelGainNode );
       this.middleOctaveClip.disconnect( this.outputLevelGainNode );
@@ -471,8 +462,7 @@ class SoundClipCollection extends SoundGenerator {
     }
   }
 
-  // @private
-  override dispose() {
+  public override dispose() {
     this.disconnectClips();
     this.lowerOctaveClip.dispose();
     this.middleOctaveClip.dispose();
