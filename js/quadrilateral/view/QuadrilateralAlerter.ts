@@ -6,13 +6,14 @@
 
 import quadrilateral from '../../quadrilateral.js';
 import ShapeSnapshot from '../model/ShapeSnapshot.js';
-import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import Utterance from '../../../../utterance-queue/js/Utterance.js';
 import ResponsePacket from '../../../../utterance-queue/js/ResponsePacket.js';
 import Alerter from '../../../../scenery-phet/js/accessibility/describers/Alerter.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
+import QuadrilateralScreenView from './QuadrilateralScreenView.js';
+import { Voicing } from '../../../../scenery/js/imports.js';
 
 const ALERT_INTERVAL = 1; // in seconds
 
@@ -25,13 +26,13 @@ class QuadrilateralAlerter extends Alerter {
   private alertDirty: boolean;
   private timeSinceLastAlert: number;
 
-  constructor( model: QuadrilateralModel, quadrilateralDescriber: QuadrilateralDescriber ) {
+  constructor( model: QuadrilateralModel, screenView: QuadrilateralScreenView ) {
     super();
 
     this.alertDirty = false;
     this.timeSinceLastAlert = 0;
 
-    this.quadrilateralDescriber = quadrilateralDescriber;
+    this.quadrilateralDescriber = screenView.quadrilateralDescriber;
     this.model = model;
 
     this.shapeSnapshot = new ShapeSnapshot( model.quadrilateralShapeModel );
@@ -47,6 +48,11 @@ class QuadrilateralAlerter extends Alerter {
         priority: Utterance.MEDIUM_PRIORITY
       }
     } );
+
+    // So that this content respects voicingVisible.
+    // TODO: Consider announcing through the QuadrilateralNode instead of needing registerUtteranceToNode.
+    Voicing.registerUtteranceToNode( this.utterance, screenView );
+    Voicing.registerUtteranceToNode( this.parallelogramChangeUtterance, screenView );
 
     // If we ever change from being in parallelogram to not in parallelogram, we want to describe that change
     model.quadrilateralShapeModel.isParallelogramProperty.link( () => {
