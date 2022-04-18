@@ -16,6 +16,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import vibrationManager from '../../../../tappi/js/vibrationManager.js';
 
 // constants
 const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
@@ -137,10 +138,10 @@ class VertexNode extends Voicing( Circle, 1 ) {
     // vibration
     vertex.isPressedProperty.lazyLink( isPressed => {
       if ( isPressed ) {
-        navigator.vibrate( [ 10000 ] );
+        vibrationManager.startVibrate( [ 100, 100 ] );
       }
       else {
-        navigator.vibrate( 0 );
+        vibrationManager.stopVibrate();
       }
     } );
 
