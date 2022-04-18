@@ -76,7 +76,7 @@ class ParallelSideChecker {
       const verticesPressedArray = [ side1Vertex1Pressed, side1Vertex2Pressed, side2Vertex1Pressed, side2Vertex2Pressed ];
       const numberOfVerticesPressed = _.countBy( verticesPressedArray ).true;
       const anySelfSidesPressed = side1Pressed || side2Pressed;
-      const anyOppositeSidesPressed = otherSide1Pressed || otherSide2Pressed;
+      const anyOtherSidesPressed = otherSide1Pressed || otherSide2Pressed;
 
       let toleranceInterval;
 
@@ -106,7 +106,7 @@ class ParallelSideChecker {
           // shape to become a parallelogram while it is being dragged.
           toleranceInterval = Number.NEGATIVE_INFINITY;
         }
-        else if ( anyOppositeSidesPressed && !this.isParallelProperty.value ) {
+        else if ( anyOtherSidesPressed && !this.isParallelProperty.value ) {
 
           // The other sides are being pressed and my sides are not currently parallel. While dragging a side we
           // do not want the shape to become a parallelogram within a finite angleToleranceInterval so make sure
