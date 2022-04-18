@@ -356,8 +356,8 @@ class QuadrilateralShapeModel {
     // ParallelSideCheckers are responsible for determining if opposite SidePairs are parallel within their dynamic
     // angleToleranceIntervalProperty.
     this.parallelSideCheckers = [
-      new ParallelSideChecker( this.oppositeSides[ 0 ], this.shapeChangedEmitter, model.resetNotInProgressProperty ),
-      new ParallelSideChecker( this.oppositeSides[ 1 ], this.shapeChangedEmitter, model.resetNotInProgressProperty )
+      new ParallelSideChecker( this.oppositeSides[ 0 ], this.oppositeSides[ 1 ], this.shapeChangedEmitter, model.resetNotInProgressProperty ),
+      new ParallelSideChecker( this.oppositeSides[ 1 ], this.oppositeSides[ 0 ], this.shapeChangedEmitter, model.resetNotInProgressProperty )
     ];
 
     // referenced for private use in functions

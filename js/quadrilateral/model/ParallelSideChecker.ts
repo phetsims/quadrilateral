@@ -47,29 +47,36 @@ class ParallelSideChecker {
 
   /**
    * @param oppositeSidePair - The SidePair with opposite sides that we want to inspect for parallelism
+   * @param otherOppositeSidePair - The state of interaction with the other sides may determine this checker's tolerance
    * @param shapeChangedEmitter - Emitter for when the quadrilateral shape changes in some way.
    * @param resetNotInProgressProperty - Is the model currently not resetting?
    */
-  constructor( oppositeSidePair: SidePair, shapeChangedEmitter: Emitter, resetNotInProgressProperty: Property<boolean> ) {
+  constructor( oppositeSidePair: SidePair, otherOppositeSidePair: SidePair, shapeChangedEmitter: Emitter, resetNotInProgressProperty: Property<boolean> ) {
 
     this.sidePair = oppositeSidePair;
 
     this.side1 = oppositeSidePair.side1;
     this.side2 = oppositeSidePair.side2;
 
+    const otherSide1 = otherOppositeSidePair.side1;
+    const otherSide2 = otherOppositeSidePair.side2;
+
     this.isParallelProperty = new BooleanProperty( false );
 
     this.angleToleranceIntervalProperty = new DerivedProperty( [
       this.side1.isPressedProperty,
       this.side2.isPressedProperty,
+      otherSide1.isPressedProperty,
+      otherSide2.isPressedProperty,
       this.side1.vertex1.isPressedProperty, this.side1.vertex2.isPressedProperty,
       this.side2.vertex1.isPressedProperty, this.side2.vertex2.isPressedProperty,
       resetNotInProgressProperty
-    ], ( side1Pressed, side2Pressed, side1Vertex1Pressed, side1Vertex2Pressed, side2Vertex1Pressed, side2Vertex2Pressed, resetNotInProgress ) => {
+    ], ( side1Pressed, side2Pressed, otherSide1Pressed, otherSide2Pressed, side1Vertex1Pressed, side1Vertex2Pressed, side2Vertex1Pressed, side2Vertex2Pressed, resetNotInProgress ) => {
 
       const verticesPressedArray = [ side1Vertex1Pressed, side1Vertex2Pressed, side2Vertex1Pressed, side2Vertex2Pressed ];
       const numberOfVerticesPressed = _.countBy( verticesPressedArray ).true;
-      const anySidesPressed = side1Pressed || side2Pressed;
+      const anySelfSidesPressed = side1Pressed || side2Pressed;
+      const anyOppositeSidesPressed = otherSide1Pressed || otherSide2Pressed;
 
       let toleranceInterval;
 
@@ -87,16 +94,23 @@ class ParallelSideChecker {
       else {
 
         // remaining cases apply to mouse, touch, and keyboard input
-        if ( anySidesPressed && this.isParallelProperty.value ) {
+        if ( anySelfSidesPressed && this.isParallelProperty.value ) {
 
           // A side has been picked up while the shape is a parallelogram - it should be impossible for the shape
           // to go "out" of parallelogram in this case because none of the angles should be changing.
           toleranceInterval = Number.POSITIVE_INFINITY;
         }
-        else if ( anySidesPressed && !this.isParallelProperty.value ) {
+        else if ( anySelfSidesPressed && !this.isParallelProperty.value ) {
 
           // A side as been picked up while the shape is NOT a parallelogram - it should be impossible for the
           // shape to become a parallelogram while it is being dragged.
+          toleranceInterval = Number.NEGATIVE_INFINITY;
+        }
+        else if ( anyOppositeSidesPressed && !this.isParallelProperty.value ) {
+
+          // The other sides are being pressed and my sides are not currently parallel. While dragging a side we
+          // do not want the shape to become a parallelogram within a finite angleToleranceInterval so make sure
+          // my sides will never become parallel.
           toleranceInterval = Number.NEGATIVE_INFINITY;
         }
         else if ( numberOfVerticesPressed >= 2 ) {
