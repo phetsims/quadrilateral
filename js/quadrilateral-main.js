@@ -11,6 +11,7 @@ import Sim from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
 import { Color, ColorProperty, HBox } from '../../scenery/js/imports.js';
 import Tandem from '../../tandem/js/Tandem.js';
+import vibrationManager from '../../tappi/js/vibrationManager.js';
 import QuadrilateralSoundOptionsModel from './quadrilateral/model/QuadrilateralSoundOptionsModel.js';
 import QuadrilateralQueryParameters from './quadrilateral/QuadrilateralQueryParameters.js';
 import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';
@@ -70,4 +71,6 @@ simLauncher.launch( () => {
 
   const sim = new Sim( quadrilateralTitleString, simScreens, simOptions );
   sim.start();
+
+  vibrationManager.initialize( sim.browserTabVisibleProperty, sim.activeProperty );
 } );

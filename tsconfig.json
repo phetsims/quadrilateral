@@ -9,6 +9,9 @@
     },
     {
       "path": "../bamboo/tsconfig-module.json"
+    },
+    {
+      "path": "../tappi"
     }
   ],
   "include": [

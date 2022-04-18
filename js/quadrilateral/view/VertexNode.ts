@@ -134,6 +134,16 @@ class VertexNode extends Voicing( Circle, 1 ) {
       }
     } );
 
+    // vibration
+    vertex.isPressedProperty.lazyLink( isPressed => {
+      if ( isPressed ) {
+        navigator.vibrate( [ 10000 ] );
+      }
+      else {
+        navigator.vibrate( 0 );
+      }
+    } );
+
     this.mutate( options );
   }
 }
