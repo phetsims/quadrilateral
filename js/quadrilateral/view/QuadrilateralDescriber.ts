@@ -210,8 +210,8 @@ class QuadrilateralDescriber {
         }
       }
       else if ( changedSideCount === 1 ) {
-        let sideNameString: string = '';
-        let directionString: string = '';
+        let sideNameString = '';
+        let directionString = '';
         if ( rightSideChanged ) {
           sideNameString = transformationsRightSideString;
           directionString = rightTiltDifference < 0 ? rightString : leftString;
