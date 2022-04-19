@@ -334,6 +334,8 @@ class QuadrilateralScreenView extends ScreenView {
       this.quadrilateralMarkerInput.step( dt );
     }
 
+    this.quadrilateralNode && this.quadrilateralNode.step( dt );
+
     vibrationManager.step( dt );
 
     this.quadrilateralAlerter.step( dt );

@@ -5,7 +5,7 @@
  */
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import { Node, NodeOptions } from '../../../../scenery/js/imports.js';
+import { IPaint, Node, NodeOptions } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import quadrilateralStrings from '../../quadrilateralStrings.js';
@@ -38,6 +38,9 @@ const vertexDString = quadrilateralStrings.vertexD;
 const EQUAL_SIDES_SEGMENT_LINE_WIDTH = 2;
 const DEFAULT_SIDES_SEGMENT_LINE_WIDTH = 1;
 
+// in seconds,
+const SHAPE_FILL_TIME = 0.35;
+
 type QuadrilateralNodeSelfOptions = {
   tandem?: Tandem;
 };
@@ -48,7 +51,13 @@ class QuadrilateralNode extends Node {
   private readonly model: QuadrilateralModel;
   private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
   private readonly scratchShapeModel: QuadrilateralShapeModel;
-  private readonly modelViewTransform: ModelViewTransform2
+  private readonly modelViewTransform: ModelViewTransform2;
+
+  private readonly vertexNodes: VertexNode[];
+  private readonly sideNodes: SideNode[];
+
+  private remainingTimeForShapeChangeFill: number;
+  private activeFill: IPaint | null;
 
   public constructor( quadrilateralModel: QuadrilateralModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, providedOptions?: QuadrilateralNodeOptions ) {
 
@@ -57,6 +66,9 @@ class QuadrilateralNode extends Node {
     }, providedOptions );
 
     super( options );
+
+    this.remainingTimeForShapeChangeFill = 0;
+    this.activeFill = null;
 
     this.model = quadrilateralModel;
     this.quadrilateralShapeModel = this.model.quadrilateralShapeModel;
@@ -153,29 +165,57 @@ class QuadrilateralNode extends Node {
 
     // listeners
     // Change colors when we have become a parallelogram
-    const vertexNodes = [ vertexNode1, vertexNode2, vertexNode3, vertexNode4 ];
-    const sideNodes = [ topSideNode, rightSideNode, bottomSideNode, leftSideNode ];
+    this.vertexNodes = [ vertexNode1, vertexNode2, vertexNode3, vertexNode4 ];
+    this.sideNodes = [ topSideNode, rightSideNode, bottomSideNode, leftSideNode ];
 
     Property.multilink( [ this.quadrilateralShapeModel.isParallelogramProperty, this.quadrilateralShapeModel.shapeNameProperty ], ( isParallelogram, shapeName ) => {
-      const fillProperty = isParallelogram ? QuadrilateralColors.quadrilateralParallelogramShapeColorProperty :
-                   shapeName !== null ? QuadrilateralColors.quadrilateralNamedShapeColorProperty :
-                   QuadrilateralColors.quadrilateralShapeColorProperty;
-
-      vertexNodes.forEach( vertexNode => { vertexNode.fill = fillProperty; } );
-      sideNodes.forEach( sideNode => { sideNode.fill = fillProperty; } );
+      if ( shapeName !== null ) {
+        this.remainingTimeForShapeChangeFill = SHAPE_FILL_TIME;
+      }
+      // const fillProperty = isParallelogram ? QuadrilateralColors.quadrilateralParallelogramShapeColorProperty :
+      //                      shapeName !== null ? QuadrilateralColors.quadrilateralNamedShapeColorProperty :
+      //                      QuadrilateralColors.quadrilateralShapeColorProperty;
+      //
+      // vertexNodes.forEach( vertexNode => { vertexNode.fill = fillProperty; } );
+      // sideNodes.forEach( sideNode => { sideNode.fill = fillProperty; } );
     } );
 
     // Design request - when all side lengths are equal (which will be true when square or rhombus) increase
     // side segment line width
     this.quadrilateralShapeModel.shapeNameProperty.link( shapeName => {
       const lineWidth = ( shapeName === NamedQuadrilateral.SQUARE || shapeName === NamedQuadrilateral.RHOMBUS ) ? EQUAL_SIDES_SEGMENT_LINE_WIDTH : DEFAULT_SIDES_SEGMENT_LINE_WIDTH;
-      sideNodes.forEach( sideNode => { sideNode.lineWidth = lineWidth; } );
+      this.sideNodes.forEach( sideNode => { sideNode.lineWidth = lineWidth; } );
     } );
 
     this.pdomOrder = [
       vertexParentNode,
       sideParentNode
     ];
+  }
+
+  public step( dt: number ) {
+    const previousActiveFill = this.activeFill;
+    if ( this.quadrilateralShapeModel.isParallelogramProperty.value ) {
+      this.activeFill = QuadrilateralColors.quadrilateralParallelogramShapeColorProperty;
+    }
+    else if ( this.remainingTimeForShapeChangeFill > 0 ) {
+      this.activeFill = QuadrilateralColors.quadrilateralNamedShapeColorProperty;
+    }
+    else {
+      this.activeFill = QuadrilateralColors.quadrilateralShapeColorProperty;
+    }
+
+    this.remainingTimeForShapeChangeFill = Math.max( 0, this.remainingTimeForShapeChangeFill - dt );
+
+    console.log( this.activeFill.value );
+    if ( previousActiveFill !== this.activeFill ) {
+      this.updateFills();
+    }
+  }
+
+  private updateFills() {
+    this.vertexNodes.forEach( vertexNode => { vertexNode.fill = this.activeFill; } );
+    this.sideNodes.forEach( sideNode => { sideNode.fill = this.activeFill; } );
   }
 }
 
