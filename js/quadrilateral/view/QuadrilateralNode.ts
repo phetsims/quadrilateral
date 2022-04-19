@@ -207,7 +207,6 @@ class QuadrilateralNode extends Node {
 
     this.remainingTimeForShapeChangeFill = Math.max( 0, this.remainingTimeForShapeChangeFill - dt );
 
-    console.log( this.activeFill.value );
     if ( previousActiveFill !== this.activeFill ) {
       this.updateFills();
     }
