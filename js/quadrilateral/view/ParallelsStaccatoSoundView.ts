@@ -164,7 +164,7 @@ class QuadrilateralPitchedPopGenerator extends SoundGenerator {
 
   public constructor( providedOptions?: QuadrilateralPitchedPopGeneratorOptions ) {
 
-    const options = optionize<QuadrilateralPitchedPopGeneratorOptions, QuadrilateralPitchedPopGeneratorSelfOptions, SoundGeneratorOptions>( {
+    const options = optionize<QuadrilateralPitchedPopGeneratorOptions, QuadrilateralPitchedPopGeneratorSelfOptions, SoundGeneratorOptions>()( {
 
       // the range of pitches that this pop generator will produce, in Hz
       pitchRange: new Range( 220, 660 ),

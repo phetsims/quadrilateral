@@ -134,7 +134,7 @@ class QuadrilateralShapeModel {
 
   constructor( model: QuadrilateralModel, providedOptions?: QuadrilateralShapeModelOptions ) {
 
-    const options = optionize<QuadrilateralShapeModelOptions, QuadrilateralShapeModelOptions>( {
+    const options = optionize<QuadrilateralShapeModelOptions, QuadrilateralShapeModelOptions>()( {
 
       // If true, validation will be done to ensure that the quadrilateral shape is reasonable. But this may be
       // undesireable if you want to use this QuadrilateralShapeModel to determine if the proposed shape is

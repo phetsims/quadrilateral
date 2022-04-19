@@ -31,7 +31,7 @@ type QuadrilateralVisibilityControlsOptions = QuadrilateralVisibilityControlsSel
 class QuadrilateralVisibilityControls extends VBox {
   constructor( cornerLabelsVisibleProperty: BooleanProperty, cornerGuideVisibleProperty: BooleanProperty, providedOptions?: QuadrilateralVisibilityControlsOptions ) {
 
-    const options = optionize<QuadrilateralVisibilityControlsOptions, QuadrilateralVisibilityControlsSelfOptions, VBoxOptions>( {
+    const options = optionize<QuadrilateralVisibilityControlsOptions, QuadrilateralVisibilityControlsSelfOptions, VBoxOptions>()( {
       align: 'left',
       spacing: 15,
 

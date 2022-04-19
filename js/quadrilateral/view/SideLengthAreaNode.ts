@@ -26,7 +26,7 @@ type SideLengthAreaNodeOptions = SideLengthAreaNodeSelfOptions & NodeOptions;
 class SideLengthAreaNode extends Node {
   constructor( shapeModel: QuadrilateralShapeModel, dragSide: Side, oppositeSide: Side, lengthSide: Side, modelViewTransform: ModelViewTransform2, providedOptions?: SideLengthAreaNodeOptions ) {
 
-    const options = optionize<SideLengthAreaNodeOptions, SideLengthAreaNodeSelfOptions, NodeOptions>( {
+    const options = optionize<SideLengthAreaNodeOptions, SideLengthAreaNodeSelfOptions, NodeOptions>()( {
 
       // Additional rotation to apply to the arcs so they generally look as expected
       drawRotation: 0

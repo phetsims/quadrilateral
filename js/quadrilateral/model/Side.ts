@@ -51,7 +51,7 @@ class Side {
    */
   constructor( vertex1: Vertex, vertex2: Vertex, tandem: Tandem, providedOptions?: SideOptions ) {
 
-    const options = optionize<SideOptions, SideOptions>( {
+    const options = optionize<SideOptions, SideOptions>()( {
 
       // Offsets the initial tilt by this Vector so that the tilt values can be the same for each side even
       // if they have different orientations.

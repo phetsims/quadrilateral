@@ -19,7 +19,7 @@ import optionize from '../../../../phet-core/js/optionize.js';
 class CalibrationContentNode extends VBox {
   constructor( model: QuadrilateralModel, providedOptions?: VBoxOptions ) {
 
-    const options = optionize<VBoxOptions, {}>( {
+    const options = optionize<VBoxOptions, {}>()( {
       align: 'center'
     }, providedOptions );
 
