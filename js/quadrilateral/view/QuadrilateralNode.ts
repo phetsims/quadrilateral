@@ -19,6 +19,7 @@ import CornerGuideNode from './CornerGuideNode.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import RightAngleIndicatorNode from './RightAngleIndicatorNode.js';
+import Property from '../../../../axon/js/Property.js';
 
 // constants
 const cornerAString = quadrilateralStrings.a11y.cornerA;
@@ -154,8 +155,12 @@ class QuadrilateralNode extends Node {
     // Change colors when we have become a parallelogram
     const vertexNodes = [ vertexNode1, vertexNode2, vertexNode3, vertexNode4 ];
     const sideNodes = [ topSideNode, rightSideNode, bottomSideNode, leftSideNode ];
-    this.quadrilateralShapeModel.isParallelogramProperty.link( isParallelogram => {
-      const fillProperty = isParallelogram ? QuadrilateralColors.quadrilateralParallelogramShapeColorProperty : QuadrilateralColors.quadrilateralShapeColorProperty;
+
+    Property.multilink( [ this.quadrilateralShapeModel.isParallelogramProperty, this.quadrilateralShapeModel.shapeNameProperty ], ( isParallelogram, shapeName ) => {
+      const fillProperty = isParallelogram ? QuadrilateralColors.quadrilateralParallelogramShapeColorProperty :
+                   shapeName !== null ? QuadrilateralColors.quadrilateralNamedShapeColorProperty :
+                   QuadrilateralColors.quadrilateralShapeColorProperty;
+
       vertexNodes.forEach( vertexNode => { vertexNode.fill = fillProperty; } );
       sideNodes.forEach( sideNode => { sideNode.fill = fillProperty; } );
     } );

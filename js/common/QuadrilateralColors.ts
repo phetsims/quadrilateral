@@ -34,6 +34,11 @@ const QuadrilateralColors = {
     default: new Color( 21, 255, 127 )
   } ),
 
+  // The color for the quadrilateral when you hit a "named" shape but we are still not a parallelogram
+  quadrilateralNamedShapeColorProperty: new ProfileColorProperty( quadrilateral, 'quadrilateralNamedShape', {
+    default: new Color( 255, 239, 189 )
+  } ),
+
   // Color for strokes of the quadrilateral shape
   quadrilateralShapeStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'quadrilateralShapeStroke', {
     default: 'black'
