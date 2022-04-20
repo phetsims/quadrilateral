@@ -16,9 +16,10 @@ class QuadrilateralScreen extends Screen {
 
   /**
    * @param {QuadrilateralSoundOptionsModel} soundOptionsModel
+   * @param {BooleanProperty} shapeIdentificationFeedbackEnabledProperty
    * @param {Object} [options]
    */
-  constructor( soundOptionsModel, options ) {
+  constructor( soundOptionsModel, shapeIdentificationFeedbackEnabledProperty, options ) {
 
     options = merge( {
       //TODO if you include homeScreenIcon or navigationBarIcon, use JOIST/ScreenIcon
@@ -27,7 +28,7 @@ class QuadrilateralScreen extends Screen {
     }, options );
 
     super(
-      () => new QuadrilateralModel( options.tandem.createTandem( 'model' ) ),
+      () => new QuadrilateralModel( shapeIdentificationFeedbackEnabledProperty, options.tandem.createTandem( 'model' ) ),
       model => new QuadrilateralScreenView( model, soundOptionsModel, options.tandem.createTandem( 'view' ) ),
       options
     );

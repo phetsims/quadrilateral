@@ -42,10 +42,7 @@ class QuadrilateralModel {
   public static MAJOR_GRID_SPACING = 0.05;
   public static MINOR_GRID_SPACING: number = QuadrilateralModel.MAJOR_GRID_SPACING / 4;
 
-  /**
-   * @param {Tandem} tandem
-   */
-  constructor( tandem: Tandem ) {
+  constructor( shapeIdentificationEnabledProperty: BooleanProperty, tandem: Tandem ) {
 
     // The bounds in model space. The bounds will change depending on available screen bounds so that
     // on larger screens there is more model space to explore diferent shapes.
@@ -73,7 +70,7 @@ class QuadrilateralModel {
     this.rotationMarkerDetectedProperty = new BooleanProperty( false );
 
     // Whether or not visual and auditory feedback related to identifying shapes when not a parallelogram is enabled.
-    this.shapeIdentificationFeedbackEnabledProperty = new BooleanProperty( QuadrilateralQueryParameters.shapeIdentificationFeedback );
+    this.shapeIdentificationFeedbackEnabledProperty = shapeIdentificationEnabledProperty;
 
     // The amount of rotation in radians of the marker. Only useful when the ?markerInput
     // is used. This is an experimental feature that will support rotating the shape when
