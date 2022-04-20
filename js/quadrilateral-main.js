@@ -30,7 +30,10 @@ const soundOptionsModel = new QuadrilateralSoundOptionsModel();
 const shapeIdentificationFeedbackEnabledProperty = new BooleanProperty( QuadrilateralQueryParameters.shapeIdentificationFeedback );
 const shapeIdentificationFeedbackCheckbox = new Checkbox(
   new Text( 'Shape Identification Feedback', QuadrilateralConstants.PANEL_LABEL_TEXT_OPTIONS ),
-  shapeIdentificationFeedbackEnabledProperty
+  shapeIdentificationFeedbackEnabledProperty,
+  {
+    tandem: Tandem.GENERAL_VIEW
+  }
 );
 
 // if requested by query parameter, include experimental bluetooth controls in the sim settings
