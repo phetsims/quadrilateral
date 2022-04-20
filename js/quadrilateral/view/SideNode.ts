@@ -259,11 +259,13 @@ class SideNode extends Voicing( Path, 1 ) {
     //       and finalized before publication.  See https://github.com/phetsims/quake/issues/13.
     side.isPressedProperty.lazyLink( isPressed => {
 
-      if ( isPressed ) {
-        navigator.vibrate( [ 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200 ] );
-      }
-      else {
-        navigator.vibrate( 0 );
+      if ( navigator !== undefined && navigator.vibrate !== undefined ) {
+        if ( isPressed ) {
+          navigator.vibrate( [ 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200 ] );
+        }
+        else {
+          navigator.vibrate( 0 );
+        }
       }
     } );
   }

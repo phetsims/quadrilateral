@@ -137,11 +137,13 @@ class VertexNode extends Voicing( Circle, 1 ) {
 
     // vibration
     vertex.isPressedProperty.lazyLink( isPressed => {
-      if ( isPressed ) {
-        vibrationManager.startVibrate( [ 100, 100 ] );
-      }
-      else {
-        vibrationManager.stopVibrate();
+      if ( navigator !== undefined && navigator.vibrate !== undefined ) {
+        if ( isPressed ) {
+          vibrationManager.startVibrate( [ 100, 100 ] );
+        }
+        else {
+          vibrationManager.stopVibrate();
+        }
       }
     } );
 
