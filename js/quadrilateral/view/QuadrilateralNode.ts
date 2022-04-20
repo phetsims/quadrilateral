@@ -168,16 +168,12 @@ class QuadrilateralNode extends Node {
     this.vertexNodes = [ vertexNode1, vertexNode2, vertexNode3, vertexNode4 ];
     this.sideNodes = [ topSideNode, rightSideNode, bottomSideNode, leftSideNode ];
 
+    // only if shape identification feedback is enabled, reset the timer so that we change the color for a short
+    // period when we become a named shape
     Property.multilink( [ this.quadrilateralShapeModel.isParallelogramProperty, this.quadrilateralShapeModel.shapeNameProperty ], ( isParallelogram, shapeName ) => {
-      if ( shapeName !== null ) {
+      if ( shapeName !== null && quadrilateralModel.shapeIdentificationFeedbackEnabledProperty.value ) {
         this.remainingTimeForShapeChangeFill = SHAPE_FILL_TIME;
       }
-      // const fillProperty = isParallelogram ? QuadrilateralColors.quadrilateralParallelogramShapeColorProperty :
-      //                      shapeName !== null ? QuadrilateralColors.quadrilateralNamedShapeColorProperty :
-      //                      QuadrilateralColors.quadrilateralShapeColorProperty;
-      //
-      // vertexNodes.forEach( vertexNode => { vertexNode.fill = fillProperty; } );
-      // sideNodes.forEach( sideNode => { sideNode.fill = fillProperty; } );
     } );
 
     // Design request - when all side lengths are equal (which will be true when square or rhombus) increase
@@ -199,6 +195,8 @@ class QuadrilateralNode extends Node {
       this.activeFill = QuadrilateralColors.quadrilateralParallelogramShapeColorProperty;
     }
     else if ( this.remainingTimeForShapeChangeFill > 0 ) {
+
+      // Note this will only happen if "shapeIdentificationFeedback" is enabled.
       this.activeFill = QuadrilateralColors.quadrilateralNamedShapeColorProperty;
     }
     else {

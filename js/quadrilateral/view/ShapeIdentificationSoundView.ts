@@ -15,13 +15,14 @@ import shapeIdentificationWhenNotAParallelogram_mp3 from '../../../sounds/shapeI
 import allAnglesAreRightAngles_mp3 from '../../../sounds/allAnglesAreRightAngles_mp3.js';
 import allSideLengthsAreEqual_mp3 from '../../../sounds/allSideLengthsAreEqual_mp3.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
+import IProperty from '../../../../axon/js/IProperty.js';
 
 class ShapeIdentificationSoundView {
   private readonly shapeSoundClip: SoundClip;
   private readonly allRightAnglesSoundClip: SoundClip;
   private readonly allLengthsEqualSoundClip: SoundClip;
 
-  constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: IReadOnlyProperty<boolean> ) {
+  constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: IReadOnlyProperty<boolean>, shapeIdentificationEnabledProperty: IProperty<boolean> ) {
 
     const soundClipOptions = {
       // don't play sounds while model reset is in progress
@@ -40,11 +41,10 @@ class ShapeIdentificationSoundView {
     // lazy, don't play on startup
     shapeModel.shapeNameProperty.lazyLink( ( name, oldName ) => {
 
-      // console.log( name, oldName );
-
       // Generic indication that we have achieved a new named shape other some special shapes like square/rhombus.
-      // If the shape is a parallelogram prevent sounds, there are other parallelogram sounds that are more important
-      if ( !shapeModel.isParallelogramProperty.value && name ) {
+      // If the shape is a parallelogram prevent sounds, there are other parallelogram sounds that are more important.
+      // This feedback is only provided if shape identification is enabled.
+      if ( !shapeModel.isParallelogramProperty.value && name && shapeIdentificationEnabledProperty.value ) {
 
         // Design request that this sound should not play when it is a concave shape. See
         // https://github.com/phetsims/quadrilateral/issues/57

@@ -113,6 +113,13 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // the simulation with BLE communication.
   bluetooth: {
     type: 'flag'
+  },
+
+  // If true, some additional graphical and auditory feedback will be provided when the quad becomes
+  // a named shape like rectangle or kite or trapezoid.
+  shapeIdentificationFeedback: {
+    type: 'boolean',
+    defaultValue: false
   }
 } );
 

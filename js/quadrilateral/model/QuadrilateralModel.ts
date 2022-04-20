@@ -30,6 +30,7 @@ class QuadrilateralModel {
   public markerRotationProperty: NumberProperty;
   public cornerGuideVisibleProperty: BooleanProperty;
   public vertexLabelsVisibleProperty: BooleanProperty;
+  public shapeIdentificationFeedbackEnabledProperty: BooleanProperty;
 
   public quadrilateralShapeModel: QuadrilateralShapeModel;
   public quadrilateralTestShapeModel: QuadrilateralShapeModel;
@@ -70,6 +71,9 @@ class QuadrilateralModel {
     // Whether or not a marker is detected for physical device rotation. Only useful when used in
     // combination with the ?markerInput query parameter, which enables the experimental marker feature.
     this.rotationMarkerDetectedProperty = new BooleanProperty( false );
+
+    // Whether or not visual and auditory feedback related to identifying shapes when not a parallelogram is enabled.
+    this.shapeIdentificationFeedbackEnabledProperty = new BooleanProperty( QuadrilateralQueryParameters.shapeIdentificationFeedback );
 
     // The amount of rotation in radians of the marker. Only useful when the ?markerInput
     // is used. This is an experimental feature that will support rotating the shape when
