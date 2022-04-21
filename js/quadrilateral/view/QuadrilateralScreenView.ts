@@ -323,7 +323,7 @@ class QuadrilateralScreenView extends ScreenView {
    * Steps the view.
    * @param dt - time step, in seconds
    */
-  public step( dt: number ): void {
+  public override step( dt: number ): void {
     if ( this.quadrilateralSoundView ) {
       this.quadrilateralSoundView.step( dt );
     }
