@@ -12,6 +12,7 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
+import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Utils from '../../../../dot/js/Utils.js';
 import quadrilateral from '../../quadrilateral.js';
@@ -32,7 +33,7 @@ class ParallelSideChecker {
   // depending on what is moving. For example, if dragging a side that is parallel with another, the tolerance
   // interval becomes infinite because it should be impossible for two sides to go out of parallel during this
   // interaction. See the derivation for more specific behaviors.
-  private readonly angleToleranceIntervalProperty: DerivedProperty<number, boolean[]>;
+  private readonly angleToleranceIntervalProperty: IReadOnlyProperty<number>;
 
   private readonly side1: Side;
   private readonly side2: Side;

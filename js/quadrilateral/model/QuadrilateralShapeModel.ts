@@ -33,6 +33,7 @@ import optionize from '../../../../phet-core/js/optionize.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import VertexAngles from './VertexAngles.js';
 import ParallelSideChecker from './ParallelSideChecker.js';
+import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 
 // A useful type for calculations for the vertex Shapes which define where the Vertex can move depending on
 // the positions of the other vertices. Lines are along the bounds of model space and RayIntersections
@@ -92,7 +93,7 @@ class QuadrilateralShapeModel {
 
   private propertiesDeferred: boolean;
 
-  public angleToleranceIntervalProperty: DerivedProperty<number, boolean[]>;
+  public angleToleranceIntervalProperty: IReadOnlyProperty<number>;
   public tiltToleranceIntervalProperty: Property<number>;
 
   public shapeChangedEmitter: Emitter<[]>;
