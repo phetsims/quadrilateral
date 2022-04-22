@@ -145,7 +145,7 @@ class CornerGuideNode extends Node {
    * Returns the parametric position along a line at the position t. Modified from Line.positionAt to support
    * positions outside of the range [0, 1] which is necessary for drawing code in this component.
    */
-  private static customPositionAt( line: Line, t: number ) {
+  private static customPositionAt( line: Line, t: number ): Vector2 {
     return line.start.plus( line.end.minus( line.start ).times( t ) );
   }
 

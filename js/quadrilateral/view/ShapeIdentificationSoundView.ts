@@ -72,7 +72,7 @@ class ShapeIdentificationSoundView {
   /**
    * Dispose the sound clip so that a new one can be created, and this view stops playing this sound
    */
-  public dispose() {
+  public dispose(): void {
     this.shapeSoundClip.dispose();
   }
 }

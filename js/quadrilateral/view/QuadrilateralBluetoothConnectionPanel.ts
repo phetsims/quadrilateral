@@ -50,7 +50,7 @@ class QuadrilateralBluetoothConnectionPanel extends Panel {
     content.children = [ titleText, pairButton ];
   }
 
-  private async requestQuadDevice() {
+  private async requestQuadDevice(): Promise<void> {
     let device: null | any; // should be type BluetoothDevice, but it is too experimental for native types
 
     // @ts-ignore - navigator.bluetooth is experimental and does not exist in the typing
@@ -81,7 +81,7 @@ class QuadrilateralBluetoothConnectionPanel extends Panel {
    * Respond to a characteristicvaluechanged event.
    * TODO: Implement this function. This is the main event we get when we receive new data from the device.
    */
-  private static handleCharacteristicValueChanged( event: Event ) {
+  private static handleCharacteristicValueChanged( event: Event ): void {
     if ( event.target ) {
 
       // @ts-ignore

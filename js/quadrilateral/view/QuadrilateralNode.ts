@@ -189,7 +189,7 @@ class QuadrilateralNode extends Node {
     ];
   }
 
-  public step( dt: number ) {
+  public step( dt: number ): void {
     const previousActiveFill = this.activeFill;
     if ( this.quadrilateralShapeModel.isParallelogramProperty.value ) {
       this.activeFill = QuadrilateralColors.quadrilateralParallelogramShapeColorProperty;
@@ -210,7 +210,7 @@ class QuadrilateralNode extends Node {
     }
   }
 
-  private updateFills() {
+  private updateFills(): void {
     this.vertexNodes.forEach( vertexNode => { vertexNode.fill = this.activeFill; } );
     this.sideNodes.forEach( sideNode => { sideNode.fill = this.activeFill; } );
   }

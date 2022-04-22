@@ -275,7 +275,7 @@ class SideNode extends Voicing( Path, 1 ) {
    *
    * @param deltaVector - change of position in model coordinates
    */
-  private moveVerticesFromModelDelta( deltaVector: Vector2 ) {
+  private moveVerticesFromModelDelta( deltaVector: Vector2 ): void {
 
     // vectorDelta is in model coordinates already since we provided a transform to the listener
     let proposedVertex1Position = this.side.vertex1.positionProperty.get().plus( deltaVector );
@@ -323,7 +323,7 @@ class SideNode extends Voicing( Path, 1 ) {
    * @param armVertex - Vertex being repositioned.
    * @param modelDelta - The amount of movement of the arm drag in model coordinates
    */
-  private rotateVertexAroundOther( anchorVertex: Vertex, armVertex: Vertex, modelDelta: Vector2 ) {
+  private rotateVertexAroundOther( anchorVertex: Vertex, armVertex: Vertex, modelDelta: Vector2 ): void {
     const modelPosition = armVertex.positionProperty.get().plus( modelDelta );
     const proposedPosition = QuadrilateralModel.getClosestMinorGridPosition( modelPosition );
     if ( this.quadrilateralModel.isVertexPositionAllowed( armVertex, proposedPosition ) ) {

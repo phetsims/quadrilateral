@@ -110,7 +110,7 @@ class Vertex {
    * Returns true if this Vertex intersects another.
    * @param other
    */
-  public overlapsOther( other: Vertex ) {
+  public overlapsOther( other: Vertex ): boolean {
     assert && assert( other !== this, 'You are trying to see if this vertex overlaps self?' );
     return other.modelBoundsProperty.value.intersectsBounds( this.modelBoundsProperty.value );
   }
@@ -127,7 +127,7 @@ class Vertex {
   /**
    * Reset this vertex.
    */
-  public reset() {
+  public reset(): void {
     this.positionProperty.reset();
   }
 
@@ -168,7 +168,7 @@ class Vertex {
    *        /           \
    * vertex1 --------- vertex2
    */
-  public connectToOthers( vertex1: Vertex, vertex2: Vertex ) {
+  public connectToOthers( vertex1: Vertex, vertex2: Vertex ): void {
     this.vertex1 = vertex1;
     this.vertex2 = vertex2;
   }
@@ -193,7 +193,7 @@ class Vertex {
    * @param {Vector2} vertex3Position
    * @param {boolean} validateShape
    */
-  public static calculateAngle( vertex1Position: Vector2, vertex2Position: Vector2, vertex3Position: Vector2, validateShape = true ) {
+  public static calculateAngle( vertex1Position: Vector2, vertex2Position: Vector2, vertex3Position: Vector2, validateShape = true ): number {
 
     const sideA = vertex1Position.distance( vertex2Position );
     const sideB = vertex3Position.distance( vertex2Position );

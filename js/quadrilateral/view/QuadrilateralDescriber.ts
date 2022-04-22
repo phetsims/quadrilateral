@@ -411,7 +411,7 @@ class QuadrilateralDescriber {
   /**
    * Returns the actual name of the NamedQuadrilateral.
    */
-  public getShapeNameDescription( shapeName: NamedQuadrilateral | null ) {
+  public getShapeNameDescription( shapeName: NamedQuadrilateral | null ): string | undefined {
     return shapeNameMap.get( shapeName );
   }
 
@@ -422,7 +422,7 @@ class QuadrilateralDescriber {
    * "Right now, on pair of opposite corners are equal and opposite sides are equal" or
    * "Right now, no corners are equal and no sides are equal."
    */
-  public getFirstDetailsStatement() {
+  public getFirstDetailsStatement(): string {
 
     const adjacentEqualVertexPairs = this.shapeModel.adjacentEqualVertexPairsProperty.value;
     const adjacentEqualSidePairs = this.shapeModel.adjacentEqualSidePairsProperty.value;
@@ -472,7 +472,7 @@ class QuadrilateralDescriber {
    * of the equal angles and how they compare to other angles in size qualitatively. There is no statement
    * about the corners if all angles are equal (right angles).
    */
-  getSecondDetailsStatement() {
+  getSecondDetailsStatement(): string | null {
     let statement = null;
 
     const adjacentEqualVertexPairs = this.shapeModel.adjacentEqualVertexPairsProperty.value;
@@ -749,7 +749,7 @@ class QuadrilateralDescriber {
    *
    * "Corner C is somewhat smaller than corner A and Corner B is a little smaller than Corner D."
    */
-  private getGeneralQuadrilateralVertexDescription() {
+  private getGeneralQuadrilateralVertexDescription(): string {
     const orderedOppositeVertexPairs = this.getVertexPairsOrderedForDescription( this.shapeModel.oppositeVertices );
 
     const firstCornerString = this.getCornerAngleDescription( orderedOppositeVertexPairs[ 0 ].vertex1 );
@@ -830,7 +830,7 @@ class QuadrilateralDescriber {
    * The order that the vertices are described in the statement is determined by the sorting algorithm in
    * getVerticesOrderedForDescription.
    */
-  private getTwoEqualVerticesAngleDescription( vertex1: Vertex, vertex2: Vertex ) {
+  private getTwoEqualVerticesAngleDescription( vertex1: Vertex, vertex2: Vertex ): string {
 
     const sortedVertices = this.getVerticesOrderedForDescription( [ vertex1, vertex2 ] );
     const firstVertex = sortedVertices[ 0 ];
@@ -1006,7 +1006,7 @@ class QuadrilateralDescriber {
    * unique way. This function returns the vertices in the order that they should be described in the string
    * creation functions of this Describer.
    */
-  getVerticesOrderedForDescription( vertices: Vertex[] ) {
+  getVerticesOrderedForDescription( vertices: Vertex[] ): Vertex[] {
 
     const order = vertices.sort( ( a: Vertex, b: Vertex ) => {
       return this.compareVerticesForDescription( a, b );

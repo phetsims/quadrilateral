@@ -116,7 +116,7 @@ class QuartetSideSoundView {
    * Create the sound clips used to represent aspects of the Side.
    * @param soundFile - TODO: How to do Enumerations, see https://github.com/phetsims/quadrilateral/issues/27
    */
-  private createSoundClips( soundFile: any ) {
+  private createSoundClips( soundFile: any ): void {
 
     this.disposeSoundClips();
 
@@ -136,7 +136,7 @@ class QuartetSideSoundView {
   /**
    * Dispose the active sound clips.
    */
-  private disposeSoundClips() {
+  private disposeSoundClips(): void {
 
     // remove the previous sound generators
     this.playbackRateToSoundClipCollection.forEach( ( soundClipCollection, playbackRate ) => {
@@ -150,7 +150,7 @@ class QuartetSideSoundView {
   /**
    * Dispose the QuartetSideSoundView by removing SoundClipCollections from the soundManager and dispose them.
    */
-  public dispose() {
+  public dispose(): void {
     this.disposeSoundClips();
     this.disposeQuartetSideSoundView();
   }
@@ -159,7 +159,7 @@ class QuartetSideSoundView {
    * Start playing sounds. Works by resetting the amount of time that sounds have been playing so that we will try
    * to start playing sounds in the next animation frame.
    */
-  public startPlayingSounds() {
+  public startPlayingSounds(): void {
     assert && assert( this.side.tiltProperty.value !== Number.POSITIVE_INFINITY, 'tilts cannot be infinite in sound design' );
     const exponential = Utils.roundToInterval( this.tiltToPlaybackExponential.evaluate( this.side.tiltProperty.value ), 1 );
     const playbackRate = Math.pow( 2, exponential / 12 );
@@ -380,7 +380,7 @@ class SoundClipCollection extends SoundGenerator {
   /**
    * Step the SoundView, fading in or fading out of the playing sounds.
    */
-  public step( dt: number ) {
+  public step( dt: number ): void {
 
     if ( this.playing ) {
       this.remainingPlayTime -= dt;
@@ -424,7 +424,7 @@ class SoundClipCollection extends SoundGenerator {
     }
   }
 
-  public connectClips() {
+  public connectClips(): void {
     assert && assert( !this.connected, 'Cannot connect clips to an audio context if already connected.' );
 
     this.lowerOctaveClip.connect( this.outputLevelGainNode );
@@ -434,7 +434,7 @@ class SoundClipCollection extends SoundGenerator {
     this.connected = true;
   }
 
-  public disconnectClips() {
+  public disconnectClips(): void {
     if ( this.connected ) {
       this.lowerOctaveClip.disconnect( this.outputLevelGainNode );
       this.middleOctaveClip.disconnect( this.outputLevelGainNode );
@@ -462,7 +462,7 @@ class SoundClipCollection extends SoundGenerator {
     }
   }
 
-  public override dispose() {
+  public override dispose(): void {
     this.disconnectClips();
     this.lowerOctaveClip.dispose();
     this.middleOctaveClip.dispose();

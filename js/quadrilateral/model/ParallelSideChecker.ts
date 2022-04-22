@@ -157,7 +157,7 @@ class ParallelSideChecker {
   /**
    * Returns whether the two sides are currently parallel within angleToleranceInterval.
    */
-  public areSidesParallel() {
+  public areSidesParallel(): boolean {
     assert && assert( this.side1.vertex1.angleProperty.value !== null, 'angles need to be available to determine parallel state' );
     assert && assert( this.side2.vertex2.angleProperty.value !== null, 'angles need to be available to determine parallel state' );
 

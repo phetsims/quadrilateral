@@ -111,7 +111,7 @@ class Side {
    * to update the length, but we must only update the side after all vertex positions have been set. See
    * updateOrderDependentProperties for more information.
    */
-  public updateLength() {
+  public updateLength(): void {
     this.lengthProperty.value = Vector2.getDistanceBetweenVectors( this.vertex2.positionProperty.value, this.vertex1.positionProperty.value );
   }
 
@@ -193,7 +193,7 @@ class Side {
    *
    * @param {Side} otherSide
    */
-  public connectToSide( otherSide: Side ) {
+  public connectToSide( otherSide: Side ): void {
     assert && assert( !this.isConnected, 'Cannot connect a side that is already connected to another.' );
     assert && assert( otherSide !== this, 'Cannot connect a side to itself.' );
 

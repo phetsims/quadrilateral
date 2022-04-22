@@ -103,7 +103,7 @@ class SideDemonstrationNode extends Node {
    *
    * @param dt
    */
-  public step( dt: number ) {
+  public step( dt: number ): void {
     this.rightSideSoundView && this.rightSideSoundView.step( dt );
     this.leftSideSoundView && this.leftSideSoundView.step( dt );
     this.topSideSoundView && this.topSideSoundView.step( dt );

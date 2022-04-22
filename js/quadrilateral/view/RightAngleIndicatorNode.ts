@@ -51,7 +51,7 @@ class RightAngleIndicatorNode extends Path {
     shapeModel.shapeChangedEmitter.addListener( redrawShapeListener );
   }
 
-  private redrawShape( vertex1: Vertex, vertex2: Vertex, vertex3: Vertex ) {
+  private redrawShape( vertex1: Vertex, vertex2: Vertex, vertex3: Vertex ): void {
 
     assert && assert( vertex1.angleProperty.value, 'Angle must be available to draw the indicator' );
     const angle = vertex1.angleProperty.value!;

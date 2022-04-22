@@ -140,7 +140,7 @@ class ParallelsStaccatoSoundView {
     this.remainingPlayTime = 0;
   }
 
-  public dispose() {
+  public dispose(): void {
     this.disposeParallelsStaccatoSoundView();
   }
 }

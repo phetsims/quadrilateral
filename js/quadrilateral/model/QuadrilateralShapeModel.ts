@@ -415,7 +415,7 @@ class QuadrilateralShapeModel {
    * Returns true if the side lengths have changed relative to the savedSideLengths.
    * @param currentSideLengths
    */
-  public getSideLengthsEqualToSaved( currentSideLengths: SideLengths ) {
+  public getSideLengthsEqualToSaved( currentSideLengths: SideLengths ): boolean {
 
     // TODO: For the usages of this function It might be best to compare using lengthToleranceIntervalProperty of the
     // sides that intersect with the moving sides, but that is more complicated and it isn't clear if this will be
@@ -941,7 +941,7 @@ class QuadrilateralShapeModel {
    * all are set. This way you can safely set multiple at a time without transient states where the shape is
    * not valid.
    */
-  public setVertexPositions( verticesWithProposedPositions: VertexWithProposedPosition[] ) {
+  public setVertexPositions( verticesWithProposedPositions: VertexWithProposedPosition[] ): void {
 
     this.setPropertiesDeferred( true );
 
@@ -1105,7 +1105,7 @@ class QuadrilateralShapeModel {
   /**
    * Update the Property monitoring if opposite sides are parallel with eachother.
    */
-  updateParallelSidePairs() {
+  updateParallelSidePairs(): void {
     const currentParallelSides = this.parallelSidePairsProperty.value;
 
     // only opposite sides can be parallel
@@ -1169,7 +1169,7 @@ class QuadrilateralShapeModel {
    * the tilt of the top side remains anchored. Perhaps if a gyroscope is added in the future we may be able to rotate
    * the shape correctly without anchoring the top side.
    */
-  public setPositionsFromLengthAndAngleData( topLength: number, rightLength: number, bottomLength: number, leftLength: number, p1Angle: number, p2Angle: number, p3Angle: number, p4Angle: number ) {
+  public setPositionsFromLengthAndAngleData( topLength: number, rightLength: number, bottomLength: number, leftLength: number, p1Angle: number, p2Angle: number, p3Angle: number, p4Angle: number ): void {
 
     // only try to set to sim if values look reasonable - we want to handle this gracefully, the sim shouldn't crash
     // if data isn't right
@@ -1271,7 +1271,7 @@ class QuadrilateralShapeModel {
   /**
    * Update the drag areas for all vertices.
    */
-  private setVertexDragAreas() {
+  private setVertexDragAreas(): void {
     this.vertexA.dragAreaProperty.set( this.createVertexArea( this.model.modelBoundsProperty.value!, this.vertexA, this.vertexB, this.vertexC, this.vertexD ) );
     this.vertexB.dragAreaProperty.set( this.createVertexArea( this.model.modelBoundsProperty.value!, this.vertexB, this.vertexC, this.vertexD, this.vertexA ) );
     this.vertexC.dragAreaProperty.set( this.createVertexArea( this.model.modelBoundsProperty.value!, this.vertexC, this.vertexD, this.vertexA, this.vertexB ) );
