@@ -21,6 +21,7 @@ import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import { Line, Shape } from '../../../../kite/js/imports.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
+import vibrationManager from '../../../../tappi/js/vibrationManager.js';
 
 // The dilation around side shapes when drawing the focus highlight.
 const FOCUS_HIGHLIGHT_DILATION = 15;
@@ -261,10 +262,10 @@ class SideNode extends Voicing( Path, 1 ) {
 
       if ( navigator !== undefined && navigator.vibrate !== undefined ) {
         if ( isPressed ) {
-          navigator.vibrate( [ 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200 ] );
+          vibrationManager.startVibrate( [ 200, 200 ] );
         }
         else {
-          navigator.vibrate( 0 );
+          vibrationManager.stopVibrate();
         }
       }
     } );
