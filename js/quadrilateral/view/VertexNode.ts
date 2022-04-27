@@ -17,6 +17,7 @@ import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import vibrationManager from '../../../../tappi/js/vibrationManager.js';
+import VertexDescriber from './VertexDescriber.js';
 
 // constants
 const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
@@ -50,6 +51,8 @@ class VertexNode extends Voicing( Circle, 1 ) {
     assert && assert( options.innerContent === undefined, 'VertexNode sets innerContent from nameResponse' );
     this.voicingNameResponse = options.nameResponse;
     this.innerContent = options.nameResponse;
+
+    const vertexDescriber = new VertexDescriber( vertex, model.quadrilateralShapeModel );
 
     this.model = model;
 
@@ -134,6 +137,12 @@ class VertexNode extends Voicing( Circle, 1 ) {
         vertex.isPressedProperty.value = false;
       }
     } );
+
+    // voicing
+    model.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
+      this.voicingObjectResponse = vertexDescriber.getVertexObjectResponse();
+    } );
+    this.voicingObjectResponse = vertexDescriber.getVertexObjectResponse();
 
     // vibration
     vertex.isPressedProperty.lazyLink( isPressed => {

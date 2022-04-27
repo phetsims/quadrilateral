@@ -118,6 +118,12 @@ class QuadrilateralShapeModel {
   adjacentSides: SidePair[];
   oppositeSides: SidePair[];
 
+  // A map that provides the adjacent vertices to the provided Vertex.
+  adjacentVertexMap: Map<Vertex, Vertex[]>;
+
+  // A map that provides the opposite vertex from a give vertex.
+  oppositeVertexMap: Map<Vertex, Vertex>;
+
   // An array of all the adjacent VertexPairs that currently have equal angles.
   adjacentEqualVertexPairsProperty: Property<VertexPair[]>;
 
@@ -169,6 +175,20 @@ class QuadrilateralShapeModel {
       { vertex1: this.vertexA, vertex2: this.vertexC },
       { vertex1: this.vertexB, vertex2: this.vertexD }
     ];
+
+    this.oppositeVertexMap = new Map( [
+      [ this.vertexA, this.vertexC ],
+      [ this.vertexB, this.vertexD ],
+      [ this.vertexC, this.vertexA ],
+      [ this.vertexD, this.vertexB ]
+    ] );
+
+    this.adjacentVertexMap = new Map( [
+      [ this.vertexA, [ this.vertexB, this.vertexD ] ],
+      [ this.vertexB, [ this.vertexA, this.vertexC ] ],
+      [ this.vertexC, [ this.vertexB, this.vertexD ] ],
+      [ this.vertexD, [ this.vertexA, this.vertexC ] ]
+    ] );
 
     // create the sides of the quadrilateral
     this.topSide = new Side( this.vertexA, this.vertexB, options.tandem.createTandem( 'topSide' ), {

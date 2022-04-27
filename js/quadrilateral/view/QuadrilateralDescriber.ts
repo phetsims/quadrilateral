@@ -15,8 +15,8 @@ import QuadrilateralShapeModel, { SidePair, VertexPair } from '../model/Quadrila
 import Vertex from '../model/Vertex.js';
 import VertexLabel from '../model/VertexLabel.js';
 import Range from '../../../../dot/js/Range.js';
-import Utils from '../../../../dot/js/Utils.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
+import VertexDescriber from './VertexDescriber.js';
 
 // constants
 const oppositeSidesString = quadrilateralStrings.a11y.voicing.transformations.oppositeSides;
@@ -37,10 +37,6 @@ const namedShapeParalleogramHintPatternString = quadrilateralStrings.a11y.voicin
 const namedShapeNotAParallelogramHintPatternString = quadrilateralStrings.a11y.voicing.namedShapeNotAParallelogramHintPattern;
 const aParallelogramString = quadrilateralStrings.a11y.voicing.aParallelogram;
 const firstDetailsStatementPatternString = quadrilateralStrings.a11y.voicing.firstDetailsStatementPattern;
-const cornerAString = quadrilateralStrings.a11y.cornerA;
-const cornerBString = quadrilateralStrings.a11y.cornerB;
-const cornerCString = quadrilateralStrings.a11y.cornerC;
-const cornerDString = quadrilateralStrings.a11y.cornerD;
 const aBString = quadrilateralStrings.a11y.aB;
 const bCString = quadrilateralStrings.a11y.bC;
 const cDString = quadrilateralStrings.a11y.cD;
@@ -65,34 +61,12 @@ shapeNameMap.set( NamedQuadrilateral.TRAPEZOID, quadrilateralStrings.a11y.voicin
 shapeNameMap.set( NamedQuadrilateral.CONCAVE, quadrilateralStrings.a11y.voicing.shapeNames.concaveQuadrilateral );
 shapeNameMap.set( null, quadrilateralStrings.a11y.voicing.shapeNames.generalQuadrilateral );
 
-// A map that goes from VertexLabel -> corner label (like "Corner A")
-const vertexCornerLabelMap = new Map<VertexLabel, string>();
-vertexCornerLabelMap.set( VertexLabel.VERTEX_A, cornerAString );
-vertexCornerLabelMap.set( VertexLabel.VERTEX_B, cornerBString );
-vertexCornerLabelMap.set( VertexLabel.VERTEX_C, cornerCString );
-vertexCornerLabelMap.set( VertexLabel.VERTEX_D, cornerDString );
-
 // A map that goes from VertexLabel -> letter label (like "A")
 const vertexLabelMap = new Map<VertexLabel, string>();
 vertexLabelMap.set( VertexLabel.VERTEX_A, vertexAString );
 vertexLabelMap.set( VertexLabel.VERTEX_B, vertexBString );
 vertexLabelMap.set( VertexLabel.VERTEX_C, vertexCString );
 vertexLabelMap.set( VertexLabel.VERTEX_D, vertexDString );
-
-const angleComparisonDescriptionMap = new Map<Range, string>();
-
-const createAngleComparisonDescriptionMapEntry = ( minAngle: number, maxAngle: number, widerString: string, smallerString: string ) => {
-  angleComparisonDescriptionMap.set( new Range( minAngle, maxAngle ), widerString );
-  angleComparisonDescriptionMap.set( new Range( -maxAngle, -minAngle ), smallerString );
-};
-
-createAngleComparisonDescriptionMapEntry( Math.PI, 2 * Math.PI, 'far wider than', 'far smaller than' );
-createAngleComparisonDescriptionMapEntry( Utils.toRadians( 135 ), Math.PI, 'much much wider than', 'much much smaller than' );
-createAngleComparisonDescriptionMapEntry( Math.PI / 2, Utils.toRadians( 135 ), 'much wider than', 'much smaller than' );
-createAngleComparisonDescriptionMapEntry( Math.PI / 4, Math.PI / 2, 'somewhat wider than', 'somewhat smaller than' );
-createAngleComparisonDescriptionMapEntry( Utils.toRadians( 15 ), Math.PI / 4, 'a little wider than', 'a little smaller than' );
-createAngleComparisonDescriptionMapEntry( QuadrilateralQueryParameters.shapeAngleToleranceInterval, Utils.toRadians( 15 ), 'comparable to', 'comparable to' );
-createAngleComparisonDescriptionMapEntry( 0, QuadrilateralQueryParameters.shapeAngleToleranceInterval, 'equal to', 'equal to' );
 
 // A map that will provide comparison descriptions for side lengths. Lengths in model units.
 const lengthComparisonDescriptionMap = new Map<Range, string>();
@@ -500,10 +474,10 @@ class QuadrilateralDescriber {
         const fourthCornerString = this.getCornerAngleDescription( orderedUnequalVertices[ 1 ] );
 
         // how the equal vertex angles compare qualitatively to the fist unequal vertex
-        const firstComparisonString = this.getAngleComparisonDescription( orderedUnequalVertices[ 0 ], orderedEqualVertices[ 0 ] );
+        const firstComparisonString = VertexDescriber.getAngleComparisonDescription( orderedUnequalVertices[ 0 ], orderedEqualVertices[ 0 ] );
 
         // how the equal vertex angles compare qualitatively to the second unequal vertex
-        const secondComparisonString = this.getAngleComparisonDescription( orderedUnequalVertices[ 1 ], orderedEqualVertices[ 0 ] );
+        const secondComparisonString = VertexDescriber.getAngleComparisonDescription( orderedUnequalVertices[ 1 ], orderedEqualVertices[ 0 ] );
 
         const patternString = 'Equal {{firstCorners}} are {{firstComparison}} {{thirdCorner}} and {{secondComparison}} {{fourthCorner}}.';
         statement = StringUtils.fillIn( patternString, {
@@ -757,8 +731,8 @@ class QuadrilateralDescriber {
     const thirdCornerString = this.getCornerAngleDescription( orderedOppositeVertexPairs[ 1 ].vertex1 );
     const fourthCornerString = this.getCornerAngleDescription( orderedOppositeVertexPairs[ 1 ].vertex2 );
 
-    const firstComparisonString = this.getAngleComparisonDescription( orderedOppositeVertexPairs[ 0 ].vertex2, orderedOppositeVertexPairs[ 0 ].vertex1 );
-    const secondComparisonString = this.getAngleComparisonDescription( orderedOppositeVertexPairs[ 1 ].vertex2, orderedOppositeVertexPairs[ 1 ].vertex1 );
+    const firstComparisonString = VertexDescriber.getAngleComparisonDescription( orderedOppositeVertexPairs[ 0 ].vertex2, orderedOppositeVertexPairs[ 0 ].vertex1 );
+    const secondComparisonString = VertexDescriber.getAngleComparisonDescription( orderedOppositeVertexPairs[ 1 ].vertex2, orderedOppositeVertexPairs[ 1 ].vertex1 );
 
     const patternString = '{{firstCorner}} is {{firstComparison}} {{secondCorner}}, and {{thirdCorner}} is {{secondComparison}} {{fourthCorner}}.';
     return StringUtils.fillIn( patternString, {
@@ -846,8 +820,8 @@ class QuadrilateralDescriber {
     const fourthCornerString = this.getCornerAngleDescription( sortedUndescribedVertices[ 1 ] );
 
     // describe the relative size of the equal angles compared to eqch unequal angle
-    const firstComparisonString = this.getAngleComparisonDescription( sortedUndescribedVertices[ 0 ], firstVertex );
-    const secondComparisonString = this.getAngleComparisonDescription( sortedUndescribedVertices[ 1 ], firstVertex );
+    const firstComparisonString = VertexDescriber.getAngleComparisonDescription( sortedUndescribedVertices[ 0 ], firstVertex );
+    const secondComparisonString = VertexDescriber.getAngleComparisonDescription( sortedUndescribedVertices[ 1 ], firstVertex );
 
     return StringUtils.fillIn( patternString, {
       firstCorners: firstCornersString,
@@ -874,7 +848,7 @@ class QuadrilateralDescriber {
     const secondCornersString = this.getCornersAngleDescription( orderedVertexPairs[ 1 ].vertex1, orderedVertexPairs[ 1 ].vertex2 );
 
     // we are comparing the angles of the vertex pairs, relative to the first described pair
-    const comparisonString = this.getAngleComparisonDescription( orderedVertexPairs[ 1 ].vertex1, orderedVertexPairs[ 0 ].vertex1 );
+    const comparisonString = VertexDescriber.getAngleComparisonDescription( orderedVertexPairs[ 1 ].vertex1, orderedVertexPairs[ 0 ].vertex1 );
 
     const patternString = 'Equal {{firstCorners}} are {{comparison}} equal {{secondCorners}}.';
     return StringUtils.fillIn( patternString, {
@@ -892,7 +866,7 @@ class QuadrilateralDescriber {
    */
   private getCornerAngleDescription( vertex: Vertex ): string {
 
-    const labelString = vertexCornerLabelMap.get( vertex.vertexLabel );
+    const labelString = VertexDescriber.VertexCornerLabelMap.get( vertex.vertexLabel );
     assert && assert( labelString, 'vertexLabel not in vertexLabelMap' );
 
     let descriptionString = labelString;
@@ -945,37 +919,6 @@ class QuadrilateralDescriber {
     }
 
     return descriptionString;
-  }
-
-  /**
-   * Returns the description of comparison between two angles, using the entries of angleComparisonDescriptionMap.
-   * Description compares vertex2 to vertex1. So if vertex2 has a larger angle than vertex1 the output will be something
-   * like:
-   * "much much wider than" or
-   * "a little wider than"
-   *
-   * or if vertex2 angle is smaller than vertex1, we will return something like
-   * "much much smaller than" or
-   * "a little smaller than"
-   */
-  private getAngleComparisonDescription( vertex1: Vertex, vertex2: Vertex ): string {
-    assert && assert( vertex1.angleProperty.value !== null, 'angles need to be initialized for descriptions' );
-    assert && assert( vertex2.angleProperty.value !== null, 'angles need to be initialized for descriptions' );
-
-    let description: string | null = null;
-
-    const angle1 = vertex1.angleProperty.value!;
-    const angle2 = vertex2.angleProperty.value!;
-    const angleDifference = angle2 - angle1;
-
-    angleComparisonDescriptionMap.forEach( ( value, key ) => {
-      if ( key.contains( angleDifference ) ) {
-        description = value;
-      }
-    } );
-
-    assert && assert( description, `Description not found for angle difference ${angleDifference}` );
-    return description!;
   }
 
   /**
