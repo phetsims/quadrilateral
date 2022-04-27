@@ -17,6 +17,7 @@ import VertexLabel from '../model/VertexLabel.js';
 import Range from '../../../../dot/js/Range.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import VertexDescriber from './VertexDescriber.js';
+import SideDescriber from './SideDescriber.js';
 
 // constants
 const oppositeSidesString = quadrilateralStrings.a11y.voicing.transformations.oppositeSides;
@@ -615,10 +616,10 @@ class QuadrilateralDescriber {
           const fourthSide = orderedOtherSidePairs[ 0 ].side2;
 
           // comparing the length of the first side to the second side, relative to the first side
-          const firstComparisonString = this.getLengthComparisonDescription( secondSide, firstSide );
+          const firstComparisonString = SideDescriber.getLengthComparisonDescription( secondSide, firstSide );
 
           // comparing third and fourth sides, relative to the third side
-          const secondComparisonString = this.getLengthComparisonDescription( fourthSide, thirdSide );
+          const secondComparisonString = SideDescriber.getLengthComparisonDescription( fourthSide, thirdSide );
 
           const trapezoidPatternString = 'Side {{firstSide}} is {{firstComparison}} Side {{secondSide}} and parallel. Side {{thirdSide}} is {{secondComparison}} Side {{fourthSide}}.';
           const parallelSidesStatement = StringUtils.fillIn( trapezoidPatternString, {
@@ -687,13 +688,13 @@ class QuadrilateralDescriber {
           const fourthSide = orderedRemainingSides[ 0 ].side2;
 
           // first comparison is the equal sides against the third side, relative to the first side
-          const firstComparisonString = this.getLengthComparisonDescription( thirdSide, firstSide );
+          const firstComparisonString = SideDescriber.getLengthComparisonDescription( thirdSide, firstSide );
 
           // second comparison is the equal sides aginst the fourth side, relative to the first side
-          const secondComparisonString = this.getLengthComparisonDescription( fourthSide, firstSide );
+          const secondComparisonString = SideDescriber.getLengthComparisonDescription( fourthSide, firstSide );
 
           // third comparison is the fourth side against the third side, relative to the third side
-          const thirdComparisonString = this.getLengthComparisonDescription( fourthSide, thirdSide );
+          const thirdComparisonString = SideDescriber.getLengthComparisonDescription( fourthSide, thirdSide );
 
           statement = StringUtils.fillIn( patternString, {
             firstSide: this.getSideDescription( firstSide ),
@@ -763,8 +764,8 @@ class QuadrilateralDescriber {
     const fourthSide = sortedOppositeSidePairs[ 1 ].side2;
 
     // comparing the lengths of each opposite side pair, relative to the first side in the pair
-    const firstComparisonString = this.getLengthComparisonDescription( secondSide, firstSide );
-    const secondComparisonString = this.getLengthComparisonDescription( fourthSide, thirdSide );
+    const firstComparisonString = SideDescriber.getLengthComparisonDescription( secondSide, firstSide );
+    const secondComparisonString = SideDescriber.getLengthComparisonDescription( fourthSide, thirdSide );
 
     return StringUtils.fillIn( patternString, {
       firstSide: this.getSideDescription( firstSide ),
@@ -783,7 +784,7 @@ class QuadrilateralDescriber {
 
     // Compare the lengths of the first two parallel sides against the lengths of the second two parallel sides,
     // relative to the first two parallel sides.
-    const comparisonString = this.getLengthComparisonDescription( orderedSidePairs[ 1 ].side1, orderedSidePairs[ 0 ].side1 );
+    const comparisonString = SideDescriber.getLengthComparisonDescription( orderedSidePairs[ 1 ].side1, orderedSidePairs[ 0 ].side1 );
 
     // const patternString = 'Equal Sides {{firstSide}} and {{secondSide}} are {{comparison}} equal Sides {{thirdSide}} and {{fourthSide}}.';
     return StringUtils.fillIn( patternString, {
@@ -919,31 +920,6 @@ class QuadrilateralDescriber {
     }
 
     return descriptionString;
-  }
-
-  /**
-   * Returns a description of comparison between two sides, using entries of lengthComparisonDescriptionMap.
-   * Description compares side2 to side1. For example, if side2 is longer than side1 the output will be something
-   * like:
-   * "Side2 is much longer than side1."
-   *
-   * TODO: Use the one in SideDescriber!
-   */
-  private getLengthComparisonDescription( side1: Side, side2: Side ): string {
-    let description: string | null = null;
-
-    const length1 = side1.lengthProperty.value;
-    const length2 = side2.lengthProperty.value;
-    const lengthDifference = length2 - length1;
-
-    lengthComparisonDescriptionMap.forEach( ( value, key ) => {
-      if ( key.contains( lengthDifference ) ) {
-        description = value;
-      }
-    } );
-
-    assert && assert( description, 'Length comparison description not found for provided Sides' );
-    return description!;
   }
 
   /**
