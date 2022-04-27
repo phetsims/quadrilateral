@@ -197,6 +197,9 @@ class SideNode extends Voicing( Path, 1 ) {
 
         vectorToVertex1 = ( side.vertex1.positionProperty.value ).minus( modelPoint );
         vectorToVertex2 = ( side.vertex2.positionProperty.value ).minus( modelPoint );
+
+        // TODO: See #130, I am not sure what should be spoken during interaction
+        this.voicingSpeakFullResponse();
       },
       end: () => {
 

@@ -105,6 +105,11 @@ class VertexNode extends Voicing( Circle, 1 ) {
 
     const dragListener = new DragListener( {
       transform: modelViewTransform,
+      start: () => {
+
+        // TODO: See #130, I am not sure what should be spoken during interaction
+        this.voicingSpeakFullResponse();
+      },
       drag: ( event: SceneryEvent, listener: DragListener ) => {
         const pointerPoint = event.pointer.point;
         const parentPoint = this.globalToParentPoint( pointerPoint! );
