@@ -926,6 +926,8 @@ class QuadrilateralDescriber {
    * Description compares side2 to side1. For example, if side2 is longer than side1 the output will be something
    * like:
    * "Side2 is much longer than side1."
+   *
+   * TODO: Use the one in SideDescriber!
    */
   private getLengthComparisonDescription( side1: Side, side2: Side ): string {
     let description: string | null = null;

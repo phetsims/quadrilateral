@@ -124,6 +124,12 @@ class QuadrilateralShapeModel {
   // A map that provides the opposite vertex from a give vertex.
   oppositeVertexMap: Map<Vertex, Vertex>;
 
+  // A map that provides the adjacent sides to the provided Side.
+  adjacentSideMap: Map<Side, Side[]>;
+
+  // A map that provides the opposite side from the provided Side.
+  oppositeSideMap: Map<Side, Side>;
+
   // An array of all the adjacent VertexPairs that currently have equal angles.
   adjacentEqualVertexPairsProperty: Property<VertexPair[]>;
 
@@ -207,8 +213,21 @@ class QuadrilateralShapeModel {
       validateShape: options.validateShape
     } );
 
-    // Collection of the Sides of the quadrilateral for easy iteration
     this.sides = [ this.topSide, this.rightSide, this.bottomSide, this.leftSide ];
+
+    this.oppositeSideMap = new Map( [
+      [ this.topSide, this.bottomSide ],
+      [ this.rightSide, this.leftSide ],
+      [ this.bottomSide, this.topSide ],
+      [ this.leftSide, this.rightSide ]
+    ] );
+
+    this.adjacentSideMap = new Map( [
+      [ this.topSide, [ this.leftSide, this.rightSide ] ],
+      [ this.rightSide, [ this.topSide, this.bottomSide ] ],
+      [ this.bottomSide, [ this.leftSide, this.rightSide ] ],
+      [ this.leftSide, [ this.topSide, this.bottomSide ] ]
+    ] );
 
     this.adjacentSides = [
       { side1: this.topSide, side2: this.rightSide },
@@ -948,6 +967,14 @@ class QuadrilateralShapeModel {
     return Utils.equalsEpsilon( angle1, angle2, QuadrilateralQueryParameters.shapeAngleToleranceInterval );
   }
 
+  /**
+   * Returns true if two sides are close enough in length that they should be considered equal. Uses the
+   * shapeLengthAngleToleranceInterval.
+   */
+  public isShapeLengthEqualToOther( length1: number, length2: number ): boolean {
+    return Utils.equalsEpsilon( length1, length2, QuadrilateralQueryParameters.shapeLengthToleranceInterval );
+  }
+
   public isRightAngle( angle: number ): boolean {
     return this.isShapeAngleEqualToOther( angle, Math.PI / 2 );
   }
@@ -1105,7 +1132,7 @@ class QuadrilateralShapeModel {
       const firstLength = sidePair.side1.lengthProperty.value;
       const secondLength = sidePair.side2.lengthProperty.value;
       const currentlyIncludesSidePair = currentSidePairs.includes( sidePair );
-      const areLengthsEqual = this.isShapeAngleEqualToOther( firstLength, secondLength );
+      const areLengthsEqual = this.isShapeLengthEqualToOther( firstLength, secondLength );
 
       if ( currentlyIncludesSidePair && !areLengthsEqual ) {
 

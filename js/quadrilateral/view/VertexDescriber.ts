@@ -103,19 +103,17 @@ class VertexDescriber {
    * "much smaller than adjacent equal corners." or
    * "equal to adjacent corners."
    */
-  getAdjacentVertexObjectDescription(): string {
+  public getAdjacentVertexObjectDescription(): string {
     let description = '';
 
-    const adjacentVertexPairs = this.quadrilateralShapeModel.adjacentEqualVertexPairsProperty.value;
-
     const adjacentCorners = this.quadrilateralShapeModel.adjacentVertexMap.get( this.vertex )!;
-
     const adjacentCornersEqual = this.quadrilateralShapeModel.isShapeAngleEqualToOther(
       adjacentCorners[ 0 ].angleProperty.value!,
       adjacentCorners[ 1 ].angleProperty.value!
     );
 
     let numberOfEqualAdjacentVertexPairs = 0;
+    const adjacentVertexPairs = this.quadrilateralShapeModel.adjacentEqualVertexPairsProperty.value;
     adjacentVertexPairs.forEach( vertexPair => {
       if ( vertexPair.vertex1 === this.vertex || vertexPair.vertex2 === this.vertex ) {
         numberOfEqualAdjacentVertexPairs++;
@@ -135,7 +133,7 @@ class VertexDescriber {
 
       // the adjacent corners are equal but not equal to provided vertex, combine their description and use either
       // to describe the relative description
-      description = StringUtils.fillIn( '{{comparison}} adjacent equal corners', {
+      description = StringUtils.fillIn( '{{comparison}} equal adjacent corners', {
         comparison: VertexDescriber.getAngleComparisonDescription( adjacentCorners[ 0 ], this.vertex )
       } );
     }

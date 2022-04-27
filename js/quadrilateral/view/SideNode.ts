@@ -22,6 +22,7 @@ import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import { Line, Shape } from '../../../../kite/js/imports.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import vibrationManager from '../../../../tappi/js/vibrationManager.js';
+import SideDescriber from './SideDescriber.js';
 
 // The dilation around side shapes when drawing the focus highlight.
 const FOCUS_HIGHLIGHT_DILATION = 15;
@@ -76,6 +77,9 @@ class SideNode extends Voicing( Path, 1 ) {
 
     // Mutate options eagerly, but not in super because that doesn't work with the Voicing trait
     this.mutate( options );
+
+    // Generates descriptions
+    const sideDescriber = new SideDescriber( side, this.quadrilateralShapeModel );
 
     // Reusable lineNode for calculating the shape of the focus highlight
     const lineNode = new LineNode( 0, 0, 0, 0 );
@@ -254,6 +258,12 @@ class SideNode extends Voicing( Path, 1 ) {
         side.isPressedProperty.value = false;
       }
     } );
+
+    // voicing
+    this.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
+      this.voicingObjectResponse = sideDescriber.getSideObjectResponse();
+    } );
+    this.voicingObjectResponse = sideDescriber.getSideObjectResponse();
 
     // vibration
     // TODO: This code for vibration is a prototype, and only vibrates for a finite time.  It will need to be improved
