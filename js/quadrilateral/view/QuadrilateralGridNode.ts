@@ -15,6 +15,7 @@ import Range from '../../../../dot/js/Range.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import GridLineSet from '../../../../bamboo/js/GridLineSet.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
+import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 
 const GRID_SPACING = QuadrilateralModel.MAJOR_GRID_SPACING * 4;
 
@@ -23,7 +24,7 @@ const GRID_LINE_OPTIONS = {
 };
 
 class QuadrilateralGridNode extends Node {
-  constructor( modelBoundsProperty: Property<Bounds2 | null>, modelViewTransform: ModelViewTransform2 ) {
+  constructor( modelBoundsProperty: Property<Bounds2 | null>, visibleProperty: IReadOnlyProperty<boolean>, modelViewTransform: ModelViewTransform2 ) {
     super();
 
     const chartTransform = new ChartTransform();
@@ -47,6 +48,8 @@ class QuadrilateralGridNode extends Node {
         chartTransform.setModelYRange( new Range( modelBounds.top, modelBounds.bottom ) );
       }
     } );
+
+    visibleProperty.link( visible => { this.visible = visible; } );
   }
 }
 

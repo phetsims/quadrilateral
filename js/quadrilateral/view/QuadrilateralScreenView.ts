@@ -167,7 +167,7 @@ class QuadrilateralScreenView extends ScreenView {
       this.addChild( new SideLengthAreaNode( shapeModel, shapeModel.leftSide, shapeModel.rightSide, shapeModel.bottomSide, modelViewTransform, { drawRotation: Math.PI / 2 } ) );
     }
 
-    const gridNode = new QuadrilateralGridNode( model.modelBoundsProperty, this.modelViewTransform );
+    const gridNode = new QuadrilateralGridNode( model.modelBoundsProperty, model.symmetryGridVisibleProperty, this.modelViewTransform );
     gridNode.leftTop = boundsRectangle.leftTop.plusScalar( BORDER_RECTANGLE_LINE_WIDTH / 2 );
     this.addChild( gridNode );
 
