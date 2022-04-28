@@ -6,8 +6,7 @@
  * @author Jesse Greenberg
  */
 
-import merge from '../../../../phet-core/js/merge.js';
-import { Circle, DragListener, KeyboardDragListener, SceneryEvent, Text, Voicing } from '../../../../scenery/js/imports.js';
+import { Circle, CircleOptions, DragListener, KeyboardDragListener, SceneryEvent, Text, Voicing } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -19,39 +18,39 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import vibrationManager from '../../../../tappi/js/vibrationManager.js';
 import VertexDescriber from './VertexDescriber.js';
 import { Shape } from '../../../../kite/js/imports.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 
 // constants
 const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
 
 const POINTER_AREA_DILATION = 5;
 
+type SelfOptions = {
+
+  // a11y - for both PDOM and Voicing
+  nameResponse?: null | string;
+};
+
+// VertexNode sets these properties explicitly from the nameResponse option
+type VertexNodeOptions = SelfOptions & Omit<CircleOptions, 'voicingNameResponse' | 'innerContent'>;
+
 class VertexNode extends Voicing( Circle, 1 ) {
   private readonly model: QuadrilateralModel;
 
-  // TODO: Options pattern cannot be used yet because of the trait pattern
-  constructor( vertex: Vertex, vertexLabel: string, model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, options?: any ) {
-    options = merge( {
-
+  constructor( vertex: Vertex, vertexLabel: string, model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, providedOptions?: VertexNodeOptions ) {
+    const options = optionize<VertexNodeOptions, SelfOptions, CircleOptions>()( {
       fill: QuadrilateralColors.quadrilateralShapeColorProperty,
       stroke: QuadrilateralColors.quadrilateralShapeStrokeColorProperty,
-
-      // pdom
       tagName: 'div',
       ariaRole: 'application',
       focusable: true,
-
-      // a11y - for both PDOM and Voicing
       nameResponse: null,
-
-      // phet-io
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     const viewRadius = modelViewTransform.modelToViewBounds( vertex.modelBoundsProperty.value ).width / 2;
     super( viewRadius );
 
-    assert && assert( options.voicingNameResponse === undefined, 'VertexNode sets voicingNameResponse from nameResponse' );
-    assert && assert( options.innerContent === undefined, 'VertexNode sets innerContent from nameResponse' );
     this.voicingNameResponse = options.nameResponse;
     this.innerContent = options.nameResponse;
 
