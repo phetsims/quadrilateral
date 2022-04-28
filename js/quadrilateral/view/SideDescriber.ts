@@ -13,6 +13,7 @@ import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import quadrilateralStrings from '../../quadrilateralStrings.js';
+import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 
 // constants
 const farLongerThanString = quadrilateralStrings.a11y.voicing.farLongerThan;
@@ -86,8 +87,15 @@ class SideDescriber {
                           parallelSideObjectResponsePatternString :
                           sideObjectResponsePatternString;
 
+    // If the quadrilateral is a rhombus or a square, always describe that the opposite side is equal in length to the
+    // other. This may not happen naturally by comparing side lengths because a rhombus and square may be detected
+    // when sides are not perfectly equal due to the angle tolerance interval.
+    const shapeName = this.quadrilateralShapeModel.shapeNameProperty.value;
+    const oppositeComparison = shapeName === NamedQuadrilateral.SQUARE || shapeName === NamedQuadrilateral.RHOMBUS ?
+                               equalToString : SideDescriber.getLengthComparisonDescription( oppositeSide, this.side );
+
     response = StringUtils.fillIn( patternString, {
-      oppositeComparison: SideDescriber.getLengthComparisonDescription( oppositeSide, this.side ),
+      oppositeComparison: oppositeComparison,
       adjacentSideDescription: this.getAdjacentSideDescription()
     } );
 
