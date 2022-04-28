@@ -22,7 +22,6 @@ import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsMo
 import quadrilateralStrings from '../../quadrilateralStrings.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
-import QuadrilateralAlerter from './QuadrilateralAlerter.js';
 import Dialog from '../../../../sun/js/Dialog.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import CalibrationContentNode from './CalibrationContentNode.js';
@@ -47,7 +46,6 @@ class QuadrilateralScreenView extends ScreenView {
   private readonly demonstrationNode: SideDemonstrationNode | null;
   private readonly quadrilateralSoundView: QuadrilateralSoundView | null;
   public readonly quadrilateralDescriber: QuadrilateralDescriber;
-  private readonly quadrilateralAlerter: QuadrilateralAlerter;
   private readonly resetAllButton: ResetAllButton;
   private readonly quadrilateralMarkerInput: QuadrilateralMarkerInput | null;
 
@@ -118,9 +116,6 @@ class QuadrilateralScreenView extends ScreenView {
 
     // Responsible for generating descriptions of the state of the quadrilateral for accessibility.
     this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel );
-
-    // Responsible for alerting updates about the changing simulation in real-time.
-    this.quadrilateralAlerter = new QuadrilateralAlerter( model, this );
 
     // A reference to the QuadrilateralNode. For now, it is not always created while we have the side query parameters
     // for development. But we may want
@@ -337,8 +332,6 @@ class QuadrilateralScreenView extends ScreenView {
     this.quadrilateralNode && this.quadrilateralNode.step( dt );
 
     vibrationManager.step( dt );
-
-    this.quadrilateralAlerter.step( dt );
   }
 }
 
