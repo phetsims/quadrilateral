@@ -102,7 +102,17 @@ type StringsType = {
       'equalAdjacentCornersPattern': string,
       'smallerThanAdjacentCorners': string,
       'widerThanAdjacentCorners': string,
-      'notEqualToAdjacentCorners': string
+      'notEqualToAdjacentCorners': string,
+      'farLongerThan': string,
+      'farShorterThan': string,
+      'muchMuchLongerThan': string,
+      'muchMuchShorterThan': string,
+      'muchLongerThan': string,
+      'muchShorterThan': string,
+      'somewhatLongerThan': string,
+      'somewhatShorterThan': string,
+      'aLittleLongerThan': string,
+      'aLittleShorterThan': string
     }
   }
 };

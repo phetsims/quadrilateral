@@ -12,6 +12,21 @@ import Range from '../../../../dot/js/Range.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
+import quadrilateralStrings from '../../quadrilateralStrings.js';
+
+// constants
+const farLongerThanString = quadrilateralStrings.a11y.voicing.farLongerThan;
+const farShorterThanString = quadrilateralStrings.a11y.voicing.farShorterThan;
+const muchMuchLongerThanString = quadrilateralStrings.a11y.voicing.muchMuchLongerThan;
+const muchMuchShorterThanString = quadrilateralStrings.a11y.voicing.muchMuchShorterThan;
+const muchLongerThanString = quadrilateralStrings.a11y.voicing.muchLongerThan;
+const muchShorterThanString = quadrilateralStrings.a11y.voicing.muchShorterThan;
+const somewhatLongerThanString = quadrilateralStrings.a11y.voicing.somewhatLongerThan;
+const somewhatShorterThanString = quadrilateralStrings.a11y.voicing.somewhatShorterThan;
+const aLittleLongerThanString = quadrilateralStrings.a11y.voicing.aLittleLongerThan;
+const aLittleShorterThanString = quadrilateralStrings.a11y.voicing.aLittleShorterThan;
+const comparableToString = quadrilateralStrings.a11y.voicing.comparableTo;
+const equalToString = quadrilateralStrings.a11y.voicing.equalTo;
 
 // A map that will provide comparison descriptions for side lengths. Lengths in model units.
 const lengthComparisonDescriptionMap = new Map<Range, string>();
@@ -27,13 +42,13 @@ const createLengthComparisonMapEntry = ( minSegments: number, maxSegments: numbe
   lengthComparisonDescriptionMap.set( new Range( -maxLength, -minLength ), shorterString );
 };
 
-createLengthComparisonMapEntry( 6, Number.POSITIVE_INFINITY, 'far longer than', 'far shorter than' );
-createLengthComparisonMapEntry( 4.5, 6, 'much much longer than', 'much much shorter than' );
-createLengthComparisonMapEntry( 3, 4.5, 'much longer than', 'much shorter than' );
-createLengthComparisonMapEntry( 1.5, 3, 'somewhat longer than', 'somewhat shorter than' );
-createLengthComparisonMapEntry( 0.5, 1.5, 'a little longer than', 'a little shorter than' );
-createLengthComparisonMapEntry( QuadrilateralQueryParameters.shapeLengthToleranceInterval, 0.5, 'comparable to', 'comparable to' );
-createLengthComparisonMapEntry( 0, QuadrilateralQueryParameters.shapeLengthToleranceInterval, 'equal to', 'equal to' );
+createLengthComparisonMapEntry( 6, Number.POSITIVE_INFINITY, farLongerThanString, farShorterThanString );
+createLengthComparisonMapEntry( 4.5, 6, muchMuchLongerThanString, muchMuchShorterThanString );
+createLengthComparisonMapEntry( 3, 4.5, muchLongerThanString, muchShorterThanString );
+createLengthComparisonMapEntry( 1.5, 3, somewhatLongerThanString, somewhatShorterThanString );
+createLengthComparisonMapEntry( 0.5, 1.5, aLittleLongerThanString, aLittleShorterThanString );
+createLengthComparisonMapEntry( QuadrilateralQueryParameters.shapeLengthToleranceInterval, 0.5, comparableToString, comparableToString );
+createLengthComparisonMapEntry( 0, QuadrilateralQueryParameters.shapeLengthToleranceInterval, equalToString, equalToString );
 
 class SideDescriber {
 

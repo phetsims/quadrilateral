@@ -261,6 +261,39 @@
       },
       "notEqualToAdjacentCorners": {
         "value": "not equal to adjacent corners"
+      },
+      "farLongerThan": {
+        "value": "far longer than"
+      },
+      "farShorterThan": {
+        "value": "far shorter than"
+      },
+      "muchMuchLongerThan": {
+        "value": "much much longer than"
+      },
+      "muchMuchShorterThan": {
+        "value": "much much shorter than"
+      },
+      "muchLongerThan": {
+        "value": "much longer than"
+      },
+      "muchShorterThan": {
+        "value": "much shorter than"
+      },
+      "somewhatLongerThan": {
+        "value": "somewhat longer than"
+      },
+      "somewhatShorterThan": {
+        "value": "somewhat shorter than"
+      },
+      "aLittleLongerThan": {
+        "value": "a little longer than"
+      },
+      "aLittleShorterThan": {
+        "value": "a little shorter than"
+      },
+      "parallelSideObjectResponsePattern": {
+        "value":
       }
     }
   }
