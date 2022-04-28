@@ -39,6 +39,8 @@ import vibrationManager from '../../../../tappi/js/vibrationManager.js';
 const MODEL_BOUNDS = QuadrilateralQueryParameters.calibrationDemoDevice ? new Bounds2( -4.5, -4.5, 4.5, 4.5 ) :
                      new Bounds2( -1, -1, 1, 1 );
 
+const BORDER_RECTANGLE_LINE_WIDTH = 2;
+
 class QuadrilateralScreenView extends ScreenView {
   private readonly model: QuadrilateralModel;
   private readonly modelViewTransform: ModelViewTransform2;
@@ -149,7 +151,7 @@ class QuadrilateralScreenView extends ScreenView {
     // Rounded corners to look nice, but actual model bounds are pure Bounds2.
     assert && assert( this.model.modelBoundsProperty.value !== null );
     const playAreaViewBounds = modelViewTransform.modelToViewBounds( this.model.modelBoundsProperty.value! );
-    const boundsRectangle = new Rectangle( playAreaViewBounds, 5, 5, { stroke: 'white', lineWidth: 2 } );
+    const boundsRectangle = new Rectangle( playAreaViewBounds, 5, 5, { stroke: 'white', lineWidth: BORDER_RECTANGLE_LINE_WIDTH } );
     this.addChild( boundsRectangle );
 
     if ( QuadrilateralQueryParameters.showDragAreas ) {
@@ -164,8 +166,9 @@ class QuadrilateralScreenView extends ScreenView {
       this.addChild( new SideLengthAreaNode( shapeModel, shapeModel.bottomSide, shapeModel.topSide, shapeModel.rightSide, modelViewTransform, { drawRotation: Math.PI } ) );
       this.addChild( new SideLengthAreaNode( shapeModel, shapeModel.leftSide, shapeModel.rightSide, shapeModel.bottomSide, modelViewTransform, { drawRotation: Math.PI / 2 } ) );
     }
+
     const gridNode = new QuadrilateralGridNode( model.modelBoundsProperty, this.modelViewTransform );
-    gridNode.leftTop = boundsRectangle.leftTop;
+    gridNode.leftTop = boundsRectangle.leftTop.plusScalar( BORDER_RECTANGLE_LINE_WIDTH / 2 );
     this.addChild( gridNode );
 
     this.quadrilateralMarkerInput = null;

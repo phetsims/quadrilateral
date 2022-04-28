@@ -14,14 +14,21 @@ import Orientation from '../../../../phet-core/js/Orientation.js';
 import Range from '../../../../dot/js/Range.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import GridLineSet from '../../../../bamboo/js/GridLineSet.js';
+import QuadrilateralColors from '../../common/QuadrilateralColors.js';
+
+const GRID_SPACING = QuadrilateralModel.MAJOR_GRID_SPACING * 4;
+
+const GRID_LINE_OPTIONS = {
+  stroke: QuadrilateralColors.symmetryGridColorProperty
+};
 
 class QuadrilateralGridNode extends Node {
   constructor( modelBoundsProperty: Property<Bounds2 | null>, modelViewTransform: ModelViewTransform2 ) {
     super();
 
     const chartTransform = new ChartTransform();
-    const majorHorizontalLineSet = new GridLineSet( chartTransform, Orientation.HORIZONTAL, QuadrilateralModel.MAJOR_GRID_SPACING );
-    const majorVerticalLineSet = new GridLineSet( chartTransform, Orientation.VERTICAL, QuadrilateralModel.MAJOR_GRID_SPACING );
+    const majorHorizontalLineSet = new GridLineSet( chartTransform, Orientation.HORIZONTAL, GRID_SPACING, GRID_LINE_OPTIONS );
+    const majorVerticalLineSet = new GridLineSet( chartTransform, Orientation.VERTICAL, GRID_SPACING, GRID_LINE_OPTIONS );
 
     this.children = [
       majorHorizontalLineSet,
