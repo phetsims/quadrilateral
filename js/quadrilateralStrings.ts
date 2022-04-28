@@ -13,6 +13,7 @@ type StringsType = {
   },
   'cornerLabels': string,
   'cornerGuides': string,
+  'symmetryGrid': string,
   'vertexA': string,
   'vertexB': string,
   'vertexC': string,

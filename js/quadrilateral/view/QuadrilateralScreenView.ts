@@ -65,7 +65,10 @@ class QuadrilateralScreenView extends ScreenView {
       debugValuesPanel.visible = showValues;
     } );
 
-    const visibilityControls = new QuadrilateralVisibilityControls( model.vertexLabelsVisibleProperty, model.cornerGuideVisibleProperty, {
+    const visibilityControls = new QuadrilateralVisibilityControls(
+      model.vertexLabelsVisibleProperty,
+      model.cornerGuideVisibleProperty,
+      model.symmetryGridVisibleProperty, {
       rightCenter: this.layoutBounds.rightCenter.minusXY( QuadrilateralConstants.SCREEN_VIEW_X_MARGIN, 0 ),
       tandem: tandem.createTandem( 'visibilityControls' )
     } );

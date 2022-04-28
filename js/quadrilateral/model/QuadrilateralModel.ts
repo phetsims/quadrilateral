@@ -30,6 +30,7 @@ class QuadrilateralModel {
   public markerRotationProperty: NumberProperty;
   public cornerGuideVisibleProperty: BooleanProperty;
   public vertexLabelsVisibleProperty: BooleanProperty;
+  public symmetryGridVisibleProperty: BooleanProperty;
   public shapeIdentificationFeedbackEnabledProperty: BooleanProperty;
 
   public quadrilateralShapeModel: QuadrilateralShapeModel;
@@ -94,6 +95,9 @@ class QuadrilateralModel {
       tandem: tandem.createTandem( 'vertexLabelsVisibleProperty' )
     } );
 
+    this.symmetryGridVisibleProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'symmetryGridVisibleProperty' )
+    } );
 
     // Whether the angle guide graphics are visible at each vertex.
     this.cornerGuideVisibleProperty = new BooleanProperty( false, {

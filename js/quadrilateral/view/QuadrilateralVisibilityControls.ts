@@ -29,7 +29,7 @@ type QuadrilateralVisibilityControlsSelfOptions = {
 type QuadrilateralVisibilityControlsOptions = QuadrilateralVisibilityControlsSelfOptions & Omit<VBoxOptions, 'children'>
 
 class QuadrilateralVisibilityControls extends VBox {
-  constructor( cornerLabelsVisibleProperty: BooleanProperty, cornerGuideVisibleProperty: BooleanProperty, providedOptions?: QuadrilateralVisibilityControlsOptions ) {
+  constructor( cornerLabelsVisibleProperty: BooleanProperty, cornerGuideVisibleProperty: BooleanProperty, symmetryGridVisibleProperty: BooleanProperty, providedOptions?: QuadrilateralVisibilityControlsOptions ) {
 
     const options = optionize<QuadrilateralVisibilityControlsOptions, QuadrilateralVisibilityControlsSelfOptions, VBoxOptions>()( {
       align: 'left',
@@ -74,7 +74,25 @@ class QuadrilateralVisibilityControls extends VBox {
       tandem: options.tandem.createTandem( 'cornerGuideCheckbox' )
     } );
 
-    options.children = [ cornerLabelsCheckbox, cornerGuideCheckbox ];
+    const symmetryGridText = new Text( quadrilateralStrings.symmetryGrid, TEXT_OPTIONS );
+    const symmetryGridCheckbox = new Checkbox( symmetryGridText, symmetryGridVisibleProperty, {
+
+      // pdom
+      labelTagName: 'label',
+      labelContent: quadrilateralStrings.symmetryGrid,
+
+      // voicing
+      voicingNameResponse: quadrilateralStrings.symmetryGrid,
+
+      // a11y
+      checkedContextResponse: 'Please add checkbox context response.',
+      uncheckedContextResponse: 'Please add checkbox context response.',
+
+      // phet-io
+      tandem: options.tandem.createTandem( 'cornerGuideCheckbox' )
+    } );
+
+    options.children = [ cornerLabelsCheckbox, cornerGuideCheckbox, symmetryGridCheckbox ];
 
     super( options );
   }

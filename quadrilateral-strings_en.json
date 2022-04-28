@@ -8,6 +8,9 @@
   "cornerGuides": {
     "value": "Corner Guides"
   },
+  "symmetryGrid": {
+    "value": "Symmetry Grid"
+  },
   "vertexA": {
     "value": "A"
   },
