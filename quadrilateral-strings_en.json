@@ -111,6 +111,83 @@
       "firstDetailsStatementPattern": {
         "value": "Right now, {{cornerType}} corners are {{angleEquality}}, and {{sideType}} sides are equal."
       },
+      "details": {
+        "all": {
+          "value": "all"
+        },
+        "opposite": {
+          "value": "opposite"
+        },
+        "rightAngles": {
+          "value": "right angles"
+        },
+        "equal": {
+          "value": "equal"
+        },
+        "pairsOfAdjacent": {
+          "value": "pairs of adjacent"
+        },
+        "onePairOfAdjacent": {
+          "value": "one pair of adjacent"
+        },
+        "onePairOfOpposite": {
+          "value": "one pair of opposite"
+        },
+        "noString": {
+          "value": "no"
+        },
+        "cornersPattern": {
+          "value": "Equal {{firstCorners}} are {{firstComparison}} {{thirdCorner}} and {{secondComparison}} {{fourthCorner}}."
+        },
+        "cornerPointsPattern": {
+          "value": "{{firstCorner}} points toward {{secondCorner}}."
+        },
+        "cornerConcavePattern": {
+          "value": "{{quadrilateralStatement}} {{pointingStatement}}"
+        },
+        "sidesPattern": {
+          "value": "Parallel Sides {{firstSide}} and {{secondSide}} are {{comparison}} parallel Sides {{thirdSide}} and {{fourthSide}}."
+        },
+        "kiteSidesPattern": {
+          "value": "Equal Sides {{firstSide}} and {{secondSide}} are {{comparison}} equal Sides {{thirdSide}} and {{fourthSide}}."
+        },
+        "trapezoidSidesPattern": {
+          "value":"Side {{firstSide}} is {{firstComparison}} Side {{secondSide}} and parallel. Side {{thirdSide}} is {{secondComparison}} Side {{fourthSide}}."
+        },
+        "equalSidesPattern": {
+          "value": "Sides {{firstSide}} and {{secondSide}} are equal."
+        },
+        "twoStatementPattern": {
+          "value": "{{firstStatement}} {{secondStatement}}"
+        },
+        "sideConcavePattern": {
+          "value": "Equal Sides {{firstSide}} and {{secondSide}} are {{comparison}} equal Sides {{thirdSide}} and {{fourthSide}}."
+        },
+        "generalSidePattern": {
+          "value": "Side {{firstSide}} is {{firstComparison}} side {{secondSide}}. Side {{thirdSide}} is {{secondComparison}} Side {{fourthSide}}"
+        },
+        "generalSideWithOneAdjacentEqualPairPattern": {
+          "value": "Equal sides {{firstSide}} and {{secondSide}} are {{firstComparison}} Side {{thirdSide}} and {{secondComparison}} {{fourthSide}}. Side {{thirdSide}} is {{thirdComparison}} {{fourthSide}}."
+        },
+        "generalVertexPattern": {
+          "value": "{{firstCorner}} is {{firstComparison}} {{secondCorner}}, and {{thirdCorner}} is {{secondComparison}} {{fourthCorner}}."
+        },
+        "cornerAnglePattern": {
+          "value": "right angle {{cornerLabel}}"
+        },
+        "rightAngleCornersPattern": {
+          "value": "right angle {{cornersString}}"
+        },
+        "twoEqualVerticesAnglePattern": {
+          "value": "Equal {{firstCorners}} are {{firstComparison}} {{thirdCorner}} and {{secondComparison}} {{fourthCorner}}."
+        },
+        "twoPairsOfEqualVerticesPattern": {
+          "value": "Equal {{firstCorners}} are {{comparison}} equal {{secondCorners}}."
+        },
+        "cornersAnglePattern": {
+          "value": "'Corners {{firstCorner}} and {{secondCorner}}"
+        }
+      },
       "shapeNames": {
         "square": {
           "value": "a square"

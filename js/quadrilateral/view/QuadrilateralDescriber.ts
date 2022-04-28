@@ -14,8 +14,6 @@ import Side from '../model/Side.js';
 import QuadrilateralShapeModel, { SidePair, VertexPair } from '../model/QuadrilateralShapeModel.js';
 import Vertex from '../model/Vertex.js';
 import VertexLabel from '../model/VertexLabel.js';
-import Range from '../../../../dot/js/Range.js';
-import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import VertexDescriber from './VertexDescriber.js';
 import SideDescriber from './SideDescriber.js';
 
@@ -46,7 +44,31 @@ const topSideString = quadrilateralStrings.a11y.topSide;
 const rightSideString = quadrilateralStrings.a11y.rightSide;
 const bottomSideString = quadrilateralStrings.a11y.bottomSide;
 const leftSideString = quadrilateralStrings.a11y.leftSide;
-
+const allString = quadrilateralStrings.a11y.voicing.details.all;
+const oppositeString = quadrilateralStrings.a11y.voicing.details.opposite;
+const rightAnglesString = quadrilateralStrings.a11y.voicing.details.rightAngles;
+const equalString = quadrilateralStrings.a11y.voicing.details.equal;
+const pairsOfAdjacentString = quadrilateralStrings.a11y.voicing.details.pairsOfAdjacent;
+const onePairOfAdjacentString = quadrilateralStrings.a11y.voicing.details.onePairOfAdjacent;
+const onePairOfOppositeString = quadrilateralStrings.a11y.voicing.details.onePairOfOpposite;
+const noString = quadrilateralStrings.a11y.voicing.details.noString;
+const cornersPatternString = quadrilateralStrings.a11y.voicing.details.cornersPattern;
+const cornerPointsPatternString = quadrilateralStrings.a11y.voicing.details.cornerPointsPattern;
+const cornerConcavePatternString = quadrilateralStrings.a11y.voicing.details.cornerConcavePattern;
+const sidesPatternString = quadrilateralStrings.a11y.voicing.details.sidesPattern;
+const kiteSidesPatternString = quadrilateralStrings.a11y.voicing.details.kiteSidesPattern;
+const trapezoidSidesPatternString = quadrilateralStrings.a11y.voicing.details.trapezoidSidesPattern;
+const equalSidesPatternString = quadrilateralStrings.a11y.voicing.details.equalSidesPattern;
+const twoStatementPatternString = quadrilateralStrings.a11y.voicing.details.twoStatementPattern;
+const sideConcavePatternString = quadrilateralStrings.a11y.voicing.details.sideConcavePattern;
+const generalSidePatternString = quadrilateralStrings.a11y.voicing.details.generalSidePattern;
+const generalVertexPatternString = quadrilateralStrings.a11y.voicing.details.generalVertexPattern;
+const cornerAnglePatternString = quadrilateralStrings.a11y.voicing.details.cornerAnglePattern;
+const rightAngleCornersPatternString = quadrilateralStrings.a11y.voicing.details.rightAngleCornersPattern;
+const twoEqualVerticesAnglePatternString = quadrilateralStrings.a11y.voicing.details.twoEqualVerticesAnglePattern;
+const generalSideWithOneAdjacentEqualPairPatternString = quadrilateralStrings.a11y.voicing.details.generalSideWithOneAdjacentEqualPairPattern;
+const twoPairsOfEqualVerticesPatternString = quadrilateralStrings.a11y.voicing.details.twoPairsOfEqualVerticesPattern;
+const cornersAnglePatternString = quadrilateralStrings.a11y.voicing.details.cornersAnglePattern;
 const vertexAString = quadrilateralStrings.vertexA;
 const vertexBString = quadrilateralStrings.vertexB;
 const vertexCString = quadrilateralStrings.vertexC;
@@ -68,28 +90,6 @@ vertexLabelMap.set( VertexLabel.VERTEX_A, vertexAString );
 vertexLabelMap.set( VertexLabel.VERTEX_B, vertexBString );
 vertexLabelMap.set( VertexLabel.VERTEX_C, vertexCString );
 vertexLabelMap.set( VertexLabel.VERTEX_D, vertexDString );
-
-// A map that will provide comparison descriptions for side lengths. Lengths in model units.
-const lengthComparisonDescriptionMap = new Map<Range, string>();
-
-// Populate entries of the lengthComparisonDescriptionMap - They are symmetric in that ranges for "longer" strings
-// have the same ranges as the "shorter" strings with values inverted. Lengths for this function are provided in the
-// number of segments, since that is how it is described in the design doc. That is converted to model units for
-// the map.
-const createLengthComparisonMapEntry = ( minSegments: number, maxSegments: number, longerString: string, shorterString: string ) => {
-  const minLength = minSegments * Side.SIDE_SEGMENT_LENGTH;
-  const maxLength = maxSegments * Side.SIDE_SEGMENT_LENGTH;
-  lengthComparisonDescriptionMap.set( new Range( minLength, maxLength ), longerString );
-  lengthComparisonDescriptionMap.set( new Range( -maxLength, -minLength ), shorterString );
-};
-
-createLengthComparisonMapEntry( 6, Number.POSITIVE_INFINITY, 'far longer than', 'far shorter than' );
-createLengthComparisonMapEntry( 4.5, 6, 'much much longer than', 'much much shorter than' );
-createLengthComparisonMapEntry( 3, 4.5, 'much longer than', 'much shorter than' );
-createLengthComparisonMapEntry( 1.5, 3, 'somewhat longer than', 'somewhat shorter than' );
-createLengthComparisonMapEntry( 0.5, 1.5, 'a little longer than', 'a little shorter than' );
-createLengthComparisonMapEntry( QuadrilateralQueryParameters.shapeLengthToleranceInterval, 0.5, 'comparable to', 'comparable to' );
-createLengthComparisonMapEntry( 0, QuadrilateralQueryParameters.shapeLengthToleranceInterval, 'equal to', 'equal to' );
 
 class QuadrilateralDescriber {
   private readonly shapeModel: QuadrilateralShapeModel;
@@ -408,31 +408,31 @@ class QuadrilateralDescriber {
     if ( this.shapeModel.isParallelogramProperty.value ) {
 
       // If all adjacent vertices are equal then all are right angles. Otherwise, opposite angles must be equal.
-      cornerTypeString = adjacentEqualVertexPairs.length === 4 ? 'all' : 'opposite';
-      angleEqualityString = adjacentEqualVertexPairs.length === 4 ? 'right angles' : 'equal';
+      cornerTypeString = adjacentEqualVertexPairs.length === 4 ? allString : oppositeString;
+      angleEqualityString = adjacentEqualVertexPairs.length === 4 ? rightAnglesString : equalString;
 
       // if all adjacent sides are equal in length, all sides are equal, otherwise only opposite sides are equal
-      sideTypeString = adjacentEqualSidePairs.length === 4 ? 'all' : 'opposite';
+      sideTypeString = adjacentEqualSidePairs.length === 4 ? allString : oppositeString;
     }
     else {
       const oppositeEqualVertexPairs = this.shapeModel.oppositeEqualVertexPairsProperty.value;
       const oppositeEqualSidePairs = this.shapeModel.oppositeEqualSidePairsProperty.value;
 
-      cornerTypeString = adjacentEqualVertexPairs.length === 2 ? 'pairs of adjacent' :
-                         adjacentEqualVertexPairs.length === 1 ? 'one pair of adjacent' :
-                         oppositeEqualVertexPairs.length === 1 ? 'one pair of opposite' :
-                         'no';
+      cornerTypeString = adjacentEqualVertexPairs.length === 2 ? pairsOfAdjacentString :
+                         adjacentEqualVertexPairs.length === 1 ? onePairOfAdjacentString :
+                         oppositeEqualVertexPairs.length === 1 ? onePairOfOppositeString :
+                         noString;
 
-      angleEqualityString = adjacentEqualVertexPairs.length === 1 && this.shapeModel.isShapeAngleEqualToOther( adjacentEqualVertexPairs[ 0 ].vertex1.angleProperty.value!, Math.PI / 2 ) ? 'right angles' :
-                            oppositeEqualVertexPairs.length === 1 && this.shapeModel.isShapeAngleEqualToOther( oppositeEqualVertexPairs[ 0 ].vertex1.angleProperty.value!, Math.PI / 2 ) ? 'right angles' :
+      angleEqualityString = adjacentEqualVertexPairs.length === 1 && this.shapeModel.isShapeAngleEqualToOther( adjacentEqualVertexPairs[ 0 ].vertex1.angleProperty.value!, Math.PI / 2 ) ? rightAnglesString :
+                            oppositeEqualVertexPairs.length === 1 && this.shapeModel.isShapeAngleEqualToOther( oppositeEqualVertexPairs[ 0 ].vertex1.angleProperty.value!, Math.PI / 2 ) ? rightAnglesString :
                               // if two pairs of adjacent angles exist but we are not parallelogram, all cannot be
                               // right angles. OR, no angles are equal.
-                            'equal';
+                            equalString;
 
-      sideTypeString = adjacentEqualSidePairs.length === 2 ? 'pairs of adjacent' :
-                       adjacentEqualSidePairs.length === 1 ? 'one pair of adjacent' :
-                       oppositeEqualSidePairs.length === 1 ? 'one pair of opposite' :
-                       'no';
+      sideTypeString = adjacentEqualSidePairs.length === 2 ? pairsOfAdjacentString :
+                       adjacentEqualSidePairs.length === 1 ? onePairOfAdjacentString :
+                       oppositeEqualSidePairs.length === 1 ? onePairOfOppositeString :
+                       noString;
     }
 
     return StringUtils.fillIn( firstDetailsStatementPatternString, {
@@ -480,7 +480,7 @@ class QuadrilateralDescriber {
         // how the equal vertex angles compare qualitatively to the second unequal vertex
         const secondComparisonString = VertexDescriber.getAngleComparisonDescription( orderedUnequalVertices[ 1 ], orderedEqualVertices[ 0 ] );
 
-        const patternString = 'Equal {{firstCorners}} are {{firstComparison}} {{thirdCorner}} and {{secondComparison}} {{fourthCorner}}.';
+        const patternString = cornersPatternString;
         statement = StringUtils.fillIn( patternString, {
           firstCorners: firstCornersString,
           firstComparison: firstComparisonString,
@@ -544,14 +544,13 @@ class QuadrilateralDescriber {
         } );
         assert && assert( otherVertex && concaveVertex, 'A concave shape better have a vertex whose angle is greater than Math.PI' );
 
-        const pointingPatternString = '{{firstCorner}} points toward {{secondCorner}}.';
+        const pointingPatternString = cornerPointsPatternString;
         const pointingStatementString = StringUtils.fillIn( pointingPatternString, {
           firstCorner: this.getCornerAngleDescription( concaveVertex! ),
           secondCorner: this.getCornerAngleDescription( otherVertex! )
         } );
 
-        const patternString = '{{quadrilateralStatement}} {{pointingStatement}}';
-        statement = StringUtils.fillIn( patternString, {
+        statement = StringUtils.fillIn( cornerConcavePatternString, {
           quadrilateralStatement: quadrilateralStatementString,
           pointingStatement: pointingStatementString
         } );
@@ -590,12 +589,12 @@ class QuadrilateralDescriber {
         // assert && assert( parallelSidePairs.length === 2, 'Should be two pairs of parallel sides for a parallelogram' );
         const oppositeSides = this.shapeModel.oppositeSides;
 
-        const patternString = 'Parallel Sides {{firstSide}} and {{secondSide}} are {{comparison}} parallel Sides {{thirdSide}} and {{fourthSide}}.';
+        const patternString = sidesPatternString;
         statement = this.getTwoSidePairsDescription( oppositeSides, patternString );
       }
       else if ( shapeName === NamedQuadrilateral.KITE ) {
         assert && assert( adjacentEqualSidePairs.length === 2, 'There should be two pairs of adjacent sides with with the same length for a kite' );
-        const patternString = 'Equal Sides {{firstSide}} and {{secondSide}} are {{comparison}} equal Sides {{thirdSide}} and {{fourthSide}}.';
+        const patternString = kiteSidesPatternString;
         statement = this.getTwoSidePairsDescription( adjacentEqualSidePairs, patternString );
       }
       else if ( shapeName === NamedQuadrilateral.TRAPEZOID || shapeName === NamedQuadrilateral.ISOSCELES_TRAPEZOID ) {
@@ -621,7 +620,7 @@ class QuadrilateralDescriber {
           // comparing third and fourth sides, relative to the third side
           const secondComparisonString = SideDescriber.getLengthComparisonDescription( fourthSide, thirdSide );
 
-          const trapezoidPatternString = 'Side {{firstSide}} is {{firstComparison}} Side {{secondSide}} and parallel. Side {{thirdSide}} is {{secondComparison}} Side {{fourthSide}}.';
+          const trapezoidPatternString = trapezoidSidesPatternString;
           const parallelSidesStatement = StringUtils.fillIn( trapezoidPatternString, {
             firstSide: this.getSideDescription( firstSide ),
             firstComparison: firstComparisonString,
@@ -638,13 +637,12 @@ class QuadrilateralDescriber {
             const firstSide = orderedAdjacentSides[ 0 ].side1;
             const secondSide = orderedAdjacentSides[ 0 ].side2;
 
-            const equalSidesPatternString = 'Sides {{firstSide}} and {{secondSide}} are equal.';
             const equalSidesStatement = StringUtils.fillIn( equalSidesPatternString, {
               firstSide: this.getSideDescription( firstSide ),
               secondSide: this.getSideDescription( secondSide )
             } );
 
-            statement = StringUtils.fillIn( '{{firstStatement}} {{secondStatement}}', {
+            statement = StringUtils.fillIn( twoStatementPatternString, {
               firstStatement: parallelSidesStatement,
               secondStatement: equalSidesStatement
             } );
@@ -660,7 +658,7 @@ class QuadrilateralDescriber {
       else if ( shapeName === NamedQuadrilateral.CONCAVE ) {
         if ( adjacentEqualSidePairs.length === 2 ) {
           assert && assert( adjacentEqualSidePairs.length === 2, 'There should be two pairs of adjacent sides with with the same length for a kite' );
-          const patternString = 'Equal Sides {{firstSide}} and {{secondSide}} are {{comparison}} equal Sides {{thirdSide}} and {{fourthSide}}.';
+          const patternString = sideConcavePatternString;
           statement = this.getTwoSidePairsDescription( adjacentEqualSidePairs, patternString );
         }
         else {
@@ -672,8 +670,6 @@ class QuadrilateralDescriber {
         // General quadrilateral - if there is one pair of adjacent sides we have this unique pattern that describes
         // the pair of equal sides relative to the others
         if ( adjacentEqualSidePairs.length === 1 ) {
-          const patternString = 'Equal sides {{firstSide}} and {{secondSide}} are {{firstComparison}} Side {{thirdSide}} and {{secondComparison}} {{fourthSide}}. Side {{thirdSide}} is {{thirdComparison}} {{fourthSide}}.';
-
           const sortedAdjacentSidePairs = this.getSidePairsOrderedForDescription( adjacentEqualSidePairs );
 
           const firstSide = sortedAdjacentSidePairs[ 0 ].side1;
@@ -696,7 +692,7 @@ class QuadrilateralDescriber {
           // third comparison is the fourth side against the third side, relative to the third side
           const thirdComparisonString = SideDescriber.getLengthComparisonDescription( fourthSide, thirdSide );
 
-          statement = StringUtils.fillIn( patternString, {
+          statement = StringUtils.fillIn( generalSideWithOneAdjacentEqualPairPatternString, {
             firstSide: this.getSideDescription( firstSide ),
             secondSide: this.getSideDescription( secondSide ),
             firstComparison: firstComparisonString,
@@ -735,8 +731,7 @@ class QuadrilateralDescriber {
     const firstComparisonString = VertexDescriber.getAngleComparisonDescription( orderedOppositeVertexPairs[ 0 ].vertex2, orderedOppositeVertexPairs[ 0 ].vertex1 );
     const secondComparisonString = VertexDescriber.getAngleComparisonDescription( orderedOppositeVertexPairs[ 1 ].vertex2, orderedOppositeVertexPairs[ 1 ].vertex1 );
 
-    const patternString = '{{firstCorner}} is {{firstComparison}} {{secondCorner}}, and {{thirdCorner}} is {{secondComparison}} {{fourthCorner}}.';
-    return StringUtils.fillIn( patternString, {
+    return StringUtils.fillIn( generalVertexPatternString, {
       firstCorner: firstCornerString,
       firstComparison: firstComparisonString,
       secondCorner: secondCornerString,
@@ -755,7 +750,7 @@ class QuadrilateralDescriber {
 
     // general fallback pattern for a quadrilateral without interesting properties, describing relative lengths
     // of opposite sides
-    const patternString = 'Side {{firstSide}} is {{firstComparison}} side {{secondSide}}. Side {{thirdSide}} is {{secondComparison}} Side {{fourthSide}}';
+    const patternString = generalSidePatternString;
     const sortedOppositeSidePairs = this.getSidePairsOrderedForDescription( this.shapeModel.oppositeSides );
 
     const firstSide = sortedOppositeSidePairs[ 0 ].side1;
@@ -811,7 +806,7 @@ class QuadrilateralDescriber {
     const firstVertex = sortedVertices[ 0 ];
     const secondVertex = sortedVertices[ 1 ];
 
-    const patternString = 'Equal {{firstCorners}} are {{firstComparison}} {{thirdCorner}} and {{secondComparison}} {{fourthCorner}}.';
+    const patternString = twoEqualVerticesAnglePatternString;
     const firstCornersString = this.getCornersAngleDescription( firstVertex, secondVertex );
 
     const undescribedVertices = this.getUndescribedVertices( [ firstVertex, secondVertex ] );
@@ -851,7 +846,7 @@ class QuadrilateralDescriber {
     // we are comparing the angles of the vertex pairs, relative to the first described pair
     const comparisonString = VertexDescriber.getAngleComparisonDescription( orderedVertexPairs[ 1 ].vertex1, orderedVertexPairs[ 0 ].vertex1 );
 
-    const patternString = 'Equal {{firstCorners}} are {{comparison}} equal {{secondCorners}}.';
+    const patternString = twoPairsOfEqualVerticesPatternString;
     return StringUtils.fillIn( patternString, {
       firstCorners: firstCornersString,
       comparison: comparisonString,
@@ -875,7 +870,7 @@ class QuadrilateralDescriber {
     if ( this.shapeModel.isRightAngle( vertex.angleProperty.value! ) ) {
 
       // include "right angle"
-      descriptionString = StringUtils.fillIn( 'right angle {{cornerLabel}}', {
+      descriptionString = StringUtils.fillIn( cornerAnglePatternString, {
         cornerLabel: labelString
       } );
     }
@@ -904,7 +899,7 @@ class QuadrilateralDescriber {
     const firstLabelString = vertexLabelMap.get( vertex1.vertexLabel );
     const secondLabelString = vertexLabelMap.get( vertex2.vertexLabel );
 
-    const cornersPatternString = 'Corners {{firstCorner}} and {{secondCorner}}';
+    const cornersPatternString = cornersAnglePatternString;
 
     let descriptionString = StringUtils.fillIn( cornersPatternString, {
       firstCorner: firstLabelString,
@@ -914,7 +909,7 @@ class QuadrilateralDescriber {
     assert && assert( vertex1.angleProperty.value !== null, 'angles need to be ready for use in getCornersAngleDescription' );
     const angle1 = vertex1.angleProperty.value!;
     if ( this.shapeModel.isRightAngle( angle1 ) ) {
-      descriptionString = StringUtils.fillIn( 'right angle {{cornersString}}', {
+      descriptionString = StringUtils.fillIn( rightAngleCornersPatternString, {
         cornersString: descriptionString
       } );
     }
@@ -982,7 +977,7 @@ class QuadrilateralDescriber {
    * description. For a reason I don't fully understand, vertices and sides are described bottom to top, and left to
    * right. First, we order each side within the SidePair with that criterion. Then we order the SidePairs for the
    * final returned array.
- */
+   */
   getSidePairsOrderedForDescription( sidePairs: SidePair[] ): SidePair[] {
 
     // First we order the sides within in each SidePair so that we can find the SidePair with the vertices
