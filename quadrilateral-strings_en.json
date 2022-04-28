@@ -201,6 +201,66 @@
         "proximityToParallelogramPattern": {
           "value": "{{changeDescription}}. Opposite sides {{proximityDescription}} parallel."
         }
+      },
+      "vertexObjectResponsePattern": {
+        "value": "{{oppositeComparison}} opposite corner, {{adjacentVertexDescription}}."
+      },
+      "rightAngleVertexObjectResponsePattern": {
+        "value": "right angle, {{oppositeComparison}} opposite corner, {{adjacentVertexDescription}}."
+      },
+      "farWiderThan": {
+        "value": "far wider than"
+      },
+      "farSmallerThan": {
+        "value": "far smaller than"
+      },
+      "muchMuchWiderThan": {
+        "value": "much much wider than"
+      },
+      "muchMuchSmallerThan": {
+        "value": "much much smaller than"
+      },
+      "muchWiderThan": {
+        "value": "much wider than"
+      },
+      "muchSmallerThan": {
+        "value": "much smaller than"
+      },
+      "somewhatWiderThan": {
+        "value": "somewhat wider than"
+      },
+      "somewhatSmallerThan": {
+        "value": "somewhat smaller than"
+      },
+      "aLittleWiderThan": {
+        "value": "a little wider than"
+      },
+      "aLittleSmallerThan": {
+        "value": "a little smaller than"
+      },
+      "comparableTo": {
+        "value": "comparable to"
+      },
+      "equalTo": {
+        "value": "equal to"
+      },
+      "equalToAdjacentCorners": {
+        "value": "equal to adjacent corners"
+      },
+      "equalToOneAdjacentCorner": {
+        "value": "equal to one adjacent corner"
+      },
+      "equalAdjacentCornersPattern": {
+        "value": "{{comparison}} equal adjacent corners"
+      },
+      "smallerThanAdjacentCorners": {
+        "value": "smaller than adjacent corners"
+      },
+      "widerThanAdjacentCorners": {
+        "value": "wider than adjacent corners"
+      },
+      "notEqualToAdjacentCorners": {
+        "value": "not equal to adjacent corners"
       }
     }
   }

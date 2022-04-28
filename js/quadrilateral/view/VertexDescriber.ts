@@ -21,6 +21,26 @@ const cornerAString = quadrilateralStrings.a11y.cornerA;
 const cornerBString = quadrilateralStrings.a11y.cornerB;
 const cornerCString = quadrilateralStrings.a11y.cornerC;
 const cornerDString = quadrilateralStrings.a11y.cornerD;
+const rightAngleVertexObjectResponsePatternString = quadrilateralStrings.a11y.voicing.rightAngleVertexObjectResponsePattern;
+const vertexObjectResponsePatternString = quadrilateralStrings.a11y.voicing.vertexObjectResponsePattern;
+const farWiderThanString = quadrilateralStrings.a11y.voicing.farWiderThan;
+const farSmallerThanString = quadrilateralStrings.a11y.voicing.farSmallerThan;
+const muchMuchWiderThanString = quadrilateralStrings.a11y.voicing.muchMuchWiderThan;
+const muchMuchSmallerThanString = quadrilateralStrings.a11y.voicing.muchMuchSmallerThan;
+const muchWiderThanString = quadrilateralStrings.a11y.voicing.muchWiderThan;
+const muchSmallerThanString = quadrilateralStrings.a11y.voicing.muchSmallerThan;
+const somewhatWiderThanString = quadrilateralStrings.a11y.voicing.somewhatWiderThan;
+const somewhatSmallerThanString = quadrilateralStrings.a11y.voicing.somewhatSmallerThan;
+const aLittleWiderThanString = quadrilateralStrings.a11y.voicing.aLittleWiderThan;
+const aLittleSmallerThanString = quadrilateralStrings.a11y.voicing.aLittleSmallerThan;
+const comparableToString = quadrilateralStrings.a11y.voicing.comparableTo;
+const equalToString = quadrilateralStrings.a11y.voicing.equalTo;
+const equalToAdjacentCornersString = quadrilateralStrings.a11y.voicing.equalToAdjacentCorners;
+const equalToOneAdjacentCornerString = quadrilateralStrings.a11y.voicing.equalToOneAdjacentCorner;
+const equalAdjacentCornersPatternString = quadrilateralStrings.a11y.voicing.equalAdjacentCornersPattern;
+const smallerThanAdjacentCornersString = quadrilateralStrings.a11y.voicing.smallerThanAdjacentCorners;
+const widerThanAdjacentCornersString = quadrilateralStrings.a11y.voicing.widerThanAdjacentCorners;
+const notEqualToAdjacentCornersString = quadrilateralStrings.a11y.voicing.notEqualToAdjacentCorners;
 
 // Maps a vertex to its accessible name, like "Corner A".
 const VertexCornerLabelMap = new Map<VertexLabel, string>( [
@@ -38,13 +58,13 @@ const createAngleComparisonDescriptionMapEntry = ( minAngle: number, maxAngle: n
   AngleComparisonDescriptionMap.set( new Range( -maxAngle, -minAngle ), smallerString );
 };
 
-createAngleComparisonDescriptionMapEntry( Math.PI, 2 * Math.PI, 'far wider than', 'far smaller than' );
-createAngleComparisonDescriptionMapEntry( Utils.toRadians( 135 ), Math.PI, 'much much wider than', 'much much smaller than' );
-createAngleComparisonDescriptionMapEntry( Math.PI / 2, Utils.toRadians( 135 ), 'much wider than', 'much smaller than' );
-createAngleComparisonDescriptionMapEntry( Math.PI / 4, Math.PI / 2, 'somewhat wider than', 'somewhat smaller than' );
-createAngleComparisonDescriptionMapEntry( Utils.toRadians( 15 ), Math.PI / 4, 'a little wider than', 'a little smaller than' );
-createAngleComparisonDescriptionMapEntry( QuadrilateralQueryParameters.shapeAngleToleranceInterval, Utils.toRadians( 15 ), 'comparable to', 'comparable to' );
-createAngleComparisonDescriptionMapEntry( 0, QuadrilateralQueryParameters.shapeAngleToleranceInterval, 'equal to', 'equal to' );
+createAngleComparisonDescriptionMapEntry( Math.PI, 2 * Math.PI, farWiderThanString, farSmallerThanString );
+createAngleComparisonDescriptionMapEntry( Utils.toRadians( 135 ), Math.PI, muchMuchWiderThanString, muchMuchSmallerThanString );
+createAngleComparisonDescriptionMapEntry( Math.PI / 2, Utils.toRadians( 135 ), muchWiderThanString, muchSmallerThanString );
+createAngleComparisonDescriptionMapEntry( Math.PI / 4, Math.PI / 2, somewhatWiderThanString, somewhatSmallerThanString );
+createAngleComparisonDescriptionMapEntry( Utils.toRadians( 15 ), Math.PI / 4, aLittleWiderThanString, aLittleSmallerThanString );
+createAngleComparisonDescriptionMapEntry( QuadrilateralQueryParameters.shapeAngleToleranceInterval, Utils.toRadians( 15 ), comparableToString, comparableToString );
+createAngleComparisonDescriptionMapEntry( 0, QuadrilateralQueryParameters.shapeAngleToleranceInterval, equalToString, equalToString );
 
 class VertexDescriber {
 
@@ -86,8 +106,8 @@ class VertexDescriber {
 
     // Prepend "right angle" if this vertex is currently a right angle
     const patternString = this.quadrilateralShapeModel.isRightAngle( vertexAngle ) ?
-                          'right angle, {{oppositeComparison}} opposite corner, {{adjacentVertexDescription}}.' :
-                          '{{oppositeComparison}} opposite corner, {{adjacentVertexDescription}}.';
+                          rightAngleVertexObjectResponsePatternString :
+                          vertexObjectResponsePatternString;
 
     response = StringUtils.fillIn( patternString, {
       oppositeComparison: VertexDescriber.getAngleComparisonDescription( oppositeVertex, this.vertex ),
@@ -122,18 +142,18 @@ class VertexDescriber {
     if ( numberOfEqualAdjacentVertexPairs === 2 ) {
 
       // This vertex and both adjacent angles are all equal
-      description = 'equal to adjacent corners';
+      description = equalToAdjacentCornersString;
     }
     else if ( numberOfEqualAdjacentVertexPairs === 1 ) {
 
       // just say "equal to one adjacent corner
-      description = 'equal to one adjacent corner';
+      description = equalToOneAdjacentCornerString;
     }
     else if ( adjacentCornersEqual ) {
 
       // the adjacent corners are equal but not equal to provided vertex, combine their description and use either
       // to describe the relative description
-      description = StringUtils.fillIn( '{{comparison}} equal adjacent corners', {
+      description = StringUtils.fillIn( equalAdjacentCornersPatternString, {
         comparison: VertexDescriber.getAngleComparisonDescription( adjacentCorners[ 0 ], this.vertex )
       } );
     }
@@ -146,13 +166,13 @@ class VertexDescriber {
       const secondAdjacentAngle = adjacentCorners[ 1 ].angleProperty.value!;
 
       if ( firstAdjacentAngle > vertexAngle && secondAdjacentAngle > vertexAngle ) {
-        description = 'smaller than adjacent corners';
+        description = smallerThanAdjacentCornersString;
       }
       else if ( firstAdjacentAngle < vertexAngle && secondAdjacentAngle < vertexAngle ) {
-        description = 'wider than adjacent corners';
+        description = widerThanAdjacentCornersString;
       }
       else {
-        description = 'not equal to adjacent corners';
+        description = notEqualToAdjacentCornersString;
       }
     }
 

@@ -82,7 +82,27 @@ type StringsType = {
         'veryCloseTo': string,
         'extremelyCloseTo': string,
         'proximityToParallelogramPattern': string
-      }
+      },
+      'vertexObjectResponsePattern': string,
+      'rightAngleVertexObjectResponsePattern': string,
+      'farWiderThan': string,
+      'farSmallerThan': string,
+      'muchMuchWiderThan': string,
+      'muchMuchSmallerThan': string,
+      'muchWiderThan': string,
+      'muchSmallerThan': string,
+      'somewhatWiderThan': string,
+      'somewhatSmallerThan': string,
+      'aLittleWiderThan': string,
+      'aLittleSmallerThan': string,
+      'comparableTo': string,
+      'equalTo': string,
+      'equalToAdjacentCorners': string,
+      'equalToOneAdjacentCorner': string,
+      'equalAdjacentCornersPattern': string,
+      'smallerThanAdjacentCorners': string,
+      'widerThanAdjacentCorners': string,
+      'notEqualToAdjacentCorners': string
     }
   }
 };
