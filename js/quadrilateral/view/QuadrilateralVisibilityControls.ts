@@ -89,7 +89,7 @@ class QuadrilateralVisibilityControls extends VBox {
       uncheckedContextResponse: 'Please add checkbox context response.',
 
       // phet-io
-      tandem: options.tandem.createTandem( 'cornerGuideCheckbox' )
+      tandem: options.tandem.createTandem( 'symmetryGridCheckbox' )
     } );
 
     options.children = [ cornerLabelsCheckbox, cornerGuideCheckbox, symmetryGridCheckbox ];
