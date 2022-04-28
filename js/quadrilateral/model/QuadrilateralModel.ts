@@ -91,7 +91,7 @@ class QuadrilateralModel {
     } );
 
     // Whether labels on each vertex are visible.
-    this.vertexLabelsVisibleProperty = new BooleanProperty( false, {
+    this.vertexLabelsVisibleProperty = new BooleanProperty( true, {
       tandem: tandem.createTandem( 'vertexLabelsVisibleProperty' )
     } );
 

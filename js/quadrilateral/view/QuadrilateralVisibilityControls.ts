@@ -17,7 +17,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 
 // constants
 const TEXT_OPTIONS = {
-  font: new PhetFont( { size: 16 } ),
+  font: new PhetFont( { size: 14 } ),
 
   // i18n (inspection)
   maxWidth: 100
