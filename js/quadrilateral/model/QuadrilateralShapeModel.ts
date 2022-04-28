@@ -729,6 +729,7 @@ class QuadrilateralShapeModel {
         };
       }
     } );
+    assert && assert( firstRayIntersectionLinePair && secondRayIntersectionLinePair, 'ray intersections were not found' );
 
     // An array of points that will create the final shape
     let points = [];
@@ -781,7 +782,8 @@ class QuadrilateralShapeModel {
     const lengthA = line.start.distance( point );
     const lengthB = line.end.distance( point );
 
-    return length === lengthA + lengthB;
+    // TODO: This check is susceptible to precision errors but this seems fragile, is there another way to do this?
+    return Utils.equalsEpsilon( length, lengthA + lengthB, 0.001 );
   }
 
   /**
