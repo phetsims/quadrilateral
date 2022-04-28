@@ -69,9 +69,9 @@ class QuadrilateralScreenView extends ScreenView {
       model.vertexLabelsVisibleProperty,
       model.cornerGuideVisibleProperty,
       model.symmetryGridVisibleProperty, {
-      rightCenter: this.layoutBounds.rightCenter.minusXY( QuadrilateralConstants.SCREEN_VIEW_X_MARGIN, 0 ),
-      tandem: tandem.createTandem( 'visibilityControls' )
-    } );
+        rightCenter: this.layoutBounds.rightCenter.minusXY( QuadrilateralConstants.SCREEN_VIEW_X_MARGIN, 0 ),
+        tandem: tandem.createTandem( 'visibilityControls' )
+      } );
     this.addChild( visibilityControls );
 
     this.resetAllButton = new ResetAllButton( {
@@ -164,11 +164,9 @@ class QuadrilateralScreenView extends ScreenView {
       this.addChild( new SideLengthAreaNode( shapeModel, shapeModel.bottomSide, shapeModel.topSide, shapeModel.rightSide, modelViewTransform, { drawRotation: Math.PI } ) );
       this.addChild( new SideLengthAreaNode( shapeModel, shapeModel.leftSide, shapeModel.rightSide, shapeModel.bottomSide, modelViewTransform, { drawRotation: Math.PI / 2 } ) );
     }
-    if ( QuadrilateralQueryParameters.showGrid ) {
-      const gridNode = new QuadrilateralGridNode( model.modelBoundsProperty, this.modelViewTransform );
-      gridNode.leftTop = boundsRectangle.leftTop;
-      this.addChild( gridNode );
-    }
+    const gridNode = new QuadrilateralGridNode( model.modelBoundsProperty, this.modelViewTransform );
+    gridNode.leftTop = boundsRectangle.leftTop;
+    this.addChild( gridNode );
 
     this.quadrilateralMarkerInput = null;
     if ( QuadrilateralQueryParameters.markerInput ) {

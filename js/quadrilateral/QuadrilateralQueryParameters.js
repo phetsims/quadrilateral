@@ -22,9 +22,6 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
 
   showLengthAreas: { type: 'flag' },
 
-  // If provided, a graphic showing the grid to visualize allowable vertex positions is displayed.
-  showGrid: { type: 'flag' },
-
   // The tolerance interval for the angle calculations which determine when the quadrilateral is a parallelogram.
   // This is in radians, so it is limited between 0 and 2 PI. If maximum value, the quadrilateral will always
   // register as a parallelogram.
