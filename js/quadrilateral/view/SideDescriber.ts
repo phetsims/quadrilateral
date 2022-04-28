@@ -27,6 +27,14 @@ const aLittleLongerThanString = quadrilateralStrings.a11y.voicing.aLittleLongerT
 const aLittleShorterThanString = quadrilateralStrings.a11y.voicing.aLittleShorterThan;
 const comparableToString = quadrilateralStrings.a11y.voicing.comparableTo;
 const equalToString = quadrilateralStrings.a11y.voicing.equalTo;
+const parallelSideObjectResponsePatternString = quadrilateralStrings.a11y.voicing.parallelSideObjectResponsePattern;
+const sideObjectResponsePatternString = quadrilateralStrings.a11y.voicing.sideObjectResponsePattern;
+const equalToAdjacentSidesString = quadrilateralStrings.a11y.voicing.equalToAdjacentSides;
+const equalToOneAdjacentSideString = quadrilateralStrings.a11y.voicing.equalToOneAdjacentSide;
+const equalAdjacentSidesPatternString = quadrilateralStrings.a11y.voicing.equalAdjacentSidesPattern;
+const shorterThanAdjacentSidesString = quadrilateralStrings.a11y.voicing.shorterThanAdjacentSides;
+const longerThanAdjacentSidesString = quadrilateralStrings.a11y.voicing.longerThanAdjacentSides;
+const notEqualToAdjacentSidesString = quadrilateralStrings.a11y.voicing.notEqualToAdjacentSides;
 
 // A map that will provide comparison descriptions for side lengths. Lengths in model units.
 const lengthComparisonDescriptionMap = new Map<Range, string>();
@@ -75,8 +83,8 @@ class SideDescriber {
     const thisSideIsParallel = _.some( parallelSidePairs, sidePair => sidePair.side1 === this.side || sidePair.side2 === this.side );
 
     const patternString = thisSideIsParallel ?
-                          'parallel to and {{oppositeComparison}} opposite side, {{adjacentSideDescription}}' :
-                          '{{oppositeComparison}} opposite side, {{adjacentSideDescription}}';
+                          parallelSideObjectResponsePatternString :
+                          sideObjectResponsePatternString;
 
     response = StringUtils.fillIn( patternString, {
       oppositeComparison: SideDescriber.getLengthComparisonDescription( oppositeSide, this.side ),
@@ -113,18 +121,18 @@ class SideDescriber {
     if ( numberOfEqualAdjacentSidePairs === 2 ) {
 
       // This side and both adjacent sides are all equal
-      description = 'equal to adjacent sides';
+      description = equalToAdjacentSidesString;
     }
     else if ( numberOfEqualAdjacentSidePairs === 1 ) {
 
       // Just one 'equal' side, that is all we need to describe
-      description = 'equal to one adjacent side';
+      description = equalToOneAdjacentSideString;
     }
     else if ( adjacentSidesEqual ) {
 
       // the adjacent sides are equal in length but not equal to this side, describe the length of
       // this side relative to the other sides but we can use either side since they are equal in length
-      description = StringUtils.fillIn( '{{comparison}} equal adjacent sides', {
+      description = StringUtils.fillIn( equalAdjacentSidesPatternString, {
         comparison: SideDescriber.getLengthComparisonDescription( adjacentSides[ 0 ], this.side )
       } );
     }
@@ -136,13 +144,13 @@ class SideDescriber {
       const firstAdjacentLength = adjacentSides[ 0 ].lengthProperty.value;
       const secondAdjacentLength = adjacentSides[ 1 ].lengthProperty.value;
       if ( firstAdjacentLength > sideLength && secondAdjacentLength > sideLength ) {
-        description = 'shorter than adjacent sides';
+        description = shorterThanAdjacentSidesString;
       }
       else if ( firstAdjacentLength < sideLength && secondAdjacentLength < sideLength ) {
-        description = 'longer than adjacent sides';
+        description = longerThanAdjacentSidesString;
       }
       else {
-        description = 'not equal to adjacent sides';
+        description = notEqualToAdjacentSidesString;
       }
     }
 

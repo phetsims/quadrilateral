@@ -291,6 +291,30 @@
       },
       "aLittleShorterThan": {
         "value": "a little shorter than"
+      },
+      "parallelSideObjectResponsePattern": {
+        "value": "parallel to and {{oppositeComparison}} opposite side, {{adjacentSideDescription}}"
+      },
+      "sideObjectResponsePattern": {
+        "value": "{{oppositeComparison}} opposite side, {{adjacentSideDescription}}"
+      },
+      "equalToAdjacentSides": {
+        "value": "equal to adjacent sides"
+      },
+      "equalToOneAdjacentSide": {
+        "value": "equal to one adjacent side"
+      },
+      "equalAdjacentSidesPattern": {
+        "value": "{{comparison}} equal adjacent sides"
+      },
+      "shorterThanAdjacentSides": {
+        "value": "shorter than adjacent sides"
+      },
+      "longerThanAdjacentSides": {
+        "value": "longer than adjacent sides"
+      },
+      "notEqualToAdjacentSides": {
+        "value": "not equal to adjacent sides"
       }
     }
   }

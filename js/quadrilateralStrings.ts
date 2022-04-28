@@ -112,7 +112,15 @@ type StringsType = {
       'somewhatLongerThan': string,
       'somewhatShorterThan': string,
       'aLittleLongerThan': string,
-      'aLittleShorterThan': string
+      'aLittleShorterThan': string,
+      'parallelSideObjectResponsePattern': string,
+      'sideObjectResponsePattern': string,
+      'equalToAdjacentSides': string,
+      'equalToOneAdjacentSide': string,
+      'equalAdjacentSidesPattern': string,
+      'shorterThanAdjacentSides': string,
+      'longerThanAdjacentSides': string,
+      'notEqualToAdjacentSides': string
     }
   }
 };
