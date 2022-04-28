@@ -18,9 +18,12 @@ import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import vibrationManager from '../../../../tappi/js/vibrationManager.js';
 import VertexDescriber from './VertexDescriber.js';
+import { Shape } from '../../../../kite/js/imports.js';
 
 // constants
 const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
+
+const POINTER_AREA_DILATION = 5;
 
 class VertexNode extends Voicing( Circle, 1 ) {
   private readonly model: QuadrilateralModel;
@@ -64,6 +67,10 @@ class VertexNode extends Voicing( Circle, 1 ) {
       maxWidth: 12 // by inspection
     } );
     this.addChild( vertexLabelText );
+
+    // Expand the pointer areas a bit so that it is difficult to accidentally pick up a side when near the vertex edge
+    this.touchArea = Shape.circle( viewRadius + POINTER_AREA_DILATION );
+    this.mouseArea = this.touchArea;
 
     vertex.positionProperty.link( position => {
       this.center = modelViewTransform.modelToViewPosition( position );
