@@ -13,6 +13,7 @@ import simLauncher from '../../joist/js/simLauncher.js';
 import { Color, ColorProperty, HBox, Text, VBox } from '../../scenery/js/imports.js';
 import Checkbox from '../../sun/js/Checkbox.js';
 import Tandem from '../../tandem/js/Tandem.js';
+import draggableResizableHTMLElement from '../../tangible/js/mediaPipe/draggableResizableHTMLElement.js';
 import vibrationManager from '../../tappi/js/vibrationManager.js';
 import QuadrilateralConstants from './common/QuadrilateralConstants.js';
 import QuadrilateralSoundOptionsModel from './quadrilateral/model/QuadrilateralSoundOptionsModel.js';
@@ -52,6 +53,13 @@ const controls = new HBox( {
   align: 'top'
 } );
 
+
+const x = document.createElement( 'p' );
+x.innerText = 'Hello!!JKL:DF';
+const element = draggableResizableHTMLElement( x );
+setTimeout( () => {
+  document.body.appendChild( element );
+}, 1000 );
 const simOptions = {
 
   //TODO fill in credits, all of these fields are optional, see joist.CreditsNode
