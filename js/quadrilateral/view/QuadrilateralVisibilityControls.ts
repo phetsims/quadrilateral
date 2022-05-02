@@ -47,6 +47,7 @@ class QuadrilateralVisibilityControls extends VBox {
 
       // voicing
       voicingNameResponse: quadrilateralStrings.cornerLabels,
+      voicingHintResponse: quadrilateralStrings.a11y.angleGuidesHintResponse,
 
       // a11y
       checkedContextResponse: quadrilateralStrings.a11y.cornerLabelsAddedResponse,

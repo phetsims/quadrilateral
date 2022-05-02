@@ -38,11 +38,17 @@
     "cornerLabelsRemovedResponse": {
       "value": "Names hidden."
     },
+    "cornerLabelsHintResponse": {
+      "value": "Explore shapes with or without visual labels."
+    },
     "angleGuidesAddedResponse": {
       "value": "Angle guides added to corners."
     },
     "angleGuidesRemovedResponse": {
       "value": "Guides hidden."
+    },
+    "angleGuidesHintResponse": {
+      "value": "Explore shapes with or without visual angle guides."
     },
     "symmetryLinesAddedResponse": {
       "value": "Grid lines added."
