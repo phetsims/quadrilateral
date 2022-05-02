@@ -191,6 +191,7 @@ class QuadrilateralModel {
     // reset visibility Properties
     this.cornerGuideVisibleProperty.reset();
     this.vertexLabelsVisibleProperty.reset();
+    this.symmetryGridVisibleProperty.reset();
 
     // reset is not in progress anymore
     this.resetNotInProgressProperty.value = true;
