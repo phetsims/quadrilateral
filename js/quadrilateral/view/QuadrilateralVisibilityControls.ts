@@ -83,10 +83,11 @@ class QuadrilateralVisibilityControls extends VBox {
 
       // voicing
       voicingNameResponse: quadrilateralStrings.symmetryGrid,
+      voicingHintResponse: quadrilateralStrings.a11y.symmetryLinesHintResponse,
 
       // a11y
-      checkedContextResponse: 'Please add checkbox context response.',
-      uncheckedContextResponse: 'Please add checkbox context response.',
+      checkedContextResponse: quadrilateralStrings.a11y.symmetryLinesAddedResponse,
+      uncheckedContextResponse: quadrilateralStrings.a11y.symmetryLinesRemovedResponse,
 
       // phet-io
       tandem: options.tandem.createTandem( 'symmetryGridCheckbox' )

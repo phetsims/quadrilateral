@@ -44,6 +44,15 @@
     "angleGuidesRemovedResponse": {
       "value": "Guides hidden."
     },
+    "symmetryLinesAddedResponse": {
+      "value": "Grid lines added."
+    },
+    "symmetryLinesRemovedResponse": {
+      "value": "Lines hidden."
+    },
+    "symmetryLinesHintResponse": {
+      "value": "Explore shapes with or without visual grid."
+    },
     "myShapesCorners": {
       "value": "My Shape's Corners"
     },
