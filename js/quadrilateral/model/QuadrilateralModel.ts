@@ -19,10 +19,12 @@ import Vertex from './Vertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 
 class QuadrilateralModel {
   public modelBoundsProperty: Property<Bounds2 | null>;
   public physicalModelBoundsProperty: Property<Bounds2 | null>;
+  public physicalToVirtualTransform: ModelViewTransform2 | null = null;
   public resetNotInProgressProperty: BooleanProperty;
   public isCalibratingProperty: BooleanProperty;
   public showDebugValuesProperty: BooleanProperty;
@@ -169,8 +171,18 @@ class QuadrilateralModel {
   public setPhysicalModelBounds( topLength: number, rightLength: number, bottomLength: number, leftLength: number ): void {
 
     // assuming a square shape for extrema - we may need a mapping function for each individual side if this cannot be assumed
-    const maxLength = _.max( [ topLength, rightLength, bottomLength, leftLength ] );
-    this.physicalModelBoundsProperty.value = new Bounds2( 0, 0, maxLength!, maxLength! );
+    const maxLength = _.max( [ topLength, rightLength, bottomLength, leftLength ] )!;
+    this.physicalModelBoundsProperty.value = new Bounds2( 0, 0, maxLength, maxLength );
+
+    // create a transform that goes from physical space to simulation space - scale from physical space to
+    // simulation model space isometrically which we know is limited in the y direction (so it uses height)
+    const modelBounds = this.modelBoundsProperty.value!;
+
+    this.physicalToVirtualTransform = ModelViewTransform2.createSinglePointScaleMapping(
+      new Vector2( maxLength / 2, maxLength / 2 ), // center of the physical space "model"
+      new Vector2( 0, 0 ), // origin of the simulation model
+      modelBounds.height / ( maxLength ) // scale from physical model to simulation space
+    );
   }
 
   /**

@@ -1208,6 +1208,37 @@ class QuadrilateralShapeModel {
   }
 
   /**
+   * Set the positions of vertices directly from a tangible device. A connection to a physical device might use this
+   * function to set the positions in model space. If it doesn't have absolute positioning it may need to use
+   * setPositionsFromLengthAndAngleData instead.
+   */
+  public setPositionsFromAbsolutePositionData( proposedPositions: VertexWithProposedPosition[] ): void {
+
+    // only try to set to sim if values look reasonable - we want to handle this gracefully, the sim shouldn't crash
+    // if data isn't right
+    const allDataGood = _.every( proposedPositions, vertexWithProposedPosition => {
+      return vertexWithProposedPosition.proposedPosition.isFinite();
+    } );
+    if ( !allDataGood ) {
+      return;
+    }
+
+    // you must calibrate before setting positions from a physical device
+    if ( this.model.physicalToVirtualTransform !== null && !this.model.isCalibratingProperty.value && this.model.modelBoundsProperty.value ) {
+
+      // scale the physical positions to the simulation virtual model
+      const scaledProposedPositions: VertexWithProposedPosition[] = proposedPositions.map( vertexWithProposedPosition => {
+        return {
+          vertex: vertexWithProposedPosition.vertex,
+          proposedPosition: this.model.physicalToVirtualTransform!.modelToViewPosition( vertexWithProposedPosition.proposedPosition )
+        };
+      } );
+
+      this.setVertexPositions( scaledProposedPositions );
+    }
+  }
+
+  /**
    * Set positions of the Vertices from length and angle data. We get the angles at each vertex and lengths
    * of each side from the hardware. We need to convert that to vertex positions in model space.
    *
