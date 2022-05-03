@@ -17,7 +17,7 @@ import GridLineSet from '../../../../bamboo/js/GridLineSet.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 
-const GRID_SPACING = QuadrilateralModel.MAJOR_GRID_SPACING * 4;
+const GRID_SPACING = QuadrilateralModel.MAJOR_GRID_SPACING * 5;
 
 const GRID_LINE_OPTIONS = {
   stroke: QuadrilateralColors.symmetryGridColorProperty
