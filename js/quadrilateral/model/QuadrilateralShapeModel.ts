@@ -316,29 +316,20 @@ class QuadrilateralShapeModel {
     // Emits an event whenever the shape of the Quadrilateral changes
     this.shapeChangedEmitter = new Emitter<[]>();
 
-    const toleranceIntervalWideningListener = ( defaultToleranceInterval: number, shapeName: NamedQuadrilateral | null, scaleFactor: number ): number => {
-      let shapeAngleToleranceInterval = defaultToleranceInterval;
-
-      // If connected to a device, make the interval larger when we have a detected shape so that it is easier
-      // to maintain the detected shape as interaction continues. This is important because it is not easy to make
-      // fine grain motion with the tangible.
-      if ( QuadrilateralQueryParameters.deviceConnection ) {
-        if ( shapeName !== null ) {
-          shapeAngleToleranceInterval = defaultToleranceInterval * scaleFactor;
-        }
-      }
-
-      return shapeAngleToleranceInterval;
-    };
-
     this.shapeAngleToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty ], ( shapeName: NamedQuadrilateral | null ) => {
-      return toleranceIntervalWideningListener( QuadrilateralQueryParameters.shapeAngleToleranceInterval, shapeName, 3 );
+      return QuadrilateralShapeModel.toleranceIntervalWideningListener(
+        QuadrilateralQueryParameters.shapeAngleToleranceInterval,
+        QuadrilateralQueryParameters.deviceShapeAngleToleranceInterval,
+        shapeName
+      );
     } );
 
     this.shapeLengthToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty ], ( shapeName: NamedQuadrilateral | null ) => {
-      const interval = toleranceIntervalWideningListener( QuadrilateralQueryParameters.shapeLengthToleranceInterval, shapeName, 3 );
-      console.log( interval );
-      return interval;
+      return QuadrilateralShapeModel.toleranceIntervalWideningListener(
+        QuadrilateralQueryParameters.shapeLengthToleranceInterval,
+        QuadrilateralQueryParameters.deviceShapeLengthToleranceInterval,
+        shapeName
+      );
     } );
 
     // ParallelSideCheckers are responsible for determining if opposite SidePairs are parallel within their dynamic
@@ -1318,6 +1309,28 @@ class QuadrilateralShapeModel {
     if ( !deferred ) {
       deferredVertexListeners.forEach( deferredListener => deferredListener && deferredListener() );
     }
+  }
+
+  /**
+   * When connected to a tangible, widen the tolerance interval when we have a detected shape Name so that it is more
+   * difficult to leave the quadrilateral state in that condition. This is helpful because it is difficult to make
+   * fine-grained motions with the tangible.
+   */
+  private static toleranceIntervalWideningListener( defaultToleranceInterval: number, defaultDeviceToleranceInterval: number, shapeName: NamedQuadrilateral | null ): number {
+    let toleranceInterval = defaultToleranceInterval;
+
+    // Make the interval larger when we have a detected shape so that it is easier
+    // to maintain the detected shape as interaction continues. This is important because it is not easy to make
+    // fine grain motion with the tangible.
+    if ( QuadrilateralQueryParameters.deviceConnection ) {
+      toleranceInterval = defaultDeviceToleranceInterval;
+      console.log( defaultDeviceToleranceInterval );
+      if ( shapeName !== null ) {
+        toleranceInterval = defaultToleranceInterval * QuadrilateralQueryParameters.toleranceIntervalScaleFactor;
+      }
+    }
+
+    return toleranceInterval;
   }
 
   public reset(): void {

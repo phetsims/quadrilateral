@@ -70,8 +70,10 @@ class QuadrilateralModelValuePanel extends Panel {
 
     const sideABCDToleranceIntervalText = new Text( '', TEXT_OPTIONS );
     const sideBCDAToleranceIntervalText = new Text( '', TEXT_OPTIONS );
+    const shapeAngleToleranceIntervalText = new Text( '', TEXT_OPTIONS );
+    const shapeLengthToleranceIntervalText = new Text( '', TEXT_OPTIONS );
     const toleranceIntervalBox = new VBox( {
-      children: [ sideABCDToleranceIntervalText, sideBCDAToleranceIntervalText ],
+      children: [ sideABCDToleranceIntervalText, sideBCDAToleranceIntervalText, shapeAngleToleranceIntervalText, shapeLengthToleranceIntervalText ],
       align: 'left'
     } );
 
@@ -124,6 +126,10 @@ class QuadrilateralModelValuePanel extends Panel {
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 0 ].angleToleranceIntervalProperty, sideABCDToleranceIntervalText, '(AB, CD) angleToleranceInterval' );
     // @ts-ignore - angleToleranceInterval is private, but I want to use it here for now just for debugging
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 1 ].angleToleranceIntervalProperty, sideBCDAToleranceIntervalText, '(BC, DA) angleToleranceInterval' );
+    // @ts-ignore - shapeAngleToleranceInterval is private, but I want to use it here for now just for debugging
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.shapeAngleToleranceIntervalProperty, shapeAngleToleranceIntervalText, 'shapeAngleToleranceInterval' );
+    // @ts-ignore - shapeLengthToleranceInterval is private, but I want to use it here for now just for debugging
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.shapeLengthToleranceIntervalProperty, shapeLengthToleranceIntervalText, 'shapeLengthToleranceInterval' );
 
     // shape name
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.shapeNameProperty, shapeNameText, 'shape name' );

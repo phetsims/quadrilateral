@@ -31,11 +31,21 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     defaultValue: 0.01
   },
 
-  // A scale factor to apply to the angle tolerance interval which determines when the quadrilateral is a
+  // Behaves like angleToleranceInterval, but the default when connected to a tangible
+  // controller for the sim. Default is a little larger than angleToleranceInterval
+  // since the tangible is harder to control.
+  deviceAngleToleranceInterval: {
+    type: 'number',
+    isValidValue: value => value <= ( 2 * Math.PI ) && value >= 0,
+    defaultValue: 0.02
+  },
+
+  // A scale factor to apply to the tolerance intervals which determines when the quadrilateral is a
   // parallelogram. This is multiplied by the angleToleranceInterval when more than one vertex is dragged so
-  // that it is easier to "stay" in parallelogram in that case. It should be larger than one so that the
-  // angleToleranceInterval is larger in these cases. See QuadrilateralShapeModel for usage and more information.
-  angleToleranceIntervalScaleFactor: {
+  // that it is easier to "stay" in parallelogram in that case. It is also used when connected to the tangible.
+  // It should be larger than one so that the angleToleranceInterval is larger in these cases. See
+  // QuadrilateralShapeModel for usage and more information.
+  toleranceIntervalScaleFactor: {
     type: 'number',
     defaultValue: 10,
     isValidValue: value => value >= 1
@@ -45,6 +55,20 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     type: 'number',
     isValidValue: value => value <= ( 2 * Math.PI ) && value >= 0,
     defaultValue: 0.01
+  },
+
+  // The default value for the angleToleranceInterval when we are connected to the device. Otherwise
+  // behaves like angleToleranceInterval.
+  deviceShapeAngleToleranceInterval: {
+    type: 'number',
+    isValidValue: value => value <= ( 2 * Math.PI ) && value >= 0,
+    defaultValue: 0.02
+  },
+
+  deviceShapeLengthToleranceInterval: {
+    type: 'number',
+    isValidValue: value => value <= ( 2 * Math.PI ) && value >= 0,
+    defaultValue: 0.02
   },
 
   // The tolerance interval for the angle of tilt for sides.

@@ -84,12 +84,13 @@ class ParallelSideChecker {
       if ( QuadrilateralQueryParameters.deviceConnection ) {
 
         // The simulation is connected to device hardware, there is some special behavior to make it harder to
-        // leave the important learning goal states, see https://github.com/phetsims/quadrilateral/issues/116
+        // leave the important learning goal states, see https://github.com/phetsims/quadrilateral/issues/116. Default
+        // angleToleranceInterval is also generally larger.
         if ( this.isParallelProperty.value ) {
-          toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval * 3;
+          toleranceInterval = QuadrilateralQueryParameters.deviceAngleToleranceInterval * QuadrilateralQueryParameters.toleranceIntervalScaleFactor;
         }
         else {
-          toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval;
+          toleranceInterval = QuadrilateralQueryParameters.deviceAngleToleranceInterval;
         }
       }
       else if ( !resetNotInProgress ) {
@@ -123,7 +124,7 @@ class ParallelSideChecker {
 
           // Two or more vertices pressed at once, increase the tolerance interval by a scale factor so that
           // it is easier to find and remain a parallelogram with this input
-          toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval * QuadrilateralQueryParameters.angleToleranceIntervalScaleFactor;
+          toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval * QuadrilateralQueryParameters.toleranceIntervalScaleFactor;
         }
         else if ( numberOfVerticesPressed === 1 ) {
 
