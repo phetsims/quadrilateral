@@ -527,7 +527,10 @@ class QuadrilateralShapeModel {
   public getShapeName(): NamedQuadrilateral | null {
     let namedQuadrilateral = null;
 
-    const topSideLengthEqualToRightSideLength = this.topSide.isShapeLengthEqualToOther( this.rightSide );
+    const topSideLengthEqualToRightSideLength = this.isShapeLengthEqualToOther(
+      this.topSide.lengthProperty.value,
+      this.rightSide.lengthProperty.value
+    );
 
     // equalities for adjacent vertices
     const adjacentVertexAngles = [
@@ -612,7 +615,7 @@ class QuadrilateralShapeModel {
         // angles that are equal. The angle check shouldn't be required but is because the lengths won't be
         // exactly equal since they use lengthToleranceInterval in their comparison.
         const kiteSideLengthRequirement = _.countBy( adjacentSides, ( sidePair: Side[] ) => {
-          return sidePair[ 0 ].isShapeLengthEqualToOther( sidePair[ 1 ] );
+          return this.isShapeLengthEqualToOther( sidePair[ 0 ].lengthProperty.value, sidePair[ 1 ].lengthProperty.value );
         } ).true === 2;
         const kiteAngleRequirement = this.oppositeEqualVertexPairsProperty.value.length === 1;
         const kiteRequirement = kiteSideLengthRequirement && kiteAngleRequirement;

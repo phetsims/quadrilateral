@@ -146,18 +146,6 @@ class Side {
   }
 
   /**
-   * Returns true when the length of this Side is equal to another for the purposes of shape recognition.
-   * This tolerance interval does not change with side length like the `lengthToleranceIntervalProperty`.
-   * For some reason dictated by the design team, "length maintenance" tasks should have a variable
-   * tolerance interval and use `isLengthEqualToOther` while "shape detection" tasks should have an
-   * unchanging value and use this function.
-   * @param side
-   */
-  public isShapeLengthEqualToOther( side: Side ): boolean {
-    return Utils.equalsEpsilon( side.lengthProperty.value, this.lengthProperty.value, QuadrilateralQueryParameters.shapeLengthToleranceInterval );
-  }
-
-  /**
    * Returns true if this Side includes the provided Vertex.
    */
   public includesVertex( vertex: Vertex ): boolean {
