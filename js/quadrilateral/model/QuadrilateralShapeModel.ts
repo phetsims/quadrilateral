@@ -415,6 +415,8 @@ class QuadrilateralShapeModel {
   /**
    * Returns true if the current vertex angles are equal to the angles stored in savedVertexAngles, within a unique
    * tolerance interval. Used to determine if any of the angles have changed during an interaction.
+   *
+   * TODO: I suspect this can be removed, maintining angles like this is no longer a learning goal.
    */
   getVertexAnglesEqualToSaved( currentVertexAngles: VertexAngles ): boolean {
 
