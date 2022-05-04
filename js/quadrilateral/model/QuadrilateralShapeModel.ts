@@ -28,12 +28,10 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Ray2 from '../../../../dot/js/Ray2.js';
 import SideLengths from './SideLengths.js';
 import VertexLabel from './VertexLabel.js';
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import VertexAngles from './VertexAngles.js';
 import ParallelSideChecker from './ParallelSideChecker.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 
 // A useful type for calculations for the vertex Shapes which define where the Vertex can move depending on
 // the positions of the other vertices. Lines are along the bounds of model space and RayIntersections
@@ -93,7 +91,6 @@ class QuadrilateralShapeModel {
 
   private propertiesDeferred: boolean;
 
-  public angleToleranceIntervalProperty: IReadOnlyProperty<number>;
   public tiltToleranceIntervalProperty: Property<number>;
 
   public shapeChangedEmitter: Emitter<[]>;
@@ -252,89 +249,6 @@ class QuadrilateralShapeModel {
     this.bottomSide.connectToSide( this.rightSide );
     this.leftSide.connectToSide( this.bottomSide );
     this.topSide.connectToSide( this.leftSide );
-
-    // A value that controls the threshold for equality when determining if the quadrilateral forms a parallelogram.
-    // Without a margin of error it would be exceedingly difficult to create a parallelogram shape. The value changes
-    // depending on input. Any tolerance interval means isParallelogramProperty will be true when we are not exactly
-    // a parallelogram. This means that angles will NOT remain constant will dragging sides or more than one
-    // vertex at a time because the properties of a parallelogram will not be present, even though we are telling
-    // the user that they are "in parallelogram". As such, we make it more or less difficult to remain in parallelogram
-    // depending on the input.
-    //
-    // If a side is being dragged while in parallelogram, it should be impossible to go "out" of parallelogram.
-    // If dragging two or more sides, the tolerance is larger because it should be easier to find and stay in
-    // parallelogram with this mode of input.
-    // If dragging a single vertex, the tolerance is as small as possible because with this mode of input has the
-    // finest control.
-    this.angleToleranceIntervalProperty = new DerivedProperty(
-      [
-        this.vertexA.isPressedProperty, this.vertexB.isPressedProperty, this.vertexC.isPressedProperty, this.vertexD.isPressedProperty,
-        this.topSide.isPressedProperty, this.rightSide.isPressedProperty, this.bottomSide.isPressedProperty, this.leftSide.isPressedProperty,
-        model.resetNotInProgressProperty
-      ],
-      (
-        vertexAPressed, vertexBPressed, vertexCPressed, vertexDPressed,
-        topSidePressed, rightSidePressed, bottomSidePressed, leftSidePressed,
-        resetNotInProgress
-      ) => {
-        const verticesPressedArray = [ vertexAPressed, vertexBPressed, vertexCPressed, vertexDPressed ];
-        const sidesPressedArray = [ topSidePressed, rightSidePressed, bottomSidePressed, leftSidePressed ];
-
-        const numberOfVerticesPressed = _.countBy( verticesPressedArray ).true;
-        const anySidesPressed = _.some( sidesPressedArray );
-
-        let toleranceInterval;
-
-        if ( QuadrilateralQueryParameters.deviceConnection ) {
-
-          // The simulation is connected to device hardware, so we use a larger tolerance interval because control
-          // with the hardware is more erratic and less fine-grained.
-          toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval * QuadrilateralQueryParameters.angleToleranceIntervalScaleFactor;
-        }
-        else if ( !resetNotInProgress ) {
-
-          // A reset has just begun, set the tolerance interval back to its initial value on load
-          toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval;
-        }
-        else {
-
-          // remaining cases apply to mouse, touch, and keyboard input
-          if ( anySidesPressed && this.isParallelogramProperty.value ) {
-
-            // A side has been picked up while the shape is a parallelogram - it should be impossible for the shape
-            // to go "out" of parallelogram in this case because none of the angles should be changing.
-            toleranceInterval = Number.POSITIVE_INFINITY;
-          }
-          else if ( anySidesPressed && !this.isParallelogramProperty.value ) {
-
-            // A side as been picked up while the shape is NOT a parallelogram - it should be impossible for the
-            // shape to become a parallelogram while it is being dragged.
-            toleranceInterval = Number.NEGATIVE_INFINITY;
-          }
-          else if ( numberOfVerticesPressed >= 2 ) {
-
-            // Two or more vertices pressed at once, increase the tolerance interval by a scale factor so that
-            // it is easier to find and remain a parallelogram with this input
-            toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval * QuadrilateralQueryParameters.angleToleranceIntervalScaleFactor;
-          }
-          else if ( numberOfVerticesPressed === 1 ) {
-
-            // Only one vertex is moving, we can afford to be as precise as possible from this form of input, and
-            // so we have the smallest tolerance interval.
-            toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval;
-          }
-          else {
-
-            // We are dragging a side while out of parallelogram, or we just released all sides and vertices. Do NOT
-            // change the angleToleranceInterval because we don't want the quadrilateral to suddenly appear out of
-            // parallelogram at the end of the interaction. The ternary handles initialization.
-            toleranceInterval = this.angleToleranceIntervalProperty ? this.angleToleranceIntervalProperty.value : QuadrilateralQueryParameters.angleToleranceInterval;
-          }
-        }
-
-        return toleranceInterval;
-      }
-    );
 
     this.tiltToleranceIntervalProperty = new NumberProperty( QuadrilateralQueryParameters.tiltToleranceInterval, {
       tandem: options.tandem.createTandem( 'tiltToleranceIntervalProperty' ),
@@ -951,14 +865,6 @@ class QuadrilateralShapeModel {
   public getAreAllLengthsEqual(): boolean {
     return this.shapeNameProperty.value === NamedQuadrilateral.RHOMBUS ||
            this.shapeNameProperty.value === NamedQuadrilateral.SQUARE;
-  }
-
-  /**
-   * Returns true if two angles are close enough to each other that they should be considered equal. They are close
-   * enough if they are within the angleToleranceIntervalProperty.
-   */
-  public isAngleEqualToOther( angle1: number, angle2: number ): boolean {
-    return Utils.equalsEpsilon( angle1, angle2, this.angleToleranceIntervalProperty.value );
   }
 
   /**
