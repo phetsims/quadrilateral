@@ -1228,9 +1228,13 @@ class QuadrilateralShapeModel {
 
       // scale the physical positions to the simulation virtual model
       const scaledProposedPositions: VertexWithProposedPosition[] = proposedPositions.map( vertexWithProposedPosition => {
+
+        const virtualPosition = this.model.physicalToVirtualTransform!.modelToViewPosition( vertexWithProposedPosition.proposedPosition );
+        const constrainedPosition = QuadrilateralModel.getClosestMinorGridPosition( virtualPosition );
+
         return {
           vertex: vertexWithProposedPosition.vertex,
-          proposedPosition: this.model.physicalToVirtualTransform!.modelToViewPosition( vertexWithProposedPosition.proposedPosition )
+          proposedPosition: constrainedPosition
         };
       } );
 
