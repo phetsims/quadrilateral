@@ -12,7 +12,6 @@ import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import quadrilateral from '../../quadrilateral.js';
 import Vertex from './Vertex.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import Utils from '../../../../dot/js/Utils.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import { Line } from '../../../../scenery/js/imports.js';
@@ -33,6 +32,9 @@ class Side {
   public lengthProperty: NumberProperty;
   public readonly isPressedProperty: BooleanProperty;
   public shapeProperty: IReadOnlyProperty<Shape>;
+
+  // TODO: I suspect that the usages of this can be removed now that we are not tracking changes in shape length
+  // in real time for learning goals.
   public readonly lengthToleranceIntervalProperty: IReadOnlyProperty<number>;
 
   // In model coordinates, the length of a side segment in model coordinates. The full side is divided into segments of
@@ -130,19 +132,6 @@ class Side {
    */
   public getFinalSegmentLength(): number {
     return this.lengthProperty.value % Side.SIDE_SEGMENT_LENGTH;
-  }
-
-  /**
-   * Returns true when the length of this Side is equal to the other Side, within length tolerance intervals.
-   * The Sides may have different tolerance intervals because the intervals are a function of the length.
-   * We always use the larger of the two intervals in this case.
-   */
-  public isLengthEqualToOther( side: Side ): boolean {
-
-    // for more consistent, always use the larger of the length tolerance intervals (they will be slightly
-    // different for sides with different lengths
-    const toleranceInterval = Math.max( side.lengthToleranceIntervalProperty.value, this.lengthToleranceIntervalProperty.value );
-    return Utils.equalsEpsilon( side.lengthProperty.value, this.lengthProperty.value, toleranceInterval );
   }
 
   /**

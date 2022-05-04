@@ -32,6 +32,8 @@ import optionize from '../../../../phet-core/js/optionize.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import VertexAngles from './VertexAngles.js';
 import ParallelSideChecker from './ParallelSideChecker.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 
 // A useful type for calculations for the vertex Shapes which define where the Vertex can move depending on
 // the positions of the other vertices. Lines are along the bounds of model space and RayIntersections
@@ -92,6 +94,13 @@ class QuadrilateralShapeModel {
   private propertiesDeferred: boolean;
 
   public tiltToleranceIntervalProperty: Property<number>;
+
+  // The tolerance interval for angle and length comparisons when detecting shape names. This needs to be different
+  // from the angleToleranceInterval of the ParallelSideCheckers because those tolerance intervals can go to infinity
+  // to support certain learning goals. The shape detection comparisons need a more consistent angle tolerance
+  // interval. However, there is some unique behavior when connected to the tangible device.
+  public readonly shapeAngleToleranceIntervalProperty: IReadOnlyProperty<number>;
+  public readonly shapeLengthToleranceIntervalProperty: IReadOnlyProperty<number>;
 
   public shapeChangedEmitter: Emitter<[]>;
 
@@ -306,6 +315,31 @@ class QuadrilateralShapeModel {
 
     // Emits an event whenever the shape of the Quadrilateral changes
     this.shapeChangedEmitter = new Emitter<[]>();
+
+    const toleranceIntervalWideningListener = ( defaultToleranceInterval: number, shapeName: NamedQuadrilateral | null, scaleFactor: number ): number => {
+      let shapeAngleToleranceInterval = defaultToleranceInterval;
+
+      // If connected to a device, make the interval larger when we have a detected shape so that it is easier
+      // to maintain the detected shape as interaction continues. This is important because it is not easy to make
+      // fine grain motion with the tangible.
+      if ( QuadrilateralQueryParameters.deviceConnection ) {
+        if ( shapeName !== null ) {
+          shapeAngleToleranceInterval = defaultToleranceInterval * scaleFactor;
+        }
+      }
+
+      return shapeAngleToleranceInterval;
+    };
+
+    this.shapeAngleToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty ], ( shapeName: NamedQuadrilateral | null ) => {
+      return toleranceIntervalWideningListener( QuadrilateralQueryParameters.shapeAngleToleranceInterval, shapeName, 3 );
+    } );
+
+    this.shapeLengthToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty ], ( shapeName: NamedQuadrilateral | null ) => {
+      const interval = toleranceIntervalWideningListener( QuadrilateralQueryParameters.shapeLengthToleranceInterval, shapeName, 3 );
+      console.log( interval );
+      return interval;
+    } );
 
     // ParallelSideCheckers are responsible for determining if opposite SidePairs are parallel within their dynamic
     // angleToleranceIntervalProperty.
@@ -877,7 +911,7 @@ class QuadrilateralShapeModel {
    * very high the shape isn't incorrectly described.
    */
   public isShapeAngleEqualToOther( angle1: number, angle2: number ): boolean {
-    return Utils.equalsEpsilon( angle1, angle2, QuadrilateralQueryParameters.shapeAngleToleranceInterval );
+    return Utils.equalsEpsilon( angle1, angle2, this.shapeAngleToleranceIntervalProperty.value );
   }
 
   /**
@@ -885,7 +919,7 @@ class QuadrilateralShapeModel {
    * shapeLengthAngleToleranceInterval.
    */
   public isShapeLengthEqualToOther( length1: number, length2: number ): boolean {
-    return Utils.equalsEpsilon( length1, length2, QuadrilateralQueryParameters.shapeLengthToleranceInterval );
+    return Utils.equalsEpsilon( length1, length2, this.shapeLengthToleranceIntervalProperty.value );
   }
 
   public isRightAngle( angle: number ): boolean {
