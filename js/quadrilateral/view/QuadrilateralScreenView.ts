@@ -35,6 +35,7 @@ import QuadrilateralVisibilityControls from './QuadrilateralVisibilityControls.j
 import QuadrilateralGridNode from './QuadrilateralGridNode.js';
 import QuadrilateralScreenSummaryContentNode from './QuadrilateralScreenSummaryContentNode.js';
 import vibrationManager from '../../../../tappi/js/vibrationManager.js';
+import QuadrilateralAlerter from './QuadrilateralAlerter.js';
 
 const MODEL_BOUNDS = QuadrilateralQueryParameters.calibrationDemoDevice ? new Bounds2( -4.5, -4.5, 4.5, 4.5 ) :
                      new Bounds2( -1, -1, 1, 1 );
@@ -245,9 +246,12 @@ class QuadrilateralScreenView extends ScreenView {
     // pdom
     this.pdomPlayAreaNode.pdomOrder = [ this.quadrilateralNode ];
     this.pdomControlAreaNode.pdomOrder = [ visibilityControls, this.resetAllButton ];
-
     this.setScreenSummaryContent( new QuadrilateralScreenSummaryContentNode() );
 
+    // voicing
+    // Disabling eslint here because this variable is not used but I am sure that it will be soon.
+    // eslint-disable-next-line no-unused-vars
+    const quadrilateralAlerter = new QuadrilateralAlerter( model, this );
   }
 
   /**

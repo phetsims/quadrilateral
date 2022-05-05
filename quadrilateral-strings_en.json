@@ -294,6 +294,12 @@
           "value": "{{changeDescription}}. Opposite sides {{proximityDescription}} parallel."
         }
       },
+      "foundAParallelogram": {
+        "value": "Found a parallelogram!"
+      },
+      "lostYourParallelogram": {
+        "value": "Lost your parallelogram!"
+      },
       "vertexObjectResponsePattern": {
         "value": "{{oppositeComparison}} opposite corner, {{adjacentVertexDescription}}."
       },

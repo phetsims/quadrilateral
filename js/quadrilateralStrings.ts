@@ -115,6 +115,8 @@ type StringsType = {
         'extremelyCloseTo': string,
         'proximityToParallelogramPattern': string
       },
+      'foundAParallelogram': string,
+      'lostYourParallelogram': string,
       'vertexObjectResponsePattern': string,
       'rightAngleVertexObjectResponsePattern': string,
       'farWiderThan': string,
