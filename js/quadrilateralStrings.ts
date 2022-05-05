@@ -148,11 +148,16 @@ type StringsType = {
       'parallelSideObjectResponsePattern': string,
       'sideObjectResponsePattern': string,
       'equalToAdjacentSides': string,
+      'equalToParallelAdjacentSides': string,
       'equalToOneAdjacentSide': string,
       'equalAdjacentSidesPattern': string,
+      'equalAdjacentParallelSidesPattern': string,
       'shorterThanAdjacentSides': string,
+      'shorterThanParallelAdjacentSides': string,
       'longerThanAdjacentSides': string,
-      'notEqualToAdjacentSides': string
+      'longerThanParallelAdjacentSides': string,
+      'notEqualToAdjacentSides': string,
+      'notEqualToParallelAdjacentSides': string
     }
   }
 };

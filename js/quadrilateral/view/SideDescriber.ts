@@ -33,9 +33,13 @@ const sideObjectResponsePatternString = quadrilateralStrings.a11y.voicing.sideOb
 const equalToAdjacentSidesString = quadrilateralStrings.a11y.voicing.equalToAdjacentSides;
 const equalToOneAdjacentSideString = quadrilateralStrings.a11y.voicing.equalToOneAdjacentSide;
 const equalAdjacentSidesPatternString = quadrilateralStrings.a11y.voicing.equalAdjacentSidesPattern;
+const equalAdjacentParallelSidesPatternString = quadrilateralStrings.a11y.voicing.equalAdjacentParallelSidesPattern;
 const shorterThanAdjacentSidesString = quadrilateralStrings.a11y.voicing.shorterThanAdjacentSides;
 const longerThanAdjacentSidesString = quadrilateralStrings.a11y.voicing.longerThanAdjacentSides;
 const notEqualToAdjacentSidesString = quadrilateralStrings.a11y.voicing.notEqualToAdjacentSides;
+const shorterThanParallelAdjacentSidesString = quadrilateralStrings.a11y.voicing.shorterThanParallelAdjacentSides;
+const longerThanParallelAdjacentSidesString = quadrilateralStrings.a11y.voicing.longerThanParallelAdjacentSides;
+const notEqualToParallelAdjacentSidesString = quadrilateralStrings.a11y.voicing.notEqualToParallelAdjacentSides;
 
 // A map that will provide comparison descriptions for side lengths. Lengths in model units.
 const lengthComparisonDescriptionMap = new Map<Range, string>();
@@ -103,11 +107,12 @@ class SideDescriber {
   }
 
   /**
-   * Get a description of the adjacent sides and how this side compares to them in length. Used for the
-   * Object response of this vertex. Will return something like
+   * Get a description of the adjacent sides and how this side compares to them in length. Also includes information
+   * about them if they are parallel. Used for the Object response of this vertex. Will return something like
    *
    * "much smaller than adjacent equal sides" or
-   * "equal to adjacent sides"
+   * "equal to adjacent sides" or
+   * "not equal to parallel adjacent sides"
    */
   private getAdjacentSideDescription(): string {
     let description = '';
@@ -126,10 +131,21 @@ class SideDescriber {
       }
     } );
 
+    const parallelSideChecker = _.find( this.quadrilateralShapeModel.parallelSideCheckers, checker => {
+      return checker.side1 === adjacentSides[ 0 ] || checker.side1 === adjacentSides[ 1 ];
+    } );
+    assert && assert( parallelSideChecker, 'did not find ParallelSideChecker' );
+    const adjacentSidesParallel = parallelSideChecker!.areSidesParallel();
+
     if ( numberOfEqualAdjacentSidePairs === 2 ) {
 
       // This side and both adjacent sides are all equal
-      description = equalToAdjacentSidesString;
+      if ( adjacentSidesParallel ) {
+        description = 'equal to parallel adjacent sides';
+      }
+      else {
+        description = equalToAdjacentSidesString;
+      }
     }
     else if ( numberOfEqualAdjacentSidePairs === 1 ) {
 
@@ -138,9 +154,11 @@ class SideDescriber {
     }
     else if ( adjacentSidesEqual ) {
 
+      const patternString = adjacentSidesParallel ? equalAdjacentParallelSidesPatternString : equalAdjacentSidesPatternString;
+
       // the adjacent sides are equal in length but not equal to this side, describe the length of
       // this side relative to the other sides but we can use either side since they are equal in length
-      description = StringUtils.fillIn( equalAdjacentSidesPatternString, {
+      description = StringUtils.fillIn( patternString, {
         comparison: SideDescriber.getLengthComparisonDescription( adjacentSides[ 0 ], this.side )
       } );
     }
@@ -152,13 +170,13 @@ class SideDescriber {
       const firstAdjacentLength = adjacentSides[ 0 ].lengthProperty.value;
       const secondAdjacentLength = adjacentSides[ 1 ].lengthProperty.value;
       if ( firstAdjacentLength > sideLength && secondAdjacentLength > sideLength ) {
-        description = shorterThanAdjacentSidesString;
+        description = adjacentSidesParallel ? shorterThanParallelAdjacentSidesString : shorterThanAdjacentSidesString;
       }
       else if ( firstAdjacentLength < sideLength && secondAdjacentLength < sideLength ) {
-        description = longerThanAdjacentSidesString;
+        description = adjacentSidesParallel ? longerThanParallelAdjacentSidesString : longerThanAdjacentSidesString;
       }
       else {
-        description = notEqualToAdjacentSidesString;
+        description = adjacentSidesParallel ? notEqualToParallelAdjacentSidesString : notEqualToAdjacentSidesString;
       }
     }
 

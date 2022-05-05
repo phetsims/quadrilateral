@@ -167,7 +167,7 @@
           "value": "Equal Sides {{firstSide}} and {{secondSide}} are {{comparison}} equal Sides {{thirdSide}} and {{fourthSide}}."
         },
         "trapezoidSidesPattern": {
-          "value":"Side {{firstSide}} is {{firstComparison}} Side {{secondSide}} and parallel. Side {{thirdSide}} is {{secondComparison}} Side {{fourthSide}}."
+          "value": "Side {{firstSide}} is {{firstComparison}} Side {{secondSide}} and parallel. Side {{thirdSide}} is {{secondComparison}} Side {{fourthSide}}."
         },
         "equalSidesPattern": {
           "value": "Sides {{firstSide}} and {{secondSide}} are equal."
@@ -393,20 +393,35 @@
       "equalToAdjacentSides": {
         "value": "equal to adjacent sides"
       },
+      "equalToParallelAdjacentSides": {
+        "value": "equal to parallel adjacent sides"
+      },
       "equalToOneAdjacentSide": {
         "value": "equal to one adjacent side"
       },
       "equalAdjacentSidesPattern": {
         "value": "{{comparison}} equal adjacent sides"
       },
+      "equalAdjacentParallelSidesPattern": {
+        "value": "{{comparison}} parallel and equal adjacent sides"
+      },
       "shorterThanAdjacentSides": {
+        "value": "shorter than adjacent sides"
+      },
+      "shorterThanParallelAdjacentSides": {
         "value": "shorter than adjacent sides"
       },
       "longerThanAdjacentSides": {
         "value": "longer than adjacent sides"
       },
+      "longerThanParallelAdjacentSides": {
+        "value": "longer than parallel adjacent sides"
+      },
       "notEqualToAdjacentSides": {
         "value": "not equal to adjacent sides"
+      },
+      "notEqualToParallelAdjacentSides": {
+        "value": "not equal to parallel adjacent sides"
       }
     }
   }

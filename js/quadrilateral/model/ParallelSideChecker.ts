@@ -35,8 +35,8 @@ class ParallelSideChecker {
   // interaction. See the derivation for more specific behaviors.
   private readonly angleToleranceIntervalProperty: IReadOnlyProperty<number>;
 
-  private readonly side1: Side;
-  private readonly side2: Side;
+  public readonly side1: Side;
+  public readonly side2: Side;
   public readonly sidePair: SidePair;
 
   // A Property indicating that the provided sides are parallel, ONLY FOR DEBUGGING. You should go through
