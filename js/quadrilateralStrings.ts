@@ -117,6 +117,12 @@ type StringsType = {
       };
       'foundAParallelogram': string;
       'lostYourParallelogram': string;
+      'foundAParallelogramWithAllRightAngles': string;
+      'foundAParallelogramWithAllSidesEqual': string;
+      'foundParallelogramWithAnglesAndSidesEqual': string;
+      'allRightAnglesAndSidesEqual': string;
+      'allSidesEqual': string;
+      'allRightAngles': string;
       'vertexObjectResponsePattern': string;
       'rightAngleVertexObjectResponsePattern': string;
       'farWiderThan': string;

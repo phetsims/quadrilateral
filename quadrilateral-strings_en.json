@@ -300,6 +300,24 @@
       "lostYourParallelogram": {
         "value": "Lost your parallelogram!"
       },
+      "foundAParallelogramWithAllRightAngles": {
+        "value": "Found a parallelogram with all right angles!"
+      },
+      "foundAParallelogramWithAllSidesEqual": {
+        "value": "Found a parallelogram with all right angles!"
+      },
+      "foundParallelogramWithAnglesAndSidesEqual": {
+        "value": "Found a parallelogram with all right angles and all sides equal!"
+      },
+      "allRightAnglesAndSidesEqual": {
+        "value": "All right angles and all sides equal!"
+      },
+      "allSidesEqual": {
+        "value": "All sides equal."
+      },
+      "allRightAngles": {
+        "value": "All right angles."
+      },
       "vertexObjectResponsePattern": {
         "value": "{{oppositeComparison}} opposite corner, {{adjacentVertexDescription}}."
       },
