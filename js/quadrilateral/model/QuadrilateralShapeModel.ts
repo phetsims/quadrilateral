@@ -932,11 +932,15 @@ class QuadrilateralShapeModel {
 
     // set all positions
     verticesWithProposedPositions.forEach( vertexWithProposedPosition => {
-      vertexWithProposedPosition.vertex.positionProperty.set( vertexWithProposedPosition.proposedPosition );
+
+      // this is a new Vector2 instance so even if x,y values are the same as the old value it will triggere
+      // listeners without this check
+      if ( !vertexWithProposedPosition.proposedPosition.equals( vertexWithProposedPosition.vertex.positionProperty.value ) ) {
+        vertexWithProposedPosition.vertex.positionProperty.set( vertexWithProposedPosition.proposedPosition );
+      }
     } );
 
     // un-defer all so that all Properties and calls callbacks
-    // debugger;
     this.setPropertiesDeferred( false );
   }
 
