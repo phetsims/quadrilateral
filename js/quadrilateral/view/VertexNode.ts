@@ -122,7 +122,7 @@ class VertexNode extends Voicing( Circle, 1 ) {
         const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
 
         // constrain to the allowable positions in the model along the grid
-        const constrainedPosition = QuadrilateralModel.getClosestMinorGridPosition( modelPoint );
+        const constrainedPosition = QuadrilateralModel.getClosestGridPosition( modelPoint );
 
         if ( model.isVertexPositionAllowed( vertex, constrainedPosition ) ) {
           vertex.positionProperty.value = constrainedPosition;

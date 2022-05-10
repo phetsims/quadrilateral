@@ -1166,7 +1166,7 @@ class QuadrilateralShapeModel {
       const scaledProposedPositions: VertexWithProposedPosition[] = proposedPositions.map( vertexWithProposedPosition => {
 
         const virtualPosition = this.model.physicalToVirtualTransform!.modelToViewPosition( vertexWithProposedPosition.proposedPosition );
-        const constrainedPosition = QuadrilateralModel.getClosestMinorGridPosition( virtualPosition );
+        const constrainedPosition = QuadrilateralModel.getClosestGridPosition( virtualPosition, QuadrilateralModel.DEVICE_GRID_SPACING );
 
         return {
           vertex: vertexWithProposedPosition.vertex,

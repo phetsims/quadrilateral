@@ -45,6 +45,11 @@ class QuadrilateralModel {
   public static MAJOR_GRID_SPACING = 0.05;
   public static MINOR_GRID_SPACING: number = QuadrilateralModel.MAJOR_GRID_SPACING / 4;
 
+  // When controlling with the device the vertex positions are constrained to this resolution
+  // of grid spacing - a bit larger than the MINOR_GRID_SPACING to prevent small motions that
+  // may come from noise.
+  public static DEVICE_GRID_SPACING: number = QuadrilateralModel.MAJOR_GRID_SPACING / 2;
+
   constructor( shapeIdentificationEnabledProperty: BooleanProperty, tandem: Tandem ) {
 
     // The bounds in model space. The bounds will change depending on available screen bounds so that
@@ -230,10 +235,9 @@ class QuadrilateralModel {
 
   /**
    * Returns the closest position in the model from the point provided that will be constrained to the minor lines
-   * of the model "grid".
+   * of the model "grid". By default it uses the following minor grid spacing but a different spacing may be necessary.
    */
-  public static getClosestMinorGridPosition( position: Vector2 ): Vector2 {
-    const interval = QuadrilateralModel.MINOR_GRID_SPACING;
+  public static getClosestGridPosition( position: Vector2, interval = QuadrilateralModel.MINOR_GRID_SPACING ): Vector2 {
     return new Vector2( Utils.roundToInterval( position.x, interval ), Utils.roundToInterval( position.y, interval ) );
   }
 }

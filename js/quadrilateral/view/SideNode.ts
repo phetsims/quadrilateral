@@ -223,8 +223,8 @@ class SideNode extends Voicing( Path, 1 ) {
           const modelVertex2Position = modelPoint.plus( vectorToVertex2! );
 
           // constrain each to the model grid
-          const proposedVertex1Position = QuadrilateralModel.getClosestMinorGridPosition( modelVertex1Position );
-          const proposedVertex2Position = QuadrilateralModel.getClosestMinorGridPosition( modelVertex2Position );
+          const proposedVertex1Position = QuadrilateralModel.getClosestGridPosition( modelVertex1Position );
+          const proposedVertex2Position = QuadrilateralModel.getClosestGridPosition( modelVertex2Position );
 
           // only update positions if both are allowed
           if ( quadrilateralModel.areVertexPositionsAllowed( side.vertex1, proposedVertex1Position, side.vertex2, proposedVertex2Position ) ) {
@@ -296,8 +296,8 @@ class SideNode extends Voicing( Path, 1 ) {
     let proposedVertex2Position = this.side.vertex2.positionProperty.get().plus( deltaVector );
 
     // constrain positions to the "grid" of the model
-    proposedVertex1Position = QuadrilateralModel.getClosestMinorGridPosition( proposedVertex1Position );
-    proposedVertex2Position = QuadrilateralModel.getClosestMinorGridPosition( proposedVertex2Position );
+    proposedVertex1Position = QuadrilateralModel.getClosestGridPosition( proposedVertex1Position );
+    proposedVertex2Position = QuadrilateralModel.getClosestGridPosition( proposedVertex2Position );
 
     // if the positions are outside of model bounds, the shape is not allowed
     // TODO: I am not sure how to put this in the isQuadrilateralShapeAllowed, because to set the shape
@@ -339,7 +339,7 @@ class SideNode extends Voicing( Path, 1 ) {
    */
   private rotateVertexAroundOther( anchorVertex: Vertex, armVertex: Vertex, modelDelta: Vector2 ): void {
     const modelPosition = armVertex.positionProperty.get().plus( modelDelta );
-    const proposedPosition = QuadrilateralModel.getClosestMinorGridPosition( modelPosition );
+    const proposedPosition = QuadrilateralModel.getClosestGridPosition( modelPosition );
     if ( this.quadrilateralModel.isVertexPositionAllowed( armVertex, proposedPosition ) ) {
       armVertex.positionProperty.value = proposedPosition;
     }
