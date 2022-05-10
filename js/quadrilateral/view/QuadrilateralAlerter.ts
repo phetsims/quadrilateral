@@ -32,7 +32,10 @@ class QuadrilateralAlerter extends Alerter {
     const alertResponsePacket = new ResponsePacket();
 
     const utterance = new Utterance( {
-      alert: alertResponsePacket
+      alert: alertResponsePacket,
+      announcerOptions: {
+        cancelSelf: false
+      }
     } );
 
     // Depending on what combinations of state the shape enters/loses we use different descriptions. We need

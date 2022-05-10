@@ -155,6 +155,9 @@ class ParallelSideChecker {
   /**
    * Returns true if two angles are close enough to each other that they should be considered equal. They are close
    * enough if they are within the angleToleranceIntervalProperty.
+   *
+   * NOTE: If we need to detect proximity to "parallelness" the smaller absolute values of difference between
+   * angle1 and angle2 would be closer to parallel.
    */
   public isAngleEqualToOther( angle1: number, angle2: number ): boolean {
     return Utils.equalsEpsilon( angle1, angle2, this.angleToleranceIntervalProperty.value );

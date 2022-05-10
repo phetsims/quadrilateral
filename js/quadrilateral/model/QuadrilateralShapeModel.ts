@@ -1324,9 +1324,8 @@ class QuadrilateralShapeModel {
     // fine grain motion with the tangible.
     if ( QuadrilateralQueryParameters.deviceConnection ) {
       toleranceInterval = defaultDeviceToleranceInterval;
-      console.log( defaultDeviceToleranceInterval );
       if ( shapeName !== null ) {
-        toleranceInterval = defaultToleranceInterval * QuadrilateralQueryParameters.toleranceIntervalScaleFactor;
+        toleranceInterval = defaultDeviceToleranceInterval * QuadrilateralQueryParameters.toleranceIntervalScaleFactor;
       }
     }
 
