@@ -326,6 +326,8 @@ class QuadrilateralShapeModel {
         QuadrilateralQueryParameters.deviceShapeAngleToleranceInterval,
         shapeName
       );
+    }, {
+      tandem: options.tandem.createTandem( 'shapeAngleToleranceIntervalProperty' )
     } );
 
     this.shapeLengthToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty ], ( shapeName: NamedQuadrilateral | null ) => {
@@ -334,6 +336,8 @@ class QuadrilateralShapeModel {
         QuadrilateralQueryParameters.deviceShapeLengthToleranceInterval,
         shapeName
       );
+    }, {
+      tandem: options.tandem.createTandem( 'shapeLengthToleranceIntervalProperty' )
     } );
 
     // ParallelSideCheckers are responsible for determining if opposite SidePairs are parallel within their dynamic
