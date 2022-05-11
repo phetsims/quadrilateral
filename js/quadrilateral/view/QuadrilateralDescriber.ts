@@ -366,7 +366,7 @@ class QuadrilateralDescriber {
     const shapeName = this.shapeModel.shapeNameProperty.value;
     const shapeNameString = this.getShapeNameDescription( shapeName );
 
-    if ( this.shapeModel.isParallelogramProperty.value && shapeName === null ) {
+    if ( this.shapeModel.isParallelogramProperty.value && shapeName === NamedQuadrilateral.GENERAL_QUADRILATERAL ) {
 
       // parallelogram with no name, don't include "general quadrilateral" just say parallelogram
       description = aParallelogramString;
