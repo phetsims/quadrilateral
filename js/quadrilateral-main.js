@@ -10,6 +10,7 @@ import BooleanProperty from '../../axon/js/BooleanProperty.js';
 import PreferencesConfiguration from '../../joist/js/preferences/PreferencesConfiguration.js';
 import Sim from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
+import ClapperboardButton from '../../scenery-phet/js/ClapperboardButton.js';
 import { Color, ColorProperty, HBox, Text, VBox } from '../../scenery/js/imports.js';
 import Checkbox from '../../sun/js/Checkbox.js';
 import Tandem from '../../tandem/js/Tandem.js';
@@ -43,8 +44,9 @@ const shapeIdentificationFeedbackCheckbox = new Checkbox(
   }
 );
 
+const otherControls = [ new ClapperboardButton() ];
+
 // if requested by query parameter, include experimental bluetooth controls in the sim settings
-const otherControls = [];
 QuadrilateralQueryParameters.bluetooth && otherControls.push( new QuadrilateralBluetoothConnectionPanel( tangibleDeviceConnectedProperty, Tandem.GENERAL_VIEW ) );
 otherControls.push( shapeIdentificationFeedbackCheckbox );
 const otherControlsBox = new VBox( {
