@@ -170,11 +170,11 @@ class SideNode extends Voicing( Path, 1 ) {
       // velocity defined in view coordinates per second, assuming 60 fps
       dragVelocity: viewDragDelta * 60,
       shiftDragVelocity: minorViewDelta * 60,
-
       downDelta: viewDragDelta,
       shiftDownDelta: minorViewDelta,
       moveOnHoldDelay: 750,
       moveOnHoldInterval: 50,
+
       tandem: options.tandem.createTandem( 'keyboardDragListener' )
     } ) );
 
