@@ -35,6 +35,7 @@ import ParallelSideChecker from './ParallelSideChecker.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
+import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 
 // A useful type for calculations for the vertex Shapes which define where the Vertex can move depending on
 // the positions of the other vertices. Lines are along the bounds of model space and RayIntersections
@@ -327,7 +328,8 @@ class QuadrilateralShapeModel {
         shapeName
       );
     }, {
-      tandem: options.tandem.createTandem( 'shapeAngleToleranceIntervalProperty' )
+      tandem: options.tandem.createTandem( 'shapeAngleToleranceIntervalProperty' ),
+      phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
     } );
 
     this.shapeLengthToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty ], ( shapeName: NamedQuadrilateral | null ) => {
@@ -337,7 +339,8 @@ class QuadrilateralShapeModel {
         shapeName
       );
     }, {
-      tandem: options.tandem.createTandem( 'shapeLengthToleranceIntervalProperty' )
+      tandem: options.tandem.createTandem( 'shapeLengthToleranceIntervalProperty' ),
+      phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
     } );
 
     // ParallelSideCheckers are responsible for determining if opposite SidePairs are parallel within their dynamic
