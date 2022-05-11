@@ -27,6 +27,13 @@ const calibrationDemoString = 'Device'; // this will never be translatable, keep
 
 const soundOptionsModel = new QuadrilateralSoundOptionsModel();
 
+// Property indicating that a tangible device is connected to the simulation, either through bluetooth or a wired
+// serial connection. It is up to the BLE or serial connector to set the Property.
+const tangibleDeviceConnectedProperty = new BooleanProperty( false, {
+  tandem: Tandem.GENERAL_CONTROLLER.createTandem( 'tangibleDeviceConnectedProperty' ),
+  phetioReadOnly: true
+} );
+
 const shapeIdentificationFeedbackEnabledProperty = new BooleanProperty( QuadrilateralQueryParameters.shapeIdentificationFeedback );
 const shapeIdentificationFeedbackCheckbox = new Checkbox(
   new Text( 'Shape Identification Feedback', QuadrilateralConstants.PANEL_LABEL_TEXT_OPTIONS ),
@@ -38,7 +45,7 @@ const shapeIdentificationFeedbackCheckbox = new Checkbox(
 
 // if requested by query parameter, include experimental bluetooth controls in the sim settings
 const otherControls = [];
-QuadrilateralQueryParameters.bluetooth && otherControls.push( new QuadrilateralBluetoothConnectionPanel( Tandem.GENERAL_VIEW ) );
+QuadrilateralQueryParameters.bluetooth && otherControls.push( new QuadrilateralBluetoothConnectionPanel( tangibleDeviceConnectedProperty, Tandem.GENERAL_VIEW ) );
 otherControls.push( shapeIdentificationFeedbackCheckbox );
 const otherControlsBox = new VBox( {
   children: otherControls,

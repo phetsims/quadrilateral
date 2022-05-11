@@ -13,6 +13,7 @@ import quadrilateral from '../../quadrilateral.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import { Text, VBox } from '../../../../scenery/js/imports.js';
+import IProperty from '../../../../axon/js/IProperty.js';
 
 // The bluetooth options for the requestDevice call.
 const REQUEST_DEVICE_OPTIONS = {
@@ -26,7 +27,11 @@ const REQUEST_DEVICE_OPTIONS = {
 };
 
 class QuadrilateralBluetoothConnectionPanel extends Panel {
-  constructor( tandem: Tandem ) {
+
+  // Reference to an observable indicating that a connection has been made to the tangible device.
+  private tangibleDeviceConnectedProperty : IProperty<boolean>;
+  
+  constructor( tangibleDeviceConnectedProperty: IProperty<boolean>, tandem: Tandem ) {
 
     // TODO: Handle when device does not support bluetooth with bluetooth.getAvailability.
     // TODO: Handle when browser does not support bluetooth, presumablue !navigator.bluetooth
@@ -41,6 +46,8 @@ class QuadrilateralBluetoothConnectionPanel extends Panel {
       minWidth: 200,
       align: 'center'
     } );
+
+    this.tangibleDeviceConnectedProperty = tangibleDeviceConnectedProperty;
 
     const pairButton = new TextPushButton( 'Search for device', {
       textNodeOptions: QuadrilateralConstants.PANEL_LABEL_TEXT_OPTIONS,
@@ -70,6 +77,8 @@ class QuadrilateralBluetoothConnectionPanel extends Panel {
         const characteristic = await primaryService.getCharacteristic( '19b10010-e8f2-537e-4f6c-d104768a1214' ).catch( ( err: DOMException ) => { console.error( err ); } );
         const notifySuccess = await characteristic.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
         notifySuccess.addEventListener( 'characteristicvaluechanged', QuadrilateralBluetoothConnectionPanel.handleCharacteristicValueChanged );
+
+        this.tangibleDeviceConnectedProperty.value = true;
 
         // At this time we can assume that connections are successful
         console.log( 'connection successful' );
