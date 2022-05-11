@@ -16,6 +16,7 @@ import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import { SidePair } from './QuadrilateralShapeModel.js';
@@ -147,6 +148,9 @@ class ParallelSideChecker {
       }
 
       return toleranceInterval;
+    }, {
+      tandem: tandem.createTandem( 'angleToleranceIntervalProperty' ),
+      phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
     } );
 
     // Primarily for debugging in the QuadrilateralModelValuePanel. We cannot actually use this Property because
