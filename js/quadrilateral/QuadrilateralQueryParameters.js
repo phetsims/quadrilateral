@@ -8,18 +8,12 @@ import quadrilateral from '../quadrilateral.js';
 
 const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
 
-  // Testing query parameters to only include one side at a time. You can use each of these in combination.
-  // These were added to support development of the sound design. It was difficult to understand what was
-  // happening with sound and the ability to isolate each side made it easier.
-  rightSide: { type: 'flag' },
-  leftSide: { type: 'flag' },
-  topSide: { type: 'flag' },
-  bottomSide: { type: 'flag' },
-
   // If provided, a graphic showing the area available for the vertex that is being dragged
   // is drawn on screen for debugging and demonstration purposes.
   showDragAreas: { type: 'flag' },
 
+  // Add some visual debugging to show the lengths that must be maintained to acheive the "maintain side
+  // lengths while keeping a parallelogram" learning goal.
   showLengthAreas: { type: 'flag' },
 
   // The tolerance interval for the angle calculations which determine when the quadrilateral is a parallelogram.
@@ -51,6 +45,10 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     isValidValue: value => value >= 1
   },
 
+  // The default value for the angle tolerance that will be used for determining the named shape of the
+  // quadrilateral. This must be different from the angleToleranceInterval, which use complex behavior
+  // and values depending on how the shape is being interacted with. The angleToleranceInterval
+  // can become infinite, which is not appropriate for detecting the shape name.
   shapeAngleToleranceInterval: {
     type: 'number',
     isValidValue: value => value <= ( 2 * Math.PI ) && value >= 0,
@@ -65,6 +63,9 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     defaultValue: 0.02
   },
 
+  // The default value for the shapeLengthToleranceInterval when we are connected to the device. In general
+  // the default value should be larger since fine-grained motion is difficult with the device. Otherwise behaves
+  // like shapeLengthToleranceInterval.
   deviceShapeLengthToleranceInterval: {
     type: 'number',
     isValidValue: value => value <= ( 2 * Math.PI ) && value >= 0,
