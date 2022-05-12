@@ -15,6 +15,8 @@ import Emitter from '../../../../axon/js/Emitter.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Utils from '../../../../dot/js/Utils.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
+import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import { SidePair } from './QuadrilateralShapeModel.js';
@@ -51,8 +53,9 @@ class ParallelSideChecker {
    * @param otherOppositeSidePair - The state of interaction with the other sides may determine this checker's tolerance
    * @param shapeChangedEmitter - Emitter for when the quadrilateral shape changes in some way.
    * @param resetNotInProgressProperty - Is the model currently not resetting?
+   * @param tandem
    */
-  constructor( oppositeSidePair: SidePair, otherOppositeSidePair: SidePair, shapeChangedEmitter: Emitter, resetNotInProgressProperty: Property<boolean> ) {
+  constructor( oppositeSidePair: SidePair, otherOppositeSidePair: SidePair, shapeChangedEmitter: Emitter, resetNotInProgressProperty: Property<boolean>, tandem: Tandem ) {
 
     this.sidePair = oppositeSidePair;
 
@@ -62,7 +65,10 @@ class ParallelSideChecker {
     const otherSide1 = otherOppositeSidePair.side1;
     const otherSide2 = otherOppositeSidePair.side2;
 
-    this.isParallelProperty = new BooleanProperty( false );
+    this.isParallelProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'isParallelProperty' ),
+      phetioReadOnly: true
+    } );
 
     this.angleToleranceIntervalProperty = new DerivedProperty( [
       this.side1.isPressedProperty,
@@ -142,6 +148,9 @@ class ParallelSideChecker {
       }
 
       return toleranceInterval;
+    }, {
+      tandem: tandem.createTandem( 'angleToleranceIntervalProperty' ),
+      phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
     } );
 
     // Primarily for debugging in the QuadrilateralModelValuePanel. We cannot actually use this Property because

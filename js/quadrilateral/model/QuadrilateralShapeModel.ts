@@ -34,6 +34,8 @@ import VertexAngles from './VertexAngles.js';
 import ParallelSideChecker from './ParallelSideChecker.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
+import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 
 // A useful type for calculations for the vertex Shapes which define where the Vertex can move depending on
 // the positions of the other vertices. Lines are along the bounds of model space and RayIntersections
@@ -109,7 +111,7 @@ class QuadrilateralShapeModel {
   public allAnglesRightProperty: Property<boolean>;
   public allLengthsEqualProperty: Property<boolean>;
 
-  public readonly shapeNameProperty: Property<NamedQuadrilateral | null>;
+  public readonly shapeNameProperty: EnumerationProperty<NamedQuadrilateral>;
 
   public savedSideLengths: SideLengths;
   private savedVertexAngles: VertexAngles;
@@ -311,7 +313,10 @@ class QuadrilateralShapeModel {
 
     // The name of the quadrilateral (like square/rhombus/trapezoid, etc). Will be null if it is a random
     // unnamed shape.
-    this.shapeNameProperty = new Property<null | NamedQuadrilateral>( null );
+    this.shapeNameProperty = new EnumerationProperty( NamedQuadrilateral.GENERAL_QUADRILATERAL, {
+      tandem: options.tandem.createTandem( 'shapeNameProperty' )
+    } );
+    // this.shapeNameProperty = new Property<null | NamedQuadrilateral>( null );
 
     // Emits an event whenever the shape of the Quadrilateral changes
     this.shapeChangedEmitter = new Emitter<[]>();
@@ -322,6 +327,9 @@ class QuadrilateralShapeModel {
         QuadrilateralQueryParameters.deviceShapeAngleToleranceInterval,
         shapeName
       );
+    }, {
+      tandem: options.tandem.createTandem( 'shapeAngleToleranceIntervalProperty' ),
+      phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
     } );
 
     this.shapeLengthToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty ], ( shapeName: NamedQuadrilateral | null ) => {
@@ -330,13 +338,28 @@ class QuadrilateralShapeModel {
         QuadrilateralQueryParameters.deviceShapeLengthToleranceInterval,
         shapeName
       );
+    }, {
+      tandem: options.tandem.createTandem( 'shapeLengthToleranceIntervalProperty' ),
+      phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
     } );
 
     // ParallelSideCheckers are responsible for determining if opposite SidePairs are parallel within their dynamic
     // angleToleranceIntervalProperty.
     this.parallelSideCheckers = [
-      new ParallelSideChecker( this.oppositeSides[ 0 ], this.oppositeSides[ 1 ], this.shapeChangedEmitter, model.resetNotInProgressProperty ),
-      new ParallelSideChecker( this.oppositeSides[ 1 ], this.oppositeSides[ 0 ], this.shapeChangedEmitter, model.resetNotInProgressProperty )
+      new ParallelSideChecker(
+        { side1: this.topSide, side2: this.bottomSide },
+        { side1: this.rightSide, side2: this.leftSide },
+        this.shapeChangedEmitter,
+        model.resetNotInProgressProperty,
+        options.tandem.createTandem( 'sideABSideCDParallelSideChecker' )
+      ),
+      new ParallelSideChecker(
+        { side1: this.rightSide, side2: this.leftSide },
+        { side1: this.topSide, side2: this.bottomSide },
+        this.shapeChangedEmitter,
+        model.resetNotInProgressProperty,
+        options.tandem.createTandem( 'sideBCSideDAParallelSideChecker' )
+      )
     ];
 
     // referenced for private use in functions
@@ -465,8 +488,10 @@ class QuadrilateralShapeModel {
    * Returns the name of the quadrilateral, one of NamedQuadrilateral enumeration. If the quadrilateral is in a shape
    * that is not named, returns null.
    */
-  public getShapeName(): NamedQuadrilateral | null {
-    let namedQuadrilateral = null;
+  public getShapeName(): NamedQuadrilateral {
+
+    // basic shape, fallback case
+    let namedQuadrilateral = NamedQuadrilateral.GENERAL_QUADRILATERAL;
 
     const topSideLengthEqualToRightSideLength = this.isShapeLengthEqualToOther(
       this.topSide.lengthProperty.value,
@@ -999,17 +1024,6 @@ class QuadrilateralShapeModel {
       this.anglesEqualToSavedProperty.set( this.getVertexAnglesEqualToSaved( this.getVertexAngles() ) );
     }
 
-    // After we have detected whether or not we are a parallelogram, and after all angle and length comparisons are
-    // ready for use, calculate the name of the current quadrilateral shape.
-    // console.log( this.getShapeName() );
-    // if ( this.validateShape ) {
-    //   if ( this.shapeNameProperty.value !== this.getShapeName() ) {
-    //     debugger;
-    //   }
-    //   if ( _.some( this.sides, side => side.lengthProperty.value > 1 ) ) {
-    //     debugger;
-    //   }
-    // }
     this.shapeNameProperty.set( this.getShapeName() );
 
     // Uses detected shape name so must be called AFTER the shapeNameProperty is set above.

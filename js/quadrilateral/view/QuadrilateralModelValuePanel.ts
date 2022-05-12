@@ -139,7 +139,7 @@ class QuadrilateralModelValuePanel extends Panel {
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.markerRotationProperty, markerRotationText, 'Marker rotation' );
   }
 
-  private static addRedrawValueTextListener( property: IReadOnlyProperty<number | null> | IProperty<boolean> | Property<NamedQuadrilateral | null>, text: Text, label: string ): void {
+  private static addRedrawValueTextListener( property: IReadOnlyProperty<number | null> | IProperty<boolean> | Property<NamedQuadrilateral>, text: Text, label: string ): void {
     property.link( value => {
 
       let formattedValue = value;

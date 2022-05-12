@@ -16,7 +16,6 @@ import { Rectangle, Text } from '../../../../scenery/js/imports.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralNode from './QuadrilateralNode.js';
 import QuadrilateralSoundView from './QuadrilateralSoundView.js';
-import SideDemonstrationNode from './SideDemonstrationNode.js';
 import VertexDragAreaNode from './VertexDragAreaNode.js';
 import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
 import quadrilateralStrings from '../../quadrilateralStrings.js';
@@ -45,7 +44,6 @@ class QuadrilateralScreenView extends ScreenView {
   private readonly model: QuadrilateralModel;
   private readonly modelViewTransform: ModelViewTransform2;
   private readonly quadrilateralNode: QuadrilateralNode | null;
-  private readonly demonstrationNode: SideDemonstrationNode | null;
   private readonly quadrilateralSoundView: QuadrilateralSoundView | null;
   public readonly quadrilateralDescriber: QuadrilateralDescriber;
   private readonly resetAllButton: ResetAllButton;
@@ -125,26 +123,15 @@ class QuadrilateralScreenView extends ScreenView {
     // for development. But we may want
     this.quadrilateralNode = null;
 
-    // A reference to the SideDemonstrationNode, which will be created if we are using debugging query parameters.
-    this.demonstrationNode = null;
-
-    // A reference to the QuadriladteralSoundView, created if we are NOT using debugging query parameters. When the
-    // "demonstration" Node is no longer useful this can be created eagerly.
+    // A reference to the QuadriladteralSoundView
     this.quadrilateralSoundView = null;
 
-    if ( QuadrilateralQueryParameters.rightSide || QuadrilateralQueryParameters.leftSide ||
-         QuadrilateralQueryParameters.topSide || QuadrilateralQueryParameters.bottomSide ) {
-      this.demonstrationNode = new SideDemonstrationNode( model, modelViewTransform, this.layoutBounds, soundOptionsModel );
-      this.addChild( this.demonstrationNode );
-    }
-    else {
-      this.quadrilateralNode = new QuadrilateralNode( model, modelViewTransform, this.layoutBounds, {
-        tandem: tandem.createTandem( 'quadrilateralNode' )
-      } );
-      this.addChild( this.quadrilateralNode );
+    this.quadrilateralNode = new QuadrilateralNode( model, modelViewTransform, this.layoutBounds, {
+      tandem: tandem.createTandem( 'quadrilateralNode' )
+    } );
+    this.addChild( this.quadrilateralNode );
 
-      this.quadrilateralSoundView = new QuadrilateralSoundView( model, soundOptionsModel );
-    }
+    this.quadrilateralSoundView = new QuadrilateralSoundView( model, soundOptionsModel );
 
     // Rectangle showing available model bounds, requested in https://github.com/phetsims/quadrilateral/issues/49.
     // Rounded corners to look nice, but actual model bounds are pure Bounds2.

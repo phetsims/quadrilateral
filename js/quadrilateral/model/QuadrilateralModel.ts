@@ -20,6 +20,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 
 class QuadrilateralModel {
   public modelBoundsProperty: Property<Bounds2 | null>;
@@ -29,6 +30,10 @@ class QuadrilateralModel {
   public isCalibratingProperty: BooleanProperty;
   public showDebugValuesProperty: BooleanProperty;
   public rotationMarkerDetectedProperty: BooleanProperty;
+
+  // A Property that indicates that all markers are observed by the camera to control this simulation. Requested as
+  // part of state for upcoming studies in https://github.com/phetsims/quadrilateral/issues/97
+  public allVertexMarkersDetectedProperty: IReadOnlyProperty<boolean>;
   public markerRotationProperty: NumberProperty;
   public cornerGuideVisibleProperty: BooleanProperty;
   public vertexLabelsVisibleProperty: BooleanProperty;
@@ -81,6 +86,10 @@ class QuadrilateralModel {
 
     // The amount of rotation in radians of the marker. TODO: delete? https://github.com/phetsims/tangible/issues/11
     this.markerRotationProperty = new NumberProperty( 0 );
+
+    this.allVertexMarkersDetectedProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'allVertexMarkersDetectedProperty' )
+    } );
 
     // This is the centrail quadrilateral shape for the simulation.
     this.quadrilateralShapeModel = new QuadrilateralShapeModel( this, {
