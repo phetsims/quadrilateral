@@ -433,7 +433,7 @@
         "value": "shorter than adjacent sides"
       },
       "shorterThanParallelAdjacentSides": {
-        "value": "shorter than adjacent sides"
+        "value": "shorter than parallel adjacent sides"
       },
       "longerThanAdjacentSides": {
         "value": "longer than adjacent sides"
