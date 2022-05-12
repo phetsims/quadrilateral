@@ -316,10 +316,11 @@ class QuadrilateralShapeModel {
     this.shapeNameProperty = new EnumerationProperty( NamedQuadrilateral.GENERAL_QUADRILATERAL, {
       tandem: options.tandem.createTandem( 'shapeNameProperty' )
     } );
-    // this.shapeNameProperty = new Property<null | NamedQuadrilateral>( null );
 
     // Emits an event whenever the shape of the Quadrilateral changes
-    this.shapeChangedEmitter = new Emitter<[]>();
+    this.shapeChangedEmitter = new Emitter<[]>( {
+      tandem: options.tandem.createTandem( 'shapeChangedEmitter' )
+    } );
 
     this.shapeAngleToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty ], ( shapeName: NamedQuadrilateral | null ) => {
       return QuadrilateralShapeModel.toleranceIntervalWideningListener(
