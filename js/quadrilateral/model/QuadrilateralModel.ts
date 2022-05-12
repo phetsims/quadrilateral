@@ -73,16 +73,13 @@ class QuadrilateralModel {
       tandem: tandem.createTandem( 'resetNotInProgressProperty' )
     } );
 
-    // Whether or not a marker is detected for physical device rotation. Only useful when used in
-    // combination with the ?markerInput query parameter, which enables the experimental marker feature.
+    // Whether or not a marker is detected for physical device rotation. TODO: delete? https://github.com/phetsims/tangible/issues/11
     this.rotationMarkerDetectedProperty = new BooleanProperty( false );
 
     // Whether or not visual and auditory feedback related to identifying shapes when not a parallelogram is enabled.
     this.shapeIdentificationFeedbackEnabledProperty = shapeIdentificationEnabledProperty;
 
-    // The amount of rotation in radians of the marker. Only useful when the ?markerInput
-    // is used. This is an experimental feature that will support rotating the shape when
-    // a marker is attached to the physical device.
+    // The amount of rotation in radians of the marker. TODO: delete? https://github.com/phetsims/tangible/issues/11
     this.markerRotationProperty = new NumberProperty( 0 );
 
     // This is the centrail quadrilateral shape for the simulation.

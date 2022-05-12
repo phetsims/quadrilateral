@@ -19,12 +19,8 @@
       "adapted-from-phet"
     ],
     "phetLibs": [
-      "tangible",
       "bamboo",
       "tappi"
-    ],
-    "preload": [
-      "../sherpa/lib/beholder-detection-1.1.12.js"
     ],
     "simFeatures": {
       "supportsInteractiveDescription": true,

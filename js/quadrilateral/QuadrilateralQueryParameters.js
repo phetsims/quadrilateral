@@ -106,12 +106,6 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     type: 'flag'
   },
 
-  // If provided, we will also support marker input. Currently, this will just look for a single
-  // marker and apply rotation to the shape.
-  markerInput: {
-    type: 'flag'
-  },
-
   // If provided, some extra things will be done in the simulation to test connection with a device. The sim will
   // have two screens, one that acts as the "simulation" and the other that acts as the "device". The "device" screen
   // runs in one iframe and the simulation screen runs in another. The two communicat to test calibration/communication.

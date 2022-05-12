@@ -30,7 +30,6 @@ import PhetColorScheme from '../../../../scenery-phet/js/PhetColorScheme.js';
 import QuadrilateralModelValuePanel from './QuadrilateralModelValuePanel.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import SideLengthAreaNode from './SideLengthAreaNode.js';
-import QuadrilateralMarkerInput from './QuadrilateralMarkerInput.js';
 import QuadrilateralVisibilityControls from './QuadrilateralVisibilityControls.js';
 import QuadrilateralGridNode from './QuadrilateralGridNode.js';
 import QuadrilateralScreenSummaryContentNode from './QuadrilateralScreenSummaryContentNode.js';
@@ -50,7 +49,6 @@ class QuadrilateralScreenView extends ScreenView {
   private readonly quadrilateralSoundView: QuadrilateralSoundView | null;
   public readonly quadrilateralDescriber: QuadrilateralDescriber;
   private readonly resetAllButton: ResetAllButton;
-  private readonly quadrilateralMarkerInput: QuadrilateralMarkerInput | null;
 
   public constructor( model: QuadrilateralModel, soundOptionsModel: QuadrilateralSoundOptionsModel, tandem: Tandem ) {
     super( {
@@ -171,27 +169,6 @@ class QuadrilateralScreenView extends ScreenView {
     const gridNode = new QuadrilateralGridNode( model.modelBoundsProperty, model.symmetryGridVisibleProperty, this.modelViewTransform );
     gridNode.leftTop = boundsRectangle.leftTop.plusScalar( BORDER_RECTANGLE_LINE_WIDTH / 2 );
     this.addChild( gridNode );
-
-    this.quadrilateralMarkerInput = null;
-    if ( QuadrilateralQueryParameters.markerInput ) {
-      this.quadrilateralMarkerInput = new QuadrilateralMarkerInput( model.rotationMarkerDetectedProperty, model.markerRotationProperty );
-
-      // If we are NOT connected to a device, rotate the quadrilateral shape from the marker rotation.
-      // If we are connected to a device the rotation will be applied for us when we set from device data.
-      if ( !QuadrilateralQueryParameters.deviceConnection ) {
-        model.markerRotationProperty.lazyLink( rotation => {
-          model.quadrilateralShapeModel.setPositionsFromLengthsAndAngles(
-            model.quadrilateralShapeModel.topSide.lengthProperty.value,
-            model.quadrilateralShapeModel.rightSide.lengthProperty.value,
-            model.quadrilateralShapeModel.leftSide.lengthProperty.value,
-            model.quadrilateralShapeModel.vertexA.angleProperty.value!,
-            model.quadrilateralShapeModel.vertexB.angleProperty.value!,
-            model.quadrilateralShapeModel.vertexC.angleProperty.value!,
-            model.quadrilateralShapeModel.vertexD.angleProperty.value!
-          );
-        } );
-      }
-    }
 
     if ( QuadrilateralQueryParameters.deviceConnection && !QuadrilateralQueryParameters.calibrationDemoDevice ) {
 
@@ -332,9 +309,6 @@ class QuadrilateralScreenView extends ScreenView {
     }
     if ( this.demonstrationNode ) {
       this.demonstrationNode.step( dt );
-    }
-    if ( this.quadrilateralMarkerInput ) {
-      this.quadrilateralMarkerInput.step( dt );
     }
 
     this.quadrilateralNode && this.quadrilateralNode.step( dt );
