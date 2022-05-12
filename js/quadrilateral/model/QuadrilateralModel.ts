@@ -21,6 +21,7 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 
 class QuadrilateralModel {
   public modelBoundsProperty: Property<Bounds2 | null>;
@@ -59,14 +60,22 @@ class QuadrilateralModel {
 
     // The bounds in model space. The bounds will change depending on available screen bounds so that
     // on larger screens there is more model space to explore diferent shapes.
-    this.modelBoundsProperty = new Property<Bounds2 | null>( null );
+    this.modelBoundsProperty = new Property<Bounds2 | null>( null, {
+      tandem: tandem.createTandem( 'modelBoundsProperty' ),
+      phetioType: Property.PropertyIO( NullableIO( Bounds2.Bounds2IO ) )
+    } );
 
     // The Bounds provided by the physical model, so we know how to map the physical model bounds to the model space
-    this.physicalModelBoundsProperty = new Property<Bounds2 | null>( null );
+    this.physicalModelBoundsProperty = new Property<Bounds2 | null>( null, {
+      tandem: tandem.createTandem( 'physicalModelBoundsProperty' ),
+      phetioType: Property.PropertyIO( NullableIO( Bounds2.Bounds2IO ) )
+    } );
 
     // If true, the simulation is "calibrating" to a physical device so we don't set the vertex positions in response
     // to changes from the physical device. Instead we are updating physicalModelBounds.
-    this.isCalibratingProperty = new BooleanProperty( false );
+    this.isCalibratingProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'isCalibratingProperty' )
+    } );
 
     // If true, a panel displaying model values will be added to the view. Only for debugging.
     this.showDebugValuesProperty = new BooleanProperty( QuadrilateralQueryParameters.showModelValues );
