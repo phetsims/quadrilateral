@@ -294,9 +294,6 @@ class QuadrilateralScreenView extends ScreenView {
     if ( this.quadrilateralSoundView ) {
       this.quadrilateralSoundView.step( dt );
     }
-    if ( this.demonstrationNode ) {
-      this.demonstrationNode.step( dt );
-    }
 
     this.quadrilateralNode && this.quadrilateralNode.step( dt );
 
