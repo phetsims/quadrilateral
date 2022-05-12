@@ -72,7 +72,9 @@ class Side {
     this.isConnected = false;
 
     // Whether or not this Side is pressed and being interacted with. For now this is useful for debugging.
-    this.isPressedProperty = new BooleanProperty( false );
+    this.isPressedProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'isPressedProperty' )
+    } );
 
     // Angle of this line against a perpendicular line that would be drawn across it when the vertices are at their
     // initial positions, used to determine the amount of tilt of the line.
@@ -85,7 +87,9 @@ class Side {
       } );
 
     // The distance between the two vertices, in model space.
-    this.lengthProperty = new NumberProperty( 0 );
+    this.lengthProperty = new NumberProperty( 0, {
+      tandem: tandem.createTandem( 'lengthProperty' )
+    } );
 
     // The shape of the side, determined by the length and the model width.
     this.shapeProperty = new DerivedProperty(
@@ -105,6 +109,9 @@ class Side {
     // tolerance interval will be relatively much larger when the length is very small.
     this.lengthToleranceIntervalProperty = new DerivedProperty( [ this.lengthProperty ], ( length: number ) => {
       return length * QuadrilateralQueryParameters.lengthToleranceIntervalScaleFactor;
+    }, {
+      tandem: tandem.createTandem( 'lengthToleranceIntervalProperty' ),
+      phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
     } );
   }
 
