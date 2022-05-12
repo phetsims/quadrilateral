@@ -4,6 +4,10 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import PhetioObject from '../../../tandem/js/PhetioObject.js';
+import Tandem from '../../../tandem/js/Tandem.js';
+import IOType from '../../../tandem/js/types/IOType.js';
+import NumberIO from '../../../tandem/js/types/NumberIO.js';
 import quadrilateral from '../quadrilateral.js';
 
 const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
@@ -138,6 +142,50 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     defaultValue: false
   }
 } );
+
+// It was requested that the tolerance defaults are part of the data stream, this inner class accomplishes that. See
+// https://github.com/phetsims/quadrilateral/issues/97#issuecomment-1125088255
+class ToleranceDefaults extends PhetioObject {
+  constructor() {
+    super( {
+      tandem: Tandem.GLOBAL_MODEL.createTandem( 'ToleranceDefaults' ),
+      phetioType: new IOType( 'ToleranceDefaultsIO', {
+        isValidValue: _.stubTrue,
+
+        // @param {ToleranceDefaults} object
+        toStateObject: object => object.toStateObject(),
+        stateSchema: {
+          angleToleranceInterval: NumberIO,
+          deviceAngleToleranceInterval: NumberIO,
+          toleranceIntervalScaleFactor: NumberIO,
+          shapeAngleToleranceInterval: NumberIO,
+          deviceShapeAngleToleranceInterval: NumberIO,
+          deviceShapeLengthToleranceInterval: NumberIO,
+          lengthToleranceIntervalScaleFactor: NumberIO,
+          shapeLengthToleranceInterval: NumberIO
+        }
+      } ),
+      phetioState: true
+    } );
+  }
+
+  // @public
+  toStateObject() {
+    return {
+      angleToleranceInterval: QuadrilateralQueryParameters.angleToleranceInterval,
+      deviceAngleToleranceInterval: QuadrilateralQueryParameters.deviceAngleToleranceInterval,
+      toleranceIntervalScaleFactor: QuadrilateralQueryParameters.toleranceIntervalScaleFactor,
+      shapeAngleToleranceInterval: QuadrilateralQueryParameters.shapeAngleToleranceInterval,
+      deviceShapeAngleToleranceInterval: QuadrilateralQueryParameters.deviceShapeAngleToleranceInterval,
+      deviceShapeLengthToleranceInterval: QuadrilateralQueryParameters.deviceShapeLengthToleranceInterval,
+      lengthToleranceIntervalScaleFactor: QuadrilateralQueryParameters.lengthToleranceIntervalScaleFactor,
+      shapeLengthToleranceInterval: QuadrilateralQueryParameters.shapeLengthToleranceInterval
+    };
+  }
+}
+
+// instantiate so it appears in PhET-iO state
+const toleranceDefaults = new ToleranceDefaults(); //eslint-disable-line no-unused-vars
 
 quadrilateral.register( 'QuadrilateralQueryParameters', QuadrilateralQueryParameters );
 export default QuadrilateralQueryParameters;
