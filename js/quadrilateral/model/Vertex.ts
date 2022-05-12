@@ -17,6 +17,8 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import VertexLabel from './VertexLabel.js';
+import NullableIO from '../../../../tandem/js/types/NullableIO.js';
+import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 
 
 const VERTEX_BOUNDS = new Bounds2( 0, 0, 0.1, 0.1 );
@@ -57,7 +59,10 @@ class Vertex {
 
     // The angle at this vertex of the quadrilateral, null until this vertex is connected to two others because we
     // need three points to form the angle.
-    this.angleProperty = new Property<null | number>( null );
+    this.angleProperty = new Property<null | number>( null, {
+      tandem: tandem.createTandem( 'angleProperty' ),
+      phetioType: Property.PropertyIO( NullableIO( NumberIO ) )
+    } );
 
     // The label for this vertex so we can get the same vertex on another QuadrilateralShapeModel.
     this.vertexLabel = vertexLabel;
