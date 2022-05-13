@@ -20,6 +20,10 @@ const QuadrilateralConstants = {
   SCREEN_VIEW_X_MARGIN: 15,
   SCREEN_VIEW_Y_MARGIN: 15,
 
+  SCREEN_TEXT_OPTIONS: {
+    font: new PhetFont( { size: 14 } )
+  },
+
   PANEL_LABEL_TEXT_OPTIONS: {
     font: new PhetFont( { size: 16 } )
   },

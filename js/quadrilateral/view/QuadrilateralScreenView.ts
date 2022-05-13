@@ -22,7 +22,6 @@ import quadrilateralStrings from '../../quadrilateralStrings.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 import Dialog from '../../../../sun/js/Dialog.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import CalibrationContentNode from './CalibrationContentNode.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import PhetColorScheme from '../../../../scenery-phet/js/PhetColorScheme.js';
@@ -161,9 +160,7 @@ class QuadrilateralScreenView extends ScreenView {
 
       // Add a Dialog that will calibrate the device to the simulation (mapping physical data to modelled data).
       const calibrationDialog = new Dialog( new CalibrationContentNode( model ), {
-        title: new Text( 'Calibrate with device', {
-          font: new PhetFont( { size: 36 } )
-        } )
+        title: new Text( 'External Device Calibration', QuadrilateralConstants.PANEL_TITLE_TEXT_OPTIONS )
       } );
 
       calibrationDialog.isShowingProperty.link( ( isShowing, wasShowing ) => {
@@ -195,13 +192,11 @@ class QuadrilateralScreenView extends ScreenView {
           calibrationDialog.show();
         },
 
-        textNodeOptions: {
-          font: new PhetFont( { size: 36 } )
-        },
+        textNodeOptions: QuadrilateralConstants.SCREEN_TEXT_OPTIONS,
         baseColor: PhetColorScheme.BUTTON_YELLOW,
 
         // position is relative to the ResetAllButton for now
-        rightBottom: this.resetAllButton.rightTop.minusXY( 0, 15 )
+        leftBottom: this.resetAllButton.leftTop.minusXY( 0, 15 )
       } );
 
       this.addChild( calibrationButton );

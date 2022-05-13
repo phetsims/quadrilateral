@@ -205,18 +205,18 @@ class QuadrilateralShapeModel {
     ] );
 
     // create the sides of the quadrilateral
-    this.topSide = new Side( this.vertexA, this.vertexB, options.tandem.createTandem( 'topSide' ), {
+    this.topSide = new Side( this.vertexA, this.vertexB, options.tandem.createTandem( 'sideAB' ), {
       offsetVectorForTiltCalculation: new Vector2( 0, 1 ),
       validateShape: options.validateShape
     } );
-    this.rightSide = new Side( this.vertexB, this.vertexC, options.tandem.createTandem( 'rightSide' ), {
+    this.rightSide = new Side( this.vertexB, this.vertexC, options.tandem.createTandem( 'sideBC' ), {
       validateShape: options.validateShape
     } );
-    this.bottomSide = new Side( this.vertexC, this.vertexD, options.tandem.createTandem( 'bottomSide' ), {
+    this.bottomSide = new Side( this.vertexC, this.vertexD, options.tandem.createTandem( 'sideCD' ), {
       offsetVectorForTiltCalculation: new Vector2( 0, -1 ),
       validateShape: options.validateShape
     } );
-    this.leftSide = new Side( this.vertexD, this.vertexA, options.tandem.createTandem( 'leftSide' ), {
+    this.leftSide = new Side( this.vertexD, this.vertexA, options.tandem.createTandem( 'sideDA' ), {
       offsetVectorForTiltCalculation: new Vector2( -1, 0 ),
       validateShape: options.validateShape
     } );

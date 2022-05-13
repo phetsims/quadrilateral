@@ -7,21 +7,20 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import { Text, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
+import { Text, TextOptions, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import quadrilateralStrings from '../../quadrilateralStrings.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
+import optionize, { combineOptions } from '../../../../phet-core/js/optionize.js';
 
 // constants
-const TEXT_OPTIONS = {
-  font: new PhetFont( { size: 14 } ),
+const TEXT_OPTIONS = combineOptions<TextOptions>( {
 
   // i18n (inspection)
   maxWidth: 100
-};
+}, QuadrilateralConstants.SCREEN_TEXT_OPTIONS );
 
 type QuadrilateralVisibilityControlsSelfOptions = {
   tandem?: Tandem;
