@@ -36,6 +36,7 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
+import IProperty from '../../../../axon/js/IProperty.js';
 
 // A useful type for calculations for the vertex Shapes which define where the Vertex can move depending on
 // the positions of the other vertices. Lines are along the bounds of model space and RayIntersections
@@ -82,6 +83,10 @@ class QuadrilateralShapeModel {
   public leftSide: Side;
 
   public readonly parallelSideCheckers: ParallelSideChecker[];
+
+  // The area of the quadrilateral. Updated in "deferred" Properties, only after positions of all four vertices are
+  // determined.
+  public readonly areaProperty: IProperty<number>;
 
   public readonly vertices: Vertex[];
   public readonly sides: Side[];
@@ -315,6 +320,10 @@ class QuadrilateralShapeModel {
     // unnamed shape.
     this.shapeNameProperty = new EnumerationProperty( NamedQuadrilateral.GENERAL_QUADRILATERAL, {
       tandem: options.tandem.createTandem( 'shapeNameProperty' )
+    } );
+
+    this.areaProperty = new NumberProperty( 0, {
+      tandem: options.tandem.createTandem( 'areaProperty' )
     } );
 
     // Emits an event whenever the shape of the Quadrilateral changes
@@ -921,6 +930,28 @@ class QuadrilateralShapeModel {
   }
 
   /**
+   * Returns the area of the quadrilateral. Uses Bretschneider's formula for the area of a general quadrilateral,
+   * see https://en.wikipedia.org/wiki/Bretschneider%27s_formula.
+   *
+   * Dependent on side lengths and angles, make sure those are up to date before calling this function in
+   * updateOrderDependentProperties.
+   */
+  private getArea(): number {
+    const a = this.topSide.lengthProperty.value;
+    const b = this.rightSide.lengthProperty.value;
+    const c = this.bottomSide.lengthProperty.value;
+    const d = this.leftSide.lengthProperty.value;
+
+    // semiperimeter
+    const s = ( a + b + c + d ) / 2;
+
+    // can use any two opposite angles
+    const cosArg = Math.cos( ( this.vertexA.angleProperty.value! + this.vertexC.angleProperty.value! ) / 2 );
+
+    return Math.sqrt( ( s - a ) * ( s - b ) * ( s - c ) * ( s - d ) - ( a * b * c * d ) * cosArg * cosArg );
+  }
+
+  /**
    * Returns true if two angles are close enough together that they should be considered equal. This uses the
    * shapeAngleToleranceProperty, the most strict interval available. The angleToleranceInterval can be set
    * to infinity and is very dynamic to accomplish comparisons required to detect parallelogram state during
@@ -995,8 +1026,8 @@ class QuadrilateralShapeModel {
     this.updateVertexAngleComparisons();
     this.updateSideLengthComparisons();
 
-    // The isParallelogramProperty needs to be set asynchronously, see the documentation for isParallelogramProperty.
     this.isParallelogramProperty.set( this.getIsParallelogram() );
+    this.areaProperty.set( this.getArea() );
 
     // We need to determine if side lengths have changed in the step function because we need to calculate
     // lengths after all positions have been set.
