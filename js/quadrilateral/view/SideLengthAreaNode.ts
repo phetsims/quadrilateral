@@ -47,7 +47,7 @@ class SideLengthAreaNode extends Node {
       dragSide.isPressedProperty,
       dragSide.vertex1.isPressedProperty,
       dragSide.vertex2.isPressedProperty
-    ], ( equalToSaved: boolean, sidePressed: boolean, vertex1Pressed: boolean, vertex2Pressed: boolean ) => {
+    ], ( equalToSaved, sidePressed, vertex1Pressed, vertex2Pressed ) => {
 
       const showArc = ( sidePressed || ( vertex1Pressed && vertex2Pressed ) ) && shapeModel.isParallelogramProperty.value;
 

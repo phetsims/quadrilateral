@@ -76,7 +76,7 @@ class ParallelsStaccatoSoundView {
 
     const leftRightMultilink = Property.multilink(
       [ quadrilateralShapeModel.leftSide.tiltProperty, quadrilateralShapeModel.rightSide.tiltProperty ],
-      ( leftTilt: number, rightTilt: number ) => {
+      ( leftTilt, rightTilt ) => {
         assert && assert( leftTilt !== Number.POSITIVE_INFINITY && rightTilt !== Number.POSITIVE_INFINITY, 'tilts cannot be infinite in the sound design' );
         this.leftRightPopCoefficient = TILT_DIFFERENCE_TO_PITCHED_POP_COEFFICIENT.evaluate( Math.abs( leftTilt - rightTilt ) );
         this.leftRightRelativePitch = TILT_DIFFERENCE_TO_PITCH.evaluate( Math.abs( leftTilt - rightTilt ) );
@@ -84,7 +84,7 @@ class ParallelsStaccatoSoundView {
     );
     const topBottomMultilink = Property.multilink(
       [ quadrilateralShapeModel.topSide.tiltProperty, quadrilateralShapeModel.bottomSide.tiltProperty ],
-      ( topTilt: number, bottomTilt: number ) => {
+      ( topTilt, bottomTilt ) => {
         assert && assert( topTilt !== Number.POSITIVE_INFINITY && bottomTilt !== Number.POSITIVE_INFINITY, 'tilts cannot be infinite in the sound design' );
         this.topBottomPopCoefficient = TILT_DIFFERENCE_TO_PITCHED_POP_COEFFICIENT.evaluate( Math.abs( topTilt - bottomTilt ) );
         this.topBottomRelativePitch = TILT_DIFFERENCE_TO_PITCH.evaluate( Math.abs( topTilt - bottomTilt ) );

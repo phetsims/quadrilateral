@@ -85,7 +85,7 @@ class SideNode extends Voicing( Path, 1 ) {
     const lineNode = new LineNode( 0, 0, 0, 0 );
 
     // listeners
-    Property.multilink( [ side.vertex1.positionProperty, side.vertex2.positionProperty ], ( vertex1Position: Vector2, vertex2Position: Vector2 ) => {
+    Property.multilink( [ side.vertex1.positionProperty, side.vertex2.positionProperty ], ( vertex1Position, vertex2Position ) => {
 
       // create a single line that will then be divided into segments
       const fullLine = new Line( vertex1Position, vertex2Position );

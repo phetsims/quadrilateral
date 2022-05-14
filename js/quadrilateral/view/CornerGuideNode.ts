@@ -60,7 +60,7 @@ class CornerGuideNode extends Node {
       lineDash: [ 5, 5 ]
     } );
 
-    Property.multilink( [ vertex1.angleProperty, vertex1.positionProperty ], ( angle: number | null, position: Vector2 ) => {
+    Property.multilink( [ vertex1.angleProperty, vertex1.positionProperty ], ( angle, position ) => {
       assert && assert( angle !== null, 'angleProperty needs to be defined to add listeners in CornerGuideNode' );
       assert && assert( angle! > 0, 'CornerGuideNodes cannot support angles at or less than zero' );
       const vertexCenter = vertex1.positionProperty.value;
@@ -135,7 +135,7 @@ class CornerGuideNode extends Node {
 
     // listeners - This Node is only visible when "Angle Guides" are visible by the user and the angle is NOT a right
     // angle. In that case, the RightAngleIndicatorNode will display the angle.
-    Property.multilink( [ visibleProperty, shapeModel.shapeNameProperty ], ( visible: boolean, shapeName: NamedQuadrilateral | null ) => {
+    Property.multilink( [ visibleProperty, shapeModel.shapeNameProperty ], ( visible, shapeName ) => {
       const currentShape = shapeModel.shapeNameProperty.value;
       this.visible = visible && currentShape !== NamedQuadrilateral.SQUARE && currentShape !== NamedQuadrilateral.RECTANGLE;
     } );

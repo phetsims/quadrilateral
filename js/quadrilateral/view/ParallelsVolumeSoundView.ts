@@ -17,7 +17,7 @@ import soundManager from '../../../../tambo/js/soundManager.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import QuadrilateralSoundOptionsModel, { SuccessSoundFile } from '../model/QuadrilateralSoundOptionsModel.js';
-import Multilink from '../../../../axon/js/Multilink.js';
+import { UnknownMultilink } from '../../../../axon/js/Multilink.js';
 import Side from '../model/Side.js';
 import WrappedAudioBuffer from '../../../../tambo/js/WrappedAudioBuffer.js';
 
@@ -29,8 +29,9 @@ class ParallelsVolumeSoundView {
   private model: QuadrilateralModel;
   private leftRightSideGenerator: null | SoundClipChord;
   private topBottomSideGenerator: null | SoundClipChord;
-  private leftRightSideMultilink: null | Multilink<any[]>;
-  private topBottomSideMultilink: null | Multilink<any[]>;
+
+  private leftRightSideMultilink: UnknownMultilink | null;
+  private topBottomSideMultilink: UnknownMultilink | null;
   private leftRightSideOutputLevel: number;
   private topBottomSideOutputLevel: number;
   private isPlaying: boolean;
@@ -176,12 +177,12 @@ class ParallelsVolumeSoundView {
     this.leftRightSideGenerator.setOutputLevel( 0 );
     this.topBottomSideGenerator.setOutputLevel( 0 );
 
-    this.leftRightSideMultilink = this.createTiltMultilink( this.model.quadrilateralShapeModel.leftSide, this.model.quadrilateralShapeModel.rightSide, ( outputLevel: number ) => {
+    this.leftRightSideMultilink = this.createTiltMultilink( this.model.quadrilateralShapeModel.leftSide, this.model.quadrilateralShapeModel.rightSide, outputLevel => {
       assert && assert( this.leftRightSideGenerator, 'The SoundGenerator has been disposed of, you can no longer set its output level' );
       this.leftRightSideOutputLevel = outputLevel;
       this.leftRightSideGenerator!.outputLevel = outputLevel;
     } );
-    this.topBottomSideMultilink = this.createTiltMultilink( this.model.quadrilateralShapeModel.topSide, this.model.quadrilateralShapeModel.bottomSide, ( outputLevel: number ) => {
+    this.topBottomSideMultilink = this.createTiltMultilink( this.model.quadrilateralShapeModel.topSide, this.model.quadrilateralShapeModel.bottomSide, outputLevel => {
       assert && assert( this.leftRightSideGenerator, 'The SoundGenerator has been disposed of, you can no longer set its output level' );
       this.topBottomSideOutputLevel = outputLevel;
       this.topBottomSideGenerator!.outputLevel = outputLevel;
@@ -215,10 +216,10 @@ class ParallelsVolumeSoundView {
    * Creates and returns (for disposal) a multilink that sets the output level of a SoundGenerator from the
    * difference in tilts of two sides.
    */
-  public createTiltMultilink( sideA: Side, sideB: Side, applyOutputLevel: ( outputLevel: number ) => void ): Multilink<[ leftTilt: number, rightTilt: number ]> {
+  public createTiltMultilink( sideA: Side, sideB: Side, applyOutputLevel: ( outputLevel: number ) => void ): UnknownMultilink {
     return Property.multilink(
       [ sideA.tiltProperty, sideB.tiltProperty ],
-      ( leftTilt: number, rightTilt: number ) => {
+      ( leftTilt, rightTilt ) => {
 
         assert && assert( leftTilt !== Number.POSITIVE_INFINITY && rightTilt !== Number.POSITIVE_INFINITY, 'tilts cannot be infinite in sound design' );
         const outputLevel = TILT_DIFFERENCE_TO_OUTPUT_LEVEL.evaluate( Math.abs( leftTilt - rightTilt ) );

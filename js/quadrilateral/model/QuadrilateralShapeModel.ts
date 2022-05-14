@@ -392,7 +392,7 @@ class QuadrilateralShapeModel {
         this.vertexB.positionProperty,
         this.vertexC.positionProperty,
         this.vertexD.positionProperty ],
-      ( position1: Vector2, position2: Vector2, position3: Vector2, position4: Vector2 ) => {
+      ( position1, position2, position3, position4 ) => {
 
         // Update Properties after Vertex positions have changed. Please note the usage of
         // setDeferred for Vertex position Properties in this sim because it is important
