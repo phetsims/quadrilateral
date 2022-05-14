@@ -331,7 +331,7 @@ class QuadrilateralShapeModel {
       tandem: options.tandem.createTandem( 'shapeChangedEmitter' )
     } );
 
-    this.shapeAngleToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty ], ( shapeName: NamedQuadrilateral | null ) => {
+    this.shapeAngleToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty ], shapeName => {
       return QuadrilateralShapeModel.toleranceIntervalWideningListener(
         QuadrilateralQueryParameters.shapeAngleToleranceInterval,
         QuadrilateralQueryParameters.deviceShapeAngleToleranceInterval,
@@ -342,7 +342,7 @@ class QuadrilateralShapeModel {
       phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
     } );
 
-    this.shapeLengthToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty ], ( shapeName: NamedQuadrilateral | null ) => {
+    this.shapeLengthToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty ], shapeName => {
       return QuadrilateralShapeModel.toleranceIntervalWideningListener(
         QuadrilateralQueryParameters.shapeLengthToleranceInterval,
         QuadrilateralQueryParameters.deviceShapeLengthToleranceInterval,

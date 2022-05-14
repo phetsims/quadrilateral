@@ -79,7 +79,7 @@ class Side {
     // Angle of this line against a perpendicular line that would be drawn across it when the vertices are at their
     // initial positions, used to determine the amount of tilt of the line.
     this.tiltProperty = new DerivedProperty( [ this.vertex1.positionProperty, this.vertex2.positionProperty ],
-      ( vertex1Position: Vector2, vertex2Position: Vector2 ) => {
+      ( vertex1Position, vertex2Position ) => {
         return Vertex.calculateAngle( vertex1Position, vertex2Position, vertex2Position.plus( options.offsetVectorForTiltCalculation ), options.validateShape );
       }, {
         tandem: tandem.createTandem( 'tiltProperty' ),
@@ -94,7 +94,7 @@ class Side {
     // The shape of the side, determined by the length and the model width.
     this.shapeProperty = new DerivedProperty(
       [ this.vertex1.positionProperty, this.vertex2.positionProperty ],
-      ( position1: Vector2, position2: Vector2 ) => {
+      ( position1, position2 ) => {
 
         // TODO: make reusable
         const lineShape = new Line( position1.x, position1.y, position2.x, position2.y, {
@@ -107,7 +107,7 @@ class Side {
     // The tolerance for this side to determine if it is equal to another. It is a portion of the full length
     // so that when the side is longer it still as easy for two sides to be equal in length. Otherwise the
     // tolerance interval will be relatively much larger when the length is very small.
-    this.lengthToleranceIntervalProperty = new DerivedProperty( [ this.lengthProperty ], ( length: number ) => {
+    this.lengthToleranceIntervalProperty = new DerivedProperty( [ this.lengthProperty ], length => {
       return length * QuadrilateralQueryParameters.lengthToleranceIntervalScaleFactor;
     }, {
       tandem: tandem.createTandem( 'lengthToleranceIntervalProperty' ),
