@@ -140,6 +140,13 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   shapeIdentificationFeedback: {
     type: 'boolean',
     defaultValue: false
+  },
+
+  // If true, a dialog will be shown at startup that will require the user to touch the screen.  This will allow the
+  // haptics and sound to start as soon as the user begins to interact with the shape.  See
+  // https://github.com/phetsims/quadrilateral/issues/148 for more information.
+  showInitialTouchDialog: {
+    type: 'flag'
   }
 } );
 

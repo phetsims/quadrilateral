@@ -23,6 +23,12 @@
   "vertexD": {
     "value": "D"
   },
+  "hapticsDialogMessage": {
+    "value": "Please note that this sim uses vibrational<br>haptics on devices that support it."
+  },
+  "gotIt": {
+    "value": "Got it."
+  },
   "a11y": {
     "screenSummary": {
       "playAreaDescription": {

@@ -18,6 +18,8 @@ type StringsType = {
   'vertexB': string;
   'vertexC': string;
   'vertexD': string;
+  'hapticsDialogMessage': string;
+  'gotIt': string;
   'a11y': {
     'screenSummary': {
       'playAreaDescription': string;

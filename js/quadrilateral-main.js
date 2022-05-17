@@ -15,6 +15,7 @@ import { Color, ColorProperty, HBox, Text, VBox } from '../../scenery/js/imports
 import Checkbox from '../../sun/js/Checkbox.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import vibrationManager from '../../tappi/js/vibrationManager.js';
+import HapticsInfoDialog from './common/HapticsInfoDialog.js';
 import QuadrilateralConstants from './common/QuadrilateralConstants.js';
 import QuadrilateralSoundOptionsModel from './quadrilateral/model/QuadrilateralSoundOptionsModel.js';
 import QuadrilateralQueryParameters from './quadrilateral/QuadrilateralQueryParameters.js';
@@ -106,6 +107,19 @@ simLauncher.launch( () => {
 
   const sim = new Sim( quadrilateralTitleString, simScreens, simOptions );
   sim.start();
+
+  if ( QuadrilateralQueryParameters.showInitialTouchDialog && window.navigator.vibrate ) {
+
+    // Put up a dialog that will essentially force the user to interact with the sim, thus enabled haptics.
+    const showDialogOnConstructionComplete = complete => {
+      if ( complete ) {
+        const dialog = new HapticsInfoDialog();
+        dialog.show();
+        sim.isConstructionCompleteProperty.unlink( showDialogOnConstructionComplete );
+      }
+    };
+    sim.isConstructionCompleteProperty.lazyLink( showDialogOnConstructionComplete );
+  }
 
   vibrationManager.initialize( sim.browserTabVisibleProperty, sim.activeProperty );
 } );
