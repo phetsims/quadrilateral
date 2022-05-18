@@ -27,6 +27,13 @@ const foundParallelogramWithAnglesAndSidesEqualString = quadrilateralStrings.a11
 const allRightAnglesAndSidesEqualString = quadrilateralStrings.a11y.voicing.allRightAnglesAndSidesEqual;
 const allSidesEqualString = quadrilateralStrings.a11y.voicing.allSidesEqual;
 const allRightAnglesString = quadrilateralStrings.a11y.voicing.allRightAngles;
+const aBString = quadrilateralStrings.a11y.aB;
+const bCString = quadrilateralStrings.a11y.bC;
+const cDString = quadrilateralStrings.a11y.cD;
+const dAString = quadrilateralStrings.a11y.dA;
+
+// A response may trigger because there is a large enough change in angle or length
+type ResponseReason = 'angle' | 'length';
 
 class QuadrilateralAlerter extends Alerter {
 
@@ -44,14 +51,9 @@ class QuadrilateralAlerter extends Alerter {
   private angleResponseReady = false;
   private lengthResponseReady = false;
 
-  // A snapshot of state variables when it is time to produce a new response describing the change in angles. A new
-  // snapshot will be generated when the angle response is created.
-  private previousShapeSnapshotForAngleResponses: ShapeSnapshot;
-
-  // A snapshot of state variables to indicate when it is time to produce a new response describing changes in side
-  // length. A new snapshot will be generated when the response is created, so we are comparing changes between
-  // when the
-  private previousShapeSnapshotForLengthResponses: ShapeSnapshot;
+  // A snapshot of state variables when it is time to produce a new response describing the change in angle or length.
+  // A new snapshot will be generated when it is time to announce the context response.
+  private previousShapeSnapshot: ShapeSnapshot;
 
   constructor( model: QuadrilateralModel, screenView: QuadrilateralScreenView ) {
     super();
@@ -59,8 +61,7 @@ class QuadrilateralAlerter extends Alerter {
     const shapeModel = model.quadrilateralShapeModel;
 
     this.model = model;
-    this.previousShapeSnapshotForAngleResponses = new ShapeSnapshot( shapeModel );
-    this.previousShapeSnapshotForLengthResponses = new ShapeSnapshot( shapeModel );
+    this.previousShapeSnapshot = new ShapeSnapshot( shapeModel );
 
     // The utterance used when important pedagogical state changes like entering/exiting parallelogram, all lengths
     // equal, or all right angles
@@ -88,10 +89,10 @@ class QuadrilateralAlerter extends Alerter {
 
     model.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
 
-      const previousAAngle = this.previousShapeSnapshotForAngleResponses.vertexAAngle;
-      const previousBAngle = this.previousShapeSnapshotForAngleResponses.vertexBAngle;
-      const previousCAngle = this.previousShapeSnapshotForAngleResponses.vertexCAngle;
-      const previousDAngle = this.previousShapeSnapshotForAngleResponses.vertexDAngle;
+      const previousAAngle = this.previousShapeSnapshot.vertexAAngle;
+      const previousBAngle = this.previousShapeSnapshot.vertexBAngle;
+      const previousCAngle = this.previousShapeSnapshot.vertexCAngle;
+      const previousDAngle = this.previousShapeSnapshot.vertexDAngle;
 
       const aAngleDifference = previousAAngle - shapeModel.vertexA.angleProperty.value!;
       const bAngleDifference = previousBAngle - shapeModel.vertexB.angleProperty.value!;
@@ -99,12 +100,12 @@ class QuadrilateralAlerter extends Alerter {
       const dAngleDifference = previousDAngle - shapeModel.vertexD.angleProperty.value!;
 
       const angleDifferences = [ aAngleDifference, bAngleDifference, cAngleDifference, dAngleDifference ];
-      this.angleResponseReady = _.some( angleDifferences, angleDifference => Math.abs( angleDifference ) > Math.PI / 6 );
+      this.angleResponseReady = _.some( angleDifferences, angleDifference => Math.abs( angleDifference ) > Math.PI / 12 );
 
-      const previousABLength = this.previousShapeSnapshotForLengthResponses.topSideLength;
-      const previousBCLength = this.previousShapeSnapshotForLengthResponses.rightSideLength;
-      const previousCDLength = this.previousShapeSnapshotForLengthResponses.bottomSideLength;
-      const previousDALength = this.previousShapeSnapshotForLengthResponses.leftSideLength;
+      const previousABLength = this.previousShapeSnapshot.topSideLength;
+      const previousBCLength = this.previousShapeSnapshot.rightSideLength;
+      const previousCDLength = this.previousShapeSnapshot.bottomSideLength;
+      const previousDALength = this.previousShapeSnapshot.leftSideLength;
 
       const abLengthDifference = previousABLength - shapeModel.topSide.lengthProperty.value;
       const bcLengthDifference = previousBCLength - shapeModel.rightSide.lengthProperty.value;
@@ -116,24 +117,14 @@ class QuadrilateralAlerter extends Alerter {
 
       this.lengthResponseReady = _.some( lengthDifferences, lengthDifference => Math.abs( lengthDifference ) > Side.SIDE_SEGMENT_LENGTH ) && !angleDifferencesLarge;
 
-      if ( this.angleResponseReady ) {
-        console.log( 'time for angle response' );
-        const tiltChangeResponse = this.getAngleChangeResponse( shapeModel, this.previousShapeSnapshotForAngleResponses );
+      if ( this.angleResponseReady || this.lengthResponseReady ) {
+        console.log( 'time for a new response' );
+
+        const thisResponseReason = angleDifferencesLarge ? 'angle' : 'length';
+        const tiltChangeResponse = this.getShapeChangeResponse( shapeModel, this.previousShapeSnapshot, thisResponseReason );
         changingStateResponsePacket.contextResponse = tiltChangeResponse;
         this.alert( changingStateUtterance );
-
-        // TODO: Combine and just use one snapshot?
-        this.previousShapeSnapshotForAngleResponses = new ShapeSnapshot( shapeModel );
-        this.previousShapeSnapshotForLengthResponses = new ShapeSnapshot( shapeModel );
-      }
-      else if ( this.lengthResponseReady ) {
-        console.log( 'time for length response' );
-        const lengthChangeResponse = this.getLengthChangeResponse( shapeModel, this.previousShapeSnapshotForLengthResponses );
-        changingStateResponsePacket.contextResponse = lengthChangeResponse;
-        this.alert( changingStateUtterance );
-
-        this.previousShapeSnapshotForAngleResponses = new ShapeSnapshot( shapeModel );
-        this.previousShapeSnapshotForLengthResponses = new ShapeSnapshot( shapeModel );
+        this.previousShapeSnapshot = new ShapeSnapshot( shapeModel );
       }
 
       const importantStateResponse = this.getImportantStateChangeResponse();
@@ -148,56 +139,131 @@ class QuadrilateralAlerter extends Alerter {
     Voicing.registerUtteranceToNode( changingStateUtterance, screenView );
   }
 
-  private getLengthChangeResponse( shapeModel: QuadrilateralShapeModel, previousShapeSnapshot: ShapeSnapshot ): string | null {
+  // private getLengthChangeResponse( shapeModel: QuadrilateralShapeModel, previousShapeSnapshot: ShapeSnapshot ): string | null {
+  //   let response: string | null = null;
+  //
+  //   const areaDifference = shapeModel.areaProperty.value - previousShapeSnapshot.area;
+  //   const areaChangeString = areaDifference > 0 ? 'bigger' : 'smaller';
+  //
+  //   if ( shapeModel.isParallelogramProperty.value && previousShapeSnapshot.isParallelogram ) {
+  //
+  //     // remained a parallelogram between length change responses, describe how the sides are in parallel with
+  //     // an area change
+  //
+  //     // TODO: its possible to have a length change when we might expect angles to be changing because the length
+  //     // does change as parallel sides tilt. See https://github.com/phetsims/quadrilateral/issues/154
+  //     // assert && assert( areaDifference !== 0, 'with changing lengths the difference in area should not be zero...' );
+  //
+  //     const patternString = 'Opposite sides in parallel as shape gets {{areaChange}}.';
+  //     response = StringUtils.fillIn( patternString, {
+  //       areaChange: areaChangeString
+  //     } );
+  //   }
+  //   else if ( !shapeModel.isParallelogramProperty.value ) {
+  //
+  //     // currently not a parallelogram, describe the change in length
+  //     const patternString = 'All sides tilt away from parallel as shape gets {{areaChange}}';
+  //     response = StringUtils.fillIn( patternString, {
+  //       areaChange: areaChangeString
+  //     } );
+  //   }
+  //
+  //   return response;
+  // }
+
+  private getShapeChangeResponse( shapeModel: QuadrilateralShapeModel, previousShapeSnapshot: ShapeSnapshot, responseReason: ResponseReason ): string | null {
     let response: string | null = null;
 
-    // these are updated between descriptions, is that right?
-    // getImportantStateChangeResponse updates every shape change...
-    // if was a parallelogram and still is a parallelogram
-    // "opposite sides in parallel as shape gets {{bigger/smaller}}
+    const areaDifference = shapeModel.areaProperty.value - previousShapeSnapshot.area;
+    const areaChangeString = areaDifference > 0 ? 'bigger' : 'smaller';
 
     if ( shapeModel.isParallelogramProperty.value && previousShapeSnapshot.isParallelogram ) {
 
-      // remained a parallelogram between length change responses, describe how the sides are in parallel with
-      // an area change
-      const areaDifference = shapeModel.areaProperty.value - previousShapeSnapshot.area;
+      // remained a parallelogram through changes
+      if ( responseReason === 'angle' ) {
 
-      // TODO: its possible to have a length change when we might expect angles to be changing because the length
-      // does change as parallel sides tilt. See https://github.com/phetsims/quadrilateral/issues/154
-      // assert && assert( areaDifference !== 0, 'with changing lengths the difference in area should not be zero...' );
+        // angle is the dominant response and caused the change, we are describing change in side tilt
+        const currentDistancesToRight = [ shapeModel.vertexA.angleProperty.value!, shapeModel.vertexB.angleProperty.value!, shapeModel.vertexC.angleProperty.value!, shapeModel.vertexD.angleProperty.value! ].map( QuadrilateralAlerter.distanceFromRightAngle );
+        const previousDistancesToRight = [ previousShapeSnapshot.vertexAAngle, previousShapeSnapshot.vertexBAngle, previousShapeSnapshot.vertexCAngle, previousShapeSnapshot.vertexDAngle ].map( QuadrilateralAlerter.distanceFromRightAngle );
 
-      const patternString = 'Opposite sides in parallel as shape gets {{areaChange}}.';
-      const areaChangeString = areaDifference > 0 ? 'bigger' : 'smaller';
+        const differences = [];
+        for ( let i = 0; i < currentDistancesToRight.length; i++ ) {
+          differences.push( currentDistancesToRight[ i ]! - previousDistancesToRight[ i ] );
+        }
 
-      response = StringUtils.fillIn( patternString, {
-        areaChange: areaChangeString
-      } );
+        // If the distances to pi for every angle have gotten smaller, we are getting closer to right angles, that is
+        // described as "straighten"
+        const tiltChangeString = _.every( differences, difference => difference > 0 ) ? 'tilt' : 'straighten';
+        const patternString = 'Opposite sides {{tiltChange}} in parallel as opposite corners change equally.';
+
+        response = StringUtils.fillIn( patternString, {
+          tiltChange: tiltChangeString
+        } );
+      }
+      else if ( responseReason === 'length' ) {
+        const patternString = 'Opposite sides in parallel as shape gets {{areaChange}}.';
+        response = StringUtils.fillIn( patternString, {
+          areaChange: areaChangeString
+        } );
+      }
     }
+    else {
 
-    return response;
-  }
+      const sideABsideCDParallelBefore = previousShapeSnapshot.sideABsideCDParallel;
+      const sideBCSideDAParallelBefore = previousShapeSnapshot.sideBCsideDAParallel;
 
-  private getAngleChangeResponse( shapeModel: QuadrilateralShapeModel, previousShapeSnapshot: ShapeSnapshot ): string | null {
-    let response: string | null = null;
+      const sideABSideCDParallelAfter = shapeModel.sideABSideCDParallelSideChecker.areSidesParallel();
+      const sideBCSideDAParallelAfter = shapeModel.sideBCSideDAParallelSideChecker.areSidesParallel();
 
-    if ( shapeModel.isParallelogramProperty.value && previousShapeSnapshot.isParallelogram ) {
+      // for readability, cases are determined by current and change in side parallel state of sides
+      const onlyOneParallelAfter = sideABSideCDParallelAfter !== sideBCSideDAParallelAfter;
+      const neitherParallelBefore = !sideABsideCDParallelBefore && !sideBCSideDAParallelBefore;
+      const neitherParallelAfter = !sideABSideCDParallelAfter && !sideBCSideDAParallelAfter;
+      const atLeastOneParallelBefore = sideABsideCDParallelBefore || sideBCSideDAParallelBefore;
 
-      const currentDistancesToRight = [ shapeModel.vertexA.angleProperty.value!, shapeModel.vertexB.angleProperty.value!, shapeModel.vertexC.angleProperty.value!, shapeModel.vertexD.angleProperty.value! ].map( QuadrilateralAlerter.distanceFromRightAngle );
-      const previousDistancesToRight = [ previousShapeSnapshot.vertexAAngle, previousShapeSnapshot.vertexBAngle, previousShapeSnapshot.vertexCAngle, previousShapeSnapshot.vertexDAngle ].map( QuadrilateralAlerter.distanceFromRightAngle );
-
-      const differences = [];
-      for ( let i = 0; i < currentDistancesToRight.length; i++ ) {
-        differences.push( currentDistancesToRight[ i ]! - previousDistancesToRight[ i ] );
+      let firstSideString;
+      let secondSideString;
+      if ( sideABSideCDParallelAfter ) {
+        firstSideString = aBString;
+        secondSideString = cDString;
+      }
+      else {
+        firstSideString = bCString;
+        secondSideString = dAString;
       }
 
-      // If the distances to pi for every angle have gotten smaller, we are getting closer to right angles, that is
-      // described as "straighten"
-      const tiltChangeString = _.every( differences, difference => difference > 0 ) ? 'tilt' : 'straighten';
-      const patternString = 'Opposite sides {{tiltChange}} in parallel as opposite corners change equally.';
+      if ( neitherParallelBefore && onlyOneParallelAfter ) {
+        const patternString = 'Opposite sides {{firstSide}} and {{secondSide}} tilt in parallel as corners change unequally.';
 
-      response = StringUtils.fillIn( patternString, {
-        tiltChange: tiltChangeString
-      } );
+        response = StringUtils.fillIn( patternString, {
+          firstSide: firstSideString,
+          secondSide: secondSideString
+        } );
+      }
+      else if ( onlyOneParallelAfter ) {
+
+        // if one pair of sides remains in parallel after the change, and it is the same side pair
+        const patternString = 'Opposite sides {{firstSide}} and {{secondSide}} tilt in parallel as shape gets {{areaChange}}.';
+
+        response = StringUtils.fillIn( patternString, {
+          firstSide: firstSideString,
+          secondSide: secondSideString,
+          areaChange: areaChangeString
+        } );
+      }
+      else if ( atLeastOneParallelBefore && neitherParallelAfter ) {
+
+        // at least one to zero parallel side pairs
+        response = 'All sides tilt away from parallel as opposite corners change unequally.';
+      }
+      else if ( neitherParallelBefore && neitherParallelAfter ) {
+
+        // no parallel side pairs before and after
+        const patternString = 'All sides tilt away from parallel as shape gets {{areaChange}}.';
+        response = StringUtils.fillIn( patternString, {
+          areaChange: areaChangeString
+        } );
+      }
     }
 
     return response;

@@ -13,7 +13,11 @@ class ShapeSnapshot {
   public readonly rightSideTilt: number;
   public readonly bottomSideTilt: number;
   public readonly leftSideTilt: number;
+
   public readonly isParallelogram: boolean;
+  public readonly sideABsideCDParallel: boolean;
+  public readonly sideBCsideDAParallel: boolean;
+
   public readonly vertexAPosition: Vector2;
   public readonly vertexBPosition: Vector2;
   public readonly vertexCPosition: Vector2;
@@ -35,7 +39,11 @@ class ShapeSnapshot {
     this.rightSideTilt = shapeModel.rightSide.tiltProperty.value;
     this.bottomSideTilt = shapeModel.bottomSide.tiltProperty.value;
     this.leftSideTilt = shapeModel.leftSide.tiltProperty.value;
+
     this.isParallelogram = shapeModel.isParallelogramProperty.value;
+    this.sideABsideCDParallel = shapeModel.sideABSideCDParallelSideChecker.areSidesParallel();
+    this.sideBCsideDAParallel = shapeModel.sideBCSideDAParallelSideChecker.areSidesParallel();
+
     this.vertexAPosition = shapeModel.vertexA.positionProperty.value;
     this.vertexBPosition = shapeModel.vertexB.positionProperty.value;
     this.vertexCPosition = shapeModel.vertexC.positionProperty.value;

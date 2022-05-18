@@ -82,6 +82,8 @@ class QuadrilateralShapeModel {
   public bottomSide: Side;
   public leftSide: Side;
 
+  public readonly sideABSideCDParallelSideChecker: ParallelSideChecker;
+  public readonly sideBCSideDAParallelSideChecker: ParallelSideChecker;
   public readonly parallelSideCheckers: ParallelSideChecker[];
 
   // The area of the quadrilateral. Updated in "deferred" Properties, only after positions of all four vertices are
@@ -353,23 +355,27 @@ class QuadrilateralShapeModel {
       phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
     } );
 
+    this.sideABSideCDParallelSideChecker = new ParallelSideChecker(
+      { side1: this.topSide, side2: this.bottomSide },
+      { side1: this.rightSide, side2: this.leftSide },
+      this.shapeChangedEmitter,
+      model.resetNotInProgressProperty,
+      options.tandem.createTandem( 'sideABSideCDParallelSideChecker' )
+    );
+
+    this.sideBCSideDAParallelSideChecker = new ParallelSideChecker(
+      { side1: this.rightSide, side2: this.leftSide },
+      { side1: this.topSide, side2: this.bottomSide },
+      this.shapeChangedEmitter,
+      model.resetNotInProgressProperty,
+      options.tandem.createTandem( 'sideBCSideDAParallelSideChecker' )
+    );
+
     // ParallelSideCheckers are responsible for determining if opposite SidePairs are parallel within their dynamic
     // angleToleranceIntervalProperty.
     this.parallelSideCheckers = [
-      new ParallelSideChecker(
-        { side1: this.topSide, side2: this.bottomSide },
-        { side1: this.rightSide, side2: this.leftSide },
-        this.shapeChangedEmitter,
-        model.resetNotInProgressProperty,
-        options.tandem.createTandem( 'sideABSideCDParallelSideChecker' )
-      ),
-      new ParallelSideChecker(
-        { side1: this.rightSide, side2: this.leftSide },
-        { side1: this.topSide, side2: this.bottomSide },
-        this.shapeChangedEmitter,
-        model.resetNotInProgressProperty,
-        options.tandem.createTandem( 'sideBCSideDAParallelSideChecker' )
-      )
+      this.sideABSideCDParallelSideChecker,
+      this.sideBCSideDAParallelSideChecker
     ];
 
     // referenced for private use in functions
