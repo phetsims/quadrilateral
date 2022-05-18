@@ -31,6 +31,16 @@ const aBString = quadrilateralStrings.a11y.aB;
 const bCString = quadrilateralStrings.a11y.bC;
 const cDString = quadrilateralStrings.a11y.cD;
 const dAString = quadrilateralStrings.a11y.dA;
+const oppositeSidesTiltPatternString = quadrilateralStrings.a11y.voicing.oppositeSidesTiltPattern;
+const oppositeSidesInParallelPatternString = quadrilateralStrings.a11y.voicing.oppositeSidesInParallelPattern;
+const oppositeSidesInParallelAsCornersChangeEquallyPatternString = quadrilateralStrings.a11y.voicing.oppositeSidesInParallelAsCornersChangeEquallyPattern;
+const oppositeSidesTiltAsShapeChangesPatternString = quadrilateralStrings.a11y.voicing.oppositeSidesTiltAsShapeChangesPattern;
+const allSidesTiltAwayFromParallelString = quadrilateralStrings.a11y.voicing.allSidesTiltAwayFromParallel;
+const allSidesTiltAwayFromParallelAsShapeChangesPatternString = quadrilateralStrings.a11y.voicing.allSidesTiltAwayFromParallelAsShapeChangesPattern;
+const tiltString = quadrilateralStrings.a11y.voicing.tilt;
+const straightenString = quadrilateralStrings.a11y.voicing.straighten;
+const biggerString = quadrilateralStrings.a11y.voicing.bigger;
+const smallerString = quadrilateralStrings.a11y.voicing.smaller;
 
 // A response may trigger because there is a large enough change in angle or length
 type ResponseReason = 'angle' | 'length';
@@ -139,43 +149,27 @@ class QuadrilateralAlerter extends Alerter {
     Voicing.registerUtteranceToNode( changingStateUtterance, screenView );
   }
 
-  // private getLengthChangeResponse( shapeModel: QuadrilateralShapeModel, previousShapeSnapshot: ShapeSnapshot ): string | null {
-  //   let response: string | null = null;
-  //
-  //   const areaDifference = shapeModel.areaProperty.value - previousShapeSnapshot.area;
-  //   const areaChangeString = areaDifference > 0 ? 'bigger' : 'smaller';
-  //
-  //   if ( shapeModel.isParallelogramProperty.value && previousShapeSnapshot.isParallelogram ) {
-  //
-  //     // remained a parallelogram between length change responses, describe how the sides are in parallel with
-  //     // an area change
-  //
-  //     // TODO: its possible to have a length change when we might expect angles to be changing because the length
-  //     // does change as parallel sides tilt. See https://github.com/phetsims/quadrilateral/issues/154
-  //     // assert && assert( areaDifference !== 0, 'with changing lengths the difference in area should not be zero...' );
-  //
-  //     const patternString = 'Opposite sides in parallel as shape gets {{areaChange}}.';
-  //     response = StringUtils.fillIn( patternString, {
-  //       areaChange: areaChangeString
-  //     } );
-  //   }
-  //   else if ( !shapeModel.isParallelogramProperty.value ) {
-  //
-  //     // currently not a parallelogram, describe the change in length
-  //     const patternString = 'All sides tilt away from parallel as shape gets {{areaChange}}';
-  //     response = StringUtils.fillIn( patternString, {
-  //       areaChange: areaChangeString
-  //     } );
-  //   }
-  //
-  //   return response;
-  // }
-
+  /**
+   * Get a response description for the shape change from previous state to current. Will describe parallel sides,
+   * shape area, and side tilt during changes and interaction. The logic of this function is as described in the
+   * design doc, see
+   * https://docs.google.com/document/d/1jXayebAWnnNzsT3l6o72YPw4-YtiQaHQNuAi64eiguc/edit#heading=h.ap2d0jqvt5et
+   *
+   * Will return something like
+   * "Opposite sides AB and CD tilt in parallel as shape gets bigger." or
+   * "All sides tilt away from parallel as opposite corners change unequally." or
+   * "Opposite sides straighten in parallel as opposite corners change equally." or
+   *
+   * @param shapeModel
+   * @param previousShapeSnapshot - Object holding shape fields from the previous time this function was used
+   * @param responseReason - This response happens when angles or lengths change enough to trigger a new description,
+   *                         the triggering case will determine parts of the response string.
+   */
   private getShapeChangeResponse( shapeModel: QuadrilateralShapeModel, previousShapeSnapshot: ShapeSnapshot, responseReason: ResponseReason ): string | null {
     let response: string | null = null;
 
     const areaDifference = shapeModel.areaProperty.value - previousShapeSnapshot.area;
-    const areaChangeString = areaDifference > 0 ? 'bigger' : 'smaller';
+    const areaChangeString = areaDifference > 0 ? biggerString : smallerString;
 
     if ( shapeModel.isParallelogramProperty.value && previousShapeSnapshot.isParallelogram ) {
 
@@ -193,15 +187,17 @@ class QuadrilateralAlerter extends Alerter {
 
         // If the distances to pi for every angle have gotten smaller, we are getting closer to right angles, that is
         // described as "straighten"
-        const tiltChangeString = _.every( differences, difference => difference > 0 ) ? 'tilt' : 'straighten';
-        const patternString = 'Opposite sides {{tiltChange}} in parallel as opposite corners change equally.';
+        const tiltChangeString = _.every( differences, difference => difference > 0 ) ? tiltString : straightenString;
+        const patternString = oppositeSidesTiltPatternString;
 
         response = StringUtils.fillIn( patternString, {
           tiltChange: tiltChangeString
         } );
       }
       else if ( responseReason === 'length' ) {
-        const patternString = 'Opposite sides in parallel as shape gets {{areaChange}}.';
+
+        // lengths changed enough while in parallel to describe length without describing tilt
+        const patternString = oppositeSidesInParallelPatternString;
         response = StringUtils.fillIn( patternString, {
           areaChange: areaChangeString
         } );
@@ -221,6 +217,7 @@ class QuadrilateralAlerter extends Alerter {
       const neitherParallelAfter = !sideABSideCDParallelAfter && !sideBCSideDAParallelAfter;
       const atLeastOneParallelBefore = sideABsideCDParallelBefore || sideBCSideDAParallelBefore;
 
+      // Any remaining parallel sides are described, determine which opposite sides to use
       let firstSideString;
       let secondSideString;
       if ( sideABSideCDParallelAfter ) {
@@ -233,7 +230,7 @@ class QuadrilateralAlerter extends Alerter {
       }
 
       if ( neitherParallelBefore && onlyOneParallelAfter ) {
-        const patternString = 'Opposite sides {{firstSide}} and {{secondSide}} tilt in parallel as corners change unequally.';
+        const patternString = oppositeSidesInParallelAsCornersChangeEquallyPatternString;
 
         response = StringUtils.fillIn( patternString, {
           firstSide: firstSideString,
@@ -243,8 +240,7 @@ class QuadrilateralAlerter extends Alerter {
       else if ( onlyOneParallelAfter ) {
 
         // if one pair of sides remains in parallel after the change, and it is the same side pair
-        const patternString = 'Opposite sides {{firstSide}} and {{secondSide}} tilt in parallel as shape gets {{areaChange}}.';
-
+        const patternString = oppositeSidesTiltAsShapeChangesPatternString;
         response = StringUtils.fillIn( patternString, {
           firstSide: firstSideString,
           secondSide: secondSideString,
@@ -254,12 +250,12 @@ class QuadrilateralAlerter extends Alerter {
       else if ( atLeastOneParallelBefore && neitherParallelAfter ) {
 
         // at least one to zero parallel side pairs
-        response = 'All sides tilt away from parallel as opposite corners change unequally.';
+        response = allSidesTiltAwayFromParallelString;
       }
       else if ( neitherParallelBefore && neitherParallelAfter ) {
 
         // no parallel side pairs before and after
-        const patternString = 'All sides tilt away from parallel as shape gets {{areaChange}}.';
+        const patternString = allSidesTiltAwayFromParallelAsShapeChangesPatternString;
         response = StringUtils.fillIn( patternString, {
           areaChange: areaChangeString
         } );
@@ -269,6 +265,9 @@ class QuadrilateralAlerter extends Alerter {
     return response;
   }
 
+  /**
+   * Return distance (absolute value) of an angle against a right angle (pi/2).
+   */
   private static distanceFromRightAngle( angle: number ): number {
     return Math.abs( Math.PI / 2 - angle );
   }

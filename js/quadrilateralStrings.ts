@@ -84,6 +84,16 @@ type StringsType = {
         'twoPairsOfEqualVerticesPattern': string;
         'cornersAnglePattern': string;
       };
+      'oppositeSidesTiltPattern': string;
+      'oppositeSidesInParallelPattern': string;
+      'oppositeSidesInParallelAsCornersChangeEquallyPattern': string;
+      'oppositeSidesTiltAsShapeChangesPattern': string;
+      'allSidesTiltAwayFromParallel': string;
+      'allSidesTiltAwayFromParallelAsShapeChangesPattern': string;
+      'tilt': string;
+      'straighten': string;
+      'bigger': string;
+      'smaller': string;
       'shapeNames': {
         'square': string;
         'rectangle': string;

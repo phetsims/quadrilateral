@@ -209,6 +209,36 @@
           "value": "'Corners {{firstCorner}} and {{secondCorner}}"
         }
       },
+      "oppositeSidesTiltPattern": {
+        "value": "Opposite sides {{tiltChange}} in parallel as opposite corners change equally."
+      },
+      "oppositeSidesInParallelPattern": {
+        "value": "Opposite sides in parallel as shape gets {{areaChange}}."
+      },
+      "oppositeSidesInParallelAsCornersChangeEquallyPattern": {
+        "value": "Opposite sides {{firstSide}} and {{secondSide}} tilt in parallel as corners change unequally."
+      },
+      "oppositeSidesTiltAsShapeChangesPattern": {
+        "value": "Opposite sides {{firstSide}} and {{secondSide}} tilt in parallel as shape gets {{areaChange}}."
+      },
+      "allSidesTiltAwayFromParallel": {
+        "value": "All sides tilt away from parallel as opposite corners change equally."
+      },
+      "allSidesTiltAwayFromParallelAsShapeChangesPattern": {
+        "value": "All sides tilt away from parallel as shape gets {{areaChange}}"
+      },
+      "tilt": {
+        "value": "tilt"
+      },
+      "straighten": {
+        "value": "straighten"
+      },
+      "bigger": {
+        "value": "bigger"
+      },
+      "smaller": {
+        "value": "smaller"
+      },
       "shapeNames": {
         "square": {
           "value": "a square"
