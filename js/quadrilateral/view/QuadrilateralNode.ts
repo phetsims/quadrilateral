@@ -19,7 +19,7 @@ import CornerGuideNode from './CornerGuideNode.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import RightAngleIndicatorNode from './RightAngleIndicatorNode.js';
-import Property from '../../../../axon/js/Property.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 
 // constants
 const cornerAString = quadrilateralStrings.a11y.cornerA;
@@ -170,7 +170,7 @@ class QuadrilateralNode extends Node {
 
     // only if shape identification feedback is enabled, reset the timer so that we change the color for a short
     // period when we become a named shape
-    Property.multilink( [ this.quadrilateralShapeModel.isParallelogramProperty, this.quadrilateralShapeModel.shapeNameProperty ], ( isParallelogram, shapeName ) => {
+    Multilink.multilink( [ this.quadrilateralShapeModel.isParallelogramProperty, this.quadrilateralShapeModel.shapeNameProperty ], ( isParallelogram, shapeName ) => {
       if ( shapeName !== null && quadrilateralModel.shapeIdentificationFeedbackEnabledProperty.value ) {
         this.remainingTimeForShapeChangeFill = SHAPE_FILL_TIME;
       }

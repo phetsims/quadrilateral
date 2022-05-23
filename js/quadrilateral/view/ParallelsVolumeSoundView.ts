@@ -10,14 +10,13 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Property from '../../../../axon/js/Property.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';
 import SoundClipChord from '../../../../tambo/js/sound-generators/SoundClipChord.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import QuadrilateralSoundOptionsModel, { SuccessSoundFile } from '../model/QuadrilateralSoundOptionsModel.js';
-import { UnknownMultilink } from '../../../../axon/js/Multilink.js';
+import Multilink, { UnknownMultilink } from '../../../../axon/js/Multilink.js';
 import Side from '../model/Side.js';
 import WrappedAudioBuffer from '../../../../tambo/js/WrappedAudioBuffer.js';
 
@@ -118,7 +117,7 @@ class ParallelsVolumeSoundView {
       soundManager.removeSoundGenerator( this.leftRightSideGenerator );
       this.leftRightSideGenerator.dispose();
 
-      Property.unmultilink( this.leftRightSideMultilink! );
+      Multilink.unmultilink( this.leftRightSideMultilink! );
     }
     if ( this.topBottomSideGenerator ) {
       assert && assert( this.topBottomSideMultilink, 'The multilink must be established before we dispose of it.' );
@@ -126,7 +125,7 @@ class ParallelsVolumeSoundView {
       soundManager.removeSoundGenerator( this.topBottomSideGenerator );
       this.topBottomSideGenerator.dispose();
 
-      Property.unmultilink( this.topBottomSideMultilink! );
+      Multilink.unmultilink( this.topBottomSideMultilink! );
     }
   }
 
@@ -217,7 +216,7 @@ class ParallelsVolumeSoundView {
    * difference in tilts of two sides.
    */
   public createTiltMultilink( sideA: Side, sideB: Side, applyOutputLevel: ( outputLevel: number ) => void ): UnknownMultilink {
-    return Property.multilink(
+    return Multilink.multilink(
       [ sideA.tiltProperty, sideB.tiltProperty ],
       ( leftTilt, rightTilt ) => {
 

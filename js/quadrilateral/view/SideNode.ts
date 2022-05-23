@@ -8,7 +8,6 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Property from '../../../../axon/js/Property.js';
 import merge from '../../../../phet-core/js/merge.js';
 import { DragListener, KeyboardDragListener, Line as LineNode, Path, SceneryEvent, Voicing } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -23,6 +22,7 @@ import { Line, Shape } from '../../../../kite/js/imports.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import vibrationManager from '../../../../tappi/js/vibrationManager.js';
 import SideDescriber from './SideDescriber.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 
 // The dilation around side shapes when drawing the focus highlight.
 const FOCUS_HIGHLIGHT_DILATION = 15;
@@ -85,7 +85,7 @@ class SideNode extends Voicing( Path, 1 ) {
     const lineNode = new LineNode( 0, 0, 0, 0 );
 
     // listeners
-    Property.multilink( [ side.vertex1.positionProperty, side.vertex2.positionProperty ], ( vertex1Position, vertex2Position ) => {
+    Multilink.multilink( [ side.vertex1.positionProperty, side.vertex2.positionProperty ], ( vertex1Position, vertex2Position ) => {
 
       // create a single line that will then be divided into segments
       const fullLine = new Line( vertex1Position, vertex2Position );

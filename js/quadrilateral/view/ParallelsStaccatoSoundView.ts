@@ -4,7 +4,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Property from '../../../../axon/js/Property.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';
 import Range from '../../../../dot/js/Range.js';
 import optionize from '../../../../phet-core/js/optionize.js';
@@ -74,7 +74,7 @@ class ParallelsStaccatoSoundView {
     };
     quadrilateralShapeModel.shapeChangedEmitter.addListener( shapeChangeListener );
 
-    const leftRightMultilink = Property.multilink(
+    const leftRightMultilink = Multilink.multilink(
       [ quadrilateralShapeModel.leftSide.tiltProperty, quadrilateralShapeModel.rightSide.tiltProperty ],
       ( leftTilt, rightTilt ) => {
         assert && assert( leftTilt !== Number.POSITIVE_INFINITY && rightTilt !== Number.POSITIVE_INFINITY, 'tilts cannot be infinite in the sound design' );
@@ -82,7 +82,7 @@ class ParallelsStaccatoSoundView {
         this.leftRightRelativePitch = TILT_DIFFERENCE_TO_PITCH.evaluate( Math.abs( leftTilt - rightTilt ) );
       }
     );
-    const topBottomMultilink = Property.multilink(
+    const topBottomMultilink = Multilink.multilink(
       [ quadrilateralShapeModel.topSide.tiltProperty, quadrilateralShapeModel.bottomSide.tiltProperty ],
       ( topTilt, bottomTilt ) => {
         assert && assert( topTilt !== Number.POSITIVE_INFINITY && bottomTilt !== Number.POSITIVE_INFINITY, 'tilts cannot be infinite in the sound design' );
@@ -101,8 +101,8 @@ class ParallelsStaccatoSoundView {
       this.model.quadrilateralShapeModel.shapeChangedEmitter.removeListener( shapeChangeListener );
       this.model.resetNotInProgressProperty.unlink( resetListener );
 
-      Property.unmultilink( leftRightMultilink );
-      Property.unmultilink( topBottomMultilink );
+      Multilink.unmultilink( leftRightMultilink );
+      Multilink.unmultilink( topBottomMultilink );
     };
 
   }

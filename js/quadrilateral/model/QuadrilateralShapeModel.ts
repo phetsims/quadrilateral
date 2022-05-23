@@ -37,6 +37,7 @@ import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import IProperty from '../../../../axon/js/IProperty.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 
 // A useful type for calculations for the vertex Shapes which define where the Vertex can move depending on
 // the positions of the other vertices. Lines are along the bounds of model space and RayIntersections
@@ -393,7 +394,7 @@ class QuadrilateralShapeModel {
       }
     } );
 
-    Property.multilink( [
+    Multilink.multilink( [
         this.vertexA.positionProperty,
         this.vertexB.positionProperty,
         this.vertexC.positionProperty,

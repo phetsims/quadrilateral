@@ -14,8 +14,8 @@ import { Shape } from '../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralUtils from '../../common/QuadrilateralUtils.js';
-import Property from '../../../../axon/js/Property.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 
 type SideLengthAreaNodeSelfOptions = {
   drawRotation?: number;
@@ -42,7 +42,7 @@ class SideLengthAreaNode extends Node {
 
     this.children = [ vertex1Path, vertex2Path ];
 
-    Property.multilink( [
+    Multilink.multilink( [
       shapeModel.lengthsEqualToSavedProperty,
       dragSide.isPressedProperty,
       dragSide.vertex1.isPressedProperty,

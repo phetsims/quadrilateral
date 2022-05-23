@@ -25,8 +25,8 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
-import Property from '../../../../axon/js/Property.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 
 // constants
 // The size of each slice of the angle guide, in radians
@@ -60,7 +60,7 @@ class CornerGuideNode extends Node {
       lineDash: [ 5, 5 ]
     } );
 
-    Property.multilink( [ vertex1.angleProperty, vertex1.positionProperty ], ( angle, position ) => {
+    Multilink.multilink( [ vertex1.angleProperty, vertex1.positionProperty ], ( angle, position ) => {
       assert && assert( angle !== null, 'angleProperty needs to be defined to add listeners in CornerGuideNode' );
       assert && assert( angle! > 0, 'CornerGuideNodes cannot support angles at or less than zero' );
       const vertexCenter = vertex1.positionProperty.value;
@@ -135,7 +135,7 @@ class CornerGuideNode extends Node {
 
     // listeners - This Node is only visible when "Angle Guides" are visible by the user and the angle is NOT a right
     // angle. In that case, the RightAngleIndicatorNode will display the angle.
-    Property.multilink( [ visibleProperty, shapeModel.shapeNameProperty ], ( visible, shapeName ) => {
+    Multilink.multilink( [ visibleProperty, shapeModel.shapeNameProperty ], ( visible, shapeName ) => {
       const currentShape = shapeModel.shapeNameProperty.value;
       this.visible = visible && currentShape !== NamedQuadrilateral.SQUARE && currentShape !== NamedQuadrilateral.RECTANGLE;
     } );
