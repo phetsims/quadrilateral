@@ -85,7 +85,6 @@ class RightAngleIndicatorNode extends Path {
       assert && assert( cornerIntersectionSegments.length === 1, 'Must be one and only one intersection between lines' );
       const intersectionPoint = cornerIntersectionSegments[ 0 ].point;
 
-      // @ts-ignore - Need Line.js in TypeScript
       const closestPointToIntersection = firstLine.explicitClosestToPoint( intersectionPoint )[ 0 ].closestPoint;
 
       const correctedLength = SIDE_LENGTH + intersectionPoint.distance( closestPointToIntersection );

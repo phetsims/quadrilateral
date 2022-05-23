@@ -129,7 +129,6 @@ class VertexNode extends Voicing( Circle, 1 ) {
         }
       },
 
-      // @ts-ignore - TODO: Need to come through and do options, see #27
       tandem: options.tandem.createTandem( 'dragListener' )
     } );
     this.addInputListener( dragListener );

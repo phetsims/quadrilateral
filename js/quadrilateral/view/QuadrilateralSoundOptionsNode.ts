@@ -130,7 +130,6 @@ class QuadrilateralSoundOptionsNode extends Panel {
 
     this.addChild( optionsParentNode );
 
-    // @ts-ignore - TODO: How to we do Enumeration with TypeScript?
     model.soundDesignProperty.link( design => {
 
       // modify children instead of changing visibility for layout purposes
