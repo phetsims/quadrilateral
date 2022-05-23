@@ -110,7 +110,7 @@ simLauncher.launch( () => {
 
   if ( QuadrilateralQueryParameters.showInitialTouchDialog && window.navigator.vibrate ) {
 
-    // Put up a dialog that will essentially force the user to interact with the sim, thus enabled haptics.
+    // Put up a dialog that will essentially force the user to interact with the sim, thus enabling haptics right away.
     const showDialogOnConstructionComplete = complete => {
       if ( complete ) {
         const dialog = new HapticsInfoDialog();
@@ -121,5 +121,8 @@ simLauncher.launch( () => {
     sim.isConstructionCompleteProperty.lazyLink( showDialogOnConstructionComplete );
   }
 
+  // Initialize the vibration manager.  This is necessary because the vibration manager needs certain things from the
+  // sim object instance to complete its setup.  If the vibration feature becomes widely used, this may be moved into
+  // Sim.js, but as of now (May 2022) we don't want Sim.js to have a dependency on this library.
   vibrationManager.initialize( sim.browserTabVisibleProperty, sim.activeProperty );
 } );
