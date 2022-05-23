@@ -55,6 +55,8 @@ class QuadrilateralAlerter extends Alerter {
   private wasParallelogram: boolean;
   private wereAllLengthsEqual: boolean;
   private wereAllAnglesRight: boolean;
+  private wasSideABSideCDParallel: boolean;
+  private wasSideBCSideDAParallel: boolean;
 
   // Indicates when it is time to announce an angle/length response because that aspect of the quadrilateral shape
   // has changed enough to describe it.
@@ -97,6 +99,9 @@ class QuadrilateralAlerter extends Alerter {
     this.wereAllLengthsEqual = model.quadrilateralShapeModel.allLengthsEqualProperty.value;
     this.wereAllAnglesRight = model.quadrilateralShapeModel.allAnglesRightProperty.value;
 
+    this.wasSideABSideCDParallel = model.quadrilateralShapeModel.sideABSideCDParallelSideChecker.areSidesParallel();
+    this.wasSideBCSideDAParallel = model.quadrilateralShapeModel.sideBCSideDAParallelSideChecker.areSidesParallel();
+
     model.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
 
       const previousAAngle = this.previousShapeSnapshot.vertexAAngle;
@@ -127,8 +132,18 @@ class QuadrilateralAlerter extends Alerter {
 
       this.lengthResponseReady = _.some( lengthDifferences, lengthDifference => Math.abs( lengthDifference ) > Side.SIDE_SEGMENT_LENGTH ) && !angleDifferencesLarge;
 
-      if ( this.angleResponseReady || this.lengthResponseReady ) {
-        console.log( 'time for a new response' );
+      const sideABSideCDParallelAfter = shapeModel.sideABSideCDParallelSideChecker.areSidesParallel();
+      const sideBCSideDAParallelAfter = shapeModel.sideBCSideDAParallelSideChecker.areSidesParallel();
+
+      // If we go from zero parallel side pairs to at least one pair, trigger a new context response so that we hear
+      // when sides become parallel. This is relative to every change, so state variables are set immediateley instead
+      // of using the snapshot.
+      const parallelSideResponseReady = ( !this.wasSideABSideCDParallel && !this.wasSideBCSideDAParallel ) && ( sideABSideCDParallelAfter || sideBCSideDAParallelAfter );
+      this.wasSideABSideCDParallel = sideABSideCDParallelAfter;
+      this.wasSideBCSideDAParallel = sideBCSideDAParallelAfter;
+
+      if ( this.angleResponseReady || this.lengthResponseReady || parallelSideResponseReady ) {
+        console.log( 'time for a new response', parallelSideResponseReady );
 
         const thisResponseReason = angleDifferencesLarge ? 'angle' : 'length';
         const tiltChangeResponse = this.getShapeChangeResponse( shapeModel, this.previousShapeSnapshot, thisResponseReason );
