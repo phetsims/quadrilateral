@@ -143,7 +143,6 @@ class QuadrilateralAlerter extends Alerter {
       this.wasSideBCSideDAParallel = sideBCSideDAParallelAfter;
 
       if ( this.angleResponseReady || this.lengthResponseReady || parallelSideResponseReady ) {
-        console.log( 'time for a new response', parallelSideResponseReady );
 
         const thisResponseReason = angleDifferencesLarge ? 'angle' : 'length';
         const tiltChangeResponse = this.getShapeChangeResponse( shapeModel, this.previousShapeSnapshot, thisResponseReason );
