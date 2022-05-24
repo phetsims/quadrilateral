@@ -124,7 +124,13 @@ class ParallelSideChecker {
           // The other sides are being pressed and my sides are not currently parallel. While dragging a side we
           // do not want the shape to become a parallelogram within a finite angleToleranceInterval so make sure
           // my sides will never become parallel.
-          toleranceInterval = Number.NEGATIVE_INFINITY;
+          toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval;
+        }
+        else if ( anyOtherSidesPressed && this.isParallelProperty.value ) {
+
+          // The other sides are being pressed and my sides are currently parallel. It is possible in this case
+          // that my sides go in/out of parallel while they move, so reduce the tolerance interval to a defined value.
+          toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval;
         }
         else if ( numberOfVerticesPressed >= 2 ) {
 
