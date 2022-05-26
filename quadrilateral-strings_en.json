@@ -222,7 +222,7 @@
         "value": "Opposite sides {{firstSide}} and {{secondSide}} tilt in parallel as shape gets {{areaChange}}."
       },
       "allSidesTiltAwayFromParallel": {
-        "value": "All sides tilt away from parallel as opposite corners change equally."
+        "value": "All sides tilt away from parallel as opposite corners change unequally."
       },
       "allSidesTiltAwayFromParallelAsShapeChangesPattern": {
         "value": "All sides tilt away from parallel as shape gets {{areaChange}}"

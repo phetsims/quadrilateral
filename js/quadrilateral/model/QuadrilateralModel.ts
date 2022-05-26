@@ -26,7 +26,7 @@ import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 class QuadrilateralModel {
   public modelBoundsProperty: Property<Bounds2 | null>;
   public physicalModelBoundsProperty: Property<Bounds2 | null>;
-  public physicalToVirtualTransform: ModelViewTransform2 | null = null;
+  public physicalToVirtualTransform: ModelViewTransform2 = ModelViewTransform2.createIdentity();
   public resetNotInProgressProperty: BooleanProperty;
   public isCalibratingProperty: BooleanProperty;
   public showDebugValuesProperty: BooleanProperty;
@@ -190,15 +190,18 @@ class QuadrilateralModel {
     // assuming a square shape for extrema - we may need a mapping function for each individual side if this cannot be assumed
     const maxLength = _.max( [ topLength, rightLength, bottomLength, leftLength ] )!;
     this.physicalModelBoundsProperty.value = new Bounds2( 0, 0, maxLength, maxLength );
+  }
 
-    // create a transform that goes from physical space to simulation space - scale from physical space to
-    // simulation model space isometrically which we know is limited in the y direction (so it uses height)
-    const modelBounds = this.modelBoundsProperty.value!;
-
+  /**
+   * Create a transform that will go from tangible to virtual space. The scaling only uses one dimension because
+   * we assume scaling should be the same in both x and y. It uses height as the limiting factor for scaling
+   * because the simulation bounds are wider than they are tall.
+   */
+  public setPhysicalToVirtualTransform( width: number, height: number ): void {
     this.physicalToVirtualTransform = ModelViewTransform2.createSinglePointScaleMapping(
-      new Vector2( maxLength / 2, maxLength / 2 ), // center of the physical space "model"
+      new Vector2( width / 2, height / 2 ), // center of the physical space "model"
       new Vector2( 0, 0 ), // origin of the simulation model
-      modelBounds.height / ( maxLength ) // scale from physical model to simulation space
+      this.modelBoundsProperty.value!.height / ( height ) // scale from physical model to simulation space
     );
   }
 

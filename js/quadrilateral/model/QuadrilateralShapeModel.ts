@@ -48,9 +48,11 @@ type LineIntersectionPair = {
   intersectionPoint: Vector2;
 }
 
-type VertexWithProposedPosition = {
+export type VertexWithProposedPosition = {
   vertex: Vertex;
-  proposedPosition: Vector2;
+
+  // This may not be available if something goes wrong with the marker detection
+  proposedPosition?: Vector2;
 };
 
 // A pair of vertices that are grouped together in some way, they are either opposite or adjacent to each other when
@@ -999,8 +1001,10 @@ class QuadrilateralShapeModel {
 
       // this is a new Vector2 instance so even if x,y values are the same as the old value it will triggere
       // listeners without this check
-      if ( !vertexWithProposedPosition.proposedPosition.equals( vertexWithProposedPosition.vertex.positionProperty.value ) ) {
-        vertexWithProposedPosition.vertex.positionProperty.set( vertexWithProposedPosition.proposedPosition );
+      const proposedPosition = vertexWithProposedPosition.proposedPosition!;
+      assert && assert( proposedPosition, 'proposedPosition must be defined to set positions' );
+      if ( !proposedPosition.equals( vertexWithProposedPosition.vertex.positionProperty.value ) ) {
+        vertexWithProposedPosition.vertex.positionProperty.set( proposedPosition );
       }
     } );
 
@@ -1207,23 +1211,26 @@ class QuadrilateralShapeModel {
    */
   public setPositionsFromAbsolutePositionData( proposedPositions: VertexWithProposedPosition[] ): void {
 
-    // only try to set to sim if values look reasonable - we want to handle this gracefully, the sim shouldn't crash
-    // if data isn't right
-    const allDataGood = _.every( proposedPositions, vertexWithProposedPosition => {
-      return vertexWithProposedPosition.proposedPosition.isFinite();
-    } );
-    if ( !allDataGood ) {
-      return;
-    }
-
     // you must calibrate before setting positions from a physical device
     if ( this.model.physicalToVirtualTransform !== null && !this.model.isCalibratingProperty.value && this.model.modelBoundsProperty.value ) {
 
       // scale the physical positions to the simulation virtual model
       const scaledProposedPositions: VertexWithProposedPosition[] = proposedPositions.map( vertexWithProposedPosition => {
+        const proposedPosition = vertexWithProposedPosition.proposedPosition;
 
-        const virtualPosition = this.model.physicalToVirtualTransform!.modelToViewPosition( vertexWithProposedPosition.proposedPosition );
-        const constrainedPosition = QuadrilateralModel.getClosestGridPosition( virtualPosition, QuadrilateralModel.DEVICE_GRID_SPACING );
+        let constrainedPosition;
+
+        // only try to set a new position if values look reasonable - we want to handle this gracefully, the sim
+        // shouldn't crash if data isn't right
+        if ( proposedPosition && proposedPosition.isFinite() ) {
+          const virtualPosition = this.model.physicalToVirtualTransform!.modelToViewPosition( proposedPosition );
+          constrainedPosition = QuadrilateralModel.getClosestGridPosition( virtualPosition, QuadrilateralModel.DEVICE_GRID_SPACING );
+        }
+        else {
+
+          // If the value is not reasonable, just fall back to the current position
+          constrainedPosition = vertexWithProposedPosition.vertex.positionProperty.value;
+        }
 
         return {
           vertex: vertexWithProposedPosition.vertex,
@@ -1231,8 +1238,76 @@ class QuadrilateralShapeModel {
         };
       } );
 
-      this.setVertexPositions( scaledProposedPositions );
+      // Only set to the model if the shape is allowed and reasonable (no overlaps, no intersections)
+      if ( this.isShapeAllowedForTangible( scaledProposedPositions ) ) {
+        this.setVertexPositions( scaledProposedPositions );
+      }
     }
+  }
+
+  /**
+   * Apply a series of checks on VertexWithProposedPositions to make sure that the requested shape does not cross
+   * and does not have overlap.
+   * @private
+   */
+  private isShapeAllowedForTangible( vertexWithProposedPositions: VertexWithProposedPosition[] ): boolean {
+    let allowed = true;
+
+    let vertexAPosition: Vector2;
+    let vertexBPosition: Vector2;
+    let vertexCPosition: Vector2;
+    let vertexDPosition: Vector2;
+
+    vertexWithProposedPositions.forEach( vertexWithProposedPosition => {
+      if ( vertexWithProposedPosition.vertex === this.vertexA ) {
+        vertexAPosition = vertexWithProposedPosition.proposedPosition!;
+      }
+      if ( vertexWithProposedPosition.vertex === this.vertexB ) {
+        vertexBPosition = vertexWithProposedPosition.proposedPosition!;
+      }
+      if ( vertexWithProposedPosition.vertex === this.vertexC ) {
+        vertexCPosition = vertexWithProposedPosition.proposedPosition!;
+      }
+      if ( vertexWithProposedPosition.vertex === this.vertexD ) {
+        vertexDPosition = vertexWithProposedPosition.proposedPosition!;
+      }
+    } );
+
+    // all positions defined
+    allowed = !!vertexAPosition! && !!vertexBPosition! && !!vertexCPosition! && !!vertexDPosition!;
+
+    const lineAB = new Line( vertexAPosition!, vertexBPosition! );
+    const lineBC = new Line( vertexBPosition!, vertexCPosition! );
+    const lineCD = new Line( vertexCPosition!, vertexDPosition! );
+    const lineDA = new Line( vertexDPosition!, vertexAPosition! );
+    const proposedLines = [ lineAB, lineBC, lineCD, lineDA ];
+
+    // No vertices overlap (0 length)
+    if ( allowed ) {
+      allowed = _.every( proposedLines, proposedLine => proposedLine.getArcLength() > 0 );
+    }
+
+    // No lines intersect
+    if ( allowed ) {
+      for ( let i = 0; i < proposedLines.length; i++ ) {
+        const firstLine = proposedLines[ i ];
+        for ( let j = 0; j < proposedLines.length; j++ ) {
+          const secondLine = proposedLines[ j ];
+          if ( firstLine !== secondLine ) {
+            if ( Line.intersectOther( firstLine, secondLine ).length > 0 ) {
+              allowed = false;
+              break;
+            }
+          }
+        }
+
+        if ( !allowed ) {
+          break;
+        }
+      }
+    }
+
+    return allowed;
   }
 
   /**

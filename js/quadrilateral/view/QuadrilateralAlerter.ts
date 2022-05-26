@@ -128,7 +128,7 @@ class QuadrilateralAlerter extends Alerter {
       const daLengthDifference = previousDALength - shapeModel.leftSide.lengthProperty.value;
 
       const lengthDifferences = [ abLengthDifference, bcLengthDifference, cdLengthDifference, daLengthDifference ];
-      const angleDifferencesLarge = _.some( angleDifferences, angleDifference => angleDifference > Math.PI / 12 );
+      const angleDifferencesLarge = _.some( angleDifferences, angleDifference => angleDifference > Math.PI / 24 );
 
       this.lengthResponseReady = _.some( lengthDifferences, lengthDifference => Math.abs( lengthDifference ) > Side.SIDE_SEGMENT_LENGTH ) && !angleDifferencesLarge;
 
