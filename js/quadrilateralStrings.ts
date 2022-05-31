@@ -178,6 +178,11 @@ type StringsType = {
       'longerThanParallelAdjacentSides': string;
       'notEqualToAdjacentSides': string;
       'notEqualToParallelAdjacentSides': string;
+      'back': string;
+      'gone': string;
+      'cornersBack': string;
+      'cornersGone': string;
+      'cornerDetectedPattern': string;
     }
   }
 };

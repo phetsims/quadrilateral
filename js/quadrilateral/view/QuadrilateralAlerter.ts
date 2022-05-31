@@ -41,6 +41,15 @@ const tiltString = quadrilateralStrings.a11y.voicing.tilt;
 const straightenString = quadrilateralStrings.a11y.voicing.straighten;
 const biggerString = quadrilateralStrings.a11y.voicing.bigger;
 const smallerString = quadrilateralStrings.a11y.voicing.smaller;
+const vertexAString = quadrilateralStrings.vertexA;
+const vertexBString = quadrilateralStrings.vertexB;
+const vertexCString = quadrilateralStrings.vertexC;
+const vertexDString = quadrilateralStrings.vertexD;
+const backString = quadrilateralStrings.a11y.voicing.back;
+const goneString = quadrilateralStrings.a11y.voicing.gone;
+const cornersBackString = quadrilateralStrings.a11y.voicing.cornersBack;
+const cornersGoneString = quadrilateralStrings.a11y.voicing.cornersGone;
+const cornerDetectedPatternString = quadrilateralStrings.a11y.voicing.cornerDetectedPattern;
 
 // A response may trigger because there is a large enough change in angle or length
 type ResponseReason = 'angle' | 'length';
@@ -158,9 +167,40 @@ class QuadrilateralAlerter extends Alerter {
       }
     } );
 
+    // Responses specific to the OpenCV prototype - letting the user know when markers become obscured from the camera.
+    const markerResponsePacket = new ResponsePacket();
+    const markerUtterance = new Utterance( {
+      alert: markerResponsePacket,
+      priority: Utterance.LOW_PRIORITY
+    } );
+
+    model.allVertexMarkersDetectedProperty.link( allVertexMarkersDetected => {
+      if ( model.markerResponsesEnabledProperty.value ) {
+        markerResponsePacket.contextResponse = allVertexMarkersDetected ? cornersBackString : cornersGoneString;
+        this.alert( markerUtterance );
+      }
+    } );
+
+    // Reusable listener that describes when a
+    const vertexDetectionResponseListener = ( labelString: string, detected: boolean ) => {
+      if ( model.markerResponsesEnabledProperty.value ) {
+        const stateString = detected ? backString : goneString;
+        markerResponsePacket.contextResponse = StringUtils.fillIn( cornerDetectedPatternString, {
+          label: labelString,
+          state: stateString
+        } );
+        this.alert( markerUtterance );
+      }
+    };
+    model.vertexAMarkerDetectedProperty.link( detected => { vertexDetectionResponseListener( vertexAString, detected ); } );
+    model.vertexBMarkerDetectedProperty.link( detected => { vertexDetectionResponseListener( vertexBString, detected ); } );
+    model.vertexCMarkerDetectedProperty.link( detected => { vertexDetectionResponseListener( vertexCString, detected ); } );
+    model.vertexDMarkerDetectedProperty.link( detected => { vertexDetectionResponseListener( vertexDString, detected ); } );
+
     // So that this content respects voicingVisible.
     Voicing.registerUtteranceToNode( importantStateUtterance, screenView );
     Voicing.registerUtteranceToNode( changingStateUtterance, screenView );
+    Voicing.registerUtteranceToNode( markerUtterance, screenView );
   }
 
   /**

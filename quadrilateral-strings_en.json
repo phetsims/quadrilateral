@@ -482,6 +482,21 @@
       },
       "notEqualToParallelAdjacentSides": {
         "value": "not equal to parallel adjacent sides"
+      },
+      "back": {
+        "value": "back"
+      },
+      "gone": {
+        "value": "gone"
+      },
+      "cornersBack": {
+        "value": "Corners back."
+      },
+      "cornersGone": {
+        "value": "Corners gone."
+      },
+      "cornerDetectedPattern": {
+        "value": "Corner {{label}} {{state}}"
       }
     }
   }

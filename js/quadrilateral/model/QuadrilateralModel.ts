@@ -32,9 +32,22 @@ class QuadrilateralModel {
   public showDebugValuesProperty: BooleanProperty;
   public rotationMarkerDetectedProperty: BooleanProperty;
 
-  // A Property that indicates that all markers are observed by the camera to control this simulation. Requested as
-  // part of state for upcoming studies in https://github.com/phetsims/quadrilateral/issues/97
+  // A Property that indicates that all markers are observed by the camera to control this simulation. Part of
+  // a prototype for using OpenCV as an input method for the simulation
   public allVertexMarkersDetectedProperty: IReadOnlyProperty<boolean>;
+
+  // Properties that indicate whether the OpenCV prototype detects an individual vertex. The tool must be able
+  // to detect each vertex individually. The tool must be able to detect each marker individually for this to be
+  // relevant.
+  public vertexAMarkerDetectedProperty: IReadOnlyProperty<boolean>;
+  public vertexBMarkerDetectedProperty: IReadOnlyProperty<boolean>;
+  public vertexCMarkerDetectedProperty: IReadOnlyProperty<boolean>;
+  public vertexDMarkerDetectedProperty: IReadOnlyProperty<boolean>;
+
+  // A Property that controls whether Voicing responses will be enabled for when the OpenCV prototype changes in its
+  // ability to see various markers.
+  public readonly markerResponsesEnabledProperty: BooleanProperty;
+
   public markerRotationProperty: NumberProperty;
   public cornerGuideVisibleProperty: BooleanProperty;
   public vertexLabelsVisibleProperty: BooleanProperty;
@@ -98,6 +111,21 @@ class QuadrilateralModel {
 
     this.allVertexMarkersDetectedProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'allVertexMarkersDetectedProperty' )
+    } );
+    this.vertexAMarkerDetectedProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'vertexAMarkerDetectedProperty' )
+    } );
+    this.vertexBMarkerDetectedProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'vertexBMarkerDetectedProperty' )
+    } );
+    this.vertexCMarkerDetectedProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'vertexCMarkerDetectedProperty' )
+    } );
+    this.vertexDMarkerDetectedProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'vertexDMarkerDetectedProperty' )
+    } );
+    this.markerResponsesEnabledProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'markerResponsesEnabledProperty' )
     } );
 
     // This is the centrail quadrilateral shape for the simulation.
