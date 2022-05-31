@@ -1400,14 +1400,16 @@ class QuadrilateralShapeModel {
     // In model bounds, not overlapping, in respective drag areas
 
     // wait to update until all vertices are positioned so we know the quadrilateral is in a good state
-    this.setPropertiesDeferred( true );
+    // this.setPropertiesDeferred( true );
 
-    this.vertexA.positionProperty.set( constrainedPositions[ 0 ]! );
-    this.vertexB.positionProperty.set( constrainedPositions[ 1 ]! );
-    this.vertexC.positionProperty.set( constrainedPositions[ 2 ]! );
-    this.vertexD.positionProperty.set( constrainedPositions[ 3 ]! );
+    const verticesWithProposedPositions = [
+      { vertex: this.vertexA, proposedPosition: constrainedPositions[ 0 ]! },
+      { vertex: this.vertexB, proposedPosition: constrainedPositions[ 1 ]! },
+      { vertex: this.vertexC, proposedPosition: constrainedPositions[ 2 ]! },
+      { vertex: this.vertexD, proposedPosition: constrainedPositions[ 3 ]! }
+    ];
 
-    this.setPropertiesDeferred( false );
+    this.setVertexPositions( verticesWithProposedPositions );
   }
 
   /**
