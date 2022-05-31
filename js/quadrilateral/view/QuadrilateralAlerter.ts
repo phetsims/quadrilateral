@@ -89,10 +89,7 @@ class QuadrilateralAlerter extends Alerter {
     const importantAlertResponsePacket = new ResponsePacket();
     const importantStateUtterance = new Utterance( {
       alert: importantAlertResponsePacket,
-      announcerOptions: {
-        cancelSelf: false
-      },
-      priority: Utterance.DEFAULT_PRIORITY
+      priority: Utterance.HIGH_PRIORITY
     } );
 
     // The utterance used when the shape state changes, but in ways that are less pedagogically relevant than
@@ -101,7 +98,7 @@ class QuadrilateralAlerter extends Alerter {
     const changingStateResponsePacket = new ResponsePacket();
     const changingStateUtterance = new Utterance( {
       alert: changingStateResponsePacket,
-      priority: Utterance.LOW_PRIORITY
+      priority: Utterance.MEDIUM_PRIORITY
     } );
 
     this.wasParallelogram = model.quadrilateralShapeModel.isParallelogramProperty.value;
@@ -192,6 +189,7 @@ class QuadrilateralAlerter extends Alerter {
         this.alert( markerUtterance );
       }
     };
+
     model.vertexAMarkerDetectedProperty.link( detected => { vertexDetectionResponseListener( vertexAString, detected ); } );
     model.vertexBMarkerDetectedProperty.link( detected => { vertexDetectionResponseListener( vertexBString, detected ); } );
     model.vertexCMarkerDetectedProperty.link( detected => { vertexDetectionResponseListener( vertexCString, detected ); } );
