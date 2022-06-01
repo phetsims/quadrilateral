@@ -7,7 +7,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import OmitStrict from '../../../../phet-core/js/types/OmitStrict.js';
+import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import { Text, TextOptions, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
@@ -26,7 +26,7 @@ const TEXT_OPTIONS = combineOptions<TextOptions>( {
 type QuadrilateralVisibilityControlsSelfOptions = {
   tandem?: Tandem;
 };
-type QuadrilateralVisibilityControlsOptions = QuadrilateralVisibilityControlsSelfOptions & OmitStrict<VBoxOptions, 'children'>
+type QuadrilateralVisibilityControlsOptions = QuadrilateralVisibilityControlsSelfOptions & StrictOmit<VBoxOptions, 'children'>
 
 class QuadrilateralVisibilityControls extends VBox {
   constructor( cornerLabelsVisibleProperty: BooleanProperty, cornerGuideVisibleProperty: BooleanProperty, symmetryGridVisibleProperty: BooleanProperty, providedOptions?: QuadrilateralVisibilityControlsOptions ) {

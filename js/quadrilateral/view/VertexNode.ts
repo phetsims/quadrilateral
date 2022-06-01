@@ -7,7 +7,7 @@
  */
 
 import { Circle, CircleOptions, DragListener, KeyboardDragListener, SceneryEvent, Text, Voicing } from '../../../../scenery/js/imports.js';
-import OmitStrict from '../../../../phet-core/js/types/OmitStrict.js';
+import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -33,7 +33,7 @@ type SelfOptions = {
 };
 
 // VertexNode sets these properties explicitly from the nameResponse option
-type VertexNodeOptions = SelfOptions & OmitStrict<CircleOptions, 'voicingNameResponse' | 'innerContent'>;
+type VertexNodeOptions = SelfOptions & StrictOmit<CircleOptions, 'voicingNameResponse' | 'innerContent'>;
 
 class VertexNode extends Voicing( Circle, 1 ) {
   private readonly model: QuadrilateralModel;
