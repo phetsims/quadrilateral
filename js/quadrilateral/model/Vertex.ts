@@ -113,7 +113,6 @@ class Vertex {
 
   /**
    * Returns true if this Vertex intersects another.
-   * @param other
    */
   public overlapsOther( other: Vertex ): boolean {
     assert && assert( other !== this, 'You are trying to see if this vertex overlaps self?' );
@@ -193,10 +192,10 @@ class Vertex {
    *
    * See https://en.wikipedia.org/wiki/Law_of_cosines
    *
-   * @param {Vector2} vertex1Position
-   * @param {Vector2} vertex2Position - returns angle at this vertex, between vertexAPosition and vertexCPosition
-   * @param {Vector2} vertex3Position
-   * @param {boolean} validateShape
+   * @param vertex1Position
+   * @param vertex2Position - returns angle at this vertex, between vertexAPosition and vertexCPosition
+   * @param vertex3Position
+   * @param validateShape
    */
   public static calculateAngle( vertex1Position: Vector2, vertex2Position: Vector2, vertex3Position: Vector2, validateShape = true ): number {
 

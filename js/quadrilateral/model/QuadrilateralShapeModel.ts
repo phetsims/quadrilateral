@@ -433,7 +433,6 @@ class QuadrilateralShapeModel {
 
   /**
    * Returns true if the side lengths have changed relative to the savedSideLengths.
-   * @param currentSideLengths
    */
   public getSideLengthsEqualToSaved( currentSideLengths: SideLengths ): boolean {
 
@@ -790,10 +789,6 @@ class QuadrilateralShapeModel {
    *       - secondLineIntersectionPair.intersection.point
    *
    * This function will return an array of points [A, B, C, D] to create a shape between the intersections on the lines.
-   *
-   * @param directedLines
-   * @param firstLineIntersectionPair
-   * @param secondLineIntersectionPair
    */
   private static getPointsAlongBoundary( directedLines: Line[], firstLineIntersectionPair: LineIntersectionPair, secondLineIntersectionPair: LineIntersectionPair ): Vector2[] {
     const points = [];

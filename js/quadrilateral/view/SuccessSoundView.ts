@@ -313,7 +313,7 @@ class SuccessSoundView {
    * Create new sound clips for the collection of sounds. Not sure which (if any) we will use so to demonstrate
    * to the design team we are creating these options to play with.
    *
-   * @param {SuccessSoundCollection} successSoundCollection - See QuadrilateralSoundOptionsModel
+   * @param successSoundCollection - See QuadrilateralSoundOptionsModel
    */
   private createSoundClips( successSoundCollection: SuccessSoundCollection ): void {
     this.disposeSoundClips();

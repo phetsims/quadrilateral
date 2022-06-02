@@ -19,10 +19,6 @@ import SuccessSoundView from './SuccessSoundView.js';
 class QuadrilateralSoundView {
   private activeSoundView: null | QuartetSoundView | ParallelsVolumeSoundView | ParallelsStaccatoSoundView | SuccessSoundView;
 
-  /**
-   * @param {QuadrilateralModel} model
-   * @param {QuadrilateralSoundOptionsModel} soundOptionsModel
-   */
   constructor( model: QuadrilateralModel, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
 
     // The sound view that is currently "active" with playing sounds. The active sound view is chosen by user in the
