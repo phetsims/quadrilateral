@@ -41,11 +41,11 @@ const DEFAULT_SIDES_SEGMENT_LINE_WIDTH = 1;
 // in seconds,
 const SHAPE_FILL_TIME = 0.35;
 
-type QuadrilateralNodeSelfOptions = {
+type SelfOptions = {
   tandem?: Tandem;
 };
 
-type QuadrilateralNodeOptions = QuadrilateralNodeSelfOptions & NodeOptions;
+type QuadrilateralNodeOptions = SelfOptions & NodeOptions;
 
 class QuadrilateralNode extends Node {
   private readonly model: QuadrilateralModel;
@@ -61,7 +61,7 @@ class QuadrilateralNode extends Node {
 
   public constructor( quadrilateralModel: QuadrilateralModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, providedOptions?: QuadrilateralNodeOptions ) {
 
-    const options = optionize<QuadrilateralNodeOptions, QuadrilateralNodeSelfOptions, NodeOptions>()( {
+    const options = optionize<QuadrilateralNodeOptions, SelfOptions, NodeOptions>()( {
       tandem: Tandem.REQUIRED
     }, providedOptions );
 

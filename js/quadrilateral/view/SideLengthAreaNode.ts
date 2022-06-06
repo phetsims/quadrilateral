@@ -17,16 +17,16 @@ import QuadrilateralUtils from '../../common/QuadrilateralUtils.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 
-type SideLengthAreaNodeSelfOptions = {
+type SelfOptions = {
   drawRotation?: number;
 };
 
-type SideLengthAreaNodeOptions = SideLengthAreaNodeSelfOptions & NodeOptions;
+type SideLengthAreaNodeOptions = SelfOptions & NodeOptions;
 
 class SideLengthAreaNode extends Node {
   constructor( shapeModel: QuadrilateralShapeModel, dragSide: Side, oppositeSide: Side, lengthSide: Side, modelViewTransform: ModelViewTransform2, providedOptions?: SideLengthAreaNodeOptions ) {
 
-    const options = optionize<SideLengthAreaNodeOptions, SideLengthAreaNodeSelfOptions, NodeOptions>()( {
+    const options = optionize<SideLengthAreaNodeOptions, SelfOptions, NodeOptions>()( {
 
       // Additional rotation to apply to the arcs so they generally look as expected
       drawRotation: 0

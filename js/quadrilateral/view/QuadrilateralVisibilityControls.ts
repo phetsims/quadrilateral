@@ -23,15 +23,15 @@ const TEXT_OPTIONS = combineOptions<TextOptions>( {
   maxWidth: 100
 }, QuadrilateralConstants.SCREEN_TEXT_OPTIONS );
 
-type QuadrilateralVisibilityControlsSelfOptions = {
+type SelfOptions = {
   tandem?: Tandem;
 };
-type QuadrilateralVisibilityControlsOptions = QuadrilateralVisibilityControlsSelfOptions & StrictOmit<VBoxOptions, 'children'>
+type QuadrilateralVisibilityControlsOptions = SelfOptions & StrictOmit<VBoxOptions, 'children'>
 
 class QuadrilateralVisibilityControls extends VBox {
   constructor( cornerLabelsVisibleProperty: BooleanProperty, cornerGuideVisibleProperty: BooleanProperty, symmetryGridVisibleProperty: BooleanProperty, providedOptions?: QuadrilateralVisibilityControlsOptions ) {
 
-    const options = optionize<QuadrilateralVisibilityControlsOptions, QuadrilateralVisibilityControlsSelfOptions, VBoxOptions>()( {
+    const options = optionize<QuadrilateralVisibilityControlsOptions, SelfOptions, VBoxOptions>()( {
       align: 'left',
       spacing: 15,
 

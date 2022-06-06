@@ -145,12 +145,12 @@ class ParallelsStaccatoSoundView {
   }
 }
 
-type QuadrilateralPitchedPopGeneratorSelfOptions = {
+type SelfOptions = {
   pitchRange?: Range;
   numPopGenerators?: number;
 };
 
-type QuadrilateralPitchedPopGeneratorOptions = QuadrilateralPitchedPopGeneratorSelfOptions & SoundGeneratorOptions;
+type QuadrilateralPitchedPopGeneratorOptions = SelfOptions & SoundGeneratorOptions;
 
 /**
  * A PitchedPopGenerator with some slight modifications to create the desired effects in Quadrilateral.
@@ -164,7 +164,7 @@ class QuadrilateralPitchedPopGenerator extends SoundGenerator {
 
   public constructor( providedOptions?: QuadrilateralPitchedPopGeneratorOptions ) {
 
-    const options = optionize<QuadrilateralPitchedPopGeneratorOptions, QuadrilateralPitchedPopGeneratorSelfOptions, SoundGeneratorOptions>()( {
+    const options = optionize<QuadrilateralPitchedPopGeneratorOptions, SelfOptions, SoundGeneratorOptions>()( {
 
       // the range of pitches that this pop generator will produce, in Hz
       pitchRange: new Range( 220, 660 ),
