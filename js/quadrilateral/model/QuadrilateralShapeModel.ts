@@ -1219,7 +1219,7 @@ class QuadrilateralShapeModel {
         // shouldn't crash if data isn't right
         if ( proposedPosition && proposedPosition.isFinite() ) {
           const virtualPosition = this.model.physicalToVirtualTransform!.modelToViewPosition( proposedPosition );
-          constrainedPosition = QuadrilateralModel.getClosestGridPosition( virtualPosition, QuadrilateralModel.DEVICE_GRID_SPACING );
+          constrainedPosition = QuadrilateralModel.getClosestGridPosition( virtualPosition, this.model.deviceGridSpacingProperty.value );
         }
         else {
 

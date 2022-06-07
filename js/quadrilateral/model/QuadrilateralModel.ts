@@ -57,6 +57,9 @@ class QuadrilateralModel {
   public quadrilateralShapeModel: QuadrilateralShapeModel;
   public quadrilateralTestShapeModel: QuadrilateralShapeModel;
 
+  // A property that controls the resolution for positioning vertices when connected to a device.
+  public deviceGridSpacingProperty: NumberProperty;
+
   private firstModelStep: boolean;
 
   // The spacing of the model "grid" along both x and y axes. The Quadrilateral vertex positions will be constrained to
@@ -105,6 +108,10 @@ class QuadrilateralModel {
 
     // Whether or not visual and auditory feedback related to identifying shapes when not a parallelogram is enabled.
     this.shapeIdentificationFeedbackEnabledProperty = shapeIdentificationEnabledProperty;
+
+    this.deviceGridSpacingProperty = new NumberProperty( QuadrilateralModel.MAJOR_GRID_SPACING * 5, {
+      tandem: tandem.createTandem( 'deviceGridSpacingProperty' )
+    } );
 
     // The amount of rotation in radians of the marker. TODO: delete? https://github.com/phetsims/tangible/issues/11
     this.markerRotationProperty = new NumberProperty( 0 );
