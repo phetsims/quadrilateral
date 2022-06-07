@@ -67,11 +67,6 @@ class QuadrilateralModel {
   public static MAJOR_GRID_SPACING = 0.05;
   public static MINOR_GRID_SPACING: number = QuadrilateralModel.MAJOR_GRID_SPACING / 4;
 
-  // When controlling with the device the vertex positions are constrained to this resolution
-  // of grid spacing - a bit larger than the MINOR_GRID_SPACING to prevent small motions that
-  // may come from noise.
-  public static DEVICE_GRID_SPACING: number = QuadrilateralModel.MAJOR_GRID_SPACING / 2;
-
   constructor( shapeIdentificationEnabledProperty: BooleanProperty, tandem: Tandem ) {
 
     // The bounds in model space. The bounds will change depending on available screen bounds so that
@@ -109,7 +104,7 @@ class QuadrilateralModel {
     // Whether or not visual and auditory feedback related to identifying shapes when not a parallelogram is enabled.
     this.shapeIdentificationFeedbackEnabledProperty = shapeIdentificationEnabledProperty;
 
-    this.deviceGridSpacingProperty = new NumberProperty( QuadrilateralModel.MAJOR_GRID_SPACING * 5, {
+    this.deviceGridSpacingProperty = new NumberProperty( QuadrilateralModel.MAJOR_GRID_SPACING / 2, {
       tandem: tandem.createTandem( 'deviceGridSpacingProperty' )
     } );
 
