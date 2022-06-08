@@ -104,7 +104,7 @@ class QuadrilateralModel {
     // Whether or not visual and auditory feedback related to identifying shapes when not a parallelogram is enabled.
     this.shapeIdentificationFeedbackEnabledProperty = shapeIdentificationEnabledProperty;
 
-    this.deviceGridSpacingProperty = new NumberProperty( QuadrilateralModel.MAJOR_GRID_SPACING / 2, {
+    this.deviceGridSpacingProperty = new NumberProperty( QuadrilateralQueryParameters.deviceGridSpacing, {
       tandem: tandem.createTandem( 'deviceGridSpacingProperty' )
     } );
 

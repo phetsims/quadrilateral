@@ -33,6 +33,7 @@ import QuadrilateralGridNode from './QuadrilateralGridNode.js';
 import QuadrilateralScreenSummaryContentNode from './QuadrilateralScreenSummaryContentNode.js';
 import vibrationManager from '../../../../tappi/js/vibrationManager.js';
 import QuadrilateralAlerter from './QuadrilateralAlerter.js';
+import QuadrilateralBluetoothConnectionButton from './QuadrilateralBluetoothConnectionButton.js';
 
 const MODEL_BOUNDS = QuadrilateralQueryParameters.calibrationDemoDevice ? new Bounds2( -4.5, -4.5, 4.5, 4.5 ) :
                      new Bounds2( -1, -1, 1, 1 );
@@ -200,6 +201,12 @@ class QuadrilateralScreenView extends ScreenView {
       } );
 
       this.addChild( calibrationButton );
+
+      if ( QuadrilateralQueryParameters.bluetooth ) {
+        const connectionPanel = new QuadrilateralBluetoothConnectionButton( model, tandem.createTandem( 'quadrilateralBluetoothConnectionButton' ) );
+        connectionPanel.leftBottom = calibrationButton.leftTop.minusXY( 0, 15 );
+        this.addChild( connectionPanel );
+      }
     }
 
     // pdom

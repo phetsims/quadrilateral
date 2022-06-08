@@ -147,6 +147,15 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // https://github.com/phetsims/quadrilateral/issues/148 for more information.
   showInitialTouchDialog: {
     type: 'flag'
+  },
+
+  // A query parameter to control the deviceGridSpacingProperty - constrains the vertex positions to intervals of this
+  // value. Useful when connected to a device with noisy sensors because it requires larger changes in value to
+  // update a vertex position.
+  deviceGridSpacing: {
+    type: 'number',
+    defaultValue: 0.025,
+    isValidValue: value => value <= 5 * 0.05
   }
 } );
 

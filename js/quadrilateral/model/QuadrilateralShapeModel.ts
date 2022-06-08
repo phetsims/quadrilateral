@@ -1346,7 +1346,7 @@ class QuadrilateralShapeModel {
       const mappedRightLength = deviceLengthToSimLength.evaluate( rightLength );
       const mappedLeftLength = deviceLengthToSimLength.evaluate( leftLength );
 
-      this.setPositionsFromLengthsAndAngles( mappedTopLength, mappedRightLength, mappedLeftLength, p1Angle, p2Angle, p3Angle, p4Angle );
+      this.setPositionsFromLengthsAndAngles( mappedTopLength, mappedRightLength, mappedLeftLength, p1Angle, p2Angle );
     }
   }
 
@@ -1355,8 +1355,14 @@ class QuadrilateralShapeModel {
    * providing length and angle data. When reconstructing the shape we start by making the top side parallel
    * with the top of model bounds. The remaining vertices are positioned acordingly. Finally, if there is some
    * rotation to apply (from the experimental marker input), that rotation is applied. TODO: Review this if something should change without marker input, https://github.com/phetsims/tangible/issues/11
+   *
+   * @param topLength
+   * @param rightLength
+   * @param leftLength
+   * @param p1Angle - the left top angle (vertexA)
+   * @param p2Angle - the right top angle (vertexB)
    */
-  public setPositionsFromLengthsAndAngles( topLength: number, rightLength: number, leftLength: number, p1Angle: number, p2Angle: number, p3Angle: number, p4Angle: number ): void {
+  public setPositionsFromLengthsAndAngles( topLength: number, rightLength: number, leftLength: number, p1Angle: number, p2Angle: number ): void {
 
     assert && assert( this.model.modelBoundsProperty.value, 'setPositionsFromLengthsAndAngles can only be used when modelBounds are defined' );
     const modelBounds = this.model.modelBoundsProperty.value!;
@@ -1387,20 +1393,14 @@ class QuadrilateralShapeModel {
     // make sure that all positions are within model bounds
     const constrainedPositions = _.map( rotatedPositions, position => this.model.modelBoundsProperty.value?.closestPointTo( position ) );
 
-    // TODO: Validate these positions...
-    // FOR NEXT TIME: Start here.
-    // 1) Set positions to a scratch model
-    // 2) Query the positions and make sure vertices are OK for the quad
-    // In model bounds, not overlapping, in respective drag areas
-
-    // wait to update until all vertices are positioned so we know the quadrilateral is in a good state
-    // this.setPropertiesDeferred( true );
+    // Constrain to intervals of deviceGridSpacingProperty.value to try to reduce noise
+    const constrainedGridPositions = _.map( constrainedPositions, constrainedPosition => QuadrilateralModel.getClosestGridPosition( constrainedPosition!, this.model.deviceGridSpacingProperty.value ) );
 
     const verticesWithProposedPositions = [
-      { vertex: this.vertexA, proposedPosition: constrainedPositions[ 0 ]! },
-      { vertex: this.vertexB, proposedPosition: constrainedPositions[ 1 ]! },
-      { vertex: this.vertexC, proposedPosition: constrainedPositions[ 2 ]! },
-      { vertex: this.vertexD, proposedPosition: constrainedPositions[ 3 ]! }
+      { vertex: this.vertexA, proposedPosition: constrainedGridPositions[ 0 ]! },
+      { vertex: this.vertexB, proposedPosition: constrainedGridPositions[ 1 ]! },
+      { vertex: this.vertexC, proposedPosition: constrainedGridPositions[ 2 ]! },
+      { vertex: this.vertexD, proposedPosition: constrainedGridPositions[ 3 ]! }
     ];
 
     this.setVertexPositions( verticesWithProposedPositions );
