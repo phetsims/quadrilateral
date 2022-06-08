@@ -13,6 +13,7 @@ import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
+import stepTimer from '../../../../axon/js/stepTimer.js';
 
 // The bluetooth options for the requestDevice call.
 const REQUEST_DEVICE_OPTIONS = {
@@ -25,7 +26,13 @@ const REQUEST_DEVICE_OPTIONS = {
   optionalServices: [ 'battery_service' ] // TODO: Is this right?
 };
 
+// In seconds, the maximum interval that we will send updates to the simulation. This attempts to reduce noise
+// as sensor values jitter around an average.
+const SIM_UPDATE_INTERVAL = 0.5;
+
 class QuadrilateralBluetoothConnectionButton extends TextPushButton {
+
+  private timeSinceUpdatingSim = 0;
 
   public readonly allDataCollectedEmitter = new Emitter();
 
@@ -46,25 +53,33 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
     this.addListener( this.requestQuadDevice.bind( this ) );
 
     this.allDataCollectedEmitter.addListener( () => {
-      console.log( 'All Data collected!' );
-      console.log( this.topLength, this.rightLength, this.leftLength, this.topLeftAngle, this.topRightAngle );
-
       if ( quadrilateralModel.isCalibratingProperty.value ) {
         quadrilateralModel.setPhysicalModelBounds( this.topLength, this.rightLength, 0, this.leftLength );
       }
       else if ( quadrilateralModel.physicalModelBoundsProperty.value ) {
-        quadrilateralModel.quadrilateralShapeModel.setPositionsFromLengthAndAngleData(
-          this.topLength,
-          this.rightLength,
-          5, // unused in setPositionsFromLengthsAndAngles
-          this.leftLength,
 
-          Utils.toRadians( this.topLeftAngle ),
-          Utils.toRadians( this.topRightAngle ),
-          Utils.toRadians( 90 ), // unused in setPositionsFromLengthsAndAngles
-          Utils.toRadians( 90 ) // unused in setPositionsFromLengthsAndAngles
-        );
+        // In an attempt to filter out noise, only update the sim at this interval
+        if ( this.timeSinceUpdatingSim > SIM_UPDATE_INTERVAL ) {
+          quadrilateralModel.quadrilateralShapeModel.setPositionsFromLengthAndAngleData(
+            this.topLength,
+            this.rightLength,
+            5, // unused in setPositionsFromLengthsAndAngles
+            this.leftLength,
+
+            Utils.toRadians( this.topLeftAngle ),
+            Utils.toRadians( this.topRightAngle ),
+            Utils.toRadians( 90 ), // unused in setPositionsFromLengthsAndAngles
+            Utils.toRadians( 90 ) // unused in setPositionsFromLengthsAndAngles
+          );
+
+          // wait for the update interval before setting positions to the sim again
+          this.timeSinceUpdatingSim = 0;
+        }
       }
+    } );
+
+    stepTimer.addListener( dt => {
+      this.timeSinceUpdatingSim += dt;
     } );
   }
 
