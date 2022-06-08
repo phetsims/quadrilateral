@@ -25,6 +25,10 @@ const VERTEX_BOUNDS = new Bounds2( 0, 0, 0.1, 0.1 );
 const HALF_WIDTH = VERTEX_BOUNDS.width / 2;
 const HALF_HEIGHT = VERTEX_BOUNDS.height / 2;
 
+// How many values to save for the smoothing
+const SMOOTHING_LENGTH = 10;
+assert && assert( SMOOTHING_LENGTH > 0, 'The smoothing length needs to be greater than zero for averaging to work' );
+
 class Vertex {
   public positionProperty: Property<Vector2>;
   public angleProperty: Property<number | null>;
@@ -38,6 +42,8 @@ class Vertex {
   private vertex1: Vertex | null;
   private vertex2: Vertex | null;
 
+  // The collection of SMOOTHING_LENGTH number of positions
+  private readonly positions: Vector2[] = [];
 
   // in model coordinates, the bounds of the vertex - necessary because we need to calculate vertex/vertex and
   // vertex/side collisions
@@ -175,6 +181,20 @@ class Vertex {
   public connectToOthers( vertex1: Vertex, vertex2: Vertex ): void {
     this.vertex1 = vertex1;
     this.vertex2 = vertex2;
+  }
+
+  /**
+   * "Smooth" the provided position for the vertex by saving it in a collection of positions of max length
+   * and returning the average position.
+   */
+  public smoothPosition( position: Vector2 ): Vector2 {
+    this.positions.push( position );
+
+    while ( this.positions.length > SMOOTHING_LENGTH ) {
+      this.positions.shift();
+    }
+
+    return Vector2.average( this.positions );
   }
 
   /**

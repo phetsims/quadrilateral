@@ -1393,8 +1393,17 @@ class QuadrilateralShapeModel {
     // make sure that all positions are within model bounds
     const constrainedPositions = _.map( rotatedPositions, position => this.model.modelBoundsProperty.value?.closestPointTo( position ) );
 
+    // smooth positions to try to reduce noise
+    // TODO: Should this go before or after constraining to the grid?
+    const smoothedPositions = [
+      this.vertexA.smoothPosition( constrainedPositions[ 0 ]! ),
+      this.vertexB.smoothPosition( constrainedPositions[ 1 ]! ),
+      this.vertexC.smoothPosition( constrainedPositions[ 2 ]! ),
+      this.vertexD.smoothPosition( constrainedPositions[ 3 ]! )
+    ];
+
     // Constrain to intervals of deviceGridSpacingProperty.value to try to reduce noise
-    const constrainedGridPositions = _.map( constrainedPositions, constrainedPosition => QuadrilateralModel.getClosestGridPosition( constrainedPosition!, this.model.deviceGridSpacingProperty.value ) );
+    const constrainedGridPositions = _.map( smoothedPositions, smoothedPosition => QuadrilateralModel.getClosestGridPosition( smoothedPosition!, this.model.deviceGridSpacingProperty.value ) );
 
     const verticesWithProposedPositions = [
       { vertex: this.vertexA, proposedPosition: constrainedGridPositions[ 0 ]! },
