@@ -20,7 +20,6 @@ import QuadrilateralConstants from './common/QuadrilateralConstants.js';
 import QuadrilateralSoundOptionsModel from './quadrilateral/model/QuadrilateralSoundOptionsModel.js';
 import QuadrilateralQueryParameters from './quadrilateral/QuadrilateralQueryParameters.js';
 import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';
-import QuadrilateralBluetoothConnectionPanel from './quadrilateral/view/QuadrilateralBluetoothConnectionPanel.js';
 import QuadrilateralSoundOptionsNode from './quadrilateral/view/QuadrilateralSoundOptionsNode.js';
 import quadrilateralStrings from './quadrilateralStrings.js';
 
@@ -28,13 +27,6 @@ const quadrilateralTitleString = quadrilateralStrings.quadrilateral.title;
 const calibrationDemoString = 'Device'; // this will never be translatable, keep out of json file
 
 const soundOptionsModel = new QuadrilateralSoundOptionsModel();
-
-// Property indicating that a tangible device is connected to the simulation, either through bluetooth or a wired
-// serial connection. It is up to the BLE or serial connector to set the Property.
-const tangibleDeviceConnectedProperty = new BooleanProperty( false, {
-  tandem: Tandem.GENERAL_CONTROLLER.createTandem( 'tangibleDeviceConnectedProperty' ),
-  phetioReadOnly: true
-} );
 
 const shapeIdentificationFeedbackEnabledProperty = new BooleanProperty( QuadrilateralQueryParameters.shapeIdentificationFeedback );
 const shapeIdentificationFeedbackCheckbox = new Checkbox(
@@ -45,13 +37,11 @@ const shapeIdentificationFeedbackCheckbox = new Checkbox(
   }
 );
 
-const otherControls = [ new ClapperboardButton( {
-  tandem: Tandem.GENERAL_VIEW.createTandem( 'clapperboardButton' )
-} ) ];
+const otherControls = [
+  new ClapperboardButton( { tandem: Tandem.GENERAL_VIEW.createTandem( 'clapperboardButton' ) } ),
+  shapeIdentificationFeedbackCheckbox
+];
 
-// if requested by query parameter, include experimental bluetooth controls in the sim settings
-QuadrilateralQueryParameters.bluetooth && otherControls.push( new QuadrilateralBluetoothConnectionPanel( tangibleDeviceConnectedProperty, Tandem.GENERAL_VIEW ) );
-otherControls.push( shapeIdentificationFeedbackCheckbox );
 const otherControlsBox = new VBox( {
   children: otherControls,
   align: 'left',
