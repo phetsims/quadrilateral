@@ -8,7 +8,7 @@
 
 import BooleanProperty from '../../axon/js/BooleanProperty.js';
 import PreferencesConfiguration from '../../joist/js/preferences/PreferencesConfiguration.js';
-import Sim from '../../joist/js/Sim.js';
+import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
 import ClapperboardButton from '../../scenery-phet/js/ClapperboardButton.js';
 import { Color, ColorProperty, HBox, Text, VBox } from '../../scenery/js/imports.js';
@@ -54,7 +54,7 @@ const controls = new HBox( {
   align: 'top'
 } );
 
-const simOptions = {
+const simOptions: SimOptions = {
 
   //TODO fill in credits, all of these fields are optional, see joist.CreditsNode
   credits: {
@@ -83,7 +83,7 @@ simLauncher.launch( () => {
   // https://github.com/phetsims/quadrilateral/issues/18
   const quadrilateralScreen = new QuadrilateralScreen( soundOptionsModel, shapeIdentificationFeedbackEnabledProperty, {
     name: quadrilateralTitleString,
-    tandem: Tandem.ROOT.createTandem( 'quadrilateralScreen' )
+  tandem: Tandem.ROOT.createTandem( 'quadrilateralScreen' )
   } );
   const calibrationDemoScreen = new QuadrilateralScreen( soundOptionsModel, shapeIdentificationFeedbackEnabledProperty, {
     name: calibrationDemoString,
@@ -101,7 +101,7 @@ simLauncher.launch( () => {
   if ( QuadrilateralQueryParameters.showInitialTouchDialog && window.navigator.vibrate ) {
 
     // Put up a dialog that will essentially force the user to interact with the sim, thus enabling haptics right away.
-    const showDialogOnConstructionComplete = complete => {
+    const showDialogOnConstructionComplete = ( complete: boolean ) => {
       if ( complete ) {
         const dialog = new HapticsInfoDialog();
         dialog.show();
