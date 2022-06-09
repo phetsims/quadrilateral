@@ -14,6 +14,7 @@ import Utils from '../../../../dot/js/Utils.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import stepTimer from '../../../../axon/js/stepTimer.js';
+import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 
 // The bluetooth options for the requestDevice call.
 const REQUEST_DEVICE_OPTIONS = {
@@ -28,7 +29,7 @@ const REQUEST_DEVICE_OPTIONS = {
 
 // In seconds, the maximum interval that we will send updates to the simulation. This attempts to reduce noise
 // as sensor values jitter around an average.
-const SIM_UPDATE_INTERVAL = 0.5;
+const SIM_UPDATE_INTERVAL = QuadrilateralQueryParameters.bluetoothUpdateInterval;
 
 class QuadrilateralBluetoothConnectionButton extends TextPushButton {
 

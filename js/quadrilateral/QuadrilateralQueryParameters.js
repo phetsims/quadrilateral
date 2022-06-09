@@ -156,6 +156,21 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     type: 'number',
     defaultValue: 0.025,
     isValidValue: value => value <= 5 * 0.05
+  },
+
+  // How many values to save when smoothing vertex positions when connected to a bluetooth device. Note that
+  // at this time this has no impact on the OpenCV prototype input.
+  smoothingLength: {
+    type: 'number',
+    defaultValue: 10,
+    isValidValue: value => value > 0
+  },
+
+  // How frequently to update the sim from values provided with a bluetooth device.
+  bluetoothUpdateInterval: {
+    type: 'number',
+    defaultValue: 0.1,
+    isValidValue: value => value > 0
   }
 } );
 

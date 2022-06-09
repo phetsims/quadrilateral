@@ -19,6 +19,7 @@ import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import VertexLabel from './VertexLabel.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
+import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 
 
 const VERTEX_BOUNDS = new Bounds2( 0, 0, 0.1, 0.1 );
@@ -26,7 +27,7 @@ const HALF_WIDTH = VERTEX_BOUNDS.width / 2;
 const HALF_HEIGHT = VERTEX_BOUNDS.height / 2;
 
 // How many values to save for the smoothing
-const SMOOTHING_LENGTH = 10;
+const SMOOTHING_LENGTH = QuadrilateralQueryParameters.smoothingLength;
 assert && assert( SMOOTHING_LENGTH > 0, 'The smoothing length needs to be greater than zero for averaging to work' );
 
 class Vertex {
