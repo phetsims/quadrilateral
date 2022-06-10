@@ -33,6 +33,10 @@ class QuadrilateralModel {
   public showDebugValuesProperty: BooleanProperty;
   public rotationMarkerDetectedProperty: BooleanProperty;
 
+  // True when we are connected to a device in some way, either bluetooth, serial, or
+  // opencv. This is mostly for data collection.
+  public connectedToDeviceProperty: BooleanProperty;
+
   public readonly preferencesModel: QuadrilateralPreferencesModel;
 
   // A Property that indicates that all markers are observed by the camera to control this simulation. Part of
@@ -70,6 +74,10 @@ class QuadrilateralModel {
   constructor( preferencesModel: QuadrilateralPreferencesModel, tandem: Tandem ) {
 
     this.preferencesModel = preferencesModel;
+
+    this.connectedToDeviceProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'connectedToDeviceProperty' )
+    } );
 
     // The bounds in model space. The bounds will change depending on available screen bounds so that
     // on larger screens there is more model space to explore diferent shapes.
