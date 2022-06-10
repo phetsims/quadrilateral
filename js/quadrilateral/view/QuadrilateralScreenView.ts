@@ -17,7 +17,6 @@ import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralNode from './QuadrilateralNode.js';
 import QuadrilateralSoundView from './QuadrilateralSoundView.js';
 import VertexDragAreaNode from './VertexDragAreaNode.js';
-import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
 import quadrilateralStrings from '../../quadrilateralStrings.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
@@ -34,6 +33,7 @@ import QuadrilateralScreenSummaryContentNode from './QuadrilateralScreenSummaryC
 import vibrationManager from '../../../../tappi/js/vibrationManager.js';
 import QuadrilateralAlerter from './QuadrilateralAlerter.js';
 import QuadrilateralBluetoothConnectionButton from './QuadrilateralBluetoothConnectionButton.js';
+import QuadrilateralPreferencesModel from '../model/QuadrilateralPreferencesModel.js';
 
 const MODEL_BOUNDS = QuadrilateralQueryParameters.calibrationDemoDevice ? new Bounds2( -4.5, -4.5, 4.5, 4.5 ) :
                      new Bounds2( -1, -1, 1, 1 );
@@ -48,7 +48,7 @@ class QuadrilateralScreenView extends ScreenView {
   public readonly quadrilateralDescriber: QuadrilateralDescriber;
   private readonly resetAllButton: ResetAllButton;
 
-  public constructor( model: QuadrilateralModel, soundOptionsModel: QuadrilateralSoundOptionsModel, tandem: Tandem ) {
+  public constructor( model: QuadrilateralModel, preferencesModel: QuadrilateralPreferencesModel, tandem: Tandem ) {
     super( {
 
       // phet-io
@@ -131,7 +131,7 @@ class QuadrilateralScreenView extends ScreenView {
     } );
     this.addChild( this.quadrilateralNode );
 
-    this.quadrilateralSoundView = new QuadrilateralSoundView( model, soundOptionsModel );
+    this.quadrilateralSoundView = new QuadrilateralSoundView( model, preferencesModel.soundOptionsModel );
 
     // Rectangle showing available model bounds, requested in https://github.com/phetsims/quadrilateral/issues/49.
     // Rounded corners to look nice, but actual model bounds are pure Bounds2.

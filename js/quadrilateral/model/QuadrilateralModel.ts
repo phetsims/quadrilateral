@@ -22,6 +22,7 @@ import Utils from '../../../../dot/js/Utils.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
+import QuadrilateralPreferencesModel from './QuadrilateralPreferencesModel.js';
 
 class QuadrilateralModel {
   public modelBoundsProperty: Property<Bounds2 | null>;
@@ -31,6 +32,8 @@ class QuadrilateralModel {
   public isCalibratingProperty: BooleanProperty;
   public showDebugValuesProperty: BooleanProperty;
   public rotationMarkerDetectedProperty: BooleanProperty;
+
+  public readonly preferencesModel: QuadrilateralPreferencesModel;
 
   // A Property that indicates that all markers are observed by the camera to control this simulation. Part of
   // a prototype for using OpenCV as an input method for the simulation
@@ -57,9 +60,6 @@ class QuadrilateralModel {
   public quadrilateralShapeModel: QuadrilateralShapeModel;
   public quadrilateralTestShapeModel: QuadrilateralShapeModel;
 
-  // A property that controls the resolution for positioning vertices when connected to a device.
-  public deviceGridSpacingProperty: NumberProperty;
-
   private firstModelStep: boolean;
 
   // The spacing of the model "grid" along both x and y axes. The Quadrilateral vertex positions will be constrained to
@@ -67,7 +67,9 @@ class QuadrilateralModel {
   public static MAJOR_GRID_SPACING = 0.05;
   public static MINOR_GRID_SPACING: number = QuadrilateralModel.MAJOR_GRID_SPACING / 4;
 
-  constructor( shapeIdentificationEnabledProperty: BooleanProperty, tandem: Tandem ) {
+  constructor( preferencesModel: QuadrilateralPreferencesModel, tandem: Tandem ) {
+
+    this.preferencesModel = preferencesModel;
 
     // The bounds in model space. The bounds will change depending on available screen bounds so that
     // on larger screens there is more model space to explore diferent shapes.
@@ -102,11 +104,7 @@ class QuadrilateralModel {
     this.rotationMarkerDetectedProperty = new BooleanProperty( false );
 
     // Whether or not visual and auditory feedback related to identifying shapes when not a parallelogram is enabled.
-    this.shapeIdentificationFeedbackEnabledProperty = shapeIdentificationEnabledProperty;
-
-    this.deviceGridSpacingProperty = new NumberProperty( QuadrilateralQueryParameters.deviceGridSpacing, {
-      tandem: tandem.createTandem( 'deviceGridSpacingProperty' )
-    } );
+    this.shapeIdentificationFeedbackEnabledProperty = preferencesModel.shapeIdentificationFeedbackEnabledProperty;
 
     // The amount of rotation in radians of the marker. TODO: delete? https://github.com/phetsims/tangible/issues/11
     this.markerRotationProperty = new NumberProperty( 0 );

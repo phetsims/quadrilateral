@@ -14,7 +14,6 @@ import Utils from '../../../../dot/js/Utils.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import stepTimer from '../../../../axon/js/stepTimer.js';
-import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 
 // The bluetooth options for the requestDevice call.
 const REQUEST_DEVICE_OPTIONS = {
@@ -26,10 +25,6 @@ const REQUEST_DEVICE_OPTIONS = {
   ],
   optionalServices: [ 'battery_service' ] // TODO: Is this right?
 };
-
-// In seconds, the maximum interval that we will send updates to the simulation. This attempts to reduce noise
-// as sensor values jitter around an average.
-const SIM_UPDATE_INTERVAL = QuadrilateralQueryParameters.bluetoothUpdateInterval;
 
 class QuadrilateralBluetoothConnectionButton extends TextPushButton {
 
@@ -60,7 +55,7 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
       else if ( quadrilateralModel.physicalModelBoundsProperty.value ) {
 
         // In an attempt to filter out noise, only update the sim at this interval
-        if ( this.timeSinceUpdatingSim > SIM_UPDATE_INTERVAL ) {
+        if ( this.timeSinceUpdatingSim > quadrilateralModel.preferencesModel.bluetoothUpdateIntervalProperty.value ) {
           quadrilateralModel.quadrilateralShapeModel.setPositionsFromLengthAndAngleData(
             this.topLength,
             this.rightLength,
@@ -82,6 +77,10 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
     stepTimer.addListener( dt => {
       this.timeSinceUpdatingSim += dt;
     } );
+
+    // Browser throws an error durring fuzzing that requires bluetooth connection to happen from
+    // user input.
+    this.enabled = !phet.chipper.isFuzzEnabled();
   }
 
   private async requestQuadDevice(): Promise<any> {

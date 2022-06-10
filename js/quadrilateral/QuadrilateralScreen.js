@@ -15,11 +15,11 @@ import QuadrilateralScreenView from './view/QuadrilateralScreenView.js';
 class QuadrilateralScreen extends Screen {
 
   /**
-   * @param {QuadrilateralSoundOptionsModel} soundOptionsModel
+   * @param {QuadrilateralPreferencesModel} preferencesModel
    * @param {BooleanProperty} shapeIdentificationFeedbackEnabledProperty
    * @param {Object} [options]
    */
-  constructor( soundOptionsModel, shapeIdentificationFeedbackEnabledProperty, options ) {
+  constructor( preferencesModel, options ) {
 
     options = merge( {
       //TODO if you include homeScreenIcon or navigationBarIcon, use JOIST/ScreenIcon
@@ -28,8 +28,8 @@ class QuadrilateralScreen extends Screen {
     }, options );
 
     super(
-      () => new QuadrilateralModel( shapeIdentificationFeedbackEnabledProperty, options.tandem.createTandem( 'model' ) ),
-      model => new QuadrilateralScreenView( model, soundOptionsModel, options.tandem.createTandem( 'view' ) ),
+      () => new QuadrilateralModel( preferencesModel, options.tandem.createTandem( 'model' ) ),
+      model => new QuadrilateralScreenView( model, preferencesModel, options.tandem.createTandem( 'view' ) ),
       options
     );
   }

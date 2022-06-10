@@ -19,16 +19,10 @@ import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import VertexLabel from './VertexLabel.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
-import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
-
 
 const VERTEX_BOUNDS = new Bounds2( 0, 0, 0.1, 0.1 );
 const HALF_WIDTH = VERTEX_BOUNDS.width / 2;
 const HALF_HEIGHT = VERTEX_BOUNDS.height / 2;
-
-// How many values to save for the smoothing
-const SMOOTHING_LENGTH = QuadrilateralQueryParameters.smoothingLength;
-assert && assert( SMOOTHING_LENGTH > 0, 'The smoothing length needs to be greater than zero for averaging to work' );
 
 class Vertex {
   public positionProperty: Property<Vector2>;
@@ -39,6 +33,9 @@ class Vertex {
   public isPressedProperty: Property<boolean>;
   public modelBoundsProperty: IReadOnlyProperty<Bounds2>;
   private tandem: Tandem;
+
+  // Property that controls how many values to include in the "smoothing" of positions. See smoothPosition()
+  private readonly smoothingLengthProperty: IReadOnlyProperty<number>;
 
   private vertex1: Vertex | null;
   private vertex2: Vertex | null;
@@ -51,13 +48,16 @@ class Vertex {
   public static readonly VERTEX_BOUNDS = VERTEX_BOUNDS;
   public static readonly VERTEX_WIDTH = VERTEX_BOUNDS.width;
 
-
   /**
    * @param initialPosition - The initial position for the Vertex in model coordinates.
    * @param vertexLabel - A label tagging the vertex, so we can look up the equivalent vertex on another shape model
+   * @param smoothingLengthProperty - Controlling how many values to use in the position smoothing when connected to
+   *                                  a tangible device.
    * @param tandem
    */
-  constructor( initialPosition: Vector2, vertexLabel: VertexLabel, tandem: Tandem ) {
+  constructor( initialPosition: Vector2, vertexLabel: VertexLabel, smoothingLengthProperty: IReadOnlyProperty<number>, tandem: Tandem ) {
+
+    this.smoothingLengthProperty = smoothingLengthProperty;
 
     // The position of the vertex in model coordinates.
     this.positionProperty = new Vector2Property( initialPosition, {
@@ -191,7 +191,7 @@ class Vertex {
   public smoothPosition( position: Vector2 ): Vector2 {
     this.positions.push( position );
 
-    while ( this.positions.length > SMOOTHING_LENGTH ) {
+    while ( this.positions.length > this.smoothingLengthProperty.value ) {
       this.positions.shift();
     }
 

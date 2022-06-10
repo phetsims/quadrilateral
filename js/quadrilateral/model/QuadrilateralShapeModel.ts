@@ -179,10 +179,10 @@ class QuadrilateralShapeModel {
     this.validateShape = options.validateShape;
 
     // vertices of the quadrilateral
-    this.vertexA = new Vertex( new Vector2( -0.25, 0.25 ), VertexLabel.VERTEX_A, options.tandem.createTandem( 'vertexA' ) );
-    this.vertexB = new Vertex( new Vector2( 0.25, 0.25 ), VertexLabel.VERTEX_B, options.tandem.createTandem( 'vertexB' ) );
-    this.vertexC = new Vertex( new Vector2( 0.25, -0.25 ), VertexLabel.VERTEX_C, options.tandem.createTandem( 'vertexC' ) );
-    this.vertexD = new Vertex( new Vector2( -0.25, -0.25 ), VertexLabel.VERTEX_D, options.tandem.createTandem( 'vertexD' ) );
+    this.vertexA = new Vertex( new Vector2( -0.25, 0.25 ), VertexLabel.VERTEX_A, model.preferencesModel.smoothingLengthProperty, options.tandem.createTandem( 'vertexA' ) );
+    this.vertexB = new Vertex( new Vector2( 0.25, 0.25 ), VertexLabel.VERTEX_B, model.preferencesModel.smoothingLengthProperty, options.tandem.createTandem( 'vertexB' ) );
+    this.vertexC = new Vertex( new Vector2( 0.25, -0.25 ), VertexLabel.VERTEX_C, model.preferencesModel.smoothingLengthProperty, options.tandem.createTandem( 'vertexC' ) );
+    this.vertexD = new Vertex( new Vector2( -0.25, -0.25 ), VertexLabel.VERTEX_D, model.preferencesModel.smoothingLengthProperty, options.tandem.createTandem( 'vertexD' ) );
 
     // Collection of the vertices which should be easy to iterate over
     this.vertices = [ this.vertexA, this.vertexB, this.vertexC, this.vertexD ];
@@ -1219,7 +1219,7 @@ class QuadrilateralShapeModel {
         // shouldn't crash if data isn't right
         if ( proposedPosition && proposedPosition.isFinite() ) {
           const virtualPosition = this.model.physicalToVirtualTransform!.modelToViewPosition( proposedPosition );
-          constrainedPosition = QuadrilateralModel.getClosestGridPosition( virtualPosition, this.model.deviceGridSpacingProperty.value );
+          constrainedPosition = QuadrilateralModel.getClosestGridPosition( virtualPosition, this.model.preferencesModel.deviceGridSpacingProperty.value );
         }
         else {
 
@@ -1403,7 +1403,7 @@ class QuadrilateralShapeModel {
     ];
 
     // Constrain to intervals of deviceGridSpacingProperty.value to try to reduce noise
-    const constrainedGridPositions = _.map( smoothedPositions, smoothedPosition => QuadrilateralModel.getClosestGridPosition( smoothedPosition!, this.model.deviceGridSpacingProperty.value ) );
+    const constrainedGridPositions = _.map( smoothedPositions, smoothedPosition => QuadrilateralModel.getClosestGridPosition( smoothedPosition!, this.model.preferencesModel.deviceGridSpacingProperty.value ) );
 
     const verticesWithProposedPositions = [
       { vertex: this.vertexA, proposedPosition: constrainedGridPositions[ 0 ]! },

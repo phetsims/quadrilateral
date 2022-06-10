@@ -6,53 +6,23 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import BooleanProperty from '../../axon/js/BooleanProperty.js';
 import PreferencesConfiguration from '../../joist/js/preferences/PreferencesConfiguration.js';
 import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
-import ClapperboardButton from '../../scenery-phet/js/ClapperboardButton.js';
-import { Color, ColorProperty, HBox, Text, VBox } from '../../scenery/js/imports.js';
-import Checkbox from '../../sun/js/Checkbox.js';
+import { Color, ColorProperty } from '../../scenery/js/imports.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import vibrationManager from '../../tappi/js/vibrationManager.js';
 import HapticsInfoDialog from './common/HapticsInfoDialog.js';
-import QuadrilateralConstants from './common/QuadrilateralConstants.js';
-import QuadrilateralSoundOptionsModel from './quadrilateral/model/QuadrilateralSoundOptionsModel.js';
 import QuadrilateralQueryParameters from './quadrilateral/QuadrilateralQueryParameters.js';
 import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';
-import QuadrilateralSoundOptionsNode from './quadrilateral/view/QuadrilateralSoundOptionsNode.js';
 import quadrilateralStrings from './quadrilateralStrings.js';
+import QuadrilateralPreferencesModel from './quadrilateral/model/QuadrilateralPreferencesModel.js';
+import QuadrilateralPreferencesNode from './quadrilateral/view/QuadrilateralPreferencesNode.js';
 
 const quadrilateralTitleString = quadrilateralStrings.quadrilateral.title;
 const calibrationDemoString = 'Device'; // this will never be translatable, keep out of json file
 
-const soundOptionsModel = new QuadrilateralSoundOptionsModel();
-
-const shapeIdentificationFeedbackEnabledProperty = new BooleanProperty( QuadrilateralQueryParameters.shapeIdentificationFeedback );
-const shapeIdentificationFeedbackCheckbox = new Checkbox(
-  new Text( 'Shape Identification Feedback', QuadrilateralConstants.PANEL_LABEL_TEXT_OPTIONS ),
-  shapeIdentificationFeedbackEnabledProperty,
-  {
-    tandem: Tandem.GENERAL_VIEW
-  }
-);
-
-const otherControls = [
-  new ClapperboardButton( { tandem: Tandem.GENERAL_VIEW.createTandem( 'clapperboardButton' ) } ),
-  shapeIdentificationFeedbackCheckbox
-];
-
-const otherControlsBox = new VBox( {
-  children: otherControls,
-  align: 'left',
-  spacing: 15
-} );
-
-const controls = new HBox( {
-  children: [ new QuadrilateralSoundOptionsNode( soundOptionsModel, Tandem.GENERAL_VIEW ), otherControlsBox ],
-  spacing: 15,
-  align: 'top'
-} );
+const preferencesModel = new QuadrilateralPreferencesModel();
 
 const simOptions: SimOptions = {
 
@@ -70,7 +40,7 @@ const simOptions: SimOptions = {
   // preferences configuration with defaults from package.json
   preferencesConfiguration: new PreferencesConfiguration( {
     generalOptions: {
-      simControls: new HBox( { children: [ controls ], spacing: 10, align: 'top' } )
+      simControls: new QuadrilateralPreferencesNode( preferencesModel )
     }
   } )
 };
@@ -81,11 +51,11 @@ simLauncher.launch( () => {
 
   // if in the "calibration" demo, use two screens to test communication between them, see
   // https://github.com/phetsims/quadrilateral/issues/18
-  const quadrilateralScreen = new QuadrilateralScreen( soundOptionsModel, shapeIdentificationFeedbackEnabledProperty, {
+  const quadrilateralScreen = new QuadrilateralScreen( preferencesModel, {
     name: quadrilateralTitleString,
-  tandem: Tandem.ROOT.createTandem( 'quadrilateralScreen' )
+    tandem: Tandem.ROOT.createTandem( 'quadrilateralScreen' )
   } );
-  const calibrationDemoScreen = new QuadrilateralScreen( soundOptionsModel, shapeIdentificationFeedbackEnabledProperty, {
+  const calibrationDemoScreen = new QuadrilateralScreen( preferencesModel, {
     name: calibrationDemoString,
     screenViewOptions: {
       calibrationDemoDevice: true
