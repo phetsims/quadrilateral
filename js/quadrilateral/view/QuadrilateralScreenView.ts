@@ -34,6 +34,7 @@ import vibrationManager from '../../../../tappi/js/vibrationManager.js';
 import QuadrilateralAlerter from './QuadrilateralAlerter.js';
 import QuadrilateralBluetoothConnectionButton from './QuadrilateralBluetoothConnectionButton.js';
 import QuadrilateralPreferencesModel from '../model/QuadrilateralPreferencesModel.js';
+import QuadrilateralSoundBoardNode from './QuadrilateralSoundBoardNode.js';
 
 const MODEL_BOUNDS = QuadrilateralQueryParameters.calibrationDemoDevice ? new Bounds2( -4.5, -4.5, 4.5, 4.5 ) :
                      new Bounds2( -1, -1, 1, 1 );
@@ -156,6 +157,27 @@ class QuadrilateralScreenView extends ScreenView {
     const gridNode = new QuadrilateralGridNode( model.modelBoundsProperty, model.symmetryGridVisibleProperty, this.modelViewTransform );
     gridNode.leftTop = boundsRectangle.leftTop.plusScalar( BORDER_RECTANGLE_LINE_WIDTH / 2 );
     this.addChild( gridNode );
+
+    if ( QuadrilateralQueryParameters.soundBoard ) {
+
+      const soundBoardDialog = new Dialog( new QuadrilateralSoundBoardNode(), {
+        title: new Text( 'QuadrilateralSoundBoard', QuadrilateralConstants.PANEL_TITLE_TEXT_OPTIONS )
+      } );
+
+      // this is the "sim", add a button to start calibration
+      const showSoundBoardButton = new TextPushButton( 'Sound Board', {
+        listener: () => {
+          soundBoardDialog.show();
+        },
+
+        textNodeOptions: QuadrilateralConstants.SCREEN_TEXT_OPTIONS,
+
+        // position is relative to the ResetAllButton for now
+        leftBottom: visibilityControls.leftTop.minusXY( 0, 15 )
+      } );
+
+      this.addChild( showSoundBoardButton );
+    }
 
     if ( QuadrilateralQueryParameters.deviceConnection && !QuadrilateralQueryParameters.calibrationDemoDevice ) {
 

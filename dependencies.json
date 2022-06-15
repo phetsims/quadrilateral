@@ -1,5 +1,5 @@
 {
-  "comment": "# quadrilateral 1.0.0-dev.37 Thu Jun 09 2022 21:33:05 GMT-0400 (Eastern Daylight Time)",
+  "comment": "# quadrilateral 1.0.0-dev.38 Fri Jun 10 2022 14:46:58 GMT-0400 (Eastern Daylight Time)",
   "assert": {
     "sha": "c13a8c7741d95fbd8e37619c66ebcca8686dffe7",
     "branch": "master"
@@ -61,7 +61,7 @@
     "branch": "master"
   },
   "quadrilateral": {
-    "sha": "273484f678872975a3d24da975b4f0331b2e7965",
+    "sha": "c8006d47e1205f94598a1f4c9e9cb528cf3a8395",
     "branch": "master"
   },
   "query-string-machine": {

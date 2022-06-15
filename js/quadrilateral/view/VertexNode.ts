@@ -6,7 +6,7 @@
  * @author Jesse Greenberg
  */
 
-import { Circle, CircleOptions, DragListener, KeyboardDragListener, SceneryEvent, Text, Voicing } from '../../../../scenery/js/imports.js';
+import { Circle, CircleOptions, DragListener, KeyboardDragListener, SceneryEvent, Text, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
@@ -31,15 +31,16 @@ type SelfOptions = {
   // a11y - for both PDOM and Voicing
   nameResponse?: null | string;
 };
+type ParentOptions = VoicingOptions & CircleOptions;
 
 // VertexNode sets these properties explicitly from the nameResponse option
-type VertexNodeOptions = SelfOptions & StrictOmit<CircleOptions, 'voicingNameResponse' | 'innerContent'>;
+type VertexNodeOptions = SelfOptions & StrictOmit<ParentOptions, 'voicingNameResponse' | 'innerContent'>;
 
 class VertexNode extends Voicing( Circle, 1 ) {
   private readonly model: QuadrilateralModel;
 
   constructor( vertex: Vertex, vertexLabel: string, model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, providedOptions?: VertexNodeOptions ) {
-    const options = optionize<VertexNodeOptions, SelfOptions, CircleOptions>()( {
+    const options = optionize<VertexNodeOptions, SelfOptions, ParentOptions>()( {
       fill: QuadrilateralColors.quadrilateralShapeColorProperty,
       stroke: QuadrilateralColors.quadrilateralShapeStrokeColorProperty,
       tagName: 'div',

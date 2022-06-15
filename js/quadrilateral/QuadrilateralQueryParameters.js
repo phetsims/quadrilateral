@@ -172,6 +172,13 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     type: 'number',
     defaultValue: 0.1,
     isValidValue: value => value > 0
+  },
+
+  // If present, a button to open a "sound board" dialog will be available to play sounds and example Voicing
+  // strings used in this sim. This may be helpful for interviews if we decide to fake output by playing
+  // sounds that match the user input.
+  soundBoard: {
+    type: 'flag'
   }
 } );
 
