@@ -13,12 +13,13 @@ import Vertex from '../model/Vertex.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Side from '../model/Side.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import EmptyObjectType from '../../../../phet-core/js/types/EmptyObjectType.js';
 
 class VertexDragAreaNode extends Path {
 
   constructor( vertex: Vertex, sides: Side[], modelViewTransform: ModelViewTransform2, providedOptions?: PathOptions ) {
 
-    const options = optionize<PathOptions, {}>()( {
+    const options = optionize<PathOptions, EmptyObjectType>()( {
       fill: `rgba(${dotRandom.nextInt( 255 )},${dotRandom.nextInt( 255 )},${dotRandom.nextInt( 255 )},0.5)`
     }, providedOptions );
 

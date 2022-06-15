@@ -17,6 +17,7 @@ import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import IProperty from '../../../../axon/js/IProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import EmptyObjectType from '../../../../phet-core/js/types/EmptyObjectType.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import Property from '../../../../axon/js/Property.js';
 
@@ -26,7 +27,7 @@ const valuePatternString = '{{label}}: {{value}}';
 class QuadrilateralModelValuePanel extends Panel {
   constructor( model: QuadrilateralModel, providedOptions?: PanelOptions ) {
 
-    const options = optionize<PanelOptions, {}>()( {
+    const options = optionize<PanelOptions, EmptyObjectType>()( {
 
       // looks good for debugging without the panel resizing frequently
       minWidth: 400
