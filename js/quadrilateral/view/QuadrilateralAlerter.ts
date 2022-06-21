@@ -76,7 +76,7 @@ class QuadrilateralAlerter extends Alerter {
   // A new snapshot will be generated when it is time to announce the context response.
   private previousShapeSnapshot: ShapeSnapshot;
 
-  constructor( model: QuadrilateralModel, screenView: QuadrilateralScreenView ) {
+  public constructor( model: QuadrilateralModel, screenView: QuadrilateralScreenView ) {
     super();
 
     const shapeModel = model.quadrilateralShapeModel;

@@ -51,7 +51,7 @@ class Side {
    * @param tandem
    * @param [providedOptions]
    */
-  constructor( vertex1: Vertex, vertex2: Vertex, tandem: Tandem, providedOptions?: SideOptions ) {
+  public constructor( vertex1: Vertex, vertex2: Vertex, tandem: Tandem, providedOptions?: SideOptions ) {
 
     const options = optionize<SideOptions, SideOptions>()( {
 

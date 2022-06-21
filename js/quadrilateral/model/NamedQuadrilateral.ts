@@ -12,17 +12,17 @@ import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import quadrilateral from '../../quadrilateral.js';
 
 class NamedQuadrilateral extends EnumerationValue {
-  static SQUARE = new NamedQuadrilateral();
-  static RECTANGLE = new NamedQuadrilateral();
-  static RHOMBUS = new NamedQuadrilateral();
-  static KITE = new NamedQuadrilateral();
-  static ISOSCELES_TRAPEZOID = new NamedQuadrilateral();
-  static TRAPEZOID = new NamedQuadrilateral();
-  static CONCAVE = new NamedQuadrilateral();
-  static GENERAL_QUADRILATERAL = new NamedQuadrilateral();
+  public static SQUARE = new NamedQuadrilateral();
+  public static RECTANGLE = new NamedQuadrilateral();
+  public static RHOMBUS = new NamedQuadrilateral();
+  public static KITE = new NamedQuadrilateral();
+  public static ISOSCELES_TRAPEZOID = new NamedQuadrilateral();
+  public static TRAPEZOID = new NamedQuadrilateral();
+  public static CONCAVE = new NamedQuadrilateral();
+  public static GENERAL_QUADRILATERAL = new NamedQuadrilateral();
 
   // Gets a list of keys, values and mapping between them.  For use in EnumerationProperty and PhET-iO
-  static enumeration = new Enumeration( NamedQuadrilateral, {
+  public static enumeration = new Enumeration( NamedQuadrilateral, {
     phetioDocumentation: 'Possible named shapes for the quadrilateral.'
   } );
 }

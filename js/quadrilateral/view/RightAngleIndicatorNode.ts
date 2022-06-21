@@ -31,7 +31,7 @@ class RightAngleIndicatorNode extends Path {
    * @param shapeModel
    * @param modelViewTransform
    */
-  constructor( vertex1: Vertex, vertex2: Vertex, vertex3: Vertex, shapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2 ) {
+  public constructor( vertex1: Vertex, vertex2: Vertex, vertex3: Vertex, shapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2 ) {
     super( null, {
       stroke: QuadrilateralColors.rightAngleIndicatorStrokeColorProperty,
       lineWidth: 2

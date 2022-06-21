@@ -17,7 +17,7 @@ import EmptyObjectType from '../../../../phet-core/js/types/EmptyObjectType.js';
 
 class VertexDragAreaNode extends Path {
 
-  constructor( vertex: Vertex, sides: Side[], modelViewTransform: ModelViewTransform2, providedOptions?: PathOptions ) {
+  public constructor( vertex: Vertex, sides: Side[], modelViewTransform: ModelViewTransform2, providedOptions?: PathOptions ) {
 
     const options = optionize<PathOptions, EmptyObjectType>()( {
       fill: `rgba(${dotRandom.nextInt( 255 )},${dotRandom.nextInt( 255 )},${dotRandom.nextInt( 255 )},0.5)`

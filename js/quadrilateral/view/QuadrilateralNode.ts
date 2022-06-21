@@ -221,7 +221,7 @@ class QuadrilateralNode extends Node {
  * Components of the quadrilateral shape are organized under a few H3s.
  */
 class ShapeHeadingNode extends Node {
-  constructor( labelContent: string ) {
+  public constructor( labelContent: string ) {
     super( {
       tagName: 'div',
       labelTagName: 'h3',

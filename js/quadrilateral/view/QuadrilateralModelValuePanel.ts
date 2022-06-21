@@ -25,7 +25,7 @@ const TEXT_OPTIONS = { fontSize: 16 };
 const valuePatternString = '{{label}}: {{value}}';
 
 class QuadrilateralModelValuePanel extends Panel {
-  constructor( model: QuadrilateralModel, providedOptions?: PanelOptions ) {
+  public constructor( model: QuadrilateralModel, providedOptions?: PanelOptions ) {
 
     const options = optionize<PanelOptions, EmptyObjectType>()( {
 

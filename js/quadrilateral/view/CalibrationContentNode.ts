@@ -18,7 +18,7 @@ import EmptyObjectType from '../../../../phet-core/js/types/EmptyObjectType.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 
 class CalibrationContentNode extends VBox {
-  constructor( model: QuadrilateralModel, providedOptions?: VBoxOptions ) {
+  public constructor( model: QuadrilateralModel, providedOptions?: VBoxOptions ) {
 
     const options = optionize<VBoxOptions, EmptyObjectType>()( {
       align: 'center'

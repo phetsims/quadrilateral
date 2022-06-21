@@ -17,7 +17,7 @@ class VertexAngles {
   public readonly vertexCAngle: numberOrNull;
   public readonly vertexDAngle: numberOrNull;
 
-  constructor( vertexAAngle: numberOrNull, vertexBAngle: numberOrNull, vertexCAngle: numberOrNull, vertexDAngle: numberOrNull ) {
+  public constructor( vertexAAngle: numberOrNull, vertexBAngle: numberOrNull, vertexCAngle: numberOrNull, vertexDAngle: numberOrNull ) {
     this.vertexAAngle = vertexAAngle;
     this.vertexBAngle = vertexBAngle;
     this.vertexCAngle = vertexCAngle;

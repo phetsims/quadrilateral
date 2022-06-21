@@ -128,42 +128,42 @@ class QuadrilateralShapeModel {
 
   // Arrays that define the relationship between vertices in the model, either opposite or adjacent once they are
   // assembled to form the quadrilateral shape.
-  adjacentVertices: VertexPair[];
-  oppositeVertices: VertexPair[];
+  public readonly adjacentVertices: VertexPair[];
+  public readonly oppositeVertices: VertexPair[];
 
   // Arrays that define the relationship between Sides in the model, either opposite or adjacent once they are
   // assembled to form the Quadrilateral shape.
-  adjacentSides: SidePair[];
-  oppositeSides: SidePair[];
+  public readonly adjacentSides: SidePair[];
+  public readonly oppositeSides: SidePair[];
 
   // A map that provides the adjacent vertices to the provided Vertex.
-  adjacentVertexMap: Map<Vertex, Vertex[]>;
+  public readonly adjacentVertexMap: Map<Vertex, Vertex[]>;
 
   // A map that provides the opposite vertex from a give vertex.
-  oppositeVertexMap: Map<Vertex, Vertex>;
+  public readonly oppositeVertexMap: Map<Vertex, Vertex>;
 
   // A map that provides the adjacent sides to the provided Side.
-  adjacentSideMap: Map<Side, Side[]>;
+  public readonly adjacentSideMap: Map<Side, Side[]>;
 
   // A map that provides the opposite side from the provided Side.
-  oppositeSideMap: Map<Side, Side>;
+  public readonly oppositeSideMap: Map<Side, Side>;
 
   // An array of all the adjacent VertexPairs that currently have equal angles.
-  adjacentEqualVertexPairsProperty: Property<VertexPair[]>;
+  public readonly adjacentEqualVertexPairsProperty: Property<VertexPair[]>;
 
   // An array of all the opposite VertexPairs that currently have equal angles.
-  oppositeEqualVertexPairsProperty: Property<VertexPair[]>;
+  public readonly oppositeEqualVertexPairsProperty: Property<VertexPair[]>;
 
   // An array of all the adjacent SidePairs that have equal lengths.
-  adjacentEqualSidePairsProperty: Property<SidePair[]>;
+  public readonly adjacentEqualSidePairsProperty: Property<SidePair[]>;
 
   // An array of all the opposite SidePairs that have equal side lengths.
-  oppositeEqualSidePairsProperty: Property<SidePair[]>;
+  public readonly oppositeEqualSidePairsProperty: Property<SidePair[]>;
 
   // An array of all the (opposite) SidePairs that currently parallel with each other.
-  parallelSidePairsProperty: Property<SidePair[]>;
+  public readonly parallelSidePairsProperty: Property<SidePair[]>;
 
-  constructor( model: QuadrilateralModel, providedOptions?: QuadrilateralShapeModelOptions ) {
+  public constructor( model: QuadrilateralModel, providedOptions?: QuadrilateralShapeModelOptions ) {
 
     const options = optionize<QuadrilateralShapeModelOptions, QuadrilateralShapeModelOptions>()( {
 
@@ -484,7 +484,7 @@ class QuadrilateralShapeModel {
    *
    * TODO: I suspect this can be removed, maintining angles like this is no longer a learning goal.
    */
-  getVertexAnglesEqualToSaved( currentVertexAngles: VertexAngles ): boolean {
+  private getVertexAnglesEqualToSaved( currentVertexAngles: VertexAngles ): boolean {
 
     // A value requested by https://github.com/phetsims/quadrilateral/issues/59#issuecomment-1048004794
     const vertexAnglesToleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval * 2;
@@ -1012,7 +1012,7 @@ class QuadrilateralShapeModel {
    * in which Properties are set, which is very important in this sim. Positions need to update, then angles, then
    * parallelogram state, and finally shape name.
    */
-  updateOrderDependentProperties(): void {
+  public updateOrderDependentProperties(): void {
 
     // update angles
     this.vertices.forEach( vertex => {
@@ -1146,7 +1146,7 @@ class QuadrilateralShapeModel {
   /**
    * Update the Property monitoring if opposite sides are parallel with eachother.
    */
-  updateParallelSidePairs(): void {
+  private updateParallelSidePairs(): void {
     const currentParallelSides = this.parallelSidePairsProperty.value;
 
     // only opposite sides can be parallel

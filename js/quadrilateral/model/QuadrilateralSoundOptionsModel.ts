@@ -35,35 +35,35 @@ import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 // constants
 // Enumeration for named sound designs, each with their own options and parameters
 class SoundDesign extends EnumerationValue {
-  static QUARTET = new SoundDesign();
-  static PARALLELS_VOLUME = new SoundDesign();
-  static PARALLELS_STACCATO = new SoundDesign();
-  static SUCCESS_SOUNDS = new SoundDesign();
-  static MAINTENANCE_SOUNDS = new SoundDesign();
+  public static QUARTET = new SoundDesign();
+  public static PARALLELS_VOLUME = new SoundDesign();
+  public static PARALLELS_STACCATO = new SoundDesign();
+  public static SUCCESS_SOUNDS = new SoundDesign();
+  public static MAINTENANCE_SOUNDS = new SoundDesign();
 
   // gets a list of keys, values and mapping between them for EnumerationProperty and PhET-iO
-  static enumeration = new Enumeration( SoundDesign );
+  public static enumeration = new Enumeration( SoundDesign );
 }
 
 
 class QuartetSoundFile extends EnumerationValue {
-  static ONE = new QuartetSoundFile();
-  static TWO = new QuartetSoundFile();
-  static THREE = new QuartetSoundFile();
-  static FOUR = new QuartetSoundFile();
+  public static ONE = new QuartetSoundFile();
+  public static TWO = new QuartetSoundFile();
+  public static THREE = new QuartetSoundFile();
+  public static FOUR = new QuartetSoundFile();
 
   // gets a list of keys, values and mapping between them for EnumerationProperty and PhET-iO
-  static enumeration = new Enumeration( QuartetSoundFile );
+  public static enumeration = new Enumeration( QuartetSoundFile );
 }
 
 class SuccessSoundFile extends EnumerationValue {
-  static ONE = new SuccessSoundFile();
-  static TWO = new SuccessSoundFile();
-  static THREE = new SuccessSoundFile();
-  static FOUR = new SuccessSoundFile();
+  public static ONE = new SuccessSoundFile();
+  public static TWO = new SuccessSoundFile();
+  public static THREE = new SuccessSoundFile();
+  public static FOUR = new SuccessSoundFile();
 
   // gets a list of keys, values and mapping between them for EnumerationProperty and PhET-iO
-  static enumeration = new Enumeration( SuccessSoundFile );
+  public static enumeration = new Enumeration( SuccessSoundFile );
 }
 
 // Maps QuartetSoundFile to the WrappedAudioBuffer for the SoundClip
@@ -83,7 +83,7 @@ class SuccessSoundCollection {
   public readonly failureSound: WrappedAudioBuffer;
   public readonly maintenanceSound: WrappedAudioBuffer;
 
-  constructor( successSound: WrappedAudioBuffer, failureSound: WrappedAudioBuffer, maintenanceSound: WrappedAudioBuffer ) {
+  public constructor( successSound: WrappedAudioBuffer, failureSound: WrappedAudioBuffer, maintenanceSound: WrappedAudioBuffer ) {
     this.successSound = successSound;
     this.failureSound = failureSound;
     this.maintenanceSound = maintenanceSound;
@@ -108,7 +108,7 @@ class QuadrilateralSoundOptionsModel {
   public static AUDIO_BUFFER_MAP = AUDIO_BUFFER_MAP;
   public static SUCCESS_SOUND_COLLECTION_MAP = SUCCESS_SOUND_COLLECTION_MAP;
 
-  constructor() {
+  public constructor() {
 
     // The selected sound design, changing this will change the entire design.
     this.soundDesignProperty = new EnumerationProperty( SoundDesign.SUCCESS_SOUNDS );

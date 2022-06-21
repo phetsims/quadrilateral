@@ -377,7 +377,7 @@ class SuccessSoundView {
    *
    * @param dt - time step for the animation, in seconds
    */
-  step( dt: number ): void {
+  public step( dt: number ): void {
     this.remainingDelayForMaintenanceSound -= dt;
 
     this.timeSinceSuccessSound += dt;

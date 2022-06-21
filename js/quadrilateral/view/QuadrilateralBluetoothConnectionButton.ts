@@ -38,7 +38,7 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
   private topLeftAngle = 0;
   private topRightAngle = 0;
 
-  constructor( quadrilateralModel: QuadrilateralModel, tandem: Tandem ) {
+  public constructor( quadrilateralModel: QuadrilateralModel, tandem: Tandem ) {
 
     // TODO: Handle when device does not support bluetooth with bluetooth.getAvailability.
     // TODO: Handle when browser does not support bluetooth, presumablue !navigator.bluetooth

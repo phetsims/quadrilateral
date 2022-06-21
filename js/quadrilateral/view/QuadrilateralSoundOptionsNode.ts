@@ -145,7 +145,7 @@ class QuadrilateralSoundOptionsNode extends Panel {
         // there are different sets of "success" sounds for these prototypes
         children.push( labelledSuccessSoundRadioButtonGroup );
 
-        // Not available for the "maintenance" design because that design alreadyd includes
+        // Not available for the "maintenance" design because that design already includes
         // what this checkbox provides by default
         if ( design === SoundDesign.SUCCESS_SOUNDS ) {
 
@@ -164,7 +164,7 @@ class QuadrilateralSoundOptionsNode extends Panel {
  * radio buttons are often sub-options under one of the sound design prototypes.
  */
 class LabelledRadioButtonGroup extends VBox {
-  constructor( property: EnumerationProperty<QuartetSoundFile | SuccessSoundFile>, items: AquaRadioButtonGroupItem<QuartetSoundFile | SuccessSoundFile>[], labelString: string, tandem: Tandem ) {
+  public constructor( property: EnumerationProperty<QuartetSoundFile | SuccessSoundFile>, items: AquaRadioButtonGroupItem<QuartetSoundFile | SuccessSoundFile>[], labelString: string, tandem: Tandem ) {
     const labelText = new Text( labelString, TITLE_TEXT_OPTIONS );
     const radioButtonGroup = new VerticalAquaRadioButtonGroup( property, items, {
       tandem: tandem.createTandem( 'radioButtonGroup' )

@@ -22,7 +22,7 @@ class ShapeIdentificationSoundView {
   private readonly allRightAnglesSoundClip: SoundClip;
   private readonly allLengthsEqualSoundClip: SoundClip;
 
-  constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: IReadOnlyProperty<boolean>, shapeIdentificationEnabledProperty: IProperty<boolean> ) {
+  public constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: IReadOnlyProperty<boolean>, shapeIdentificationEnabledProperty: IProperty<boolean> ) {
 
     const soundClipOptions = {
       // don't play sounds while model reset is in progress

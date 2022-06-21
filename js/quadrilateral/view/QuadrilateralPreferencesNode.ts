@@ -22,7 +22,7 @@ import optionize from '../../../../phet-core/js/optionize.js';
 import EmptyObjectType from '../../../../phet-core/js/types/EmptyObjectType.js';
 
 class QuadrilateralPreferencesNode extends Node {
-  constructor( preferencesModel: QuadrilateralPreferencesModel ) {
+  public constructor( preferencesModel: QuadrilateralPreferencesModel ) {
     super();
 
     const shapeIdentificationFeedbackCheckbox = new Checkbox(

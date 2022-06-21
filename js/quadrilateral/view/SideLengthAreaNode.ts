@@ -24,7 +24,7 @@ type SelfOptions = {
 type SideLengthAreaNodeOptions = SelfOptions & NodeOptions;
 
 class SideLengthAreaNode extends Node {
-  constructor( shapeModel: QuadrilateralShapeModel, dragSide: Side, oppositeSide: Side, lengthSide: Side, modelViewTransform: ModelViewTransform2, providedOptions?: SideLengthAreaNodeOptions ) {
+  public constructor( shapeModel: QuadrilateralShapeModel, dragSide: Side, oppositeSide: Side, lengthSide: Side, modelViewTransform: ModelViewTransform2, providedOptions?: SideLengthAreaNodeOptions ) {
 
     const options = optionize<SideLengthAreaNodeOptions, SelfOptions, NodeOptions>()( {
 

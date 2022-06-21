@@ -39,7 +39,7 @@ type VertexNodeOptions = SelfOptions & StrictOmit<ParentOptions, 'voicingNameRes
 class VertexNode extends Voicing( Circle, 1 ) {
   private readonly model: QuadrilateralModel;
 
-  constructor( vertex: Vertex, vertexLabel: string, model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, providedOptions?: VertexNodeOptions ) {
+  public constructor( vertex: Vertex, vertexLabel: string, model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, providedOptions?: VertexNodeOptions ) {
     const options = optionize<VertexNodeOptions, SelfOptions, ParentOptions>()( {
       fill: QuadrilateralColors.quadrilateralShapeColorProperty,
       stroke: QuadrilateralColors.quadrilateralShapeStrokeColorProperty,

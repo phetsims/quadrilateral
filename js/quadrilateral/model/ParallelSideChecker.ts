@@ -55,7 +55,7 @@ class ParallelSideChecker {
    * @param resetNotInProgressProperty - Is the model currently not resetting?
    * @param tandem
    */
-  constructor( oppositeSidePair: SidePair, otherOppositeSidePair: SidePair, shapeChangedEmitter: Emitter, resetNotInProgressProperty: Property<boolean>, tandem: Tandem ) {
+  public constructor( oppositeSidePair: SidePair, otherOppositeSidePair: SidePair, shapeChangedEmitter: Emitter, resetNotInProgressProperty: Property<boolean>, tandem: Tandem ) {
 
     this.sidePair = oppositeSidePair;
 

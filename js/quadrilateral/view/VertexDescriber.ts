@@ -76,7 +76,7 @@ class VertexDescriber {
   public static VertexCornerLabelMap = VertexCornerLabelMap;
   public static AngleComparisonDescriptionMap = AngleComparisonDescriptionMap;
 
-  constructor( vertex: Vertex, quadrilateralShapeModel: QuadrilateralShapeModel ) {
+  public constructor( vertex: Vertex, quadrilateralShapeModel: QuadrilateralShapeModel ) {
     this.vertex = vertex;
     this.quadrilateralShapeModel = quadrilateralShapeModel;
   }

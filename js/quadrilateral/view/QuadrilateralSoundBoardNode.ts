@@ -33,7 +33,7 @@ const BUTTON_SPACING = 5;
 type ButtonType = 'momentary' | 'push';
 
 class QuadrilateralSoundBoardNode extends Node {
-  constructor() {
+  public constructor() {
     super();
 
     const maintenanceSoundClip = new SoundClip( quadMovingInParallelSuccessLoop001_wav, { loop: true } );
@@ -97,7 +97,7 @@ class QuadrilateralSoundBoardNode extends Node {
 }
 
 class PlayAudioButton extends HBox {
-  constructor( labelString: string, createButton: ( ( iconNode: Node ) => ButtonNode ) ) {
+  public constructor( labelString: string, createButton: ( ( iconNode: Node ) => ButtonNode ) ) {
     const labelText = new Text( labelString, QuadrilateralConstants.PANEL_LABEL_TEXT_OPTIONS );
 
 
@@ -118,7 +118,7 @@ class PlayAudioButton extends HBox {
 }
 
 class PlaySoundButton extends PlayAudioButton {
-  constructor( labelString: string, soundClip: SoundClip, buttonType: ButtonType ) {
+  public constructor( labelString: string, soundClip: SoundClip, buttonType: ButtonType ) {
 
     const createButtonNode = ( iconNode: Node ) => {
       let buttonNode;
@@ -161,7 +161,7 @@ class PlaySoundButton extends PlayAudioButton {
 }
 
 class PlayVoicingResponseButton extends PlayAudioButton {
-  constructor( labelString: string, voicingResponse: string ) {
+  public constructor( labelString: string, voicingResponse: string ) {
 
     const createButton = ( iconNode: Node ) => {
       const button = new RectangularPushButton( {

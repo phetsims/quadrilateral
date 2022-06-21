@@ -17,7 +17,7 @@ import quadrilateralStrings from '../quadrilateralStrings.js';
 
 class HapticsInfoDialog extends Dialog {
 
-  constructor() {
+  public constructor() {
 
     const text = new RichText( quadrilateralStrings.hapticsDialogMessage, {
       font: new PhetFont( 16 )

@@ -42,7 +42,7 @@ const OUTER_RADIUS = Vertex.VERTEX_WIDTH / 2 + SLICE_RADIAL_LENGTH;
 const EXTERNAL_ANGLE_GUIDE_LENGTH = SLICE_RADIAL_LENGTH * 8;
 
 class CornerGuideNode extends Node {
-  constructor( vertex1: Vertex, vertex2: Vertex, visibleProperty: BooleanProperty, shapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2 ) {
+  public constructor( vertex1: Vertex, vertex2: Vertex, visibleProperty: BooleanProperty, shapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2 ) {
     super();
 
     // The guide looks like alternating dark and light slices along the annulus, we accomplish this with two paths

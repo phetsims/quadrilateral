@@ -34,7 +34,7 @@ class ShapeSnapshot {
   public readonly bottomSideLength: number;
   public readonly area: number;
 
-  constructor( shapeModel: QuadrilateralShapeModel ) {
+  public constructor( shapeModel: QuadrilateralShapeModel ) {
     this.topSideTilt = shapeModel.topSide.tiltProperty.value;
     this.rightSideTilt = shapeModel.rightSide.tiltProperty.value;
     this.bottomSideTilt = shapeModel.bottomSide.tiltProperty.value;

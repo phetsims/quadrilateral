@@ -15,7 +15,7 @@ const playAreaDescriptionString = quadrilateralStrings.a11y.screenSummary.playAr
 const controlAreaDescriptionString = quadrilateralStrings.a11y.screenSummary.controlAreaDescription;
 
 class QuadrilateralScreenSummaryContentNode extends Node {
-  constructor() {
+  public constructor() {
     super();
 
     // A description of what is in the play area

@@ -24,7 +24,7 @@ const GRID_LINE_OPTIONS = {
 };
 
 class QuadrilateralGridNode extends Node {
-  constructor( modelBoundsProperty: Property<Bounds2 | null>, visibleProperty: IReadOnlyProperty<boolean>, modelViewTransform: ModelViewTransform2 ) {
+  public constructor( modelBoundsProperty: Property<Bounds2 | null>, visibleProperty: IReadOnlyProperty<boolean>, modelViewTransform: ModelViewTransform2 ) {
     super();
 
     const chartTransform = new ChartTransform();

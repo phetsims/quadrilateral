@@ -71,7 +71,7 @@ class QuadrilateralModel {
   public static MAJOR_GRID_SPACING = 0.05;
   public static MINOR_GRID_SPACING: number = QuadrilateralModel.MAJOR_GRID_SPACING / 4;
 
-  constructor( preferencesModel: QuadrilateralPreferencesModel, tandem: Tandem ) {
+  public constructor( preferencesModel: QuadrilateralPreferencesModel, tandem: Tandem ) {
 
     this.preferencesModel = preferencesModel;
 

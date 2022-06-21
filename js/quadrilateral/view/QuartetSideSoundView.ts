@@ -30,6 +30,7 @@ import Side from '../model/Side.js';
 import WrappedAudioBuffer from '../../../../tambo/js/WrappedAudioBuffer.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 
 // constants
 // TODO: calculate these from constants, should be based on the limitations of each vertex bounds
@@ -37,7 +38,7 @@ const MIN_LENGTH = 0.10;
 const MAX_LENGTH_SQUARE = 2;
 
 // Sound clips will be created between these exponentials, using these values in a function to set the playback
-// rate for imported sound clips. The playback rate will will be set by Math.pow( 2, i / 12 ), where i is between
+// rate for imported sound clips. The playback rate will be set by Math.pow( 2, i / 12 ), where i is between
 // these values, effectively creating a span of 4 octaves with tones along the chromatic scale.
 const MAX_SOUND_CLIP_EXPONENTIAL = 24;
 const MIN_SOUND_CLIP_EXPONENTIAL = -24;
@@ -75,8 +76,7 @@ class QuartetSideSoundView {
   private readonly disposeQuartetSideSoundView: () => void;
   private readonly resetNotInProgressProperty: BooleanProperty;
 
-  // TODO: How to do EnumerationDeprecatedProperty, see https://github.com/phetsims/quadrilateral/issues/27
-  constructor( side: Side, resetNotInProgressProperty: BooleanProperty, quartetSoundFileProperty: any ) {
+  public constructor( side: Side, resetNotInProgressProperty: BooleanProperty, quartetSoundFileProperty: EnumerationProperty<QuartetSoundFile> ) {
     this.side = side;
     this.resetNotInProgressProperty = resetNotInProgressProperty;
 
@@ -225,7 +225,7 @@ class SoundClipCollection extends SoundGenerator {
   private readonly playDuration: number;
   private remainingPlayTime: number;
   private clipOutputLevel: number;
-  playing: boolean;
+  public playing: boolean;
   private fadingIn: boolean;
   private fadingOut: boolean;
   private readonly playTimeToFadeInOutputLevel: LinearFunction;
@@ -246,7 +246,7 @@ class SoundClipCollection extends SoundGenerator {
    *                                       below this rate.
    * @param providedOptions
    */
-  constructor( wrappedAudioBuffer: WrappedAudioBuffer, resetNotInProgressProperty: BooleanProperty, defaultPlaybackRate: number, providedOptions?: SoundGeneratorOptions ) {
+  public constructor( wrappedAudioBuffer: WrappedAudioBuffer, resetNotInProgressProperty: BooleanProperty, defaultPlaybackRate: number, providedOptions?: SoundGeneratorOptions ) {
     super( providedOptions );
 
     this.defaultPlaybackRate = defaultPlaybackRate;
@@ -277,7 +277,7 @@ class SoundClipCollection extends SoundGenerator {
     this.fadingOut = false;
 
     // maps the amount of time played from 0 to fadeDuration to an output level so the sound fades in and out,
-    // but is at full volume while outside of fadeDuration
+    // but is at full volume while outside fadeDuration
     this.playTimeToFadeInOutputLevel = new LinearFunction( 0, this.fadeDuration, 0, 1, true );
     this.playTimeToFadeOutOutputLevel = new LinearFunction( this.playDuration - this.fadeDuration, this.playDuration, 1, 0, true );
 

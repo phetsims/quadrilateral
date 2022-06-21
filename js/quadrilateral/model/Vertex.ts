@@ -55,7 +55,7 @@ class Vertex {
    *                                  a tangible device.
    * @param tandem
    */
-  constructor( initialPosition: Vector2, vertexLabel: VertexLabel, smoothingLengthProperty: IReadOnlyProperty<number>, tandem: Tandem ) {
+  public constructor( initialPosition: Vector2, vertexLabel: VertexLabel, smoothingLengthProperty: IReadOnlyProperty<number>, tandem: Tandem ) {
 
     this.smoothingLengthProperty = smoothingLengthProperty;
 

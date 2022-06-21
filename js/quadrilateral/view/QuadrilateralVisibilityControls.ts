@@ -29,7 +29,7 @@ type SelfOptions = {
 type QuadrilateralVisibilityControlsOptions = SelfOptions & StrictOmit<VBoxOptions, 'children'>
 
 class QuadrilateralVisibilityControls extends VBox {
-  constructor( cornerLabelsVisibleProperty: BooleanProperty, cornerGuideVisibleProperty: BooleanProperty, symmetryGridVisibleProperty: BooleanProperty, providedOptions?: QuadrilateralVisibilityControlsOptions ) {
+  public constructor( cornerLabelsVisibleProperty: BooleanProperty, cornerGuideVisibleProperty: BooleanProperty, symmetryGridVisibleProperty: BooleanProperty, providedOptions?: QuadrilateralVisibilityControlsOptions ) {
 
     const options = optionize<QuadrilateralVisibilityControlsOptions, SelfOptions, VBoxOptions>()( {
       align: 'left',

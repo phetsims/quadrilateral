@@ -69,7 +69,7 @@ class SideDescriber {
   private side: Side;
   private quadrilateralShapeModel: QuadrilateralShapeModel;
 
-  constructor( side: Side, quadrilateralShapeModel: QuadrilateralShapeModel ) {
+  public constructor( side: Side, quadrilateralShapeModel: QuadrilateralShapeModel ) {
     this.side = side;
     this.quadrilateralShapeModel = quadrilateralShapeModel;
   }
