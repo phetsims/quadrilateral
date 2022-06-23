@@ -22,14 +22,14 @@ import optionize from '../../../../phet-core/js/optionize.js';
 import EmptyObjectType from '../../../../phet-core/js/types/EmptyObjectType.js';
 
 class QuadrilateralPreferencesNode extends Node {
-  public constructor( preferencesModel: QuadrilateralPreferencesModel ) {
+  public constructor( preferencesModel: QuadrilateralPreferencesModel, tandem: Tandem ) {
     super();
 
     const shapeIdentificationFeedbackCheckbox = new Checkbox(
       new Text( 'Shape Identification Feedback', QuadrilateralConstants.PANEL_LABEL_TEXT_OPTIONS ),
       preferencesModel.shapeIdentificationFeedbackEnabledProperty,
       {
-        tandem: Tandem.GENERAL_VIEW
+        tandem: tandem.createTandem( 'shapeIdentificationFeedbackCheckbox' )
       }
     );
 
@@ -53,7 +53,7 @@ class QuadrilateralPreferencesNode extends Node {
 
     const otherControls = [
       tangibleControls,
-      new ClapperboardButton( { tandem: Tandem.GENERAL_VIEW.createTandem( 'clapperboardButton' ) } ),
+      new ClapperboardButton( { tandem: tandem.createTandem( 'clapperboardButton' ) } ),
       shapeIdentificationFeedbackCheckbox
     ];
 
@@ -64,7 +64,7 @@ class QuadrilateralPreferencesNode extends Node {
     } );
 
     const controls = new HBox( {
-      children: [ new QuadrilateralSoundOptionsNode( preferencesModel.soundOptionsModel, Tandem.GENERAL_VIEW ), otherControlsBox ],
+      children: [ new QuadrilateralSoundOptionsNode( preferencesModel.soundOptionsModel, tandem.createTandem( 'soundOptionsNode' ) ), otherControlsBox ],
       spacing: 15,
       align: 'top'
     } );
