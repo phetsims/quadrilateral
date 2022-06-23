@@ -25,13 +25,9 @@ class QuadrilateralPreferencesNode extends Node {
   public constructor( preferencesModel: QuadrilateralPreferencesModel, tandem: Tandem ) {
     super();
 
-    const shapeIdentificationFeedbackCheckbox = new Checkbox(
-      new Text( 'Shape Identification Feedback', QuadrilateralConstants.PANEL_LABEL_TEXT_OPTIONS ),
-      preferencesModel.shapeIdentificationFeedbackEnabledProperty,
-      {
-        tandem: tandem.createTandem( 'shapeIdentificationFeedbackCheckbox' )
-      }
-    );
+    const shapeIdentificationFeedbackCheckbox = new Checkbox( preferencesModel.shapeIdentificationFeedbackEnabledProperty, new Text( 'Shape Identification Feedback', QuadrilateralConstants.PANEL_LABEL_TEXT_OPTIONS ), {
+      tandem: tandem.createTandem( 'shapeIdentificationFeedbackCheckbox' )
+    } );
 
     // Controls specifically for tangible connection
     const gridSpacingNumberControl = new TangiblePropertyNumberControl( 'Position interval', preferencesModel.deviceGridSpacingProperty, {

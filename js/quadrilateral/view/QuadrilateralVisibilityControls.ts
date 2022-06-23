@@ -39,7 +39,7 @@ class QuadrilateralVisibilityControls extends VBox {
     }, providedOptions );
 
     const cornerLabelsText = new Text( quadrilateralStrings.cornerLabels, TEXT_OPTIONS );
-    const cornerLabelsCheckbox = new Checkbox( cornerLabelsText, cornerLabelsVisibleProperty, {
+    const cornerLabelsCheckbox = new Checkbox( cornerLabelsVisibleProperty, cornerLabelsText, {
 
       // pdom
       labelTagName: 'label',
@@ -58,7 +58,7 @@ class QuadrilateralVisibilityControls extends VBox {
     } );
 
     const cornerGuideText = new Text( quadrilateralStrings.cornerGuides, TEXT_OPTIONS );
-    const cornerGuideCheckbox = new Checkbox( cornerGuideText, cornerGuideVisibleProperty, {
+    const cornerGuideCheckbox = new Checkbox( cornerGuideVisibleProperty, cornerGuideText, {
 
       // pdom
       labelTagName: 'label',
@@ -77,7 +77,7 @@ class QuadrilateralVisibilityControls extends VBox {
     } );
 
     const symmetryGridText = new Text( quadrilateralStrings.symmetryGrid, TEXT_OPTIONS );
-    const symmetryGridCheckbox = new Checkbox( symmetryGridText, symmetryGridVisibleProperty, {
+    const symmetryGridCheckbox = new Checkbox( symmetryGridVisibleProperty, symmetryGridText, {
 
       // pdom
       labelTagName: 'label',

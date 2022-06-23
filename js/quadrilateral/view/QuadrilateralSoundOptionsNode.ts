@@ -111,7 +111,7 @@ class QuadrilateralSoundOptionsNode extends Panel {
     // a checkbox to control the behavior of the maintenance sound
     const maintenanceOptionLabel = new Text( 'Constant lengths for maintenance sound', LABEL_TEXT_OPTIONS );
 
-    const maintenanceSoundCheckbox = new Checkbox( maintenanceOptionLabel, model.maintenanceSoundRequiresEqualLengthsProperty, {
+    const maintenanceSoundCheckbox = new Checkbox( model.maintenanceSoundRequiresEqualLengthsProperty, maintenanceOptionLabel, {
       tandem: tandem.createTandem( 'maintenanceSoundCheckbox' )
     } );
 
