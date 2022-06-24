@@ -115,8 +115,8 @@ class QuadrilateralSoundOptionsModel {
 
     // Property that controls the base sound for a few of the prototypes. Some prototypes have a base sound and
     // the state of the sim changes the frequency and layering of the base sound. But there are a few base
-    // sounds to choose frome.
-    this.baseSoundFileProperty = new EnumerationProperty( QuartetSoundFile.FOUR );
+    // sounds to choose from.
+    this.baseSoundFileProperty = new EnumerationProperty( QuartetSoundFile.ONE );
 
     // For the "Success" sound prototype, a sound is played when reaching a parallelogram, leaving a parallelogram,
     // and when the parallelogram is maintained while the shape changes. Within this paradigm there are
