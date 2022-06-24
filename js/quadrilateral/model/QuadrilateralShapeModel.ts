@@ -89,6 +89,11 @@ class QuadrilateralShapeModel {
   public readonly sideBCSideDAParallelSideChecker: ParallelSideChecker;
   public readonly parallelSideCheckers: ParallelSideChecker[];
 
+  // Observables that indicate when the sides become parallel. Updated after all vertex positions have been set
+  // so they are consistently up to date.
+  public readonly sideABSideCDParallelProperty = new BooleanProperty( false );
+  public readonly sideBCSideDAParallelProperty = new BooleanProperty( false );
+
   // The area of the quadrilateral. Updated in "deferred" Properties, only after positions of all four vertices are
   // determined.
   public readonly areaProperty: IProperty<number>;
@@ -1033,6 +1038,9 @@ class QuadrilateralShapeModel {
     this.updateSideLengthComparisons();
 
     this.isParallelogramProperty.set( this.getIsParallelogram() );
+    this.sideABSideCDParallelProperty.value = this.sideABSideCDParallelSideChecker.areSidesParallel();
+    this.sideBCSideDAParallelProperty.value = this.sideBCSideDAParallelSideChecker.areSidesParallel();
+
     this.areaProperty.set( this.getArea() );
 
     // We need to determine if side lengths have changed in the step function because we need to calculate

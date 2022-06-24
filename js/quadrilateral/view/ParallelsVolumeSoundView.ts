@@ -19,6 +19,9 @@ import QuadrilateralSoundOptionsModel, { SuccessSoundFile } from '../model/Quadr
 import WrappedAudioBuffer from '../../../../tambo/js/WrappedAudioBuffer.js';
 import ParallelSideChecker from '../model/ParallelSideChecker.js';
 
+import shapeIdentificationWhenNotAParallelogram_mp3 from '../../../sounds/shapeIdentificationWhenNotAParallelogram_mp3.js';
+import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
+
 // Maps the difference in tilt between pairs of sides to output level. When tilt is equal difference will be zero
 // and sound will play at highest output level. Fades out as difference grows, and eventually goes silent.
 const PARALLEL_PROXIMITY_TO_OUTPUT_LEVEL = new LinearFunction( 0, Math.PI / 2, 0.5, 0, true );
@@ -96,10 +99,24 @@ class ParallelsVolumeSoundView {
     };
     this.model.resetNotInProgressProperty.link( resetListener );
 
+
+    // Requested in https://github.com/phetsims/quadrilateral/issues/171, when the sides enter parallel state
+    // we hear this success "click"
+    const soundClipOptions = { enableControlProperties: [ model.resetNotInProgressProperty ] };
+    const inParallelSoundClip = new SoundClip( shapeIdentificationWhenNotAParallelogram_mp3, soundClipOptions );
+    soundManager.addSoundGenerator( inParallelSoundClip );
+
+    const inParallelListener = ( parallel: boolean ) => parallel && inParallelSoundClip.play();
+    model.quadrilateralShapeModel.sideABSideCDParallelProperty.link( inParallelListener );
+    model.quadrilateralShapeModel.sideBCSideDAParallelProperty.link( inParallelListener );
+
     this.disposeParallelsVolumeSoundView = () => {
       this.model.quadrilateralShapeModel.shapeChangedEmitter.removeListener( shapeChangeListener );
       soundOptionsModel.baseSoundFileProperty.unlink( createSoundClipsListener );
       this.model.resetNotInProgressProperty.unlink( resetListener );
+
+      model.quadrilateralShapeModel.sideABSideCDParallelProperty.unlink( inParallelListener );
+      model.quadrilateralShapeModel.sideBCSideDAParallelProperty.unlink( inParallelListener );
     };
   }
 
