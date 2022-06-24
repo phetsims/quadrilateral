@@ -16,21 +16,23 @@ import soundManager from '../../../../tambo/js/soundManager.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import QuadrilateralSoundOptionsModel, { SuccessSoundFile } from '../model/QuadrilateralSoundOptionsModel.js';
-import Multilink, { UnknownMultilink } from '../../../../axon/js/Multilink.js';
-import Side from '../model/Side.js';
 import WrappedAudioBuffer from '../../../../tambo/js/WrappedAudioBuffer.js';
+import ParallelSideChecker from '../model/ParallelSideChecker.js';
 
 // Maps the difference in tilt between pairs of sides to output level. When tilt is equal difference will be zero
 // and sound will play at highest output level. Fades out as difference grows, and eventually goes silent.
-const TILT_DIFFERENCE_TO_OUTPUT_LEVEL = new LinearFunction( 0, 0.5, 0.5, 0, true );
+const PARALLEL_PROXIMITY_TO_OUTPUT_LEVEL = new LinearFunction( 0, Math.PI / 2, 0.5, 0, true );
 
 class ParallelsVolumeSoundView {
   private model: QuadrilateralModel;
   private leftRightSideGenerator: null | SoundClipChord;
   private topBottomSideGenerator: null | SoundClipChord;
 
-  private leftRightSideMultilink: UnknownMultilink | null;
-  private topBottomSideMultilink: UnknownMultilink | null;
+  // References to the listeners that will be used to start/stop or change the parameters of SoundClips depending
+  // on the state of the model. Saved for dispose.
+  private leftRightTiltListener: ( () => void ) | null = null;
+  private topBottomTiltListener: ( () => void ) | null = null;
+
   private leftRightSideOutputLevel: number;
   private topBottomSideOutputLevel: number;
   private isPlaying: boolean;
@@ -43,11 +45,6 @@ class ParallelsVolumeSoundView {
     // SoundGenerators that play sounds for each set of sides.
     this.leftRightSideGenerator = null;
     this.topBottomSideGenerator = null;
-
-    // References to the Multilinks that will be used to start/stop or change the parameters of SoundClips depending
-    // on the state of the model.
-    this.leftRightSideMultilink = null;
-    this.topBottomSideMultilink = null;
 
     // Ouptut levels (volume) for the sounds associated with each SoundClip.
     this.leftRightSideOutputLevel = 0;
@@ -83,7 +80,7 @@ class ParallelsVolumeSoundView {
         if ( this.topBottomSideGenerator && !this.topBottomSideGenerator.isPlayingProperty.value ) {
 
           // the time constant fades in a bit so that it isn't harsh
-          this.leftRightSideGenerator.setOutputLevel( this.topBottomSideOutputLevel / 2 );
+          this.topBottomSideGenerator.setOutputLevel( this.topBottomSideOutputLevel / 2 );
           this.topBottomSideGenerator.play();
           this.topBottomSideGenerator.setOutputLevel( this.topBottomSideOutputLevel, 0.3 );
         }
@@ -112,20 +109,22 @@ class ParallelsVolumeSoundView {
   private disposeSoundClips(): void {
 
     if ( this.leftRightSideGenerator ) {
-      assert && assert( this.leftRightSideMultilink, 'The multilink must be established before we dispose of it.' );
+      assert && assert( this.leftRightTiltListener, 'The multilink must be established before we dispose of it.' );
 
       soundManager.removeSoundGenerator( this.leftRightSideGenerator );
       this.leftRightSideGenerator.dispose();
 
-      Multilink.unmultilink( this.leftRightSideMultilink! );
+      this.model.quadrilateralShapeModel.shapeChangedEmitter.removeListener( this.leftRightTiltListener! );
+      this.leftRightTiltListener = null;
     }
     if ( this.topBottomSideGenerator ) {
-      assert && assert( this.topBottomSideMultilink, 'The multilink must be established before we dispose of it.' );
+      assert && assert( this.topBottomTiltListener, 'The multilink must be established before we dispose of it.' );
 
       soundManager.removeSoundGenerator( this.topBottomSideGenerator );
       this.topBottomSideGenerator.dispose();
 
-      Multilink.unmultilink( this.topBottomSideMultilink! );
+      this.model.quadrilateralShapeModel.shapeChangedEmitter.removeListener( this.topBottomTiltListener! );
+      this.topBottomTiltListener = null;
     }
   }
 
@@ -176,16 +175,19 @@ class ParallelsVolumeSoundView {
     this.leftRightSideGenerator.setOutputLevel( 0 );
     this.topBottomSideGenerator.setOutputLevel( 0 );
 
-    this.leftRightSideMultilink = this.createTiltMultilink( this.model.quadrilateralShapeModel.leftSide, this.model.quadrilateralShapeModel.rightSide, outputLevel => {
-      assert && assert( this.leftRightSideGenerator, 'The SoundGenerator has been disposed of, you can no longer set its output level' );
+    const shapeModel = this.model.quadrilateralShapeModel;
+
+    this.leftRightTiltListener = this.createTiltListener( shapeModel.sideBCSideDAParallelSideChecker, outputLevel => {
       this.leftRightSideOutputLevel = outputLevel;
       this.leftRightSideGenerator!.outputLevel = outputLevel;
     } );
-    this.topBottomSideMultilink = this.createTiltMultilink( this.model.quadrilateralShapeModel.topSide, this.model.quadrilateralShapeModel.bottomSide, outputLevel => {
-      assert && assert( this.leftRightSideGenerator, 'The SoundGenerator has been disposed of, you can no longer set its output level' );
+    shapeModel.shapeChangedEmitter.addListener( this.leftRightTiltListener );
+
+    this.topBottomTiltListener = this.createTiltListener( shapeModel.sideABSideCDParallelSideChecker, outputLevel => {
       this.topBottomSideOutputLevel = outputLevel;
       this.topBottomSideGenerator!.outputLevel = outputLevel;
     } );
+    shapeModel.shapeChangedEmitter.addListener( this.topBottomTiltListener );
 
     soundManager.addSoundGenerator( this.leftRightSideGenerator );
     soundManager.addSoundGenerator( this.topBottomSideGenerator );
@@ -212,19 +214,18 @@ class ParallelsVolumeSoundView {
   }
 
   /**
-   * Creates and returns (for disposal) a multilink that sets the output level of a SoundGenerator from the
-   * difference in tilts of two sides.
+   * Creates and returns (for disposal) a listener that sets the output level of a SoundGenerator from the proximity
+   * to parallel for two sides.
    */
-  public createTiltMultilink( sideA: Side, sideB: Side, applyOutputLevel: ( outputLevel: number ) => void ): UnknownMultilink {
-    return Multilink.multilink(
-      [ sideA.tiltProperty, sideB.tiltProperty ],
-      ( leftTilt, rightTilt ) => {
-
-        assert && assert( leftTilt !== Number.POSITIVE_INFINITY && rightTilt !== Number.POSITIVE_INFINITY, 'tilts cannot be infinite in sound design' );
-        const outputLevel = TILT_DIFFERENCE_TO_OUTPUT_LEVEL.evaluate( Math.abs( leftTilt - rightTilt ) );
-        applyOutputLevel( outputLevel );
+  private createTiltListener( parallelSideChecker: ParallelSideChecker, applyOutputLevel: ( outputLevel: number ) => void ): ( () => void ) {
+    return () => {
+      let outputLevel = 0;
+      if ( !parallelSideChecker.areSidesParallel() ) {
+        outputLevel = PARALLEL_PROXIMITY_TO_OUTPUT_LEVEL.evaluate( parallelSideChecker.getProximityToParallelValue() );
       }
-    );
+
+      applyOutputLevel( outputLevel );
+    };
   }
 }
 

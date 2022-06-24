@@ -179,6 +179,14 @@ class ParallelSideChecker {
   }
 
   /**
+   * Returns a value indicating how close the sides are to parallel. 0 indicates perfectly parallel and larger
+   * values (up to Math.PI) indicate farther form parallel.
+   */
+  public getProximityToParallelValue(): number {
+    return Math.abs( this.side1.vertex1.angleProperty.value! + this.side2.vertex2.angleProperty.value! - Math.PI );
+  }
+
+  /**
    * Returns whether the two sides are currently parallel within angleToleranceInterval.
    */
   public areSidesParallel(): boolean {
