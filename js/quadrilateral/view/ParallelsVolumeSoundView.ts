@@ -18,9 +18,11 @@ import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import QuadrilateralSoundOptionsModel, { SuccessSoundFile } from '../model/QuadrilateralSoundOptionsModel.js';
 import WrappedAudioBuffer from '../../../../tambo/js/WrappedAudioBuffer.js';
 import ParallelSideChecker from '../model/ParallelSideChecker.js';
+import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
 
 import shapeIdentificationWhenNotAParallelogram_mp3 from '../../../sounds/shapeIdentificationWhenNotAParallelogram_mp3.js';
-import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
+import quadIntoParallel001_mp3 from '../../../sounds/quadIntoParallel001_mp3.js';
+import quadOutOfParallel001_mp3 from '../../../sounds/quadOutOfParallel001_mp3.js';
 
 // Maps the difference in tilt between pairs of sides to output level. When tilt is equal difference will be zero
 // and sound will play at highest output level. Fades out as difference grows, and eventually goes silent.
@@ -99,16 +101,34 @@ class ParallelsVolumeSoundView {
     };
     this.model.resetNotInProgressProperty.link( resetListener );
 
-
     // Requested in https://github.com/phetsims/quadrilateral/issues/171, when the sides enter parallel state
     // we hear this success "click"
-    const soundClipOptions = { enableControlProperties: [ model.resetNotInProgressProperty ] };
-    const inParallelSoundClip = new SoundClip( shapeIdentificationWhenNotAParallelogram_mp3, soundClipOptions );
+    const inParallelSoundClip = new SoundClip( shapeIdentificationWhenNotAParallelogram_mp3, {
+      enableControlProperties: [ model.resetNotInProgressProperty ]
+    } );
     soundManager.addSoundGenerator( inParallelSoundClip );
 
     const inParallelListener = ( parallel: boolean ) => parallel && inParallelSoundClip.play();
     model.quadrilateralShapeModel.sideABSideCDParallelProperty.link( inParallelListener );
     model.quadrilateralShapeModel.sideBCSideDAParallelProperty.link( inParallelListener );
+
+    // Requested in https://github.com/phetsims/quadrilateral/issues/171, play sound when we enter or leave
+    // parallelogram
+    const soundClipOptions = { enableControlProperties: [ model.resetNotInProgressProperty ], initialOutputLevel: 0.5 };
+    const successSoundClip = new SoundClip( quadIntoParallel001_mp3, soundClipOptions );
+    soundManager.addSoundGenerator( successSoundClip );
+
+    const failureSoundClip = new SoundClip( quadOutOfParallel001_mp3, soundClipOptions );
+    soundManager.addSoundGenerator( failureSoundClip );
+
+    model.quadrilateralShapeModel.isParallelogramProperty.link( isParallel => {
+      if ( isParallel ) {
+        successSoundClip.play();
+      }
+      else {
+        failureSoundClip.play();
+      }
+    } );
 
     this.disposeParallelsVolumeSoundView = () => {
       this.model.quadrilateralShapeModel.shapeChangedEmitter.removeListener( shapeChangeListener );
