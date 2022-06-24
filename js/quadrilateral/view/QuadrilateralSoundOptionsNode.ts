@@ -38,13 +38,13 @@ class QuadrilateralSoundOptionsNode extends Panel {
     const soundDesignLabelText = new Text( 'Sound Design', TITLE_TEXT_OPTIONS );
 
     const optionsParentNode = new Node();
-    const designComboBox = new ComboBox( [
+    const designComboBox = new ComboBox( model.soundDesignProperty, [
       new ComboBoxItem( new Text( 'Maintenance Sounds', LABEL_TEXT_OPTIONS ), SoundDesign.MAINTENANCE_SOUNDS, { tandemName: 'successWithMaintenanceItem' } ),
       new ComboBoxItem( new Text( 'Success Sounds', LABEL_TEXT_OPTIONS ), SoundDesign.SUCCESS_SOUNDS, { tandemName: 'successItem' } ),
       new ComboBoxItem( new Text( 'Quartet', LABEL_TEXT_OPTIONS ), SoundDesign.QUARTET, { tandemName: 'quartetItem' } ),
       new ComboBoxItem( new Text( 'Parallels Volume', LABEL_TEXT_OPTIONS ), SoundDesign.PARALLELS_VOLUME, { tandemName: 'parallelsVolumeItem' } ),
       new ComboBoxItem( new Text( 'Parallels Staccato', LABEL_TEXT_OPTIONS ), SoundDesign.PARALLELS_STACCATO, { tandemName: 'parallelsStaccatoItem' } )
-    ], model.soundDesignProperty, optionsParentNode, {
+    ], optionsParentNode, {
 
       tandem: tandem.createTandem( 'designComboBox' )
     } );
