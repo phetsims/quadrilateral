@@ -139,7 +139,7 @@ class PlaySoundButton extends PlayAudioButton {
       else {
 
         const pressedProperty = new BooleanProperty( false );
-        buttonNode = new RectangularMomentaryButton( false, true, pressedProperty, {
+        buttonNode = new RectangularMomentaryButton( pressedProperty, false, true, {
           content: iconNode
         } );
 
