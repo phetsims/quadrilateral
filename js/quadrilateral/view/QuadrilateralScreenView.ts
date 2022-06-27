@@ -35,6 +35,7 @@ import QuadrilateralAlerter from './QuadrilateralAlerter.js';
 import QuadrilateralBluetoothConnectionButton from './QuadrilateralBluetoothConnectionButton.js';
 import QuadrilateralPreferencesModel from '../model/QuadrilateralPreferencesModel.js';
 import QuadrilateralSoundBoardNode from './QuadrilateralSoundBoardNode.js';
+import QuadrilateralMediaPipe from './QuadrilateralMediaPipe.js';
 
 const MODEL_BOUNDS = QuadrilateralQueryParameters.calibrationDemoDevice ? new Bounds2( -4.5, -4.5, 4.5, 4.5 ) :
                      new Bounds2( -1, -1, 1, 1 );
@@ -48,6 +49,7 @@ class QuadrilateralScreenView extends ScreenView {
   private readonly quadrilateralSoundView: QuadrilateralSoundView | null;
   public readonly quadrilateralDescriber: QuadrilateralDescriber;
   private readonly resetAllButton: ResetAllButton;
+  private readonly mediaPipe: QuadrilateralMediaPipe | null = null;
 
   public constructor( model: QuadrilateralModel, preferencesModel: QuadrilateralPreferencesModel, tandem: Tandem ) {
     super( {
@@ -231,6 +233,10 @@ class QuadrilateralScreenView extends ScreenView {
       }
     }
 
+    if ( QuadrilateralQueryParameters.mediaPipe ) {
+      this.mediaPipe = new QuadrilateralMediaPipe( model );
+    }
+
     // pdom
     this.pdomPlayAreaNode.pdomOrder = [ this.quadrilateralNode ];
     this.pdomControlAreaNode.pdomOrder = [ visibilityControls, this.resetAllButton ];
@@ -318,6 +324,8 @@ class QuadrilateralScreenView extends ScreenView {
     if ( this.quadrilateralSoundView ) {
       this.quadrilateralSoundView.step( dt );
     }
+
+    this.mediaPipe && this.mediaPipe.step( dt );
 
     this.quadrilateralNode && this.quadrilateralNode.step( dt );
 

@@ -1211,6 +1211,8 @@ class QuadrilateralShapeModel {
    * Set the positions of vertices directly from a tangible device. A connection to a physical device might use this
    * function to set the positions in model space. If it doesn't have absolute positioning it may need to use
    * setPositionsFromLengthAndAngleData instead.
+   *
+   * Currently this is being used by the OpenCV prototype and a prototype using MediaPipe.
    */
   public setPositionsFromAbsolutePositionData( proposedPositions: VertexWithProposedPosition[] ): void {
 
@@ -1226,8 +1228,19 @@ class QuadrilateralShapeModel {
         // only try to set a new position if values look reasonable - we want to handle this gracefully, the sim
         // shouldn't crash if data isn't right
         if ( proposedPosition && proposedPosition.isFinite() ) {
+
+          // transform from tangible to virtual coordinates
           const virtualPosition = this.model.physicalToVirtualTransform!.modelToViewPosition( proposedPosition );
-          constrainedPosition = QuadrilateralModel.getClosestGridPosition( virtualPosition, this.model.preferencesModel.deviceGridSpacingProperty.value );
+
+          // apply smoothing over a number of values to reduce noise
+          constrainedPosition = vertexWithProposedPosition.vertex.smoothPosition( virtualPosition! );
+
+          // constrain to the closest grid position
+          // With a high enough smoothingLength, this isn't necessary with MediaPipe.
+          // constrainedPosition = QuadrilateralModel.getClosestGridPosition( virtualPosition, this.model.preferencesModel.deviceGridSpacingProperty.value );
+
+          // constrain within model bounds
+          constrainedPosition = this.model.modelBoundsProperty.value?.closestPointTo( constrainedPosition );
         }
         else {
 
