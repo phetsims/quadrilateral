@@ -11,7 +11,6 @@
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { HBox, Node, Text, VBox } from '../../../../scenery/js/imports.js';
 import ComboBox from '../../../../sun/js/ComboBox.js';
-import ComboBoxItem from '../../../../sun/js/ComboBoxItem.js';
 import Panel from '../../../../sun/js/Panel.js';
 import VerticalAquaRadioButtonGroup from '../../../../sun/js/VerticalAquaRadioButtonGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -39,11 +38,31 @@ class QuadrilateralSoundOptionsNode extends Panel {
 
     const optionsParentNode = new Node();
     const designComboBox = new ComboBox( model.soundDesignProperty, [
-      new ComboBoxItem( new Text( 'Maintenance Sounds', LABEL_TEXT_OPTIONS ), SoundDesign.MAINTENANCE_SOUNDS, { tandemName: 'successWithMaintenanceItem' } ),
-      new ComboBoxItem( new Text( 'Success Sounds', LABEL_TEXT_OPTIONS ), SoundDesign.SUCCESS_SOUNDS, { tandemName: 'successItem' } ),
-      new ComboBoxItem( new Text( 'Quartet', LABEL_TEXT_OPTIONS ), SoundDesign.QUARTET, { tandemName: 'quartetItem' } ),
-      new ComboBoxItem( new Text( 'Parallels Volume', LABEL_TEXT_OPTIONS ), SoundDesign.PARALLELS_VOLUME, { tandemName: 'parallelsVolumeItem' } ),
-      new ComboBoxItem( new Text( 'Parallels Staccato', LABEL_TEXT_OPTIONS ), SoundDesign.PARALLELS_STACCATO, { tandemName: 'parallelsStaccatoItem' } )
+      {
+        value: SoundDesign.MAINTENANCE_SOUNDS,
+        node: new Text( 'Maintenance Sounds', LABEL_TEXT_OPTIONS ),
+        tandemName: `successWithMaintenance${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
+      },
+      {
+        value: SoundDesign.SUCCESS_SOUNDS,
+        node: new Text( 'Success Sounds', LABEL_TEXT_OPTIONS ),
+        tandemName: `success${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
+      },
+      {
+        value: SoundDesign.QUARTET,
+        node: new Text( 'Quartet', LABEL_TEXT_OPTIONS ),
+        tandemName: `quartet${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
+      },
+      {
+        value: SoundDesign.PARALLELS_VOLUME,
+        node: new Text( 'Parallels Volume', LABEL_TEXT_OPTIONS ),
+        tandemName: `parallelsVolume${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
+      },
+      {
+        value: SoundDesign.PARALLELS_STACCATO,
+        node: new Text( 'Parallels Staccato', LABEL_TEXT_OPTIONS ),
+        tandemName: `parallelsStaccato${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
+      }
     ], optionsParentNode, {
 
       tandem: tandem.createTandem( 'designComboBox' )
