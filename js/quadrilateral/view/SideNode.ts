@@ -8,8 +8,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import merge from '../../../../phet-core/js/merge.js';
-import { DragListener, KeyboardDragListener, Line as LineNode, Path, SceneryEvent, Voicing } from '../../../../scenery/js/imports.js';
+import { DragListener, KeyboardDragListener, Line as LineNode, Path, PathOptions, SceneryEvent, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import Side from '../model/Side.js';
@@ -23,9 +22,19 @@ import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import vibrationManager from '../../../../tappi/js/vibrationManager.js';
 import SideDescriber from './SideDescriber.js';
 import Multilink from '../../../../axon/js/Multilink.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 
 // The dilation around side shapes when drawing the focus highlight.
 const FOCUS_HIGHLIGHT_DILATION = 15;
+
+type SelfOptions = {
+
+  // The "accessible name" for both PDOM and Voicing, sets both voicingNameResponse and PDOM's innerContent.
+  nameResponse?: null | string;
+};
+type ParentOptions = StrictOmit<VoicingOptions, 'voicingNameResponse'> & StrictOmit<PathOptions, 'innerContent'>;
+type SideNodeOptions = SelfOptions & ParentOptions;
 
 class SideNode extends Voicing( Path, 1 ) {
   private side: Side;
@@ -34,10 +43,9 @@ class SideNode extends Voicing( Path, 1 ) {
   private scratchShapeModel: QuadrilateralShapeModel;
   private quadrilateralModel: QuadrilateralModel;
 
-  // TODO: Options pattern cannot be used yet because of Voicing trait
-  public constructor( quadrilateralModel: QuadrilateralModel, side: Side, scratchSide: Side, modelViewTransform: ModelViewTransform2, options?: any ) {
+  public constructor( quadrilateralModel: QuadrilateralModel, side: Side, scratchSide: Side, modelViewTransform: ModelViewTransform2, providedOptions?: SideNodeOptions ) {
 
-    options = merge( {
+    const options = optionize<SideNodeOptions, SelfOptions, ParentOptions>()( {
       fill: QuadrilateralColors.quadrilateralShapeColorProperty,
       stroke: QuadrilateralColors.quadrilateralShapeStrokeColorProperty,
 
@@ -51,12 +59,10 @@ class SideNode extends Voicing( Path, 1 ) {
 
       // phet-io
       tandem: Tandem.OPTIONAL
-    }, options );
+    }, providedOptions );
 
     super( side.shapeProperty.value );
 
-    assert && assert( options.voicingNameResponse === undefined, 'SideNode sets voicingNameResponse from nameResponse' );
-    assert && assert( options.innerContent === undefined, 'SideNode sets innerContent from nameResponse' );
     this.voicingNameResponse = options.nameResponse;
     this.innerContent = options.nameResponse;
 
