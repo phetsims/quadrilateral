@@ -32,6 +32,10 @@ const TITLE_TEXT_OPTIONS = {
 const TITLE_SPACING = 15;
 
 class QuadrilateralSoundOptionsNode extends Panel {
+
+  // Necessary for PhET-iO state and disposal since these components become dynamic when they live in a phetio capsule
+  private readonly disposeQuadrilateralSoundOptionsNode: () => void;
+
   public constructor( model: QuadrilateralSoundOptionsModel, tandem: Tandem ) {
 
     const soundDesignLabelText = new Text( 'Sound Design', TITLE_TEXT_OPTIONS );
@@ -175,6 +179,18 @@ class QuadrilateralSoundOptionsNode extends Panel {
 
       content.children = children;
     } );
+
+    this.disposeQuadrilateralSoundOptionsNode = () => {
+      designComboBox.dispose();
+      labelledBaseSoundRadioButtonGroup.dispose();
+      labelledSuccessSoundRadioButtonGroup.dispose();
+      maintenanceSoundCheckbox.dispose();
+    };
+  }
+
+  public override dispose(): void {
+    this.disposeQuadrilateralSoundOptionsNode();
+    super.dispose();
   }
 }
 
@@ -183,6 +199,10 @@ class QuadrilateralSoundOptionsNode extends Panel {
  * radio buttons are often sub-options under one of the sound design prototypes.
  */
 class LabelledRadioButtonGroup extends VBox {
+
+  // Necessary for phet-io to clean up tandems
+  private readonly disposeLabelledRadioButtonGroup: () => void;
+
   public constructor( property: EnumerationProperty<QuartetSoundFile | SuccessSoundFile>, items: AquaRadioButtonGroupItem<QuartetSoundFile | SuccessSoundFile>[], labelString: string, tandem: Tandem ) {
     const labelText = new Text( labelString, TITLE_TEXT_OPTIONS );
     const radioButtonGroup = new VerticalAquaRadioButtonGroup( property, items, {
@@ -193,6 +213,15 @@ class LabelledRadioButtonGroup extends VBox {
       children: [ labelText, radioButtonGroup ],
       spacing: 15
     } );
+
+    this.disposeLabelledRadioButtonGroup = () => {
+      radioButtonGroup.dispose();
+    };
+  }
+
+  public override dispose(): void {
+    this.disposeLabelledRadioButtonGroup();
+    super.dispose();
   }
 }
 

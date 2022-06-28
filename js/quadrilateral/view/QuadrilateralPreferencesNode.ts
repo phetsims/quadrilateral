@@ -22,6 +22,10 @@ import optionize from '../../../../phet-core/js/optionize.js';
 import EmptyObjectType from '../../../../phet-core/js/types/EmptyObjectType.js';
 
 class QuadrilateralPreferencesNode extends Node {
+
+  // Disposal of components and tandems necessary for phet-io state, otherwise they could exist for life of the sim.
+  private readonly disposeQuadrilateralPreferencesNode: () => void;
+
   public constructor( preferencesModel: QuadrilateralPreferencesModel, tandem: Tandem ) {
     super();
 
@@ -47,9 +51,11 @@ class QuadrilateralPreferencesNode extends Node {
       spacing: 5
     } ) );
 
+    const clapperButton = new ClapperboardButton( { tandem: tandem.createTandem( 'clapperboardButton' ) } );
+
     const otherControls = [
       tangibleControls,
-      new ClapperboardButton( { tandem: tandem.createTandem( 'clapperboardButton' ) } ),
+      clapperButton,
       shapeIdentificationFeedbackCheckbox
     ];
 
@@ -59,8 +65,9 @@ class QuadrilateralPreferencesNode extends Node {
       spacing: 15
     } );
 
+    const soundOptionsNode = new QuadrilateralSoundOptionsNode( preferencesModel.soundOptionsModel, tandem.createTandem( 'soundOptionsNode' ) );
     const controls = new HBox( {
-      children: [ new QuadrilateralSoundOptionsNode( preferencesModel.soundOptionsModel, tandem.createTandem( 'soundOptionsNode' ) ), otherControlsBox ],
+      children: [ soundOptionsNode, otherControlsBox ],
       spacing: 15,
       align: 'top'
     } );
@@ -72,6 +79,20 @@ class QuadrilateralPreferencesNode extends Node {
     } );
 
     this.addChild( preferencesNode );
+
+    this.disposeQuadrilateralPreferencesNode = () => {
+      soundOptionsNode.dispose();
+      shapeIdentificationFeedbackCheckbox.dispose();
+      gridSpacingNumberControl.dispose();
+      smoothingLengthNumberControl.dispose();
+      updateIntervalNumberControl.dispose();
+      clapperButton.dispose();
+    };
+  }
+
+  public override dispose(): void {
+    this.disposeQuadrilateralPreferencesNode();
+    super.dispose();
   }
 }
 
