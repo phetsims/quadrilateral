@@ -14,6 +14,7 @@ import Utils from '../../../../dot/js/Utils.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import stepTimer from '../../../../axon/js/stepTimer.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 
 // The bluetooth options for the requestDevice call.
 const REQUEST_DEVICE_OPTIONS = {
@@ -83,9 +84,16 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
     this.enabled = !phet.chipper.isFuzzEnabled();
   }
 
-  private async requestQuadDevice(): Promise<any> {
+  /**
+   * Uses web bluetooth API to connect to a particular device.
+   *
+   * 6/29/22 - JG decided to use IntentionalAny for this prototype code that will likely never see production.
+   */
+  private async requestQuadDevice(): Promise<IntentionalAny> {
 
-    let device: null | any; // should be type BluetoothDevice, but it is too experimental for native types
+    // should be type BluetoothDevice, but it is too experimental for native types. There is no need to re-implement
+    // typing of the bluetooth web API for this prototype code.
+    let device: null | IntentionalAny;
 
     // @ts-ignore - navigator.bluetooth is experimental and does not exist in the typing
     if ( navigator.bluetooth ) {

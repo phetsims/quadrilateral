@@ -84,7 +84,7 @@ class QuartetSideSoundView {
     this.playbackRateToSoundClipCollection = new Map();
 
     // TODO: selectedSound is one of SoundFile enumeration, how do we do this?
-    const createSoundClipsListener = ( selectedSound: any ) => {
+    const createSoundClipsListener = ( selectedSound: QuartetSoundFile ) => {
       this.createSoundClips( selectedSound );
     };
 
@@ -114,9 +114,8 @@ class QuartetSideSoundView {
 
   /**
    * Create the sound clips used to represent aspects of the Side.
-   * @param soundFile - TODO: How to do Enumerations, see https://github.com/phetsims/quadrilateral/issues/27
    */
-  private createSoundClips( soundFile: any ): void {
+  private createSoundClips( soundFile: QuartetSoundFile ): void {
 
     this.disposeSoundClips();
 
