@@ -21,7 +21,7 @@ const INDEX_TIP_INDEX = 8;
 type ThumbAndIndex = {
   thumbPosition: Vector2;
   indexPosition: Vector2;
-}
+};
 
 if ( QuadrilateralQueryParameters.mediaPipe ) {
   MediaPipe.initialize();

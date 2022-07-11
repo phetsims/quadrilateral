@@ -26,7 +26,7 @@ const TEXT_OPTIONS = combineOptions<TextOptions>( {
 type SelfOptions = {
   tandem?: Tandem;
 };
-type QuadrilateralVisibilityControlsOptions = SelfOptions & StrictOmit<VBoxOptions, 'children'>
+type QuadrilateralVisibilityControlsOptions = SelfOptions & StrictOmit<VBoxOptions, 'children'>;
 
 class QuadrilateralVisibilityControls extends VBox {
   public constructor( cornerLabelsVisibleProperty: BooleanProperty, cornerGuideVisibleProperty: BooleanProperty, symmetryGridVisibleProperty: BooleanProperty, providedOptions?: QuadrilateralVisibilityControlsOptions ) {
