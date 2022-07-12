@@ -67,7 +67,7 @@ class SuccessSoundFile extends EnumerationValue {
 }
 
 // Maps QuartetSoundFile to the WrappedAudioBuffer for the SoundClip
-const AUDIO_BUFFER_MAP: Map<QuartetSoundFile, WrappedAudioBuffer> = new Map();
+const AUDIO_BUFFER_MAP = new Map<QuartetSoundFile, WrappedAudioBuffer>();
 AUDIO_BUFFER_MAP.set( QuartetSoundFile.ONE, quadLoop01_mp3 );
 AUDIO_BUFFER_MAP.set( QuartetSoundFile.TWO, quadLoop02_mp3 );
 AUDIO_BUFFER_MAP.set( QuartetSoundFile.THREE, quadLoop03_mp3 );
@@ -90,7 +90,7 @@ class SuccessSoundCollection {
   }
 }
 
-const SUCCESS_SOUND_COLLECTION_MAP: Map<SuccessSoundFile, SuccessSoundCollection> = new Map();
+const SUCCESS_SOUND_COLLECTION_MAP = new Map<SuccessSoundFile, SuccessSoundCollection>();
 SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.ONE, new SuccessSoundCollection( quadIntoParallel001_mp3, quadOutOfParallel001_mp3, quadMovingInParallelSuccessLoop001_wav ) );
 SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.TWO, new SuccessSoundCollection( quadIntoParallel002_mp3, quadOutOfParallel002_mp3, quadMovingInParallelSuccessLoop002_mp3 ) );
 SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.THREE, new SuccessSoundCollection( quadIntoParallel003_mp3, quadOutOfParallel003_mp3, quadMovingInParallelSuccessLoop003_mp3 ) );
