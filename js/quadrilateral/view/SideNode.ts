@@ -198,7 +198,7 @@ class SideNode extends Voicing( Path, 1 ) {
 
         // point in the coordinate frame of the play area, then in model coordinates
         assert && assert( event.pointer.point, 'How could there not be a point from an event?' );
-        const parentPoint = this.globalToParentPoint( event.pointer.point! );
+        const parentPoint = this.globalToParentPoint( event.pointer.point );
         const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
 
         vectorToVertex1 = ( side.vertex1.positionProperty.value ).minus( modelPoint );
@@ -220,7 +220,7 @@ class SideNode extends Voicing( Path, 1 ) {
         if ( !vertex1Pressed && !vertex2Pressed ) {
 
           // point in the coordinate frame of the play area, then in model coordinates
-          const parentPoint = this.globalToParentPoint( event.pointer.point! );
+          const parentPoint = this.globalToParentPoint( event.pointer.point );
           const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
 
           assert && assert( vectorToVertex1, 'vectorToVertex1 should have been defined at start of drag' );

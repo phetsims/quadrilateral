@@ -93,7 +93,7 @@ class QuartetSideSoundView {
 
     const resetListener = ( notInProgress: boolean ) => {
       if ( this.activeSoundClipCollection ) {
-        this.activeSoundClipCollection!.stopSoundClips();
+        this.activeSoundClipCollection.stopSoundClips();
       }
     };
     this.resetNotInProgressProperty.link( resetListener );
@@ -176,7 +176,7 @@ class QuartetSideSoundView {
         }
       } );
 
-      newCollection!.startPlayingSounds();
+      newCollection.startPlayingSounds();
       this.activeSoundClipCollection = newCollection;
     }
     else {

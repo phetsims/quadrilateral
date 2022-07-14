@@ -120,7 +120,7 @@ class VertexNode extends Voicing( Circle, 1 ) {
       },
       drag: ( event: SceneryEvent, listener: DragListener ) => {
         const pointerPoint = event.pointer.point;
-        const parentPoint = this.globalToParentPoint( pointerPoint! );
+        const parentPoint = this.globalToParentPoint( pointerPoint );
         const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
 
         // constrain to the allowable positions in the model along the grid

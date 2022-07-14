@@ -805,8 +805,8 @@ class QuadrilateralShapeModel {
     let iterations = 0;
 
     // walk along the bounds, adding corner points until we reach the same line as the secondLineIntersectionPair
-    let nextLine = firstLineIntersectionPair!.line;
-    while ( nextLine !== secondLineIntersectionPair!.line ) {
+    let nextLine = firstLineIntersectionPair.line;
+    while ( nextLine !== secondLineIntersectionPair.line ) {
       points.push( nextLine.end );
 
       let nextIndex = directedLines.indexOf( nextLine ) + 1;
@@ -821,7 +821,7 @@ class QuadrilateralShapeModel {
 
     // we have walked to the same line as the second intersection point, finalize by including the second
     // intersection point
-    points.push( secondLineIntersectionPair!.intersectionPoint );
+    points.push( secondLineIntersectionPair.intersectionPoint );
 
     return points;
   }
@@ -1230,10 +1230,10 @@ class QuadrilateralShapeModel {
         if ( proposedPosition && proposedPosition.isFinite() ) {
 
           // transform from tangible to virtual coordinates
-          const virtualPosition = this.model.physicalToVirtualTransform!.modelToViewPosition( proposedPosition );
+          const virtualPosition = this.model.physicalToVirtualTransform.modelToViewPosition( proposedPosition );
 
           // apply smoothing over a number of values to reduce noise
-          constrainedPosition = vertexWithProposedPosition.vertex.smoothPosition( virtualPosition! );
+          constrainedPosition = vertexWithProposedPosition.vertex.smoothPosition( virtualPosition );
 
           // constrain to the closest grid position
           // With a high enough smoothingLength, this isn't necessary with MediaPipe.
@@ -1424,7 +1424,7 @@ class QuadrilateralShapeModel {
     ];
 
     // Constrain to intervals of deviceGridSpacingProperty.value to try to reduce noise
-    const constrainedGridPositions = _.map( smoothedPositions, smoothedPosition => QuadrilateralModel.getClosestGridPosition( smoothedPosition!, this.model.preferencesModel.deviceGridSpacingProperty.value ) );
+    const constrainedGridPositions = _.map( smoothedPositions, smoothedPosition => QuadrilateralModel.getClosestGridPosition( smoothedPosition, this.model.preferencesModel.deviceGridSpacingProperty.value ) );
 
     const verticesWithProposedPositions = [
       { vertex: this.vertexA, proposedPosition: constrainedGridPositions[ 0 ]! },

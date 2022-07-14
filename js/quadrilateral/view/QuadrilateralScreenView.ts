@@ -198,10 +198,10 @@ class QuadrilateralScreenView extends ScreenView {
           // positions if all is well
           if ( physicalModelBounds && physicalModelBounds.isValid() ) {
             shapeModel.setPositionsFromLengthAndAngleData(
-              physicalModelBounds!.width,
-              physicalModelBounds!.width,
-              physicalModelBounds!.width,
-              physicalModelBounds!.width,
+              physicalModelBounds.width,
+              physicalModelBounds.width,
+              physicalModelBounds.width,
+              physicalModelBounds.width,
               Math.PI / 2,
               Math.PI / 2,
               Math.PI / 2,
