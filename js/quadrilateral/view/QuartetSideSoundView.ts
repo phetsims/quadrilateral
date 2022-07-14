@@ -14,8 +14,6 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';
 import PiecewiseLinearFunction from '../../../../dot/js/PiecewiseLinearFunction.js';
 import Utils from '../../../../dot/js/Utils.js';
-
-// @ts-ignore - TODO: Variable 'phetAudioContext' implicitly has type 'any' in some locations where its type cannot be determined.
 import phetAudioContext from '../../../../tambo/js/phetAudioContext.js';
 import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
 import SoundGenerator, { SoundGeneratorOptions } from '../../../../tambo/js/sound-generators/SoundGenerator.js';
@@ -232,7 +230,7 @@ class SoundClipCollection extends SoundGenerator {
   private readonly lowerOctaveClip: SoundClip;
   private readonly middleOctaveClip: SoundClip;
   private readonly upperOctaveClip: SoundClip;
-  private readonly outputLevelGainNode: AudioParam;
+  private readonly outputLevelGainNode: GainNode;
   private readonly anyClipsPlayingProperty: IReadOnlyProperty<boolean>;
   private connected: boolean;
   private readonly resetNotInProgressProperty: BooleanProperty;
@@ -299,10 +297,7 @@ class SoundClipCollection extends SoundGenerator {
     } );
 
     // The GainNode that will control the volume for all sounds of this SoundView collectively.
-    // @ts-ignore - TODO: How to do phetAudioContext for TypeScript?
     this.outputLevelGainNode = phetAudioContext.createGain();
-
-    // @ts-ignore - TODO: How to do phetAudioContext for TypeScript?
     this.outputLevelGainNode.connect( this.masterGainNode );
 
     this.anyClipsPlayingProperty = DerivedProperty.or( [
@@ -405,7 +400,6 @@ class SoundClipCollection extends SoundGenerator {
         }
       }
 
-      // @ts-ignore - TODO: How to do phetAudioContext, see https://github.com/phetsims/quadrilateral/issues/27
       this.outputLevelGainNode.gain.value = this.clipOutputLevel;
 
       // we haven't started playing yet, start now
