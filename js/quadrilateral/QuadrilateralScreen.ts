@@ -1,6 +1,7 @@
 // Copyright 2021-2022, University of Colorado Boulder
 
 /**
+ * Entry point for the screen of quadrilateral.
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
@@ -16,13 +17,11 @@ class QuadrilateralScreen extends Screen {
 
   /**
    * @param {QuadrilateralPreferencesModel} preferencesModel
-   * @param {BooleanProperty} shapeIdentificationFeedbackEnabledProperty
    * @param {Object} [options]
    */
   constructor( preferencesModel, options ) {
 
     options = merge( {
-      //TODO if you include homeScreenIcon or navigationBarIcon, use JOIST/ScreenIcon
       backgroundColorProperty: QuadrilateralColors.screenBackgroundColorProperty,
       tandem: Tandem.REQUIRED
     }, options );
