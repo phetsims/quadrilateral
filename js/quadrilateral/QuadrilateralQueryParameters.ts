@@ -25,7 +25,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // register as a parallelogram.
   angleToleranceInterval: {
     type: 'number',
-    isValidValue: value => value <= ( 2 * Math.PI ) && value >= 0,
+    isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
     defaultValue: 0.01
   },
 
@@ -34,7 +34,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // since the tangible is harder to control.
   deviceAngleToleranceInterval: {
     type: 'number',
-    isValidValue: value => value <= ( 2 * Math.PI ) && value >= 0,
+    isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
     defaultValue: 0.02
   },
 
@@ -46,7 +46,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   toleranceIntervalScaleFactor: {
     type: 'number',
     defaultValue: 10,
-    isValidValue: value => value >= 1
+    isValidValue: ( value: number ) => value >= 1
   },
 
   // The default value for the angle tolerance that will be used for determining the named shape of the
@@ -55,7 +55,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // can become infinite, which is not appropriate for detecting the shape name.
   shapeAngleToleranceInterval: {
     type: 'number',
-    isValidValue: value => value <= ( 2 * Math.PI ) && value >= 0,
+    isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
     defaultValue: 0.01
   },
 
@@ -63,7 +63,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // behaves like angleToleranceInterval.
   deviceShapeAngleToleranceInterval: {
     type: 'number',
-    isValidValue: value => value <= ( 2 * Math.PI ) && value >= 0,
+    isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
     defaultValue: 0.02
   },
 
@@ -72,14 +72,14 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // like shapeLengthToleranceInterval.
   deviceShapeLengthToleranceInterval: {
     type: 'number',
-    isValidValue: value => value <= ( 2 * Math.PI ) && value >= 0,
+    isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
     defaultValue: 0.02
   },
 
   // The tolerance interval for the angle of tilt for sides.
   tiltToleranceInterval: {
     type: 'number',
-    isValidValue: value => value <= ( 2 * Math.PI ) && value >= 0,
+    isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
     defaultValue: 0.2
   },
 
@@ -88,7 +88,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // have a same length within ( length * lengthToleranceIntervalScaleFactor).
   lengthToleranceIntervalScaleFactor: {
     type: 'number',
-    isValidValue: value => value <= 1 && value >= 0,
+    isValidValue: ( value: number ) => value <= 1 && value >= 0,
     defaultValue: 0.05
   },
 
@@ -155,7 +155,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   deviceGridSpacing: {
     type: 'number',
     defaultValue: 0.025,
-    isValidValue: value => value <= 5 * 0.05
+    isValidValue: ( value: number ) => value <= 5 * 0.05
   },
 
   // How many values to save when smoothing vertex positions when connected to a bluetooth device. Note that
@@ -163,7 +163,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   smoothingLength: {
     type: 'number',
     defaultValue: 5,
-    isValidValue: value => value > 0
+    isValidValue: ( value: number ) => value > 0
   },
 
   // How frequently to update the sim from values provided with a bluetooth device, in seconds. Increasing this
@@ -171,7 +171,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   bluetoothUpdateInterval: {
     type: 'number',
     defaultValue: 0.1,
-    isValidValue: value => value > 0
+    isValidValue: ( value: number ) => value > 0
   },
 
   // If present, a button to open a "sound board" dialog will be available to play sounds and example Voicing
@@ -188,17 +188,28 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   }
 } );
 
+// Collection of properties that appear in ToleranceDefaults state object.
+type ToleranceDefaultsCollection = {
+  angleToleranceInterval: number;
+  deviceAngleToleranceInterval: number;
+  toleranceIntervalScaleFactor: number;
+  shapeAngleToleranceInterval: number;
+  deviceShapeAngleToleranceInterval: number;
+  deviceShapeLengthToleranceInterval: number;
+  lengthToleranceIntervalScaleFactor: number;
+  shapeLengthToleranceInterval: number;
+};
+
 // It was requested that the tolerance defaults are part of the data stream, this inner class accomplishes that. See
 // https://github.com/phetsims/quadrilateral/issues/97#issuecomment-1125088255
 class ToleranceDefaults extends PhetioObject {
-  constructor() {
+  public constructor() {
     super( {
       tandem: Tandem.GLOBAL_MODEL.createTandem( 'ToleranceDefaults' ),
       phetioType: new IOType( 'ToleranceDefaultsIO', {
         isValidValue: _.stubTrue,
 
-        // @param {ToleranceDefaults} object
-        toStateObject: object => object.toStateObject(),
+        toStateObject: ( object: ToleranceDefaults ) => object.toStateObject(),
         stateSchema: {
           angleToleranceInterval: NumberIO,
           deviceAngleToleranceInterval: NumberIO,
@@ -214,8 +225,7 @@ class ToleranceDefaults extends PhetioObject {
     } );
   }
 
-  // @public
-  toStateObject() {
+  public toStateObject(): ToleranceDefaultsCollection {
     return {
       angleToleranceInterval: QuadrilateralQueryParameters.angleToleranceInterval,
       deviceAngleToleranceInterval: QuadrilateralQueryParameters.deviceAngleToleranceInterval,
@@ -230,7 +240,7 @@ class ToleranceDefaults extends PhetioObject {
 }
 
 // instantiate so it appears in PhET-iO state
-const toleranceDefaults = new ToleranceDefaults(); //eslint-disable-line no-unused-vars
+const toleranceDefaults = new ToleranceDefaults(); //eslint-disable-line @typescript-eslint/no-unused-vars
 
 quadrilateral.register( 'QuadrilateralQueryParameters', QuadrilateralQueryParameters );
 export default QuadrilateralQueryParameters;
