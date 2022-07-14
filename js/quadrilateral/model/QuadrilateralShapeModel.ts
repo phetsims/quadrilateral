@@ -71,7 +71,7 @@ export type SidePair = {
 
 type QuadrilateralShapeModelOptions = {
   validateShape?: boolean;
-  tandem?: Tandem;
+  tandem: Tandem;
 };
 
 class QuadrilateralShapeModel {
@@ -168,17 +168,14 @@ class QuadrilateralShapeModel {
   // An array of all the (opposite) SidePairs that currently parallel with each other.
   public readonly parallelSidePairsProperty: Property<SidePair[]>;
 
-  public constructor( model: QuadrilateralModel, providedOptions?: QuadrilateralShapeModelOptions ) {
+  public constructor( model: QuadrilateralModel, providedOptions: QuadrilateralShapeModelOptions ) {
 
     const options = optionize<QuadrilateralShapeModelOptions, QuadrilateralShapeModelOptions>()( {
 
       // If true, validation will be done to ensure that the quadrilateral shape is reasonable. But this may be
       // undesireable if you want to use this QuadrilateralShapeModel to determine if the proposed shape is
       // reasonable.
-      validateShape: true,
-
-      // phet-io
-      tandem: Tandem.REQUIRED
+      validateShape: true
     }, providedOptions );
 
     this.validateShape = options.validateShape;

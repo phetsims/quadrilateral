@@ -19,7 +19,7 @@ class VertexDragAreaNode extends Path {
 
   public constructor( vertex: Vertex, sides: Side[], modelViewTransform: ModelViewTransform2, providedOptions?: PathOptions ) {
 
-    const options = optionize<PathOptions, EmptyObjectType>()( {
+    const options = optionize<PathOptions, EmptyObjectType, PathOptions>()( {
       fill: `rgba(${dotRandom.nextInt( 255 )},${dotRandom.nextInt( 255 )},${dotRandom.nextInt( 255 )},0.5)`
     }, providedOptions );
 

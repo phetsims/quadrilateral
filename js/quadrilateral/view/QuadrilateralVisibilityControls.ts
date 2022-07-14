@@ -12,9 +12,10 @@ import { Text, TextOptions, VBox, VBoxOptions } from '../../../../scenery/js/imp
 import quadrilateral from '../../quadrilateral.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import quadrilateralStrings from '../../quadrilateralStrings.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import optionize, { combineOptions } from '../../../../phet-core/js/optionize.js';
+import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import EmptyObjectType from '../../../../phet-core/js/types/EmptyObjectType.js';
 
 // constants
 const TEXT_OPTIONS = combineOptions<TextOptions>( {
@@ -23,19 +24,15 @@ const TEXT_OPTIONS = combineOptions<TextOptions>( {
   maxWidth: 100
 }, QuadrilateralConstants.SCREEN_TEXT_OPTIONS );
 
-type SelfOptions = {
-  tandem?: Tandem;
-};
-type QuadrilateralVisibilityControlsOptions = SelfOptions & StrictOmit<VBoxOptions, 'children'>;
+type SelfOptions = EmptyObjectType;
+type QuadrilateralVisibilityControlsOptions = SelfOptions & StrictOmit<VBoxOptions, 'children'> & PickRequired<VBoxOptions, 'tandem'>;
 
 class QuadrilateralVisibilityControls extends VBox {
-  public constructor( cornerLabelsVisibleProperty: BooleanProperty, cornerGuideVisibleProperty: BooleanProperty, symmetryGridVisibleProperty: BooleanProperty, providedOptions?: QuadrilateralVisibilityControlsOptions ) {
+  public constructor( cornerLabelsVisibleProperty: BooleanProperty, cornerGuideVisibleProperty: BooleanProperty, symmetryGridVisibleProperty: BooleanProperty, providedOptions: QuadrilateralVisibilityControlsOptions ) {
 
     const options = optionize<QuadrilateralVisibilityControlsOptions, SelfOptions, VBoxOptions>()( {
       align: 'left',
-      spacing: 15,
-
-      tandem: Tandem.REQUIRED
+      spacing: 15
     }, providedOptions );
 
     const cornerLabelsText = new Text( quadrilateralStrings.cornerLabels, TEXT_OPTIONS );

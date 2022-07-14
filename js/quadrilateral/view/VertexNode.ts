@@ -8,7 +8,6 @@
 
 import { Circle, CircleOptions, DragListener, KeyboardDragListener, SceneryEvent, Text, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vertex from '../model/Vertex.js';
@@ -20,6 +19,7 @@ import vibrationManager from '../../../../tappi/js/vibrationManager.js';
 import VertexDescriber from './VertexDescriber.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 
 // constants
 const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
@@ -31,23 +31,23 @@ type SelfOptions = {
   // a11y - for both PDOM and Voicing
   nameResponse?: null | string;
 };
-type ParentOptions = VoicingOptions & CircleOptions;
 
 // VertexNode sets these properties explicitly from the nameResponse option
-type VertexNodeOptions = SelfOptions & StrictOmit<ParentOptions, 'voicingNameResponse' | 'innerContent'>;
+type VertexNodeOptions = SelfOptions & StrictOmit<ParentOptions, 'voicingNameResponse' | 'innerContent'> & PickRequired<CircleOptions, 'tandem'>;
+
+type ParentOptions = VoicingOptions & CircleOptions;
 
 class VertexNode extends Voicing( Circle, 1 ) {
   private readonly model: QuadrilateralModel;
 
-  public constructor( vertex: Vertex, vertexLabel: string, model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, providedOptions?: VertexNodeOptions ) {
+  public constructor( vertex: Vertex, vertexLabel: string, model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, providedOptions: VertexNodeOptions ) {
     const options = optionize<VertexNodeOptions, SelfOptions, ParentOptions>()( {
       fill: QuadrilateralColors.quadrilateralShapeColorProperty,
       stroke: QuadrilateralColors.quadrilateralShapeStrokeColorProperty,
       tagName: 'div',
       ariaRole: 'application',
       focusable: true,
-      nameResponse: null,
-      tandem: Tandem.REQUIRED
+      nameResponse: null
     }, providedOptions );
 
     const viewRadius = modelViewTransform.modelToViewBounds( vertex.modelBoundsProperty.value ).width / 2;

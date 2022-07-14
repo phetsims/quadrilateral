@@ -9,7 +9,6 @@
  */
 
 import { DragListener, KeyboardDragListener, Line as LineNode, Path, PathOptions, SceneryEvent, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import Side from '../model/Side.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -55,10 +54,7 @@ class SideNode extends Voicing( Path, 1 ) {
       // pdom
       tagName: 'div',
       ariaRole: 'application',
-      focusable: true,
-
-      // phet-io
-      tandem: Tandem.OPTIONAL
+      focusable: true
     }, providedOptions );
 
     super( side.shapeProperty.value );
@@ -181,7 +177,7 @@ class SideNode extends Voicing( Path, 1 ) {
       moveOnHoldDelay: 750,
       moveOnHoldInterval: 50,
 
-      tandem: options.tandem.createTandem( 'keyboardDragListener' )
+      tandem: options.tandem?.createTandem( 'keyboardDragListener' )
     } ) );
 
     // Vectors between the start position during drag and each vertex so that we can translate vertex positions
@@ -252,7 +248,7 @@ class SideNode extends Voicing( Path, 1 ) {
         }
       },
 
-      tandem: options.tandem.createTandem( 'dragListener' )
+      tandem: options.tandem?.createTandem( 'dragListener' )
     } ) );
 
     this.mutate( options );

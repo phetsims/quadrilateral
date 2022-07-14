@@ -6,7 +6,6 @@
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import { IPaint, Node, NodeOptions } from '../../../../scenery/js/imports.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import quadrilateralStrings from '../../quadrilateralStrings.js';
 import SideNode from './SideNode.js';
@@ -14,12 +13,13 @@ import VertexNode from './VertexNode.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import optionize from '../../../../phet-core/js/optionize.js';
 import CornerGuideNode from './CornerGuideNode.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import RightAngleIndicatorNode from './RightAngleIndicatorNode.js';
 import Multilink from '../../../../axon/js/Multilink.js';
+import EmptyObjectType from '../../../../phet-core/js/types/EmptyObjectType.js';
+import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 
 // constants
 const cornerAString = quadrilateralStrings.a11y.cornerA;
@@ -41,11 +41,9 @@ const DEFAULT_SIDES_SEGMENT_LINE_WIDTH = 1;
 // in seconds,
 const SHAPE_FILL_TIME = 0.35;
 
-type SelfOptions = {
-  tandem?: Tandem;
-};
+type SelfOptions = EmptyObjectType;
 
-type QuadrilateralNodeOptions = SelfOptions & NodeOptions;
+type QuadrilateralNodeOptions = SelfOptions & NodeOptions & PickRequired<NodeOptions, 'tandem'>;
 
 class QuadrilateralNode extends Node {
   private readonly model: QuadrilateralModel;
@@ -59,13 +57,8 @@ class QuadrilateralNode extends Node {
   private remainingTimeForShapeChangeFill: number;
   private activeFill: IPaint | null;
 
-  public constructor( quadrilateralModel: QuadrilateralModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, providedOptions?: QuadrilateralNodeOptions ) {
-
-    const options = optionize<QuadrilateralNodeOptions, SelfOptions, NodeOptions>()( {
-      tandem: Tandem.REQUIRED
-    }, providedOptions );
-
-    super( options );
+  public constructor( quadrilateralModel: QuadrilateralModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, providedOptions: QuadrilateralNodeOptions ) {
+    super( providedOptions );
 
     this.remainingTimeForShapeChangeFill = 0;
     this.activeFill = null;
@@ -85,28 +78,28 @@ class QuadrilateralNode extends Node {
       nameResponse: cornerAString,
 
       // phet-io
-      tandem: options.tandem.createTandem( 'vertexANode' )
+      tandem: providedOptions.tandem.createTandem( 'vertexANode' )
     } );
 
     const vertexNode2 = new VertexNode( vertexB, vertexBString, quadrilateralModel, modelViewTransform, {
       nameResponse: cornerBString,
 
       // phet-io
-      tandem: options.tandem.createTandem( 'vertexBNode' )
+      tandem: providedOptions.tandem.createTandem( 'vertexBNode' )
     } );
 
     const vertexNode3 = new VertexNode( vertexC, vertexCString, quadrilateralModel, modelViewTransform, {
       nameResponse: cornerCString,
 
       // phet-io
-      tandem: options.tandem.createTandem( 'vertexCNode' )
+      tandem: providedOptions.tandem.createTandem( 'vertexCNode' )
     } );
 
     const vertexNode4 = new VertexNode( vertexD, vertexDString, quadrilateralModel, modelViewTransform, {
       nameResponse: cornerDString,
 
       // phet-io
-      tandem: options.tandem.createTandem( 'vertexDNode' )
+      tandem: providedOptions.tandem.createTandem( 'vertexDNode' )
     } );
 
     const topSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.topSide, this.model.quadrilateralTestShapeModel.topSide, modelViewTransform, {
