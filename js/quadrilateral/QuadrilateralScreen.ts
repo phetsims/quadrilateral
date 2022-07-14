@@ -5,26 +5,21 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Screen from '../../../joist/js/Screen.js';
-import merge from '../../../phet-core/js/merge.js';
-import Tandem from '../../../tandem/js/Tandem.js';
+import Screen, { ScreenOptions } from '../../../joist/js/Screen.js';
 import QuadrilateralColors from '../common/QuadrilateralColors.js';
 import quadrilateral from '../quadrilateral.js';
 import QuadrilateralModel from './model/QuadrilateralModel.js';
 import QuadrilateralScreenView from './view/QuadrilateralScreenView.js';
+import QuadrilateralPreferencesModel from './model/QuadrilateralPreferencesModel.js';
+import optionize from '../../../phet-core/js/optionize.js';
+import EmptyObjectType from '../../../phet-core/js/types/EmptyObjectType.js';
 
-class QuadrilateralScreen extends Screen {
+class QuadrilateralScreen extends Screen<QuadrilateralModel, QuadrilateralScreenView> {
+  public constructor( preferencesModel: QuadrilateralPreferencesModel, providedOptions: ScreenOptions ) {
 
-  /**
-   * @param {QuadrilateralPreferencesModel} preferencesModel
-   * @param {Object} [options]
-   */
-  constructor( preferencesModel, options ) {
-
-    options = merge( {
-      backgroundColorProperty: QuadrilateralColors.screenBackgroundColorProperty,
-      tandem: Tandem.REQUIRED
-    }, options );
+    const options = optionize<ScreenOptions, EmptyObjectType, ScreenOptions>()( {
+      backgroundColorProperty: QuadrilateralColors.screenBackgroundColorProperty
+    }, providedOptions );
 
     super(
       () => new QuadrilateralModel( preferencesModel, options.tandem.createTandem( 'model' ) ),

@@ -57,9 +57,6 @@ simLauncher.launch( () => {
   } );
   const calibrationDemoScreen = new QuadrilateralScreen( preferencesModel, {
     name: calibrationDemoString,
-    screenViewOptions: {
-      calibrationDemoDevice: true
-    },
     backgroundColorProperty: new ColorProperty( new Color( 'white' ) ),
     tandem: Tandem.ROOT.createTandem( 'calibrationDemoScreen' )
   } );
