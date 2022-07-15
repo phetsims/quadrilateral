@@ -161,7 +161,7 @@ class QuartetSideSoundView {
     const exponential = Utils.roundToInterval( this.tiltToPlaybackExponential.evaluate( this.side.tiltProperty.value ), 1 );
     const playbackRate = Math.pow( 2, exponential / 12 );
 
-    const newCollection = this.playbackRateToSoundClipCollection.get( playbackRate ) as SoundClipCollection;
+    const newCollection = this.playbackRateToSoundClipCollection.get( playbackRate )!;
     assert && assert( newCollection !== undefined, 'no new soundClipCollection found' );
 
     if ( newCollection !== this.activeSoundClipCollection ) {
