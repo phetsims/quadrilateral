@@ -20,7 +20,6 @@ import quadrilateral from '../../quadrilateral.js';
 const SIDE_LENGTH = 0.12;
 
 class RightAngleIndicatorNode extends Path {
-
   private readonly shapeModel: QuadrilateralShapeModel;
   private readonly modelViewTransform: ModelViewTransform2;
 

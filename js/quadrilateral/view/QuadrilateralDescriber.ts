@@ -105,7 +105,6 @@ class QuadrilateralDescriber {
 
     // TODO: Do we need a query parameter for this?
     this.tiltDifferenceToleranceInterval = 0.2;
-
     this.lengthDifferenceToleranceInterval = 0.05;
   }
 

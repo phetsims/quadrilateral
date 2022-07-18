@@ -27,44 +27,34 @@ type OscillatorWithGainNode = {
 
 class ParallelsStaccatoSoundView {
   private readonly model: QuadrilateralModel;
-  private readonly leftRightSideGenerator: QuadrilateralPitchedPopGenerator;
-  private readonly topBottomSideGenerator: QuadrilateralPitchedPopGenerator;
-  private isPlaying: boolean;
-  private remainingPlayTime: number;
-  private timeSinceLeftRightPlay: number;
-  private timeSinceTopBottomPlay: number;
-  private leftRightPopCoefficient: number | null;
-  private leftRightRelativePitch: number | null;
-  private topBottomPopCoefficient: number | null;
-  private topBottomRelativePitch: number | null;
+  private readonly leftRightSideGenerator = new QuadrilateralPitchedPopGenerator();
+  private readonly topBottomSideGenerator = new QuadrilateralPitchedPopGenerator();
+
+  // Whether or not this SoundView is currently playing so we know to stop playing after a time interval or
+  // fade out.
+  private isPlaying = false;
+
+  // How much longer we should play this SoundView before stopping play after an interaction.
+  private remainingPlayTime = 0;
+
+  // How much time we have played a sound for a particular pair of sides.
+  private timeSinceLeftRightPlay = STACCATO_PLAY_INTERVAL; // TODO: Why is this starting at the interval?
+  private timeSinceTopBottomPlay = 0; // TODO; Why is this zero?
+
+  // Coefficients that control the Sound output with the pitched/pop generator, null until first modified
+  // in the multilinks attached to the model.
+  private leftRightPopCoefficient: number | null = null;
+  private leftRightRelativePitch: number | null = null;
+  private topBottomPopCoefficient: number | null = null;
+  private topBottomRelativePitch: number | null = null;
   private readonly disposeParallelsStaccatoSoundView: () => void;
 
 
   public constructor( model: QuadrilateralModel, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
     this.model = model;
 
-    this.leftRightSideGenerator = new QuadrilateralPitchedPopGenerator();
-    this.topBottomSideGenerator = new QuadrilateralPitchedPopGenerator();
     soundManager.addSoundGenerator( this.leftRightSideGenerator );
     soundManager.addSoundGenerator( this.topBottomSideGenerator );
-
-    // Whether or not this SoundView is currently playing so we know to stop playing after a time interval or
-    // fade out.
-    this.isPlaying = false;
-
-    // How much longer we should play this SoundView before stopping play after an interaction.
-    this.remainingPlayTime = 0;
-
-    // How much time we have played a sound for a particular pair of sides.
-    this.timeSinceLeftRightPlay = STACCATO_PLAY_INTERVAL;
-    this.timeSinceTopBottomPlay = 0;
-
-    // Coefficients that control the Sound output with the pitched/pop generator, null until first modified
-    // in the multilinks attached to the model.
-    this.leftRightPopCoefficient = null;
-    this.leftRightRelativePitch = null;
-    this.topBottomPopCoefficient = null;
-    this.topBottomRelativePitch = null;
 
     const quadrilateralShapeModel = model.quadrilateralShapeModel;
 

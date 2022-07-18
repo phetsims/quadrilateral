@@ -28,62 +28,53 @@ const DELAY_FOR_MAINTENANCE_SOUND = 1.5;
 const SUCCESS_MAINTENANCE_SOUND_DELAY = 0.5;
 
 class SuccessSoundView {
-  private successSoundClip: null | SoundClip;
-  private failureSoundClip: null | SoundClip;
-  private maintenanceSoundClip: null | SoundClip;
-  private lengthMaintenanceSoundClip: null | SoundClip;
-  private lengthMaintenanceSoundClipPlaying: boolean;
-  private remainingLengthMaintenancePlayTime: number;
+
+  // The SoundClips are null until a SuccessSoundFile is selected by the user. There are several to choose
+  // from for now while we experiment with different prototypes, but we expect a single design at some point. At
+  // that time the SoundClips can be created on construction.
+  private successSoundClip: null | SoundClip = null;
+  private failureSoundClip: null | SoundClip = null;
+  private maintenanceSoundClip: null | SoundClip = null;
+
+  // A sound that plays specifically with the "Maintenance Sound" design paradigm. With this design,
+  // the maintenanceSoundClip is played when the shape changes keeping a parallelogram and the
+  // lengthMaintenanceSoundClip plays when changing the shape such that the parallelogram stays a parallelogram
+  // AND has non-changing sides. In this paradigm this sound clip is not configurable. We use "Collection one" for
+  // maintaining parallelogram adn "Collection four" for maintaining lengths.
+  private lengthMaintenanceSoundClip: null | SoundClip = null;
+
+  // Whether or not the length maintenance clip is currently playing, so we know whether to decrement the
+  // counting variables for it.
+  private lengthMaintenanceSoundClipPlaying = false;
+
+  // The amount of time left to continue playing the "maintenance" sounds.
+  private remainingLengthMaintenancePlayTime = 0;
 
   private readonly disposeSuccessSoundView: () => void;
 
   private model: QuadrilateralModel;
-  private remainingMaintenancePlayTime: number;
-  private maintenanceSoundClipPlaying: boolean;
 
-  private timeSinceSuccessSound: number;
+  // Amount of time left for the maintenance sound to play.
+  private remainingMaintenancePlayTime = 0;
 
-  private remainingDelayForMaintenanceSound: number;
+  // Whether the maintenance sound clip is currently playing, so we know whether to decrement the
+  // remainingMaintenancePlayTime or stop playing the maintenance sound.
+  private maintenanceSoundClipPlaying = true;
 
+  // Amount of time that has passed in ms since the success sound played.
+  private timeSinceSuccessSound = 0;
+
+  // Amount of time remaining for the delay between playing the 'maintenance' sounds.
+  private remainingDelayForMaintenanceSound = 0;
+
+  // The sound view that plays an indication sound when we detect a new named shape
   private readonly shapeIdentificationSound: ShapeIdentificationSoundView;
 
   public constructor( model: QuadrilateralModel, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
-
     this.model = model;
-
     const shapeModel = model.quadrilateralShapeModel;
 
-    // The sound view that plays an indication sound when we detect a new named shape
     this.shapeIdentificationSound = new ShapeIdentificationSoundView( shapeModel, model.resetNotInProgressProperty, model.shapeIdentificationFeedbackEnabledProperty );
-
-    // The SoundClips are null until a SuccessSoundFile is selected by the user. There are several to choose
-    // from for now while we experiment with different prototypes, but we expect a single design at some point. At
-    // that time the SoundClips can be created on construction.
-    this.successSoundClip = null;
-    this.failureSoundClip = null;
-    this.maintenanceSoundClip = null;
-
-    // A sound that plays specifically with the "Maintenance Sound" design paradigm. With this design,
-    // the maintenanceSoundClip is played when the shape changes keeping a parallelogram and the
-    // lengthMaintenanceSoundClip plays when changing the shape such that the parallelogram stays a parallelogram
-    // AND has non-changing sides. In this paradigm this sound clip is not configurable. We use "Collection one" for
-    // maintaining parallelogram adn "Collection four" for maintaining lengths.
-    this.lengthMaintenanceSoundClip = null;
-
-    // The amount of time left to continue playing the "maintenance" sounds.
-    this.remainingMaintenancePlayTime = 0;
-
-    this.remainingDelayForMaintenanceSound = 0;
-    this.timeSinceSuccessSound = 0;
-
-    // Whether the maintenance sound clip is currently playing, so we know whether to decrement the
-    // remainingMaintenancePlayTime or stop playing the maintenance sound.
-    this.maintenanceSoundClipPlaying = false;
-
-    // Whether or not the length maintenance clip is currently playing, so we knwo whether to decrement the
-    // counting variables for it
-    this.lengthMaintenanceSoundClipPlaying = false;
-    this.remainingLengthMaintenancePlayTime = 0;
 
     // link is called eagerly so that we have SoundClips to play in the following listeners
     soundOptionsModel.successSoundFileProperty.link( successSoundFile => {

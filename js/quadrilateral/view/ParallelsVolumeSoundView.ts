@@ -30,36 +30,31 @@ const PARALLEL_PROXIMITY_TO_OUTPUT_LEVEL = new LinearFunction( 0, Math.PI / 2, 0
 
 class ParallelsVolumeSoundView {
   private model: QuadrilateralModel;
-  private leftRightSideGenerator: null | SoundClipChord;
-  private topBottomSideGenerator: null | SoundClipChord;
+
+  // SoundGenerators that play sounds for each set of sides.
+  private leftRightSideGenerator: null | SoundClipChord = null;
+  private topBottomSideGenerator: null | SoundClipChord = null;
 
   // References to the listeners that will be used to start/stop or change the parameters of SoundClips depending
   // on the state of the model. Saved for dispose.
   private leftRightTiltListener: ( () => void ) | null = null;
   private topBottomTiltListener: ( () => void ) | null = null;
 
-  private leftRightSideOutputLevel: number;
-  private topBottomSideOutputLevel: number;
-  private isPlaying: boolean;
-  private remainingPlayTime: number;
+  // Output levels (volume) for the sounds associated with each SoundClip.
+  private leftRightSideOutputLevel = 0;
+  private topBottomSideOutputLevel = 0;
+
+  // Are any sounds of this SoundView playing?
+  private isPlaying = true;
+
+  // Remaining time to play sound clips since we will fade out.
+  private remainingPlayTime = 0;
+
+  // Release listeners and support garbage collection.
   private readonly disposeParallelsVolumeSoundView: () => void;
 
   public constructor( model: QuadrilateralModel, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
     this.model = model;
-
-    // SoundGenerators that play sounds for each set of sides.
-    this.leftRightSideGenerator = null;
-    this.topBottomSideGenerator = null;
-
-    // Ouptut levels (volume) for the sounds associated with each SoundClip.
-    this.leftRightSideOutputLevel = 0;
-    this.topBottomSideOutputLevel = 0;
-
-    // Are any sounds of this SoundView playing?
-    this.isPlaying = true;
-
-    // Remaining time to play sound clips since we will fade out.
-    this.remainingPlayTime = 0;
 
     const createSoundClipsListener = ( soundFile: SuccessSoundFile ) => {
       const audioBuffer = QuadrilateralSoundOptionsModel.AUDIO_BUFFER_MAP.get( soundFile );

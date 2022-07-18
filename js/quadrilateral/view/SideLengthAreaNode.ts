@@ -18,6 +18,8 @@ import optionize from '../../../../phet-core/js/optionize.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 
 type SelfOptions = {
+
+  // Additional rotation to apply to the arcs so they generally look as expected
   drawRotation?: number;
 };
 
@@ -27,8 +29,6 @@ class SideLengthAreaNode extends Node {
   public constructor( shapeModel: QuadrilateralShapeModel, dragSide: Side, oppositeSide: Side, lengthSide: Side, modelViewTransform: ModelViewTransform2, providedOptions?: SideLengthAreaNodeOptions ) {
 
     const options = optionize<SideLengthAreaNodeOptions, SelfOptions, NodeOptions>()( {
-
-      // Additional rotation to apply to the arcs so they generally look as expected
       drawRotation: 0
     }, providedOptions );
     super( options );

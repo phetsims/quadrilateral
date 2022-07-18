@@ -17,13 +17,12 @@ import SuccessSoundView from './SuccessSoundView.js';
 // constants
 
 class QuadrilateralSoundView {
-  private activeSoundView: null | QuartetSoundView | ParallelsVolumeSoundView | ParallelsStaccatoSoundView | SuccessSoundView;
+
+  // The sound view that is currently "active" with playing sounds. The active sound view is chosen by user in the
+  // Preferences dialog.
+  private activeSoundView: null | QuartetSoundView | ParallelsVolumeSoundView | ParallelsStaccatoSoundView | SuccessSoundView = null;
 
   public constructor( model: QuadrilateralModel, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
-
-    // The sound view that is currently "active" with playing sounds. The active sound view is chosen by user in the
-    // Preferences dialog.
-    this.activeSoundView = null;
 
     soundOptionsModel.soundDesignProperty.link( soundDesign => {
       this.activeSoundView && this.activeSoundView.dispose();

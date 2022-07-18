@@ -20,21 +20,41 @@ import optionize from '../../../../phet-core/js/optionize.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 
 type SideOptions = {
+
+  // Offsets the initial tilt by this Vector so that the tilt values can be the same for each side even
+  // if they have different orientations.
   offsetVectorForTiltCalculation?: Vector2;
+
+  // If true, assertions will be made about the state of the side. But you may not always want them because
+  // we may be trying to identify if a particular configuration of the quadrilateral is valid and we need to
+  // gracefully notify that state is not allowed.
   validateShape?: boolean;
 };
 
 class Side {
+
+  // Reference to the vertices that compose this Side.
   public vertex1: Vertex;
   public vertex2: Vertex;
+
+  // Has this side been connected to another to form a shape?
   private isConnected: boolean;
+
+  // Angle of this line against a perpendicular line that would be drawn across it when the vertices are at their
+  // initial positions, used to determine the amount of tilt of the line.
   public tiltProperty: IReadOnlyProperty<number>;
   public lengthProperty: NumberProperty;
+
+  // Whether or not this Side is pressed and being interacted with. For now this is useful for debugging.
   public readonly isPressedProperty: BooleanProperty;
+
+  // The shape of the side, determined by the length and the model width.
   public shapeProperty: IReadOnlyProperty<Shape>;
 
-  // TODO: I suspect that the usages of this can be removed now that we are not tracking changes in shape length
-  // in real time for learning goals.
+  // The tolerance for this side to determine if it is equal to another. It is a portion of the full length
+  // so that when the side is longer it still as easy for two sides to be equal in length. Otherwise the
+  // tolerance interval will be relatively much larger when the length is very small.
+  // TODO: I suspect that the usages of this can be removed now that we are not tracking changes in shape length in real time for learning goals.
   public readonly lengthToleranceIntervalProperty: IReadOnlyProperty<number>;
 
   // In model coordinates, the length of a side segment in model coordinates. The full side is divided into segments of
@@ -54,30 +74,18 @@ class Side {
   public constructor( vertex1: Vertex, vertex2: Vertex, tandem: Tandem, providedOptions?: SideOptions ) {
 
     const options = optionize<SideOptions, SideOptions>()( {
-
-      // Offsets the initial tilt by this Vector so that the tilt values can be the same for each side even
-      // if they have different orientations.
       offsetVectorForTiltCalculation: new Vector2( 1, 0 ),
-
-      // If true, assertions will be made about the state of the side. But you may not always want them because
-      // we may be trying to identify if a particular configuration of the quadrilateral is valid and we need to
-      // gracefully notify that state is not allowed.
       validateShape: true
     }, providedOptions );
 
     this.vertex1 = vertex1;
     this.vertex2 = vertex2;
-
-    // Has this side been connected to another to form a shape?
     this.isConnected = false;
 
-    // Whether or not this Side is pressed and being interacted with. For now this is useful for debugging.
     this.isPressedProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'isPressedProperty' )
     } );
 
-    // Angle of this line against a perpendicular line that would be drawn across it when the vertices are at their
-    // initial positions, used to determine the amount of tilt of the line.
     this.tiltProperty = new DerivedProperty( [ this.vertex1.positionProperty, this.vertex2.positionProperty ],
       ( vertex1Position, vertex2Position ) => {
         return Vertex.calculateAngle( vertex1Position, vertex2Position, vertex2Position.plus( options.offsetVectorForTiltCalculation ), options.validateShape );
@@ -91,7 +99,6 @@ class Side {
       tandem: tandem.createTandem( 'lengthProperty' )
     } );
 
-    // The shape of the side, determined by the length and the model width.
     this.shapeProperty = new DerivedProperty(
       [ this.vertex1.positionProperty, this.vertex2.positionProperty ],
       ( position1, position2 ) => {
@@ -104,9 +111,6 @@ class Side {
         return lineShape.getStrokedShape();
       } );
 
-    // The tolerance for this side to determine if it is equal to another. It is a portion of the full length
-    // so that when the side is longer it still as easy for two sides to be equal in length. Otherwise the
-    // tolerance interval will be relatively much larger when the length is very small.
     this.lengthToleranceIntervalProperty = new DerivedProperty( [ this.lengthProperty ], length => {
       return length * QuadrilateralQueryParameters.lengthToleranceIntervalScaleFactor;
     }, {

@@ -36,9 +36,17 @@ type ParentOptions = StrictOmit<VoicingOptions, 'voicingNameResponse'> & StrictO
 type SideNodeOptions = SelfOptions & ParentOptions;
 
 class SideNode extends Voicing( Path, 1 ) {
+
+  // A reference to the model component.
   private side: Side;
+
+  // A reference to the equivalent side with the two relevant vertices in the scratch model.
   private scratchSide: Side;
+
+  // A reference to the main model for the simulation.
   private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
+
+  // A scratch model so we can test vertex positions before setting them with input
   private scratchShapeModel: QuadrilateralShapeModel;
   private quadrilateralModel: QuadrilateralModel;
 
@@ -62,19 +70,10 @@ class SideNode extends Voicing( Path, 1 ) {
     this.voicingNameResponse = options.nameResponse;
     this.innerContent = options.nameResponse;
 
-    // A reference to the model component.
     this.side = side;
-
-    // A reference to the equivalent side with the two relevant vertices in the scratch model.
     this.scratchSide = scratchSide;
-
-    // A reference to the main model for the simulation.
     this.quadrilateralModel = quadrilateralModel;
-
-    // A reference to the main model for the simulation
     this.quadrilateralShapeModel = quadrilateralModel.quadrilateralShapeModel;
-
-    // A scratch model so we can test vertex positions before setting them with input
     this.scratchShapeModel = quadrilateralModel.quadrilateralTestShapeModel;
 
     // Mutate options eagerly, but not in super because that doesn't work with the Voicing trait

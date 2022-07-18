@@ -97,9 +97,23 @@ SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.THREE, new SuccessSoundCollec
 SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.FOUR, new SuccessSoundCollection( quadIntoParallel004_mp3, quadOutOfParallel004_mp3, quadMovingInParallelSuccessLoop004_mp3 ) );
 
 class QuadrilateralSoundOptionsModel {
+
+  // The selected sound design, changing this will change the entire design.
   public soundDesignProperty: EnumerationProperty<SoundDesign>;
+
+  // Property that controls the base sound for a few of the prototypes. Some prototypes have a base sound and
+  // the state of the sim changes the frequency and layering of the base sound. But there are a few base
+  // sounds to choose from.
   public baseSoundFileProperty: EnumerationProperty<QuartetSoundFile>;
+
+  // For the "Success" sound prototype, a sound is played when reaching a parallelogram, leaving a parallelogram,
+  // and when the parallelogram is maintained while the shape changes. Within this paradigm there are
+  // different sound options for each of these to chose from.
   public successSoundFileProperty: EnumerationProperty<SuccessSoundFile>;
+
+  // For the "Success" sound prototype, when true the "maintenance" sound will only play when the
+  // quadrilateral changes shape, remains a parallelogram, AND the lengths remain the same
+  // during the interaction.
   public maintenanceSoundRequiresEqualLengthsProperty: BooleanProperty;
 
   public static SoundDesign: SoundDesign;
@@ -109,23 +123,9 @@ class QuadrilateralSoundOptionsModel {
   public static SUCCESS_SOUND_COLLECTION_MAP = SUCCESS_SOUND_COLLECTION_MAP;
 
   public constructor() {
-
-    // The selected sound design, changing this will change the entire design.
     this.soundDesignProperty = new EnumerationProperty( SoundDesign.SUCCESS_SOUNDS );
-
-    // Property that controls the base sound for a few of the prototypes. Some prototypes have a base sound and
-    // the state of the sim changes the frequency and layering of the base sound. But there are a few base
-    // sounds to choose from.
     this.baseSoundFileProperty = new EnumerationProperty( QuartetSoundFile.ONE );
-
-    // For the "Success" sound prototype, a sound is played when reaching a parallelogram, leaving a parallelogram,
-    // and when the parallelogram is maintained while the shape changes. Within this paradigm there are
-    // different sound options for each of these to chose from.
     this.successSoundFileProperty = new EnumerationProperty( SuccessSoundFile.ONE );
-
-    // For the "Success" sound prototype, when true the "maintenance" sound will only play when the
-    // quadrilateral changes shape, remains a parallelogram, AND the lengths remain the same
-    // during the interaction.
     this.maintenanceSoundRequiresEqualLengthsProperty = new BooleanProperty( QuadrilateralQueryParameters.equalLengthsForMaintenanceSound );
   }
 }

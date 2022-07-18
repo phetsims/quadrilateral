@@ -70,23 +70,34 @@ export type SidePair = {
 };
 
 type QuadrilateralShapeModelOptions = {
+
+  // If true, validation will be done to ensure that the quadrilateral shape is reasonable. But this may be
+  // undesirable if you want to use this QuadrilateralShapeModel to determine if the proposed shape is
+  // reasonable.
   validateShape?: boolean;
   tandem: Tandem;
 };
 
 class QuadrilateralShapeModel {
+
+  // Vertices of the quadrilateral.
   public vertexA: Vertex;
   public vertexB: Vertex;
   public vertexC: Vertex;
   public vertexD: Vertex;
 
+  // Sides of the quadrilateral.
   public topSide: Side;
   public rightSide: Side;
   public bottomSide: Side;
   public leftSide: Side;
 
+  // Monitors angles of the shape to determine when pairs of opposite sides are parallel.
   public readonly sideABSideCDParallelSideChecker: ParallelSideChecker;
   public readonly sideBCSideDAParallelSideChecker: ParallelSideChecker;
+
+  // ParallelSideCheckers are responsible for determining if opposite SidePairs are parallel within their dynamic
+  // angleToleranceIntervalProperty. This is the collection of both checkers, one for each OppositeSidePair.
   public readonly parallelSideCheckers: ParallelSideChecker[];
 
   // Observables that indicate when the sides become parallel. Updated after all vertex positions have been set
@@ -101,15 +112,29 @@ class QuadrilateralShapeModel {
   public readonly vertices: Vertex[];
   public readonly sides: Side[];
 
+  // See QuadrilateralShapeModelOptions
   private readonly validateShape: boolean;
 
+  // Whether the Side lengths have changed relative to the saved side lengths that were stored at the beginning
+  // of an interaction. This helps accomplish a learning goal of determining if the quad remains a parallelogram
+  // while also keeping side lengths the same. This is set in the step function asynchronously(!!) so that
+  // it can be calculated only after all vertex positions have been set by listeners.
   public readonly lengthsEqualToSavedProperty: BooleanProperty;
+
+  // Whether the current angles are equal to the saved set of savedVertexAngles. The savedVertexAngles are updated
+  // every time the quadrilateral side lengths change, so that we can track the condition that both the sides
+  // are remaining constant AND the angles are changing.
   public readonly anglesEqualToSavedProperty: BooleanProperty;
 
+  // Reference to the simulation model for other needed state.
   public readonly model: QuadrilateralModel;
 
+  // Whether or not the Properties of the shape are currently being deferred, preventing listeners
+  // from being called and new values from being set.
   private propertiesDeferred: boolean;
 
+  // A tolerance value specifically for comparisons relatint to tilt.
+  // TODO: Can we remove this now that we have ParallelSideChecker?
   public tiltToleranceIntervalProperty: Property<number>;
 
   // The tolerance interval for angle and length comparisons when detecting shape names. This needs to be different
@@ -119,20 +144,42 @@ class QuadrilateralShapeModel {
   public readonly shapeAngleToleranceIntervalProperty: IReadOnlyProperty<number>;
   public readonly shapeLengthToleranceIntervalProperty: IReadOnlyProperty<number>;
 
+  // Emits an event whenever the shape of the Quadrilateral changes
   public shapeChangedEmitter: Emitter<[]>;
 
+  // Whether the quadrilateral is a parallelogram. This Property updates async in the step function! We need to
+  // update this Property after all vertex positions and all vertex angles have been updated. When moving more than
+  // one vertex at a time, only one vertex position updates synchronously in the code and in those transient states
+  // the model may temporarily not be a parallelogram. Updating in step after all Properties and listeners are done
+  // with this work resolves the problem.
   public isParallelogramProperty: Property<boolean>;
 
+  // Whether or not all angles of the quadrilateral are right angles within shapeAngleToleranceInterval.
+  // This is set in step because we need to wait until all vertices are positioned during model
+  // updates.
   public allAnglesRightProperty: Property<boolean>;
+
+  // Whether or not all lenghts of the quadrilateral are equal within the lengthToleranceInterval.
+  // Updated asychronously because we need to make sure that the positions of vertices have stabilized
+  // after model updates.
   public allLengthsEqualProperty: Property<boolean>;
 
+  // The name of the quadrilateral (like square/rhombus/trapezoid, etc). Will be null if it is a random
+  // unnamed shape.
   public readonly shapeNameProperty: EnumerationProperty<NamedQuadrilateral>;
 
+  // A collection of the Side lengths at a point in time. Updated whenever an interaction begins with the
+  // quadrilateral. Allows us to monitor the change in Side lengths during interaction.
+  // TODO: Delete this? Are we still using 'saved' features?
   public savedSideLengths: SideLengths;
+
+  // A collection of the vertex angles at a point in time. Updated whenever the quadrilateral changes.
+  // TODO: Delete this? Are we still using 'saved' features?
   private savedVertexAngles: VertexAngles;
 
   // Arrays that define the relationship between vertices in the model, either opposite or adjacent once they are
   // assembled to form the quadrilateral shape.
+  // TODO: Consider removing this, the relationships are duplicated with Sides
   public readonly adjacentVertices: VertexPair[];
   public readonly oppositeVertices: VertexPair[];
 
@@ -171,16 +218,11 @@ class QuadrilateralShapeModel {
   public constructor( model: QuadrilateralModel, providedOptions: QuadrilateralShapeModelOptions ) {
 
     const options = optionize<QuadrilateralShapeModelOptions, QuadrilateralShapeModelOptions>()( {
-
-      // If true, validation will be done to ensure that the quadrilateral shape is reasonable. But this may be
-      // undesireable if you want to use this QuadrilateralShapeModel to determine if the proposed shape is
-      // reasonable.
       validateShape: true
     }, providedOptions );
 
     this.validateShape = options.validateShape;
 
-    // vertices of the quadrilateral
     this.vertexA = new Vertex( new Vector2( -0.25, 0.25 ), VertexLabel.VERTEX_A, model.preferencesModel.smoothingLengthProperty, options.tandem.createTandem( 'vertexA' ) );
     this.vertexB = new Vertex( new Vector2( 0.25, 0.25 ), VertexLabel.VERTEX_B, model.preferencesModel.smoothingLengthProperty, options.tandem.createTandem( 'vertexB' ) );
     this.vertexC = new Vertex( new Vector2( 0.25, -0.25 ), VertexLabel.VERTEX_C, model.preferencesModel.smoothingLengthProperty, options.tandem.createTandem( 'vertexC' ) );
@@ -189,7 +231,6 @@ class QuadrilateralShapeModel {
     // Collection of the vertices which should be easy to iterate over
     this.vertices = [ this.vertexA, this.vertexB, this.vertexC, this.vertexD ];
 
-    // TODO: Consider removing this, the relationships are duplicated with Sides
     this.adjacentVertices = [
       { vertex1: this.vertexA, vertex2: this.vertexB },
       { vertex1: this.vertexB, vertex2: this.vertexC },
@@ -216,7 +257,6 @@ class QuadrilateralShapeModel {
       [ this.vertexD, [ this.vertexA, this.vertexC ] ]
     ] );
 
-    // create the sides of the quadrilateral
     this.topSide = new Side( this.vertexA, this.vertexB, options.tandem.createTandem( 'sideAB' ), {
       offsetVectorForTiltCalculation: new Vector2( 0, 1 ),
       validateShape: options.validateShape
@@ -278,53 +318,29 @@ class QuadrilateralShapeModel {
       range: new Range( 0, 2 * Math.PI )
     } );
 
-    // A collection of the Side lengths at a point in time. Updated whenever an interaction begins with the
-    // quadrilateral. Allows us to monitor the change in Side lengths during interaction.
     this.savedSideLengths = this.getSideLengths();
-
-    // A collection of the vertex angles at a point in time. Updated whenever the quadrilateral changes.
     this.savedVertexAngles = this.getVertexAngles();
 
-    // Whether the Side lengths have changed relative to the saved side lengths that were stored at the beginning
-    // of an interaction. This helps accomplish a learning goal of determining if the quad remains a parallelogram
-    // while also keeping side lengths the same. This is set in the step function asynchronously(!!) so that
-    // it can be calculated only after all vertex positions have been set by listeners.
     this.lengthsEqualToSavedProperty = new BooleanProperty( false, {
       tandem: options.tandem.createTandem( 'lengthsEqualToSavedProperty' )
     } );
 
-    // Whether the current angles are equal to the saved set of savedVertexAngles. The savedVertexAngles are updated
-    // every time the quadrilateral side lengths change, so that we can track the condition that both the sides
-    // are remaining constant AND the angles are changing.
     this.anglesEqualToSavedProperty = new BooleanProperty( true, {
       tandem: options.tandem?.createTandem( 'anglesEqualToSavedProperty' )
     } );
 
-    // Whether the quadrilateral is a parallelogram. This Property updates async in the step function! We need to
-    // update this Property after all vertex positions and all vertex angles have been updated. When moving more than
-    // one vertex at a time, only one vertex position updates synchronously in the code and in those transient states
-    // the model may temporarily not be a parallelogram. Updating in step after all Properties and listeners are done
-    // with this work resolves the problem.
     this.isParallelogramProperty = new BooleanProperty( false, {
       tandem: options.tandem.createTandem( 'isParallelogramProperty' )
     } );
 
-    // Whether or not all angles of the quadrilateral are right angles within shapeAngleToleranceInterval.
-    // This is set in step because we need to wait until all vertices are positioned during model
-    // updates.
     this.allAnglesRightProperty = new BooleanProperty( false, {
       tandem: options.tandem.createTandem( 'allAnglesRightProperty' )
     } );
 
-    // Whether or not all lenghts of the quadrilateral are equal within the lengthToleranceInterval.
-    // Updated asychronously because we need to make sure that the positions of vertices have stabilized
-    // after model updates.
     this.allLengthsEqualProperty = new BooleanProperty( false, {
       tandem: options.tandem.createTandem( 'allLengthsEqualProperty' )
     } );
 
-    // The name of the quadrilateral (like square/rhombus/trapezoid, etc). Will be null if it is a random
-    // unnamed shape.
     this.shapeNameProperty = new EnumerationProperty( NamedQuadrilateral.GENERAL_QUADRILATERAL, {
       tandem: options.tandem.createTandem( 'shapeNameProperty' )
     } );
@@ -333,7 +349,6 @@ class QuadrilateralShapeModel {
       tandem: options.tandem.createTandem( 'areaProperty' )
     } );
 
-    // Emits an event whenever the shape of the Quadrilateral changes
     this.shapeChangedEmitter = new Emitter<[]>( {
       tandem: options.tandem.createTandem( 'shapeChangedEmitter' )
     } );
@@ -376,18 +391,12 @@ class QuadrilateralShapeModel {
       options.tandem.createTandem( 'sideBCSideDAParallelSideChecker' )
     );
 
-    // ParallelSideCheckers are responsible for determining if opposite SidePairs are parallel within their dynamic
-    // angleToleranceIntervalProperty.
     this.parallelSideCheckers = [
       this.sideABSideCDParallelSideChecker,
       this.sideBCSideDAParallelSideChecker
     ];
 
-    // referenced for private use in functions
     this.model = model;
-
-    // Whether or not the Properties of the shape are currently being deferred, preventing listeners
-    // from being called and new values from being set.
     this.propertiesDeferred = false;
 
     this.saveSideLengths();

@@ -25,18 +25,39 @@ import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import QuadrilateralPreferencesModel from './QuadrilateralPreferencesModel.js';
 
 class QuadrilateralModel {
+
+  // The bounds in model space. The bounds will change depending on available screen bounds so that
+  // on larger screens there is more model space to explore diferent shapes.
   public modelBoundsProperty: Property<Bounds2 | null>;
+
+  // The Bounds provided by the physical model, so we know how to map the physical model bounds to the model space
   public physicalModelBoundsProperty: Property<Bounds2 | null>;
+
+  // A transform that goes from tangible to virtual space. Used to set simulation vertex positions from
+  // positions from position data provided by the physical device.
+  // TODO: This should likely replace the physicalModelBoundsProperty and its mapping.
   public physicalToVirtualTransform: ModelViewTransform2 = ModelViewTransform2.createIdentity();
+
+  // Whether a reset is currently in progress. Added for sound. If the model is actively resetting,
+  // SoundManagers will disable so we don't play sounds for transient model states. It is a value for when
+  // the reset is NOT in progress because that is most convenient to pass to SoundGenerator enableControlProperties.
   public resetNotInProgressProperty: BooleanProperty;
+
+  // If true, the simulation is "calibrating" to a physical device so we don't set the vertex positions in response
+  // to changes from the physical device. Instead we are updating physicalModelBounds.
   public isCalibratingProperty: BooleanProperty;
+
+  // If true, a panel displaying model values will be added to the view. Only for debugging.
   public showDebugValuesProperty: BooleanProperty;
+
+  // Whether or not a marker is detected for physical device rotation. TODO: delete? https://github.com/phetsims/tangible/issues/11
   public rotationMarkerDetectedProperty: BooleanProperty;
 
   // True when we are connected to a device in some way, either bluetooth, serial, or
   // opencv. This is mostly for data collection.
   public connectedToDeviceProperty: BooleanProperty;
 
+  // Controls runtime preferences for the simulation.
   public readonly preferencesModel: QuadrilateralPreferencesModel;
 
   // A Property that indicates that all markers are observed by the camera to control this simulation. Part of
@@ -55,15 +76,31 @@ class QuadrilateralModel {
   // ability to see various markers.
   public readonly markerResponsesEnabledProperty: BooleanProperty;
 
+  // The amount of rotation in radians of the marker. TODO: delete? https://github.com/phetsims/tangible/issues/11
   public markerRotationProperty: NumberProperty;
+
+  // Whether the angle guide graphics are visible at each vertex.
   public cornerGuideVisibleProperty: BooleanProperty;
+
+  // Whether labels on each vertex are visible.
   public vertexLabelsVisibleProperty: BooleanProperty;
+
+  // Whether the symmetry grid is visible.
   public symmetryGridVisibleProperty: BooleanProperty;
+
+  // Whether additional feedback (mostly sounds) are enabled to indicate shape changes.
   public shapeIdentificationFeedbackEnabledProperty: BooleanProperty;
 
+  // A reference to the "main" shape model for the simulation. Controls vertex positions.
   public quadrilateralShapeModel: QuadrilateralShapeModel;
+
+  // A reference to a "test" model for the simulation. Used to validate and verify that vertex positions are
+  // reasonable before setting to the "main" shape model.
   public quadrilateralTestShapeModel: QuadrilateralShapeModel;
 
+  // The first model step we will disable all sounds. This simulation updates certain Properties in the animation
+  // frame so we wait until after the sim has loaded to start playing any sounds (lazyLink is not sufficient when
+  // Properties are updated the following frame).
   private firstModelStep: boolean;
 
   // The spacing of the model "grid" along both x and y axes. The Quadrilateral vertex positions will be constrained to
@@ -79,42 +116,30 @@ class QuadrilateralModel {
       tandem: tandem.createTandem( 'connectedToDeviceProperty' )
     } );
 
-    // The bounds in model space. The bounds will change depending on available screen bounds so that
-    // on larger screens there is more model space to explore diferent shapes.
     this.modelBoundsProperty = new Property<Bounds2 | null>( null, {
       tandem: tandem.createTandem( 'modelBoundsProperty' ),
       phetioType: Property.PropertyIO( NullableIO( Bounds2.Bounds2IO ) )
     } );
 
-    // The Bounds provided by the physical model, so we know how to map the physical model bounds to the model space
     this.physicalModelBoundsProperty = new Property<Bounds2 | null>( null, {
       tandem: tandem.createTandem( 'physicalModelBoundsProperty' ),
       phetioType: Property.PropertyIO( NullableIO( Bounds2.Bounds2IO ) )
     } );
 
-    // If true, the simulation is "calibrating" to a physical device so we don't set the vertex positions in response
-    // to changes from the physical device. Instead we are updating physicalModelBounds.
     this.isCalibratingProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'isCalibratingProperty' )
     } );
 
-    // If true, a panel displaying model values will be added to the view. Only for debugging.
     this.showDebugValuesProperty = new BooleanProperty( QuadrilateralQueryParameters.showModelValues );
 
-    // Whether or not a reset is currently in progress. Added for sound. If the model is actively resetting,
-    // SoundManagers will disable so we don't play sounds for transient model states. It is a value for when
-    // the reset is NOT in progress because that is most convenient to pass to SoundGenerator enableControlProperties.
     this.resetNotInProgressProperty = new BooleanProperty( true, {
       tandem: tandem.createTandem( 'resetNotInProgressProperty' )
     } );
 
-    // Whether or not a marker is detected for physical device rotation. TODO: delete? https://github.com/phetsims/tangible/issues/11
     this.rotationMarkerDetectedProperty = new BooleanProperty( false );
 
-    // Whether or not visual and auditory feedback related to identifying shapes when not a parallelogram is enabled.
     this.shapeIdentificationFeedbackEnabledProperty = preferencesModel.shapeIdentificationFeedbackEnabledProperty;
 
-    // The amount of rotation in radians of the marker. TODO: delete? https://github.com/phetsims/tangible/issues/11
     this.markerRotationProperty = new NumberProperty( 0 );
 
     this.allVertexMarkersDetectedProperty = new BooleanProperty( false, {
@@ -136,19 +161,15 @@ class QuadrilateralModel {
       tandem: tandem.createTandem( 'markerResponsesEnabledProperty' )
     } );
 
-    // This is the centrail quadrilateral shape for the simulation.
     this.quadrilateralShapeModel = new QuadrilateralShapeModel( this, {
       tandem: tandem.createTandem( 'quadrilateralShapeModel' )
     } );
 
-    // This quadrilateral is often used as a "scratch" where we test positions to make
-    // sure they are valid before setting to the main quadrilateral.
     this.quadrilateralTestShapeModel = new QuadrilateralShapeModel( this, {
       validateShape: false,
       tandem: tandem.createTandem( 'quadrilateralTestShapeModel' )
     } );
 
-    // Whether labels on each vertex are visible.
     this.vertexLabelsVisibleProperty = new BooleanProperty( true, {
       tandem: tandem.createTandem( 'vertexLabelsVisibleProperty' )
     } );
@@ -157,14 +178,10 @@ class QuadrilateralModel {
       tandem: tandem.createTandem( 'symmetryGridVisibleProperty' )
     } );
 
-    // Whether the angle guide graphics are visible at each vertex.
     this.cornerGuideVisibleProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'cornerGuideVisibleProperty' )
     } );
 
-    // The first model step we will disable all sounds. This simulation updates certain Properties in the animation
-    // frame so we wait until after the sim has loaded to start playing any sounds (lazyLink is not sufficient when
-    // Properties are updated the following frame).
     this.firstModelStep = true;
 
     // Put a reference to the simulation model on the window so that we can access it in wrappers that facilitate

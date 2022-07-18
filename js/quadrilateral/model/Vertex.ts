@@ -25,18 +25,45 @@ const HALF_WIDTH = VERTEX_BOUNDS.width / 2;
 const HALF_HEIGHT = VERTEX_BOUNDS.height / 2;
 
 class Vertex {
+
+  // The position of the vertex in model coordinates.
   public positionProperty: Property<Vector2>;
+
+  // The angle at this vertex of the quadrilateral, null until this vertex is connected to two others because we
+  // need three points to form the angle.
   public angleProperty: Property<number | null>;
   public readonly vertexLabel: VertexLabel;
+
+  // The bounds in model coordinates that define where this vertex can move.
+  // TODO: This is being replaced by dragAreaProperty, remove.
   public dragBoundsProperty: Property<null | Bounds2>;
+
+  // The Shape in model coordinates that defines where this Vertex can move. It can never
+  // go outside this area. The dragAreaProperty is determined by other vertices of the quadrilateral
+  // and is calculated such that the quadrilateral can never become complex or concave. It is null until
+  // the model bounds are defined and this Vertex is connected to others to form the quadrilateral shape.
   public dragAreaProperty: Property<null | Shape>;
+
+  // True when this Vertex is "pressed" during user interaction.
   public isPressedProperty: Property<boolean>;
+
+  // The bounds in model coordinates of this vertex, with dimensions VERTEX_BOUNDS, centered at the value of the
+  // positionProperty.
   public modelBoundsProperty: IReadOnlyProperty<Bounds2>;
+
+  // Referenced so that we can pass the tandem to Properties as they are dynamically created in the methods below.
   private tandem: Tandem;
 
   // Property that controls how many values to include in the "smoothing" of positions. See smoothPosition()
   private readonly smoothingLengthProperty: IReadOnlyProperty<number>;
 
+  // A reference to vertices connected to this vertex for the purposes of calculating the angle at this vertex.
+  // The orientation of vertex1 and vertex2 for angle calculations are as shown in the following diagram:
+  //        thisVertex
+  //          /       \
+  //   sideA /         \ sideB
+  //        /           \
+  // vertex1 --------- vertex2
   private vertex1: Vertex | null;
   private vertex2: Vertex | null;
 
@@ -56,16 +83,11 @@ class Vertex {
    * @param tandem
    */
   public constructor( initialPosition: Vector2, vertexLabel: VertexLabel, smoothingLengthProperty: IReadOnlyProperty<number>, tandem: Tandem ) {
-
     this.smoothingLengthProperty = smoothingLengthProperty;
-
-    // The position of the vertex in model coordinates.
     this.positionProperty = new Vector2Property( initialPosition, {
       tandem: tandem.createTandem( 'positionProperty' )
     } );
 
-    // The angle at this vertex of the quadrilateral, null until this vertex is connected to two others because we
-    // need three points to form the angle.
     this.angleProperty = new Property<null | number>( null, {
       tandem: tandem.createTandem( 'angleProperty' ),
       phetioType: Property.PropertyIO( NullableIO( NumberIO ) )
@@ -74,40 +96,22 @@ class Vertex {
     // The label for this vertex so we can get the same vertex on another QuadrilateralShapeModel.
     this.vertexLabel = vertexLabel;
 
-    // A reference to vertices connected to this vertex for the purposes of calculating the angle at this vertex.
-    // The orientation of vertex1 and vertex2 for angle calculations are as shown in the following diagram:
-    //        thisVertex
-    //          /       \
-    //   sideA /         \ sideB
-    //        /           \
-    // vertex1 --------- vertex2
     this.vertex1 = null;
     this.vertex2 = null;
 
-    // The bounds in model coordinates that define where this vertex can move. NOTE: Likely this
-    // is being replaced by dragAreaProperty, see next field.
     this.dragBoundsProperty = new Property<Bounds2 | null>( null );
-
-    // The Shape in model coordinates that defines where this Vertex can move. It can never
-    // go outside of this area. The dragAreaProperty is determined by other vertices of the quadrilateral
-    // and is calculated such that the quadrilateral can never become complex or concave. It is null until
-    // the model bounds are defined and this Vertex is connected to others to form the quadrilateral shape.
     this.dragAreaProperty = new Property<Shape | null>( null );
 
-    // The bounds in model coordinates of this vertex, with dimensions VERTEX_BOUNDS, centered at the value of the
-    // positionProperty.
     this.modelBoundsProperty = new DerivedProperty( [ this.positionProperty ], position => {
 
       // TODO: possibly reduce allocations?
       return new Bounds2( position.x - HALF_WIDTH, position.y - HALF_HEIGHT, position.x + HALF_WIDTH, position.y + HALF_HEIGHT );
     } );
 
-    // True when this Vertex is "pressed" during user interaction.
     this.isPressedProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'isPressedProperty' )
     } );
 
-    // Referenced so that we can pass the tandem to Properties as they are dynamically created in the methods below.
     this.tandem = tandem;
   }
 

@@ -68,18 +68,23 @@ AUDIO_BUFFER_MAP.set( QuartetSoundFile.FOUR, quadLoop04_mp3 );
 
 class QuartetSideSoundView {
   private readonly side: Side;
-  private playbackRateToSoundClipCollection: Map<number, SoundClipCollection>;
-  private readonly tiltToPlaybackExponential: LinearFunction;
-  private activeSoundClipCollection: null | SoundClipCollection;
+
+  // A map that goes from playback rate to the created SoundClipCollection.
+  private playbackRateToSoundClipCollection: Map<number, SoundClipCollection> = new Map();
+
+  // A map that goes between tilt to the value used to calculate playback rate for a particular tilt. Initial value
+  // for each side is Math.PI / 2. A value of 0 is fully tilted to the "left" while a value of Math.PI is fully
+  // tilted to the right.
+  private readonly tiltToPlaybackExponential: LinearFunction = new LinearFunction( 0, Math.PI, MIN_SOUND_CLIP_EXPONENTIAL, MAX_SOUND_CLIP_EXPONENTIAL );
+
+  // The SoundClipCollection that is currently active for the given value of the Side tiltProperty.
+  private activeSoundClipCollection: null | SoundClipCollection = null;
   private readonly disposeQuartetSideSoundView: () => void;
   private readonly resetNotInProgressProperty: BooleanProperty;
 
   public constructor( side: Side, resetNotInProgressProperty: BooleanProperty, quartetSoundFileProperty: EnumerationProperty<QuartetSoundFile> ) {
     this.side = side;
     this.resetNotInProgressProperty = resetNotInProgressProperty;
-
-    // A map that goes from playback rate to the created SoundClipCollection.
-    this.playbackRateToSoundClipCollection = new Map();
 
     // TODO: selectedSound is one of SoundFile enumeration, how do we do this?
     const createSoundClipsListener = ( selectedSound: QuartetSoundFile ) => {
@@ -95,14 +100,6 @@ class QuartetSideSoundView {
       }
     };
     this.resetNotInProgressProperty.link( resetListener );
-
-    // A map that goes between tilt to the value used to calculate playback rate for a particular tilt. Initial value
-    // for each side is Math.PI / 2. A value of 0 is fully tilted to the "left" while a value of Math.PI is fully
-    // tilted to the right.
-    this.tiltToPlaybackExponential = new LinearFunction( 0, Math.PI, MIN_SOUND_CLIP_EXPONENTIAL, MAX_SOUND_CLIP_EXPONENTIAL );
-
-    // The SoundClipCollection that is currently active for the given value of the Side tiltProperty.
-    this.activeSoundClipCollection = null;
 
     this.disposeQuartetSideSoundView = () => {
       this.resetNotInProgressProperty.unlink( resetListener );

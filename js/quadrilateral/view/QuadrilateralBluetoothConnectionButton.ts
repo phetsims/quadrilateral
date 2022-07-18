@@ -29,6 +29,8 @@ const REQUEST_DEVICE_OPTIONS = {
 
 class QuadrilateralBluetoothConnectionButton extends TextPushButton {
 
+  // Amount of time passed in ms since updating the simulation from bluetooth input. We wait at least every
+  // quadrilateralModel.preferencesModel.bluetoothUpdateIntervalProperty.value in an attempt to filter out noise.
   private timeSinceUpdatingSim = 0;
 
   public readonly allDataCollectedEmitter = new Emitter();

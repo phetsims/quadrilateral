@@ -1,6 +1,11 @@
 // Copyright 2021-2022, University of Colorado Boulder
 
 /**
+ * A snapshot of the model Properties at a point in time needed to compare against other states to watch
+ * how the model is changing over time.
+ *
+ * TODO: Can this be deleted? "saved states" for audio features are no longer needed for this sim.
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
