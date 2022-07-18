@@ -23,6 +23,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import QuadrilateralPreferencesModel from './QuadrilateralPreferencesModel.js';
+import IProperty from '../../../../axon/js/IProperty.js';
 
 class QuadrilateralModel {
 
@@ -41,21 +42,21 @@ class QuadrilateralModel {
   // Whether a reset is currently in progress. Added for sound. If the model is actively resetting,
   // SoundManagers will disable so we don't play sounds for transient model states. It is a value for when
   // the reset is NOT in progress because that is most convenient to pass to SoundGenerator enableControlProperties.
-  public resetNotInProgressProperty: BooleanProperty;
+  public resetNotInProgressProperty: IProperty<boolean>;
 
   // If true, the simulation is "calibrating" to a physical device so we don't set the vertex positions in response
   // to changes from the physical device. Instead we are updating physicalModelBounds.
-  public isCalibratingProperty: BooleanProperty;
+  public isCalibratingProperty: IProperty<boolean>;
 
   // If true, a panel displaying model values will be added to the view. Only for debugging.
-  public showDebugValuesProperty: BooleanProperty;
+  public showDebugValuesProperty: IProperty<boolean>;
 
   // Whether or not a marker is detected for physical device rotation. TODO: delete? https://github.com/phetsims/tangible/issues/11
-  public rotationMarkerDetectedProperty: BooleanProperty;
+  public rotationMarkerDetectedProperty: IProperty<boolean>;
 
   // True when we are connected to a device in some way, either bluetooth, serial, or
   // opencv. This is mostly for data collection.
-  public connectedToDeviceProperty: BooleanProperty;
+  public connectedToDeviceProperty: IProperty<boolean>;
 
   // Controls runtime preferences for the simulation.
   public readonly preferencesModel: QuadrilateralPreferencesModel;

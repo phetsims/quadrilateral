@@ -16,6 +16,7 @@ import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import optionize, { combineOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import EmptyObjectType from '../../../../phet-core/js/types/EmptyObjectType.js';
+import Property from '../../../../axon/js/Property.js';
 
 // constants
 const TEXT_OPTIONS = combineOptions<TextOptions>( {
@@ -28,7 +29,7 @@ type SelfOptions = EmptyObjectType;
 type QuadrilateralVisibilityControlsOptions = SelfOptions & StrictOmit<VBoxOptions, 'children'> & PickRequired<VBoxOptions, 'tandem'>;
 
 class QuadrilateralVisibilityControls extends VBox {
-  public constructor( cornerLabelsVisibleProperty: BooleanProperty, cornerGuideVisibleProperty: BooleanProperty, symmetryGridVisibleProperty: BooleanProperty, providedOptions: QuadrilateralVisibilityControlsOptions ) {
+  public constructor( cornerLabelsVisibleProperty: Property<boolean>, cornerGuideVisibleProperty: Property<boolean>, symmetryGridVisibleProperty: BooleanProperty, providedOptions: QuadrilateralVisibilityControlsOptions ) {
 
     const options = optionize<QuadrilateralVisibilityControlsOptions, SelfOptions, VBoxOptions>()( {
       align: 'left',
