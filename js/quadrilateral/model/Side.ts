@@ -18,6 +18,9 @@ import { Line } from '../../../../scenery/js/imports.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import QuadrilateralPhysics from './QuadrilateralPhysics.js';
+import vertexLabel from './VertexLabel.js';
+import vertexAngles from './VertexAngles.js';
 
 type SideOptions = {
 
@@ -32,6 +35,8 @@ type SideOptions = {
 };
 
 class Side {
+
+  private readonly physicsBody: p2.Body | null = null;
 
   // Reference to the vertices that compose this Side.
   public vertex1: Vertex;
@@ -68,10 +73,11 @@ class Side {
   /**
    * @param vertex1 - The first vertex of this Side.
    * @param vertex2 - The second vertex of this Side.
+   * @param physicsEngine
    * @param tandem
    * @param [providedOptions]
    */
-  public constructor( vertex1: Vertex, vertex2: Vertex, tandem: Tandem, providedOptions?: SideOptions ) {
+  public constructor( vertex1: Vertex, vertex2: Vertex, physicsEngine: QuadrilateralPhysics, tandem: Tandem, providedOptions?: SideOptions ) {
 
     const options = optionize<SideOptions, SideOptions>()( {
       offsetVectorForTiltCalculation: new Vector2( 1, 0 ),
@@ -117,6 +123,91 @@ class Side {
       tandem: tandem.createTandem( 'lengthToleranceIntervalProperty' ),
       phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
     } );
+
+    if ( false ) {
+      // const p2Position = QuadrilateralPhysics.vectorToP2Position( vertex2.positionProperty.value.average( vertex1.positionProperty.value ) );
+
+      this.physicsBody = new p2.Body( {
+        // mass: 0.15,
+        fixedRotation: true,
+
+        // needs to be the center of the shape and update dynamically
+        // position: p2Position,
+        velocity: [ 0, 0 ],
+        angularVelocity: 0,
+
+        ccdSpeedThreshold: 40
+      } );
+
+      let vertex1Constraint: p2.RevoluteConstraint | null = null;
+      let vertex2Constraint: p2.RevoluteConstraint | null = null;
+
+      physicsEngine.addBody( this.physicsBody );
+
+      let physicsShape: p2.Shape | null;
+      this.shapeProperty.link( modelShape => {
+        if ( physicsShape ) {
+          this.physicsBody!.removeShape( physicsShape );
+        }
+
+        const p2Position = QuadrilateralPhysics.vectorToP2Position( vertex2.positionProperty.value.average( vertex1.positionProperty.value ) );
+        this.physicsBody!.position = p2Position;
+
+        assert && assert( modelShape.subpaths.length === 1 );
+        const p2Path: [ number, number ][] = [];
+
+        const subpath = modelShape.subpaths[ 0 ];
+
+        // points need to be in CCW order (opposite of subpath segments)
+        for ( let i = subpath.segments.length - 1; i > -1; i-- ) {
+          const segment = subpath.segments[ i ];
+
+          // create a path around the start point of each segment for the body shape
+          p2Path.push( QuadrilateralPhysics.vectorToP2Position( segment.start ) );
+        }
+
+        const copyPath = p2Path.slice();
+        physicsShape = new p2.Convex( {
+          vertices: p2Path
+        } );
+        this.physicsBody!.addShape( physicsShape );
+
+        this.physicsBody!.setDensity( 1e6 );
+
+        if ( this.vertex1.vertexLabel === vertexLabel.VERTEX_A ) {
+          console.log( copyPath );
+        }
+
+        if ( vertex1Constraint ) {
+          physicsEngine.removePhysicsConstraint( vertex1Constraint );
+          vertex1Constraint = null;
+        }
+        if ( vertex2Constraint ) {
+          physicsEngine.removePhysicsConstraint( vertex2Constraint );
+          vertex2Constraint = null;
+        }
+
+        const localAOut: [ number, number ] = [ 0, 0 ];
+        const localBOut: [ number, number ] = [ 0, 0 ];
+
+        this.physicsBody!.toLocalFrame( localAOut, QuadrilateralPhysics.vectorToP2Position( vertex1.positionProperty.value ) );
+        this.physicsBody!.toLocalFrame( localBOut, QuadrilateralPhysics.vectorToP2Position( vertex2.positionProperty.value ) );
+
+        // constraint for vertex1
+        vertex1Constraint = new p2.RevoluteConstraint( this.physicsBody!, vertex1.physicsBody, {
+          localPivotA: localAOut,
+          localPivotB: [ 0, 0 ]
+        } );
+
+        vertex2Constraint = new p2.RevoluteConstraint( this.physicsBody!, vertex1.physicsBody, {
+          localPivotA: localBOut,
+          localPivotB: [ 0, 0 ]
+        } );
+
+        physicsEngine.addPhysicsConstraint( vertex1Constraint );
+        physicsEngine.addPhysicsConstraint( vertex2Constraint );
+      } );
+    }
   }
 
   /**

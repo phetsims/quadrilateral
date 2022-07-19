@@ -27,7 +27,8 @@
       "../sherpa/lib/mediaPipe/hands@0.4.1646424915/mediaPipeDependencies.js",
       "../sherpa/lib/mediaPipe/hands@0.4.1646424915/hands.js",
       "../sherpa/lib/mediaPipe/camera_utils-0.3.1640029074.js",
-      "../sherpa/lib/mediaPipe/control_utils-0.6.1629159505.js"
+      "../sherpa/lib/mediaPipe/control_utils-0.6.1629159505.js",
+      "../sherpa/lib/p2-0.7.1.js"
     ],
     "simFeatures": {
       "supportsInteractiveDescription": true,
@@ -37,6 +38,9 @@
     "supportsOutputJS": true
   },
   "eslintConfig": {
+    "globals": {
+      "p2": "readonly"
+    },
     "extends": "../chipper/eslint/sim_eslintrc.js",
     "overrides": [
       {

@@ -113,10 +113,17 @@ class VertexNode extends Voicing( Circle, 1 ) {
 
     const dragListener = new DragListener( {
       transform: modelViewTransform,
-      start: () => {
+      start: event => {
 
         // TODO: See #130, I am not sure what should be spoken during interaction
         this.voicingSpeakFullResponse();
+
+        const pointerPoint = event.pointer.point;
+        const parentPoint = this.globalToParentPoint( pointerPoint );
+        const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
+        vertex.physicsEngine.addPointerConstraint( vertex.physicsBody, modelPoint );
+
+        vertex.physicsBody.setDensity( 1 );
       },
       drag: ( event: SceneryEvent, listener: DragListener ) => {
         const pointerPoint = event.pointer.point;
@@ -126,9 +133,17 @@ class VertexNode extends Voicing( Circle, 1 ) {
         // constrain to the allowable positions in the model along the grid
         const constrainedPosition = QuadrilateralModel.getClosestGridPosition( modelPoint );
 
-        if ( model.isVertexPositionAllowed( vertex, constrainedPosition ) ) {
-          vertex.positionProperty.value = constrainedPosition;
-        }
+        vertex.physicsEngine.updatePointerConstraint( vertex.physicsBody, modelPoint );
+
+        // if ( model.isVertexPositionAllowed( vertex, constrainedPosition ) ) {
+        //   vertex.positionProperty.value = constrainedPosition;
+        // }
+      },
+      end: event => {
+        vertex.physicsEngine.removePointerConstraint( vertex.physicsBody );
+        vertex.physicsEngine.stopBodyMotion( vertex.physicsBody );
+
+        vertex.physicsBody.setDensity( 1e6 );
       },
 
       tandem: options.tandem.createTandem( 'dragListener' )

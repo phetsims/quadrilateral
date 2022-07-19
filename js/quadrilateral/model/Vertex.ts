@@ -19,6 +19,8 @@ import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import VertexLabel from './VertexLabel.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
+import QuadrilateralPhysics from './QuadrilateralPhysics.js';
+import Matrix3 from '../../../../dot/js/Matrix3.js';
 
 const VERTEX_BOUNDS = new Bounds2( 0, 0, 0.1, 0.1 );
 const HALF_WIDTH = VERTEX_BOUNDS.width / 2;
@@ -70,19 +72,28 @@ class Vertex {
   // The collection of SMOOTHING_LENGTH number of positions
   private readonly positions: Vector2[] = [];
 
+  public readonly physicsEngine: QuadrilateralPhysics;
+  public readonly physicsBody: p2.Body;
+
   // in model coordinates, the bounds of the vertex - necessary because we need to calculate vertex/vertex and
   // vertex/side collisions
   public static readonly VERTEX_BOUNDS = VERTEX_BOUNDS;
   public static readonly VERTEX_WIDTH = VERTEX_BOUNDS.width;
 
+  // Transform matrix set before/after the physics engine steps, to be used to adjust/read the mass's position/transform.
+  public readonly matrix: Matrix3 = new Matrix3();
+
   /**
    * @param initialPosition - The initial position for the Vertex in model coordinates.
+   * @param physicsEngine - Responsible for collision detection and prevention.
    * @param vertexLabel - A label tagging the vertex, so we can look up the equivalent vertex on another shape model
    * @param smoothingLengthProperty - Controlling how many values to use in the position smoothing when connected to
    *                                  a tangible device.
    * @param tandem
    */
-  public constructor( initialPosition: Vector2, vertexLabel: VertexLabel, smoothingLengthProperty: IReadOnlyProperty<number>, tandem: Tandem ) {
+  public constructor( initialPosition: Vector2, physicsEngine: QuadrilateralPhysics, vertexLabel: VertexLabel, smoothingLengthProperty: IReadOnlyProperty<number>, usePhysics: boolean, tandem: Tandem ) {
+    this.physicsEngine = physicsEngine;
+
     this.smoothingLengthProperty = smoothingLengthProperty;
     this.positionProperty = new Vector2Property( initialPosition, {
       tandem: tandem.createTandem( 'positionProperty' )
@@ -112,6 +123,28 @@ class Vertex {
       tandem: tandem.createTandem( 'isPressedProperty' )
     } );
 
+    // p2 engine setup
+    this.physicsBody = new p2.Body( {
+      mass: 0.15,
+      position: QuadrilateralPhysics.vectorToP2Position( initialPosition ),
+      fixedRotation: true,
+
+      // Prevents tunneling through other objects when moving quickly from dragging
+      ccdSpeedThreshold: 40
+    } );
+    const shape = new p2.Box( {
+      width: VERTEX_BOUNDS.width,
+      height: VERTEX_BOUNDS.height
+    } );
+
+    if ( usePhysics ) {
+      this.physicsBody.addShape( shape );
+      physicsEngine.addBody( this.physicsBody );
+
+      // for some reason this needs to be after the body has a shape
+      this.physicsBody.setDensity( 1e6 );
+    }
+
     this.tandem = tandem;
   }
 
@@ -137,6 +170,17 @@ class Vertex {
    */
   public setPropertiesDeferred( deferred: boolean ): ( () => void ) | null {
     return this.positionProperty.setDeferred( deferred );
+  }
+
+  private readPhysicsData(): void {
+    this.physicsEngine.bodyGetMatrixTransform( this.physicsBody, this.matrix );
+  }
+
+  public step(): void {
+    // this.readPhysicsData();
+
+    const positionVector = QuadrilateralPhysics.p2PositionToVector( this.physicsBody.position );
+    this.positionProperty.value = positionVector;
   }
 
   /**

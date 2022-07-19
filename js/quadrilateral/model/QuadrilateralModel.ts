@@ -24,6 +24,7 @@ import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import QuadrilateralPreferencesModel from './QuadrilateralPreferencesModel.js';
 import IProperty from '../../../../axon/js/IProperty.js';
+import QuadrilateralPhysics from './QuadrilateralPhysics.js';
 
 class QuadrilateralModel {
 
@@ -104,6 +105,8 @@ class QuadrilateralModel {
   // Properties are updated the following frame).
   private firstModelStep: boolean;
 
+  private readonly physicsEngine = new QuadrilateralPhysics();
+
   // The spacing of the model "grid" along both x and y axes. The Quadrilateral vertex positions will be constrained to
   // intervals of these values in model coordinates.
   public static MAJOR_GRID_SPACING = 0.05;
@@ -162,11 +165,11 @@ class QuadrilateralModel {
       tandem: tandem.createTandem( 'markerResponsesEnabledProperty' )
     } );
 
-    this.quadrilateralShapeModel = new QuadrilateralShapeModel( this, {
+    this.quadrilateralShapeModel = new QuadrilateralShapeModel( this, this.physicsEngine, {
       tandem: tandem.createTandem( 'quadrilateralShapeModel' )
     } );
 
-    this.quadrilateralTestShapeModel = new QuadrilateralShapeModel( this, {
+    this.quadrilateralTestShapeModel = new QuadrilateralShapeModel( this, this.physicsEngine,{
       validateShape: false,
       tandem: tandem.createTandem( 'quadrilateralTestShapeModel' )
     } );
@@ -288,6 +291,9 @@ class QuadrilateralModel {
    * @param dt - time step, in seconds
    */
   public step( dt: number ): void {
+    this.physicsEngine.step( dt );
+
+    this.quadrilateralShapeModel.step( dt );
 
     // First model step prevent sounds from coming through as we call updateOrderDependentProperties
     // TODO: This may not be necessary anymore since updateOrderDependentPRoperties was moved

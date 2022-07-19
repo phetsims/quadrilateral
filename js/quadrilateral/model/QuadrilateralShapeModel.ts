@@ -38,6 +38,7 @@ import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import IProperty from '../../../../axon/js/IProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
+import QuadrilateralPhysics from './QuadrilateralPhysics.js';
 
 // A useful type for calculations for the vertex Shapes which define where the Vertex can move depending on
 // the positions of the other vertices. Lines are along the bounds of model space and RayIntersections
@@ -215,7 +216,7 @@ class QuadrilateralShapeModel {
   // An array of all the (opposite) SidePairs that currently parallel with each other.
   public readonly parallelSidePairsProperty: Property<SidePair[]>;
 
-  public constructor( model: QuadrilateralModel, providedOptions: QuadrilateralShapeModelOptions ) {
+  public constructor( model: QuadrilateralModel, physicsEngine: QuadrilateralPhysics, providedOptions: QuadrilateralShapeModelOptions ) {
 
     const options = optionize<QuadrilateralShapeModelOptions, QuadrilateralShapeModelOptions>()( {
       validateShape: true
@@ -223,10 +224,11 @@ class QuadrilateralShapeModel {
 
     this.validateShape = options.validateShape;
 
-    this.vertexA = new Vertex( new Vector2( -0.25, 0.25 ), VertexLabel.VERTEX_A, model.preferencesModel.smoothingLengthProperty, options.tandem.createTandem( 'vertexA' ) );
-    this.vertexB = new Vertex( new Vector2( 0.25, 0.25 ), VertexLabel.VERTEX_B, model.preferencesModel.smoothingLengthProperty, options.tandem.createTandem( 'vertexB' ) );
-    this.vertexC = new Vertex( new Vector2( 0.25, -0.25 ), VertexLabel.VERTEX_C, model.preferencesModel.smoothingLengthProperty, options.tandem.createTandem( 'vertexC' ) );
-    this.vertexD = new Vertex( new Vector2( -0.25, -0.25 ), VertexLabel.VERTEX_D, model.preferencesModel.smoothingLengthProperty, options.tandem.createTandem( 'vertexD' ) );
+    // include the physics calculations for the real physics model (hacks for now, tap in when validateShape is true)
+    this.vertexA = new Vertex( new Vector2( -0.25, 0.25 ), physicsEngine, VertexLabel.VERTEX_A, model.preferencesModel.smoothingLengthProperty, options.validateShape, options.tandem.createTandem( 'vertexA' ) );
+    this.vertexB = new Vertex( new Vector2( 0.25, 0.25 ), physicsEngine, VertexLabel.VERTEX_B, model.preferencesModel.smoothingLengthProperty, options.validateShape, options.tandem.createTandem( 'vertexB' ) );
+    this.vertexC = new Vertex( new Vector2( 0.25, -0.25 ), physicsEngine, VertexLabel.VERTEX_C, model.preferencesModel.smoothingLengthProperty, options.validateShape, options.tandem.createTandem( 'vertexC' ) );
+    this.vertexD = new Vertex( new Vector2( -0.25, -0.25 ), physicsEngine, VertexLabel.VERTEX_D, model.preferencesModel.smoothingLengthProperty, options.validateShape, options.tandem.createTandem( 'vertexD' ) );
 
     // Collection of the vertices which should be easy to iterate over
     this.vertices = [ this.vertexA, this.vertexB, this.vertexC, this.vertexD ];
@@ -257,18 +259,18 @@ class QuadrilateralShapeModel {
       [ this.vertexD, [ this.vertexA, this.vertexC ] ]
     ] );
 
-    this.topSide = new Side( this.vertexA, this.vertexB, options.tandem.createTandem( 'sideAB' ), {
+    this.topSide = new Side( this.vertexA, this.vertexB, physicsEngine, options.tandem.createTandem( 'sideAB' ), {
       offsetVectorForTiltCalculation: new Vector2( 0, 1 ),
       validateShape: options.validateShape
     } );
-    this.rightSide = new Side( this.vertexB, this.vertexC, options.tandem.createTandem( 'sideBC' ), {
+    this.rightSide = new Side( this.vertexB, this.vertexC, physicsEngine, options.tandem.createTandem( 'sideBC' ), {
       validateShape: options.validateShape
     } );
-    this.bottomSide = new Side( this.vertexC, this.vertexD, options.tandem.createTandem( 'sideCD' ), {
+    this.bottomSide = new Side( this.vertexC, this.vertexD, physicsEngine, options.tandem.createTandem( 'sideCD' ), {
       offsetVectorForTiltCalculation: new Vector2( 0, -1 ),
       validateShape: options.validateShape
     } );
-    this.leftSide = new Side( this.vertexD, this.vertexA, options.tandem.createTandem( 'sideDA' ), {
+    this.leftSide = new Side( this.vertexD, this.vertexA, physicsEngine, options.tandem.createTandem( 'sideDA' ), {
       offsetVectorForTiltCalculation: new Vector2( -1, 0 ),
       validateShape: options.validateShape
     } );
@@ -1494,6 +1496,12 @@ class QuadrilateralShapeModel {
     }
 
     return toleranceInterval;
+  }
+
+  public step( dt: number ): void {
+    this.vertices.forEach( vertex => {
+      vertex.step();
+    } );
   }
 
   public reset(): void {
