@@ -16,8 +16,7 @@ import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import IProperty from '../../../../axon/js/IProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import Property from '../../../../axon/js/Property.js';
 

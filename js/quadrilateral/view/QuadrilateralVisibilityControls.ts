@@ -13,9 +13,8 @@ import quadrilateral from '../../quadrilateral.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import quadrilateralStrings from '../../quadrilateralStrings.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
-import optionize, { combineOptions } from '../../../../phet-core/js/optionize.js';
+import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Property from '../../../../axon/js/Property.js';
 
 // constants

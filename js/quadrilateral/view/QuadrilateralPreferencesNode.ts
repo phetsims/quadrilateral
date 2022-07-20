@@ -18,8 +18,7 @@ import QuadrilateralSoundOptionsNode from './QuadrilateralSoundOptionsNode.js';
 import Panel from '../../../../sun/js/Panel.js';
 import NumberControl, { NumberControlOptions } from '../../../../scenery-phet/js/NumberControl.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 
 class QuadrilateralPreferencesNode extends Node {
 

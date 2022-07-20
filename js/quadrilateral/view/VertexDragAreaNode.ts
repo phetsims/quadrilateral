@@ -12,8 +12,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import Vertex from '../model/Vertex.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Side from '../model/Side.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 
 class VertexDragAreaNode extends Path {
 
