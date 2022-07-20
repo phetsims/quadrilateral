@@ -19,7 +19,7 @@ import Panel from '../../../../sun/js/Panel.js';
 import NumberControl, { NumberControlOptions } from '../../../../scenery-phet/js/NumberControl.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import EmptyObjectType from '../../../../phet-core/js/types/EmptyObjectType.js';
+import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 
 class QuadrilateralPreferencesNode extends Node {
 
@@ -104,7 +104,7 @@ class TangiblePropertyNumberControl extends NumberControl {
     const propertyRange = property.range!;
     assert && assert( propertyRange, 'range required for NumberControl' );
 
-    const options = optionize<NumberControlOptions, EmptyObjectType, NumberControlOptions>()( {
+    const options = optionize<NumberControlOptions, EmptySelfOptions, NumberControlOptions>()( {
       delta: propertyRange.min,
 
       // opt out of tandems for these preferences because NumberControl requires phet.joist.sim and these

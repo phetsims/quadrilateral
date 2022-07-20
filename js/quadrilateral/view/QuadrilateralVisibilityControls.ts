@@ -15,7 +15,7 @@ import quadrilateralStrings from '../../quadrilateralStrings.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import optionize, { combineOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import EmptyObjectType from '../../../../phet-core/js/types/EmptyObjectType.js';
+import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Property from '../../../../axon/js/Property.js';
 
 // constants
@@ -25,7 +25,7 @@ const TEXT_OPTIONS = combineOptions<TextOptions>( {
   maxWidth: 100
 }, QuadrilateralConstants.SCREEN_TEXT_OPTIONS );
 
-type SelfOptions = EmptyObjectType;
+type SelfOptions = EmptySelfOptions;
 type QuadrilateralVisibilityControlsOptions = SelfOptions & StrictOmit<VBoxOptions, 'children'> & PickRequired<VBoxOptions, 'tandem'>;
 
 class QuadrilateralVisibilityControls extends VBox {
