@@ -11,7 +11,7 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import Emitter from '../../../../axon/js/Emitter.js';
+import IEmitter from '../../../../axon/js/IEmitter.js';
 import IProperty from '../../../../axon/js/IProperty.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import Property from '../../../../axon/js/Property.js';
@@ -56,7 +56,7 @@ class ParallelSideChecker {
    * @param resetNotInProgressProperty - Is the model currently not resetting?
    * @param tandem
    */
-  public constructor( oppositeSidePair: SidePair, otherOppositeSidePair: SidePair, shapeChangedEmitter: Emitter, resetNotInProgressProperty: IProperty<boolean>, tandem: Tandem ) {
+  public constructor( oppositeSidePair: SidePair, otherOppositeSidePair: SidePair, shapeChangedEmitter: IEmitter, resetNotInProgressProperty: IProperty<boolean>, tandem: Tandem ) {
 
     this.sidePair = oppositeSidePair;
 
