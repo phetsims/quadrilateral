@@ -132,6 +132,10 @@ class QuadrilateralScreenView extends ScreenView {
     // A reference to the QuadriladteralSoundView
     this.quadrilateralSoundView = null;
 
+    // Layered under everything else
+    const diagonalGuidesNode = new QuadrilateralDiagonalGuidesNode( model.quadrilateralShapeModel, model.modelBoundsProperty, model.diagonalGuidesVisibleProperty, this.modelViewTransform );
+    this.addChild( diagonalGuidesNode );
+
     this.quadrilateralNode = new QuadrilateralNode( model, modelViewTransform, this.layoutBounds, {
       tandem: tandem.createTandem( 'quadrilateralNode' )
     } );
@@ -162,9 +166,6 @@ class QuadrilateralScreenView extends ScreenView {
     const gridNode = new QuadrilateralGridNode( model.modelBoundsProperty, model.symmetryGridVisibleProperty, this.modelViewTransform );
     gridNode.leftTop = boundsRectangle.leftTop.plusScalar( BORDER_RECTANGLE_LINE_WIDTH / 2 );
     this.addChild( gridNode );
-
-    const diagonalGuidesNode = new QuadrilateralDiagonalGuidesNode( model.quadrilateralShapeModel, model.modelBoundsProperty, model.diagonalGuidesVisibleProperty, this.modelViewTransform );
-    this.addChild( diagonalGuidesNode );
 
     if ( QuadrilateralQueryParameters.soundBoard ) {
 
