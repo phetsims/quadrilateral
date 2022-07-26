@@ -102,7 +102,7 @@ type StringsType = {
         'isoscelesTrapezoid': string;
         'trapezoid': string;
         'concaveQuadrilateral': string;
-        'generalQuadrilateral': string;
+        'convexQuadrilateral': string;
       };
       'transformations': {
         'tiltingPattern': string;

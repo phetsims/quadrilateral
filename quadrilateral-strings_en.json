@@ -261,8 +261,8 @@
         "concaveQuadrilateral": {
           "value": "a concave quadrilateral"
         },
-        "generalQuadrilateral": {
-          "value": "a general quadrilateral"
+        "convexQuadrilateral": {
+          "value": "a convex quadrilateral"
         }
       },
       "transformations": {

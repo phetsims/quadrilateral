@@ -66,7 +66,7 @@ shapeNameMap.set( NamedQuadrilateral.KITE, quadrilateralStrings.a11y.voicing.sha
 shapeNameMap.set( NamedQuadrilateral.ISOSCELES_TRAPEZOID, quadrilateralStrings.a11y.voicing.shapeNames.isoscelesTrapezoid );
 shapeNameMap.set( NamedQuadrilateral.TRAPEZOID, quadrilateralStrings.a11y.voicing.shapeNames.trapezoid );
 shapeNameMap.set( NamedQuadrilateral.CONCAVE_QUADRILATERAL, quadrilateralStrings.a11y.voicing.shapeNames.concaveQuadrilateral );
-shapeNameMap.set( NamedQuadrilateral.GENERAL_QUADRILATERAL, quadrilateralStrings.a11y.voicing.shapeNames.generalQuadrilateral );
+shapeNameMap.set( NamedQuadrilateral.CONVEX_QUADRILATERAL, quadrilateralStrings.a11y.voicing.shapeNames.convexQuadrilateral );
 
 // A map that goes from VertexLabel -> letter label (like "A")
 const vertexLabelMap = new Map<VertexLabel, string>();
@@ -122,7 +122,7 @@ class QuadrilateralDescriber {
     const shapeName = this.shapeModel.shapeNameProperty.value;
     const shapeNameString = this.getShapeNameDescription( shapeName );
 
-    if ( this.shapeModel.isParallelogramProperty.value && shapeName === NamedQuadrilateral.GENERAL_QUADRILATERAL ) {
+    if ( this.shapeModel.isParallelogramProperty.value && shapeName === NamedQuadrilateral.CONVEX_QUADRILATERAL ) {
 
       // parallelogram with no name, don't include "general quadrilateral" just say parallelogram
       description = aParallelogramString;
@@ -257,7 +257,7 @@ class QuadrilateralDescriber {
         else {
 
           // In the basic case a trapezoid is described like a general quadrilateral
-          statement = this.getGeneralQuadrilateralVertexDescription();
+          statement = this.getConvexQuadrilateralVertexDescription();
         }
       }
       else if ( shapeName === NamedQuadrilateral.ISOSCELES_TRAPEZOID ) {
@@ -284,7 +284,7 @@ class QuadrilateralDescriber {
           quadrilateralStatementString = this.getTwoEqualVerticesAngleDescription( adjacentEqualVertexPairs[ 0 ].vertex1, adjacentEqualVertexPairs[ 0 ].vertex2 );
         }
         else {
-          quadrilateralStatementString = this.getGeneralQuadrilateralVertexDescription();
+          quadrilateralStatementString = this.getConvexQuadrilateralVertexDescription();
         }
 
         // after the quadrilateral statement describe the vertex whose angle makes this shape concave
@@ -314,7 +314,7 @@ class QuadrilateralDescriber {
       else {
 
         // fall back to the format for a "general" quadrilateral, see function for the details
-        statement = this.getGeneralQuadrilateralVertexDescription();
+        statement = this.getConvexQuadrilateralVertexDescription();
       }
     }
 
@@ -476,7 +476,7 @@ class QuadrilateralDescriber {
    *
    * "Corner C is somewhat smaller than corner A and Corner B is a little smaller than Corner D."
    */
-  private getGeneralQuadrilateralVertexDescription(): string {
+  private getConvexQuadrilateralVertexDescription(): string {
     const orderedOppositeVertexPairs = this.getVertexPairsOrderedForDescription( this.shapeModel.oppositeVertices );
 
     const firstCornerString = this.getCornerAngleDescription( orderedOppositeVertexPairs[ 0 ].vertex1 );

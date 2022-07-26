@@ -342,7 +342,7 @@ class QuadrilateralShapeModel {
       tandem: options.tandem.createTandem( 'allLengthsEqualProperty' )
     } );
 
-    this.shapeNameProperty = new EnumerationProperty( NamedQuadrilateral.GENERAL_QUADRILATERAL, {
+    this.shapeNameProperty = new EnumerationProperty( NamedQuadrilateral.CONVEX_QUADRILATERAL, {
       tandem: options.tandem.createTandem( 'shapeNameProperty' )
     } );
 
@@ -521,7 +521,7 @@ class QuadrilateralShapeModel {
   public getShapeName(): NamedQuadrilateral {
 
     // basic shape, fallback case
-    let namedQuadrilateral = NamedQuadrilateral.GENERAL_QUADRILATERAL;
+    let namedQuadrilateral = NamedQuadrilateral.CONVEX_QUADRILATERAL;
 
     const topSideLengthEqualToRightSideLength = this.isShapeLengthEqualToOther(
       this.topSide.lengthProperty.value,
