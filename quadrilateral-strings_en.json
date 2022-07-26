@@ -123,9 +123,6 @@
       "namedShapeNotAParallelogramHintPattern": {
         "value": "{{shapeName}}, not a parallelogram"
       },
-      "aParallelogram": {
-        "value": "a parallelogram"
-      },
       "detailsPattern": {
         "value": "Currently, your shape is {{description}}."
       },
@@ -263,6 +260,9 @@
         },
         "convexQuadrilateral": {
           "value": "a convex quadrilateral"
+        },
+        "parallelogram": {
+          "value": "a parallelogram"
         }
       },
       "transformations": {

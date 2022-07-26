@@ -103,6 +103,7 @@ type StringsType = {
         'trapezoid': string;
         'concaveQuadrilateral': string;
         'convexQuadrilateral': string;
+        'parallelogram': string;
       };
       'transformations': {
         'tiltingPattern': string;

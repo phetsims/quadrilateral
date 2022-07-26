@@ -571,6 +571,11 @@ class QuadrilateralShapeModel {
         // as well.
         namedQuadrilateral = NamedQuadrilateral.RHOMBUS;
       }
+      else {
+
+        // No additional classification but it is a parallelogram
+        namedQuadrilateral = NamedQuadrilateral.PARALLELOGRAM;
+      }
     }
     else {
 

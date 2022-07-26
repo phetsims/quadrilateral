@@ -18,7 +18,6 @@ import SideDescriber from './SideDescriber.js';
 // constants
 const namedShapeParalleogramHintPatternString = quadrilateralStrings.a11y.voicing.namedShapeParalleogramHintPattern;
 const namedShapeNotAParallelogramHintPatternString = quadrilateralStrings.a11y.voicing.namedShapeNotAParallelogramHintPattern;
-const aParallelogramString = quadrilateralStrings.a11y.voicing.aParallelogram;
 const firstDetailsStatementPatternString = quadrilateralStrings.a11y.voicing.firstDetailsStatementPattern;
 const aBString = quadrilateralStrings.a11y.aB;
 const bCString = quadrilateralStrings.a11y.bC;
@@ -67,6 +66,7 @@ shapeNameMap.set( NamedQuadrilateral.ISOSCELES_TRAPEZOID, quadrilateralStrings.a
 shapeNameMap.set( NamedQuadrilateral.TRAPEZOID, quadrilateralStrings.a11y.voicing.shapeNames.trapezoid );
 shapeNameMap.set( NamedQuadrilateral.CONCAVE_QUADRILATERAL, quadrilateralStrings.a11y.voicing.shapeNames.concaveQuadrilateral );
 shapeNameMap.set( NamedQuadrilateral.CONVEX_QUADRILATERAL, quadrilateralStrings.a11y.voicing.shapeNames.convexQuadrilateral );
+shapeNameMap.set( NamedQuadrilateral.PARALLELOGRAM, quadrilateralStrings.a11y.voicing.shapeNames.parallelogram );
 
 // A map that goes from VertexLabel -> letter label (like "A")
 const vertexLabelMap = new Map<VertexLabel, string>();
@@ -122,10 +122,10 @@ class QuadrilateralDescriber {
     const shapeName = this.shapeModel.shapeNameProperty.value;
     const shapeNameString = this.getShapeNameDescription( shapeName );
 
-    if ( this.shapeModel.isParallelogramProperty.value && shapeName === NamedQuadrilateral.CONVEX_QUADRILATERAL ) {
+    if ( this.shapeModel.isParallelogramProperty.value && shapeName === NamedQuadrilateral.PARALLELOGRAM ) {
 
-      // parallelogram with no name, don't include "general quadrilateral" just say parallelogram
-      description = aParallelogramString;
+      // parallelogram with no other name, don't include "general quadrilateral" just say parallelogram
+      description = shapeNameString!;
     }
     else {
       const patternString = this.shapeModel.isParallelogramProperty.value ? namedShapeParalleogramHintPatternString :
