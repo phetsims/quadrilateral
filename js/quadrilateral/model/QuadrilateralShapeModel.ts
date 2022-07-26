@@ -540,7 +540,7 @@ class QuadrilateralShapeModel {
 
     // If any angles are larger than PI it is a concave shape.
     if ( _.some( this.vertices, vertex => vertex.angleProperty.value! > Math.PI ) ) {
-      namedQuadrilateral = NamedQuadrilateral.CONCAVE;
+      namedQuadrilateral = NamedQuadrilateral.CONCAVE_QUADRILATERAL;
     }
     else if ( this.isParallelogramProperty.value ) {
 

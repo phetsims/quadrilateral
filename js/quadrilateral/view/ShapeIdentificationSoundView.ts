@@ -49,7 +49,7 @@ class ShapeIdentificationSoundView {
 
         // Design request that this sound should not play when it is a concave shape. See
         // https://github.com/phetsims/quadrilateral/issues/57
-        if ( name !== NamedQuadrilateral.CONCAVE ) {
+        if ( name !== NamedQuadrilateral.CONCAVE_QUADRILATERAL ) {
           this.shapeSoundClip.play();
         }
       }

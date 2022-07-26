@@ -65,7 +65,7 @@ shapeNameMap.set( NamedQuadrilateral.RHOMBUS, quadrilateralStrings.a11y.voicing.
 shapeNameMap.set( NamedQuadrilateral.KITE, quadrilateralStrings.a11y.voicing.shapeNames.kite );
 shapeNameMap.set( NamedQuadrilateral.ISOSCELES_TRAPEZOID, quadrilateralStrings.a11y.voicing.shapeNames.isoscelesTrapezoid );
 shapeNameMap.set( NamedQuadrilateral.TRAPEZOID, quadrilateralStrings.a11y.voicing.shapeNames.trapezoid );
-shapeNameMap.set( NamedQuadrilateral.CONCAVE, quadrilateralStrings.a11y.voicing.shapeNames.concaveQuadrilateral );
+shapeNameMap.set( NamedQuadrilateral.CONCAVE_QUADRILATERAL, quadrilateralStrings.a11y.voicing.shapeNames.concaveQuadrilateral );
 shapeNameMap.set( NamedQuadrilateral.GENERAL_QUADRILATERAL, quadrilateralStrings.a11y.voicing.shapeNames.generalQuadrilateral );
 
 // A map that goes from VertexLabel -> letter label (like "A")
@@ -272,7 +272,7 @@ class QuadrilateralDescriber {
         // assert && assert( oppositeEqualVertexPairs.length === 2, 'there should be two pairs of equal opposite angles for a parallelogram' );
         statement = this.getTwoPairsOfEqualVerticesAngleDescription( this.shapeModel.oppositeVertices );
       }
-      else if ( shapeName === NamedQuadrilateral.CONCAVE ) {
+      else if ( shapeName === NamedQuadrilateral.CONCAVE_QUADRILATERAL ) {
 
         // The concave shape may have a pair of opposite or adjacent vertex pairs with equal angles that should be
         // described.
@@ -411,7 +411,7 @@ class QuadrilateralDescriber {
           statement = 'I cannot describe this trapezoid because of issue 108.';
         }
       }
-      else if ( shapeName === NamedQuadrilateral.CONCAVE ) {
+      else if ( shapeName === NamedQuadrilateral.CONCAVE_QUADRILATERAL ) {
         if ( adjacentEqualSidePairs.length === 2 ) {
           assert && assert( adjacentEqualSidePairs.length === 2, 'There should be two pairs of adjacent sides with with the same length for a kite' );
           const patternString = sideConcavePatternString;
