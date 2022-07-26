@@ -620,13 +620,9 @@ class QuadrilateralShapeModel {
 
         if ( kiteRequirement ) {
 
-          // A kite that has one angle greater than OR EQUAL TO 180 degrees is considered a "dart" (equality with 180
-          // means we cannot use the same concave shape detection
-          const dartRequirement = _.some( this.vertices, vertex => {
-            return vertex.angleProperty.value! >= Math.PI;
-          } );
-
-          if ( dartRequirement ) {
+          // A kite that has one angle greater than (but not equal to, see
+          // https://github.com/phetsims/quadrilateral/issues/176) degrees is considered a "dart"
+          if ( concaveShape ) {
             namedQuadrilateral = NamedQuadrilateral.DART;
           }
           else {
