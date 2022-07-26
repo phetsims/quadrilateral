@@ -14,6 +14,7 @@ type StringsType = {
   'cornerLabels': string;
   'cornerGuides': string;
   'symmetryGrid': string;
+  'diagonalGuides': string;
   'vertexA': string;
   'vertexB': string;
   'vertexC': string;
@@ -33,6 +34,9 @@ type StringsType = {
     'angleGuidesHintResponse': string;
     'symmetryLinesAddedResponse': string;
     'symmetryLinesRemovedResponse': string;
+    'diagonalGuidesAddedResponse': string;
+    'diagonalGuidesRemovedResponse': string;
+    'diagonalGuidesHintResponse': string;
     'symmetryLinesHintResponse': string;
     'myShapesCorners': string;
     'myShapesSides': string;

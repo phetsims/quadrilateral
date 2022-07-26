@@ -89,6 +89,9 @@ class QuadrilateralModel {
   // Whether the symmetry grid is visible.
   public symmetryGridVisibleProperty: BooleanProperty;
 
+  // Whether the diagonal guides are visible.
+  public readonly diagonalGuidesVisibleProperty: BooleanProperty;
+
   // Whether additional feedback (mostly sounds) are enabled to indicate shape changes.
   public shapeIdentificationFeedbackEnabledProperty: BooleanProperty;
 
@@ -177,6 +180,10 @@ class QuadrilateralModel {
 
     this.symmetryGridVisibleProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'symmetryGridVisibleProperty' )
+    } );
+
+    this.diagonalGuidesVisibleProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'diagonalGuidesVisibleProperty' )
     } );
 
     this.cornerGuideVisibleProperty = new BooleanProperty( false, {
@@ -278,6 +285,7 @@ class QuadrilateralModel {
     this.cornerGuideVisibleProperty.reset();
     this.vertexLabelsVisibleProperty.reset();
     this.symmetryGridVisibleProperty.reset();
+    this.diagonalGuidesVisibleProperty.reset();
 
     // reset is not in progress anymore
     this.resetNotInProgressProperty.value = true;

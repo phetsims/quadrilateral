@@ -11,6 +11,9 @@
   "symmetryGrid": {
     "value": "Symmetry Grid"
   },
+  "diagonalGuides": {
+    "value": "Diagonal Guides"
+  },
   "vertexA": {
     "value": "A"
   },
@@ -61,6 +64,15 @@
     },
     "symmetryLinesRemovedResponse": {
       "value": "Lines hidden."
+    },
+    "diagonalGuidesAddedResponse": {
+      "value": "Diagonal guides added."
+    },
+    "diagonalGuidesRemovedResponse": {
+      "value": "Diagonal guides removed."
+    },
+    "diagonalGuidesHintResponse": {
+      "value": "Explore shapes with or without diagonal guides."
     },
     "symmetryLinesHintResponse": {
       "value": "Explore shapes with or without visual grid."
