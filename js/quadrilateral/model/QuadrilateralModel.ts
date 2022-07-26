@@ -81,13 +81,13 @@ class QuadrilateralModel {
   public markerRotationProperty: NumberProperty;
 
   // Whether the angle guide graphics are visible at each vertex.
-  public cornerGuideVisibleProperty: BooleanProperty;
+  public readonly cornerGuideVisibleProperty: BooleanProperty;
 
   // Whether labels on each vertex are visible.
-  public vertexLabelsVisibleProperty: BooleanProperty;
+  public readonly vertexLabelsVisibleProperty: BooleanProperty;
 
   // Whether the symmetry grid is visible.
-  public symmetryGridVisibleProperty: BooleanProperty;
+  public readonly symmetryGridVisibleProperty: BooleanProperty;
 
   // Whether the diagonal guides are visible.
   public readonly diagonalGuidesVisibleProperty: BooleanProperty;
