@@ -21,7 +21,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 
 const LINE_NODE_OPTIONS = {
   lineWidth: 2,
-  lineDash: [ 10, 5 ],
+  lineDash: [ 10, 2 ],
   stroke: QuadrilateralColors.diagonalGuidesStrokeColorProperty
 };
 
