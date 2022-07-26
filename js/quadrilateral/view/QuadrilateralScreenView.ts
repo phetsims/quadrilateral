@@ -36,6 +36,7 @@ import QuadrilateralBluetoothConnectionButton from './QuadrilateralBluetoothConn
 import QuadrilateralPreferencesModel from '../model/QuadrilateralPreferencesModel.js';
 import QuadrilateralSoundBoardNode from './QuadrilateralSoundBoardNode.js';
 import QuadrilateralMediaPipe from './QuadrilateralMediaPipe.js';
+import QuadrilateralDiagonalGuidesNode from './QuadrilateralDiagonalGuidesNode.js';
 
 const MODEL_BOUNDS = QuadrilateralQueryParameters.calibrationDemoDevice ? new Bounds2( -4.5, -4.5, 4.5, 4.5 ) :
                      new Bounds2( -1, -1, 1, 1 );
@@ -161,6 +162,9 @@ class QuadrilateralScreenView extends ScreenView {
     const gridNode = new QuadrilateralGridNode( model.modelBoundsProperty, model.symmetryGridVisibleProperty, this.modelViewTransform );
     gridNode.leftTop = boundsRectangle.leftTop.plusScalar( BORDER_RECTANGLE_LINE_WIDTH / 2 );
     this.addChild( gridNode );
+
+    const diagonalGuidesNode = new QuadrilateralDiagonalGuidesNode( model.quadrilateralShapeModel, model.modelBoundsProperty, model.diagonalGuidesVisibleProperty, this.modelViewTransform );
+    this.addChild( diagonalGuidesNode );
 
     if ( QuadrilateralQueryParameters.soundBoard ) {
 
