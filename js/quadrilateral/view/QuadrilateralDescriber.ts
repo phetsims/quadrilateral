@@ -67,6 +67,7 @@ shapeNameMap.set( NamedQuadrilateral.TRAPEZOID, quadrilateralStrings.a11y.voicin
 shapeNameMap.set( NamedQuadrilateral.CONCAVE_QUADRILATERAL, quadrilateralStrings.a11y.voicing.shapeNames.concaveQuadrilateral );
 shapeNameMap.set( NamedQuadrilateral.CONVEX_QUADRILATERAL, quadrilateralStrings.a11y.voicing.shapeNames.convexQuadrilateral );
 shapeNameMap.set( NamedQuadrilateral.PARALLELOGRAM, quadrilateralStrings.a11y.voicing.shapeNames.parallelogram );
+shapeNameMap.set( NamedQuadrilateral.DART, quadrilateralStrings.a11y.voicing.shapeNames.dart );
 
 // A map that goes from VertexLabel -> letter label (like "A")
 const vertexLabelMap = new Map<VertexLabel, string>();

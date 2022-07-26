@@ -263,6 +263,9 @@
         },
         "parallelogram": {
           "value": "a parallelogram"
+        },
+        "dart": {
+          "value": "a dart"
         }
       },
       "transformations": {

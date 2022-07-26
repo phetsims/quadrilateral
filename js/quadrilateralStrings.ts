@@ -54,7 +54,6 @@ type StringsType = {
       'youHaveAShapeHintPattern': string;
       'namedShapeParalleogramHintPattern': string;
       'namedShapeNotAParallelogramHintPattern': string;
-      'aParallelogram': string;
       'detailsPattern': string;
       'firstDetailsStatementPattern': string;
       'details': {
@@ -104,6 +103,7 @@ type StringsType = {
         'concaveQuadrilateral': string;
         'convexQuadrilateral': string;
         'parallelogram': string;
+        'dart': string;
       };
       'transformations': {
         'tiltingPattern': string;

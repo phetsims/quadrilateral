@@ -520,8 +520,9 @@ class QuadrilateralShapeModel {
    */
   public getShapeName(): NamedQuadrilateral {
 
-    // basic shape, fallback case
-    let namedQuadrilateral = NamedQuadrilateral.CONVEX_QUADRILATERAL;
+    // basic fallback cases - convex or concave quadrilateral
+    const concaveShape = _.some( this.vertices, vertex => vertex.angleProperty.value! > Math.PI );
+    let namedQuadrilateral = concaveShape ? NamedQuadrilateral.CONCAVE_QUADRILATERAL : NamedQuadrilateral.CONVEX_QUADRILATERAL;
 
     const topSideLengthEqualToRightSideLength = this.isShapeLengthEqualToOther(
       this.topSide.lengthProperty.value,
@@ -538,11 +539,7 @@ class QuadrilateralShapeModel {
     const vertexAAngleEqualsVertexBAngle = this.isShapeAngleEqualToOther( this.vertexA.angleProperty.value!, this.vertexB.angleProperty.value! );
     const vertex2AngleEqualsVertex3Angle = this.isShapeAngleEqualToOther( this.vertexB.angleProperty.value!, this.vertexC.angleProperty.value! );
 
-    // If any angles are larger than PI it is a concave shape.
-    if ( _.some( this.vertices, vertex => vertex.angleProperty.value! > Math.PI ) ) {
-      namedQuadrilateral = NamedQuadrilateral.CONCAVE_QUADRILATERAL;
-    }
-    else if ( this.isParallelogramProperty.value ) {
+    if ( this.isParallelogramProperty.value ) {
 
       // Square, rhombus, rectangle must be a parallelogram. If we assume this then we can simplify some of the other
       // comparisons to detect these shapes because we know that opposite angles must be equal and opposite sides must
@@ -622,7 +619,19 @@ class QuadrilateralShapeModel {
         const kiteRequirement = kiteSideLengthRequirement && kiteAngleRequirement;
 
         if ( kiteRequirement ) {
-          namedQuadrilateral = NamedQuadrilateral.KITE;
+
+          // A kite that has one angle greater than OR EQUAL TO 180 degrees is considered a "dart" (equality with 180
+          // means we cannot use the same concave shape detection
+          const dartRequirement = _.some( this.vertices, vertex => {
+            return vertex.angleProperty.value! >= Math.PI;
+          } );
+
+          if ( dartRequirement ) {
+            namedQuadrilateral = NamedQuadrilateral.DART;
+          }
+          else {
+            namedQuadrilateral = NamedQuadrilateral.KITE;
+          }
         }
       }
     }
