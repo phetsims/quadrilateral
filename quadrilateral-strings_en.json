@@ -376,8 +376,8 @@
         "value": "right angle, {{oppositeComparison}} opposite corner, {{adjacentVertexDescription}}."
       },
       "vertexDragObjectResponse": {
-        "bigger": {
-          "value": "bigger"
+        "wider": {
+          "value": "wider"
         },
         "smaller": {
           "value": "smaller"

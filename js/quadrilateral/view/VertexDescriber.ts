@@ -41,7 +41,7 @@ const equalAdjacentCornersPatternString = quadrilateralStrings.a11y.voicing.equa
 const smallerThanAdjacentCornersString = quadrilateralStrings.a11y.voicing.smallerThanAdjacentCorners;
 const widerThanAdjacentCornersString = quadrilateralStrings.a11y.voicing.widerThanAdjacentCorners;
 const notEqualToAdjacentCornersString = quadrilateralStrings.a11y.voicing.notEqualToAdjacentCorners;
-const biggerString = quadrilateralStrings.a11y.voicing.vertexDragObjectResponse.bigger;
+const widerString = quadrilateralStrings.a11y.voicing.vertexDragObjectResponse.wider;
 const smallerString = quadrilateralStrings.a11y.voicing.vertexDragObjectResponse.smaller;
 const fartherFromString = quadrilateralStrings.a11y.voicing.vertexDragObjectResponse.fartherFrom;
 const closerToString = quadrilateralStrings.a11y.voicing.vertexDragObjectResponse.closerTo;
@@ -130,7 +130,7 @@ class VertexDescriber {
    *
    * "angle smaller, farther from opposite corner" or
    * "angle smaller, closer to opposite corner" or
-   * "angle bigger, farther from opposite corner"
+   * "angle wider, farther from opposite corner"
    *
    * Note that since this is dependent on angles and not just position Properties, this must be called after
    * shapeChangedEmitter emits when we know that all angle and shape Properties have been updated. See
@@ -145,7 +145,7 @@ class VertexDescriber {
     const currentOppositeDistance = QuadrilateralShapeModel.getDistanceBetweenVertices( this.vertex, oppositeVertex );
 
     assert && assert( previousAngle !== currentAngle, 'impossible to move a vertex without changing angle' );
-    const angleChangeString = currentAngle > previousAngle ? biggerString : smallerString;
+    const angleChangeString = currentAngle > previousAngle ? widerString : smallerString;
     const distanceChangeString = currentOppositeDistance > previousOppositeDistance ? fartherFromString : closerToString;
 
     return StringUtils.fillIn( vertexDragObjectResponsePatternString, {

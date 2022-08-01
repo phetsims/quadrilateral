@@ -143,7 +143,7 @@ type StringsType = {
       'vertexObjectResponsePattern': string;
       'rightAngleVertexObjectResponsePattern': string;
       'vertexDragObjectResponse': {
-        'bigger': string;
+        'wider': string;
         'smaller': string;
         'fartherFrom': string;
         'closerTo': string;
