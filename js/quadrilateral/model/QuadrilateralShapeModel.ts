@@ -148,6 +148,12 @@ class QuadrilateralShapeModel {
   // Emits an event whenever the shape of the Quadrilateral changes
   public shapeChangedEmitter: IEmitter;
 
+  // Emits an event whenever the Shape of the Quadrilateral changes. Only emits after all order dependent
+  // Properties are up to date (no transient states as individual Vertices move). When the shape changes,
+  // there is distributed view code that needs to run in order. Instead of depending on listener order, breaking
+  // it into multiple Emitters to control the order of callbacks is working OK and easy.
+  public firstSeriesShapeChangedEmitter: IEmitter;
+
   // Whether the quadrilateral is a parallelogram. This Property updates async in the step function! We need to
   // update this Property after all vertex positions and all vertex angles have been updated. When moving more than
   // one vertex at a time, only one vertex position updates synchronously in the code and in those transient states
@@ -354,6 +360,8 @@ class QuadrilateralShapeModel {
       tandem: options.tandem.createTandem( 'shapeChangedEmitter' )
     } );
 
+    this.firstSeriesShapeChangedEmitter = new Emitter<[]>();
+
     this.shapeAngleToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty ], shapeName => {
       return QuadrilateralShapeModel.toleranceIntervalWideningListener(
         QuadrilateralQueryParameters.shapeAngleToleranceInterval,
@@ -421,7 +429,11 @@ class QuadrilateralShapeModel {
         // at once.
         this.updateOrderDependentProperties();
 
-        // so that emitter listeners arent called until after order dependent Properties are updated
+        // After updating order dependent Properties so that emitter listeners arent called until after order dependent
+        // Properties are updated. Multiple Emitters for this event control the order of certain listeners distributed
+        // in code that need to happen first. Not thrilled about this approach and may re-implement some things
+        // to do it a different way.
+        this.firstSeriesShapeChangedEmitter.emit();
         this.shapeChangedEmitter.emit();
 
         if ( model.modelBoundsProperty.value ) {
@@ -1491,6 +1503,14 @@ class QuadrilateralShapeModel {
    */
   public static getDistanceBetweenVertices( vertex1: Vertex, vertex2: Vertex ): number {
     return vertex1.positionProperty.value.distance( vertex2.positionProperty.value );
+  }
+
+  /**
+   * Returns the average length between two sides. Useful when determining how parallel or adjacent
+   * pairs of side lengths change over time.
+   */
+  public static getAverageSideLength( side1: Side, side2: Side ): number {
+    return side1.lengthProperty.value + side2.lengthProperty.value / 2;
   }
 
   /**

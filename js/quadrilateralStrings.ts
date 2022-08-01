@@ -149,6 +149,11 @@ type StringsType = {
         'closerTo': string;
         'vertexDragObjectResponsePattern': string;
       };
+      'sideDragObjectResponse': {
+        'shorter': string;
+        'longer': string;
+        'sideDragObjectResponsePattern': string;
+      };
       'farWiderThan': string;
       'farSmallerThan': string;
       'muchMuchWiderThan': string;

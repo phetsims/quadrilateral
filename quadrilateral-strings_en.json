@@ -392,6 +392,17 @@
           "value": "angle {{angleChange}}, {{distanceChange}} opposite corner"
         }
       },
+      "sideDragObjectResponse": {
+        "shorter": {
+          "value": "shorter"
+        },
+        "longer": {
+          "value": "longer"
+        },
+        "sideDragObjectResponsePattern": {
+          "value": "{{directionChange}}, adjacent sides {{lengthChange}}"
+        }
+      },
       "farWiderThan": {
         "value": "far wider than"
       },

@@ -169,9 +169,6 @@ class VertexNode extends Voicing( Circle, 1 ) {
 
     // voicing
     const inputResponseUtterance = new Utterance( {
-
-      // higher than the Priority of context responses so that timed context responses do not interrupt these
-      // object responses
       priority: QuadrilateralConstants.INPUT_OBJECT_RESPONSE_PRIORITY
     } );
     model.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
