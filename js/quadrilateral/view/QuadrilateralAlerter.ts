@@ -84,21 +84,12 @@ class QuadrilateralAlerter extends Alerter {
     this.model = model;
     this.previousShapeSnapshot = new ShapeSnapshot( shapeModel );
 
-    // The utterance used when important pedagogical state changes like entering/exiting parallelogram, all lengths
-    // equal, or all right angles
-    const importantAlertResponsePacket = new ResponsePacket();
-    const importantStateUtterance = new Utterance( {
-      alert: importantAlertResponsePacket,
-      priority: Utterance.HIGH_PRIORITY
-    } );
-
     // The utterance used when the shape state changes, but in ways that are less pedagogically relevant than
     // the important state information. This Utterance is therefore interruptable and lower priority than the
     // importantStateUtterance in the utterance queue.
-    const changingStateResponsePacket = new ResponsePacket();
-    const changingStateUtterance = new Utterance( {
-      alert: changingStateResponsePacket,
-      priority: Utterance.MEDIUM_PRIORITY
+    const shapeResponsePacket = new ResponsePacket();
+    const shapeUtterance = new Utterance( {
+      alert: shapeResponsePacket
     } );
 
     this.wasParallelogram = model.quadrilateralShapeModel.isParallelogramProperty.value;
@@ -148,19 +139,18 @@ class QuadrilateralAlerter extends Alerter {
       this.wasSideABSideCDParallel = sideABSideCDParallelAfter;
       this.wasSideBCSideDAParallel = sideBCSideDAParallelAfter;
 
-      if ( this.angleResponseReady || this.lengthResponseReady || parallelSideResponseReady ) {
-
-        const thisResponseReason = angleDifferencesLarge ? 'angle' : 'length';
-        const tiltChangeResponse = this.getShapeChangeResponse( shapeModel, this.previousShapeSnapshot, thisResponseReason );
-        changingStateResponsePacket.contextResponse = tiltChangeResponse;
-        this.alert( changingStateUtterance );
-        this.previousShapeSnapshot = new ShapeSnapshot( shapeModel );
-      }
-
+      // prioritize the "important" information change, other content is not spoken if this is ready
       const importantStateResponse = this.getImportantStateChangeResponse();
       if ( importantStateResponse ) {
-        importantAlertResponsePacket.contextResponse = importantStateResponse!;
-        this.alert( importantStateUtterance );
+        shapeResponsePacket.contextResponse = importantStateResponse!;
+        this.alert( shapeUtterance );
+      }
+      else if ( this.angleResponseReady || this.lengthResponseReady || parallelSideResponseReady ) {
+        const thisResponseReason = angleDifferencesLarge ? 'angle' : 'length';
+        const tiltChangeResponse = this.getShapeChangeResponse( shapeModel, this.previousShapeSnapshot, thisResponseReason );
+        shapeResponsePacket.contextResponse = tiltChangeResponse;
+        this.alert( shapeUtterance );
+        this.previousShapeSnapshot = new ShapeSnapshot( shapeModel );
       }
     } );
 
@@ -196,8 +186,7 @@ class QuadrilateralAlerter extends Alerter {
     model.vertexDMarkerDetectedProperty.link( detected => { vertexDetectionResponseListener( vertexDString, detected ); } );
 
     // So that this content respects voicingVisible.
-    Voicing.registerUtteranceToNode( importantStateUtterance, screenView );
-    Voicing.registerUtteranceToNode( changingStateUtterance, screenView );
+    Voicing.registerUtteranceToNode( shapeUtterance, screenView );
     Voicing.registerUtteranceToNode( markerUtterance, screenView );
   }
 

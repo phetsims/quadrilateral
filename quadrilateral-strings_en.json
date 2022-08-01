@@ -375,6 +375,23 @@
       "rightAngleVertexObjectResponsePattern": {
         "value": "right angle, {{oppositeComparison}} opposite corner, {{adjacentVertexDescription}}."
       },
+      "vertexDragObjectResponse": {
+        "bigger": {
+          "value": "bigger"
+        },
+        "smaller": {
+          "value": "smaller"
+        },
+        "fartherFrom": {
+          "value": "farther from"
+        },
+        "closerTo": {
+          "value": "closer to"
+        },
+        "vertexDragObjectResponsePattern": {
+          "value": "angle {{angleChange}}, {{distanceChange}} opposite corner"
+        }
+      },
       "farWiderThan": {
         "value": "far wider than"
       },

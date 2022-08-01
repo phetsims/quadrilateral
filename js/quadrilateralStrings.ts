@@ -142,6 +142,13 @@ type StringsType = {
       'allRightAngles': string;
       'vertexObjectResponsePattern': string;
       'rightAngleVertexObjectResponsePattern': string;
+      'vertexDragObjectResponse': {
+        'bigger': string;
+        'smaller': string;
+        'fartherFrom': string;
+        'closerTo': string;
+        'vertexDragObjectResponsePattern': string;
+      };
       'farWiderThan': string;
       'farSmallerThan': string;
       'muchMuchWiderThan': string;

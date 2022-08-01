@@ -41,6 +41,11 @@ const equalAdjacentCornersPatternString = quadrilateralStrings.a11y.voicing.equa
 const smallerThanAdjacentCornersString = quadrilateralStrings.a11y.voicing.smallerThanAdjacentCorners;
 const widerThanAdjacentCornersString = quadrilateralStrings.a11y.voicing.widerThanAdjacentCorners;
 const notEqualToAdjacentCornersString = quadrilateralStrings.a11y.voicing.notEqualToAdjacentCorners;
+const biggerString = quadrilateralStrings.a11y.voicing.vertexDragObjectResponse.bigger;
+const smallerString = quadrilateralStrings.a11y.voicing.vertexDragObjectResponse.smaller;
+const fartherFromString = quadrilateralStrings.a11y.voicing.vertexDragObjectResponse.fartherFrom;
+const closerToString = quadrilateralStrings.a11y.voicing.vertexDragObjectResponse.closerTo;
+const vertexDragObjectResponsePatternString = quadrilateralStrings.a11y.voicing.vertexDragObjectResponse.vertexDragObjectResponsePattern;
 
 // Maps a vertex to its accessible name, like "Corner A".
 const VertexCornerLabelMap = new Map<VertexLabel, string>( [
@@ -115,6 +120,38 @@ class VertexDescriber {
     } );
 
     return response;
+  }
+
+  /**
+   * Returns the Object Response that is announced every movement with keyboard dragging. This
+   * is unique to keyboard input. With mouse/touch input the less frequent rate of context responses
+   * are sufficient for the Voicing output to describe the changing shape. With keyboard, the user
+   * needs a response every key press to know that changes are happening. Will return something like
+   *
+   * "angle smaller, farther from opposite corner" or
+   * "angle smaller, closer to opposite corner" or
+   * "angle bigger, farther from opposite corner"
+   *
+   * Note that since this is dependent on angles and not just position Properties, this must be called after
+   * shapeChangedEmitter emits when we know that all angle and shape Properties have been updated. See
+   * QuadrilateralShapeModel.updateOrderDependentProperties for more information.
+   *
+   * @param previousAngle - angle of the described Vertex before this described change
+   * @param previousOppositeDistance - distance from the described Vertex to the opposite vertex before this change
+   */
+  public getKeyboardDragObjectResponse( previousAngle: number, previousOppositeDistance: number ): string {
+    const currentAngle = this.vertex.angleProperty.value!;
+    const oppositeVertex = this.quadrilateralShapeModel.oppositeVertexMap.get( this.vertex )!;
+    const currentOppositeDistance = QuadrilateralShapeModel.getDistanceBetweenVertices( this.vertex, oppositeVertex );
+
+    assert && assert( previousAngle !== currentAngle, 'impossible to move a vertex without changing angle' );
+    const angleChangeString = currentAngle > previousAngle ? biggerString : smallerString;
+    const distanceChangeString = currentOppositeDistance > previousOppositeDistance ? fartherFromString : closerToString;
+
+    return StringUtils.fillIn( vertexDragObjectResponsePatternString, {
+      angleChange: angleChangeString,
+      distanceChange: distanceChangeString
+    } );
   }
 
   /**

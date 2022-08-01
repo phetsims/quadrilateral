@@ -1487,6 +1487,13 @@ class QuadrilateralShapeModel {
   }
 
   /**
+   * Returns the distance in model space between two vertices.
+   */
+  public static getDistanceBetweenVertices( vertex1: Vertex, vertex2: Vertex ): number {
+    return vertex1.positionProperty.value.distance( vertex2.positionProperty.value );
+  }
+
+  /**
    * When connected to a tangible, widen the tolerance interval when we have a detected shape Name so that it is more
    * difficult to leave the quadrilateral state in that condition. This is helpful because it is difficult to make
    * fine-grained motions with the tangible.

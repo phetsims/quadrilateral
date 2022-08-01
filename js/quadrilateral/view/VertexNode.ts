@@ -20,6 +20,9 @@ import VertexDescriber from './VertexDescriber.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
+import Utterance from '../../../../utterance-queue/js/Utterance.js';
+import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 
 // constants
 const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
@@ -81,15 +84,29 @@ class VertexNode extends Voicing( Circle, 1 ) {
       vertexLabelText.visible = vertexLabelsVisible;
     } );
 
-    // A basic keyboard input listener.
+    // From keyboard dragging, a Voicing Object Response is triggered every move. But we can't generate the description
+    // until all Shape Properties have been updated, so we need to wait to describe until after the shapeChangedEmitter
+    // emits. See QuadrilateralShapeModel.updateOrderDependentProperties for more information.
+    // Keyboard presses should trigger a response every input. When using mouse/touch we will never hear this,
+    // because with that form of input the less frequent rate of information from context responses is sufficient.
+    let voiceNextShapeChange = false;
+
+    // Voicing for the vertex describes changing values. Since it is triggered by input instead of a changing Property
+    // we need to watch the previous values of angle and distance to describe the new value.
+    const oppositeVertex = model.quadrilateralShapeModel.oppositeVertexMap.get( vertex )!;
+    let previousOppositeDistance = QuadrilateralShapeModel.getDistanceBetweenVertices( vertex, oppositeVertex );
+    let previousAngle = vertex.angleProperty.value;
+
     const largeViewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralModel.MAJOR_GRID_SPACING );
     const smallViewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralModel.MINOR_GRID_SPACING );
     const keyboardDragListener = new KeyboardDragListener( {
       transform: modelViewTransform,
       drag: ( modelDelta: Vector2 ) => {
         const proposedPosition = vertex.positionProperty.value.plus( modelDelta );
-
         if ( model.isVertexPositionAllowed( vertex, proposedPosition ) ) {
+          voiceNextShapeChange = true;
+          previousAngle = vertex.angleProperty.value;
+          previousOppositeDistance = QuadrilateralShapeModel.getDistanceBetweenVertices( vertex, oppositeVertex );
           vertex.positionProperty.value = proposedPosition;
         }
       },
@@ -151,8 +168,26 @@ class VertexNode extends Voicing( Circle, 1 ) {
     } );
 
     // voicing
+    const inputResponseUtterance = new Utterance( {
+
+      // higher than the Priority of context responses so that timed context responses do not interrupt these
+      // object responses
+      priority: QuadrilateralConstants.INPUT_OBJECT_RESPONSE_PRIORITY
+    } );
     model.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
       this.voicingObjectResponse = vertexDescriber.getVertexObjectResponse();
+
+      if ( voiceNextShapeChange ) {
+        assert && assert( previousAngle !== null, 'previous angle value must be available for Voicing' );
+        const response = vertexDescriber.getKeyboardDragObjectResponse( previousAngle!, previousOppositeDistance );
+        this.voicingSpeakResponse( {
+          objectResponse: response,
+          utterance: inputResponseUtterance
+        } );
+
+        // wait until further input to describe more changes
+        voiceNextShapeChange = false;
+      }
     } );
     this.voicingObjectResponse = vertexDescriber.getVertexObjectResponse();
 

@@ -7,6 +7,7 @@
  */
 
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
+import Utterance from '../../../utterance-queue/js/Utterance.js';
 import quadrilateral from '../quadrilateral.js';
 
 const QuadrilateralConstants = {
@@ -30,7 +31,13 @@ const QuadrilateralConstants = {
 
   PANEL_TITLE_TEXT_OPTIONS: {
     font: new PhetFont( { size: 16, weight: 'bold' } )
-  }
+  },
+
+  // VOICING CONSTANTS
+  // Object responses that are only triggered from input have a higher priority than context responses so that
+  // they are spoken first, input interrupts older responses, and so that context responses always come after the
+  // latest object response during interaction.
+  INPUT_OBJECT_RESPONSE_PRIORITY: Utterance.MEDIUM_PRIORITY
 };
 
 quadrilateral.register( 'QuadrilateralConstants', QuadrilateralConstants );
