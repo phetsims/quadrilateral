@@ -15,6 +15,7 @@ import QuartetSoundView from './QuartetSoundView.js';
 import SuccessSoundView from './SuccessSoundView.js';
 import TracksBuildUpSoundView from './TracksBuildUpSoundView.js';
 import TracksSoundView from './TracksSoundView.js';
+import TracksVolumeEmphasisSoundView from './TracksVolumeEmphasisSoundView.js';
 
 // constants
 
@@ -48,7 +49,7 @@ class QuadrilateralSoundView {
         this.activeSoundView = new TracksBuildUpSoundView( model.quadrilateralShapeModel, model.resetNotInProgressProperty, soundOptionsModel );
       }
       else if ( soundDesign === SoundDesign.TRACKS_VOLUME_EMPHASIS ) {
-        this.activeSoundView = new TracksBuildUpSoundView( model.quadrilateralShapeModel, model.resetNotInProgressProperty, soundOptionsModel );
+        this.activeSoundView = new TracksVolumeEmphasisSoundView( model.quadrilateralShapeModel, model.resetNotInProgressProperty, soundOptionsModel );
       }
       else if ( soundDesign === SoundDesign.TRACKS_MELODY ) {
         this.activeSoundView = new TracksBuildUpSoundView( model.quadrilateralShapeModel, model.resetNotInProgressProperty, soundOptionsModel );
