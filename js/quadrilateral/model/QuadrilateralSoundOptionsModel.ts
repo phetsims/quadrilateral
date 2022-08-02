@@ -40,6 +40,10 @@ class SoundDesign extends EnumerationValue {
   public static PARALLELS_STACCATO = new SoundDesign();
   public static SUCCESS_SOUNDS = new SoundDesign();
   public static MAINTENANCE_SOUNDS = new SoundDesign();
+  public static TRACKS_BUILD_UP = new SoundDesign();
+  public static TRACKS_VOLUME_EMPHASIS = new SoundDesign();
+  public static TRACKS_MELODY = new SoundDesign();
+  public static TRACKS_ARPEGGIO = new SoundDesign();
 
   // gets a list of keys, values and mapping between them for EnumerationProperty and PhET-iO
   public static enumeration = new Enumeration( SoundDesign );

@@ -22,6 +22,8 @@ class ShapeIdentificationSoundView {
   private readonly allRightAnglesSoundClip: SoundClip;
   private readonly allLengthsEqualSoundClip: SoundClip;
 
+  private readonly disposeShapeIdentificationSoundView: () => void;
+
   public constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: IReadOnlyProperty<boolean>, shapeIdentificationEnabledProperty: IProperty<boolean> ) {
 
     const soundClipOptions = {
@@ -40,7 +42,7 @@ class ShapeIdentificationSoundView {
     soundManager.addSoundGenerator( this.allLengthsEqualSoundClip );
 
     // lazy, don't play on startup
-    shapeModel.shapeNameProperty.lazyLink( ( name, oldName ) => {
+    const shapeNameListener = ( name: NamedQuadrilateral, oldName: NamedQuadrilateral | null ) => {
 
       // Generic indication that we have achieved a new named shape other some special shapes like square/rhombus.
       // If the shape is a parallelogram prevent sounds, there are other parallelogram sounds that are more important.
@@ -53,28 +55,40 @@ class ShapeIdentificationSoundView {
           this.shapeSoundClip.play();
         }
       }
-    } );
+    };
+    shapeModel.shapeNameProperty.lazyLink( shapeNameListener );
 
     // Unique sound that should play when all angles are right.
-    shapeModel.allAnglesRightProperty.lazyLink( allAnglesRight => {
+    const allAnglesRightListener = ( allAnglesRight: boolean ) => {
       if ( allAnglesRight ) {
         this.allRightAnglesSoundClip.play();
       }
-    } );
+    };
+    shapeModel.allAnglesRightProperty.lazyLink( allAnglesRightListener );
 
     // Unique sound that should play when all lengths are equal.
-    shapeModel.allLengthsEqualProperty.lazyLink( allLengthsEqual => {
+    const allLengthsEqualListener = ( allLengthsEqual: boolean ) => {
       if ( allLengthsEqual ) {
         this.allLengthsEqualSoundClip.play();
       }
-    } );
+    };
+    shapeModel.allLengthsEqualProperty.lazyLink( allLengthsEqualListener );
+
+    this.disposeShapeIdentificationSoundView = () => {
+      shapeModel.shapeNameProperty.unlink( shapeNameListener );
+      shapeModel.allAnglesRightProperty.unlink( allAnglesRightListener );
+      shapeModel.allLengthsEqualProperty.unlink( allLengthsEqualListener );
+    };
   }
 
   /**
    * Dispose the sound clip so that a new one can be created, and this view stops playing this sound
    */
   public dispose(): void {
+    this.disposeShapeIdentificationSoundView();
     this.shapeSoundClip.dispose();
+    this.allRightAnglesSoundClip.dispose();
+    this.allLengthsEqualSoundClip.dispose();
   }
 }
 
