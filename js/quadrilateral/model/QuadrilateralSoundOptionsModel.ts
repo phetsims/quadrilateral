@@ -120,6 +120,10 @@ class QuadrilateralSoundOptionsModel {
   // during the interaction.
   public maintenanceSoundRequiresEqualLengthsProperty: BooleanProperty;
 
+  // For the "Tracks" designs, if this Property is true, the sounds will play forever. This may be desireable for users,
+  // but it is also helpful for debugging for now.
+  public tracksPlayForeverProperty: BooleanProperty;
+
   public static SoundDesign: SoundDesign;
   public static QuartetSoundFile: QuartetSoundFile;
   public static SuccessSoundFile: SuccessSoundFile;
@@ -127,10 +131,11 @@ class QuadrilateralSoundOptionsModel {
   public static SUCCESS_SOUND_COLLECTION_MAP = SUCCESS_SOUND_COLLECTION_MAP;
 
   public constructor() {
-    this.soundDesignProperty = new EnumerationProperty( SoundDesign.SUCCESS_SOUNDS );
+    this.soundDesignProperty = new EnumerationProperty( SoundDesign.TRACKS_BUILD_UP );
     this.baseSoundFileProperty = new EnumerationProperty( QuartetSoundFile.ONE );
     this.successSoundFileProperty = new EnumerationProperty( SuccessSoundFile.ONE );
     this.maintenanceSoundRequiresEqualLengthsProperty = new BooleanProperty( QuadrilateralQueryParameters.equalLengthsForMaintenanceSound );
+    this.tracksPlayForeverProperty = new BooleanProperty( false );
   }
 }
 

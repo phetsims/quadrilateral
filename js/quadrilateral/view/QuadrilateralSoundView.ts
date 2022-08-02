@@ -13,6 +13,8 @@ import ParallelsStaccatoSoundView from './ParallelsStaccatoSoundView.js';
 import ParallelsVolumeSoundView from './ParallelsVolumeSoundView.js';
 import QuartetSoundView from './QuartetSoundView.js';
 import SuccessSoundView from './SuccessSoundView.js';
+import TracksBuildUpSoundView from './TracksBuildUpSoundView.js';
+import TracksSoundView from './TracksSoundView.js';
 
 // constants
 
@@ -20,7 +22,7 @@ class QuadrilateralSoundView {
 
   // The sound view that is currently "active" with playing sounds. The active sound view is chosen by user in the
   // Preferences dialog.
-  private activeSoundView: null | QuartetSoundView | ParallelsVolumeSoundView | ParallelsStaccatoSoundView | SuccessSoundView = null;
+  private activeSoundView: null | QuartetSoundView | ParallelsVolumeSoundView | ParallelsStaccatoSoundView | SuccessSoundView | TracksSoundView = null;
 
   public constructor( model: QuadrilateralModel, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
 
@@ -41,6 +43,18 @@ class QuadrilateralSoundView {
       }
       else if ( soundDesign === SoundDesign.MAINTENANCE_SOUNDS ) {
         this.activeSoundView = new SuccessSoundView( model, soundOptionsModel );
+      }
+      else if ( soundDesign === SoundDesign.TRACKS_BUILD_UP ) {
+        this.activeSoundView = new TracksBuildUpSoundView( model.quadrilateralShapeModel, model.resetNotInProgressProperty, soundOptionsModel );
+      }
+      else if ( soundDesign === SoundDesign.TRACKS_VOLUME_EMPHASIS ) {
+        this.activeSoundView = new TracksBuildUpSoundView( model.quadrilateralShapeModel, model.resetNotInProgressProperty, soundOptionsModel );
+      }
+      else if ( soundDesign === SoundDesign.TRACKS_MELODY ) {
+        this.activeSoundView = new TracksBuildUpSoundView( model.quadrilateralShapeModel, model.resetNotInProgressProperty, soundOptionsModel );
+      }
+      else if ( soundDesign === SoundDesign.TRACKS_ARPEGGIO ) {
+        this.activeSoundView = new TracksBuildUpSoundView( model.quadrilateralShapeModel, model.resetNotInProgressProperty, soundOptionsModel );
       }
     } );
   }

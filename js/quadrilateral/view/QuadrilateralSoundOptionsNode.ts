@@ -153,9 +153,13 @@ class QuadrilateralSoundOptionsNode extends Panel {
 
     // a checkbox to control the behavior of the maintenance sound
     const maintenanceOptionLabel = new Text( 'Constant lengths for maintenance sound', LABEL_TEXT_OPTIONS );
-
     const maintenanceSoundCheckbox = new Checkbox( model.maintenanceSoundRequiresEqualLengthsProperty, maintenanceOptionLabel, {
       tandem: tandem.createTandem( 'maintenanceSoundCheckbox' )
+    } );
+
+    const tracksPlayForeverLabel = new Text( 'Tracks play forever', LABEL_TEXT_OPTIONS );
+    const tracksPlayForeverCheckbox = new Checkbox( model.tracksPlayForeverProperty, tracksPlayForeverLabel, {
+      tandem: tandem.createTandem( 'tracksPlayForeverCheckbox' )
     } );
 
     const content = new VBox( {
@@ -195,6 +199,10 @@ class QuadrilateralSoundOptionsNode extends Panel {
           // The "success" design has options for how the maintenance sound behaves
           children.push( maintenanceSoundCheckbox );
         }
+      }
+      else if ( design === SoundDesign.TRACKS_ARPEGGIO || design === SoundDesign.TRACKS_BUILD_UP ||
+                design === SoundDesign.TRACKS_MELODY || design === SoundDesign.TRACKS_VOLUME_EMPHASIS ) {
+        children.push( tracksPlayForeverCheckbox );
       }
 
       content.children = children;
