@@ -108,17 +108,19 @@ class QuadrilateralAlerter extends Alerter {
     // the important state information. This Utterance is therefore interruptable and lower priority than the
     // importantStateUtterance in the utterance queue.
     // const shapeResponsePacket = new ResponsePacket();
-    const shapeUtterance = new Utterance( {
-      // alert: shapeResponsePacket,
-      priority: Utterance.DEFAULT_PRIORITY
+    const lowPriorityUtterance = new Utterance( {
+      priority: Utterance.LOW_PRIORITY
     } );
 
-    const importantStateUtterance = new Utterance( {
-      // alert: shapeResponsePacket,
+    const mediumPriorityUtterance = new Utterance( {
+      priority: Utterance.MEDIUM_PRIORITY
+    } );
+
+    const highPriorityUtterance = new Utterance( {
 
       // for important state changes of the shape, this utterance is used so that it cannot be interrupted
       // by further interaction
-      priority: Utterance.MEDIUM_PRIORITY
+      priority: Utterance.HIGH_PRIORITY
     } );
 
     this.wasParallelogram = model.quadrilateralShapeModel.isParallelogramProperty.value;
@@ -131,9 +133,9 @@ class QuadrilateralAlerter extends Alerter {
     model.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
       const responsePacket = new ResponsePacket();
 
-      // By default, we use the lower priority Utterance. If we detect a critical state change, we will use
-      // a higher priority Utterance for interruption.
-      let utterance = shapeUtterance;
+      // By default, we use the lower priority Utterance that won't interrupt responses that are currently being
+      // announced. If we detect a critical state change, we will use a higher priority Utterance for interruption.
+      let utterance = lowPriorityUtterance;
 
       const previousAAngle = this.previousContextResponseShapeSnapshot.vertexAAngle;
       const previousBAngle = this.previousContextResponseShapeSnapshot.vertexBAngle;
@@ -177,11 +179,12 @@ class QuadrilateralAlerter extends Alerter {
       const importantStateResponse = this.getImportantStateChangeResponse();
       if ( importantStateResponse ) {
         responsePacket.contextResponse = importantStateResponse!;
-        utterance = importantStateUtterance;
+        utterance = highPriorityUtterance;
       }
       else if ( this.angleResponseReady || this.lengthResponseReady || parallelSideResponseReady ) {
         const thisResponseReason = angleDifferencesLarge ? 'angle' : 'length';
         const tiltChangeResponse = this.getShapeChangeResponse( this.quadrilateralShapeModel, this.previousContextResponseShapeSnapshot, thisResponseReason );
+        utterance = mediumPriorityUtterance;
         responsePacket.contextResponse = tiltChangeResponse!;
       }
 
@@ -246,8 +249,9 @@ class QuadrilateralAlerter extends Alerter {
     model.vertexDMarkerDetectedProperty.link( detected => { vertexDetectionResponseListener( vertexDString, detected ); } );
 
     // So that this content respects voicingVisible.
-    Voicing.registerUtteranceToNode( shapeUtterance, screenView );
-    Voicing.registerUtteranceToNode( importantStateUtterance, screenView );
+    Voicing.registerUtteranceToNode( lowPriorityUtterance, screenView );
+    Voicing.registerUtteranceToNode( mediumPriorityUtterance, screenView );
+    Voicing.registerUtteranceToNode( highPriorityUtterance, screenView );
     Voicing.registerUtteranceToNode( markerUtterance, screenView );
   }
 
