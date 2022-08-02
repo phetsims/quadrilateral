@@ -55,6 +55,8 @@ const NAMED_QUADRILATERAL_TO_TRACKS_MAP = new Map( [
 ] );
 
 class TracksBuildUpSoundView extends TracksSoundView {
+  private readonly disposeTracksBuildUpSoundView: () => void;
+
   public constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: IReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
     super( shapeModel, resetNotInProgressProperty, soundOptionsModel, BUILD_UP_TRACKS );
 
@@ -65,17 +67,22 @@ class TracksBuildUpSoundView extends TracksSoundView {
         soundClip.setOutputLevel( 0 );
       } );
 
-      // TODO: Remove this check, every NamedQuadrilateral should have an entry.
-      if ( NAMED_QUADRILATERAL_TO_TRACKS_MAP.has( shapeName ) ) {
-        const soundIndicesToPlay = NAMED_QUADRILATERAL_TO_TRACKS_MAP.get( shapeName );
-        soundIndicesToPlay!.forEach( index => {
-          this.soundClips[ index ].setOutputLevel( 1 );
-        } );
-      }
+      const soundIndicesToPlay = NAMED_QUADRILATERAL_TO_TRACKS_MAP.get( shapeName );
+      assert && assert( soundIndicesToPlay, 'NamedQuadrilateral does not have a TracksBuildUpSoundView design' );
+      soundIndicesToPlay!.forEach( index => {
+        this.soundClips[ index ].setOutputLevel( 1 );
+      } );
     };
     shapeModel.shapeNameProperty.link( shapeNameListener );
 
+    this.disposeTracksBuildUpSoundView = () => {
+      shapeModel.shapeNameProperty.unlink( shapeNameListener );
+    };
+  }
 
+  public override dispose(): void {
+    this.disposeTracksBuildUpSoundView();
+    super.dispose();
   }
 }
 

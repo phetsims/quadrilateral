@@ -27,7 +27,7 @@ import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
 
 // All the sounds played in this sound design
-const BUILD_UP_TRACKS = [
+const VOLUME_EMPHASIS_TRACKS = [
   quadBeatTracksBuildingBaseRhythm_mp3,
   quadBeatTracksBuildingBuildingTracks000_mp3,
   quadBeatTracksBuildingBuildingTracks001_mp3,
@@ -56,7 +56,7 @@ const NAMED_QUADRILATERAL_TO_HIGH_VOLUME_TRACKS_MAP = new Map( [
 
 class TracksVolumeEmphasisSoundView extends TracksSoundView {
   public constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: IReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
-    super( shapeModel, resetNotInProgressProperty, soundOptionsModel, BUILD_UP_TRACKS );
+    super( shapeModel, resetNotInProgressProperty, soundOptionsModel, VOLUME_EMPHASIS_TRACKS );
 
     const shapeNameListener = ( shapeName: NamedQuadrilateral ) => {
 
