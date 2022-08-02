@@ -57,6 +57,10 @@ class Vertex {
   // Property that controls how many values to include in the "smoothing" of positions. See smoothPosition()
   private readonly smoothingLengthProperty: IReadOnlyProperty<number>;
 
+  // Indicates that the Vertex has received some input and it is time to trigger a new Voicing Object Response
+  // the next time Properties are updated in QuadrilateralShapeModel.
+  public voicingObjectResponseDirty = false;
+
   // A reference to vertices connected to this vertex for the purposes of calculating the angle at this vertex.
   // The orientation of vertex1 and vertex2 for angle calculations are as shown in the following diagram:
   //        thisVertex

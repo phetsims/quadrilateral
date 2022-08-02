@@ -388,8 +388,11 @@
         "closerTo": {
           "value": "closer to"
         },
-        "vertexDragObjectResponsePattern": {
+        "fullVertexDragObjectResponsePattern": {
           "value": "angle {{angleChange}}, {{distanceChange}} opposite corner"
+        },
+        "partialVertexDragObjectResponsePattern": {
+          "value": "{{distanceChange}} opposite corner"
         }
       },
       "sideDragObjectResponse": {

@@ -4,14 +4,14 @@
  * A snapshot of the model Properties at a point in time needed to compare against other states to watch
  * how the model is changing over time.
  *
- * TODO: Can this be deleted? "saved states" for audio features are no longer needed for this sim.
- *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
 import quadrilateral from '../../quadrilateral.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
+import SideLabel from './SideLabel.js';
+import VertexLabel from './VertexLabel.js';
 
 class ShapeSnapshot {
   public readonly topSideTilt: number;
@@ -65,6 +65,65 @@ class ShapeSnapshot {
     this.leftSideLength = shapeModel.leftSide.lengthProperty.value;
 
     this.area = shapeModel.areaProperty.value;
+  }
+
+  /**
+   * Returns the saved Vertex angle of a particular Vertex given the VertexLabel.
+   */
+  public getAngleFromVertexLabel( label: VertexLabel ): number {
+    return label === VertexLabel.VERTEX_A ? this.vertexAAngle :
+           label === VertexLabel.VERTEX_B ? this.vertexBAngle :
+           label === VertexLabel.VERTEX_C ? this.vertexCAngle :
+           this.vertexDAngle; // VERTEX_D
+  }
+
+  /**
+   * Returns the saved Vertex position of a particular Vertex given the VertexLabel.
+   */
+  public getPositionFromVertexLabel( label: VertexLabel ): Vector2 {
+    return label === VertexLabel.VERTEX_A ? this.vertexAPosition :
+           label === VertexLabel.VERTEX_B ? this.vertexBPosition :
+           label === VertexLabel.VERTEX_C ? this.vertexCPosition :
+           this.vertexDPosition; // VERTEX_D
+  }
+
+  /**
+   * Get the distance between two Vertices of this saved snapshot from their VertexLabels.
+   */
+  public getDistanceBetweenVertices( vertex1Label: VertexLabel, vertex2Label: VertexLabel ): number {
+    const p1 = this.getPositionFromVertexLabel( vertex1Label );
+    const p2 = this.getPositionFromVertexLabel( vertex2Label );
+    return p1.distance( p2 );
+  }
+
+  /**
+   * Returns the saved vertex positions of a side given the SideLabel. Returns an array with the
+   * vertex positions in order like [ side.vertex1, side.vertex2 ].
+   */
+  public getVertexPositionsFromSideLabel( label: SideLabel ): [ Vector2, Vector2 ] {
+    return label === SideLabel.SIDE_AB ? [ this.vertexAPosition, this.vertexBPosition ] :
+           label === SideLabel.SIDE_BC ? [ this.vertexBPosition, this.vertexCPosition ] :
+           label === SideLabel.SIDE_CD ? [ this.vertexCPosition, this.vertexDPosition ] :
+             [ this.vertexDPosition, this.vertexAPosition ]; // SIDE_DA
+  }
+
+  /**
+   * Returns the saved side lengths of adjacent sides for side defined by the SideLabel. Returns
+   * an array of adjacent side lengths in order moving clockwise like this:
+   *                sideLabel
+   *               ----------
+   *              |         |
+   * adjacentSide1|         |adjacentSide2
+   *              |         |
+   *              |         |
+   *
+   * @returns [adjacentSide1.lengthProperty.value, adjacentSide2.lengthProperty.value]
+   */
+  public getAdjacentSideLengthsFromSideLabel( label: SideLabel ): [ number, number ] {
+    return label === SideLabel.SIDE_AB ? [ this.leftSideLength, this.rightSideLength ] :
+           label === SideLabel.SIDE_BC ? [ this.topSideLength, this.bottomSideLength ] :
+           label === SideLabel.SIDE_CD ? [ this.rightSideLength, this.leftSideLength ] :
+             [ this.bottomSideLength, this.topSideLength ]; // SIDE_DA
   }
 }
 

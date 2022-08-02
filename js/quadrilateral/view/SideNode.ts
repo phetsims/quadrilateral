@@ -23,8 +23,6 @@ import SideDescriber from './SideDescriber.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
-import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
-import Utterance from '../../../../utterance-queue/js/Utterance.js';
 
 // The dilation around side shapes when drawing the focus highlight.
 const FOCUS_HIGHLIGHT_DILATION = 15;
@@ -51,27 +49,6 @@ class SideNode extends Voicing( Path, 1 ) {
   // A scratch model so we can test vertex positions before setting them with input
   private scratchShapeModel: QuadrilateralShapeModel;
   private quadrilateralModel: QuadrilateralModel;
-
-
-  // From keyboard dragging, a Voicing Object Response is triggered every move. But we can't generate the description
-  // until all Shape Properties have been updated, so we need to wait to describe until after the shapeChangedEmitter
-  // emits. See QuadrilateralShapeModel.updateOrderDependentProperties for more information.
-  // Keyboard presses should trigger a response every input. When using mouse/touch we will never hear this,
-  // because with that form of input the less frequent rate of information from context responses is sufficient.
-  private voiceNextShapeChange = false;
-
-  // The Side.vertex1 position before updating from input, so that we can describe how the Side moves. The Side
-  // moves by applying deltas to both Vertices, so by watching the positioning of one vertex we can describe both.
-  // Description only happens when using keyboard input so we cannot use a Property listener.
-  private previousVertex1Position: Vector2;
-
-  // Reference to the adjacent Sides of this.side.
-  private readonly adjacentSides: Side[];
-
-  // The average length of adjacent sides before an update with keyboard input. This is used to monitor changes
-  // for description in response to keyboard input, so it is best as an updated field rather than a Property and
-  // needs to be in this class to be updated in the KeyboardDragListener.
-  private previousAverageAdjacentSideLength: number;
 
   public constructor( quadrilateralModel: QuadrilateralModel, side: Side, scratchSide: Side, modelViewTransform: ModelViewTransform2, providedOptions?: SideNodeOptions ) {
 
@@ -186,11 +163,6 @@ class SideNode extends Voicing( Path, 1 ) {
     const viewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralModel.MAJOR_GRID_SPACING );
     const minorViewDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralModel.MINOR_GRID_SPACING );
 
-    this.previousVertex1Position = side.vertex1.positionProperty.value.copy();
-
-    this.adjacentSides = this.quadrilateralShapeModel.adjacentSideMap.get( this.side )!;
-    this.previousAverageAdjacentSideLength = QuadrilateralShapeModel.getAverageSideLength( this.adjacentSides[ 0 ], this.adjacentSides[ 1 ] );
-
     this.addInputListener( new KeyboardDragListener( {
       transform: modelViewTransform,
       drag: ( vectorDelta: Vector2 ) => {
@@ -293,23 +265,8 @@ class SideNode extends Voicing( Path, 1 ) {
     } );
 
     // voicing
-    const inputResponseUtterance = new Utterance( {
-      priority: QuadrilateralConstants.INPUT_OBJECT_RESPONSE_PRIORITY
-    } );
-
-    // Trigger this Voicing response before the shapeChangedEmitter so this content reaches the UtteranceQueue first.
-    this.quadrilateralShapeModel.firstSeriesShapeChangedEmitter.addListener( () => {
+    this.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
       this.voicingObjectResponse = sideDescriber.getSideObjectResponse();
-
-      if ( this.voiceNextShapeChange ) {
-        const response = sideDescriber.getKeyboardDragObjectResponse( this.previousVertex1Position, this.previousAverageAdjacentSideLength );
-        this.voicingSpeakResponse( {
-          objectResponse: response,
-          utterance: inputResponseUtterance
-        } );
-
-        this.voiceNextShapeChange = false;
-      }
     } );
     this.voicingObjectResponse = sideDescriber.getSideObjectResponse();
 
@@ -368,9 +325,8 @@ class SideNode extends Voicing( Path, 1 ) {
 
     if ( this.scratchShapeModel.isQuadrilateralShapeAllowed() ) {
 
-      this.previousVertex1Position = this.side.vertex1.positionProperty.value.copy();
-      this.previousAverageAdjacentSideLength = QuadrilateralShapeModel.getAverageSideLength( this.adjacentSides[ 0 ], this.adjacentSides[ 1 ] );
-      this.voiceNextShapeChange = true;
+      // signify to the Alerter that it will be time to generate a new object response from input
+      this.side.voicingObjectResponseDirty = true;
 
       this.quadrilateralShapeModel.setVertexPositions( [
         { vertex: this.side.vertex1, proposedPosition: proposedVertex1Position },

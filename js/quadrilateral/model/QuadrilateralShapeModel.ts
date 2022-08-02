@@ -1510,7 +1510,7 @@ class QuadrilateralShapeModel {
    * pairs of side lengths change over time.
    */
   public static getAverageSideLength( side1: Side, side2: Side ): number {
-    return side1.lengthProperty.value + side2.lengthProperty.value / 2;
+    return ( side1.lengthProperty.value + side2.lengthProperty.value ) / 2;
   }
 
   /**

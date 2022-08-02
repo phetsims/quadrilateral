@@ -18,6 +18,8 @@ import { Line } from '../../../../scenery/js/imports.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import SideLabel from './SideLabel.js';
+import VertexLabel from './VertexLabel.js';
 
 type SideOptions = {
 
@@ -47,6 +49,12 @@ class Side {
 
   // Whether or not this Side is pressed and being interacted with. For now this is useful for debugging.
   public readonly isPressedProperty: BooleanProperty;
+
+  // Allows us to label this Side so we know which one we are working with when that is important for
+  // various calculations.
+  public readonly sideLabel: SideLabel;
+
+  public voicingObjectResponseDirty = false;
 
   // The shape of the side, determined by the length and the model width.
   public shapeProperty: IReadOnlyProperty<Shape>;
@@ -81,6 +89,8 @@ class Side {
     this.vertex1 = vertex1;
     this.vertex2 = vertex2;
     this.isConnected = false;
+
+    this.sideLabel = this.determineSideLabel();
 
     this.isPressedProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'isPressedProperty' )
@@ -186,6 +196,17 @@ class Side {
 
     this.isConnected = true;
     this.vertex1.connectToOthers( otherSide.vertex1, this.vertex2 );
+  }
+
+  /**
+   * From the vertices of this side, apply the correct SideLabel. The vertices have enough info to determine
+   * this, so it shouldn't be necessary or possible for the client to provide this as a constructor arg.
+   */
+  private determineSideLabel(): SideLabel {
+    return this.vertex1.vertexLabel === VertexLabel.VERTEX_A ? SideLabel.SIDE_AB :
+           this.vertex1.vertexLabel === VertexLabel.VERTEX_B ? SideLabel.SIDE_BC :
+           this.vertex1.vertexLabel === VertexLabel.VERTEX_C ? SideLabel.SIDE_CD :
+           SideLabel.SIDE_DA;
   }
 }
 

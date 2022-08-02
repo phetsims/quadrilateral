@@ -14,8 +14,6 @@ import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import quadrilateralStrings from '../../quadrilateralStrings.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import MovementAlerter from '../../../../scenery-phet/js/accessibility/describers/MovementAlerter.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 
 // constants
@@ -43,9 +41,6 @@ const notEqualToAdjacentSidesString = quadrilateralStrings.a11y.voicing.notEqual
 const shorterThanParallelAdjacentSidesString = quadrilateralStrings.a11y.voicing.shorterThanParallelAdjacentSides;
 const longerThanParallelAdjacentSidesString = quadrilateralStrings.a11y.voicing.longerThanParallelAdjacentSides;
 const notEqualToParallelAdjacentSidesString = quadrilateralStrings.a11y.voicing.notEqualToParallelAdjacentSides;
-const shorterString = quadrilateralStrings.a11y.voicing.sideDragObjectResponse.shorter;
-const longerString = quadrilateralStrings.a11y.voicing.sideDragObjectResponse.longer;
-const sideDragObjectResponsePatternString = quadrilateralStrings.a11y.voicing.sideDragObjectResponse.sideDragObjectResponsePattern;
 
 // A map that will provide comparison descriptions for side lengths. Lengths in model units.
 const lengthComparisonDescriptionMap = new Map<Range, string>();
@@ -112,28 +107,6 @@ class SideDescriber {
     } );
 
     return response;
-  }
-
-  public getKeyboardDragObjectResponse( previousVertex1Position: Vector2, previousAverageAdjacentSideLength: number ): string {
-
-    // The side will move from deltas applied to both the vertices at the same time. So we know how the Side
-    // changed just by inspecting the change in position of side.vertex1.
-    const translationVector = this.side.vertex1.positionProperty.value.minus( previousVertex1Position );
-
-    const movementAngle = translationVector.angle;
-    const directionString = MovementAlerter.getDirectionDescriptionFromAngle( movementAngle, {
-      modelViewTransform: this.modelViewTransform
-    } );
-
-    const adjacentSides = this.quadrilateralShapeModel.adjacentSideMap.get( this.side )!;
-    const currentAverageAdjacentSideLength = QuadrilateralShapeModel.getAverageSideLength( adjacentSides[ 0 ], adjacentSides[ 1 ] );
-    const lengthDifference = currentAverageAdjacentSideLength - previousAverageAdjacentSideLength;
-    const lengthChangeString = lengthDifference > 0 ? longerString : shorterString;
-
-    return StringUtils.fillIn( sideDragObjectResponsePatternString, {
-      directionChange: directionString,
-      lengthChange: lengthChangeString
-    } );
   }
 
   /**

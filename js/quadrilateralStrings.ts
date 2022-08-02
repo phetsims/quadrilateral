@@ -147,7 +147,8 @@ type StringsType = {
         'smaller': string;
         'fartherFrom': string;
         'closerTo': string;
-        'vertexDragObjectResponsePattern': string;
+        'fullVertexDragObjectResponsePattern': string;
+        'partialVertexDragObjectResponsePattern': string;
       };
       'sideDragObjectResponse': {
         'shorter': string;
