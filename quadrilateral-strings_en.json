@@ -26,6 +26,41 @@
   "vertexD": {
     "value": "D"
   },
+  "showShapeName": {
+    "value": "Show Shape Name"
+  },
+  "shapeNames": {
+    "square": {
+      "value": "Square"
+    },
+    "rectangle": {
+      "value": "Rectangle"
+    },
+    "rhombus": {
+      "value": "Rhombus"
+    },
+    "kite": {
+      "value": "Kite"
+    },
+    "isoscelesTrapezoid": {
+      "value": "Isosceles Trapezoid"
+    },
+    "trapezoid": {
+      "value": "Trapezoid"
+    },
+    "concaveQuadrilateral": {
+      "value": "Concave Quadrilateral"
+    },
+    "convexQuadrilateral": {
+      "value": "Convex Quadrilateral"
+    },
+    "parallelogram": {
+      "value": "Parallelogram"
+    },
+    "dart": {
+      "value": "Dart"
+    }
+  },
   "hapticsDialogMessage": {
     "value": "Please note that this sim uses vibrational<br>haptics on devices that support it."
   },

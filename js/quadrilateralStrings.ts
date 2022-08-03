@@ -19,6 +19,19 @@ type StringsType = {
   'vertexB': string;
   'vertexC': string;
   'vertexD': string;
+  'showShapeName': string;
+  'shapeNames': {
+    'square': string;
+    'rectangle': string;
+    'rhombus': string;
+    'kite': string;
+    'isoscelesTrapezoid': string;
+    'trapezoid': string;
+    'concaveQuadrilateral': string;
+    'convexQuadrilateral': string;
+    'parallelogram': string;
+    'dart': string;
+  };
   'hapticsDialogMessage': string;
   'gotIt': string;
   'a11y': {

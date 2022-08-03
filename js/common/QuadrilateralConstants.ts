@@ -21,6 +21,12 @@ const QuadrilateralConstants = {
   SCREEN_VIEW_X_MARGIN: 15,
   SCREEN_VIEW_Y_MARGIN: 15,
 
+  // additional spacing in the view between components
+  VIEW_SPACING: 15,
+
+  // corner radius used in many rectangles in this sim
+  CORNER_RADIUS: 5,
+
   SCREEN_TEXT_OPTIONS: {
     font: new PhetFont( { size: 14 } )
   },
@@ -31,6 +37,11 @@ const QuadrilateralConstants = {
 
   PANEL_TITLE_TEXT_OPTIONS: {
     font: new PhetFont( { size: 16, weight: 'bold' } )
+  },
+
+  SHAPE_NAME_TEXT_OPTIONS: {
+    font: new PhetFont( { size: 22 } ),
+    maxWidth: 250
   },
 
   // VOICING CONSTANTS

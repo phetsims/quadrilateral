@@ -72,7 +72,16 @@ const QuadrilateralColors = {
   // Color for the stroke for the diagonal guides
   diagonalGuidesStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'diagonalGuideStroke', {
     default: new Color( 115, 110, 110 )
+  } ),
+
+  panelFillColorProperty: new ProfileColorProperty( quadrilateral, 'panelFillColor', {
+    default: 'white'
+  } ),
+
+  panelStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'panelStrokeColor', {
+    default: 'black'
   } )
+
 };
 
 quadrilateral.register( 'QuadrilateralColors', QuadrilateralColors );

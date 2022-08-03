@@ -37,6 +37,7 @@ import QuadrilateralPreferencesModel from '../model/QuadrilateralPreferencesMode
 import QuadrilateralSoundBoardNode from './sound/QuadrilateralSoundBoardNode.js';
 import QuadrilateralMediaPipe from './QuadrilateralMediaPipe.js';
 import QuadrilateralDiagonalGuidesNode from './QuadrilateralDiagonalGuidesNode.js';
+import QuadrilateralShapeNameDisplay from './QuadrilateralShapeNameDisplay.js';
 
 const MODEL_BOUNDS = QuadrilateralQueryParameters.calibrationDemoDevice ? new Bounds2( -4.5, -4.5, 4.5, 4.5 ) :
                      new Bounds2( -1, -1, 1, 1 );
@@ -91,11 +92,15 @@ class QuadrilateralScreenView extends ScreenView {
     } );
     this.addChild( this.resetAllButton );
 
+    const shapeNameDisplay = new QuadrilateralShapeNameDisplay( model.shapeNameVisibleProperty, model.quadrilateralShapeModel.shapeNameProperty, tandem.createTandem( 'quadrilateralShapeNameDisplay' ) );
+    this.addChild( shapeNameDisplay );
+
     // the model bounds are defined by available view space. Some padding is added around the screen and we make
-    // sure that the vertices cannot overlap with simulation controls (at this time, just the ResetAllButton).
-    // Otherwise the quadrilateral can move around freely in the play area.
+    // sure that the vertices cannot overlap with simulation controls. Otherwise the quadrilateral can move freely in
+    // the ScreenView.
     let reducedViewBounds = this.layoutBounds.eroded( QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN );
     reducedViewBounds = reducedViewBounds.withMaxX( this.resetAllButton.left - QuadrilateralConstants.SCREEN_VIEW_X_MARGIN );
+    reducedViewBounds = reducedViewBounds.withMinY( shapeNameDisplay.height + 2 * QuadrilateralConstants.VIEW_SPACING );
 
     // The bounds used for the ModelViewTransform2 are a square set of bounds constrained by the limiting dimension
     // of the reducedViewBounds and centered around the reducedViewBounds. Must be square so that the deltas in x and y
@@ -166,6 +171,9 @@ class QuadrilateralScreenView extends ScreenView {
     const gridNode = new QuadrilateralGridNode( model.modelBoundsProperty, model.symmetryGridVisibleProperty, this.modelViewTransform );
     gridNode.leftTop = boundsRectangle.leftTop.plusScalar( BORDER_RECTANGLE_LINE_WIDTH / 2 );
     this.addChild( gridNode );
+
+    // layout for components that depend on the play area bounds being defined
+    shapeNameDisplay.centerBottom = boundsRectangle.centerTop.minusXY( 0, QuadrilateralConstants.VIEW_SPACING );
 
     if ( QuadrilateralQueryParameters.soundBoard ) {
 
