@@ -4,15 +4,15 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Multilink from '../../../../axon/js/Multilink.js';
-import LinearFunction from '../../../../dot/js/LinearFunction.js';
-import Range from '../../../../dot/js/Range.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import SoundGenerator, { SoundGeneratorOptions } from '../../../../tambo/js/sound-generators/SoundGenerator.js';
-import soundManager from '../../../../tambo/js/soundManager.js';
-import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
+import Multilink from '../../../../../axon/js/Multilink.js';
+import LinearFunction from '../../../../../dot/js/LinearFunction.js';
+import Range from '../../../../../dot/js/Range.js';
+import optionize from '../../../../../phet-core/js/optionize.js';
+import SoundGenerator, { SoundGeneratorOptions } from '../../../../../tambo/js/sound-generators/SoundGenerator.js';
+import soundManager from '../../../../../tambo/js/soundManager.js';
+import quadrilateral from '../../../quadrilateral.js';
+import QuadrilateralModel from '../../model/QuadrilateralModel.js';
+import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
 
 const STACCATO_PLAY_INTERVAL = 0.5; // in seconds, how frequently we play the staccato sound
 

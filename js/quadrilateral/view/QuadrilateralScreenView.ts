@@ -15,7 +15,7 @@ import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import { Rectangle, Text } from '../../../../scenery/js/imports.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralNode from './QuadrilateralNode.js';
-import QuadrilateralSoundView from './QuadrilateralSoundView.js';
+import QuadrilateralSoundView from './sound/QuadrilateralSoundView.js';
 import VertexDragAreaNode from './VertexDragAreaNode.js';
 import quadrilateralStrings from '../../quadrilateralStrings.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
@@ -34,7 +34,7 @@ import vibrationManager from '../../../../tappi/js/vibrationManager.js';
 import QuadrilateralAlerter from './QuadrilateralAlerter.js';
 import QuadrilateralBluetoothConnectionButton from './QuadrilateralBluetoothConnectionButton.js';
 import QuadrilateralPreferencesModel from '../model/QuadrilateralPreferencesModel.js';
-import QuadrilateralSoundBoardNode from './QuadrilateralSoundBoardNode.js';
+import QuadrilateralSoundBoardNode from './sound/QuadrilateralSoundBoardNode.js';
 import QuadrilateralMediaPipe from './QuadrilateralMediaPipe.js';
 import QuadrilateralDiagonalGuidesNode from './QuadrilateralDiagonalGuidesNode.js';
 

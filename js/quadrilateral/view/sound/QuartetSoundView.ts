@@ -9,10 +9,10 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import quadrilateral from '../../quadrilateral.js';
+import quadrilateral from '../../../quadrilateral.js';
 import QuartetSideSoundView from './QuartetSideSoundView.js';
-import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
+import QuadrilateralModel from '../../model/QuadrilateralModel.js';
+import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
 
 class QuartetSoundView {
   private readonly topSideSoundView: QuartetSideSoundView;

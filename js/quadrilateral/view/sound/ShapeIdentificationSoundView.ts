@@ -6,16 +6,16 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
-import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
-import quadrilateral from '../../quadrilateral.js';
-import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
-import soundManager from '../../../../tambo/js/soundManager.js';
-import shapeIdentificationWhenNotAParallelogram_mp3 from '../../../sounds/shapeIdentificationWhenNotAParallelogram_mp3.js';
-import allAnglesAreRightAngles_mp3 from '../../../sounds/allAnglesAreRightAngles_mp3.js';
-import allSideLengthsAreEqual_mp3 from '../../../sounds/allSideLengthsAreEqual_mp3.js';
-import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
-import IProperty from '../../../../axon/js/IProperty.js';
+import IReadOnlyProperty from '../../../../../axon/js/IReadOnlyProperty.js';
+import SoundClip from '../../../../../tambo/js/sound-generators/SoundClip.js';
+import quadrilateral from '../../../quadrilateral.js';
+import NamedQuadrilateral from '../../model/NamedQuadrilateral.js';
+import soundManager from '../../../../../tambo/js/soundManager.js';
+import shapeIdentificationWhenNotAParallelogram_mp3 from '../../../../sounds/shapeIdentificationWhenNotAParallelogram_mp3.js';
+import allAnglesAreRightAngles_mp3 from '../../../../sounds/allAnglesAreRightAngles_mp3.js';
+import allSideLengthsAreEqual_mp3 from '../../../../sounds/allSideLengthsAreEqual_mp3.js';
+import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
+import IProperty from '../../../../../axon/js/IProperty.js';
 
 class ShapeIdentificationSoundView {
   private readonly shapeSoundClip: SoundClip;

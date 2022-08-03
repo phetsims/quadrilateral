@@ -10,24 +10,24 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import LinearFunction from '../../../../dot/js/LinearFunction.js';
-import PiecewiseLinearFunction from '../../../../dot/js/PiecewiseLinearFunction.js';
-import Utils from '../../../../dot/js/Utils.js';
-import phetAudioContext from '../../../../tambo/js/phetAudioContext.js';
-import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
-import SoundGenerator, { SoundGeneratorOptions } from '../../../../tambo/js/sound-generators/SoundGenerator.js';
-import soundManager from '../../../../tambo/js/soundManager.js';
-import quadLoop01_mp3 from '../../../sounds/quadLoop01_mp3.js';
-import quadLoop02_mp3 from '../../../sounds/quadLoop02_mp3.js';
-import quadLoop03_mp3 from '../../../sounds/quadLoop03_mp3.js';
-import quadLoop04_mp3 from '../../../sounds/quadLoop04_mp3.js';
-import quadrilateral from '../../quadrilateral.js';
-import { QuartetSoundFile } from '../model/QuadrilateralSoundOptionsModel.js';
-import Side from '../model/Side.js';
-import WrappedAudioBuffer from '../../../../tambo/js/WrappedAudioBuffer.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
-import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
+import DerivedProperty from '../../../../../axon/js/DerivedProperty.js';
+import LinearFunction from '../../../../../dot/js/LinearFunction.js';
+import PiecewiseLinearFunction from '../../../../../dot/js/PiecewiseLinearFunction.js';
+import Utils from '../../../../../dot/js/Utils.js';
+import phetAudioContext from '../../../../../tambo/js/phetAudioContext.js';
+import SoundClip from '../../../../../tambo/js/sound-generators/SoundClip.js';
+import SoundGenerator, { SoundGeneratorOptions } from '../../../../../tambo/js/sound-generators/SoundGenerator.js';
+import soundManager from '../../../../../tambo/js/soundManager.js';
+import quadLoop01_mp3 from '../../../../sounds/quadLoop01_mp3.js';
+import quadLoop02_mp3 from '../../../../sounds/quadLoop02_mp3.js';
+import quadLoop03_mp3 from '../../../../sounds/quadLoop03_mp3.js';
+import quadLoop04_mp3 from '../../../../sounds/quadLoop04_mp3.js';
+import quadrilateral from '../../../quadrilateral.js';
+import { QuartetSoundFile } from '../../model/QuadrilateralSoundOptionsModel.js';
+import Side from '../../model/Side.js';
+import WrappedAudioBuffer from '../../../../../tambo/js/WrappedAudioBuffer.js';
+import IReadOnlyProperty from '../../../../../axon/js/IReadOnlyProperty.js';
+import EnumerationProperty from '../../../../../axon/js/EnumerationProperty.js';
 
 // constants
 // TODO: calculate these from constants, should be based on the limitations of each vertex bounds

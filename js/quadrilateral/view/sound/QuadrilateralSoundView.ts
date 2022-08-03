@@ -6,9 +6,9 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import QuadrilateralSoundOptionsModel, { SoundDesign } from '../model/QuadrilateralSoundOptionsModel.js';
+import quadrilateral from '../../../quadrilateral.js';
+import QuadrilateralModel from '../../model/QuadrilateralModel.js';
+import QuadrilateralSoundOptionsModel, { SoundDesign } from '../../model/QuadrilateralSoundOptionsModel.js';
 import ParallelsStaccatoSoundView from './ParallelsStaccatoSoundView.js';
 import ParallelsVolumeSoundView from './ParallelsVolumeSoundView.js';
 import QuartetSoundView from './QuartetSoundView.js';

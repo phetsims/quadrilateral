@@ -11,20 +11,20 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import quadrilateral from '../../quadrilateral.js';
+import quadrilateral from '../../../quadrilateral.js';
 import TracksSoundView from './TracksSoundView.js';
-import quadBeatTracksBuildingBaseRhythm_mp3 from '../../../sounds/quadBeatTracksBuildingBaseRhythm_mp3.js';
-import quadBeatTracksBuildingBuildingTracks000_mp3 from '../../../sounds/quadBeatTracksBuildingBuildingTracks000_mp3.js';
-import quadBeatTracksBuildingBuildingTracks001_mp3 from '../../../sounds/quadBeatTracksBuildingBuildingTracks001_mp3.js';
-import quadBeatTracksBuildingBuildingTracks002_mp3 from '../../../sounds/quadBeatTracksBuildingBuildingTracks002_mp3.js';
-import quadBeatTracksBuildingBuildingTracks003_mp3 from '../../../sounds/quadBeatTracksBuildingBuildingTracks003_mp3.js';
-import quadBeatTracksBuildingBuildingTracks004_mp3 from '../../../sounds/quadBeatTracksBuildingBuildingTracks004_mp3.js';
-import quadBeatTracksBuildingBuildingTracks005_mp3 from '../../../sounds/quadBeatTracksBuildingBuildingTracks005_mp3.js';
-import quadBeatTracksBuildingBuildingTracks006_mp3 from '../../../sounds/quadBeatTracksBuildingBuildingTracks006_mp3.js';
-import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
-import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
-import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
+import quadBeatTracksBuildingBaseRhythm_mp3 from '../../../../sounds/quadBeatTracksBuildingBaseRhythm_mp3.js';
+import quadBeatTracksBuildingBuildingTracks000_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks000_mp3.js';
+import quadBeatTracksBuildingBuildingTracks001_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks001_mp3.js';
+import quadBeatTracksBuildingBuildingTracks002_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks002_mp3.js';
+import quadBeatTracksBuildingBuildingTracks003_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks003_mp3.js';
+import quadBeatTracksBuildingBuildingTracks004_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks004_mp3.js';
+import quadBeatTracksBuildingBuildingTracks005_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks005_mp3.js';
+import quadBeatTracksBuildingBuildingTracks006_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks006_mp3.js';
+import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
+import IReadOnlyProperty from '../../../../../axon/js/IReadOnlyProperty.js';
+import NamedQuadrilateral from '../../model/NamedQuadrilateral.js';
+import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
 
 // All the sounds played in this sound design
 const BUILD_UP_TRACKS = [

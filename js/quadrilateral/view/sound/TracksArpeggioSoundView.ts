@@ -13,20 +13,20 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import quadrilateral from '../../quadrilateral.js';
+import quadrilateral from '../../../quadrilateral.js';
 import TracksSoundView from './TracksSoundView.js';
-import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
-import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
-import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
-import quadBuildingUpArpeggio000_mp3 from '../../../sounds/quadBuildingUpArpeggio000_mp3.js';
-import quadBuildingUpArpeggio001_mp3 from '../../../sounds/quadBuildingUpArpeggio001_mp3.js';
-import quadBuildingUpArpeggio002_mp3 from '../../../sounds/quadBuildingUpArpeggio002_mp3.js';
-import quadBuildingUpArpeggio003_mp3 from '../../../sounds/quadBuildingUpArpeggio003_mp3.js';
-import quadBuildingUpArpeggio004_mp3 from '../../../sounds/quadBuildingUpArpeggio004_mp3.js';
-import quadBuildingUpArpeggio005_mp3 from '../../../sounds/quadBuildingUpArpeggio005_mp3.js';
-import quadBuildingUpArpeggio006_mp3 from '../../../sounds/quadBuildingUpArpeggio006_mp3.js';
-import quadBuildingUpArpeggio007_mp3 from '../../../sounds/quadBuildingUpArpeggio007_mp3.js';
+import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
+import IReadOnlyProperty from '../../../../../axon/js/IReadOnlyProperty.js';
+import NamedQuadrilateral from '../../model/NamedQuadrilateral.js';
+import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
+import quadBuildingUpArpeggio000_mp3 from '../../../../sounds/quadBuildingUpArpeggio000_mp3.js';
+import quadBuildingUpArpeggio001_mp3 from '../../../../sounds/quadBuildingUpArpeggio001_mp3.js';
+import quadBuildingUpArpeggio002_mp3 from '../../../../sounds/quadBuildingUpArpeggio002_mp3.js';
+import quadBuildingUpArpeggio003_mp3 from '../../../../sounds/quadBuildingUpArpeggio003_mp3.js';
+import quadBuildingUpArpeggio004_mp3 from '../../../../sounds/quadBuildingUpArpeggio004_mp3.js';
+import quadBuildingUpArpeggio005_mp3 from '../../../../sounds/quadBuildingUpArpeggio005_mp3.js';
+import quadBuildingUpArpeggio006_mp3 from '../../../../sounds/quadBuildingUpArpeggio006_mp3.js';
+import quadBuildingUpArpeggio007_mp3 from '../../../../sounds/quadBuildingUpArpeggio007_mp3.js';
 
 // All the sounds played in this sound design
 // TODO: We are missing "optional" tracks in https://github.com/phetsims/quadrilateral/issues/175#issuecomment-1201643077

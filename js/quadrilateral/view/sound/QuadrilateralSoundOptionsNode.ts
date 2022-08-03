@@ -8,17 +8,17 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { HBox, Node, Text, VBox } from '../../../../scenery/js/imports.js';
-import ComboBox from '../../../../sun/js/ComboBox.js';
-import Panel from '../../../../sun/js/Panel.js';
-import VerticalAquaRadioButtonGroup from '../../../../sun/js/VerticalAquaRadioButtonGroup.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
-import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralSoundOptionsModel, { QuartetSoundFile, SoundDesign, SuccessSoundFile } from '../model/QuadrilateralSoundOptionsModel.js';
-import Checkbox from '../../../../sun/js/Checkbox.js';
-import { AquaRadioButtonGroupItem } from '../../../../sun/js/AquaRadioButtonGroup.js';
-import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
+import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
+import { HBox, Node, Text, VBox } from '../../../../../scenery/js/imports.js';
+import ComboBox from '../../../../../sun/js/ComboBox.js';
+import Panel from '../../../../../sun/js/Panel.js';
+import VerticalAquaRadioButtonGroup from '../../../../../sun/js/VerticalAquaRadioButtonGroup.js';
+import Tandem from '../../../../../tandem/js/Tandem.js';
+import quadrilateral from '../../../quadrilateral.js';
+import QuadrilateralSoundOptionsModel, { QuartetSoundFile, SoundDesign, SuccessSoundFile } from '../../model/QuadrilateralSoundOptionsModel.js';
+import Checkbox from '../../../../../sun/js/Checkbox.js';
+import { AquaRadioButtonGroupItem } from '../../../../../sun/js/AquaRadioButtonGroup.js';
+import EnumerationProperty from '../../../../../axon/js/EnumerationProperty.js';
 
 const LABEL_TEXT_OPTIONS = {
   font: new PhetFont( { size: 16 } )

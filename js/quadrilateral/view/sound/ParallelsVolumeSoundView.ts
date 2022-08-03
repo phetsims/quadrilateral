@@ -10,19 +10,19 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import LinearFunction from '../../../../dot/js/LinearFunction.js';
-import SoundClipChord from '../../../../tambo/js/sound-generators/SoundClipChord.js';
-import soundManager from '../../../../tambo/js/soundManager.js';
-import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import QuadrilateralSoundOptionsModel, { SuccessSoundFile } from '../model/QuadrilateralSoundOptionsModel.js';
-import WrappedAudioBuffer from '../../../../tambo/js/WrappedAudioBuffer.js';
-import ParallelSideChecker from '../model/ParallelSideChecker.js';
-import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
+import LinearFunction from '../../../../../dot/js/LinearFunction.js';
+import SoundClipChord from '../../../../../tambo/js/sound-generators/SoundClipChord.js';
+import soundManager from '../../../../../tambo/js/soundManager.js';
+import quadrilateral from '../../../quadrilateral.js';
+import QuadrilateralModel from '../../model/QuadrilateralModel.js';
+import QuadrilateralSoundOptionsModel, { SuccessSoundFile } from '../../model/QuadrilateralSoundOptionsModel.js';
+import WrappedAudioBuffer from '../../../../../tambo/js/WrappedAudioBuffer.js';
+import ParallelSideChecker from '../../model/ParallelSideChecker.js';
+import SoundClip from '../../../../../tambo/js/sound-generators/SoundClip.js';
 
-import shapeIdentificationWhenNotAParallelogram_mp3 from '../../../sounds/shapeIdentificationWhenNotAParallelogram_mp3.js';
-import quadIntoParallel001_mp3 from '../../../sounds/quadIntoParallel001_mp3.js';
-import quadOutOfParallel001_mp3 from '../../../sounds/quadOutOfParallel001_mp3.js';
+import shapeIdentificationWhenNotAParallelogram_mp3 from '../../../../sounds/shapeIdentificationWhenNotAParallelogram_mp3.js';
+import quadIntoParallel001_mp3 from '../../../../sounds/quadIntoParallel001_mp3.js';
+import quadOutOfParallel001_mp3 from '../../../../sounds/quadOutOfParallel001_mp3.js';
 
 // Maps the difference in tilt between pairs of sides to output level. When tilt is equal difference will be zero
 // and sound will play at highest output level. Fades out as difference grows, and eventually goes silent.

@@ -4,23 +4,23 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
-import RectangularMomentaryButton from '../../../../sun/js/buttons/RectangularMomentaryButton.js';
-import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
-import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
-import { HBox, Node, Path, Text, VBox } from '../../../../scenery/js/imports.js';
+import RectangularPushButton from '../../../../../sun/js/buttons/RectangularPushButton.js';
+import RectangularMomentaryButton from '../../../../../sun/js/buttons/RectangularMomentaryButton.js';
+import SoundClip from '../../../../../tambo/js/sound-generators/SoundClip.js';
+import quadrilateral from '../../../quadrilateral.js';
+import QuadrilateralConstants from '../../../common/QuadrilateralConstants.js';
+import { HBox, Node, Path, Text, VBox } from '../../../../../scenery/js/imports.js';
 
-import allAnglesAreRightAngles_mp3 from '../../../sounds/allAnglesAreRightAngles_mp3.js';
-import allSideLengthsAreEqual_mp3 from '../../../sounds/allSideLengthsAreEqual_mp3.js';
-import quadIntoParallel001_mp3 from '../../../sounds/quadIntoParallel001_mp3.js';
-import quadOutOfParallel001_mp3 from '../../../sounds/quadOutOfParallel001_mp3.js';
-import quadMovingInParallelSuccessLoop001_wav from '../../../sounds/quadMovingInParallelSuccessLoop001_wav.js';
-import soundManager from '../../../../tambo/js/soundManager.js';
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import PlayIconShape from '../../../../scenery-phet/js/PlayIconShape.js';
-import ButtonNode from '../../../../sun/js/buttons/ButtonNode.js';
-import quadrilateralStrings from '../../quadrilateralStrings.js';
+import allAnglesAreRightAngles_mp3 from '../../../../sounds/allAnglesAreRightAngles_mp3.js';
+import allSideLengthsAreEqual_mp3 from '../../../../sounds/allSideLengthsAreEqual_mp3.js';
+import quadIntoParallel001_mp3 from '../../../../sounds/quadIntoParallel001_mp3.js';
+import quadOutOfParallel001_mp3 from '../../../../sounds/quadOutOfParallel001_mp3.js';
+import quadMovingInParallelSuccessLoop001_wav from '../../../../sounds/quadMovingInParallelSuccessLoop001_wav.js';
+import soundManager from '../../../../../tambo/js/soundManager.js';
+import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
+import PlayIconShape from '../../../../../scenery-phet/js/PlayIconShape.js';
+import ButtonNode from '../../../../../sun/js/buttons/ButtonNode.js';
+import quadrilateralStrings from '../../../quadrilateralStrings.js';
 
 const allRightAnglesString = quadrilateralStrings.a11y.voicing.allRightAngles;
 const allSidesEqualString = quadrilateralStrings.a11y.voicing.allSidesEqual;

@@ -14,7 +14,7 @@ import Checkbox from '../../../../sun/js/Checkbox.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ClapperboardButton from '../../../../scenery-phet/js/ClapperboardButton.js';
-import QuadrilateralSoundOptionsNode from './QuadrilateralSoundOptionsNode.js';
+import QuadrilateralSoundOptionsNode from './sound/QuadrilateralSoundOptionsNode.js';
 import Panel from '../../../../sun/js/Panel.js';
 import NumberControl, { NumberControlOptions } from '../../../../scenery-phet/js/NumberControl.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';

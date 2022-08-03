@@ -4,12 +4,12 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import merge from '../../../../phet-core/js/merge.js';
-import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
-import soundManager from '../../../../tambo/js/soundManager.js';
-import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import QuadrilateralSoundOptionsModel, { SoundDesign, SuccessSoundCollection, SuccessSoundFile } from '../model/QuadrilateralSoundOptionsModel.js';
+import merge from '../../../../../phet-core/js/merge.js';
+import SoundClip from '../../../../../tambo/js/sound-generators/SoundClip.js';
+import soundManager from '../../../../../tambo/js/soundManager.js';
+import quadrilateral from '../../../quadrilateral.js';
+import QuadrilateralModel from '../../model/QuadrilateralModel.js';
+import QuadrilateralSoundOptionsModel, { SoundDesign, SuccessSoundCollection, SuccessSoundFile } from '../../model/QuadrilateralSoundOptionsModel.js';
 import ShapeIdentificationSoundView from './ShapeIdentificationSoundView.js';
 
 const MAX_OUTPUT_LEVEL = 0.2;

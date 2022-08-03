@@ -12,14 +12,14 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
-import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
-import SoundGenerator from '../../../../tambo/js/sound-generators/SoundGenerator.js';
-import soundManager from '../../../../tambo/js/soundManager.js';
-import WrappedAudioBuffer from '../../../../tambo/js/WrappedAudioBuffer.js';
-import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
-import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
+import IReadOnlyProperty from '../../../../../axon/js/IReadOnlyProperty.js';
+import SoundClip from '../../../../../tambo/js/sound-generators/SoundClip.js';
+import SoundGenerator from '../../../../../tambo/js/sound-generators/SoundGenerator.js';
+import soundManager from '../../../../../tambo/js/soundManager.js';
+import WrappedAudioBuffer from '../../../../../tambo/js/WrappedAudioBuffer.js';
+import quadrilateral from '../../../quadrilateral.js';
+import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
+import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
 
 // In seconds, how long all tracks should play after there has been some change in shape.
 const ALL_TRACKS_PLAY_TIME = 2;

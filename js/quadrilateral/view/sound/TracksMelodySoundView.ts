@@ -10,19 +10,19 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import quadrilateral from '../../quadrilateral.js';
+import quadrilateral from '../../../quadrilateral.js';
 import TracksSoundView from './TracksSoundView.js';
-import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
-import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
-import QuadrilateralSoundOptionsModel from '../model/QuadrilateralSoundOptionsModel.js';
-import quadMelodyTracks000_mp3 from '../../../sounds/quadMelodyTracks000_mp3.js';
-import quadMelodyTracks001_mp3 from '../../../sounds/quadMelodyTracks001_mp3.js';
-import quadMelodyTracks002_mp3 from '../../../sounds/quadMelodyTracks002_mp3.js';
-import quadMelodyTracks003_mp3 from '../../../sounds/quadMelodyTracks003_mp3.js';
-import quadMelodyTracks004_mp3 from '../../../sounds/quadMelodyTracks004_mp3.js';
-import quadMelodyTracks005_mp3 from '../../../sounds/quadMelodyTracks005_mp3.js';
-import quadMelodyTracksBaseMusic_mp3 from '../../../sounds/quadMelodyTracksBaseMusic_mp3.js';
+import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
+import IReadOnlyProperty from '../../../../../axon/js/IReadOnlyProperty.js';
+import NamedQuadrilateral from '../../model/NamedQuadrilateral.js';
+import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
+import quadMelodyTracks000_mp3 from '../../../../sounds/quadMelodyTracks000_mp3.js';
+import quadMelodyTracks001_mp3 from '../../../../sounds/quadMelodyTracks001_mp3.js';
+import quadMelodyTracks002_mp3 from '../../../../sounds/quadMelodyTracks002_mp3.js';
+import quadMelodyTracks003_mp3 from '../../../../sounds/quadMelodyTracks003_mp3.js';
+import quadMelodyTracks004_mp3 from '../../../../sounds/quadMelodyTracks004_mp3.js';
+import quadMelodyTracks005_mp3 from '../../../../sounds/quadMelodyTracks005_mp3.js';
+import quadMelodyTracksBaseMusic_mp3 from '../../../../sounds/quadMelodyTracksBaseMusic_mp3.js';
 
 // All the sounds played in this sound design
 const MELODY_TRACKS = [
