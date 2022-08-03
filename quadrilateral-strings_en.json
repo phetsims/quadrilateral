@@ -29,37 +29,35 @@
   "showShapeName": {
     "value": "Show Shape Name"
   },
-  "shapeNames": {
-    "square": {
-      "value": "Square"
-    },
-    "rectangle": {
-      "value": "Rectangle"
-    },
-    "rhombus": {
-      "value": "Rhombus"
-    },
-    "kite": {
-      "value": "Kite"
-    },
-    "isoscelesTrapezoid": {
-      "value": "Isosceles Trapezoid"
-    },
-    "trapezoid": {
-      "value": "Trapezoid"
-    },
-    "concaveQuadrilateral": {
-      "value": "Concave Quadrilateral"
-    },
-    "convexQuadrilateral": {
-      "value": "Convex Quadrilateral"
-    },
-    "parallelogram": {
-      "value": "Parallelogram"
-    },
-    "dart": {
-      "value": "Dart"
-    }
+  "shapeNames.square": {
+    "value": "Square"
+  },
+  "shapeNames.rectangle": {
+    "value": "Rectangle"
+  },
+  "shapeNames.rhombus": {
+    "value": "Rhombus"
+  },
+  "shapeNames.kite": {
+    "value": "Kite"
+  },
+  "shapeNames.isoscelesTrapezoid": {
+    "value": "Isosceles Trapezoid"
+  },
+  "shapeNames.trapezoid": {
+    "value": "Trapezoid"
+  },
+  "shapeNames.concaveQuadrilateral": {
+    "value": "Concave Quadrilateral"
+  },
+  "shapeNames.convexQuadrilateral": {
+    "value": "Convex Quadrilateral"
+  },
+  "shapeNames.parallelogram": {
+    "value": "Parallelogram"
+  },
+  "shapeNames.dart": {
+    "value": "Dart"
   },
   "hapticsDialogMessage": {
     "value": "Please note that this sim uses vibrational<br>haptics on devices that support it."
