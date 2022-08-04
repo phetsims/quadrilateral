@@ -76,9 +76,6 @@ class SideNode extends Voicing( Path, 1 ) {
     this.quadrilateralShapeModel = quadrilateralModel.quadrilateralShapeModel;
     this.scratchShapeModel = quadrilateralModel.quadrilateralTestShapeModel;
 
-    // Mutate options eagerly, but not in super because that doesn't work with the Voicing trait
-    this.mutate( options );
-
     // Generates descriptions
     const sideDescriber = new SideDescriber( side, this.quadrilateralShapeModel, modelViewTransform );
 
