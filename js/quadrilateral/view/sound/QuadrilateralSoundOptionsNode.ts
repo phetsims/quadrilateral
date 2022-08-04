@@ -70,22 +70,22 @@ class QuadrilateralSoundOptionsNode extends Panel {
       {
         value: SoundDesign.TRACKS_BUILD_UP,
         node: new Text( 'Tracks - Build Up', LABEL_TEXT_OPTIONS ),
-        tandemName: `parallelsStaccato${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
+        tandemName: `tracksBuildUp${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
       },
       {
         value: SoundDesign.TRACKS_VOLUME_EMPHASIS,
         node: new Text( 'Tracks - Volume Emphasis', LABEL_TEXT_OPTIONS ),
-        tandemName: `parallelsStaccato${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
+        tandemName: `tracksVolume${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
       },
       {
         value: SoundDesign.TRACKS_MELODY,
         node: new Text( 'Tracks - Melody', LABEL_TEXT_OPTIONS ),
-        tandemName: `parallelsStaccato${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
+        tandemName: `tracksMelody${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
       },
       {
         value: SoundDesign.TRACKS_ARPEGGIO,
         node: new Text( 'Tracks - Arpeggio', LABEL_TEXT_OPTIONS ),
-        tandemName: `parallelsStaccato${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
+        tandemName: `tracksArpeggio${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
       }
     ], optionsParentNode, {
 
