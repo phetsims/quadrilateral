@@ -103,16 +103,20 @@ class QuadrilateralNode extends Node {
     } );
 
     const topSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.topSide, this.model.quadrilateralTestShapeModel.topSide, modelViewTransform, {
-      nameResponse: topSideString
+      nameResponse: topSideString,
+      tandem: providedOptions.tandem.createTandem( 'topSideNode' )
     } );
     const rightSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.rightSide, this.model.quadrilateralTestShapeModel.rightSide, modelViewTransform, {
-      nameResponse: rightSideString
+      nameResponse: rightSideString,
+      tandem: providedOptions.tandem.createTandem( 'rightSideNode' )
     } );
     const bottomSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.bottomSide, this.model.quadrilateralTestShapeModel.bottomSide, modelViewTransform, {
-      nameResponse: bottomSideString
+      nameResponse: bottomSideString,
+      tandem: providedOptions.tandem.createTandem( 'bottomSideNode' )
     } );
     const leftSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.leftSide, this.model.quadrilateralTestShapeModel.leftSide, modelViewTransform, {
-      nameResponse: leftSideString
+      nameResponse: leftSideString,
+      tandem: providedOptions.tandem.createTandem( 'leftSideNode' )
     } );
 
     // angle guides
