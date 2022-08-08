@@ -1,7 +1,12 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * A representation
+ * A representation of the angle when it is a right angle.
+ *
+ * TODO: The visibility of this component is now controlled by the "Corner Guides" checkbox. Since
+ * the component has overlap with CornerGuideNode now, it might be best to move this to that Node
+ * or add it as a child of that Node to simplify visibility control.
+ * 
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
