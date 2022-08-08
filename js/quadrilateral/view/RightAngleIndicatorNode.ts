@@ -1,6 +1,7 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
+ * A representation
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
@@ -12,6 +13,7 @@ import Side from '../model/Side.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import quadrilateral from '../../quadrilateral.js';
+import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 
 // in model coordinates, length of a side of the indicator from the edge of a line between two vertices
 const SIDE_LENGTH = 0.12;
@@ -19,15 +21,17 @@ const SIDE_LENGTH = 0.12;
 class RightAngleIndicatorNode extends Path {
   private readonly shapeModel: QuadrilateralShapeModel;
   private readonly modelViewTransform: ModelViewTransform2;
+  private readonly cornerGuideVisibleProperty: IReadOnlyProperty<boolean>;
 
   /**
    * @param vertex1 - The Vertex being represented, indicator will be visible when angle at this vertex is 90 degrees
    * @param vertex2 - Vertex with a side connected to vertexA in the clockwise direction
    * @param vertex3 - Vertex with a side connected to vertexB in the counterclockwise direction
+   * @param cornerGuideVisibleProperty
    * @param shapeModel
    * @param modelViewTransform
    */
-  public constructor( vertex1: Vertex, vertex2: Vertex, vertex3: Vertex, shapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2 ) {
+  public constructor( vertex1: Vertex, vertex2: Vertex, vertex3: Vertex, cornerGuideVisibleProperty: IReadOnlyProperty<boolean>, shapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2 ) {
     super( null, {
       stroke: QuadrilateralColors.rightAngleIndicatorStrokeColorProperty,
       lineWidth: 2
@@ -35,6 +39,7 @@ class RightAngleIndicatorNode extends Path {
 
     this.shapeModel = shapeModel;
     this.modelViewTransform = modelViewTransform;
+    this.cornerGuideVisibleProperty = cornerGuideVisibleProperty;
 
     // The indicators are only visible when all angles are 90 degrees (square or rectangle), but we need to draw
     // the shape every time the shape changes because we may be a square or rectangle within tolerances (angles
@@ -45,6 +50,7 @@ class RightAngleIndicatorNode extends Path {
     };
     shapeModel.shapeNameProperty.link( redrawShapeListener );
     shapeModel.shapeChangedEmitter.addListener( redrawShapeListener );
+    cornerGuideVisibleProperty.link( redrawShapeListener );
   }
 
   private redrawShape( vertex1: Vertex, vertex2: Vertex, vertex3: Vertex ): void {
@@ -52,9 +58,7 @@ class RightAngleIndicatorNode extends Path {
     assert && assert( vertex1.angleProperty.value, 'Angle must be available to draw the indicator' );
     const angle = vertex1.angleProperty.value!;
 
-    // Comparison uses shapeAngleEqualToOther because this comparison shouldn't use angleToleranceInterval
-    // which can go around Number.Infinity
-    this.visible = this.shapeModel.isShapeAngleEqualToOther( angle, Math.PI / 2 );
+    this.visible = this.shapeModel.isRightAngle( angle ) && this.cornerGuideVisibleProperty.value;
 
     // if we have become visible, we need to redraw the shape
     if ( this.visible ) {
