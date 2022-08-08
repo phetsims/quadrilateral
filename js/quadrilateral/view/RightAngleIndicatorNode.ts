@@ -11,8 +11,6 @@ import { Line, Shape } from '../../../../kite/js/imports.js';
 import Side from '../model/Side.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
-import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
-import Utils from '../../../../dot/js/Utils.js';
 import quadrilateral from '../../quadrilateral.js';
 
 // in model coordinates, length of a side of the indicator from the edge of a line between two vertices
@@ -54,16 +52,9 @@ class RightAngleIndicatorNode extends Path {
     assert && assert( vertex1.angleProperty.value, 'Angle must be available to draw the indicator' );
     const angle = vertex1.angleProperty.value!;
 
-    // It is possible that the angles are wildly different then Math.PI because of the dependency Properties. The
-    // indicator is redrawn every angle change, and that may happen before the shape name is updated. So we could
-    // run into cases where the angle is much less or greater than Math.PI / 2 and the drawing code breaks. At this
-    // time I couldn't think of another way to only draw this when the shape has all angles right, but also
-    // redraw this in those conditions whenever the angle changes. Using this value makes sure that the angle is
-    // close enough to right for assumptions in the drawing code to be legitimate.
-    const angleReasonable = Utils.equalsEpsilon( angle, Math.PI / 2, Math.PI / 4 );
-
-    const shapeName = this.shapeModel.getShapeName();
-    this.visible = ( shapeName === NamedQuadrilateral.SQUARE || shapeName === NamedQuadrilateral.RECTANGLE ) && angleReasonable;
+    // Comparison uses shapeAngleEqualToOther because this comparison shouldn't use angleToleranceInterval
+    // which can go around Number.Infinity
+    this.visible = this.shapeModel.isShapeAngleEqualToOther( angle, Math.PI / 2 );
 
     // if we have become visible, we need to redraw the shape
     if ( this.visible ) {
