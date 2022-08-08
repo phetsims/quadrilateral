@@ -188,10 +188,7 @@ class QuadrilateralNode extends Node {
 
   public step( dt: number ): void {
     const previousActiveFill = this.activeFill;
-    if ( this.quadrilateralShapeModel.isParallelogramProperty.value ) {
-      this.activeFill = QuadrilateralColors.quadrilateralParallelogramShapeColorProperty;
-    }
-    else if ( this.remainingTimeForShapeChangeFill > 0 ) {
+    if ( this.remainingTimeForShapeChangeFill > 0 ) {
 
       // Note this will only happen if "shapeIdentificationFeedback" is enabled.
       this.activeFill = QuadrilateralColors.quadrilateralNamedShapeColorProperty;
