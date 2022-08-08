@@ -139,7 +139,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // a named shape like rectangle or kite or trapezoid.
   shapeIdentificationFeedback: {
     type: 'boolean',
-    defaultValue: false
+    defaultValue: true
   },
 
   // If true, a dialog will be shown at startup that will require the user to touch the screen.  This will allow the
