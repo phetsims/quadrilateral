@@ -96,8 +96,8 @@ class VertexNode extends Voicing( Circle, 1 ) {
       // velocity defined in view coordinates per second, assuming 60 fps
       dragBoundsProperty: vertex.dragBoundsProperty,
 
-      downDelta: largeViewDragDelta,
-      shiftDownDelta: smallViewDragDelta,
+      dragDelta: largeViewDragDelta,
+      shiftDragDelta: smallViewDragDelta,
       moveOnHoldDelay: 750,
       moveOnHoldInterval: 50,
 
