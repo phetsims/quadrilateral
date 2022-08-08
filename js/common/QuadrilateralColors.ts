@@ -26,7 +26,7 @@ const QuadrilateralColors = {
 
   // Color for the symmetry grid
   symmetryGridColorProperty: new ProfileColorProperty( quadrilateral, 'symmetryGrid', {
-    default: new Color( 200, 200, 200 )
+    default: 'white'
   } ),
 
   // Color for vertices and sides of the quadrilateral shape.
