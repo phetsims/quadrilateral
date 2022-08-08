@@ -169,7 +169,6 @@ class QuadrilateralScreenView extends ScreenView {
     }
 
     const gridNode = new QuadrilateralGridNode( model.modelBoundsProperty, model.symmetryGridVisibleProperty, this.modelViewTransform );
-    gridNode.leftTop = boundsRectangle.leftTop.plusScalar( BORDER_RECTANGLE_LINE_WIDTH / 2 );
     this.addChild( gridNode );
 
     // layout for components that depend on the play area bounds being defined
