@@ -21,7 +21,7 @@ import Property from '../../../../axon/js/Property.js';
 const TEXT_OPTIONS = combineOptions<TextOptions>( {
 
   // i18n (inspection)
-  maxWidth: 100
+  maxWidth: 200
 }, QuadrilateralConstants.SCREEN_TEXT_OPTIONS );
 
 type SelfOptions = EmptySelfOptions;

@@ -28,7 +28,7 @@ const QuadrilateralConstants = {
   CORNER_RADIUS: 5,
 
   SCREEN_TEXT_OPTIONS: {
-    font: new PhetFont( { size: 14 } )
+    font: new PhetFont( { size: 18 } )
   },
 
   PANEL_LABEL_TEXT_OPTIONS: {
