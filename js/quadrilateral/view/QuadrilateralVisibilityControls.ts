@@ -10,6 +10,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import { Text, TextOptions, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
+import GridCheckbox from '../../../../scenery-phet/js/GridCheckbox.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import quadrilateralStrings from '../../quadrilateralStrings.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
@@ -92,8 +93,7 @@ class QuadrilateralVisibilityControls extends VBox {
       tandem: options.tandem.createTandem( 'diagonalGuidesCheckbox' )
     } );
 
-    const symmetryGridText = new Text( quadrilateralStrings.symmetryGrid, TEXT_OPTIONS );
-    const symmetryGridCheckbox = new Checkbox( symmetryGridVisibleProperty, symmetryGridText, {
+    const symmetryGridCheckbox = new GridCheckbox( symmetryGridVisibleProperty, {
 
       // pdom
       labelTagName: 'label',
