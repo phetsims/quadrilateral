@@ -6,7 +6,7 @@
  * TODO: The visibility of this component is now controlled by the "Corner Guides" checkbox. Since
  * the component has overlap with CornerGuideNode now, it might be best to move this to that Node
  * or add it as a child of that Node to simplify visibility control.
- * 
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
@@ -14,7 +14,6 @@ import { Path } from '../../../../scenery/js/imports.js';
 import Vertex from '../model/Vertex.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import { Line, Shape } from '../../../../kite/js/imports.js';
-import Side from '../model/Side.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import quadrilateral from '../../quadrilateral.js';
@@ -68,6 +67,9 @@ class RightAngleIndicatorNode extends Path {
     // if we have become visible, we need to redraw the shape
     if ( this.visible ) {
 
+      // TODO: Clean this up, the implementation has changed such that variable names no longer accurately
+      // describe what is happening. Got to a commit point for
+
       // The line from vertexA to vertexB (clockwise connected side)
       const firstLine = new Line( vertex1.positionProperty.value, vertex2.positionProperty.value );
 
@@ -75,33 +77,25 @@ class RightAngleIndicatorNode extends Path {
       const secondLine = new Line( vertex1.positionProperty.value, vertex3.positionProperty.value );
 
       // stroke right starts at the end point, we need to reverse it
-      const firstInnerLine = firstLine.strokeRight( Side.SIDE_WIDTH )[ 0 ].reversed();
-      const secondInnerLine = secondLine.strokeLeft( Side.SIDE_WIDTH )[ 0 ];
-
-      // the intersection point of those lines is where we start drawing our indicator
-      const cornerIntersectionSegments = Line.intersectOther( firstInnerLine, secondInnerLine );
-      assert && assert( cornerIntersectionSegments.length === 1, 'Must be one and only one intersection between lines' );
-      const intersectionPoint = cornerIntersectionSegments[ 0 ].point;
+      const intersectionPoint = vertex1.positionProperty.value;
 
       const closestPointToIntersection = firstLine.explicitClosestToPoint( intersectionPoint )[ 0 ].closestPoint;
 
       const correctedLength = SIDE_LENGTH + intersectionPoint.distance( closestPointToIntersection );
 
-      const t1 = Math.min( correctedLength / firstInnerLine.getArcLength(), 1 );
-      const pointAlongFirstInnerLine = firstInnerLine.positionAt( t1 );
+      const t1 = Math.min( correctedLength / firstLine.getArcLength(), 1 );
+      const pointAlongFirstInnerLine = firstLine.positionAt( t1 );
 
       const t2 = Math.min( correctedLength / secondLine.getArcLength(), 1 );
-      const pointAlongSecondInnerLine = secondInnerLine.positionAt( t2 );
+      const pointAlongSecondInnerLine = secondLine.positionAt( t2 );
 
       const innerPoint = pointAlongSecondInnerLine.plus( pointAlongFirstInnerLine.minus( intersectionPoint ) );
 
       // We now have all points for our "square" shape
       const shape = new Shape();
-      shape.moveToPoint( intersectionPoint );
-      shape.lineToPoint( pointAlongFirstInnerLine );
+      shape.moveToPoint( pointAlongFirstInnerLine );
       shape.lineToPoint( innerPoint );
       shape.lineToPoint( pointAlongSecondInnerLine );
-      shape.close();
 
       this.shape = this.modelViewTransform.modelToViewShape( shape );
     }
