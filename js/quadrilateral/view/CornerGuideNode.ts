@@ -130,12 +130,18 @@ class CornerGuideNode extends Node {
       crosshairPath.shape = modelViewTransform.modelToViewShape( crosshairShape );
     } );
 
-    this.children = [ darkAnglePath, lightAnglePath, crosshairPath ];
+    const arcNode = new Node( { children: [ darkAnglePath, lightAnglePath ] } );
+    this.children = [ arcNode, crosshairPath ];
 
-    // listeners - This Node is only visible when "Angle Guides" are visible by the user and the angle is NOT a right
-    // angle. In that case, the RightAngleIndicatorNode will display the angle instead.
-    Multilink.multilink( [ visibleProperty, vertex1.angleProperty ], ( visible, angle ) => {
-      this.visible = visible && !shapeModel.isRightAngle( angle! );
+    // This node is only visible when "Corner Guides" are enabled by the user
+    visibleProperty.link( visible => {
+      this.visible = visible;
+    } );
+
+    // When right angle, display the RightAngleIndicator, otherwise the arcs representing angle are shown.
+    vertex1.angleProperty.link( angle => {
+      arcNode.visible = !shapeModel.isRightAngle( angle! );
+
     } );
   }
 
