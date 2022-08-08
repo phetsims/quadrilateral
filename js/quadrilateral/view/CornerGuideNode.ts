@@ -25,7 +25,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
-import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 
 // constants
@@ -134,10 +133,9 @@ class CornerGuideNode extends Node {
     this.children = [ darkAnglePath, lightAnglePath, crosshairPath ];
 
     // listeners - This Node is only visible when "Angle Guides" are visible by the user and the angle is NOT a right
-    // angle. In that case, the RightAngleIndicatorNode will display the angle.
-    Multilink.multilink( [ visibleProperty, shapeModel.shapeNameProperty ], ( visible, shapeName ) => {
-      const currentShape = shapeModel.shapeNameProperty.value;
-      this.visible = visible && currentShape !== NamedQuadrilateral.SQUARE && currentShape !== NamedQuadrilateral.RECTANGLE;
+    // angle. In that case, the RightAngleIndicatorNode will display the angle instead.
+    Multilink.multilink( [ visibleProperty, vertex1.angleProperty ], ( visible, angle ) => {
+      this.visible = visible && !shapeModel.isRightAngle( angle! );
     } );
   }
 
