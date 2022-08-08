@@ -15,7 +15,6 @@ import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import CornerGuideNode from './CornerGuideNode.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
-import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import RightAngleIndicatorNode from './RightAngleIndicatorNode.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
@@ -34,9 +33,6 @@ const vertexAString = quadrilateralStrings.vertexA;
 const vertexBString = quadrilateralStrings.vertexB;
 const vertexCString = quadrilateralStrings.vertexC;
 const vertexDString = quadrilateralStrings.vertexD;
-
-const EQUAL_SIDES_SEGMENT_LINE_WIDTH = 2;
-const DEFAULT_SIDES_SEGMENT_LINE_WIDTH = 1;
 
 // in seconds,
 const SHAPE_FILL_TIME = 0.35;
@@ -171,13 +167,6 @@ class QuadrilateralNode extends Node {
       if ( shapeName !== null && quadrilateralModel.shapeIdentificationFeedbackEnabledProperty.value ) {
         this.remainingTimeForShapeChangeFill = SHAPE_FILL_TIME;
       }
-    } );
-
-    // Design request - when all side lengths are equal (which will be true when square or rhombus) increase
-    // side segment line width
-    this.quadrilateralShapeModel.shapeNameProperty.link( shapeName => {
-      const lineWidth = ( shapeName === NamedQuadrilateral.SQUARE || shapeName === NamedQuadrilateral.RHOMBUS ) ? EQUAL_SIDES_SEGMENT_LINE_WIDTH : DEFAULT_SIDES_SEGMENT_LINE_WIDTH;
-      this.sideNodes.forEach( sideNode => { sideNode.lineWidth = lineWidth; } );
     } );
 
     this.pdomOrder = [
