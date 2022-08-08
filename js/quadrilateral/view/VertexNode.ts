@@ -6,7 +6,7 @@
  * @author Jesse Greenberg
  */
 
-import { Circle, CircleOptions, DragListener, KeyboardDragListener, SceneryEvent, Text, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
+import { Circle, CircleOptions, DragListener, KeyboardDragListener, Path, SceneryEvent, Text, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import quadrilateral from '../../quadrilateral.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -68,6 +68,17 @@ class VertexNode extends Voicing( Circle, 1 ) {
       maxWidth: 12 // by inspection
     } );
     this.addChild( vertexLabelText );
+
+    // Add hatch marks to make it easier to align a vertex with the background grid
+    const hatchMarkShape = new Shape();
+    let angle = 0;
+    while ( angle <= 2 * Math.PI ) {
+      hatchMarkShape.moveTo( Math.cos( angle ) * viewRadius * 3 / 4, Math.sin( angle ) * viewRadius * 3 / 4 );
+      hatchMarkShape.lineTo( Math.cos( angle ) * viewRadius, Math.sin( angle ) * viewRadius );
+      angle += Math.PI / 2;
+    }
+    const hatchMarkPath = new Path( hatchMarkShape, { stroke: 'black' } );
+    this.addChild( hatchMarkPath );
 
     // Expand the pointer areas a bit so that it is difficult to accidentally pick up a side when near the vertex edge
     this.touchArea = Shape.circle( viewRadius + POINTER_AREA_DILATION );
