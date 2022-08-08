@@ -174,9 +174,9 @@ class QuadrilateralScreenView extends ScreenView {
 
     // rendering order
     this.addChild( boundsRectangle );
+    this.addChild( this.quadrilateralNode );
     this.addChild( gridNode );
     this.addChild( diagonalGuidesNode );
-    this.addChild( this.quadrilateralNode );
 
     // layout for components that depend on the play area bounds being defined
     shapeNameDisplay.centerBottom = boundsRectangle.centerTop.minusXY( 0, QuadrilateralConstants.VIEW_SPACING );
