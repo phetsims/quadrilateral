@@ -38,6 +38,7 @@ import QuadrilateralSoundBoardNode from './sound/QuadrilateralSoundBoardNode.js'
 import QuadrilateralMediaPipe from './QuadrilateralMediaPipe.js';
 import QuadrilateralDiagonalGuidesNode from './QuadrilateralDiagonalGuidesNode.js';
 import QuadrilateralShapeNameDisplay from './QuadrilateralShapeNameDisplay.js';
+import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 
 const MODEL_BOUNDS = QuadrilateralQueryParameters.calibrationDemoDevice ? new Bounds2( -4.5, -4.5, 4.5, 4.5 ) :
                      new Bounds2( -1, -1, 1, 1 );
@@ -139,12 +140,10 @@ class QuadrilateralScreenView extends ScreenView {
 
     // Layered under everything else
     const diagonalGuidesNode = new QuadrilateralDiagonalGuidesNode( model.quadrilateralShapeModel, model.modelBoundsProperty, model.diagonalGuidesVisibleProperty, this.modelViewTransform );
-    this.addChild( diagonalGuidesNode );
 
     this.quadrilateralNode = new QuadrilateralNode( model, modelViewTransform, this.layoutBounds, {
       tandem: tandem.createTandem( 'quadrilateralNode' )
     } );
-    this.addChild( this.quadrilateralNode );
 
     this.quadrilateralSoundView = new QuadrilateralSoundView( model, preferencesModel.soundOptionsModel );
 
@@ -152,8 +151,11 @@ class QuadrilateralScreenView extends ScreenView {
     // Rounded corners to look nice, but actual model bounds are pure Bounds2.
     assert && assert( this.model.modelBoundsProperty.value !== null );
     const playAreaViewBounds = modelViewTransform.modelToViewBounds( this.model.modelBoundsProperty.value! );
-    const boundsRectangle = new Rectangle( playAreaViewBounds, 5, 5, { stroke: 'white', lineWidth: BORDER_RECTANGLE_LINE_WIDTH } );
-    this.addChild( boundsRectangle );
+    const boundsRectangle = new Rectangle( playAreaViewBounds, 5, 5, {
+      stroke: QuadrilateralColors.playAreaStrokeColorProperty,
+      fill: QuadrilateralColors.playAreaFillColorProperty,
+      lineWidth: BORDER_RECTANGLE_LINE_WIDTH
+    } );
 
     if ( QuadrilateralQueryParameters.showDragAreas ) {
       this.addChild( new VertexDragAreaNode( shapeModel.vertexA, [ shapeModel.leftSide, shapeModel.topSide ], modelViewTransform ) );
@@ -169,7 +171,12 @@ class QuadrilateralScreenView extends ScreenView {
     }
 
     const gridNode = new QuadrilateralGridNode( model.modelBoundsProperty, model.symmetryGridVisibleProperty, this.modelViewTransform );
+
+    // rendering order
+    this.addChild( boundsRectangle );
     this.addChild( gridNode );
+    this.addChild( diagonalGuidesNode );
+    this.addChild( this.quadrilateralNode );
 
     // layout for components that depend on the play area bounds being defined
     shapeNameDisplay.centerBottom = boundsRectangle.centerTop.minusXY( 0, QuadrilateralConstants.VIEW_SPACING );

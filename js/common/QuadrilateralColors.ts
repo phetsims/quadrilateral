@@ -80,8 +80,15 @@ const QuadrilateralColors = {
 
   panelStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'panelStrokeColor', {
     default: 'black'
-  } )
+  } ),
 
+  playAreaStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'playAreaStrokeColor', {
+    default: 'white'
+  } ),
+
+  playAreaFillColorProperty: new ProfileColorProperty( quadrilateral, 'playAreaFillColor', {
+    default: new Color( 67, 67, 255 )
+  } )
 };
 
 quadrilateral.register( 'QuadrilateralColors', QuadrilateralColors );
