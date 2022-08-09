@@ -19,7 +19,7 @@ import { Shape } from '../../../../kite/js/imports.js';
 const GRID_SPACING = QuadrilateralModel.MAJOR_GRID_SPACING * 5;
 
 const GRID_LINE_OPTIONS = {
-  stroke: QuadrilateralColors.symmetryGridColorProperty
+  stroke: QuadrilateralColors.gridColorProperty
 };
 
 class QuadrilateralGridNode extends Path {

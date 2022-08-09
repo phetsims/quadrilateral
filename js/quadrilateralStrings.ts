@@ -13,7 +13,7 @@ type StringsType = {
   };
   'cornerLabels': string;
   'cornerGuides': string;
-  'symmetryGrid': string;
+  'grid': string;
   'diagonalGuides': string;
   'vertexA': string;
   'vertexB': string;
@@ -45,12 +45,12 @@ type StringsType = {
     'angleGuidesAddedResponse': string;
     'angleGuidesRemovedResponse': string;
     'angleGuidesHintResponse': string;
-    'symmetryLinesAddedResponse': string;
-    'symmetryLinesRemovedResponse': string;
+    'gridLinesAddedResponse': string;
+    'gridLinesRemovedResponse': string;
     'diagonalGuidesAddedResponse': string;
     'diagonalGuidesRemovedResponse': string;
     'diagonalGuidesHintResponse': string;
-    'symmetryLinesHintResponse': string;
+    'gridLinesHintResponse': string;
     'myShapesCorners': string;
     'myShapesSides': string;
     'cornerA': string;

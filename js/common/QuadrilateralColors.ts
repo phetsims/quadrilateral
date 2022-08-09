@@ -24,8 +24,8 @@ const QuadrilateralColors = {
     default: new Color( 133, 133, 255 )
   } ),
 
-  // Color for the symmetry grid
-  symmetryGridColorProperty: new ProfileColorProperty( quadrilateral, 'symmetryGrid', {
+  // Color for the grid in the play area
+  gridColorProperty: new ProfileColorProperty( quadrilateral, 'grid', {
     default: 'white'
   } ),
 

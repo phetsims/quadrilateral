@@ -73,7 +73,7 @@ class QuadrilateralScreenView extends ScreenView {
     const visibilityControls = new QuadrilateralVisibilityControls(
       model.vertexLabelsVisibleProperty,
       model.cornerGuideVisibleProperty,
-      model.symmetryGridVisibleProperty,
+      model.gridVisibleProperty,
       model.diagonalGuidesVisibleProperty,
       {
         rightCenter: this.layoutBounds.rightCenter.minusXY( QuadrilateralConstants.SCREEN_VIEW_X_MARGIN, 0 ),
@@ -170,7 +170,7 @@ class QuadrilateralScreenView extends ScreenView {
       this.addChild( new SideLengthAreaNode( shapeModel, shapeModel.leftSide, shapeModel.rightSide, shapeModel.bottomSide, modelViewTransform, { drawRotation: Math.PI / 2 } ) );
     }
 
-    const gridNode = new QuadrilateralGridNode( model.modelBoundsProperty, model.symmetryGridVisibleProperty, this.modelViewTransform );
+    const gridNode = new QuadrilateralGridNode( model.modelBoundsProperty, model.gridVisibleProperty, this.modelViewTransform );
 
     // rendering order - grid is supposed to be on top of the quadrilateral, see
     // https://github.com/phetsims/quadrilateral/issues/178

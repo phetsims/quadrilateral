@@ -86,8 +86,8 @@ class QuadrilateralModel {
   // Whether labels on each vertex are visible.
   public readonly vertexLabelsVisibleProperty: BooleanProperty;
 
-  // Whether the symmetry grid is visible.
-  public readonly symmetryGridVisibleProperty: BooleanProperty;
+  // Whether the grid is visible.
+  public readonly gridVisibleProperty: BooleanProperty;
 
   // Whether the diagonal guides are visible.
   public readonly diagonalGuidesVisibleProperty: BooleanProperty;
@@ -181,8 +181,8 @@ class QuadrilateralModel {
       tandem: tandem.createTandem( 'vertexLabelsVisibleProperty' )
     } );
 
-    this.symmetryGridVisibleProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'symmetryGridVisibleProperty' )
+    this.gridVisibleProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'gridVisibleProperty' )
     } );
 
     this.diagonalGuidesVisibleProperty = new BooleanProperty( false, {
@@ -291,7 +291,7 @@ class QuadrilateralModel {
     // reset visibility Properties
     this.cornerGuideVisibleProperty.reset();
     this.vertexLabelsVisibleProperty.reset();
-    this.symmetryGridVisibleProperty.reset();
+    this.gridVisibleProperty.reset();
     this.diagonalGuidesVisibleProperty.reset();
     this.shapeNameVisibleProperty.reset();
 

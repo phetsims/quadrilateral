@@ -8,8 +8,8 @@
   "cornerGuides": {
     "value": "Corner Guides"
   },
-  "symmetryGrid": {
-    "value": "Symmetry Grid"
+  "grid": {
+    "value": "Grid"
   },
   "diagonalGuides": {
     "value": "Diagonal Guides"
@@ -92,10 +92,10 @@
     "angleGuidesHintResponse": {
       "value": "Explore shapes with or without visual angle guides."
     },
-    "symmetryLinesAddedResponse": {
+    "gridLinesAddedResponse": {
       "value": "Grid lines added."
     },
-    "symmetryLinesRemovedResponse": {
+    "gridLinesRemovedResponse": {
       "value": "Lines hidden."
     },
     "diagonalGuidesAddedResponse": {
@@ -107,7 +107,7 @@
     "diagonalGuidesHintResponse": {
       "value": "Explore shapes with or without diagonal guides."
     },
-    "symmetryLinesHintResponse": {
+    "gridLinesHintResponse": {
       "value": "Explore shapes with or without visual grid."
     },
     "myShapesCorners": {

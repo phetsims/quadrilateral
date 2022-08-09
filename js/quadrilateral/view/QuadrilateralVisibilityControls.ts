@@ -29,7 +29,7 @@ type SelfOptions = EmptySelfOptions;
 type QuadrilateralVisibilityControlsOptions = SelfOptions & StrictOmit<VBoxOptions, 'children'> & PickRequired<VBoxOptions, 'tandem'>;
 
 class QuadrilateralVisibilityControls extends VBox {
-  public constructor( cornerLabelsVisibleProperty: Property<boolean>, cornerGuideVisibleProperty: Property<boolean>, symmetryGridVisibleProperty: BooleanProperty, diagonalGuidesVisibleProperty: BooleanProperty, providedOptions: QuadrilateralVisibilityControlsOptions ) {
+  public constructor( cornerLabelsVisibleProperty: Property<boolean>, cornerGuideVisibleProperty: Property<boolean>, gridVisibleProperty: BooleanProperty, diagonalGuidesVisibleProperty: BooleanProperty, providedOptions: QuadrilateralVisibilityControlsOptions ) {
 
     const options = optionize<QuadrilateralVisibilityControlsOptions, SelfOptions, VBoxOptions>()( {
       align: 'left',
@@ -93,25 +93,25 @@ class QuadrilateralVisibilityControls extends VBox {
       tandem: options.tandem.createTandem( 'diagonalGuidesCheckbox' )
     } );
 
-    const symmetryGridCheckbox = new GridCheckbox( symmetryGridVisibleProperty, {
+    const gridCheckbox = new GridCheckbox( gridVisibleProperty, {
 
       // pdom
       labelTagName: 'label',
-      labelContent: quadrilateralStrings.symmetryGrid,
+      labelContent: quadrilateralStrings.grid,
 
       // voicing
-      voicingNameResponse: quadrilateralStrings.symmetryGrid,
-      voicingHintResponse: quadrilateralStrings.a11y.symmetryLinesHintResponse,
+      voicingNameResponse: quadrilateralStrings.grid,
+      voicingHintResponse: quadrilateralStrings.a11y.gridLinesHintResponse,
 
       // a11y
-      checkedContextResponse: quadrilateralStrings.a11y.symmetryLinesAddedResponse,
-      uncheckedContextResponse: quadrilateralStrings.a11y.symmetryLinesRemovedResponse,
+      checkedContextResponse: quadrilateralStrings.a11y.gridLinesAddedResponse,
+      uncheckedContextResponse: quadrilateralStrings.a11y.gridLinesRemovedResponse,
 
       // phet-io
-      tandem: options.tandem.createTandem( 'symmetryGridCheckbox' )
+      tandem: options.tandem.createTandem( 'gridCheckbox' )
     } );
 
-    options.children = [ cornerLabelsCheckbox, cornerGuideCheckbox, diagonalGuidesCheckbox, symmetryGridCheckbox ];
+    options.children = [ cornerLabelsCheckbox, cornerGuideCheckbox, diagonalGuidesCheckbox, gridCheckbox ];
 
     super( options );
   }
