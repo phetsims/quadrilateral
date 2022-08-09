@@ -103,13 +103,16 @@ class TracksArpeggioSoundView extends TracksSoundView {
         soundClip.setOutputLevel( 0 );
       } );
 
-      // play the background sound for the named quadrilateral - lower output level since it is in the
-      // background
-      const backgroundIndicesToPlay = NAMED_QUADRILATERAL_TO_BACKGROUND_TRACKS_MAP.get( shapeName );
-      assert && assert( backgroundIndicesToPlay, 'NamedQuadrilateral does not have a TracksArpeggioSoundView design' );
-      backgroundIndicesToPlay!.forEach( index => {
-        this.soundClips[ index ].setOutputLevel( 0.25 );
-      } );
+      if ( soundOptionsModel.arpeggioBackgroundProperty.value ) {
+        
+        // play the background sound for the named quadrilateral - lower output level since it is in the
+        // background
+        const backgroundIndicesToPlay = NAMED_QUADRILATERAL_TO_BACKGROUND_TRACKS_MAP.get( shapeName );
+        assert && assert( backgroundIndicesToPlay, 'NamedQuadrilateral does not have a TracksArpeggioSoundView design' );
+        backgroundIndicesToPlay!.forEach( index => {
+          this.soundClips[ index ].setOutputLevel( 0.25 );
+        } );
+      }
 
       // play the arpeggio tracks
       const soundIndicesToPlay = NAMED_QUADRILATERAL_TO_TRACKS_MAP.get( shapeName );

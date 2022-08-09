@@ -162,6 +162,11 @@ class QuadrilateralSoundOptionsNode extends Panel {
       tandem: tandem.createTandem( 'tracksPlayForeverCheckbox' )
     } );
 
+    const arpeggioBackgroundLabel = new Text( 'Arpeggio Background Melodies', LABEL_TEXT_OPTIONS );
+    const arpeggioBackgroundCheckbox = new Checkbox( model.arpeggioBackgroundProperty, arpeggioBackgroundLabel, {
+      tandem: tandem.createTandem( 'arpeggioBackgroundMelodiesCheckbox' )
+    } );
+
     const content = new VBox( {
       children: [
         labelledComboBox,
@@ -203,6 +208,12 @@ class QuadrilateralSoundOptionsNode extends Panel {
       else if ( design === SoundDesign.TRACKS_ARPEGGIO || design === SoundDesign.TRACKS_BUILD_UP ||
                 design === SoundDesign.TRACKS_MELODY || design === SoundDesign.TRACKS_VOLUME_EMPHASIS ) {
         children.push( tracksPlayForeverCheckbox );
+
+        if ( design === SoundDesign.TRACKS_ARPEGGIO ) {
+
+          // For the arpeggio sound design, include a checkbox that controls background melodies
+          children.push( arpeggioBackgroundCheckbox );
+        }
       }
 
       content.children = children;

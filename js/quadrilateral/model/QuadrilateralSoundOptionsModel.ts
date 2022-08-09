@@ -124,6 +124,10 @@ class QuadrilateralSoundOptionsModel {
   // but it is also helpful for debugging for now.
   public tracksPlayForeverProperty: BooleanProperty;
 
+  // For the "Tracks: Arpeggio" design, if this Property is true background melodies will play behind the arpeggio
+  // sounds. Designers aren't sure whether background melodies should play so this lets them enable/disable it.
+  public arpeggioBackgroundProperty: BooleanProperty;
+
   public static SoundDesign: SoundDesign;
   public static QuartetSoundFile: QuartetSoundFile;
   public static SuccessSoundFile: SuccessSoundFile;
@@ -136,6 +140,7 @@ class QuadrilateralSoundOptionsModel {
     this.successSoundFileProperty = new EnumerationProperty( SuccessSoundFile.ONE );
     this.maintenanceSoundRequiresEqualLengthsProperty = new BooleanProperty( QuadrilateralQueryParameters.equalLengthsForMaintenanceSound );
     this.tracksPlayForeverProperty = new BooleanProperty( false );
+    this.arpeggioBackgroundProperty = new BooleanProperty( true );
   }
 }
 
