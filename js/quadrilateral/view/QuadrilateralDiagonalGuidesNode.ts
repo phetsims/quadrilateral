@@ -47,7 +47,7 @@ class QuadrilateralDiagonalGuidesNode extends Node {
       [ quadrilateralShapeModel.vertexA.positionProperty, quadrilateralShapeModel.vertexC.positionProperty, boundsProperty ],
       ( vertexAPosition, vertexCPosition, bounds ) => {
         assert && assert( vertexAPosition && vertexCPosition && bounds, 'positions need to be defined for diagonal guides' );
-        QuadrilateralDiagonalGuidesNode.drawDiagonal( vertexAPosition!, vertexCPosition!, bounds!, modelViewTransform, lineNode1 );
+        QuadrilateralDiagonalGuidesNode.drawDiagonal( vertexAPosition, vertexCPosition, bounds!, modelViewTransform, lineNode1 );
       }
     );
 
@@ -55,7 +55,7 @@ class QuadrilateralDiagonalGuidesNode extends Node {
       [ quadrilateralShapeModel.vertexB.positionProperty, quadrilateralShapeModel.vertexD.positionProperty, boundsProperty ],
       ( vertexBPosition, vertexDPosition, bounds ) => {
         assert && assert( vertexBPosition && vertexDPosition && bounds, 'positions need to be defined for diagonal guides' );
-        QuadrilateralDiagonalGuidesNode.drawDiagonal( vertexBPosition!, vertexDPosition!, bounds!, modelViewTransform, lineNode2 );
+        QuadrilateralDiagonalGuidesNode.drawDiagonal( vertexBPosition, vertexDPosition, bounds!, modelViewTransform, lineNode2 );
       }
     );
   }
@@ -67,7 +67,7 @@ class QuadrilateralDiagonalGuidesNode extends Node {
   private static drawDiagonal( vertex1Position: Vector2, vertex2Position: Vector2, bounds: Bounds2, modelViewTransform: ModelViewTransform2, lineNode: Line ): void {
 
     // convert Bounds2 to a Shape so that we can find ray/bounds intersections
-    const boundsShape = Shape.bounds( bounds! );
+    const boundsShape = Shape.bounds( bounds );
 
     const vertex1RayDirection = vertex2Position.minus( vertex1Position ).normalized();
     const vertex1Ray = new Ray2( vertex1Position, vertex1RayDirection );
