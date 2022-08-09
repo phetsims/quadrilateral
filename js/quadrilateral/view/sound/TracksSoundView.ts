@@ -30,8 +30,9 @@ const ALL_TRACKS_PLAY_TIME = 4;
 // In seconds, how long tracks fade in or fade out when sound transitions between playing and stopped.
 const FADE_TIME = 1;
 
+// linear maps that determine output level from remaining fade time
 const REMAINING_FADE_IN_TIME_TO_GAIN = new LinearFunction( FADE_TIME, 0, 0, 1 );
-const FADE_OUT_TIME_TO_GAIN = new LinearFunction( FADE_TIME, 0, 1, 0 );
+const REMAINING_FADE_OUT_TIME_TO_GAIN = new LinearFunction( FADE_TIME, 0, 1, 0 );
 
 // For the state of the sound view, indicating how sound is currently behaving.
 class PlayingState extends EnumerationValue {
@@ -103,7 +104,7 @@ class TracksSoundView extends SoundGenerator {
     shapeModel.shapeChangedEmitter.addListener( () => {
       if ( resetNotInProgressProperty.value ) {
 
-        // if we are stopped, transition to fading in
+        // if we are stopped, transition to fading out
         this.shapeDirty = true;
 
         // if we are already playing, reset timing variables to continue playing for the full duration
@@ -165,7 +166,7 @@ class TracksSoundView extends SoundGenerator {
 
       // update output level and counting variables, transition to STOPPED if it is time
       this.remainingFadeTime = Math.max( 0, this.remainingFadeTime - dt );
-      this.setOutputLevel( FADE_OUT_TIME_TO_GAIN.evaluate( this.remainingFadeTime ) );
+      this.setOutputLevel( REMAINING_FADE_OUT_TIME_TO_GAIN.evaluate( this.remainingFadeTime ) );
 
       if ( this.shapeDirty ) {
 
