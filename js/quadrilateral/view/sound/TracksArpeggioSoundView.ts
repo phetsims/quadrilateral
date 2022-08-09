@@ -80,14 +80,14 @@ const NAMED_QUADRILATERAL_TO_TRACKS_MAP = new Map( [
 const NAMED_QUADRILATERAL_TO_BACKGROUND_TRACKS_MAP = new Map( [
   [ NamedQuadrilateral.CONVEX_QUADRILATERAL, [] ],
   [ NamedQuadrilateral.CONCAVE_QUADRILATERAL, [] ],
-  [ NamedQuadrilateral.DART, [ 8 ] ],
-  [ NamedQuadrilateral.KITE, [ 8 ] ],
-  [ NamedQuadrilateral.TRAPEZOID, [ 13 ] ],
-  [ NamedQuadrilateral.ISOSCELES_TRAPEZOID, [ 13 ] ],
-  [ NamedQuadrilateral.PARALLELOGRAM, [ 12 ] ],
-  [ NamedQuadrilateral.RHOMBUS, [ 11 ] ],
-  [ NamedQuadrilateral.RECTANGLE, [ 10 ] ],
-  [ NamedQuadrilateral.SQUARE, [ 9 ] ]
+  [ NamedQuadrilateral.DART, [] ],
+  [ NamedQuadrilateral.KITE, [] ],
+  [ NamedQuadrilateral.TRAPEZOID, [] ],
+  [ NamedQuadrilateral.ISOSCELES_TRAPEZOID, [] ],
+  [ NamedQuadrilateral.PARALLELOGRAM, [] ],
+  [ NamedQuadrilateral.RHOMBUS, [] ],
+  [ NamedQuadrilateral.RECTANGLE, [] ],
+  [ NamedQuadrilateral.SQUARE, [] ]
 ] );
 
 class TracksArpeggioSoundView extends TracksSoundView {
