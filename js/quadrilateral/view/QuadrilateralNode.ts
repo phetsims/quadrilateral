@@ -5,7 +5,7 @@
  */
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import { IPaint, Node, NodeOptions } from '../../../../scenery/js/imports.js';
+import { TPaint, Node, NodeOptions } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import quadrilateralStrings from '../../quadrilateralStrings.js';
 import SideNode from './SideNode.js';
@@ -51,7 +51,7 @@ class QuadrilateralNode extends Node {
   private readonly sideNodes: SideNode[];
 
   private remainingTimeForShapeChangeFill: number;
-  private activeFill: IPaint | null;
+  private activeFill: TPaint | null;
 
   public constructor( quadrilateralModel: QuadrilateralModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, providedOptions: QuadrilateralNodeOptions ) {
     super( providedOptions );
