@@ -13,6 +13,9 @@
  */
 
 import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
+import LinearFunction from '../../../../../dot/js/LinearFunction.js';
+import Enumeration from '../../../../../phet-core/js/Enumeration.js';
+import EnumerationValue from '../../../../../phet-core/js/EnumerationValue.js';
 import SoundClip from '../../../../../tambo/js/sound-generators/SoundClip.js';
 import SoundGenerator from '../../../../../tambo/js/sound-generators/SoundGenerator.js';
 import soundManager from '../../../../../tambo/js/soundManager.js';
@@ -22,7 +25,23 @@ import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
 
 // In seconds, how long all tracks should play after there has been some change in shape.
-const ALL_TRACKS_PLAY_TIME = 6;
+const ALL_TRACKS_PLAY_TIME = 4;
+
+// In seconds, how long tracks fade in or fade out when sound transitions between playing and stopped.
+const FADE_TIME = 1;
+
+const REMAINING_FADE_IN_TIME_TO_GAIN = new LinearFunction( FADE_TIME, 0, 0, 1 );
+const FADE_OUT_TIME_TO_GAIN = new LinearFunction( FADE_TIME, 0, 1, 0 );
+
+// For the state of the sound view, indicating how sound is currently behaving.
+class PlayingState extends EnumerationValue {
+  public static PLAYING = new PlayingState();
+  public static STOPPED = new PlayingState();
+  public static FADING_IN = new PlayingState();
+  public static FADING_OUT = new PlayingState();
+
+  public static enumeration = new Enumeration( PlayingState );
+}
 
 class TracksSoundView extends SoundGenerator {
 
@@ -33,9 +52,19 @@ class TracksSoundView extends SoundGenerator {
   // on input and state of the quadrilateral shape, their output level will change.
   public readonly soundClips: SoundClip[];
 
-  // How much time sounds should continue to play for after interaction with the quadrilateral. If the user has
+  // How much time sounds should continue to play after interaction with the quadrilateral. If the user has
   // selected to play sounds forever, this variable is meaningless.
   private remainingPlayTime = 0;
+
+  // How much time sounds should continue to fade for as we transition between playing and stopped.
+  private remainingFadeTime = 0;
+
+  // State variable that controls how the sound is currently playing, fading in, fading out, or solid play.
+  private playingState: PlayingState = PlayingState.STOPPED;
+
+  // Indicates that the shape has changed in some way so that we can fade into playing clips if playingState
+  // is stopped or currently fading out.
+  private shapeDirty = false;
 
   public constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel, tracks: WrappedAudioBuffer[] ) {
     super( {
@@ -73,13 +102,20 @@ class TracksSoundView extends SoundGenerator {
 
     shapeModel.shapeChangedEmitter.addListener( () => {
       if ( resetNotInProgressProperty.value ) {
+
+        // if we are stopped, transition to fading in
+        this.shapeDirty = true;
+
+        // if we are already playing, reset timing variables to continue playing for the full duration
         this.remainingPlayTime = ALL_TRACKS_PLAY_TIME;
-        this.setOutputLevel( 1 );
       }
       else {
 
-        // Reset just started, stop any sounds until more manual changes
+        // shape just changed due to reset, do not transition to fading in, stop all sound imediately
+        this.shapeDirty = false;
+        this.playingState = PlayingState.STOPPED;
         this.remainingPlayTime = 0;
+        this.remainingFadeTime = 0;
       }
     } );
   }
@@ -91,11 +127,54 @@ class TracksSoundView extends SoundGenerator {
    * @param dt - in seconds
    */
   public step( dt: number ): void {
-    if ( !this.soundOptionsModel.tracksPlayForeverProperty.value ) {
-      this.remainingPlayTime = Math.max( 0, this.remainingPlayTime - dt );
 
-      if ( this.remainingPlayTime === 0 && this.outputLevel !== 0 ) {
+    if ( this.playingState === PlayingState.STOPPED ) {
+      if ( this.outputLevel !== 0 ) {
         this.setOutputLevel( 0 );
+      }
+
+      // Triggers indicate we should transition to fading in
+      if ( this.shapeDirty ) {
+        this.playingState = PlayingState.FADING_IN;
+        this.remainingFadeTime = FADE_TIME;
+        this.shapeDirty = false;
+      }
+    }
+    else if ( this.playingState === PlayingState.PLAYING ) {
+
+      // Updating counting variables and transition to fading out if it is time
+      this.remainingPlayTime = Math.max( 0, this.remainingPlayTime - dt );
+      if ( this.remainingPlayTime === 0 ) {
+        this.playingState = PlayingState.FADING_OUT;
+        this.remainingFadeTime = FADE_TIME;
+      }
+    }
+    else if ( this.playingState === PlayingState.FADING_IN ) {
+
+      this.remainingFadeTime = Math.max( 0, this.remainingFadeTime - dt );
+      this.setOutputLevel( REMAINING_FADE_IN_TIME_TO_GAIN.evaluate( this.remainingFadeTime ) );
+
+      if ( this.remainingFadeTime === 0 ) {
+        this.playingState = PlayingState.PLAYING;
+      }
+    }
+    else if ( this.playingState === PlayingState.FADING_OUT ) {
+
+      // update output level and counting variables, transition to STOPPED if it is time
+      this.remainingFadeTime = Math.max( 0, this.remainingFadeTime - dt );
+      this.setOutputLevel( FADE_OUT_TIME_TO_GAIN.evaluate( this.remainingFadeTime ) );
+
+      if ( this.shapeDirty ) {
+
+        // shape just changed again while fading out, fade in again for the time we spent and transition to fading in
+        this.remainingFadeTime = FADE_TIME - this.remainingFadeTime;
+        this.playingState = PlayingState.FADING_IN;
+        this.shapeDirty = false;
+      }
+      else if ( this.remainingFadeTime === 0 ) {
+
+        // No interaction since start of fade out, transition to stopped
+        this.playingState = PlayingState.STOPPED;
       }
     }
   }
