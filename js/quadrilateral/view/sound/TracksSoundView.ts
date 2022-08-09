@@ -143,7 +143,10 @@ class TracksSoundView extends SoundGenerator {
     else if ( this.playingState === PlayingState.PLAYING ) {
 
       // Updating counting variables and transition to fading out if it is time
-      this.remainingPlayTime = Math.max( 0, this.remainingPlayTime - dt );
+      if ( !this.soundOptionsModel.tracksPlayForeverProperty.value ) {
+        this.remainingPlayTime = Math.max( 0, this.remainingPlayTime - dt );
+      }
+
       if ( this.remainingPlayTime === 0 ) {
         this.playingState = PlayingState.FADING_OUT;
         this.remainingFadeTime = FADE_TIME;
