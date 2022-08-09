@@ -162,12 +162,11 @@ class QuadrilateralScreenView extends ScreenView {
 
     const gridNode = new QuadrilateralGridNode( model.modelBoundsProperty, model.gridVisibleProperty, this.modelViewTransform );
 
-    // rendering order - grid is supposed to be on top of the quadrilateral, see
-    // https://github.com/phetsims/quadrilateral/issues/178
+    // rendering order - See https://github.com/phetsims/quadrilateral/issues/178
     this.addChild( boundsRectangle );
     this.addChild( diagonalGuidesNode );
-    this.addChild( this.quadrilateralNode );
     this.addChild( gridNode );
+    this.addChild( this.quadrilateralNode );
 
     // A panel that displays model values, useful for debugging, useful for debugging
     const debugValuesPanel = new QuadrilateralModelValuePanel( model, {

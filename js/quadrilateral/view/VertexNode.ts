@@ -80,6 +80,11 @@ class VertexNode extends Voicing( Circle, 1 ) {
     const hatchMarkPath = new Path( hatchMarkShape, { stroke: 'black' } );
     this.addChild( hatchMarkPath );
 
+    // hatch marks are only visible when the grid is visible since they are used to create aligned positions.
+    model.gridVisibleProperty.link( visible => {
+      hatchMarkPath.visible = visible;
+    } );
+
     // Expand the pointer areas a bit so that it is difficult to accidentally pick up a side when near the vertex edge
     this.touchArea = Shape.circle( viewRadius + POINTER_AREA_DILATION );
     this.mouseArea = this.touchArea;

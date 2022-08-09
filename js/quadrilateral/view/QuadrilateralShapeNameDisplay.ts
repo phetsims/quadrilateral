@@ -71,6 +71,12 @@ class QuadrilateralShapeNameDisplay extends Node {
       if ( shapeNameVisible ) {
         assert && assert( SHAPE_NAME_MAP.has( shapeName ), 'Shape is not named in SHAPE_NAME_MAP' );
         text = SHAPE_NAME_MAP.get( shapeName )!;
+
+        // Text is bold when shape name is visible
+        shapeNameText.fontWeight = 'bold';
+      }
+      else {
+        shapeNameText.fontWeight = 'normal';
       }
 
       shapeNameText.text = text;
