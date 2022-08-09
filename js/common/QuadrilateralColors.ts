@@ -21,7 +21,7 @@ const QuadrilateralColors = {
 
   // Background color for screens in this sim
   screenBackgroundColorProperty: new ProfileColorProperty( quadrilateral, 'background', {
-    default: new Color( 167, 167, 255 )
+    default: new Color( 133, 133, 255 )
   } ),
 
   // Color for the symmetry grid
@@ -71,7 +71,7 @@ const QuadrilateralColors = {
 
   // Color for the stroke for the diagonal guides
   diagonalGuidesStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'diagonalGuideStroke', {
-    default: new Color( 200, 200, 200 )
+    default: new Color( 64, 64, 64 )
   } ),
 
   panelFillColorProperty: new ProfileColorProperty( quadrilateral, 'panelFillColor', {
@@ -87,7 +87,7 @@ const QuadrilateralColors = {
   } ),
 
   playAreaFillColorProperty: new ProfileColorProperty( quadrilateral, 'playAreaFillColor', {
-    default: new Color( 67, 67, 255 )
+    default: new Color( 133, 133, 255 )
   } )
 };
 
