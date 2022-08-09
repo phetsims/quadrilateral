@@ -29,7 +29,12 @@ class QuadrilateralModelValuePanel extends Panel {
     const options = optionize<PanelOptions, EmptySelfOptions>()( {
 
       // looks good for debugging without the panel resizing frequently
-      minWidth: 400
+      minWidth: 400,
+
+      // This component will be layered on top of everything in the play area, but the quadrilateral should still
+      // be pickable behind it
+      opacity: 0.5,
+      pickable: false
     }, providedOptions );
 
     const topSideLengthText = new Text( '', TEXT_OPTIONS );

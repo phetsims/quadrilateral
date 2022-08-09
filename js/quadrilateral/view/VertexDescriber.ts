@@ -43,7 +43,7 @@ const widerThanAdjacentCornersString = quadrilateralStrings.a11y.voicing.widerTh
 const notEqualToAdjacentCornersString = quadrilateralStrings.a11y.voicing.notEqualToAdjacentCorners;
 
 // Maps a vertex to its accessible name, like "Corner A".
-const VertexCornerLabelMap = new Map<VertexLabel, string>( [
+const vertexCornerLabelMap = new Map<VertexLabel, string>( [
   [ VertexLabel.VERTEX_A, cornerAString ],
   [ VertexLabel.VERTEX_B, cornerBString ],
   [ VertexLabel.VERTEX_C, cornerCString ],
@@ -51,11 +51,11 @@ const VertexCornerLabelMap = new Map<VertexLabel, string>( [
 ] );
 
 // Maps the difference in angles between two vertices to a description string.
-const AngleComparisonDescriptionMap = new Map<Range, string>();
+const angleComparisonDescriptionMap = new Map<Range, string>();
 
 const createAngleComparisonDescriptionMapEntry = ( minAngle: number, maxAngle: number, widerString: string, smallerString: string ) => {
-  AngleComparisonDescriptionMap.set( new Range( minAngle, maxAngle ), widerString );
-  AngleComparisonDescriptionMap.set( new Range( -maxAngle, -minAngle ), smallerString );
+  angleComparisonDescriptionMap.set( new Range( minAngle, maxAngle ), widerString );
+  angleComparisonDescriptionMap.set( new Range( -maxAngle, -minAngle ), smallerString );
 };
 
 createAngleComparisonDescriptionMapEntry( Math.PI, 2 * Math.PI, farWiderThanString, farSmallerThanString );
@@ -73,8 +73,7 @@ class VertexDescriber {
   private quadrilateralShapeModel: QuadrilateralShapeModel;
 
   // See above documentation.
-  public static VertexCornerLabelMap = VertexCornerLabelMap;
-  public static AngleComparisonDescriptionMap = AngleComparisonDescriptionMap;
+  public static VertexCornerLabelMap = vertexCornerLabelMap;
 
   public constructor( vertex: Vertex, quadrilateralShapeModel: QuadrilateralShapeModel ) {
     this.vertex = vertex;
@@ -87,7 +86,7 @@ class VertexDescriber {
    * "Corner D"
    */
   public getVertexLabel(): string {
-    const label = VertexCornerLabelMap.get( this.vertex.vertexLabel )!;
+    const label = vertexCornerLabelMap.get( this.vertex.vertexLabel )!;
     assert && assert( label, 'Could not find label for vertex' );
     return label;
   }
@@ -180,7 +179,7 @@ class VertexDescriber {
   }
 
   /**
-   * Returns the description of comparison between two angles, using the entries of AngleComparisonDescriptionMap.
+   * Returns the description of comparison between two angles, using the entries of angleComparisonDescriptionMap.
    * Description compares vertex2 to vertex1. So if vertex2 has a larger angle than vertex1 the output will be something
    * like:
    * "much much wider than" or
@@ -200,7 +199,7 @@ class VertexDescriber {
     const angle2 = vertex2.angleProperty.value!;
     const angleDifference = angle2 - angle1;
 
-    AngleComparisonDescriptionMap.forEach( ( value, key ) => {
+    angleComparisonDescriptionMap.forEach( ( value, key ) => {
       if ( key.contains( angleDifference ) ) {
         description = value;
       }

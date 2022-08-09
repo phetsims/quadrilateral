@@ -25,7 +25,6 @@ import CalibrationContentNode from './CalibrationContentNode.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import PhetColorScheme from '../../../../scenery-phet/js/PhetColorScheme.js';
 import QuadrilateralModelValuePanel from './QuadrilateralModelValuePanel.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
 import SideLengthAreaNode from './SideLengthAreaNode.js';
 import QuadrilateralVisibilityControls from './QuadrilateralVisibilityControls.js';
 import QuadrilateralGridNode from './QuadrilateralGridNode.js';
@@ -59,15 +58,6 @@ class QuadrilateralScreenView extends ScreenView {
 
       // phet-io
       tandem: tandem
-    } );
-
-    // A panel that displays model values, useful for debugging, useful for debugging. Should be below everything
-    const debugValuesPanel = new QuadrilateralModelValuePanel( model, {
-      leftTop: new Vector2( QuadrilateralConstants.SCREEN_VIEW_X_MARGIN, QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN )
-    } );
-    this.addChild( debugValuesPanel );
-    model.showDebugValuesProperty.link( showValues => {
-      debugValuesPanel.visible = showValues;
     } );
 
     const visibilityControls = new QuadrilateralVisibilityControls(
@@ -178,6 +168,15 @@ class QuadrilateralScreenView extends ScreenView {
     this.addChild( diagonalGuidesNode );
     this.addChild( this.quadrilateralNode );
     this.addChild( gridNode );
+
+    // A panel that displays model values, useful for debugging, useful for debugging
+    const debugValuesPanel = new QuadrilateralModelValuePanel( model, {
+      leftTop: boundsRectangle.leftTop.plusXY( 5, 5 )
+    } );
+    model.showDebugValuesProperty.link( showValues => {
+      debugValuesPanel.visible = showValues;
+    } );
+    this.addChild( debugValuesPanel );
 
     // layout for components that depend on the play area bounds being defined
     shapeNameDisplay.centerBottom = boundsRectangle.centerTop.minusXY( 0, QuadrilateralConstants.VIEW_SPACING );
