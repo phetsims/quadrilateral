@@ -175,9 +175,9 @@ class QuadrilateralScreenView extends ScreenView {
     // rendering order - grid is supposed to be on top of the quadrilateral, see
     // https://github.com/phetsims/quadrilateral/issues/178
     this.addChild( boundsRectangle );
+    this.addChild( diagonalGuidesNode );
     this.addChild( this.quadrilateralNode );
     this.addChild( gridNode );
-    this.addChild( diagonalGuidesNode );
 
     // layout for components that depend on the play area bounds being defined
     shapeNameDisplay.centerBottom = boundsRectangle.centerTop.minusXY( 0, QuadrilateralConstants.VIEW_SPACING );
