@@ -22,7 +22,7 @@ import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
 
 // In seconds, how long all tracks should play after there has been some change in shape.
-const ALL_TRACKS_PLAY_TIME = 2;
+const ALL_TRACKS_PLAY_TIME = 6;
 
 class TracksSoundView extends SoundGenerator {
 
