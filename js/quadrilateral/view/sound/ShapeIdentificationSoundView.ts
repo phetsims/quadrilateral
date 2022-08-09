@@ -6,7 +6,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import IReadOnlyProperty from '../../../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
 import SoundClip from '../../../../../tambo/js/sound-generators/SoundClip.js';
 import quadrilateral from '../../../quadrilateral.js';
 import NamedQuadrilateral from '../../model/NamedQuadrilateral.js';
@@ -24,7 +24,7 @@ class ShapeIdentificationSoundView {
 
   private readonly disposeShapeIdentificationSoundView: () => void;
 
-  public constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: IReadOnlyProperty<boolean>, shapeIdentificationEnabledProperty: IProperty<boolean> ) {
+  public constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: TReadOnlyProperty<boolean>, shapeIdentificationEnabledProperty: IProperty<boolean> ) {
 
     const soundClipOptions = {
 

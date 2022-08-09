@@ -13,7 +13,7 @@ import quadrilateral from '../../quadrilateral.js';
 import Vertex from './Vertex.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { Line } from '../../../../scenery/js/imports.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import optionize from '../../../../phet-core/js/optionize.js';
@@ -44,7 +44,7 @@ class Side {
 
   // Angle of this line against a perpendicular line that would be drawn across it when the vertices are at their
   // initial positions, used to determine the amount of tilt of the line.
-  public tiltProperty: IReadOnlyProperty<number>;
+  public tiltProperty: TReadOnlyProperty<number>;
   public lengthProperty: NumberProperty;
 
   // Whether or not this Side is pressed and being interacted with. For now this is useful for debugging.
@@ -57,13 +57,13 @@ class Side {
   public voicingObjectResponseDirty = false;
 
   // The shape of the side, determined by the length and the model width.
-  public shapeProperty: IReadOnlyProperty<Shape>;
+  public shapeProperty: TReadOnlyProperty<Shape>;
 
   // The tolerance for this side to determine if it is equal to another. It is a portion of the full length
   // so that when the side is longer it still as easy for two sides to be equal in length. Otherwise the
   // tolerance interval will be relatively much larger when the length is very small.
   // TODO: I suspect that the usages of this can be removed now that we are not tracking changes in shape length in real time for learning goals.
-  public readonly lengthToleranceIntervalProperty: IReadOnlyProperty<number>;
+  public readonly lengthToleranceIntervalProperty: TReadOnlyProperty<number>;
 
   // In model coordinates, the length of a side segment in model coordinates. The full side is divided into segments of
   // this length with the final segment length being the remainder.

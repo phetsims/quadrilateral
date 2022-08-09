@@ -33,7 +33,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import VertexAngles from './VertexAngles.js';
 import ParallelSideChecker from './ParallelSideChecker.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import IProperty from '../../../../axon/js/IProperty.js';
@@ -142,8 +142,8 @@ class QuadrilateralShapeModel {
   // from the angleToleranceInterval of the ParallelSideCheckers because those tolerance intervals can go to infinity
   // to support certain learning goals. The shape detection comparisons need a more consistent angle tolerance
   // interval. However, there is some unique behavior when connected to the tangible device.
-  public readonly shapeAngleToleranceIntervalProperty: IReadOnlyProperty<number>;
-  public readonly shapeLengthToleranceIntervalProperty: IReadOnlyProperty<number>;
+  public readonly shapeAngleToleranceIntervalProperty: TReadOnlyProperty<number>;
+  public readonly shapeLengthToleranceIntervalProperty: TReadOnlyProperty<number>;
 
   // Emits an event whenever the shape of the Quadrilateral changes
   public shapeChangedEmitter: IEmitter;

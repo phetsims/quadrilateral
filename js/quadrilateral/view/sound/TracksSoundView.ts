@@ -12,7 +12,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import IReadOnlyProperty from '../../../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
 import SoundClip from '../../../../../tambo/js/sound-generators/SoundClip.js';
 import SoundGenerator from '../../../../../tambo/js/sound-generators/SoundGenerator.js';
 import soundManager from '../../../../../tambo/js/soundManager.js';
@@ -37,7 +37,7 @@ class TracksSoundView extends SoundGenerator {
   // selected to play sounds forever, this variable is meaningless.
   private remainingPlayTime = 0;
 
-  public constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: IReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel, tracks: WrappedAudioBuffer[] ) {
+  public constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel, tracks: WrappedAudioBuffer[] ) {
     super( {
 
       // don't play sounds while model reset is in progress

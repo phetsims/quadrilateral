@@ -26,7 +26,7 @@ import quadrilateral from '../../../quadrilateral.js';
 import { QuartetSoundFile } from '../../model/QuadrilateralSoundOptionsModel.js';
 import Side from '../../model/Side.js';
 import WrappedAudioBuffer from '../../../../../tambo/js/WrappedAudioBuffer.js';
-import IReadOnlyProperty from '../../../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
 import EnumerationProperty from '../../../../../axon/js/EnumerationProperty.js';
 
 // constants
@@ -79,9 +79,9 @@ class QuartetSideSoundView {
   // The SoundClipCollection that is currently active for the given value of the Side tiltProperty.
   private activeSoundClipCollection: null | SoundClipCollection = null;
   private readonly disposeQuartetSideSoundView: () => void;
-  private readonly resetNotInProgressProperty: IReadOnlyProperty<boolean>;
+  private readonly resetNotInProgressProperty: TReadOnlyProperty<boolean>;
 
-  public constructor( side: Side, resetNotInProgressProperty: IReadOnlyProperty<boolean>, quartetSoundFileProperty: EnumerationProperty<QuartetSoundFile> ) {
+  public constructor( side: Side, resetNotInProgressProperty: TReadOnlyProperty<boolean>, quartetSoundFileProperty: EnumerationProperty<QuartetSoundFile> ) {
     this.side = side;
     this.resetNotInProgressProperty = resetNotInProgressProperty;
 
@@ -227,9 +227,9 @@ class SoundClipCollection extends SoundGenerator {
   private readonly middleOctaveClip: SoundClip;
   private readonly upperOctaveClip: SoundClip;
   private readonly outputLevelGainNode: GainNode;
-  private readonly anyClipsPlayingProperty: IReadOnlyProperty<boolean>;
+  private readonly anyClipsPlayingProperty: TReadOnlyProperty<boolean>;
   private connected: boolean;
-  private readonly resetNotInProgressProperty: IReadOnlyProperty<boolean>;
+  private readonly resetNotInProgressProperty: TReadOnlyProperty<boolean>;
 
   /**
    * @param wrappedAudioBuffer
@@ -239,7 +239,7 @@ class SoundClipCollection extends SoundGenerator {
    *                                       below this rate.
    * @param providedOptions
    */
-  public constructor( wrappedAudioBuffer: WrappedAudioBuffer, resetNotInProgressProperty: IReadOnlyProperty<boolean>, defaultPlaybackRate: number, providedOptions?: SoundGeneratorOptions ) {
+  public constructor( wrappedAudioBuffer: WrappedAudioBuffer, resetNotInProgressProperty: TReadOnlyProperty<boolean>, defaultPlaybackRate: number, providedOptions?: SoundGeneratorOptions ) {
     super( providedOptions );
 
     this.defaultPlaybackRate = defaultPlaybackRate;

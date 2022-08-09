@@ -13,7 +13,7 @@ import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import { Text, VBox } from '../../../../scenery/js/imports.js';
 import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import IProperty from '../../../../axon/js/IProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
@@ -144,7 +144,7 @@ class QuadrilateralModelValuePanel extends Panel {
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.markerRotationProperty, markerRotationText, 'Marker rotation' );
   }
 
-  private static addRedrawValueTextListener( property: IReadOnlyProperty<number | null> | IProperty<boolean> | Property<NamedQuadrilateral>, text: Text, label: string ): void {
+  private static addRedrawValueTextListener( property: TReadOnlyProperty<number | null> | IProperty<boolean> | Property<NamedQuadrilateral>, text: Text, label: string ): void {
     property.link( value => {
 
       let formattedValue = value;

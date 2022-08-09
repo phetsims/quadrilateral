@@ -20,7 +20,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import QuadrilateralPreferencesModel from './QuadrilateralPreferencesModel.js';
 import IProperty from '../../../../axon/js/IProperty.js';
@@ -63,15 +63,15 @@ class QuadrilateralModel {
 
   // A Property that indicates that all markers are observed by the camera to control this simulation. Part of
   // a prototype for using OpenCV as an input method for the simulation
-  public allVertexMarkersDetectedProperty: IReadOnlyProperty<boolean>;
+  public allVertexMarkersDetectedProperty: TReadOnlyProperty<boolean>;
 
   // Properties that indicate whether the OpenCV prototype detects an individual vertex. The tool must be able
   // to detect each vertex individually. The tool must be able to detect each marker individually for this to be
   // relevant.
-  public vertexAMarkerDetectedProperty: IReadOnlyProperty<boolean>;
-  public vertexBMarkerDetectedProperty: IReadOnlyProperty<boolean>;
-  public vertexCMarkerDetectedProperty: IReadOnlyProperty<boolean>;
-  public vertexDMarkerDetectedProperty: IReadOnlyProperty<boolean>;
+  public vertexAMarkerDetectedProperty: TReadOnlyProperty<boolean>;
+  public vertexBMarkerDetectedProperty: TReadOnlyProperty<boolean>;
+  public vertexCMarkerDetectedProperty: TReadOnlyProperty<boolean>;
+  public vertexDMarkerDetectedProperty: TReadOnlyProperty<boolean>;
 
   // A Property that controls whether Voicing responses will be enabled for when the OpenCV prototype changes in its
   // ability to see various markers.

@@ -10,7 +10,7 @@
 import quadrilateral from '../../quadrilateral.js';
 import { Line, Node } from '../../../../scenery/js/imports.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Multilink from '../../../../axon/js/Multilink.js';
@@ -28,8 +28,8 @@ const LINE_NODE_OPTIONS = {
 class QuadrilateralDiagonalGuidesNode extends Node {
   public constructor(
     quadrilateralShapeModel: QuadrilateralShapeModel,
-    boundsProperty: IReadOnlyProperty<Bounds2 | null>,
-    visibleProperty: IReadOnlyProperty<boolean>,
+    boundsProperty: TReadOnlyProperty<Bounds2 | null>,
+    visibleProperty: TReadOnlyProperty<boolean>,
     modelViewTransform: ModelViewTransform2
   ) {
     super();

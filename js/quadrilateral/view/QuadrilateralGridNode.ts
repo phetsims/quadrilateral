@@ -13,7 +13,7 @@ import Property from '../../../../axon/js/Property.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { Shape } from '../../../../kite/js/imports.js';
 
 const GRID_SPACING = QuadrilateralModel.MAJOR_GRID_SPACING * 5;
@@ -23,7 +23,7 @@ const GRID_LINE_OPTIONS = {
 };
 
 class QuadrilateralGridNode extends Path {
-  public constructor( modelBoundsProperty: Property<Bounds2 | null>, visibleProperty: IReadOnlyProperty<boolean>, modelViewTransform: ModelViewTransform2 ) {
+  public constructor( modelBoundsProperty: Property<Bounds2 | null>, visibleProperty: TReadOnlyProperty<boolean>, modelViewTransform: ModelViewTransform2 ) {
     super( null, GRID_LINE_OPTIONS );
 
     modelBoundsProperty.link( modelBounds => {

@@ -22,7 +22,7 @@ import quadBeatTracksBuildingBuildingTracks004_mp3 from '../../../../sounds/quad
 import quadBeatTracksBuildingBuildingTracks005_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks005_mp3.js';
 import quadBeatTracksBuildingBuildingTracks006_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks006_mp3.js';
 import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
-import IReadOnlyProperty from '../../../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
 import NamedQuadrilateral from '../../model/NamedQuadrilateral.js';
 import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
 
@@ -57,7 +57,7 @@ const NAMED_QUADRILATERAL_TO_TRACKS_MAP = new Map( [
 class TracksBuildUpSoundView extends TracksSoundView {
   private readonly disposeTracksBuildUpSoundView: () => void;
 
-  public constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: IReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
+  public constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
     super( shapeModel, resetNotInProgressProperty, soundOptionsModel, BUILD_UP_TRACKS );
 
     const shapeNameListener = ( shapeName: NamedQuadrilateral ) => {

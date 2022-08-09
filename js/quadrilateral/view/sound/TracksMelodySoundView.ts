@@ -13,7 +13,7 @@
 import quadrilateral from '../../../quadrilateral.js';
 import TracksSoundView from './TracksSoundView.js';
 import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
-import IReadOnlyProperty from '../../../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
 import NamedQuadrilateral from '../../model/NamedQuadrilateral.js';
 import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
 import quadMelodyTracks000_mp3 from '../../../../sounds/quadMelodyTracks000_mp3.js';
@@ -54,7 +54,7 @@ const NAMED_QUADRILATERAL_TO_TRACKS_MAP = new Map( [
 class TracksMelodySoundView extends TracksSoundView {
   private readonly disposeTracksMelodySoundView: () => void;
 
-  public constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: IReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
+  public constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
     super( shapeModel, resetNotInProgressProperty, soundOptionsModel, MELODY_TRACKS );
 
     const shapeNameListener = ( shapeName: NamedQuadrilateral ) => {

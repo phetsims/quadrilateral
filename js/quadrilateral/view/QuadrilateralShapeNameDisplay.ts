@@ -7,7 +7,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import { Node, Rectangle, Text } from '../../../../scenery/js/imports.js';
 import ExpandCollapseButton from '../../../../sun/js/ExpandCollapseButton.js';
@@ -50,7 +50,7 @@ const DISPLAY_WIDTH = 350;
 const DISPLAY_HEIGHT = 40;
 
 class QuadrilateralShapeNameDisplay extends Node {
-  public constructor( shapeNameVisibleProperty: Property<boolean>, shapeNameProperty: IReadOnlyProperty<NamedQuadrilateral>, tandem: Tandem ) {
+  public constructor( shapeNameVisibleProperty: Property<boolean>, shapeNameProperty: TReadOnlyProperty<NamedQuadrilateral>, tandem: Tandem ) {
     super();
 
     // display contents

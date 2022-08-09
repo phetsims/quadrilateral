@@ -17,7 +17,7 @@ import { Line, Shape } from '../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import quadrilateral from '../../quadrilateral.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 
 // in model coordinates, length of a side of the indicator from the edge of a line between two vertices
 const SIDE_LENGTH = 0.12;
@@ -25,7 +25,7 @@ const SIDE_LENGTH = 0.12;
 class RightAngleIndicatorNode extends Path {
   private readonly shapeModel: QuadrilateralShapeModel;
   private readonly modelViewTransform: ModelViewTransform2;
-  private readonly cornerGuideVisibleProperty: IReadOnlyProperty<boolean>;
+  private readonly cornerGuideVisibleProperty: TReadOnlyProperty<boolean>;
 
   /**
    * @param vertex1 - The Vertex being represented, indicator will be visible when angle at this vertex is 90 degrees
@@ -35,7 +35,7 @@ class RightAngleIndicatorNode extends Path {
    * @param shapeModel
    * @param modelViewTransform
    */
-  public constructor( vertex1: Vertex, vertex2: Vertex, vertex3: Vertex, cornerGuideVisibleProperty: IReadOnlyProperty<boolean>, shapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2 ) {
+  public constructor( vertex1: Vertex, vertex2: Vertex, vertex3: Vertex, cornerGuideVisibleProperty: TReadOnlyProperty<boolean>, shapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2 ) {
     super( null, {
       stroke: QuadrilateralColors.rightAngleIndicatorStrokeColorProperty,
       lineWidth: 2
