@@ -179,12 +179,6 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // sounds that match the user input.
   soundBoard: {
     type: 'flag'
-  },
-
-  // If present, a prototype with mediapipe will be available for use to play with here. Forefiger and thumb on
-  // each hand control positions of each vertex.
-  mediaPipe: {
-    type: 'flag'
   }
 } );
 

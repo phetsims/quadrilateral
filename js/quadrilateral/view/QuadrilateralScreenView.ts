@@ -38,6 +38,7 @@ import QuadrilateralMediaPipe from './QuadrilateralMediaPipe.js';
 import QuadrilateralDiagonalGuidesNode from './QuadrilateralDiagonalGuidesNode.js';
 import QuadrilateralShapeNameDisplay from './QuadrilateralShapeNameDisplay.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
+import MediaPipeQueryParameters from '../../../../tangible/js/mediaPipe/MediaPipeQueryParameters.js';
 
 const MODEL_BOUNDS = QuadrilateralQueryParameters.calibrationDemoDevice ? new Bounds2( -4.5, -4.5, 4.5, 4.5 ) :
                      new Bounds2( -1, -1, 1, 1 );
@@ -253,7 +254,7 @@ class QuadrilateralScreenView extends ScreenView {
       }
     }
 
-    if ( QuadrilateralQueryParameters.mediaPipe ) {
+    if ( MediaPipeQueryParameters.cameraInput === 'hands' ) {
       this.mediaPipe = new QuadrilateralMediaPipe( model );
     }
 

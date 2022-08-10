@@ -7,9 +7,9 @@
 import quadrilateral from '../../quadrilateral.js';
 import MediaPipe from '../../../../tangible/js/mediaPipe/MediaPipe.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
+import MediaPipeQueryParameters from '../../../../tangible/js/mediaPipe/MediaPipeQueryParameters.js';
 
 const MEDIA_PIPE_ASPECT_RATIO = 1280 / 720;
 
@@ -23,7 +23,7 @@ type ThumbAndIndex = {
   indexPosition: Vector2;
 };
 
-if ( QuadrilateralQueryParameters.mediaPipe ) {
+if ( MediaPipeQueryParameters.cameraInput === 'hands' ) {
   MediaPipe.initialize();
 }
 
@@ -31,7 +31,7 @@ class QuadrilateralMediaPipe extends MediaPipe {
   private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
 
   public constructor( model: QuadrilateralModel ) {
-    assert && assert( QuadrilateralQueryParameters.mediaPipe, 'MediaPipe can only be used when requested.' );
+    assert && assert( MediaPipeQueryParameters.cameraInput === 'hands', 'MediaPipe can only be used when requested.' );
     super();
 
     this.quadrilateralShapeModel = model.quadrilateralShapeModel;
