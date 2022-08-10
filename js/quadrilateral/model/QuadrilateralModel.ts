@@ -125,12 +125,12 @@ class QuadrilateralModel {
 
     this.modelBoundsProperty = new Property<Bounds2 | null>( null, {
       tandem: tandem.createTandem( 'modelBoundsProperty' ),
-      phetioType: Property.PropertyIO( NullableIO( Bounds2.Bounds2IO ) )
+      phetioValueType: NullableIO( Bounds2.Bounds2IO )
     } );
 
     this.physicalModelBoundsProperty = new Property<Bounds2 | null>( null, {
       tandem: tandem.createTandem( 'physicalModelBoundsProperty' ),
-      phetioType: Property.PropertyIO( NullableIO( Bounds2.Bounds2IO ) )
+      phetioValueType: NullableIO( Bounds2.Bounds2IO )
     } );
 
     this.isCalibratingProperty = new BooleanProperty( false, {

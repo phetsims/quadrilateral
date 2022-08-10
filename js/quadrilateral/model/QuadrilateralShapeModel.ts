@@ -370,7 +370,7 @@ class QuadrilateralShapeModel {
       );
     }, {
       tandem: options.tandem.createTandem( 'shapeAngleToleranceIntervalProperty' ),
-      phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
+      phetioValueType: NumberIO
     } );
 
     this.shapeLengthToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty ], shapeName => {
@@ -381,7 +381,7 @@ class QuadrilateralShapeModel {
       );
     }, {
       tandem: options.tandem.createTandem( 'shapeLengthToleranceIntervalProperty' ),
-      phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
+      phetioValueType: NumberIO
     } );
 
     this.sideABSideCDParallelSideChecker = new ParallelSideChecker(

@@ -94,7 +94,7 @@ class Vertex {
 
     this.angleProperty = new Property<null | number>( null, {
       tandem: tandem.createTandem( 'angleProperty' ),
-      phetioType: Property.PropertyIO( NullableIO( NumberIO ) )
+      phetioValueType: NullableIO( NumberIO )
     } );
 
     // The label for this vertex so we can get the same vertex on another QuadrilateralShapeModel.

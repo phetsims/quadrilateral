@@ -157,7 +157,7 @@ class ParallelSideChecker {
       return toleranceInterval;
     }, {
       tandem: tandem.createTandem( 'angleToleranceIntervalProperty' ),
-      phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
+      phetioValueType: NumberIO
     } );
 
     // Primarily for debugging in the QuadrilateralModelValuePanel. We cannot actually use this Property because

@@ -101,7 +101,7 @@ class Side {
         return Vertex.calculateAngle( vertex1Position, vertex2Position, vertex2Position.plus( options.offsetVectorForTiltCalculation ), options.validateShape );
       }, {
         tandem: tandem.createTandem( 'tiltProperty' ),
-        phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
+        phetioValueType: NumberIO
       } );
 
     // The distance between the two vertices, in model space.
@@ -125,7 +125,7 @@ class Side {
       return length * QuadrilateralQueryParameters.lengthToleranceIntervalScaleFactor;
     }, {
       tandem: tandem.createTandem( 'lengthToleranceIntervalProperty' ),
-      phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
+      phetioValueType: NumberIO
     } );
   }
 
