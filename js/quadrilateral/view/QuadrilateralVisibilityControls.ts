@@ -8,22 +8,18 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
-import { Text, TextOptions, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
+import { VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import GridCheckbox from '../../../../scenery-phet/js/GridCheckbox.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import quadrilateralStrings from '../../quadrilateralStrings.js';
-import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
-import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import Property from '../../../../axon/js/Property.js';
+import QuadrilateralIconFactory from './QuadrilateralIconFactory.js';
+import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 
-// constants
-const TEXT_OPTIONS = combineOptions<TextOptions>( {
-
-  // i18n (inspection)
-  maxWidth: 200
-}, QuadrilateralConstants.SCREEN_TEXT_OPTIONS );
+const CHECKBOX_ICON_SPACING = 10;
 
 type SelfOptions = EmptySelfOptions;
 type QuadrilateralVisibilityControlsOptions = SelfOptions & StrictOmit<VBoxOptions, 'children'> & PickRequired<VBoxOptions, 'tandem'>;
@@ -36,8 +32,9 @@ class QuadrilateralVisibilityControls extends VBox {
       spacing: 15
     }, providedOptions );
 
-    const cornerLabelsText = new Text( quadrilateralStrings.cornerLabels, TEXT_OPTIONS );
-    const cornerLabelsCheckbox = new Checkbox( cornerLabelsVisibleProperty, cornerLabelsText, {
+    const cornerLabelsIcon = QuadrilateralIconFactory.createCornerLabelsIcon();
+    const cornerLabelsCheckbox = new Checkbox( cornerLabelsVisibleProperty, cornerLabelsIcon, {
+      spacing: CHECKBOX_ICON_SPACING,
 
       // pdom
       labelTagName: 'label',
@@ -55,8 +52,9 @@ class QuadrilateralVisibilityControls extends VBox {
       tandem: options.tandem.createTandem( 'cornerLabelsCheckbox' )
     } );
 
-    const cornerGuideText = new Text( quadrilateralStrings.cornerGuides, TEXT_OPTIONS );
-    const cornerGuideCheckbox = new Checkbox( cornerGuideVisibleProperty, cornerGuideText, {
+    const cornerGuidesIcon = QuadrilateralIconFactory.createCornerGuidesIcon();
+    const cornerGuideCheckbox = new Checkbox( cornerGuideVisibleProperty, cornerGuidesIcon, {
+      spacing: CHECKBOX_ICON_SPACING,
 
       // pdom
       labelTagName: 'label',
@@ -74,8 +72,9 @@ class QuadrilateralVisibilityControls extends VBox {
       tandem: options.tandem.createTandem( 'cornerGuideCheckbox' )
     } );
 
-    const diagonalGuidesText = new Text( quadrilateralStrings.diagonalGuides, TEXT_OPTIONS );
-    const diagonalGuidesCheckbox = new Checkbox( diagonalGuidesVisibleProperty, diagonalGuidesText, {
+    const diagonalGuidesIcon = QuadrilateralIconFactory.createDiagonalGuidesIcon();
+    const diagonalGuidesCheckbox = new Checkbox( diagonalGuidesVisibleProperty, diagonalGuidesIcon, {
+      spacing: CHECKBOX_ICON_SPACING,
 
       // pdom
       labelTagName: 'label',
@@ -94,6 +93,11 @@ class QuadrilateralVisibilityControls extends VBox {
     } );
 
     const gridCheckbox = new GridCheckbox( gridVisibleProperty, {
+      spacing: CHECKBOX_ICON_SPACING,
+
+      gridSize: QuadrilateralIconFactory.ICON_HEIGHT,
+      gridStroke: QuadrilateralColors.visibilityIconsColorProperty,
+      gridLineWidth: QuadrilateralIconFactory.ICON_LINE_WIDTH,
 
       // pdom
       labelTagName: 'label',

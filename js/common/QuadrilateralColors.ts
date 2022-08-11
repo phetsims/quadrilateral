@@ -88,6 +88,11 @@ const QuadrilateralColors = {
 
   playAreaFillColorProperty: new ProfileColorProperty( quadrilateral, 'playAreaFillColor', {
     default: new Color( 133, 133, 255 )
+  } ),
+
+  // Fill color for the "Corner Labels" checkbox icon.
+  visibilityIconsColorProperty: new ProfileColorProperty( quadrilateral, 'visibilityIconsColorProperty', {
+    default: new Color( 'black' )
   } )
 };
 
