@@ -35,7 +35,7 @@ type SelfOptions = {
 type ParentOptions = StrictOmit<VoicingOptions, 'voicingNameResponse'> & StrictOmit<PathOptions, 'innerContent'>;
 type SideNodeOptions = SelfOptions & ParentOptions;
 
-class SideNode extends Voicing( Path, 1 ) {
+class SideNode extends Voicing( Path ) {
 
   // A reference to the model component.
   private side: Side;

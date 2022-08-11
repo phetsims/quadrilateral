@@ -37,7 +37,7 @@ type VertexNodeOptions = SelfOptions & StrictOmit<ParentOptions, 'voicingNameRes
 
 type ParentOptions = VoicingOptions & CircleOptions;
 
-class VertexNode extends Voicing( Circle, 1 ) {
+class VertexNode extends Voicing( Circle ) {
   private readonly model: QuadrilateralModel;
 
   public constructor( vertex: Vertex, vertexLabel: string, model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, providedOptions: VertexNodeOptions ) {
