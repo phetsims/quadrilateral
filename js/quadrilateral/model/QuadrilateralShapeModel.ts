@@ -528,7 +528,8 @@ class QuadrilateralShapeModel {
 
   /**
    * Returns the name of the quadrilateral, one of NamedQuadrilateral enumeration. If the quadrilateral is in a shape
-   * that is not named, returns null.
+   * that is not named, returns null. The logic and nesting of shapes in the detection algorithm matches
+   * the way design
    */
   public getShapeName(): NamedQuadrilateral {
 
@@ -536,115 +537,64 @@ class QuadrilateralShapeModel {
     const concaveShape = _.some( this.vertices, vertex => vertex.angleProperty.value! > Math.PI );
     let namedQuadrilateral = concaveShape ? NamedQuadrilateral.CONCAVE_QUADRILATERAL : NamedQuadrilateral.CONVEX_QUADRILATERAL;
 
-    const topSideLengthEqualToRightSideLength = this.isShapeLengthEqualToOther(
-      this.topSide.lengthProperty.value,
-      this.rightSide.lengthProperty.value
-    );
+    if ( concaveShape ) {
 
-    // equalities for adjacent vertices
-    const adjacentVertexAngles = [
-      [ this.vertexA.angleProperty.value, this.vertexB.angleProperty.value ],
-      [ this.vertexB.angleProperty.value, this.vertexC.angleProperty.value ],
-      [ this.vertexC.angleProperty.value, this.vertexD.angleProperty.value ],
-      [ this.vertexD.angleProperty.value, this.vertexA.angleProperty.value ]
-    ];
-    const vertexAAngleEqualsVertexBAngle = this.isShapeAngleEqualToOther( this.vertexA.angleProperty.value!, this.vertexB.angleProperty.value! );
-    const vertex2AngleEqualsVertex3Angle = this.isShapeAngleEqualToOther( this.vertexB.angleProperty.value!, this.vertexC.angleProperty.value! );
-
-    if ( this.isParallelogramProperty.value ) {
-
-      // Square, rhombus, rectangle must be a parallelogram. If we assume this then we can simplify some of the other
-      // comparisons to detect these shapes because we know that opposite angles must be equal and opposite sides must
-      // be the same length.
-
-      // because this is a parallelogram, we only have to check that the adjacent angles are equal, because to be
-      // a parallelogram the angles at opposite vertices must also be equal.
-      if ( vertexAAngleEqualsVertexBAngle && vertex2AngleEqualsVertex3Angle ) {
-
-        // For a parallelogram, opposite sides are equal in length, so if adjacent sides are equal in length as well
-        // it must be a square.
-        if ( topSideLengthEqualToRightSideLength ) {
-          namedQuadrilateral = NamedQuadrilateral.SQUARE;
-        }
-        else {
-
-          // Adjacent side lengths are not equal, but opposite side lengths are. All angles are equal - we must be a
-          // rectangle.
-          namedQuadrilateral = NamedQuadrilateral.RECTANGLE;
-        }
-      }
-      else if ( topSideLengthEqualToRightSideLength ) {
-
-        // Adjacent angles are different for the parallelogram and adjacent sides are equal in length. Since it is
-        // a parallelogram, if the top and right sides are equal in length, the bottom and left sides must be equal
-        // as well.
-        namedQuadrilateral = NamedQuadrilateral.RHOMBUS;
-      }
-      else {
-
-        // No additional classification but it is a parallelogram
-        namedQuadrilateral = NamedQuadrilateral.PARALLELOGRAM;
+      // A dart is a concave quadrilateral that satisfies the kite requirements
+      if ( this.isKite() ) {
+        namedQuadrilateral = NamedQuadrilateral.DART;
       }
     }
     else {
 
-      // According to https://en.wikipedia.org/wiki/Trapezoid#Characterizations a trapezoid has two adjacent
-      // angles that add up to Math.PI.
-      const trapezoidRequirement = _.some( adjacentVertexAngles, anglePair => {
-        assert && assert( anglePair[ 0 ] !== null && anglePair[ 1 ] !== null, 'angles need to be defined' );
-        return this.isShapeAngleEqualToOther( anglePair[ 0 ]! + anglePair[ 1 ]!, Math.PI );
-      } );
+      if ( this.isKite() ) {
+        namedQuadrilateral = NamedQuadrilateral.KITE;
+      }
+      else if ( this.parallelSidePairsProperty.value.length > 0 ) {
 
-      if ( trapezoidRequirement ) {
+        // At least one pair of parallel sides means we are in the trapezoid family. Note that parallel side checkers
+        // use "angleToleranceInterval" instead of "shapeAngleToleranceInterval". That is intentional because
+        // we should not have these shapes unless we have detected parallel sides within the dynamic tolerance
+        // behavior of "angleToleranceInterval".
+        namedQuadrilateral = NamedQuadrilateral.TRAPEZOID;
 
-        // An isosceles trapezoid will have two pairs of adjacent angles that are equal.
-        const isoscelesRequirement = _.countBy( adjacentVertexAngles, anglePair => {
-          assert && assert( anglePair[ 0 ] !== null && anglePair[ 1 ] !== null, 'angles need to be defined' );
-          return this.isShapeAngleEqualToOther( anglePair[ 0 ]!, anglePair[ 1 ]! );
-        } ).true === 2;
+        if ( this.adjacentEqualVertexPairsProperty.value.length > 1 ) {
 
-        // If one of the pairs of sides share the same length, it must be an isosceles trapezoid
-        if ( isoscelesRequirement ) {
+          // An isosceles trapezoid has two pairs of adjacent angles that are equal
           namedQuadrilateral = NamedQuadrilateral.ISOSCELES_TRAPEZOID;
         }
-        else {
-          namedQuadrilateral = NamedQuadrilateral.TRAPEZOID;
-        }
-      }
-      else {
 
-        // TODO: Define in constructor to reduce allocation?
-        const adjacentSides = [
-          [ this.topSide, this.rightSide ],
-          [ this.rightSide, this.bottomSide ],
-          [ this.bottomSide, this.leftSide ],
-          [ this.leftSide, this.topSide ]
-        ];
+        if ( this.isParallelogramProperty.value ) {
 
-        // We have a kite if two pairs of adjacent sides have equal lenghts and we have a pair of opposite
-        // angles that are equal. The angle check shouldn't be required but is because the lengths won't be
-        // exactly equal since they use lengthToleranceInterval in their comparison.
-        const kiteSideLengthRequirement = _.countBy( adjacentSides, ( sidePair: Side[] ) => {
-          return this.isShapeLengthEqualToOther( sidePair[ 0 ].lengthProperty.value, sidePair[ 1 ].lengthProperty.value );
-        } ).true === 2;
-        const kiteAngleRequirement = this.oppositeEqualVertexPairsProperty.value.length === 1;
-        const kiteRequirement = kiteSideLengthRequirement && kiteAngleRequirement;
+          // We have a parallelogram (two pairs of parallel sides using "angleToleranceInterval" which is very dynamic
+          // depending on shape state and user input).
+          namedQuadrilateral = NamedQuadrilateral.PARALLELOGRAM;
 
-        if ( kiteRequirement ) {
+          const allAnglesRight = this.getAreAllAnglesRight();
+          const allLengthsEqual = this.getAreAllLengthsEqual();
 
-          // A kite that has one angle greater than (but not equal to, see
-          // https://github.com/phetsims/quadrilateral/issues/176) degrees is considered a "dart"
-          if ( concaveShape ) {
-            namedQuadrilateral = NamedQuadrilateral.DART;
+          if ( allLengthsEqual && allAnglesRight ) {
+            namedQuadrilateral = NamedQuadrilateral.SQUARE;
           }
-          else {
-            namedQuadrilateral = NamedQuadrilateral.KITE;
+          else if ( allLengthsEqual ) {
+            namedQuadrilateral = NamedQuadrilateral.RHOMBUS;
+          }
+          else if ( allAnglesRight ) {
+            namedQuadrilateral = NamedQuadrilateral.RECTANGLE;
           }
         }
       }
     }
 
     return namedQuadrilateral;
+  }
+
+  /**
+   * Shape is a kite if there is exactly one set of equal opposite angles and exactly two sets of equal adjacent sides.
+   */
+  private isKite(): boolean {
+    const angleRequirement = this.oppositeEqualVertexPairsProperty.value.length === 1;
+    const lengthRequirement = this.adjacentEqualSidePairsProperty.value.length === 2;
+    return angleRequirement && lengthRequirement;
   }
 
   /**
@@ -942,29 +892,20 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Returns true when all angles are right. Uses the current named shape to detect this state. This way
-   * the detected shape will always match whether all angles are right, so for all angles to be right
-   * we must be a square or rectangle. If there was a different calculation here with unique tolerances
-   * we might run into a situation where we have all right angles but we are not a square/rectangle (or vice versa).
-   *
-   * The drawback is that this must be called AFTER the quadrilateral shape is determined by getShapeName().
+   * Returns true when all angles are right.
    */
   public getAreAllAnglesRight(): boolean {
-    return this.shapeNameProperty.value === NamedQuadrilateral.RECTANGLE ||
-           this.shapeNameProperty.value === NamedQuadrilateral.SQUARE;
+    return _.every( this.vertices, vertex => this.isRightAngle( vertex.angleProperty.value! ) );
   }
 
   /**
-   * Returns true when all lengths are equal. Uses the current named shape to detect this state. This way
-   * the detected shape will always match whether all lengths are equal, so for all lengths to be equal
-   * we must be a square or rhombus. If there was a different calculation here with unique tolerances we
-   * might run into a situation where all lengths are equal but we are not a square/rhombus (or vice versa).
-   *
-   * The drawback is that this must be called AFTER the quadrilateral shape is determined by getShapeName().
+   * Returns true when all lengths are equal.
    */
   public getAreAllLengthsEqual(): boolean {
-    return this.shapeNameProperty.value === NamedQuadrilateral.RHOMBUS ||
-           this.shapeNameProperty.value === NamedQuadrilateral.SQUARE;
+    return this.isShapeLengthEqualToOther( this.topSide.lengthProperty.value, this.rightSide.lengthProperty.value ) &&
+           this.isShapeLengthEqualToOther( this.rightSide.lengthProperty.value, this.bottomSide.lengthProperty.value ) &&
+           this.isShapeLengthEqualToOther( this.bottomSide.lengthProperty.value, this.leftSide.lengthProperty.value ) &&
+           this.isShapeLengthEqualToOther( this.leftSide.lengthProperty.value, this.topSide.lengthProperty.value );
   }
 
   /**
@@ -1153,7 +1094,8 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Update particular Property that holds collections of SidePairs that are equal in length.
+   * Update particular Property that holds collections of SidePairs that are equal in length. Uses
+   * shapeLengthToleranceIntervalProperty for comparison tolerances.
    */
   private updateEqualLengthSidePairs( equalSidePairsProperty: Property<SidePair[]>, allSidePairs: SidePair[] ): void {
     const currentSidePairs = equalSidePairsProperty.value;
