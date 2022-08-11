@@ -10,12 +10,12 @@ import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import { Shape } from '../../../../kite/js/imports.js';
 
-class QuadrilateralIconFactory {
+const QuadrilateralIconFactory = {
 
   /**
    * Creates an icon for the "Corner Labels" checkbox that toggles visibility of labels on each Vertex.
    */
-  public static createCornerLabelsIcon(): Node {
+  createCornerLabelsIcon(): Node {
     const label = new Text( 'A', QuadrilateralConstants.SCREEN_TEXT_OPTIONS );
     const circle = new Circle( QuadrilateralIconFactory.ICON_HEIGHT / 2, {
       stroke: QuadrilateralColors.visibilityIconsColorProperty,
@@ -26,12 +26,12 @@ class QuadrilateralIconFactory {
     circle.addChild( label );
 
     return circle;
-  }
+  },
 
   /**
    * Create an icon for the "Corner Guides" checkbox that toggles visual indicators of the angle at each vertex.
    */
-  public static createCornerGuidesIcon(): Node {
+  createCornerGuidesIcon(): Node {
     const iconHeight = QuadrilateralIconFactory.ICON_HEIGHT;
 
     // draw the "axes"
@@ -52,9 +52,9 @@ class QuadrilateralIconFactory {
     return new Node( {
       children: [ yAxis, xAxis, fullArcPath, partialArcPath ]
     } );
-  }
+  },
 
-  public static createDiagonalGuidesIcon(): Node {
+  createDiagonalGuidesIcon(): Node {
     const iconHeight = QuadrilateralIconFactory.ICON_HEIGHT;
     const lineOptions = { stroke: QuadrilateralColors.visibilityIconsColorProperty, lineWidth: QuadrilateralIconFactory.ICON_LINE_WIDTH, lineDash: [ 5, 3 ] };
     const firstDiagonal = new Line( -iconHeight / 2, -iconHeight / 2, iconHeight / 2, iconHeight / 2, lineOptions );
@@ -63,11 +63,12 @@ class QuadrilateralIconFactory {
     return new Node( {
       children: [ firstDiagonal, secondDiagonal ]
     } );
-  }
+  },
 
-  public static readonly ICON_HEIGHT = 30;
-  public static readonly ICON_LINE_WIDTH = 1.5;
-}
+  // @readonly
+  ICON_HEIGHT: 30,
+  ICON_LINE_WIDTH: 1.5
+};
 
 quadrilateral.register( 'QuadrilateralIconFactory', QuadrilateralIconFactory );
 export default QuadrilateralIconFactory;
