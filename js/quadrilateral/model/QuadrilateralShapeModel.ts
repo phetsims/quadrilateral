@@ -529,7 +529,7 @@ class QuadrilateralShapeModel {
   /**
    * Returns the name of the quadrilateral, one of NamedQuadrilateral enumeration. If the quadrilateral is in a shape
    * that is not named, returns null. The logic and nesting of shapes in the detection algorithm matches
-   * the way design
+   * the way shapes are classified pedagogically. See https://github.com/phetsims/quadrilateral/issues/188.
    */
   public getShapeName(): NamedQuadrilateral {
 
