@@ -10,6 +10,7 @@ import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import MediaPipeQueryParameters from '../../../../tangible/js/mediaPipe/MediaPipeQueryParameters.js';
+import MediaPipeOptions from '../../../../tangible/js/mediaPipe/MediaPipeOptions.js';
 
 const MEDIA_PIPE_ASPECT_RATIO = 1280 / 720;
 
@@ -24,7 +25,7 @@ type ThumbAndIndex = {
 };
 
 if ( MediaPipeQueryParameters.cameraInput === 'hands' ) {
-  MediaPipe.initialize();
+  MediaPipe.initialize( { mediaPipeOptionsObject: new MediaPipeOptions() } );
 }
 
 class QuadrilateralMediaPipe extends MediaPipe {
