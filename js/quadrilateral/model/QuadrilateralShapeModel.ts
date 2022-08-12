@@ -38,7 +38,7 @@ import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import IProperty from '../../../../axon/js/IProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
-import IEmitter from '../../../../axon/js/IEmitter.js';
+import TEmitter from '../../../../axon/js/TEmitter.js';
 
 // A useful type for calculations for the vertex Shapes which define where the Vertex can move depending on
 // the positions of the other vertices. Lines are along the bounds of model space and RayIntersections
@@ -146,13 +146,13 @@ class QuadrilateralShapeModel {
   public readonly shapeLengthToleranceIntervalProperty: TReadOnlyProperty<number>;
 
   // Emits an event whenever the shape of the Quadrilateral changes
-  public shapeChangedEmitter: IEmitter;
+  public shapeChangedEmitter: TEmitter;
 
   // Emits an event whenever the Shape of the Quadrilateral changes. Only emits after all order dependent
   // Properties are up to date (no transient states as individual Vertices move). When the shape changes,
   // there is distributed view code that needs to run in order. Instead of depending on listener order, breaking
   // it into multiple Emitters to control the order of callbacks is working OK and easy.
-  public firstSeriesShapeChangedEmitter: IEmitter;
+  public firstSeriesShapeChangedEmitter: TEmitter;
 
   // Whether the quadrilateral is a parallelogram. This Property updates async in the step function! We need to
   // update this Property after all vertex positions and all vertex angles have been updated. When moving more than
