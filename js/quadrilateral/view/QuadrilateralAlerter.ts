@@ -21,6 +21,7 @@ import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import MovementAlerter from '../../../../scenery-phet/js/accessibility/describers/MovementAlerter.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vertex from '../model/Vertex.js';
+import Utils from '../../../../dot/js/Utils.js';
 
 const foundAParallelogramString = quadrilateralStrings.a11y.voicing.foundAParallelogram;
 const lostYourParallelogramString = quadrilateralStrings.a11y.voicing.lostYourParallelogram;
@@ -55,13 +56,17 @@ const cornersGoneString = quadrilateralStrings.a11y.voicing.cornersGone;
 const cornerDetectedPatternString = quadrilateralStrings.a11y.voicing.cornerDetectedPattern;
 const shorterString = quadrilateralStrings.a11y.voicing.sideDragObjectResponse.shorter;
 const longerString = quadrilateralStrings.a11y.voicing.sideDragObjectResponse.longer;
-const sideDragObjectResponsePatternString = quadrilateralStrings.a11y.voicing.sideDragObjectResponse.sideDragObjectResponsePattern;
 const widerString = quadrilateralStrings.a11y.voicing.vertexDragObjectResponse.wider;
 const vertexDragSmallerString = quadrilateralStrings.a11y.voicing.vertexDragObjectResponse.smaller;
 const fartherFromString = quadrilateralStrings.a11y.voicing.vertexDragObjectResponse.fartherFrom;
 const closerToString = quadrilateralStrings.a11y.voicing.vertexDragObjectResponse.closerTo;
 const fullVertexDragObjectResponsePatternString = quadrilateralStrings.a11y.voicing.vertexDragObjectResponse.fullVertexDragObjectResponsePattern;
 const partialVertexDragObjectResponsePatternString = quadrilateralStrings.a11y.voicing.vertexDragObjectResponse.partialVertexDragObjectResponsePattern;
+
+// Constants that control side object responses. See the getSideChangeObjectResponse for more information.
+const DESCRIBE_CLOSER_TO_OPPOSITE_SIDE_THRESHOLD = 0.04; // Large, more strict requirement for describing proximity
+const DESCRIBE_LONGER_ADJACENT_SIDES_THRESHOLD = 0.002;
+const BOTH_ADJACENT_SIDES_CHANGE_THE_SAME_THRESHOLD = 0.001; // Changes should be about equal to be described as such
 
 // A response may trigger because there is a large enough change in angle or length
 type ResponseReason = 'angle' | 'length';
@@ -129,6 +134,12 @@ class QuadrilateralAlerter extends Alerter {
 
     this.wasSideABSideCDParallel = model.quadrilateralShapeModel.sideABSideCDParallelSideChecker.areSidesParallel();
     this.wasSideBCSideDAParallel = model.quadrilateralShapeModel.sideBCSideDAParallelSideChecker.areSidesParallel();
+
+    // Upon simulation reset, reset certain state for description so that next descriptions after reset are correct
+    model.resetNotInProgressProperty.link( resetNotInProgress => {
+      this.previousContextResponseShapeSnapshot = new ShapeSnapshot( this.quadrilateralShapeModel );
+      this.previousObjectResponseShapeSnapshot = new ShapeSnapshot( this.quadrilateralShapeModel );
+    } );
 
     model.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
       const responsePacket = new ResponsePacket();
@@ -256,36 +267,81 @@ class QuadrilateralAlerter extends Alerter {
   }
 
   /**
-   * Returns the object response for the side as it changes from user input like dragging. Will return something like
+   * Returns the object response for the side as it changes from user input like dragging. Describes the change in
+   * length of adjacent side and possibly proximity of the changing side to its opposite side. Amount of content in
+   * the response depends on whether the adjacent sides change the same amount, and how much the length of adjacent
+   * sides changed. Will return something like
    *
-   * "left, adjacent sides longer" or
-   * "left, adjacent sides shorter" or
-   * "right, adjacent sides longer" or
-   * "right, adjacent sides shorter"
+   * "right" or
+   * "left" or
+   * "adjacent sides change unequally" or
+   * "adjacent sides longer" or
+   * "adjacent sides longer, farther from opposite side"
    */
   private getSideChangeObjectResponse( side: Side ): string {
-    const previousVertex1Position = this.previousObjectResponseShapeSnapshot.getVertexPositionsFromSideLabel( side.sideLabel )[ 0 ];
+    let response = '';
+
     const previousAdjacentLengths = this.previousObjectResponseShapeSnapshot.getAdjacentSideLengthsFromSideLabel( side.sideLabel );
-    const previousAverageLength = previousAdjacentLengths.reduce( ( prev, current ) => prev + current ) / previousAdjacentLengths.length;
+    const firstPreviousAdjacentSideLength = previousAdjacentLengths[ 0 ];
+    const secondPreviousAdjacentSideLength = previousAdjacentLengths[ 1 ];
 
     const adjacentSides = this.quadrilateralShapeModel.adjacentSideMap.get( side )!;
-    const currentAverageLength = QuadrilateralShapeModel.getAverageSideLength( adjacentSides[ 0 ], adjacentSides[ 1 ] );
+    const firstAdjacentSideLength = adjacentSides[ 0 ].lengthProperty.value;
+    const secondAdjacentSideLength = adjacentSides[ 1 ].lengthProperty.value;
 
-    const currentVertex1Position = side.vertex1.positionProperty.value;
+    const firstAdjacentSideLengthDifference = firstAdjacentSideLength - firstPreviousAdjacentSideLength;
+    const secondAdjacentSideLengthDifference = secondAdjacentSideLength - secondPreviousAdjacentSideLength;
 
-    const translationVector = currentVertex1Position.minus( previousVertex1Position );
-    const movementAngle = translationVector.angle;
-    const directionString = MovementAlerter.getDirectionDescriptionFromAngle( movementAngle, {
-      modelViewTransform: this.modelViewTransform
-    } );
+    const firstSideAbsoluteDifference = Math.abs( firstAdjacentSideLengthDifference );
+    const secondSideAbsoluteDifference = Math.abs( secondAdjacentSideLengthDifference );
 
-    const lengthDifference = currentAverageLength - previousAverageLength;
-    const lengthChangeString = lengthDifference > 0 ? longerString : shorterString;
+    if ( firstSideAbsoluteDifference > DESCRIBE_LONGER_ADJACENT_SIDES_THRESHOLD || secondSideAbsoluteDifference > DESCRIBE_LONGER_ADJACENT_SIDES_THRESHOLD ) {
 
-    return StringUtils.fillIn( sideDragObjectResponsePatternString, {
-      directionChange: directionString,
-      lengthChange: lengthChangeString
-    } );
+      // one of the sides has moved by a large enough distance to describe changes in adjacent side length
+      let adjacentSideChangeString = '';
+      const adjacentSidesLonger = firstAdjacentSideLengthDifference > 0;
+
+      if ( Utils.equalsEpsilon( firstAdjacentSideLengthDifference, secondAdjacentSideLengthDifference, BOTH_ADJACENT_SIDES_CHANGE_THE_SAME_THRESHOLD ) ) {
+
+        // both adjacent sides changed about the same so we can combine a description to say that adjacent sides
+        // got shorter or longer
+        const changeString = adjacentSidesLonger ? longerString : shorterString;
+        adjacentSideChangeString = StringUtils.fillIn( 'adjacent sides {{change}}', {
+          change: changeString
+        } );
+      }
+      else {
+
+        // both adjacent sides changed but in very different amounts so we combine the description to say that both
+        // sides changed unequally
+        adjacentSideChangeString = 'adjacent sides change unequally';
+      }
+
+      if ( firstSideAbsoluteDifference > DESCRIBE_CLOSER_TO_OPPOSITE_SIDE_THRESHOLD && secondSideAbsoluteDifference > DESCRIBE_CLOSER_TO_OPPOSITE_SIDE_THRESHOLD ) {
+
+        // both adjacent sides have changed enough to include a description about proximity to the other side
+        const proximityString = adjacentSidesLonger ? 'farther from opposite side' : 'closer to opposite side';
+        adjacentSideChangeString = StringUtils.fillIn( '{{change}}, {{proximity}}', {
+          change: adjacentSideChangeString,
+          proximity: proximityString
+        } );
+      }
+
+      response = adjacentSideChangeString;
+    }
+    else {
+
+      // adjacent sides did not change enough, just include a direction description
+      const currentVertex1Position = side.vertex1.positionProperty.value;
+      const previousVertex1Position = this.previousObjectResponseShapeSnapshot.getVertexPositionsFromSideLabel( side.sideLabel )[ 0 ];
+      const translationVector = currentVertex1Position.minus( previousVertex1Position );
+      const movementAngle = translationVector.angle;
+      response = MovementAlerter.getDirectionDescriptionFromAngle( movementAngle, {
+        modelViewTransform: this.modelViewTransform
+      } );
+    }
+
+    return response;
   }
 
   /**

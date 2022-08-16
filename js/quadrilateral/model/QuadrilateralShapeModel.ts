@@ -292,8 +292,8 @@ class QuadrilateralShapeModel {
     this.adjacentSideMap = new Map( [
       [ this.topSide, [ this.leftSide, this.rightSide ] ],
       [ this.rightSide, [ this.topSide, this.bottomSide ] ],
-      [ this.bottomSide, [ this.leftSide, this.rightSide ] ],
-      [ this.leftSide, [ this.topSide, this.bottomSide ] ]
+      [ this.bottomSide, [ this.rightSide, this.leftSide ] ],
+      [ this.leftSide, [ this.bottomSide, this.topSide ] ]
     ] );
 
     this.adjacentSides = [
