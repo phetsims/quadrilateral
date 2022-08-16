@@ -15,7 +15,7 @@ import shapeIdentificationWhenNotAParallelogram_mp3 from '../../../../sounds/sha
 import allAnglesAreRightAngles_mp3 from '../../../../sounds/allAnglesAreRightAngles_mp3.js';
 import allSideLengthsAreEqual_mp3 from '../../../../sounds/allSideLengthsAreEqual_mp3.js';
 import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
-import IProperty from '../../../../../axon/js/IProperty.js';
+import TProperty from '../../../../../axon/js/TProperty.js';
 
 class ShapeIdentificationSoundView {
   private readonly shapeSoundClip: SoundClip;
@@ -24,7 +24,7 @@ class ShapeIdentificationSoundView {
 
   private readonly disposeShapeIdentificationSoundView: () => void;
 
-  public constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: TReadOnlyProperty<boolean>, shapeIdentificationEnabledProperty: IProperty<boolean> ) {
+  public constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: TReadOnlyProperty<boolean>, shapeIdentificationEnabledProperty: TProperty<boolean> ) {
 
     const soundClipOptions = {
 
