@@ -23,6 +23,14 @@ import quadMelodyTracks003_mp3 from '../../../../sounds/quadMelodyTracks003_mp3.
 import quadMelodyTracks004_mp3 from '../../../../sounds/quadMelodyTracks004_mp3.js';
 import quadMelodyTracks005_mp3 from '../../../../sounds/quadMelodyTracks005_mp3.js';
 import quadMelodyTracksBaseMusic_mp3 from '../../../../sounds/quadMelodyTracksBaseMusic_mp3.js';
+import quadSimplerMelodyTracks000_mp3 from '../../../../sounds/quadSimplerMelodyTracks000_mp3.js';
+import quadSimplerMelodyTracks001_mp3 from '../../../../sounds/quadSimplerMelodyTracks001_mp3.js';
+import quadSimplerMelodyTracks002_mp3 from '../../../../sounds/quadSimplerMelodyTracks002_mp3.js';
+import quadSimplerMelodyTracks003_mp3 from '../../../../sounds/quadSimplerMelodyTracks003_mp3.js';
+import quadSimplerMelodyTracks004_mp3 from '../../../../sounds/quadSimplerMelodyTracks004_mp3.js';
+import quadSimplerMelodyTracks005_mp3 from '../../../../sounds/quadSimplerMelodyTracks005_mp3.js';
+import quadSimplerMelodyTracksBaseMusic_mp3 from '../../../../sounds/quadSimplerMelodyTracksBaseMusic_mp3.js';
+import optionize from '../../../../../phet-core/js/optionize.js';
 
 // All the sounds played in this sound design
 const MELODY_TRACKS = [
@@ -33,6 +41,16 @@ const MELODY_TRACKS = [
   quadMelodyTracks003_mp3,
   quadMelodyTracks004_mp3,
   quadMelodyTracks005_mp3
+];
+
+const SIMPLE_MELODY_TRACKS = [
+  quadSimplerMelodyTracksBaseMusic_mp3,
+  quadSimplerMelodyTracks000_mp3,
+  quadSimplerMelodyTracks001_mp3,
+  quadSimplerMelodyTracks002_mp3,
+  quadSimplerMelodyTracks003_mp3,
+  quadSimplerMelodyTracks004_mp3,
+  quadSimplerMelodyTracks005_mp3
 ];
 
 // Each NamedQuadrilateral is assigned zero or more of the above tracks to play when the shape is that named
@@ -51,11 +69,21 @@ const NAMED_QUADRILATERAL_TO_TRACKS_MAP = new Map( [
   [ NamedQuadrilateral.SQUARE, [ 2 ] ]
 ] );
 
+type TracksMelodySoundViewOptions = {
+  simple: boolean;
+};
+
 class TracksMelodySoundView extends TracksSoundView {
   private readonly disposeTracksMelodySoundView: () => void;
 
-  public constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
-    super( shapeModel, resetNotInProgressProperty, soundOptionsModel, MELODY_TRACKS );
+  public constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel, providedOptions?: TracksMelodySoundViewOptions ) {
+
+    const options = optionize<TracksMelodySoundViewOptions>()( {
+      simple: false
+    }, providedOptions );
+
+    const tracks = options.simple ? SIMPLE_MELODY_TRACKS : MELODY_TRACKS;
+    super( shapeModel, resetNotInProgressProperty, soundOptionsModel, tracks );
 
     const shapeNameListener = ( shapeName: NamedQuadrilateral ) => {
 

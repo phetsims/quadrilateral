@@ -65,7 +65,9 @@ class QuadrilateralSoundView {
         } );
       }
       else if ( soundDesign === SoundDesign.TRACKS_MELODY_SIMPLE ) {
-        this.activeSoundView = new TracksArpeggioSoundView( model.quadrilateralShapeModel, model.resetNotInProgressProperty, soundOptionsModel );
+        this.activeSoundView = new TracksMelodySoundView( model.quadrilateralShapeModel, model.resetNotInProgressProperty, soundOptionsModel, {
+          simple: true
+        } );
       }
       else if ( soundDesign === SoundDesign.TRACKS_MELODY_MAPPING ) {
         this.activeSoundView = new TracksArpeggioSoundView( model.quadrilateralShapeModel, model.resetNotInProgressProperty, soundOptionsModel );
