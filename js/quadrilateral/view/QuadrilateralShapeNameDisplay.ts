@@ -56,7 +56,12 @@ class QuadrilateralShapeNameDisplay extends Node {
     // display contents
     const expandCollapseButton = new ExpandCollapseButton( shapeNameVisibleProperty, {
       sideLength: 20,
-      tandem: tandem.createTandem( 'expandCollapseButton' )
+
+      // phet-io
+      tandem: tandem.createTandem( 'expandCollapseButton' ),
+
+      // voicing
+      voicingNameResponse: showShapeNameString
     } );
     const shapeNameText = new Text( '', QuadrilateralConstants.SHAPE_NAME_TEXT_OPTIONS );
     const backgroundRectangle = new Rectangle( 0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT, QuadrilateralConstants.CORNER_RADIUS, QuadrilateralConstants.CORNER_RADIUS, {
@@ -81,6 +86,11 @@ class QuadrilateralShapeNameDisplay extends Node {
 
       shapeNameText.text = text;
       shapeNameText.center = backgroundRectangle.center;
+    } );
+
+    shapeNameVisibleProperty.lazyLink( visible => {
+      expandCollapseButton.voicingObjectResponse = visible ? 'shape name shown' : 'shape name hidden';
+      expandCollapseButton.voicingSpeakObjectResponse();
     } );
 
     // layout
