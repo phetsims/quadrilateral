@@ -17,6 +17,7 @@ import Tandem from '../../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralSoundOptionsModel, { QuartetSoundFile, SoundDesign, SuccessSoundFile } from '../../model/QuadrilateralSoundOptionsModel.js';
 import Checkbox from '../../../../../sun/js/Checkbox.js';
+import CarouselComboBox from '../../../../../sun/js/CarouselComboBox.js';
 import { AquaRadioButtonGroupItem } from '../../../../../sun/js/AquaRadioButtonGroup.js';
 import EnumerationProperty from '../../../../../axon/js/EnumerationProperty.js';
 
@@ -27,6 +28,17 @@ const LABEL_TEXT_OPTIONS = {
 const TITLE_TEXT_OPTIONS = {
   font: new PhetFont( { size: 16, weight: 'bold' } )
 };
+
+// all of the "tracks" sound designs which have special settings
+const TRACKS_SOUND_DESIGNS = [
+  SoundDesign.TRACKS_ARPEGGIO,
+  SoundDesign.TRACKS_BUILD_UP,
+  SoundDesign.TRACKS_MELODY,
+  SoundDesign.TRACKS_VOLUME_EMPHASIS,
+  SoundDesign.TRACKS_BUILD_UP_SIMPLE,
+  SoundDesign.TRACKS_MELODY_SIMPLE,
+  SoundDesign.TRACKS_MELODY_MAPPING
+];
 
 // spacing between title for option and the content Node
 const TITLE_SPACING = 15;
@@ -41,7 +53,7 @@ class QuadrilateralSoundOptionsNode extends Panel {
     const soundDesignLabelText = new Text( 'Sound Design', TITLE_TEXT_OPTIONS );
 
     const optionsParentNode = new Node();
-    const designComboBox = new ComboBox( model.soundDesignProperty, [
+    const designComboBox = new CarouselComboBox( model.soundDesignProperty, [
       {
         value: SoundDesign.MAINTENANCE_SOUNDS,
         node: new Text( 'Maintenance Sounds', LABEL_TEXT_OPTIONS ),
@@ -86,14 +98,35 @@ class QuadrilateralSoundOptionsNode extends Panel {
         value: SoundDesign.TRACKS_ARPEGGIO,
         node: new Text( 'Tracks - Arpeggio', LABEL_TEXT_OPTIONS ),
         tandemName: `tracksArpeggio${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
+      },
+      {
+        value: SoundDesign.TRACKS_BUILD_UP_SIMPLE,
+        node: new Text( 'Tracks - Build Up - Simple', LABEL_TEXT_OPTIONS ),
+        tandemName: `tracksBuildUpSimple${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
+      },
+      {
+        value: SoundDesign.TRACKS_MELODY_SIMPLE,
+        node: new Text( 'Tracks - Melody - Simple', LABEL_TEXT_OPTIONS ),
+        tandemName: `tracksMelodySimple${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
+      },
+      {
+        value: SoundDesign.TRACKS_MELODY_MAPPING,
+        node: new Text( 'Tracks - Melody - Mapping', LABEL_TEXT_OPTIONS ),
+        tandemName: `tracksMelodyMapping${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
       }
-    ], optionsParentNode, {
-
+    ], {
+      carouselOptions: {
+        orientation: 'vertical',
+        itemsPerPage: 5
+      },
       tandem: tandem.createTandem( 'designComboBox' )
     } );
 
     const labelledComboBox = new HBox( {
       children: [ soundDesignLabelText, designComboBox ],
+      align: 'top',
+      minContentHeight: 200,
+      resize: false,
       spacing: TITLE_SPACING
     } );
 
@@ -205,8 +238,7 @@ class QuadrilateralSoundOptionsNode extends Panel {
           children.push( maintenanceSoundCheckbox );
         }
       }
-      else if ( design === SoundDesign.TRACKS_ARPEGGIO || design === SoundDesign.TRACKS_BUILD_UP ||
-                design === SoundDesign.TRACKS_MELODY || design === SoundDesign.TRACKS_VOLUME_EMPHASIS ) {
+      else if ( TRACKS_SOUND_DESIGNS.includes( design ) ) {
         children.push( tracksPlayForeverCheckbox );
 
         if ( design === SoundDesign.TRACKS_ARPEGGIO ) {

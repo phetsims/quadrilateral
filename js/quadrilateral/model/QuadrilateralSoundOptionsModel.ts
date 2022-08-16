@@ -44,6 +44,9 @@ class SoundDesign extends EnumerationValue {
   public static TRACKS_VOLUME_EMPHASIS = new SoundDesign();
   public static TRACKS_MELODY = new SoundDesign();
   public static TRACKS_ARPEGGIO = new SoundDesign();
+  public static TRACKS_BUILD_UP_SIMPLE = new SoundDesign();
+  public static TRACKS_MELODY_SIMPLE = new SoundDesign();
+  public static TRACKS_MELODY_MAPPING = new SoundDesign();
 
   // gets a list of keys, values and mapping between them for EnumerationProperty and PhET-iO
   public static enumeration = new Enumeration( SoundDesign );

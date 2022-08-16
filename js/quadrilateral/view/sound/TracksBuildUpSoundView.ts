@@ -21,12 +21,21 @@ import quadBeatTracksBuildingBuildingTracks003_mp3 from '../../../../sounds/quad
 import quadBeatTracksBuildingBuildingTracks004_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks004_mp3.js';
 import quadBeatTracksBuildingBuildingTracks005_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks005_mp3.js';
 import quadBeatTracksBuildingBuildingTracks006_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks006_mp3.js';
+import quadBaseBeatSimple_mp3 from '../../../../sounds/quadBaseBeatSimple_mp3.js';
+import quadSimpleBuildingTracks000_mp3 from '../../../../sounds/quadSimpleBuildingTracks000_mp3.js';
+import quadSimpleBuildingTracks001_mp3 from '../../../../sounds/quadSimpleBuildingTracks001_mp3.js';
+import quadSimpleBuildingTracks002_mp3 from '../../../../sounds/quadSimpleBuildingTracks002_mp3.js';
+import quadSimpleBuildingTracks003_mp3 from '../../../../sounds/quadSimpleBuildingTracks003_mp3.js';
+import quadSimpleBuildingTracks004_mp3 from '../../../../sounds/quadSimpleBuildingTracks004_mp3.js';
+import quadSimpleBuildingTracks005_mp3 from '../../../../sounds/quadSimpleBuildingTracks005_mp3.js';
+import quadSimpleBuildingTracks006_mp3 from '../../../../sounds/quadSimpleBuildingTracks006_mp3.js';
 import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
 import NamedQuadrilateral from '../../model/NamedQuadrilateral.js';
 import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
+import optionize from '../../../../../phet-core/js/optionize.js';
 
-// All the sounds played in this sound design
+// All the sounds played in this sound design.
 const BUILD_UP_TRACKS = [
   quadBeatTracksBuildingBaseRhythm_mp3,
   quadBeatTracksBuildingBuildingTracks000_mp3,
@@ -36,6 +45,18 @@ const BUILD_UP_TRACKS = [
   quadBeatTracksBuildingBuildingTracks004_mp3,
   quadBeatTracksBuildingBuildingTracks005_mp3,
   quadBeatTracksBuildingBuildingTracks006_mp3
+];
+
+// All the sounds played in this sound design in the "simple" case.
+const BUILD_UP_TRACKS_SIMPLE = [
+  quadBaseBeatSimple_mp3,
+  quadSimpleBuildingTracks000_mp3,
+  quadSimpleBuildingTracks001_mp3,
+  quadSimpleBuildingTracks002_mp3,
+  quadSimpleBuildingTracks003_mp3,
+  quadSimpleBuildingTracks004_mp3,
+  quadSimpleBuildingTracks005_mp3,
+  quadSimpleBuildingTracks006_mp3
 ];
 
 // Each NamedQuadrilateral is assigned zero or more of the above tracks to play when the sim is in that state.
@@ -54,11 +75,23 @@ const NAMED_QUADRILATERAL_TO_TRACKS_MAP = new Map( [
   [ NamedQuadrilateral.SQUARE, [ 0, 2, 3, 5, 6, 7 ] ]
 ] );
 
+type TracksBuildUpSoundViewOptions = {
+
+  // If true, use the "simple" tracks instead of the default BUILD_UP_TRACKS
+  simple: boolean;
+};
+
 class TracksBuildUpSoundView extends TracksSoundView {
   private readonly disposeTracksBuildUpSoundView: () => void;
 
-  public constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
-    super( shapeModel, resetNotInProgressProperty, soundOptionsModel, BUILD_UP_TRACKS );
+  public constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel, providedOptions?: TracksBuildUpSoundViewOptions ) {
+
+    const options = optionize<TracksBuildUpSoundViewOptions>()( {
+      simple: false
+    }, providedOptions );
+
+    const tracks = options.simple ? BUILD_UP_TRACKS_SIMPLE : BUILD_UP_TRACKS;
+    super( shapeModel, resetNotInProgressProperty, soundOptionsModel, tracks );
 
     const shapeNameListener = ( shapeName: NamedQuadrilateral ) => {
 
