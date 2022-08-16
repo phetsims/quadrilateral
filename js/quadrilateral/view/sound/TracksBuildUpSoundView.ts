@@ -70,7 +70,11 @@ class TracksBuildUpSoundView extends TracksSoundView {
       const soundIndicesToPlay = NAMED_QUADRILATERAL_TO_TRACKS_MAP.get( shapeName );
       assert && assert( soundIndicesToPlay, 'NamedQuadrilateral does not have a TracksBuildUpSoundView design' );
       soundIndicesToPlay!.forEach( index => {
-        this.soundClips[ index ].setOutputLevel( 1 );
+
+        // The 'base' beat (first item in BUILD_UP_TRACKS and therefore index 0), it should be a much lower output level
+        // See https://github.com/phetsims/quadrilateral/issues/175#issuecomment-1212025691
+        const outputLevel = index === 0 ? 0.5 : 1;
+        this.soundClips[ index ].setOutputLevel( outputLevel );
       } );
     };
     shapeModel.shapeNameProperty.link( shapeNameListener );
