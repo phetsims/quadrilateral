@@ -65,7 +65,7 @@ class TracksMelodySoundView extends TracksSoundView {
       } );
 
       // the base sound always plays in this design
-      this.soundClips[ 0 ].setOutputLevel( 1 );
+      this.soundClips[ 0 ].setOutputLevel( 0.5 );
 
       const soundIndicesToPlay = NAMED_QUADRILATERAL_TO_TRACKS_MAP.get( shapeName );
       assert && assert( soundIndicesToPlay, 'NamedQuadrilateral does not have a TracksMelodySoundView design' );
