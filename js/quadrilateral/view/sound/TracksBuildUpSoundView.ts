@@ -73,7 +73,7 @@ class TracksBuildUpSoundView extends TracksSoundView {
 
         // The 'base' beat (first item in BUILD_UP_TRACKS and therefore index 0), it should be a much lower output level
         // See https://github.com/phetsims/quadrilateral/issues/175#issuecomment-1212025691
-        const outputLevel = index === 0 ? 0.5 : 1;
+        const outputLevel = index === 0 ? 0.25 : 1;
         this.soundClips[ index ].setOutputLevel( outputLevel );
       } );
     };

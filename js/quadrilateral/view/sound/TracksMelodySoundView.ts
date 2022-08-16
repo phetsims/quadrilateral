@@ -64,8 +64,9 @@ class TracksMelodySoundView extends TracksSoundView {
         soundClip.setOutputLevel( 0 );
       } );
 
-      // the base sound always plays in this design
-      this.soundClips[ 0 ].setOutputLevel( 0.5 );
+      // the base sound always plays in this design, but at a lower volume see
+      // https://github.com/phetsims/quadrilateral/issues/175#issuecomment-1212025691
+      this.soundClips[ 0 ].setOutputLevel( 0.25 );
 
       const soundIndicesToPlay = NAMED_QUADRILATERAL_TO_TRACKS_MAP.get( shapeName );
       assert && assert( soundIndicesToPlay, 'NamedQuadrilateral does not have a TracksMelodySoundView design' );
