@@ -9,6 +9,7 @@ import Tandem from '../../../tandem/js/Tandem.js';
 import IOType from '../../../tandem/js/types/IOType.js';
 import NumberIO from '../../../tandem/js/types/NumberIO.js';
 import quadrilateral from '../quadrilateral.js';
+import { SoundDesign } from './model/QuadrilateralSoundOptionsModel.js';
 
 const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
 
@@ -179,6 +180,14 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // sounds that match the user input.
   soundBoard: {
     type: 'flag'
+  },
+
+  // Sets the initial sound design on startup. Values are the enumeration values of
+  // QuadrilateralSoundOptionsModel.SoundDesign as a string. See https://github.com/phetsims/quadrilateral/blob/master/js/quadrilateral/model/QuadrilateralSoundOptionsModel.ts#L37-L53
+  soundDesign: {
+    type: 'string',
+    defaultValue: 'TRACKS_BUILD_UP',
+    validValues: SoundDesign.enumeration.keys
   }
 } );
 

@@ -138,7 +138,7 @@ class QuadrilateralSoundOptionsModel {
   public static SUCCESS_SOUND_COLLECTION_MAP = SUCCESS_SOUND_COLLECTION_MAP;
 
   public constructor() {
-    this.soundDesignProperty = new EnumerationProperty( SoundDesign.TRACKS_BUILD_UP );
+    this.soundDesignProperty = new EnumerationProperty( SoundDesign.enumeration.getValue( QuadrilateralQueryParameters.soundDesign! ) );
     this.baseSoundFileProperty = new EnumerationProperty( QuartetSoundFile.ONE );
     this.successSoundFileProperty = new EnumerationProperty( SuccessSoundFile.ONE );
     this.maintenanceSoundRequiresEqualLengthsProperty = new BooleanProperty( QuadrilateralQueryParameters.equalLengthsForMaintenanceSound );
