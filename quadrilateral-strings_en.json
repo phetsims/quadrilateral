@@ -157,7 +157,7 @@
         "value": "A quadrilateral is a closed four-sided shape. This quadrilateral is an interactive sim. It changes as you play with it. Four grabbable corners and four grabbable sides allow you to create different shapes and explore their properties. To support your exploration, show or hide shape name, and use checkboxes to add or remove labels, guides, and grid lines. A button resets the sim."
       },
       "hintContentPattern": {
-        "value": "{{shapeDescription}} Explore what makes parallelograms."
+        "value": "{{shapeDescription}} Explore what shapes you can make."
       },
       "youHaveAShapeHintPattern": {
         "value": "You have {{shapeDescription}}."
