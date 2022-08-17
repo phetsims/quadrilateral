@@ -16,8 +16,6 @@ import VertexDescriber from './VertexDescriber.js';
 import SideDescriber from './SideDescriber.js';
 
 // constants
-const namedShapeParalleogramHintPatternString = quadrilateralStrings.a11y.voicing.namedShapeParalleogramHintPattern;
-const namedShapeNotAParallelogramHintPatternString = quadrilateralStrings.a11y.voicing.namedShapeNotAParallelogramHintPattern;
 const firstDetailsStatementPatternString = quadrilateralStrings.a11y.voicing.firstDetailsStatementPattern;
 const aBString = quadrilateralStrings.a11y.aB;
 const bCString = quadrilateralStrings.a11y.bC;
@@ -110,41 +108,25 @@ class QuadrilateralDescriber {
   }
 
   /**
-   * Get a description of the quadrilateral shape, including whether or not it is a parallelogram
-   * and the name of the shape if there is one. Will return something like
-   * "a parallelogram, and a rectangle" or
-   * "a trapezoid and not a parallelogram" or
-   * "a concave quadrilateral and not a parallelogram"
+   * Get a description of the quadrilateral shape, just including the shape name. Will return something like
+   * "a rectangle" or
+   * "a trapezoid" or
+   * "a concave quadrilateral"
    */
   public getShapeDescription(): string {
-    let description = '';
 
     // of type NamedQuadrilateral enumeration
     const shapeName = this.shapeModel.shapeNameProperty.value;
-    const shapeNameString = this.getShapeNameDescription( shapeName );
-
-    if ( this.shapeModel.isParallelogramProperty.value && shapeName === NamedQuadrilateral.PARALLELOGRAM ) {
-
-      // parallelogram with no other name, don't include "general quadrilateral" just say parallelogram
-      description = shapeNameString!;
-    }
-    else {
-      const patternString = this.shapeModel.isParallelogramProperty.value ? namedShapeParalleogramHintPatternString :
-                            namedShapeNotAParallelogramHintPatternString;
-
-      description = StringUtils.fillIn( patternString, {
-        shapeName: shapeNameString
-      } );
-    }
-
-    return description;
+    return this.getShapeNameDescription( shapeName );
   }
 
   /**
    * Returns the actual name of the NamedQuadrilateral.
    */
-  public getShapeNameDescription( shapeName: NamedQuadrilateral | null ): string | undefined {
-    return shapeNameMap.get( shapeName );
+  public getShapeNameDescription( shapeName: NamedQuadrilateral | null ): string {
+    const shapeNameDescription = shapeNameMap.get( shapeName );
+    assert && assert( shapeNameDescription, 'There must be shape name description for the current shape state.' );
+    return shapeNameDescription!;
   }
 
   /**
