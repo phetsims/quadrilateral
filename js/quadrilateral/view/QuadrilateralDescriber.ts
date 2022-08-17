@@ -130,18 +130,6 @@ class QuadrilateralDescriber {
   }
 
   /**
-   * Returns a string describing the shape that you have in a pattern like
-   * "You have a square." or
-   * "You have an isosceles trapezoid."
-   */
-  public getYouHaveAShapeDescription(): string {
-    const shapeDescriptionString = this.getShapeDescription();
-    return StringUtils.fillIn( quadrilateralStrings.a11y.voicing.youHaveAShapeHintPattern, {
-      shapeDescription: shapeDescriptionString
-    } );
-  }
-
-  /**
    * Returns the first details statement. Details are broken up into three categorized statements. This one is a
    * summary about equal corner angles and equal side lengths. Will return something like
    * "Right now, opposite corners are equal and opposite sides are equal." or

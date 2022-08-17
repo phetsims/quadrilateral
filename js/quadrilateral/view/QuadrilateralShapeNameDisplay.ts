@@ -18,7 +18,6 @@ import Multilink from '../../../../axon/js/Multilink.js';
 import quadrilateralStrings from '../../quadrilateralStrings.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 
 // constants
 const squareString = quadrilateralStrings.shapeNames.square;
@@ -51,7 +50,7 @@ const DISPLAY_WIDTH = 350;
 const DISPLAY_HEIGHT = 40;
 
 class QuadrilateralShapeNameDisplay extends Node {
-  public constructor( shapeNameVisibleProperty: Property<boolean>, shapeNameProperty: TReadOnlyProperty<NamedQuadrilateral>, quadrilateralDescriber: QuadrilateralDescriber, tandem: Tandem ) {
+  public constructor( shapeNameVisibleProperty: Property<boolean>, shapeNameProperty: TReadOnlyProperty<NamedQuadrilateral>, tandem: Tandem ) {
     super();
 
     // display contents
@@ -90,15 +89,7 @@ class QuadrilateralShapeNameDisplay extends Node {
     } );
 
     shapeNameVisibleProperty.lazyLink( visible => {
-      let objectResponse = '';
-      if ( visible ) {
-        objectResponse = quadrilateralDescriber.getYouHaveAShapeDescription();
-      }
-      else {
-        objectResponse = 'shape name hidden';
-      }
-
-      expandCollapseButton.voicingObjectResponse = objectResponse;
+      expandCollapseButton.voicingObjectResponse = visible ? 'shape name shown' : 'shape name hidden';
       expandCollapseButton.voicingSpeakObjectResponse();
     } );
 

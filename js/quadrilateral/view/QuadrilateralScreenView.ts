@@ -61,9 +61,6 @@ class QuadrilateralScreenView extends ScreenView {
       tandem: tandem
     } );
 
-    // Responsible for generating descriptions of the state of the quadrilateral for accessibility.
-    this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel );
-
     const visibilityControls = new QuadrilateralVisibilityControls(
       model.vertexLabelsVisibleProperty,
       model.cornerGuideVisibleProperty,
@@ -87,7 +84,7 @@ class QuadrilateralScreenView extends ScreenView {
     } );
     this.addChild( this.resetAllButton );
 
-    const shapeNameDisplay = new QuadrilateralShapeNameDisplay( model.shapeNameVisibleProperty, model.quadrilateralShapeModel.shapeNameProperty, this.quadrilateralDescriber, tandem.createTandem( 'quadrilateralShapeNameDisplay' ) );
+    const shapeNameDisplay = new QuadrilateralShapeNameDisplay( model.shapeNameVisibleProperty, model.quadrilateralShapeModel.shapeNameProperty, tandem.createTandem( 'quadrilateralShapeNameDisplay' ) );
     this.addChild( shapeNameDisplay );
 
     // the model bounds are defined by available view space. Some padding is added around the screen and we make
@@ -121,6 +118,9 @@ class QuadrilateralScreenView extends ScreenView {
     model.modelBoundsProperty.value = this.modelViewTransform.viewToModelBounds( reducedViewBounds );
 
     const shapeModel = model.quadrilateralShapeModel;
+
+    // Responsible for generating descriptions of the state of the quadrilateral for accessibility.
+    this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel );
 
     // A reference to the QuadrilateralNode. For now, it is not always created while we have the side query parameters
     // for development. But we may want
