@@ -21,6 +21,7 @@ import NumberControl from '../../../../scenery-phet/js/NumberControl.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 
 const TEXT_OPTIONS = { fontSize: 16 };
 const valuePatternString = '{{label}}: {{value}}';
@@ -94,7 +95,10 @@ class QuadrilateralModelValuePanel extends Node {
       sliderOptions: {
         keyboardStep: 1,
         thumbSize: new Dimension2( 10, 17 )
-      }
+      },
+
+      // no tandems for debugging
+      tandem: Tandem.OPT_OUT
     } );
 
     const content = new VBox( {

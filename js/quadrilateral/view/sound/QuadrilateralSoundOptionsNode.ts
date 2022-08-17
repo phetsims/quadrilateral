@@ -119,6 +119,11 @@ class QuadrilateralSoundOptionsNode extends Panel {
         orientation: 'vertical',
         itemsPerPage: 5
       },
+      pageControlOptions: {
+
+        // NOTE: the carousel has no default tandem for the page control
+        tandem: tandem.createTandem( 'pageControl' )
+      },
       tandem: tandem.createTandem( 'designComboBox' )
     } );
 
