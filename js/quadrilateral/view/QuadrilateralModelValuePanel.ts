@@ -171,7 +171,6 @@ class QuadrilateralModelValuePanel extends Node {
    *
    * After 10 minutes of tinkering with types I decided it wasn't worth figuring out for this debugging code.
    */
-  //
   private static addRedrawValueTextListener( property: TReadOnlyProperty<IntentionalAny>,
                                              text: Text,
                                              label: string,
