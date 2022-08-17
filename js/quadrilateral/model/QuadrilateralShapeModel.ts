@@ -589,10 +589,10 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Shape is a kite if there is exactly one set of equal opposite angles and exactly two sets of equal adjacent sides.
+   * Shape is a kite if there is at least one set of equal opposite angles and exactly two sets of equal adjacent sides.
    */
   private isKite(): boolean {
-    const angleRequirement = this.oppositeEqualVertexPairsProperty.value.length === 1;
+    const angleRequirement = this.oppositeEqualVertexPairsProperty.value.length > 0;
     const lengthRequirement = this.adjacentEqualSidePairsProperty.value.length === 2;
     return angleRequirement && lengthRequirement;
   }

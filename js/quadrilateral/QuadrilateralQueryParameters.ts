@@ -27,7 +27,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   angleToleranceInterval: {
     type: 'number',
     isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
-    defaultValue: 0.01
+    defaultValue: 0.005
   },
 
   // Behaves like angleToleranceInterval, but the default when connected to a tangible
