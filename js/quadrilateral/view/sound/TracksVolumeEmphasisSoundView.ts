@@ -21,6 +21,8 @@ import quadBeatTracksBuildingBuildingTracks003_mp3 from '../../../../sounds/quad
 import quadBeatTracksBuildingBuildingTracks004_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks004_mp3.js';
 import quadBeatTracksBuildingBuildingTracks005_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks005_mp3.js';
 import quadBeatTracksBuildingBuildingTracks006_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks006_mp3.js';
+import quadBaseBeatSimple_mp3 from '../../../../sounds/quadBaseBeatSimple_mp3.js';
+import quadSimpleBuildingTracks000_mp3 from '../../../../sounds/quadSimpleBuildingTracks000_mp3.js';
 import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
 import NamedQuadrilateral from '../../model/NamedQuadrilateral.js';
@@ -35,7 +37,9 @@ const VOLUME_EMPHASIS_TRACKS = [
   quadBeatTracksBuildingBuildingTracks003_mp3,
   quadBeatTracksBuildingBuildingTracks004_mp3,
   quadBeatTracksBuildingBuildingTracks005_mp3,
-  quadBeatTracksBuildingBuildingTracks006_mp3
+  quadBeatTracksBuildingBuildingTracks006_mp3,
+  quadBaseBeatSimple_mp3,
+  quadSimpleBuildingTracks000_mp3
 ];
 
 // Each NamedQuadrilateral is assigned zero or more of the above tracks to play at a louder output level when the shape
@@ -43,8 +47,8 @@ const VOLUME_EMPHASIS_TRACKS = [
 // according to the design in https://github.com/phetsims/quadrilateral/issues/175.
 const NAMED_QUADRILATERAL_TO_HIGH_VOLUME_TRACKS_MAP = new Map( [
   [ NamedQuadrilateral.CONVEX_QUADRILATERAL, [ 0 ] ],
-  [ NamedQuadrilateral.CONCAVE_QUADRILATERAL, [] ], // no emphasis
-  [ NamedQuadrilateral.DART, [] ], // no emphasis
+  [ NamedQuadrilateral.CONCAVE_QUADRILATERAL, [ 8 ] ],
+  [ NamedQuadrilateral.DART, [ 9 ] ],
   [ NamedQuadrilateral.KITE, [ 1 ] ],
   [ NamedQuadrilateral.TRAPEZOID, [ 2 ] ],
   [ NamedQuadrilateral.ISOSCELES_TRAPEZOID, [ 3 ] ],
