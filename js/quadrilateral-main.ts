@@ -6,7 +6,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import PreferencesConfiguration from '../../joist/js/preferences/PreferencesConfiguration.js';
+import PreferencesModel from '../../joist/js/preferences/PreferencesModel.js';
 import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
 import { Color, ColorProperty } from '../../scenery/js/imports.js';
@@ -38,7 +38,7 @@ const simOptions: SimOptions = {
   },
 
   // preferences configuration with defaults from package.json
-  preferencesConfiguration: new PreferencesConfiguration( {
+  preferencesModel: new PreferencesModel( {
     generalOptions: {
       createSimControls: tandem => new QuadrilateralPreferencesNode( preferencesModel, tandem.createTandem( 'quadrilateralPreferencesNode' ) )
     }
