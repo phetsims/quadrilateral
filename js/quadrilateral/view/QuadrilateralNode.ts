@@ -169,10 +169,8 @@ class QuadrilateralNode extends Node {
       }
     } );
 
-    this.pdomOrder = [
-      vertexParentNode,
-      sideParentNode
-    ];
+    // PDOM order interleaves vertices and sides - typecast is OK because we know that children are defined
+    this.pdomOrder = _.flatten( _.zip( vertexParentNode.children, sideParentNode.children ) as unknown as Node[] );
   }
 
   public step( dt: number ): void {
