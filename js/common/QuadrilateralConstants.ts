@@ -10,12 +10,19 @@ import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import Utterance from '../../../utterance-queue/js/Utterance.js';
 import quadrilateral from '../quadrilateral.js';
 
+const MAJOR_GRID_SPACING = 0.05;
+const MINOR_GRID_SPACING = MAJOR_GRID_SPACING / 4;
 const QuadrilateralConstants = {
 
   // MODEL CONSTANTS
 
   // {number} - The amount of movement per key press in model coordinates for vertices and sides.
   MOVEMENT_PER_KEY_PRESS: 0.05,
+
+  // The spacing of the model "grid" along both x and y axes. The Quadrilateral vertex positions will be constrained to
+  // intervals of these values in model coordinates.
+  MAJOR_GRID_SPACING: MAJOR_GRID_SPACING,
+  MINOR_GRID_SPACING: MINOR_GRID_SPACING,
 
   // VIEW CONSTANTS
   SCREEN_VIEW_X_MARGIN: 15,

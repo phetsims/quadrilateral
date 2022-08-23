@@ -23,6 +23,7 @@ import SideDescriber from './SideDescriber.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
+import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 
 // The dilation around side shapes when drawing the focus highlight.
 const FOCUS_HIGHLIGHT_DILATION = 15;
@@ -157,8 +158,8 @@ class SideNode extends Voicing( Path ) {
     } );
 
     // supports keyboard dragging, attempts to move both vertices in the direction of motion of the line
-    const viewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralModel.MAJOR_GRID_SPACING );
-    const minorViewDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralModel.MINOR_GRID_SPACING );
+    const viewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralQueryParameters.majorVertexInterval );
+    const minorViewDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralQueryParameters.minorVertexInterval );
 
     this.addInputListener( new KeyboardDragListener( {
       transform: modelViewTransform,

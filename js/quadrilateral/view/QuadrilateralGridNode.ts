@@ -2,7 +2,7 @@
 
 /**
  * A grid for the play area, to make it easier to place Vertices in reproducible positions for the play area.
- * 
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
@@ -11,12 +11,12 @@ import { Path } from '../../../../scenery/js/imports.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Property from '../../../../axon/js/Property.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { Shape } from '../../../../kite/js/imports.js';
+import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 
-const GRID_SPACING = QuadrilateralModel.MAJOR_GRID_SPACING * 5;
+const GRID_SPACING = QuadrilateralConstants.MAJOR_GRID_SPACING * 5;
 
 const GRID_LINE_OPTIONS = {
   stroke: QuadrilateralColors.gridColorProperty

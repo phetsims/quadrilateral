@@ -20,6 +20,7 @@ import VertexDescriber from './VertexDescriber.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 
 // constants
 const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
@@ -97,8 +98,8 @@ class VertexNode extends Voicing( Circle ) {
       vertexLabelText.visible = vertexLabelsVisible;
     } );
 
-    const largeViewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralModel.MAJOR_GRID_SPACING );
-    const smallViewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralModel.MINOR_GRID_SPACING );
+    const largeViewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralQueryParameters.majorVertexInterval );
+    const smallViewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralQueryParameters.minorVertexInterval );
     const keyboardDragListener = new KeyboardDragListener( {
       transform: modelViewTransform,
       drag: ( modelDelta: Vector2 ) => {

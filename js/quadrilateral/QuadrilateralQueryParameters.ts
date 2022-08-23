@@ -10,6 +10,7 @@ import IOType from '../../../tandem/js/types/IOType.js';
 import NumberIO from '../../../tandem/js/types/NumberIO.js';
 import quadrilateral from '../quadrilateral.js';
 import { SoundDesign } from './model/QuadrilateralSoundOptionsModel.js';
+import QuadrilateralConstants from '../common/QuadrilateralConstants.js';
 
 const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
 
@@ -188,6 +189,21 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     type: 'string',
     defaultValue: 'TRACKS_BUILD_UP',
     validValues: SoundDesign.enumeration.keys
+  },
+
+  /**
+   * Controls the interval that the Vertex will be constrained to
+   */
+  majorVertexInterval: {
+    type: 'number',
+    defaultValue: QuadrilateralConstants.MAJOR_GRID_SPACING,
+    isValidValue: ( value: number ) => value >= QuadrilateralConstants.MINOR_GRID_SPACING
+  },
+
+  minorVertexInterval: {
+    type: 'number',
+    defaultValue: QuadrilateralConstants.MINOR_GRID_SPACING,
+    isValidValue: ( value: number ) => value >= QuadrilateralConstants.MINOR_GRID_SPACING
   }
 } );
 

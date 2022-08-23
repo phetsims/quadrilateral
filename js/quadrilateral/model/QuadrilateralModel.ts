@@ -110,11 +110,6 @@ class QuadrilateralModel {
   // Properties are updated the following frame).
   private firstModelStep: boolean;
 
-  // The spacing of the model "grid" along both x and y axes. The Quadrilateral vertex positions will be constrained to
-  // intervals of these values in model coordinates.
-  public static MAJOR_GRID_SPACING = 0.05;
-  public static MINOR_GRID_SPACING: number = QuadrilateralModel.MAJOR_GRID_SPACING / 4;
-
   public constructor( preferencesModel: QuadrilateralPreferencesModel, tandem: Tandem ) {
 
     this.preferencesModel = preferencesModel;
@@ -322,7 +317,7 @@ class QuadrilateralModel {
    * Returns the closest position in the model from the point provided that will be constrained to the minor lines
    * of the model "grid". By default it uses the following minor grid spacing but a different spacing may be necessary.
    */
-  public static getClosestGridPosition( position: Vector2, interval = QuadrilateralModel.MINOR_GRID_SPACING ): Vector2 {
+  public static getClosestGridPosition( position: Vector2, interval = QuadrilateralQueryParameters.minorVertexInterval ): Vector2 {
     return new Vector2( Utils.roundToInterval( position.x, interval ), Utils.roundToInterval( position.y, interval ) );
   }
 }
