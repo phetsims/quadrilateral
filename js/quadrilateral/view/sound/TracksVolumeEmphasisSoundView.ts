@@ -59,8 +59,8 @@ const NAMED_QUADRILATERAL_TO_HIGH_VOLUME_TRACKS_MAP = new Map( [
 ] );
 
 class TracksVolumeEmphasisSoundView extends TracksSoundView {
-  public constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
-    super( shapeModel, resetNotInProgressProperty, soundOptionsModel, VOLUME_EMPHASIS_TRACKS );
+  public constructor( shapeModel: QuadrilateralShapeModel, simSoundEnabledProperty: TReadOnlyProperty<boolean>, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
+    super( shapeModel, simSoundEnabledProperty, resetNotInProgressProperty, soundOptionsModel, VOLUME_EMPHASIS_TRACKS );
 
     const shapeNameListener = ( shapeName: NamedQuadrilateral ) => {
 

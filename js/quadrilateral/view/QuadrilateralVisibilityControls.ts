@@ -18,6 +18,7 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import Property from '../../../../axon/js/Property.js';
 import QuadrilateralIconFactory from './QuadrilateralIconFactory.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
+import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 
 const CHECKBOX_ICON_SPACING = 10;
 
@@ -29,7 +30,7 @@ class QuadrilateralVisibilityControls extends VBox {
 
     const options = optionize<QuadrilateralVisibilityControlsOptions, SelfOptions, VBoxOptions>()( {
       align: 'left',
-      spacing: 15
+      spacing: QuadrilateralConstants.CONTROLS_SPACING
     }, providedOptions );
 
     const cornerLabelsIcon = QuadrilateralIconFactory.createCornerLabelsIcon();

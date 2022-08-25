@@ -67,11 +67,11 @@ class TracksSoundView extends SoundGenerator {
   // is stopped or currently fading out.
   private shapeDirty = false;
 
-  public constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel, tracks: WrappedAudioBuffer[] ) {
+  public constructor( shapeModel: QuadrilateralShapeModel, simSoundEnabledProperty: TReadOnlyProperty<boolean>, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel, tracks: WrappedAudioBuffer[] ) {
     super( {
 
-      // don't play sounds while model reset is in progress
-      enableControlProperties: [ resetNotInProgressProperty ],
+      // don't play sounds while model reset is in progress or when the user has opted out of playing music tracks
+      enableControlProperties: [ resetNotInProgressProperty, simSoundEnabledProperty ],
 
       // No sound from this track set initially
       initialOutputLevel: 0

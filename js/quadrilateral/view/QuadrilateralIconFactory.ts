@@ -9,6 +9,7 @@ import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import { Shape } from '../../../../kite/js/imports.js';
+import musicSolidShape from '../../../../sherpa/js/fontawesome-5/musicSolidShape.js';
 
 const QuadrilateralIconFactory = {
 
@@ -62,6 +63,13 @@ const QuadrilateralIconFactory = {
 
     return new Node( {
       children: [ firstDiagonal, secondDiagonal ]
+    } );
+  },
+
+  createSoundIcon(): Node {
+    return new Path( musicSolidShape, {
+      maxHeight: QuadrilateralIconFactory.ICON_HEIGHT,
+      fill: QuadrilateralColors.visibilityIconsColorProperty
     } );
   },
 

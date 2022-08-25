@@ -31,6 +31,10 @@ type StringsType = {
   'vertexDProperty': TReadOnlyProperty<string>;
   'showShapeName': string;
   'showShapeNameProperty': TReadOnlyProperty<string>;
+  'resetShape': string;
+  'resetShapeProperty': TReadOnlyProperty<string>;
+  'playMusic': string;
+  'playMusicProperty': TReadOnlyProperty<string>;
   'shapeNames': {
     'square': string;
     'squareProperty': TReadOnlyProperty<string>;

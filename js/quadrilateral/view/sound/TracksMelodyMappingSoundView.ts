@@ -51,9 +51,9 @@ const NAMED_QUADRILATERAL_TO_TRACKS_MAP = new Map( [
 class TracksMelodyMappingSoundView extends TracksSoundView {
   private readonly disposeTracksMelodyMappingSoundView: () => void;
 
-  public constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
+  public constructor( shapeModel: QuadrilateralShapeModel, simSoundEnabledProperty: TReadOnlyProperty<boolean>, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
 
-    super( shapeModel, resetNotInProgressProperty, soundOptionsModel, MELODY_MAPPING_TRACKS );
+    super( shapeModel, simSoundEnabledProperty, resetNotInProgressProperty, soundOptionsModel, MELODY_MAPPING_TRACKS );
 
     const shapeNameListener = ( shapeName: NamedQuadrilateral ) => {
 

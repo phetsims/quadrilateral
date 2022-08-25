@@ -29,6 +29,12 @@
   "showShapeName": {
     "value": "Show Shape Name"
   },
+  "resetShape": {
+    "value": "Reset Shape"
+  },
+  "playMusic": {
+    "value": "Play Music"
+  },
   "shapeNames.square": {
     "value": "Square"
   },

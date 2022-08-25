@@ -95,6 +95,11 @@ class QuadrilateralModel {
   // Whether the shape name is displayed to the user.
   public readonly shapeNameVisibleProperty: BooleanProperty;
 
+  // Whether the simulation sound design is enabled to play as the shape changes. For now,
+  // this only controls the "Tracks" sound designs in this simulation. When this is false,
+  // we will still hear general and common code sounds.
+  public readonly simSoundEnabledProperty: BooleanProperty;
+
   // Whether additional feedback (mostly sounds) are enabled to indicate shape changes.
   public shapeIdentificationFeedbackEnabledProperty: BooleanProperty;
 
@@ -190,6 +195,10 @@ class QuadrilateralModel {
 
     this.shapeNameVisibleProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'shapeNameVisibleProperty' )
+    } );
+
+    this.simSoundEnabledProperty = new BooleanProperty( true, {
+      tandem: tandem.createTandem( 'simSoundEnabledProperty' )
     } );
 
     this.firstModelStep = true;

@@ -93,6 +93,11 @@ const QuadrilateralColors = {
   // Fill color for the "Corner Labels" checkbox icon.
   visibilityIconsColorProperty: new ProfileColorProperty( quadrilateral, 'visibilityIconsColorProperty', {
     default: new Color( 'black' )
+  } ),
+
+  // Fill for the "Reset Shape" button
+  resetShapeButtonColorProperty: new ProfileColorProperty( quadrilateral, 'resetShapeButtonColor', {
+    default: new Color( 'rgb(247, 151, 34)' )
   } )
 };
 

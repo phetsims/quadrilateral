@@ -84,14 +84,14 @@ type TracksBuildUpSoundViewOptions = {
 class TracksBuildUpSoundView extends TracksSoundView {
   private readonly disposeTracksBuildUpSoundView: () => void;
 
-  public constructor( shapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel, providedOptions?: TracksBuildUpSoundViewOptions ) {
+  public constructor( shapeModel: QuadrilateralShapeModel, simSoundEnabledProperty: TReadOnlyProperty<boolean>, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel, providedOptions?: TracksBuildUpSoundViewOptions ) {
 
     const options = optionize<TracksBuildUpSoundViewOptions>()( {
       simple: false
     }, providedOptions );
 
     const tracks = options.simple ? BUILD_UP_TRACKS_SIMPLE : BUILD_UP_TRACKS;
-    super( shapeModel, resetNotInProgressProperty, soundOptionsModel, tracks );
+    super( shapeModel, simSoundEnabledProperty, resetNotInProgressProperty, soundOptionsModel, tracks );
 
     const shapeNameListener = ( shapeName: NamedQuadrilateral ) => {
 

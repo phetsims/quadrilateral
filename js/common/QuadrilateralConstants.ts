@@ -34,6 +34,9 @@ const QuadrilateralConstants = {
   // corner radius used in many rectangles in this sim
   CORNER_RADIUS: 5,
 
+  // spacing between grouped controls
+  CONTROLS_SPACING: 15,
+
   SCREEN_TEXT_OPTIONS: {
     font: new PhetFont( { size: 18 } )
   },

@@ -39,6 +39,8 @@ import QuadrilateralDiagonalGuidesNode from './QuadrilateralDiagonalGuidesNode.j
 import QuadrilateralShapeNameDisplay from './QuadrilateralShapeNameDisplay.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import MediaPipeQueryParameters from '../../../../tangible/js/mediaPipe/MediaPipeQueryParameters.js';
+import QuadrilateralControls from './QuadrilateralControls.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 
 const MODEL_BOUNDS = QuadrilateralQueryParameters.calibrationDemoDevice ? new Bounds2( -4.5, -4.5, 4.5, 4.5 ) :
                      new Bounds2( -1, -1, 1, 1 );
@@ -61,13 +63,21 @@ class QuadrilateralScreenView extends ScreenView {
       tandem: tandem
     } );
 
+    const simulationControls = new QuadrilateralControls( model.quadrilateralShapeModel, model.resetNotInProgressProperty, model.simSoundEnabledProperty, {
+
+      // top is aligned with ShapeNameDisplay below after other layout is finished
+      right: this.layoutBounds.right - QuadrilateralConstants.SCREEN_VIEW_X_MARGIN,
+      tandem: tandem.createTandem( 'visibilityControls' )
+    } );
+    this.addChild( simulationControls );
+
     const visibilityControls = new QuadrilateralVisibilityControls(
       model.vertexLabelsVisibleProperty,
       model.cornerGuideVisibleProperty,
       model.gridVisibleProperty,
       model.diagonalGuidesVisibleProperty,
       {
-        rightCenter: this.layoutBounds.rightCenter.minusXY( QuadrilateralConstants.SCREEN_VIEW_X_MARGIN, 0 ),
+        leftCenter: new Vector2( simulationControls.left, this.layoutBounds.centerY ),
         tandem: tandem.createTandem( 'visibilityControls' )
       } );
     this.addChild( visibilityControls );
@@ -78,7 +88,8 @@ class QuadrilateralScreenView extends ScreenView {
         model.reset();
         this.reset();
       },
-      left: visibilityControls.left,
+
+      left: Math.min( visibilityControls.left, simulationControls.left ),
       bottom: this.layoutBounds.maxY - QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN,
       tandem: tandem.createTandem( 'resetAllButton' )
     } );
@@ -180,6 +191,7 @@ class QuadrilateralScreenView extends ScreenView {
 
     // layout for components that depend on the play area bounds being defined
     shapeNameDisplay.centerBottom = boundsRectangle.centerTop.minusXY( 0, QuadrilateralConstants.VIEW_SPACING );
+    simulationControls.top = shapeNameDisplay.top;
 
     if ( QuadrilateralQueryParameters.soundBoard ) {
 
