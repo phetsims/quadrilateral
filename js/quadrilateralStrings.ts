@@ -414,6 +414,12 @@ type StringsType = {
         'enabledContextResponseProperty': TReadOnlyProperty<string>;
         'disabledContextResponse': string;
         'disabledContextResponseProperty': TReadOnlyProperty<string>;
+      };
+      'resetShapeControl': {
+        'shapeShownContextResponse': string;
+        'shapeShownContextResponseProperty': TReadOnlyProperty<string>;
+        'shapeHiddenContextResponse': string;
+        'shapeHiddenContextResponseProperty': TReadOnlyProperty<string>;
       }
     }
   }

@@ -25,12 +25,18 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 const musicControlEnabledContextResponse = quadrilateralStrings.a11y.voicing.musicControl.enabledContextResponseProperty;
 const musicControlDisabledContextResponse = quadrilateralStrings.a11y.voicing.musicControl.disabledContextResponseProperty;
 const musicControlNameResponse = quadrilateralStrings.a11y.voicing.musicControl.nameResponse;
+const resetShapeControlShapesShownContextResponse = quadrilateralStrings.a11y.voicing.resetShapeControl.shapeShownContextResponse;
+const resetShapeControlShapesHiddenContextResponse = quadrilateralStrings.a11y.voicing.resetShapeControl.shapeHiddenContextResponse;
 
 type SelfOptions = EmptySelfOptions;
 type QuadrilateralControlsOptions = StrictOmit<VBoxOptions, 'align' | 'children'> & PickRequired<NodeOptions, 'tandem'>;
 
 class QuadrilateralControls extends VBox {
-  public constructor( quadrilateralShapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: TProperty<boolean>, simSoundEnabledProperty: Property<boolean>, providedOptions: QuadrilateralControlsOptions ) {
+  public constructor( quadrilateralShapeModel: QuadrilateralShapeModel,
+                      resetNotInProgressProperty: TProperty<boolean>,
+                      simSoundEnabledProperty: Property<boolean>,
+                      shapeNameVisibleProperty: Property<boolean>,
+                      providedOptions: QuadrilateralControlsOptions ) {
 
     const options = optionize<QuadrilateralControlsOptions, SelfOptions, VBoxOptions>()( {
       align: 'left',
@@ -47,6 +53,11 @@ class QuadrilateralControls extends VBox {
         resetNotInProgressProperty.value = false;
         quadrilateralShapeModel.reset();
         resetNotInProgressProperty.value = true;
+
+        resetShapeButton.voicingSpeakFullResponse( {
+          contextResponse: shapeNameVisibleProperty.value ?
+                           resetShapeControlShapesShownContextResponse : resetShapeControlShapesHiddenContextResponse
+        } );
       },
 
       // So that its dimensions match the ShowShapeName control
@@ -55,6 +66,11 @@ class QuadrilateralControls extends VBox {
       // i18n
       maxTextWidth: 250,
 
+      // voicing
+      voicingNameResponse: quadrilateralStrings.resetShape,
+      voicingContextResponse: 'You pressed me',
+
+      // phet-io
       tandem: options.tandem.createTandem( 'resetShapeButton' )
     } );
 

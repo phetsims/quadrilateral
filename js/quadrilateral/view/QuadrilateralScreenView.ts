@@ -63,7 +63,7 @@ class QuadrilateralScreenView extends ScreenView {
       tandem: tandem
     } );
 
-    const simulationControls = new QuadrilateralControls( model.quadrilateralShapeModel, model.resetNotInProgressProperty, model.simSoundEnabledProperty, {
+    const simulationControls = new QuadrilateralControls( model.quadrilateralShapeModel, model.resetNotInProgressProperty, model.simSoundEnabledProperty, model.shapeNameVisibleProperty, {
 
       // top is aligned with ShapeNameDisplay below after other layout is finished
       right: this.layoutBounds.right - QuadrilateralConstants.SCREEN_VIEW_X_MARGIN,

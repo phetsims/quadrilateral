@@ -593,6 +593,14 @@
         "disabledContextResponse": {
           "value": "Off for shape changes"
         }
+      },
+      "resetShapeControl": {
+        "shapeShownContextResponse": {
+          "value": "You have a square!"
+        },
+        "shapeHiddenContextResponse": {
+          "value": "All right angles and all sides equal."
+        }
       }
     }
   }

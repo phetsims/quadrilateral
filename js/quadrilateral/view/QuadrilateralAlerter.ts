@@ -142,88 +142,92 @@ class QuadrilateralAlerter extends Alerter {
     } );
 
     model.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
-      const responsePacket = new ResponsePacket();
 
-      // By default, we use the lower priority Utterance that won't interrupt responses that are currently being
-      // announced. If we detect a critical state change, we will use a higher priority Utterance for interruption.
-      let utterance = lowPriorityUtterance;
+      // Nothing about these should be heard while resetting
+      if ( model.resetNotInProgressProperty.value ) {
+        const responsePacket = new ResponsePacket();
 
-      const previousAAngle = this.previousContextResponseShapeSnapshot.vertexAAngle;
-      const previousBAngle = this.previousContextResponseShapeSnapshot.vertexBAngle;
-      const previousCAngle = this.previousContextResponseShapeSnapshot.vertexCAngle;
-      const previousDAngle = this.previousContextResponseShapeSnapshot.vertexDAngle;
+        // By default, we use the lower priority Utterance that won't interrupt responses that are currently being
+        // announced. If we detect a critical state change, we will use a higher priority Utterance for interruption.
+        let utterance = lowPriorityUtterance;
 
-      const aAngleDifference = previousAAngle - this.quadrilateralShapeModel.vertexA.angleProperty.value!;
-      const bAngleDifference = previousBAngle - this.quadrilateralShapeModel.vertexB.angleProperty.value!;
-      const cAngleDifference = previousCAngle - this.quadrilateralShapeModel.vertexC.angleProperty.value!;
-      const dAngleDifference = previousDAngle - this.quadrilateralShapeModel.vertexD.angleProperty.value!;
+        const previousAAngle = this.previousContextResponseShapeSnapshot.vertexAAngle;
+        const previousBAngle = this.previousContextResponseShapeSnapshot.vertexBAngle;
+        const previousCAngle = this.previousContextResponseShapeSnapshot.vertexCAngle;
+        const previousDAngle = this.previousContextResponseShapeSnapshot.vertexDAngle;
 
-      const angleDifferences = [ aAngleDifference, bAngleDifference, cAngleDifference, dAngleDifference ];
-      this.angleResponseReady = _.some( angleDifferences, angleDifference => Math.abs( angleDifference ) > Math.PI / 12 );
+        const aAngleDifference = previousAAngle - this.quadrilateralShapeModel.vertexA.angleProperty.value!;
+        const bAngleDifference = previousBAngle - this.quadrilateralShapeModel.vertexB.angleProperty.value!;
+        const cAngleDifference = previousCAngle - this.quadrilateralShapeModel.vertexC.angleProperty.value!;
+        const dAngleDifference = previousDAngle - this.quadrilateralShapeModel.vertexD.angleProperty.value!;
 
-      const previousABLength = this.previousContextResponseShapeSnapshot.topSideLength;
-      const previousBCLength = this.previousContextResponseShapeSnapshot.rightSideLength;
-      const previousCDLength = this.previousContextResponseShapeSnapshot.bottomSideLength;
-      const previousDALength = this.previousContextResponseShapeSnapshot.leftSideLength;
+        const angleDifferences = [ aAngleDifference, bAngleDifference, cAngleDifference, dAngleDifference ];
+        this.angleResponseReady = _.some( angleDifferences, angleDifference => Math.abs( angleDifference ) > Math.PI / 12 );
 
-      const abLengthDifference = previousABLength - this.quadrilateralShapeModel.topSide.lengthProperty.value;
-      const bcLengthDifference = previousBCLength - this.quadrilateralShapeModel.rightSide.lengthProperty.value;
-      const cdLengthDifference = previousCDLength - this.quadrilateralShapeModel.bottomSide.lengthProperty.value;
-      const daLengthDifference = previousDALength - this.quadrilateralShapeModel.leftSide.lengthProperty.value;
+        const previousABLength = this.previousContextResponseShapeSnapshot.topSideLength;
+        const previousBCLength = this.previousContextResponseShapeSnapshot.rightSideLength;
+        const previousCDLength = this.previousContextResponseShapeSnapshot.bottomSideLength;
+        const previousDALength = this.previousContextResponseShapeSnapshot.leftSideLength;
 
-      const lengthDifferences = [ abLengthDifference, bcLengthDifference, cdLengthDifference, daLengthDifference ];
-      const angleDifferencesLarge = _.some( angleDifferences, angleDifference => angleDifference > Math.PI / 24 );
+        const abLengthDifference = previousABLength - this.quadrilateralShapeModel.topSide.lengthProperty.value;
+        const bcLengthDifference = previousBCLength - this.quadrilateralShapeModel.rightSide.lengthProperty.value;
+        const cdLengthDifference = previousCDLength - this.quadrilateralShapeModel.bottomSide.lengthProperty.value;
+        const daLengthDifference = previousDALength - this.quadrilateralShapeModel.leftSide.lengthProperty.value;
 
-      this.lengthResponseReady = _.some( lengthDifferences, lengthDifference => Math.abs( lengthDifference ) > Side.SIDE_SEGMENT_LENGTH ) && !angleDifferencesLarge;
+        const lengthDifferences = [ abLengthDifference, bcLengthDifference, cdLengthDifference, daLengthDifference ];
+        const angleDifferencesLarge = _.some( angleDifferences, angleDifference => angleDifference > Math.PI / 24 );
 
-      const sideABSideCDParallelAfter = this.quadrilateralShapeModel.sideABSideCDParallelSideChecker.areSidesParallel();
-      const sideBCSideDAParallelAfter = this.quadrilateralShapeModel.sideBCSideDAParallelSideChecker.areSidesParallel();
+        this.lengthResponseReady = _.some( lengthDifferences, lengthDifference => Math.abs( lengthDifference ) > Side.SIDE_SEGMENT_LENGTH ) && !angleDifferencesLarge;
 
-      // If we go from zero parallel side pairs to at least one pair, trigger a new context response so that we hear
-      // when sides become parallel. This is relative to every change, so state variables are set immediateley instead
-      // of using the snapshot.
-      const parallelSideResponseReady = ( !this.wasSideABSideCDParallel && !this.wasSideBCSideDAParallel ) && ( sideABSideCDParallelAfter || sideBCSideDAParallelAfter );
-      this.wasSideABSideCDParallel = sideABSideCDParallelAfter;
-      this.wasSideBCSideDAParallel = sideBCSideDAParallelAfter;
+        const sideABSideCDParallelAfter = this.quadrilateralShapeModel.sideABSideCDParallelSideChecker.areSidesParallel();
+        const sideBCSideDAParallelAfter = this.quadrilateralShapeModel.sideBCSideDAParallelSideChecker.areSidesParallel();
 
-      // prioritize the "important" information change, other content is not spoken if this is ready
-      const importantStateResponse = this.getImportantStateChangeResponse();
-      if ( importantStateResponse ) {
-        responsePacket.contextResponse = importantStateResponse!;
-        utterance = highPriorityUtterance;
-      }
-      else if ( this.angleResponseReady || this.lengthResponseReady || parallelSideResponseReady ) {
-        const thisResponseReason = angleDifferencesLarge ? 'angle' : 'length';
-        const tiltChangeResponse = this.getShapeChangeResponse( this.quadrilateralShapeModel, this.previousContextResponseShapeSnapshot, thisResponseReason );
-        utterance = mediumPriorityUtterance;
-        responsePacket.contextResponse = tiltChangeResponse!;
-      }
+        // If we go from zero parallel side pairs to at least one pair, trigger a new context response so that we hear
+        // when sides become parallel. This is relative to every change, so state variables are set immediateley instead
+        // of using the snapshot.
+        const parallelSideResponseReady = ( !this.wasSideABSideCDParallel && !this.wasSideBCSideDAParallel ) && ( sideABSideCDParallelAfter || sideBCSideDAParallelAfter );
+        this.wasSideABSideCDParallel = sideABSideCDParallelAfter;
+        this.wasSideBCSideDAParallel = sideBCSideDAParallelAfter;
 
-      model.quadrilateralShapeModel.sides.forEach( side => {
-        if ( side.voicingObjectResponseDirty ) {
-          responsePacket.objectResponse = this.getSideChangeObjectResponse( side );
-          side.voicingObjectResponseDirty = false;
+        // prioritize the "important" information change, other content is not spoken if this is ready
+        const importantStateResponse = this.getImportantStateChangeResponse();
+        if ( importantStateResponse ) {
+          responsePacket.contextResponse = importantStateResponse!;
+          utterance = highPriorityUtterance;
         }
-      } );
-
-      model.quadrilateralShapeModel.vertices.forEach( vertex => {
-        if ( vertex.voicingObjectResponseDirty ) {
-          responsePacket.objectResponse = this.getVertexChangeObjectResponse( vertex );
-          vertex.voicingObjectResponseDirty = false;
+        else if ( this.angleResponseReady || this.lengthResponseReady || parallelSideResponseReady ) {
+          const thisResponseReason = angleDifferencesLarge ? 'angle' : 'length';
+          const tiltChangeResponse = this.getShapeChangeResponse( this.quadrilateralShapeModel, this.previousContextResponseShapeSnapshot, thisResponseReason );
+          utterance = mediumPriorityUtterance;
+          responsePacket.contextResponse = tiltChangeResponse!;
         }
-      } );
 
-      // Announce responses if we have generated any content.
-      if ( responsePacket.contextResponse || responsePacket.objectResponse ) {
-        utterance.alert = responsePacket;
-        this.alert( utterance );
+        model.quadrilateralShapeModel.sides.forEach( side => {
+          if ( side.voicingObjectResponseDirty ) {
+            responsePacket.objectResponse = this.getSideChangeObjectResponse( side );
+            side.voicingObjectResponseDirty = false;
+          }
+        } );
 
-        // save snapshots for next shape changes
-        if ( responsePacket.contextResponse ) {
-          this.previousContextResponseShapeSnapshot = new ShapeSnapshot( this.quadrilateralShapeModel );
-        }
-        if ( responsePacket.objectResponse ) {
-          this.previousObjectResponseShapeSnapshot = new ShapeSnapshot( this.quadrilateralShapeModel );
+        model.quadrilateralShapeModel.vertices.forEach( vertex => {
+          if ( vertex.voicingObjectResponseDirty ) {
+            responsePacket.objectResponse = this.getVertexChangeObjectResponse( vertex );
+            vertex.voicingObjectResponseDirty = false;
+          }
+        } );
+
+        // Announce responses if we have generated any content.
+        if ( responsePacket.contextResponse || responsePacket.objectResponse ) {
+          utterance.alert = responsePacket;
+          this.alert( utterance );
+
+          // save snapshots for next shape changes
+          if ( responsePacket.contextResponse ) {
+            this.previousContextResponseShapeSnapshot = new ShapeSnapshot( this.quadrilateralShapeModel );
+          }
+          if ( responsePacket.objectResponse ) {
+            this.previousObjectResponseShapeSnapshot = new ShapeSnapshot( this.quadrilateralShapeModel );
+          }
         }
       }
     } );
