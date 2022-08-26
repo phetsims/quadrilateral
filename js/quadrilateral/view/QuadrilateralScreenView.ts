@@ -67,7 +67,7 @@ class QuadrilateralScreenView extends ScreenView {
 
       // top is aligned with ShapeNameDisplay below after other layout is finished
       right: this.layoutBounds.right - QuadrilateralConstants.SCREEN_VIEW_X_MARGIN,
-      tandem: tandem.createTandem( 'visibilityControls' )
+      tandem: tandem.createTandem( 'simulationControls' )
     } );
     this.addChild( simulationControls );
 
