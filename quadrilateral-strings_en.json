@@ -582,6 +582,17 @@
       },
       "cornerDetectedPattern": {
         "value": "Corner {{label}} {{state}}"
+      },
+      "musicControl": {
+        "nameResponse": {
+          "value": "Music"
+        },
+        "enabledContextResponse": {
+          "value": "On for shape changes"
+        },
+        "disabledContextResponse": {
+          "value": "Off for shape changes"
+        }
       }
     }
   }

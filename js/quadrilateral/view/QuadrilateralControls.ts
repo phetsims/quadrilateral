@@ -21,6 +21,10 @@ import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import audioManager from '../../../../joist/js/audioManager.js';
 
+const musicControlEnabledContextResponse = quadrilateralStrings.a11y.voicing.musicControl.enabledContextResponseProperty;
+const musicControlDisabledContextResponse = quadrilateralStrings.a11y.voicing.musicControl.disabledContextResponseProperty;
+const musicControlNameResponse = quadrilateralStrings.a11y.voicing.musicControl.nameResponse;
+
 type SelfOptions = EmptySelfOptions;
 type QuadrilateralControlsOptions = StrictOmit<VBoxOptions, 'align' | 'children'>;
 
@@ -47,7 +51,11 @@ class QuadrilateralControls extends VBox {
     } );
 
     const playMusicLabel = new Text( quadrilateralStrings.playMusic, QuadrilateralConstants.SCREEN_TEXT_OPTIONS );
-    const playMusicCheckbox = new Checkbox( simSoundEnabledProperty, playMusicLabel );
+    const playMusicCheckbox = new Checkbox( simSoundEnabledProperty, playMusicLabel, {
+      voicingNameResponse: musicControlNameResponse,
+      checkedContextResponse: musicControlEnabledContextResponse,
+      uncheckedContextResponse: musicControlDisabledContextResponse
+    } );
 
     // To avoid confusion since the checkbox will do nothing when sound or all audio is disabled
     audioManager.audioAndSoundEnabledProperty.link( enabled => {

@@ -407,6 +407,14 @@ type StringsType = {
       'cornersGoneProperty': TReadOnlyProperty<string>;
       'cornerDetectedPattern': string;
       'cornerDetectedPatternProperty': TReadOnlyProperty<string>;
+      'musicControl': {
+        'nameResponse': string;
+        'nameResponseProperty': TReadOnlyProperty<string>;
+        'enabledContextResponse': string;
+        'enabledContextResponseProperty': TReadOnlyProperty<string>;
+        'disabledContextResponse': string;
+        'disabledContextResponseProperty': TReadOnlyProperty<string>;
+      }
     }
   }
 };
