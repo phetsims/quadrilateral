@@ -24,6 +24,7 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import QuadrilateralPreferencesModel from './QuadrilateralPreferencesModel.js';
 import TProperty from '../../../../axon/js/TProperty.js';
+import Emitter from '../../../../axon/js/Emitter.js';
 
 class QuadrilateralModel {
 
@@ -109,6 +110,9 @@ class QuadrilateralModel {
   // A reference to a "test" model for the simulation. Used to validate and verify that vertex positions are
   // reasonable before setting to the "main" shape model.
   public quadrilateralTestShapeModel: QuadrilateralShapeModel;
+
+  // Emits an event when a full model reset happens (but not when a shape reset happens)
+  public readonly resetEmitter = new Emitter();
 
   // The first model step we will disable all sounds. This simulation updates certain Properties in the animation
   // frame so we wait until after the sim has loaded to start playing any sounds (lazyLink is not sufficient when
@@ -298,6 +302,8 @@ class QuadrilateralModel {
     this.gridVisibleProperty.reset();
     this.diagonalGuidesVisibleProperty.reset();
     this.shapeNameVisibleProperty.reset();
+
+    this.resetEmitter.emit();
 
     // reset is not in progress anymore
     this.resetNotInProgressProperty.value = true;

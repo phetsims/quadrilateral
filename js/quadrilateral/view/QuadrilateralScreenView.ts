@@ -41,6 +41,7 @@ import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import MediaPipeQueryParameters from '../../../../tangible/js/mediaPipe/MediaPipeQueryParameters.js';
 import QuadrilateralControls from './QuadrilateralControls.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import QuadrilateralInteractionCueNode from './QuadrilateralInteractionCueNode.js';
 
 const MODEL_BOUNDS = QuadrilateralQueryParameters.calibrationDemoDevice ? new Bounds2( -4.5, -4.5, 4.5, 4.5 ) :
                      new Bounds2( -1, -1, 1, 1 );
@@ -143,6 +144,8 @@ class QuadrilateralScreenView extends ScreenView {
       tandem: tandem.createTandem( 'quadrilateralNode' )
     } );
 
+    const interactionCueNode = new QuadrilateralInteractionCueNode( model.quadrilateralShapeModel, model.resetEmitter, modelViewTransform );
+
     this.quadrilateralSoundView = new QuadrilateralSoundView( model, preferencesModel.soundOptionsModel );
 
     // Rectangle showing available model bounds, requested in https://github.com/phetsims/quadrilateral/issues/49.
@@ -175,6 +178,7 @@ class QuadrilateralScreenView extends ScreenView {
     this.addChild( diagonalGuidesNode );
     this.addChild( gridNode );
     this.addChild( this.quadrilateralNode );
+    this.addChild( interactionCueNode );
 
     // A panel that displays model values, useful for debugging, useful for debugging
     const debugValuesPanel = new QuadrilateralModelValuePanel( model, {

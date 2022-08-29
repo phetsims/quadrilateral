@@ -98,6 +98,11 @@ const QuadrilateralColors = {
   // Fill for the "Reset Shape" button
   resetShapeButtonColorProperty: new ProfileColorProperty( quadrilateral, 'resetShapeButtonColor', {
     default: new Color( 'rgb(247, 151, 34)' )
+  } ),
+
+  // Stroke for the interaction cues
+  interactionCueColorProperty: new ProfileColorProperty( quadrilateral, 'interactionCueColor', {
+    default: new Color( 'rgb(21,255,127)' )
   } )
 };
 

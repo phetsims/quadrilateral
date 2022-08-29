@@ -34,6 +34,9 @@ const QuadrilateralConstants = {
   // corner radius used in many rectangles in this sim
   CORNER_RADIUS: 5,
 
+  // dilation frequently used for interactive components in this sim
+  POINTER_AREA_DILATION: 5,
+
   // spacing between grouped controls
   CONTROLS_SPACING: 15,
 

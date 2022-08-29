@@ -162,6 +162,13 @@ class Side {
     return this.vertex1 === vertex || this.vertex2 === vertex;
   }
 
+  /**
+   * Returns the position in model coordinates between the two Vertices of this Side.
+   */
+  public getMidpoint(): Vector2 {
+    return this.vertex2.positionProperty.value.average( this.vertex1.positionProperty.value );
+  }
+
 
   /**
    * Returns the lowest vertex between the two Vertices of this side. If the vertices have the same

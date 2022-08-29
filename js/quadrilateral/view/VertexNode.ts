@@ -21,11 +21,10 @@ import { Shape } from '../../../../kite/js/imports.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
+import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 
 // constants
 const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
-
-const POINTER_AREA_DILATION = 5;
 
 type SelfOptions = {
 
@@ -87,7 +86,7 @@ class VertexNode extends Voicing( Circle ) {
     } );
 
     // Expand the pointer areas a bit so that it is difficult to accidentally pick up a side when near the vertex edge
-    this.touchArea = Shape.circle( viewRadius + POINTER_AREA_DILATION );
+    this.touchArea = Shape.circle( viewRadius + QuadrilateralConstants.POINTER_AREA_DILATION );
     this.mouseArea = this.touchArea;
 
     vertex.positionProperty.link( position => {
