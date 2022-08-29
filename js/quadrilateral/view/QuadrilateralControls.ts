@@ -22,8 +22,8 @@ import TProperty from '../../../../axon/js/TProperty.js';
 import audioManager from '../../../../joist/js/audioManager.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 
-const musicControlEnabledContextResponse = quadrilateralStrings.a11y.voicing.musicControl.enabledContextResponseProperty;
-const musicControlDisabledContextResponse = quadrilateralStrings.a11y.voicing.musicControl.disabledContextResponseProperty;
+const musicControlEnabledContextResponse = quadrilateralStrings.a11y.voicing.musicControl.enabledContextResponseStringProperty;
+const musicControlDisabledContextResponse = quadrilateralStrings.a11y.voicing.musicControl.disabledContextResponseStringProperty;
 const musicControlNameResponse = quadrilateralStrings.a11y.voicing.musicControl.nameResponse;
 const resetShapeControlShapesShownContextResponse = quadrilateralStrings.a11y.voicing.resetShapeControl.shapeShownContextResponse;
 const resetShapeControlShapesHiddenContextResponse = quadrilateralStrings.a11y.voicing.resetShapeControl.shapeHiddenContextResponse;
