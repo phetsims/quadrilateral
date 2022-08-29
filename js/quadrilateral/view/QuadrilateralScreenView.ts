@@ -133,10 +133,6 @@ class QuadrilateralScreenView extends ScreenView {
 
     const shapeModel = model.quadrilateralShapeModel;
 
-    // A reference to the QuadrilateralNode. For now, it is not always created while we have the side query parameters
-    // for development. But we may want
-    this.quadrilateralNode = null;
-
     // A reference to the QuadriladteralSoundView
     this.quadrilateralSoundView = null;
 
