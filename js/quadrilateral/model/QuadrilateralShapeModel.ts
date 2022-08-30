@@ -39,6 +39,7 @@ import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import TEmitter from '../../../../axon/js/TEmitter.js';
+import QuadrilateralShapeDetector from './QuadrilateralShapeDetector.js';
 
 // A useful type for calculations for the vertex Shapes which define where the Vertex can move depending on
 // the positions of the other vertices. Lines are along the bounds of model space and RayIntersections
@@ -112,6 +113,8 @@ class QuadrilateralShapeModel {
 
   public readonly vertices: Vertex[];
   public readonly sides: Side[];
+
+  private readonly shapeDetector: QuadrilateralShapeDetector;
 
   // See QuadrilateralShapeModelOptions
   private readonly validateShape: boolean;
@@ -404,6 +407,8 @@ class QuadrilateralShapeModel {
       this.sideABSideCDParallelSideChecker,
       this.sideBCSideDAParallelSideChecker
     ];
+
+    this.shapeDetector = new QuadrilateralShapeDetector( this );
 
     this.model = model;
     this.propertiesDeferred = false;
@@ -1040,11 +1045,10 @@ class QuadrilateralShapeModel {
       this.anglesEqualToSavedProperty.set( this.getVertexAnglesEqualToSaved( this.getVertexAngles() ) );
     }
 
-    this.shapeNameProperty.set( this.getShapeName() );
-
-    // Uses detected shape name so must be called AFTER the shapeNameProperty is set above.
     this.allAnglesRightProperty.set( this.getAreAllAnglesRight() );
     this.allLengthsEqualProperty.set( this.getAreAllLengthsEqual() );
+
+    this.shapeNameProperty.set( this.shapeDetector.getShapeName() );
   }
 
   /**
