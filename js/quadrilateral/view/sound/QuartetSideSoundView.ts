@@ -69,7 +69,7 @@ class QuartetSideSoundView {
   private readonly side: Side;
 
   // A map that goes from playback rate to the created SoundClipCollection.
-  private playbackRateToSoundClipCollection: Map<number, SoundClipCollection> = new Map();
+  private playbackRateToSoundClipCollection = new Map<number, SoundClipCollection>();
 
   // A map that goes between tilt to the value used to calculate playback rate for a particular tilt. Initial value
   // for each side is Math.PI / 2. A value of 0 is fully tilted to the "left" while a value of Math.PI is fully
