@@ -132,8 +132,8 @@ class QuadrilateralShapeDetector {
     }
 
     // Find matches for the current condition - Order of these checks is very important. conditionMatchesMask
-    // returns if the condition matches the minimum requirements for a shape. If there are more specific shape
-    // matches, we continue on to the most specific shape hit.
+    // returns true if the condition matches the minimum requirements for a shape. If there are more specific shape
+    // matches, we continue to look for the most specific shape attribute matches.
     let quadrilateralName: NamedQuadrilateral;
     if ( this.conditionMatchesMask( currentConditionMask, CONCAVE_MASK ) ) {
       quadrilateralName = NamedQuadrilateral.CONCAVE_QUADRILATERAL;
@@ -172,7 +172,7 @@ class QuadrilateralShapeDetector {
   }
 
   /**
-   * Returns true when the condition state at last matches the conditions of the provided mask. Consider two values
+   * Returns true when the condition state matches the conditions of the provided mask. Consider two values
    * 10110 (mask)
    * 11110 (condition)
    *
