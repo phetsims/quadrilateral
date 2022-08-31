@@ -52,7 +52,9 @@ class QuadrilateralModel {
   // If true, a panel displaying model values will be added to the view. Only for debugging.
   public showDebugValuesProperty: TProperty<boolean>;
 
-  // Whether or not a marker is detected for physical device rotation. TODO: delete? https://github.com/phetsims/tangible/issues/11
+  // Whether or not a marker is detected for physical device rotation. This is used for OpenCV prototypes and
+  // historically was used for prototypes with mechamarkers.
+  // TODO: This is a candidate for removal prior to publishing the sim.
   public rotationMarkerDetectedProperty: TProperty<boolean>;
 
   // True when we are connected to a device in some way, either bluetooth, serial, or
@@ -78,7 +80,8 @@ class QuadrilateralModel {
   // ability to see various markers.
   public readonly markerResponsesEnabledProperty: BooleanProperty;
 
-  // The amount of rotation in radians of the marker. TODO: delete? https://github.com/phetsims/tangible/issues/11
+  // The amount of rotation in radians of the tangible shape. This is used in OpenCV prototypes as well as historically
+  // in old prototypes using mechamarkers.
   public markerRotationProperty: NumberProperty;
 
   // Whether the angle guide graphics are visible at each vertex.

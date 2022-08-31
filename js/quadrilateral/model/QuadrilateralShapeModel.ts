@@ -1350,7 +1350,7 @@ class QuadrilateralShapeModel {
    * Set positions from the length and angle data provided. Useful when working with a tangible device that is
    * providing length and angle data. When reconstructing the shape we start by making the top side parallel
    * with the top of model bounds. The remaining vertices are positioned acordingly. Finally, if there is some
-   * rotation to apply (from the experimental marker input), that rotation is applied. TODO: Review this if something should change without marker input, https://github.com/phetsims/tangible/issues/11
+   * rotation to apply (from the experimental marker input), that rotation is applied.
    *
    * @param topLength
    * @param rightLength
@@ -1383,7 +1383,7 @@ class QuadrilateralShapeModel {
     const shiftedPositions = _.map( proposedPositions, shapePosition => shapePosition.plus( centroidOffset ) );
 
     // If there is some marker input, rotate positions to match the marker. Negate the rotation value to mirror the
-    // rotation of the device. TODO: not sure we need this, https://github.com/phetsims/tangible/issues/11
+    // rotation of the device.
     const rotatedPositions = _.map( shiftedPositions, shiftedPosition => shiftedPosition.rotated( -this.model.markerRotationProperty.value ) );
 
     // make sure that all positions are within model bounds
