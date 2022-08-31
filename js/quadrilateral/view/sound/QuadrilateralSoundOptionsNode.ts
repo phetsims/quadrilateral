@@ -135,27 +135,27 @@ class QuadrilateralSoundOptionsNode extends Panel {
       spacing: TITLE_SPACING
     } );
 
-    const baseSoundRadioButtonItems = [
+    const baseSoundRadioButtonItems: AquaRadioButtonGroupItem<QuartetSoundFile>[] = [
       {
-        node: new Text( 'Sound One', LABEL_TEXT_OPTIONS ),
+        createNode: tandem => new Text( 'Sound One', LABEL_TEXT_OPTIONS ),
 
         value: QuartetSoundFile.ONE,
         tandemName: 'soundOneRadioButton'
       },
       {
-        node: new Text( 'Sound Two', LABEL_TEXT_OPTIONS ),
+        createNode: tandem => new Text( 'Sound Two', LABEL_TEXT_OPTIONS ),
 
         value: QuartetSoundFile.TWO,
         tandemName: 'soundTwoRadioButton'
       },
       {
-        node: new Text( 'Sound Three', LABEL_TEXT_OPTIONS ),
+        createNode: tandem => new Text( 'Sound Three', LABEL_TEXT_OPTIONS ),
 
         value: QuartetSoundFile.THREE,
         tandemName: 'soundThreeRadioButton'
       },
       {
-        node: new Text( 'Sound Four', LABEL_TEXT_OPTIONS ),
+        createNode: tandem => new Text( 'Sound Four', LABEL_TEXT_OPTIONS ),
 
         value: QuartetSoundFile.FOUR,
         tandemName: 'soundFourRadioButton'
@@ -164,24 +164,24 @@ class QuadrilateralSoundOptionsNode extends Panel {
 
     const labelledBaseSoundRadioButtonGroup = new LabelledRadioButtonGroup( model.baseSoundFileProperty, baseSoundRadioButtonItems, 'Base Sound', tandem.createTandem( 'labelledBaseSoundRadioButtonGroup' ) );
 
-    const successSoundRadioButtonItems = [
+    const successSoundRadioButtonItems: AquaRadioButtonGroupItem<SuccessSoundFile>[] = [
       {
-        node: new Text( 'Collection One', LABEL_TEXT_OPTIONS ),
+        createNode: tandem => new Text( 'Collection One', LABEL_TEXT_OPTIONS ),
         value: SuccessSoundFile.ONE,
         tandemName: 'soundCollectionOneRadioButton'
       },
       {
-        node: new Text( 'Collection Two', LABEL_TEXT_OPTIONS ),
+        createNode: tandem => new Text( 'Collection Two', LABEL_TEXT_OPTIONS ),
         value: SuccessSoundFile.TWO,
         tandemName: 'soundCollectionTwoRadioButton'
       },
       {
-        node: new Text( 'Collection Three', LABEL_TEXT_OPTIONS ),
+        createNode: tandem => new Text( 'Collection Three', LABEL_TEXT_OPTIONS ),
         value: SuccessSoundFile.THREE,
         tandemName: 'soundCollectionThreeRadioButton'
       },
       {
-        node: new Text( 'Collection Four', LABEL_TEXT_OPTIONS ),
+        createNode: tandem => new Text( 'Collection Four', LABEL_TEXT_OPTIONS ),
         value: SuccessSoundFile.FOUR,
         tandemName: 'soundCollectionFourRadioButton'
       }
