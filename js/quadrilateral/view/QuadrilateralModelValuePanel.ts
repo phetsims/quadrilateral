@@ -84,10 +84,10 @@ class QuadrilateralModelValuePanel extends Node {
 
     const shapeNameText = new Text( '', TEXT_OPTIONS );
 
-    const markerDetectedText = new Text( '', TEXT_OPTIONS );
-    const markerRotationText = new Text( '', TEXT_OPTIONS );
+    const rotationMarkerDetectedText = new Text( '', TEXT_OPTIONS );
+    const tangibleRotationText = new Text( '', TEXT_OPTIONS );
     const markerBox = new VBox( {
-      children: [ markerDetectedText, markerRotationText ],
+      children: [ rotationMarkerDetectedText, tangibleRotationText ],
       align: 'left'
     } );
 
@@ -163,8 +163,8 @@ class QuadrilateralModelValuePanel extends Node {
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.shapeNameProperty, shapeNameText, 'shape name', decimalPlacesProperty );
 
     // marker detection
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.rotationMarkerDetectedProperty, markerDetectedText, 'Marker detected', decimalPlacesProperty );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.markerRotationProperty, markerRotationText, 'Marker rotation', decimalPlacesProperty );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.rotationMarkerDetectedProperty, rotationMarkerDetectedText, 'Marker detected', decimalPlacesProperty );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.tangibleRotationProperty, tangibleRotationText, 'Tangible rotation', decimalPlacesProperty );
   }
 
   /**

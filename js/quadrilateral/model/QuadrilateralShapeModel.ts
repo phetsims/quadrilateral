@@ -1384,7 +1384,7 @@ class QuadrilateralShapeModel {
 
     // If there is some marker input, rotate positions to match the marker. Negate the rotation value to mirror the
     // rotation of the device.
-    const rotatedPositions = _.map( shiftedPositions, shiftedPosition => shiftedPosition.rotated( -this.model.markerRotationProperty.value ) );
+    const rotatedPositions = _.map( shiftedPositions, shiftedPosition => shiftedPosition.rotated( -this.model.tangibleRotationProperty.value ) );
 
     // make sure that all positions are within model bounds
     const constrainedPositions = _.map( rotatedPositions, position => this.model.modelBoundsProperty.value?.closestPointTo( position ) );

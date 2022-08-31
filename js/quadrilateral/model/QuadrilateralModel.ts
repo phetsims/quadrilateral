@@ -53,7 +53,7 @@ class QuadrilateralModel {
   public showDebugValuesProperty: TProperty<boolean>;
 
   // Whether or not a marker is detected for physical device rotation. This is used for OpenCV prototypes and
-  // historically was used for prototypes with mechamarkers.
+  // historically was used for prototypes using a marker detection library.
   // TODO: This is a candidate for removal prior to publishing the sim.
   public rotationMarkerDetectedProperty: TProperty<boolean>;
 
@@ -81,8 +81,9 @@ class QuadrilateralModel {
   public readonly markerResponsesEnabledProperty: BooleanProperty;
 
   // The amount of rotation in radians of the tangible shape. This is used in OpenCV prototypes as well as historically
-  // in old prototypes using mechamarkers.
-  public markerRotationProperty: NumberProperty;
+  // in old prototypes using a marker detection library.
+  // TODO: Possibly remove this before publishing, this feature is not in use at the moment.
+  public tangibleRotationProperty: NumberProperty;
 
   // Whether the angle guide graphics are visible at each vertex.
   public readonly cornerGuideVisibleProperty: BooleanProperty;
@@ -154,7 +155,7 @@ class QuadrilateralModel {
 
     this.shapeIdentificationFeedbackEnabledProperty = preferencesModel.shapeIdentificationFeedbackEnabledProperty;
 
-    this.markerRotationProperty = new NumberProperty( 0 );
+    this.tangibleRotationProperty = new NumberProperty( 0 );
 
     this.allVertexMarkersDetectedProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'allVertexMarkersDetectedProperty' )
