@@ -39,7 +39,7 @@ const simOptions: SimOptions = {
 
   // preferences configuration with defaults from package.json
   preferencesModel: new PreferencesModel( {
-    generalOptions: {
+    simulationOptions: {
       customPreferences: [ {
         createContent: tandem => new QuadrilateralPreferencesNode( preferencesModel, tandem.createTandem( 'simPreferences' ) )
       } ]
