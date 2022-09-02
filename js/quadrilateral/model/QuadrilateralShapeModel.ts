@@ -532,68 +532,6 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Returns the name of the quadrilateral, one of NamedQuadrilateral enumeration. If the quadrilateral is in a shape
-   * that is not named, returns null. The logic and nesting of shapes in the detection algorithm matches
-   * the way shapes are classified pedagogically. See https://github.com/phetsims/quadrilateral/issues/188.
-   */
-  public getShapeName(): NamedQuadrilateral {
-
-    // basic fallback cases - convex or concave quadrilateral
-    const concaveShape = _.some( this.vertices, vertex => vertex.angleProperty.value! > Math.PI );
-    let namedQuadrilateral = concaveShape ? NamedQuadrilateral.CONCAVE_QUADRILATERAL : NamedQuadrilateral.CONVEX_QUADRILATERAL;
-
-    if ( concaveShape ) {
-
-      // A dart is a concave quadrilateral that satisfies the kite requirements
-      if ( this.isKite() ) {
-        namedQuadrilateral = NamedQuadrilateral.DART;
-      }
-    }
-    else {
-
-      if ( this.isKite() ) {
-        namedQuadrilateral = NamedQuadrilateral.KITE;
-      }
-      else if ( this.parallelSidePairsProperty.value.length > 0 ) {
-
-        // At least one pair of parallel sides means we are in the trapezoid family. Note that parallel side checkers
-        // use "angleToleranceInterval" instead of "shapeAngleToleranceInterval". That is intentional because
-        // we should not have these shapes unless we have detected parallel sides within the dynamic tolerance
-        // behavior of "angleToleranceInterval".
-        namedQuadrilateral = NamedQuadrilateral.TRAPEZOID;
-
-        if ( this.adjacentEqualVertexPairsProperty.value.length > 1 ) {
-
-          // An isosceles trapezoid has two pairs of adjacent angles that are equal
-          namedQuadrilateral = NamedQuadrilateral.ISOSCELES_TRAPEZOID;
-        }
-
-        if ( this.isParallelogramProperty.value ) {
-
-          // We have a parallelogram (two pairs of parallel sides using "angleToleranceInterval" which is very dynamic
-          // depending on shape state and user input).
-          namedQuadrilateral = NamedQuadrilateral.PARALLELOGRAM;
-
-          const allAnglesRight = this.getAreAllAnglesRight();
-          const allLengthsEqual = this.getAreAllLengthsEqual();
-
-          if ( allLengthsEqual && allAnglesRight ) {
-            namedQuadrilateral = NamedQuadrilateral.SQUARE;
-          }
-          else if ( allLengthsEqual ) {
-            namedQuadrilateral = NamedQuadrilateral.RHOMBUS;
-          }
-          else if ( allAnglesRight ) {
-            namedQuadrilateral = NamedQuadrilateral.RECTANGLE;
-          }
-        }
-      }
-    }
-
-    return namedQuadrilateral;
-  }
-
-  /**
    * Shape is a kite if there is at least one set of equal opposite angles and exactly two sets of equal adjacent sides.
    */
   private isKite(): boolean {
@@ -1048,6 +986,7 @@ class QuadrilateralShapeModel {
     this.allAnglesRightProperty.set( this.getAreAllAnglesRight() );
     this.allLengthsEqualProperty.set( this.getAreAllLengthsEqual() );
 
+    // getShapeName requires all shape Properties to be calculated, so this is done at the very end
     this.shapeNameProperty.set( this.shapeDetector.getShapeName() );
   }
 
