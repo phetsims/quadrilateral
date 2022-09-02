@@ -71,6 +71,8 @@ class SideNode extends Voicing( Path ) {
     this.voicingNameResponse = options.nameResponse;
     this.innerContent = options.nameResponse;
 
+    this.cursor = 'pointer';
+
     this.side = side;
     this.scratchSide = scratchSide;
     this.quadrilateralModel = quadrilateralModel;

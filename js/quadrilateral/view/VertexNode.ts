@@ -42,6 +42,7 @@ class VertexNode extends Voicing( Circle ) {
 
   public constructor( vertex: Vertex, vertexLabel: string, model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, providedOptions: VertexNodeOptions ) {
     const options = optionize<VertexNodeOptions, SelfOptions, ParentOptions>()( {
+      cursor: 'pointer',
       fill: QuadrilateralColors.quadrilateralShapeColorProperty,
       stroke: QuadrilateralColors.quadrilateralShapeStrokeColorProperty,
       tagName: 'div',
