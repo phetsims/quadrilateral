@@ -19,7 +19,7 @@ import quadrilateralStrings from './quadrilateralStrings.js';
 import QuadrilateralPreferencesModel from './quadrilateral/model/QuadrilateralPreferencesModel.js';
 import QuadrilateralPreferencesNode from './quadrilateral/view/QuadrilateralPreferencesNode.js';
 
-const quadrilateralTitleString = quadrilateralStrings.quadrilateral.title;
+const quadrilateralTitleStringProperty = quadrilateralStrings.quadrilateral.titleStringProperty;
 const calibrationDemoString = 'Device'; // this will never be translatable, keep out of json file
 
 const preferencesModel = new QuadrilateralPreferencesModel();
@@ -54,7 +54,7 @@ simLauncher.launch( () => {
   // if in the "calibration" demo, use two screens to test communication between them, see
   // https://github.com/phetsims/quadrilateral/issues/18
   const quadrilateralScreen = new QuadrilateralScreen( preferencesModel, {
-    name: quadrilateralTitleString,
+    name: quadrilateralTitleStringProperty,
     tandem: Tandem.ROOT.createTandem( 'quadrilateralScreen' )
   } );
   const calibrationDemoScreen = new QuadrilateralScreen( preferencesModel, {
@@ -64,7 +64,7 @@ simLauncher.launch( () => {
   } );
   const simScreens = QuadrilateralQueryParameters.calibrationDemo ? [ quadrilateralScreen, calibrationDemoScreen ] : [ quadrilateralScreen ];
 
-  const sim = new Sim( quadrilateralTitleString, simScreens, simOptions );
+  const sim = new Sim( quadrilateralTitleStringProperty, simScreens, simOptions );
   sim.start();
 
   // @ts-ignore
