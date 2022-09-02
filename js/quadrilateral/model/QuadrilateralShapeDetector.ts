@@ -7,6 +7,11 @@
  * A bitwise value is calculated from the shape when it is time to detect the name. That value is compared against
  * each shape mask.
  *
+ * The implementation of shape detection comes directly from decisions in
+ * https://github.com/phetsims/quadrilateral/issues/188.
+ *
+ * In particular, see https://github.com/phetsims/quadrilateral/issues/188#issuecomment-1226165886 and
+ * https://github.com/phetsims/quadrilateral/issues/188#issuecomment-1232237994.
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
