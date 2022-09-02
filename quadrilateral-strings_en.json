@@ -475,8 +475,8 @@
       "aLittleSmallerThan": {
         "value": "a little smaller than"
       },
-      "comparableTo": {
-        "value": "comparable to"
+      "almostEqualTo": {
+        "value": "almost equal to"
       },
       "equalTo": {
         "value": "equal to"

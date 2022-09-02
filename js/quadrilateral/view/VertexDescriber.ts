@@ -33,7 +33,7 @@ const somewhatWiderThanString = quadrilateralStrings.a11y.voicing.somewhatWiderT
 const somewhatSmallerThanString = quadrilateralStrings.a11y.voicing.somewhatSmallerThan;
 const aLittleWiderThanString = quadrilateralStrings.a11y.voicing.aLittleWiderThan;
 const aLittleSmallerThanString = quadrilateralStrings.a11y.voicing.aLittleSmallerThan;
-const comparableToString = quadrilateralStrings.a11y.voicing.comparableTo;
+const almostEqualToString = quadrilateralStrings.a11y.voicing.almostEqualTo;
 const equalToString = quadrilateralStrings.a11y.voicing.equalTo;
 const equalToAdjacentCornersString = quadrilateralStrings.a11y.voicing.equalToAdjacentCorners;
 const equalToOneAdjacentCornerString = quadrilateralStrings.a11y.voicing.equalToOneAdjacentCorner;
@@ -63,7 +63,7 @@ createAngleComparisonDescriptionMapEntry( Utils.toRadians( 135 ), Math.PI, muchM
 createAngleComparisonDescriptionMapEntry( Math.PI / 2, Utils.toRadians( 135 ), muchWiderThanString, muchSmallerThanString );
 createAngleComparisonDescriptionMapEntry( Math.PI / 4, Math.PI / 2, somewhatWiderThanString, somewhatSmallerThanString );
 createAngleComparisonDescriptionMapEntry( Utils.toRadians( 15 ), Math.PI / 4, aLittleWiderThanString, aLittleSmallerThanString );
-createAngleComparisonDescriptionMapEntry( QuadrilateralQueryParameters.shapeAngleToleranceInterval, Utils.toRadians( 15 ), comparableToString, comparableToString );
+createAngleComparisonDescriptionMapEntry( QuadrilateralQueryParameters.shapeAngleToleranceInterval, Utils.toRadians( 15 ), almostEqualToString, almostEqualToString );
 createAngleComparisonDescriptionMapEntry( 0, QuadrilateralQueryParameters.shapeAngleToleranceInterval, equalToString, equalToString );
 
 class VertexDescriber {

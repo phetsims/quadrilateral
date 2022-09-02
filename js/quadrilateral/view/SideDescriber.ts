@@ -27,7 +27,7 @@ const somewhatLongerThanString = quadrilateralStrings.a11y.voicing.somewhatLonge
 const somewhatShorterThanString = quadrilateralStrings.a11y.voicing.somewhatShorterThan;
 const aLittleLongerThanString = quadrilateralStrings.a11y.voicing.aLittleLongerThan;
 const aLittleShorterThanString = quadrilateralStrings.a11y.voicing.aLittleShorterThan;
-const comparableToString = quadrilateralStrings.a11y.voicing.comparableTo;
+const almostEqualTo = quadrilateralStrings.a11y.voicing.almostEqualTo;
 const equalToString = quadrilateralStrings.a11y.voicing.equalTo;
 const parallelSideObjectResponsePatternString = quadrilateralStrings.a11y.voicing.parallelSideObjectResponsePattern;
 const sideObjectResponsePatternString = quadrilateralStrings.a11y.voicing.sideObjectResponsePattern;
@@ -61,7 +61,7 @@ createLengthComparisonMapEntry( 4.5, 6, muchMuchLongerThanString, muchMuchShorte
 createLengthComparisonMapEntry( 3, 4.5, muchLongerThanString, muchShorterThanString );
 createLengthComparisonMapEntry( 1.5, 3, somewhatLongerThanString, somewhatShorterThanString );
 createLengthComparisonMapEntry( 0.5, 1.5, aLittleLongerThanString, aLittleShorterThanString );
-createLengthComparisonMapEntry( QuadrilateralQueryParameters.shapeLengthToleranceInterval, 0.5, comparableToString, comparableToString );
+createLengthComparisonMapEntry( QuadrilateralQueryParameters.shapeLengthToleranceInterval, 0.5, almostEqualTo, almostEqualTo );
 createLengthComparisonMapEntry( 0, QuadrilateralQueryParameters.shapeLengthToleranceInterval, equalToString, equalToString );
 
 class SideDescriber {

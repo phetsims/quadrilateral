@@ -335,8 +335,8 @@ type StringsType = {
       'aLittleWiderThanStringProperty': TReadOnlyProperty<string>;
       'aLittleSmallerThan': string;
       'aLittleSmallerThanStringProperty': TReadOnlyProperty<string>;
-      'comparableTo': string;
-      'comparableToStringProperty': TReadOnlyProperty<string>;
+      'almostEqualTo': string;
+      'almostEqualToStringProperty': TReadOnlyProperty<string>;
       'equalTo': string;
       'equalToStringProperty': TReadOnlyProperty<string>;
       'equalToAdjacentCorners': string;
