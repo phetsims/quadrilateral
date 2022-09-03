@@ -66,8 +66,12 @@ class QuartetSoundFile extends EnumerationValue {
 class SuccessSoundFile extends EnumerationValue {
   public static ONE = new SuccessSoundFile();
   public static TWO = new SuccessSoundFile();
-  public static THREE = new SuccessSoundFile();
+
+  // Sorry for the wacky ordering, this is a workaround for https://github.com/phetsims/quadrilateral/issues/209 until
+  // we find a better long term solution
   public static FOUR = new SuccessSoundFile();
+  public static THREE = new SuccessSoundFile();
+
 
   // gets a list of keys, values and mapping between them for EnumerationProperty and PhET-iO
   public static enumeration = new Enumeration( SuccessSoundFile );
