@@ -170,7 +170,20 @@ class QuadrilateralNode extends Node {
     } );
 
     // PDOM order interleaves vertices and sides - typecast is OK because we know that children are defined
-    this.pdomOrder = _.flatten( _.zip( vertexParentNode.children, sideParentNode.children ) as unknown as Node[] );
+    // this.pdomOrder = _.flatten( _.zip( sideParentNode.children, vertexParentNode.children ) as unknown as Node[] );
+
+    // A different traversal order was requested in https://github.com/phetsims/quadrilateral/issues/196 but not sure
+    // if we will like it so leaving the above _zip strategy for now.
+    this.pdomOrder = [
+      topSideNode,
+      vertexNode2,
+      rightSideNode,
+      vertexNode3,
+      bottomSideNode,
+      vertexNode4,
+      leftSideNode,
+      vertexNode1
+    ];
   }
 
   public step( dt: number ): void {
