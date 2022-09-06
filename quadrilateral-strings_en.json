@@ -585,7 +585,7 @@
       },
       "musicControl": {
         "nameResponse": {
-          "value": "Music"
+          "value": "Shape Sound"
         },
         "enabledContextResponse": {
           "value": "On for shape changes"
