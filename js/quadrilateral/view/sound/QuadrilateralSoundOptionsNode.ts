@@ -139,25 +139,25 @@ class QuadrilateralSoundOptionsNode extends Panel {
       {
         createNode: tandem => new Text( 'Sound One', LABEL_TEXT_OPTIONS ),
 
-        value: QuartetSoundFile.ONE,
+        value: QuartetSoundFile.QUARTET_ONE,
         tandemName: 'soundOneRadioButton'
       },
       {
         createNode: tandem => new Text( 'Sound Two', LABEL_TEXT_OPTIONS ),
 
-        value: QuartetSoundFile.TWO,
+        value: QuartetSoundFile.QUARTET_TWO,
         tandemName: 'soundTwoRadioButton'
       },
       {
         createNode: tandem => new Text( 'Sound Three', LABEL_TEXT_OPTIONS ),
 
-        value: QuartetSoundFile.THREE,
+        value: QuartetSoundFile.QUARTET_THREE,
         tandemName: 'soundThreeRadioButton'
       },
       {
         createNode: tandem => new Text( 'Sound Four', LABEL_TEXT_OPTIONS ),
 
-        value: QuartetSoundFile.FOUR,
+        value: QuartetSoundFile.QUARTET_FOUR,
         tandemName: 'soundFourRadioButton'
       }
     ];
@@ -167,22 +167,22 @@ class QuadrilateralSoundOptionsNode extends Panel {
     const successSoundRadioButtonItems: AquaRadioButtonGroupItem<SuccessSoundFile>[] = [
       {
         createNode: tandem => new Text( 'Collection One', LABEL_TEXT_OPTIONS ),
-        value: SuccessSoundFile.ONE,
+        value: SuccessSoundFile.SUCCESS_ONE,
         tandemName: 'soundCollectionOneRadioButton'
       },
       {
         createNode: tandem => new Text( 'Collection Two', LABEL_TEXT_OPTIONS ),
-        value: SuccessSoundFile.TWO,
+        value: SuccessSoundFile.SUCCESS_TWO,
         tandemName: 'soundCollectionTwoRadioButton'
       },
       {
         createNode: tandem => new Text( 'Collection Three', LABEL_TEXT_OPTIONS ),
-        value: SuccessSoundFile.THREE,
+        value: SuccessSoundFile.SUCCESS_THREE,
         tandemName: 'soundCollectionThreeRadioButton'
       },
       {
         createNode: tandem => new Text( 'Collection Four', LABEL_TEXT_OPTIONS ),
-        value: SuccessSoundFile.FOUR,
+        value: SuccessSoundFile.SUCCESS_FOUR,
         tandemName: 'soundCollectionFourRadioButton'
       }
     ];

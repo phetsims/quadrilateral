@@ -327,8 +327,8 @@ class SuccessSoundView {
     } ) );
     soundManager.addSoundGenerator( this.maintenanceSoundClip );
 
-    assert && assert( QuadrilateralSoundOptionsModel.SUCCESS_SOUND_COLLECTION_MAP.get( SuccessSoundFile.FOUR ), 'maintenance sound design assumes that SuccessSoundFile.FOUR is available ' );
-    this.lengthMaintenanceSoundClip = new SoundClip( QuadrilateralSoundOptionsModel.SUCCESS_SOUND_COLLECTION_MAP.get( SuccessSoundFile.FOUR )!.maintenanceSound, merge( {}, soundClipOptions, {
+    assert && assert( QuadrilateralSoundOptionsModel.SUCCESS_SOUND_COLLECTION_MAP.get( SuccessSoundFile.SUCCESS_FOUR ), 'maintenance sound design assumes that SuccessSoundFile.SUCCESS_FOUR is available ' );
+    this.lengthMaintenanceSoundClip = new SoundClip( QuadrilateralSoundOptionsModel.SUCCESS_SOUND_COLLECTION_MAP.get( SuccessSoundFile.SUCCESS_FOUR )!.maintenanceSound, merge( {}, soundClipOptions, {
       loop: true
     } ) );
     soundManager.addSoundGenerator( this.lengthMaintenanceSoundClip );

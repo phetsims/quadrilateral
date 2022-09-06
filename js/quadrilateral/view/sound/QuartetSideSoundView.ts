@@ -60,10 +60,10 @@ const LOWER_OCTAVE_LENGTH_TO_OUTPUT_LEVEL = new LinearFunction( MAX_LENGTH / 2, 
 
 // Maps QuartetSoundFile to the WrappedAudioBuffer for the SoundClip
 const AUDIO_BUFFER_MAP = new Map();
-AUDIO_BUFFER_MAP.set( QuartetSoundFile.ONE, quadLoop01_mp3 );
-AUDIO_BUFFER_MAP.set( QuartetSoundFile.TWO, quadLoop02_mp3 );
-AUDIO_BUFFER_MAP.set( QuartetSoundFile.THREE, quadLoop03_mp3 );
-AUDIO_BUFFER_MAP.set( QuartetSoundFile.FOUR, quadLoop04_mp3 );
+AUDIO_BUFFER_MAP.set( QuartetSoundFile.QUARTET_ONE, quadLoop01_mp3 );
+AUDIO_BUFFER_MAP.set( QuartetSoundFile.QUARTET_TWO, quadLoop02_mp3 );
+AUDIO_BUFFER_MAP.set( QuartetSoundFile.QUARTET_THREE, quadLoop03_mp3 );
+AUDIO_BUFFER_MAP.set( QuartetSoundFile.QUARTET_FOUR, quadLoop04_mp3 );
 
 class QuartetSideSoundView {
   private readonly side: Side;

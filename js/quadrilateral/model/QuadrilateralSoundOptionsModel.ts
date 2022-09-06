@@ -52,26 +52,21 @@ class SoundDesign extends EnumerationValue {
   public static enumeration = new Enumeration( SoundDesign );
 }
 
-
 class QuartetSoundFile extends EnumerationValue {
-  public static ONE = new QuartetSoundFile();
-  public static TWO = new QuartetSoundFile();
-  public static THREE = new QuartetSoundFile();
-  public static FOUR = new QuartetSoundFile();
+  public static QUARTET_ONE = new QuartetSoundFile();
+  public static QUARTET_TWO = new QuartetSoundFile();
+  public static QUARTET_THREE = new QuartetSoundFile();
+  public static QUARTET_FOUR = new QuartetSoundFile();
 
   // gets a list of keys, values and mapping between them for EnumerationProperty and PhET-iO
   public static enumeration = new Enumeration( QuartetSoundFile );
 }
 
 class SuccessSoundFile extends EnumerationValue {
-  public static ONE = new SuccessSoundFile();
-  public static TWO = new SuccessSoundFile();
-
-  // Sorry for the wacky ordering, this is a workaround for https://github.com/phetsims/quadrilateral/issues/209 until
-  // we find a better long term solution
-  public static FOUR = new SuccessSoundFile();
-  public static THREE = new SuccessSoundFile();
-
+  public static SUCCESS_ONE = new SuccessSoundFile();
+  public static SUCCESS_TWO = new SuccessSoundFile();
+  public static SUCCESS_THREE = new SuccessSoundFile();
+  public static SUCCESS_FOUR = new SuccessSoundFile();
 
   // gets a list of keys, values and mapping between them for EnumerationProperty and PhET-iO
   public static enumeration = new Enumeration( SuccessSoundFile );
@@ -79,10 +74,10 @@ class SuccessSoundFile extends EnumerationValue {
 
 // Maps QuartetSoundFile to the WrappedAudioBuffer for the SoundClip
 const AUDIO_BUFFER_MAP = new Map<QuartetSoundFile, WrappedAudioBuffer>();
-AUDIO_BUFFER_MAP.set( QuartetSoundFile.ONE, quadLoop01_mp3 );
-AUDIO_BUFFER_MAP.set( QuartetSoundFile.TWO, quadLoop02_mp3 );
-AUDIO_BUFFER_MAP.set( QuartetSoundFile.THREE, quadLoop03_mp3 );
-AUDIO_BUFFER_MAP.set( QuartetSoundFile.FOUR, quadLoop04_mp3 );
+AUDIO_BUFFER_MAP.set( QuartetSoundFile.QUARTET_ONE, quadLoop01_mp3 );
+AUDIO_BUFFER_MAP.set( QuartetSoundFile.QUARTET_TWO, quadLoop02_mp3 );
+AUDIO_BUFFER_MAP.set( QuartetSoundFile.QUARTET_THREE, quadLoop03_mp3 );
+AUDIO_BUFFER_MAP.set( QuartetSoundFile.QUARTET_FOUR, quadLoop04_mp3 );
 
 /**
  * An inner class that collects a group of sounds that go together for one of the options of the "Success" prototype.
@@ -102,10 +97,10 @@ class SuccessSoundCollection {
 }
 
 const SUCCESS_SOUND_COLLECTION_MAP = new Map<SuccessSoundFile, SuccessSoundCollection>();
-SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.ONE, new SuccessSoundCollection( quadIntoParallel001_mp3, quadOutOfParallel001_mp3, quadMovingInParallelSuccessLoop001_wav ) );
-SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.TWO, new SuccessSoundCollection( quadIntoParallel002_mp3, quadOutOfParallel002_mp3, quadMovingInParallelSuccessLoop002_mp3 ) );
-SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.THREE, new SuccessSoundCollection( quadIntoParallel003_mp3, quadOutOfParallel003_mp3, quadMovingInParallelSuccessLoop003_mp3 ) );
-SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.FOUR, new SuccessSoundCollection( quadIntoParallel004_mp3, quadOutOfParallel004_mp3, quadMovingInParallelSuccessLoop004_mp3 ) );
+SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.SUCCESS_ONE, new SuccessSoundCollection( quadIntoParallel001_mp3, quadOutOfParallel001_mp3, quadMovingInParallelSuccessLoop001_wav ) );
+SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.SUCCESS_TWO, new SuccessSoundCollection( quadIntoParallel002_mp3, quadOutOfParallel002_mp3, quadMovingInParallelSuccessLoop002_mp3 ) );
+SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.SUCCESS_THREE, new SuccessSoundCollection( quadIntoParallel003_mp3, quadOutOfParallel003_mp3, quadMovingInParallelSuccessLoop003_mp3 ) );
+SUCCESS_SOUND_COLLECTION_MAP.set( SuccessSoundFile.SUCCESS_FOUR, new SuccessSoundCollection( quadIntoParallel004_mp3, quadOutOfParallel004_mp3, quadMovingInParallelSuccessLoop004_mp3 ) );
 
 class QuadrilateralSoundOptionsModel {
 
@@ -143,8 +138,8 @@ class QuadrilateralSoundOptionsModel {
 
   public constructor() {
     this.soundDesignProperty = new EnumerationProperty( SoundDesign.enumeration.getValue( QuadrilateralQueryParameters.soundDesign! ) );
-    this.baseSoundFileProperty = new EnumerationProperty( QuartetSoundFile.ONE );
-    this.successSoundFileProperty = new EnumerationProperty( SuccessSoundFile.ONE );
+    this.baseSoundFileProperty = new EnumerationProperty( QuartetSoundFile.QUARTET_ONE );
+    this.successSoundFileProperty = new EnumerationProperty( SuccessSoundFile.SUCCESS_ONE );
     this.maintenanceSoundRequiresEqualLengthsProperty = new BooleanProperty( QuadrilateralQueryParameters.equalLengthsForMaintenanceSound );
     this.tracksPlayForeverProperty = new BooleanProperty( false );
     this.arpeggioBackgroundProperty = new BooleanProperty( true );
