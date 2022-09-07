@@ -29,11 +29,6 @@ import SidePair from '../model/SidePair.js';
 import VertexPair from '../model/VertexPair.js';
 import VertexLabel from '../model/VertexLabel.js';
 
-// const foundAParallelogramString = quadrilateralStrings.a11y.voicing.foundAParallelogram;
-// const lostYourParallelogramString = quadrilateralStrings.a11y.voicing.lostYourParallelogram;
-// const foundAParallelogramWithAllRightAnglesString = quadrilateralStrings.a11y.voicing.foundAParallelogramWithAllRightAngles;
-// const foundAParallelogramWithAllSidesEqualString = quadrilateralStrings.a11y.voicing.foundAParallelogramWithAllSidesEqual;
-// const foundParallelogramWithAnglesAndSidesEqualString = quadrilateralStrings.a11y.voicing.foundParallelogramWithAnglesAndSidesEqual;
 const foundIsoscelesTrapezoidPatternString = QuadrilateralStrings.a11y.voicing.foundIsoscelesTrapezoidPattern;
 const allRightAnglesAndAllSidesEqualString = QuadrilateralStrings.a11y.voicing.allRightAnglesAndAllSidesEqual;
 const oppositeSidesInParallelString = QuadrilateralStrings.a11y.voicing.oppositeSidesInParallel;
