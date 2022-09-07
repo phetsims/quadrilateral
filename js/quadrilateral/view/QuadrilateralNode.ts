@@ -5,7 +5,7 @@
  */
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import { TPaint, Node, NodeOptions } from '../../../../scenery/js/imports.js';
+import { Node, NodeOptions, TPaint } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import quadrilateralStrings from '../../quadrilateralStrings.js';
 import SideNode from './SideNode.js';
@@ -169,20 +169,16 @@ class QuadrilateralNode extends Node {
       }
     } );
 
-    // PDOM order interleaves vertices and sides - typecast is OK because we know that children are defined
-    // this.pdomOrder = _.flatten( _.zip( sideParentNode.children, vertexParentNode.children ) as unknown as Node[] );
-
-    // A different traversal order was requested in https://github.com/phetsims/quadrilateral/issues/196 but not sure
-    // if we will like it so leaving the above _zip strategy for now.
+    // Traversal order for components requested in https://github.com/phetsims/quadrilateral/issues/196.
     this.pdomOrder = [
+      leftSideNode,
+      vertexNode1,
       topSideNode,
       vertexNode2,
       rightSideNode,
       vertexNode3,
       bottomSideNode,
-      vertexNode4,
-      leftSideNode,
-      vertexNode1
+      vertexNode4
     ];
   }
 
