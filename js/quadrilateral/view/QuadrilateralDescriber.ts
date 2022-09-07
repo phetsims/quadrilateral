@@ -9,11 +9,14 @@ import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import Side from '../model/Side.js';
-import QuadrilateralShapeModel, { SidePair, VertexPair } from '../model/QuadrilateralShapeModel.js';
+import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import Vertex from '../model/Vertex.js';
 import VertexLabel from '../model/VertexLabel.js';
 import VertexDescriber from './VertexDescriber.js';
 import SideDescriber from './SideDescriber.js';
+import SideLabel from '../model/SideLabel.js';
+import SidePair from '../model/SidePair.js';
+import VertexPair from '../model/VertexPair.js';
 
 // constants
 const firstDetailsStatementPatternString = QuadrilateralStrings.a11y.voicing.firstDetailsStatementPattern;
@@ -74,6 +77,19 @@ vertexLabelMap.set( VertexLabel.VERTEX_B, vertexBString );
 vertexLabelMap.set( VertexLabel.VERTEX_C, vertexCString );
 vertexLabelMap.set( VertexLabel.VERTEX_D, vertexDString );
 
+// A map that goes from Side -> full side label (like "Side AB")
+const fullSideLabelMap = new Map<SideLabel, string>();
+fullSideLabelMap.set( SideLabel.SIDE_AB, topSideString );
+fullSideLabelMap.set( SideLabel.SIDE_BC, rightSideString );
+fullSideLabelMap.set( SideLabel.SIDE_CD, bottomSideString );
+fullSideLabelMap.set( SideLabel.SIDE_DA, leftSideString );
+
+const sideLabelMap = new Map();
+sideLabelMap.set( SideLabel.SIDE_AB, aBString );
+sideLabelMap.set( SideLabel.SIDE_BC, bCString );
+sideLabelMap.set( SideLabel.SIDE_CD, cDString );
+sideLabelMap.set( SideLabel.SIDE_DA, dAString );
+
 class QuadrilateralDescriber {
   private readonly shapeModel: QuadrilateralShapeModel;
 
@@ -81,26 +97,8 @@ class QuadrilateralDescriber {
   public readonly tiltDifferenceToleranceInterval: number;
   public readonly lengthDifferenceToleranceInterval: number;
 
-  // A map that goes from Side -> letter label (like "AB")
-  private readonly sideLabelMap: Map<Side, string>;
-
-  // A map that goes from Side -> full side label (like "Side AB")
-  private readonly sideFullLabelMap: Map<Side, string>;
-
   public constructor( shapeModel: QuadrilateralShapeModel ) {
     this.shapeModel = shapeModel;
-
-    this.sideLabelMap = new Map();
-    this.sideLabelMap.set( shapeModel.topSide, aBString );
-    this.sideLabelMap.set( shapeModel.rightSide, bCString );
-    this.sideLabelMap.set( shapeModel.bottomSide, cDString );
-    this.sideLabelMap.set( shapeModel.leftSide, dAString );
-
-    this.sideFullLabelMap = new Map();
-    this.sideFullLabelMap.set( shapeModel.topSide, topSideString );
-    this.sideFullLabelMap.set( shapeModel.rightSide, rightSideString );
-    this.sideFullLabelMap.set( shapeModel.bottomSide, bottomSideString );
-    this.sideFullLabelMap.set( shapeModel.leftSide, leftSideString );
 
     // TODO: Do we need a query parameter for this?
     this.tiltDifferenceToleranceInterval = 0.2;
@@ -117,16 +115,49 @@ class QuadrilateralDescriber {
 
     // of type NamedQuadrilateral enumeration
     const shapeName = this.shapeModel.shapeNameProperty.value;
-    return this.getShapeNameDescription( shapeName );
+    return QuadrilateralDescriber.getShapeNameDescription( shapeName );
   }
 
   /**
    * Returns the actual name of the NamedQuadrilateral.
    */
-  public getShapeNameDescription( shapeName: NamedQuadrilateral | null ): string {
+  public static getShapeNameDescription( shapeName: NamedQuadrilateral | null ): string {
     const shapeNameDescription = shapeNameMap.get( shapeName );
     assert && assert( shapeNameDescription, 'There must be shape name description for the current shape state.' );
     return shapeNameDescription!;
+  }
+
+  /**
+   * Gets the label string for a side from its SideLabel. Includes the Side title. Something like
+   * "Side AB" or
+   * "Side DA"
+   */
+  public static getFullSideLabelString( sideLabel: SideLabel ): string {
+    const sideLabelString = fullSideLabelMap.get( sideLabel );
+    assert && assert( sideLabelString, 'There must be a side label description.' );
+    return sideLabelString!;
+  }
+
+  /**
+   * Gets the label string for a side from its SideLabel. Just the label without other context like
+   * "AB" or
+   * "DA"
+   */
+  public static getSideLabelString( sideLabel: SideLabel ): string {
+    const sideLabelString = sideLabelMap.get( sideLabel )!;
+    assert && assert( sideLabelString, 'There must be a side label description.' );
+    return sideLabelString;
+  }
+
+  /**
+   * Gets a label string for the provided VertexLabel. Returns something like
+   * "A" or
+   * "B"
+   */
+  public static getVertexLabelString( vertexLabel: VertexLabel ): string {
+    const vertexLabelString = vertexLabelMap.get( vertexLabel )!;
+    assert && assert( vertexLabelString, 'There must be a label for the vertex.' );
+    return vertexLabelString;
   }
 
   /**
@@ -361,7 +392,9 @@ class QuadrilateralDescriber {
 
           const otherSides = this.getUndescribedSides( [ firstSide, secondSide ] );
           assert && assert( otherSides.length === 2, 'there should be two remaining sides to describe' );
-          const orderedOtherSidePairs = this.getSidePairsOrderedForDescription( [ { side1: otherSides[ 0 ], side2: otherSides[ 1 ] } ] );
+
+          const otherSidePair = new SidePair( otherSides[ 0 ], otherSides[ 1 ] );
+          const orderedOtherSidePairs = this.getSidePairsOrderedForDescription( [ otherSidePair ] );
           const thirdSide = orderedOtherSidePairs[ 0 ].side1;
           const fourthSide = orderedOtherSidePairs[ 0 ].side2;
 
@@ -427,7 +460,7 @@ class QuadrilateralDescriber {
           const secondSide = sortedAdjacentSidePairs[ 0 ].side2;
 
           const remainingSides = this.getUndescribedSides( [ firstSide, secondSide ] );
-          const remainingSidePair = { side1: remainingSides[ 0 ], side2: remainingSides[ 1 ] };
+          const remainingSidePair = new SidePair( remainingSides[ 0 ], remainingSides[ 1 ] );
           const orderedRemainingSides = this.getSidePairsOrderedForDescription( [ remainingSidePair ] );
           assert && assert( orderedRemainingSides.length === 1, 'we should have one more side pair to describe for a general quadrilateral with one pair of adjacent equal sides' );
 
@@ -633,7 +666,7 @@ class QuadrilateralDescriber {
    * Get the described label for a Side
    */
   private getSideDescription( side: Side ): string {
-    const label = this.sideLabelMap.get( side )!;
+    const label = sideLabelMap.get( side.sideLabel )!;
     assert && assert( label, 'label not found for side' );
     return label;
   }
@@ -710,7 +743,7 @@ class QuadrilateralDescriber {
     const newVertexPairs: VertexPair[] = [];
     vertexPairs.forEach( vertexPair => {
       const orderedVertices = this.getVerticesOrderedForDescription( [ vertexPair.vertex1, vertexPair.vertex2 ] );
-      newVertexPairs.push( { vertex1: orderedVertices[ 0 ], vertex2: orderedVertices[ 1 ] } );
+      newVertexPairs.push( new VertexPair( orderedVertices[ 0 ], orderedVertices[ 1 ] ) );
     } );
 
     // Now we can sort the VertexPairs based on the first vertex of each pair, since the vertices in
@@ -750,7 +783,7 @@ class QuadrilateralDescriber {
         secondSide = side1;
       }
 
-      orderedSidePairs.push( { side1: firstSide, side2: secondSide } );
+      orderedSidePairs.push( new SidePair( firstSide, secondSide ) );
     } );
 
     // Now that Sides within each pair are ordered, SidePairs can be ordered relative to the first vertex

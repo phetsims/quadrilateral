@@ -40,6 +40,8 @@ import TProperty from '../../../../axon/js/TProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import TEmitter from '../../../../axon/js/TEmitter.js';
 import QuadrilateralShapeDetector from './QuadrilateralShapeDetector.js';
+import SidePair from './SidePair.js';
+import VertexPair from './VertexPair.js';
 
 // A useful type for calculations for the vertex Shapes which define where the Vertex can move depending on
 // the positions of the other vertices. Lines are along the bounds of model space and RayIntersections
@@ -55,20 +57,6 @@ export type VertexWithProposedPosition = {
 
   // This may not be available if something goes wrong with the marker detection
   proposedPosition?: Vector2;
-};
-
-// A pair of vertices that are grouped together in some way, they are either opposite or adjacent to each other when
-// assembled in the quadrilateral shape
-export type VertexPair = {
-  vertex1: Vertex;
-  vertex2: Vertex;
-};
-
-// A pair of sides that have some relationship, probably either that they are adjacent or opposite to each other when
-// assembled in the quadrilateral shape.
-export type SidePair = {
-  side1: Side;
-  side2: Side;
 };
 
 type QuadrilateralShapeModelOptions = {
@@ -242,15 +230,15 @@ class QuadrilateralShapeModel {
     this.vertices = [ this.vertexA, this.vertexB, this.vertexC, this.vertexD ];
 
     this.adjacentVertices = [
-      { vertex1: this.vertexA, vertex2: this.vertexB },
-      { vertex1: this.vertexB, vertex2: this.vertexC },
-      { vertex1: this.vertexC, vertex2: this.vertexD },
-      { vertex1: this.vertexD, vertex2: this.vertexA }
+      new VertexPair( this.vertexA, this.vertexB ),
+      new VertexPair( this.vertexB, this.vertexC ),
+      new VertexPair( this.vertexC, this.vertexD ),
+      new VertexPair( this.vertexD, this.vertexA )
     ];
 
     this.oppositeVertices = [
-      { vertex1: this.vertexA, vertex2: this.vertexC },
-      { vertex1: this.vertexB, vertex2: this.vertexD }
+      new VertexPair( this.vertexA, this.vertexC ),
+      new VertexPair( this.vertexB, this.vertexD )
     ];
 
     this.oppositeVertexMap = new Map( [
@@ -300,15 +288,15 @@ class QuadrilateralShapeModel {
     ] );
 
     this.adjacentSides = [
-      { side1: this.topSide, side2: this.rightSide },
-      { side1: this.rightSide, side2: this.bottomSide },
-      { side1: this.bottomSide, side2: this.leftSide },
-      { side1: this.leftSide, side2: this.topSide }
+      new SidePair( this.topSide, this.rightSide ),
+      new SidePair( this.rightSide, this.bottomSide ),
+      new SidePair( this.bottomSide, this.leftSide ),
+      new SidePair( this.leftSide, this.topSide )
     ];
 
     this.oppositeSides = [
-      { side1: this.topSide, side2: this.bottomSide },
-      { side1: this.rightSide, side2: this.leftSide }
+      new SidePair( this.topSide, this.bottomSide ),
+      new SidePair( this.rightSide, this.leftSide )
     ];
 
     this.adjacentEqualVertexPairsProperty = new Property<VertexPair[]>( [] );
@@ -388,16 +376,16 @@ class QuadrilateralShapeModel {
     } );
 
     this.sideABSideCDParallelSideChecker = new ParallelSideChecker(
-      { side1: this.topSide, side2: this.bottomSide },
-      { side1: this.rightSide, side2: this.leftSide },
+      new SidePair( this.topSide, this.bottomSide ),
+      new SidePair( this.rightSide, this.leftSide ),
       this.shapeChangedEmitter,
       model.resetNotInProgressProperty,
       options.tandem.createTandem( 'sideABSideCDParallelSideChecker' )
     );
 
     this.sideBCSideDAParallelSideChecker = new ParallelSideChecker(
-      { side1: this.rightSide, side2: this.leftSide },
-      { side1: this.topSide, side2: this.bottomSide },
+      new SidePair( this.rightSide, this.leftSide ),
+      new SidePair( this.topSide, this.bottomSide ),
       this.shapeChangedEmitter,
       model.resetNotInProgressProperty,
       options.tandem.createTandem( 'sideBCSideDAParallelSideChecker' )

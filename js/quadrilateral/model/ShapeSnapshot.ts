@@ -12,6 +12,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
 import SideLabel from './SideLabel.js';
 import VertexLabel from './VertexLabel.js';
+import NamedQuadrilateral from './NamedQuadrilateral.js';
 
 class ShapeSnapshot {
   public readonly topSideTilt: number;
@@ -39,6 +40,8 @@ class ShapeSnapshot {
   public readonly bottomSideLength: number;
   public readonly area: number;
 
+  public readonly namedQuadrilateral: NamedQuadrilateral;
+
   public constructor( shapeModel: QuadrilateralShapeModel ) {
     this.topSideTilt = shapeModel.topSide.tiltProperty.value;
     this.rightSideTilt = shapeModel.rightSide.tiltProperty.value;
@@ -65,6 +68,8 @@ class ShapeSnapshot {
     this.leftSideLength = shapeModel.leftSide.lengthProperty.value;
 
     this.area = shapeModel.areaProperty.value;
+
+    this.namedQuadrilateral = shapeModel.shapeNameProperty.value;
   }
 
   /**

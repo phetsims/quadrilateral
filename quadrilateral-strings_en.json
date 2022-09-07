@@ -399,14 +399,35 @@
       "foundParallelogramWithAnglesAndSidesEqual": {
         "value": "Found a parallelogram with all right angles and all sides equal!"
       },
-      "allRightAnglesAndSidesEqual": {
-        "value": "All right angles and all sides equal!"
+      "allRightAnglesAndAllSidesEqual": {
+        "value": "All right angles and all sides equal."
       },
       "allSidesEqual": {
         "value": "All sides equal."
       },
       "allRightAngles": {
         "value": "All right angles."
+      },
+      "oppositeSidesInParallel": {
+        "value": "Opposite sides in parallel."
+      },
+      "foundTrapezoidPattern": {
+        "value": "{{firstSide}} and {{secondSide}} in parallel."
+      },
+      "foundIsoscelesTrapezoidPattern": {
+        "value": "{{equalFirstSide}} and {{equalSecondSide}} are equal, and sides {{parallelFirstSide}} and {{parallelSecondSide}} in parallel."
+      },
+      "foundKitePattern": {
+        "value": "Corners {{firstCorner}} and {{secondCorner}} are equal, and pairs of adjacent sides are equal."
+      },
+      "foundDartPattern": {
+        "value": "Corner {{inwardCorner}} points inward, Corner {{firstCorner}} and Corner {{secondCorner}} are equal, and pairs of adjacent sides are equal."
+      },
+      "foundConvexQuadrilateral": {
+        "value": "All sides tilt away from parallel."
+      },
+      "foundConcaveQuadrilateralPattern": {
+        "value": "Corner {{inwardCorner}} points inward, and all sides tilt away from parallel."
       },
       "vertexObjectResponsePattern": {
         "value": "{{oppositeComparison}} opposite corner, {{adjacentVertexDescription}}."
@@ -601,6 +622,9 @@
         "shapeHiddenContextResponse": {
           "value": "All right angles and all sides equal."
         }
+      },
+      "foundShapePattern": {
+        "value": "Found {{shapeName}}"
       }
     }
   }

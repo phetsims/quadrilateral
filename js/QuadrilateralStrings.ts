@@ -283,12 +283,26 @@ type StringsType = {
       'foundAParallelogramWithAllSidesEqualStringProperty': TReadOnlyProperty<string>;
       'foundParallelogramWithAnglesAndSidesEqual': string;
       'foundParallelogramWithAnglesAndSidesEqualStringProperty': TReadOnlyProperty<string>;
-      'allRightAnglesAndSidesEqual': string;
-      'allRightAnglesAndSidesEqualStringProperty': TReadOnlyProperty<string>;
+      'allRightAnglesAndAllSidesEqual': string;
+      'allRightAnglesAndAllSidesEqualStringProperty': TReadOnlyProperty<string>;
       'allSidesEqual': string;
       'allSidesEqualStringProperty': TReadOnlyProperty<string>;
       'allRightAngles': string;
       'allRightAnglesStringProperty': TReadOnlyProperty<string>;
+      'oppositeSidesInParallel': string;
+      'oppositeSidesInParallelStringProperty': TReadOnlyProperty<string>;
+      'foundTrapezoidPattern': string;
+      'foundTrapezoidPatternStringProperty': TReadOnlyProperty<string>;
+      'foundIsoscelesTrapezoidPattern': string;
+      'foundIsoscelesTrapezoidPatternStringProperty': TReadOnlyProperty<string>;
+      'foundKitePattern': string;
+      'foundKitePatternStringProperty': TReadOnlyProperty<string>;
+      'foundDartPattern': string;
+      'foundDartPatternStringProperty': TReadOnlyProperty<string>;
+      'foundConvexQuadrilateral': string;
+      'foundConvexQuadrilateralStringProperty': TReadOnlyProperty<string>;
+      'foundConcaveQuadrilateralPattern': string;
+      'foundConcaveQuadrilateralPatternStringProperty': TReadOnlyProperty<string>;
       'vertexObjectResponsePattern': string;
       'vertexObjectResponsePatternStringProperty': TReadOnlyProperty<string>;
       'rightAngleVertexObjectResponsePattern': string;
@@ -420,7 +434,9 @@ type StringsType = {
         'shapeShownContextResponseStringProperty': TReadOnlyProperty<string>;
         'shapeHiddenContextResponse': string;
         'shapeHiddenContextResponseStringProperty': TReadOnlyProperty<string>;
-      }
+      };
+      'foundShapePattern': string;
+      'foundShapePatternStringProperty': TReadOnlyProperty<string>;
     }
   }
 };

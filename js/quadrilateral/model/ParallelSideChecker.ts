@@ -20,7 +20,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
-import { SidePair } from './QuadrilateralShapeModel.js';
+import SidePair from './SidePair.js';
 import Side from './Side.js';
 
 class ParallelSideChecker {

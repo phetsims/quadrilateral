@@ -22,15 +22,29 @@ import MovementAlerter from '../../../../scenery-phet/js/accessibility/describer
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vertex from '../model/Vertex.js';
 import Utils from '../../../../dot/js/Utils.js';
+import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
+import QuadrilateralDescriber from './QuadrilateralDescriber.js';
+import SideLabel from '../model/SideLabel.js';
+import SidePair from '../model/SidePair.js';
+import VertexPair from '../model/VertexPair.js';
+import VertexLabel from '../model/VertexLabel.js';
 
-const foundAParallelogramString = QuadrilateralStrings.a11y.voicing.foundAParallelogram;
-const lostYourParallelogramString = QuadrilateralStrings.a11y.voicing.lostYourParallelogram;
-const foundAParallelogramWithAllRightAnglesString = QuadrilateralStrings.a11y.voicing.foundAParallelogramWithAllRightAngles;
-const foundAParallelogramWithAllSidesEqualString = QuadrilateralStrings.a11y.voicing.foundAParallelogramWithAllSidesEqual;
-const foundParallelogramWithAnglesAndSidesEqualString = QuadrilateralStrings.a11y.voicing.foundParallelogramWithAnglesAndSidesEqual;
-const allRightAnglesAndSidesEqualString = QuadrilateralStrings.a11y.voicing.allRightAnglesAndSidesEqual;
+// const foundAParallelogramString = quadrilateralStrings.a11y.voicing.foundAParallelogram;
+// const lostYourParallelogramString = quadrilateralStrings.a11y.voicing.lostYourParallelogram;
+// const foundAParallelogramWithAllRightAnglesString = quadrilateralStrings.a11y.voicing.foundAParallelogramWithAllRightAngles;
+// const foundAParallelogramWithAllSidesEqualString = quadrilateralStrings.a11y.voicing.foundAParallelogramWithAllSidesEqual;
+// const foundParallelogramWithAnglesAndSidesEqualString = quadrilateralStrings.a11y.voicing.foundParallelogramWithAnglesAndSidesEqual;
+const foundIsoscelesTrapezoidPatternString = QuadrilateralStrings.a11y.voicing.foundIsoscelesTrapezoidPattern;
+const allRightAnglesAndAllSidesEqualString = QuadrilateralStrings.a11y.voicing.allRightAnglesAndAllSidesEqual;
+const oppositeSidesInParallelString = QuadrilateralStrings.a11y.voicing.oppositeSidesInParallel;
+const foundTrapezoidPatternString = QuadrilateralStrings.a11y.voicing.foundTrapezoidPattern;
+const foundKitePatternString = QuadrilateralStrings.a11y.voicing.foundKitePattern;
+const foundDartPatternString = QuadrilateralStrings.a11y.voicing.foundDartPattern;
+const foundConvexQuadrilateralString = QuadrilateralStrings.a11y.voicing.foundConvexQuadrilateral;
+const foundConcaveQuadrilateralPatternString = QuadrilateralStrings.a11y.voicing.foundConcaveQuadrilateralPattern;
 const allSidesEqualString = QuadrilateralStrings.a11y.voicing.allSidesEqual;
 const allRightAnglesString = QuadrilateralStrings.a11y.voicing.allRightAngles;
+const foundShapePatternString = QuadrilateralStrings.a11y.voicing.foundShapePattern;
 const aBString = QuadrilateralStrings.a11y.aB;
 const bCString = QuadrilateralStrings.a11y.bC;
 const cDString = QuadrilateralStrings.a11y.cD;
@@ -190,7 +204,7 @@ class QuadrilateralAlerter extends Alerter {
         this.wasSideBCSideDAParallel = sideBCSideDAParallelAfter;
 
         // prioritize the "important" information change, other content is not spoken if this is ready
-        const importantStateResponse = this.getImportantStateChangeResponse();
+        const importantStateResponse = this.getShapeNameChangeResponse();
         if ( importantStateResponse ) {
           responsePacket.contextResponse = importantStateResponse!;
           utterance = highPriorityUtterance;
@@ -518,60 +532,313 @@ class QuadrilateralAlerter extends Alerter {
   }
 
   /**
-   * Get a response that describes the most important state changes (as decided by design/pedagogy), such as when
-   * the shape becomes a parallelogram, gets all sides of equal length, or gets all right angles.
-   *
-   * Note this function has side effects!! When it is time to generate this description we update state variables
-   * watching to see if the important shape attributes have changed since the last time this function was used.
+   * Get a response that describes changes to the detected shape name. As decided by design/pedagogy, this is the most
+   * important information to describe as things change.
    */
-  private getImportantStateChangeResponse(): string | null {
-    const parallelogram = this.model.quadrilateralShapeModel.isParallelogramProperty.value;
-    const allLengthsEqual = this.model.quadrilateralShapeModel.allLengthsEqualProperty.value;
-    const allAnglesRight = this.model.quadrilateralShapeModel.allAnglesRightProperty.value;
+  private getShapeNameChangeResponse(): string | null {
+    const currentShapeName = this.model.quadrilateralShapeModel.shapeNameProperty.value;
 
-    // no alerts while resetting - necessary because calculations for parallel state happen in step and
     let contextResponse: string | null = null;
+    if ( currentShapeName !== this.previousContextResponseShapeSnapshot.namedQuadrilateral ) {
 
-    if ( parallelogram !== this.wasParallelogram ) {
-      if ( parallelogram ) {
-
-        // we just became a parallelogram, make sure to include that in the description
-        contextResponse = ( allLengthsEqual && allAnglesRight ) ? foundParallelogramWithAnglesAndSidesEqualString :
-                          allLengthsEqual ? foundAParallelogramWithAllSidesEqualString :
-                          allAnglesRight ? foundAParallelogramWithAllRightAnglesString :
-                          foundAParallelogramString;
+      const shapeNameVisible = this.model.shapeNameVisibleProperty.value;
+      if ( currentShapeName === NamedQuadrilateral.SQUARE ) {
+        contextResponse = this.getFoundSquareResponse( shapeNameVisible );
       }
-      else {
-        contextResponse = lostYourParallelogramString;
+      else if ( currentShapeName === NamedQuadrilateral.RECTANGLE ) {
+        contextResponse = this.getFoundRectangleResponse( shapeNameVisible );
+      }
+      else if ( currentShapeName === NamedQuadrilateral.RHOMBUS ) {
+        contextResponse = this.getFoundRhombusResponse( shapeNameVisible );
+      }
+      else if ( currentShapeName === NamedQuadrilateral.PARALLELOGRAM ) {
+        contextResponse = this.getFoundParallelogramResponse( shapeNameVisible );
+      }
+      else if ( currentShapeName === NamedQuadrilateral.TRAPEZOID ) {
+        assert && assert( this.quadrilateralShapeModel.parallelSidePairsProperty.value.length === 1, 'A Trapezoid should have one parallel side pair' );
+        const parallelSidePair = this.quadrilateralShapeModel.parallelSidePairsProperty.value[ 0 ];
+        contextResponse = this.getFoundTrapezoidResponse( shapeNameVisible, parallelSidePair );
+      }
+      else if ( currentShapeName === NamedQuadrilateral.ISOSCELES_TRAPEZOID ) {
+        assert && assert( this.quadrilateralShapeModel.oppositeEqualSidePairsProperty.value.length === 1,
+          'An Isosceles Trapezoid should have one pair of sides equal in length' );
+        const oppositeEqualSidePair = this.quadrilateralShapeModel.oppositeEqualSidePairsProperty.value[ 0 ];
+
+        assert && assert( this.quadrilateralShapeModel.parallelSidePairsProperty.value.length === 1,
+          'A Trapezoid should have one parallel side pair.' );
+        const parallelSidePair = this.quadrilateralShapeModel.parallelSidePairsProperty.value[ 0 ];
+
+        contextResponse = this.getFoundIsoscelesTrapezoidResponse(
+          shapeNameVisible,
+          oppositeEqualSidePair,
+          parallelSidePair
+        );
+      }
+      else if ( currentShapeName === NamedQuadrilateral.KITE ) {
+        assert && assert( this.quadrilateralShapeModel.oppositeEqualVertexPairsProperty.value.length === 1,
+          'A kite should have only one pair of opposite equal vertices' );
+        const oppositeEqualVertexPair = this.quadrilateralShapeModel.oppositeEqualVertexPairsProperty.value[ 0 ];
+        contextResponse = this.getFoundKiteResponse( shapeNameVisible, oppositeEqualVertexPair );
+      }
+      else if ( currentShapeName === NamedQuadrilateral.DART ) {
+        contextResponse = this.getFoundDartResponse( shapeNameVisible, this.quadrilateralShapeModel.vertices );
+      }
+      else if ( currentShapeName === NamedQuadrilateral.CONCAVE_QUADRILATERAL ) {
+        contextResponse = this.getFoundConcaveQuadrilateralResponse( shapeNameVisible, this.quadrilateralShapeModel.vertices );
+      }
+      else if ( currentShapeName === NamedQuadrilateral.CONVEX_QUADRILATERAL ) {
+        contextResponse = this.getFoundConvexQuadrilateralResponse( shapeNameVisible );
       }
     }
-    else {
-      const becameAllLengthsEqual = allLengthsEqual && allLengthsEqual !== this.wereAllLengthsEqual;
-      const becameAllRightAngles = allAnglesRight && allAnglesRight !== this.wereAllAnglesRight;
-
-      if ( becameAllLengthsEqual && becameAllRightAngles ) {
-
-        // just became a parallelogram, describe the parallelogram and its additional length/angle states
-        contextResponse = allRightAnglesAndSidesEqualString;
-      }
-      else if ( becameAllLengthsEqual ) {
-
-        // only the all lengths equal state changed
-        contextResponse = allSidesEqualString;
-      }
-      else if ( becameAllRightAngles ) {
-
-        // only the all right angles state changed
-        contextResponse = allRightAnglesString;
-      }
-    }
-
-    // update values for comparison next time
-    this.wasParallelogram = parallelogram;
-    this.wereAllLengthsEqual = allLengthsEqual;
-    this.wereAllAnglesRight = allAnglesRight;
 
     return contextResponse;
+  }
+
+  /**
+   * Returns the response when you create a square. Describing the square or its attributes depending on if shape
+   * name is shown.
+   */
+  private getFoundSquareResponse( shapeNameVisible: boolean ): string {
+    let response: string;
+    if ( shapeNameVisible ) {
+      response = this.getFoundShapeResponse( NamedQuadrilateral.SQUARE );
+    }
+    else {
+      response = allRightAnglesAndAllSidesEqualString;
+    }
+
+    return response;
+  }
+
+  /**
+   * Returns the response when you create a rectangle. Describing the square or its attributes depending on if shape
+   * name is shown.
+   */
+  private getFoundRectangleResponse( shapeNameVisible: boolean ): string {
+    let response: string;
+    if ( shapeNameVisible ) {
+      response = this.getFoundShapeResponse( NamedQuadrilateral.RECTANGLE );
+    }
+    else {
+      response = allRightAnglesString;
+    }
+    return response;
+  }
+
+  /**
+   * Returns the response when you create a rhombus. Describing the square or its attributes depending on if shape
+   * name is shown.
+   */
+  private getFoundRhombusResponse( shapeNameVisible: boolean ): string {
+    let response: string;
+    if ( shapeNameVisible ) {
+      response = this.getFoundShapeResponse( NamedQuadrilateral.RHOMBUS );
+    }
+    else {
+      response = allSidesEqualString;
+    }
+    return response;
+  }
+
+  /**
+   * Returns the response when you create a trapezoid. Describing the square or its attributes depending on if shape
+   * name is shown.
+   */
+  private getFoundTrapezoidResponse( shapeNameVisible: boolean, parallelSidePair: SidePair ): string {
+    let response: string;
+    if ( shapeNameVisible ) {
+      response = this.getFoundShapeResponse( NamedQuadrilateral.TRAPEZOID );
+    }
+    else {
+      let firstSideLabel: string;
+      let secondSideLabel: string;
+
+      if ( parallelSidePair.includesSide( this.quadrilateralShapeModel.topSide ) ) {
+        firstSideLabel = QuadrilateralDescriber.getFullSideLabelString( SideLabel.SIDE_AB );
+        secondSideLabel = QuadrilateralDescriber.getFullSideLabelString( SideLabel.SIDE_CD );
+      }
+      else {
+        firstSideLabel = QuadrilateralDescriber.getFullSideLabelString( SideLabel.SIDE_BC );
+        secondSideLabel = QuadrilateralDescriber.getFullSideLabelString( SideLabel.SIDE_DA );
+      }
+      response = StringUtils.fillIn( foundTrapezoidPatternString, {
+        firstSide: firstSideLabel,
+        secondSide: secondSideLabel
+      } );
+    }
+    return response;
+  }
+
+  /**
+   * Returns the response when you create an isosceles trapezoid. Describing the square or its attributes depending on
+   * if shape name is shown.
+   */
+  private getFoundIsoscelesTrapezoidResponse( shapeNameVisible: boolean, oppositeEqualSidePair: SidePair, parallelSidePair: SidePair ): string {
+    let response: string;
+    if ( shapeNameVisible ) {
+      response = this.getFoundShapeResponse( NamedQuadrilateral.ISOSCELES_TRAPEZOID );
+    }
+    else {
+      let equalFirstSideString: string;
+      let equalSecondSideString: string;
+      let parallelFirstSideString: string;
+      let parallelSecondSideString: string;
+
+      if ( oppositeEqualSidePair.includesSide( this.quadrilateralShapeModel.topSide ) ) {
+
+        // top sides and bottom side are equal in length, left and right sides are parallel
+        equalFirstSideString = QuadrilateralDescriber.getFullSideLabelString( SideLabel.SIDE_AB );
+        equalSecondSideString = QuadrilateralDescriber.getFullSideLabelString( SideLabel.SIDE_CD );
+        parallelFirstSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_DA );
+        parallelSecondSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_BC );
+      }
+      else {
+
+        // left and right sides are equal in length, top and bottom sides are parallel
+        equalFirstSideString = QuadrilateralDescriber.getFullSideLabelString( SideLabel.SIDE_DA );
+        equalSecondSideString = QuadrilateralDescriber.getFullSideLabelString( SideLabel.SIDE_BC );
+        parallelFirstSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_AB );
+        parallelSecondSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_CD );
+      }
+
+      response = StringUtils.fillIn( foundIsoscelesTrapezoidPatternString, {
+        equalFirstSide: equalFirstSideString,
+        equalSecondSide: equalSecondSideString,
+        parallelFirstSide: parallelFirstSideString,
+        parallelSecondSide: parallelSecondSideString
+      } );
+    }
+    return response;
+  }
+
+  /**
+   * Returns the response when you create a kite. Describing the square or its attributes depending on if shape
+   * name is shown.
+   */
+  private getFoundKiteResponse( shapeNameVisible: boolean, oppositeEqualVertexPair: VertexPair ): string {
+    let response: string;
+    if ( shapeNameVisible ) {
+      response = this.getFoundShapeResponse( NamedQuadrilateral.KITE );
+    }
+    else {
+      let firstCornerString: string;
+      let secondCornerString: string;
+      if ( oppositeEqualVertexPair.includesVertex( this.quadrilateralShapeModel.vertexA ) ) {
+
+        // opposite equal vertices for the kite are A and C
+        firstCornerString = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_A );
+        secondCornerString = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_C );
+      }
+      else {
+        firstCornerString = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_B );
+        secondCornerString = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_D );
+      }
+
+      response = StringUtils.fillIn( foundKitePatternString, {
+        firstCorner: firstCornerString,
+        secondCorner: secondCornerString
+      } );
+    }
+    return response;
+  }
+
+  /**
+   * Returns the response when you create a dart. Describing the square or its attributes depending on if shape
+   * name is shown.
+   */
+  private getFoundDartResponse( shapeNameVisible: boolean, vertices: Vertex[] ): string {
+    let response: string;
+    if ( shapeNameVisible ) {
+      response = this.getFoundShapeResponse( NamedQuadrilateral.DART );
+    }
+    else {
+      const concaveVertex = vertices.find( vertex => vertex.angleProperty.value! > Math.PI )!;
+      assert && assert( concaveVertex, 'A dart has one vertex with angle greater than Math.PI.' );
+      const inwardCornerLabel = concaveVertex.vertexLabel;
+
+      // the vertices with equal angles for a dart will be the ones adjacent to the inward vertex
+      let firstCornerLabel: VertexLabel;
+      let secondCornerLabel: VertexLabel;
+      if ( inwardCornerLabel === VertexLabel.VERTEX_A || inwardCornerLabel === VertexLabel.VERTEX_D ) {
+        firstCornerLabel = VertexLabel.VERTEX_B;
+        secondCornerLabel = VertexLabel.VERTEX_D;
+      }
+      else {
+        firstCornerLabel = VertexLabel.VERTEX_A;
+        secondCornerLabel = VertexLabel.VERTEX_C;
+      }
+
+      response = StringUtils.fillIn( foundDartPatternString, {
+        inwardCorner: QuadrilateralDescriber.getVertexLabelString( inwardCornerLabel ),
+        firstCorner: QuadrilateralDescriber.getVertexLabelString( firstCornerLabel ),
+        secondCorner: QuadrilateralDescriber.getVertexLabelString( secondCornerLabel )
+      } );
+    }
+
+    return response;
+  }
+
+  /**
+   * Returns the response when you create a parallelogram. Describing the square or its attributes depending on if shape
+   * name is shown.
+   */
+  private getFoundParallelogramResponse( shapeNameVisible: boolean ): string {
+    let response: string;
+    if ( shapeNameVisible ) {
+      response = this.getFoundShapeResponse( NamedQuadrilateral.PARALLELOGRAM );
+    }
+    else {
+      response = oppositeSidesInParallelString;
+    }
+    return response;
+  }
+
+  /**
+   * Returns the response when you create a concave quadrilateral. Describing the square or its attributes depending on
+   * if shape name is shown.
+   */
+  private getFoundConcaveQuadrilateralResponse( shapeNameVisible: boolean, vertices: Vertex[] ): string {
+    let response: string;
+    if ( shapeNameVisible ) {
+      response = this.getFoundShapeResponse( NamedQuadrilateral.CONCAVE_QUADRILATERAL );
+    }
+    else {
+      const concaveVertex = vertices.find( vertex => vertex.angleProperty.value! > Math.PI )!;
+      assert && assert( concaveVertex, 'A convex quad has one vertex with angle greater than Math.PI.' );
+      const inwardCornerLabel = concaveVertex.vertexLabel;
+
+      response = StringUtils.fillIn( foundConcaveQuadrilateralPatternString, {
+        inwardCorner: QuadrilateralDescriber.getVertexLabelString( inwardCornerLabel )
+      } );
+    }
+
+    return response;
+  }
+
+  /**
+   * Returns the response when you create a convex quadrilateral. Describing the square or its attributes depending on
+   * if shape name is shown.
+   */
+  private getFoundConvexQuadrilateralResponse( shapeNameVisible: boolean ): string {
+    let response: string;
+    if ( shapeNameVisible ) {
+      response = this.getFoundShapeResponse( NamedQuadrilateral.CONVEX_QUADRILATERAL );
+    }
+    else {
+      response = foundConvexQuadrilateralString;
+    }
+    return response;
+  }
+
+  /**
+   * Returns a string describing a newly found shape. Returns something like
+   * "Found a square." or
+   * "Found an isosceles trapezoid."
+   */
+  private getFoundShapeResponse( namedQuadrilateral: NamedQuadrilateral ): string {
+    return StringUtils.fillIn( foundShapePatternString, {
+      shapeName: QuadrilateralDescriber.getShapeNameDescription( namedQuadrilateral )
+    } );
   }
 }
 
