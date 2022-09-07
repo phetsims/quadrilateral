@@ -9,7 +9,7 @@
 import Utils from '../../../../dot/js/Utils.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import quadrilateral from '../../quadrilateral.js';
-import quadrilateralStrings from '../../quadrilateralStrings.js';
+import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import Vertex from '../model/Vertex.js';
 import VertexLabel from '../model/VertexLabel.js';
@@ -17,30 +17,30 @@ import Range from '../../../../dot/js/Range.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 
 // constants
-const cornerAString = quadrilateralStrings.a11y.cornerA;
-const cornerBString = quadrilateralStrings.a11y.cornerB;
-const cornerCString = quadrilateralStrings.a11y.cornerC;
-const cornerDString = quadrilateralStrings.a11y.cornerD;
-const rightAngleVertexObjectResponsePatternString = quadrilateralStrings.a11y.voicing.rightAngleVertexObjectResponsePattern;
-const vertexObjectResponsePatternString = quadrilateralStrings.a11y.voicing.vertexObjectResponsePattern;
-const farWiderThanString = quadrilateralStrings.a11y.voicing.farWiderThan;
-const farSmallerThanString = quadrilateralStrings.a11y.voicing.farSmallerThan;
-const muchMuchWiderThanString = quadrilateralStrings.a11y.voicing.muchMuchWiderThan;
-const muchMuchSmallerThanString = quadrilateralStrings.a11y.voicing.muchMuchSmallerThan;
-const muchWiderThanString = quadrilateralStrings.a11y.voicing.muchWiderThan;
-const muchSmallerThanString = quadrilateralStrings.a11y.voicing.muchSmallerThan;
-const somewhatWiderThanString = quadrilateralStrings.a11y.voicing.somewhatWiderThan;
-const somewhatSmallerThanString = quadrilateralStrings.a11y.voicing.somewhatSmallerThan;
-const aLittleWiderThanString = quadrilateralStrings.a11y.voicing.aLittleWiderThan;
-const aLittleSmallerThanString = quadrilateralStrings.a11y.voicing.aLittleSmallerThan;
-const almostEqualToString = quadrilateralStrings.a11y.voicing.almostEqualTo;
-const equalToString = quadrilateralStrings.a11y.voicing.equalTo;
-const equalToAdjacentCornersString = quadrilateralStrings.a11y.voicing.equalToAdjacentCorners;
-const equalToOneAdjacentCornerString = quadrilateralStrings.a11y.voicing.equalToOneAdjacentCorner;
-const equalAdjacentCornersPatternString = quadrilateralStrings.a11y.voicing.equalAdjacentCornersPattern;
-const smallerThanAdjacentCornersString = quadrilateralStrings.a11y.voicing.smallerThanAdjacentCorners;
-const widerThanAdjacentCornersString = quadrilateralStrings.a11y.voicing.widerThanAdjacentCorners;
-const notEqualToAdjacentCornersString = quadrilateralStrings.a11y.voicing.notEqualToAdjacentCorners;
+const cornerAString = QuadrilateralStrings.a11y.cornerA;
+const cornerBString = QuadrilateralStrings.a11y.cornerB;
+const cornerCString = QuadrilateralStrings.a11y.cornerC;
+const cornerDString = QuadrilateralStrings.a11y.cornerD;
+const rightAngleVertexObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.rightAngleVertexObjectResponsePattern;
+const vertexObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.vertexObjectResponsePattern;
+const farWiderThanString = QuadrilateralStrings.a11y.voicing.farWiderThan;
+const farSmallerThanString = QuadrilateralStrings.a11y.voicing.farSmallerThan;
+const muchMuchWiderThanString = QuadrilateralStrings.a11y.voicing.muchMuchWiderThan;
+const muchMuchSmallerThanString = QuadrilateralStrings.a11y.voicing.muchMuchSmallerThan;
+const muchWiderThanString = QuadrilateralStrings.a11y.voicing.muchWiderThan;
+const muchSmallerThanString = QuadrilateralStrings.a11y.voicing.muchSmallerThan;
+const somewhatWiderThanString = QuadrilateralStrings.a11y.voicing.somewhatWiderThan;
+const somewhatSmallerThanString = QuadrilateralStrings.a11y.voicing.somewhatSmallerThan;
+const aLittleWiderThanString = QuadrilateralStrings.a11y.voicing.aLittleWiderThan;
+const aLittleSmallerThanString = QuadrilateralStrings.a11y.voicing.aLittleSmallerThan;
+const almostEqualToString = QuadrilateralStrings.a11y.voicing.almostEqualTo;
+const equalToString = QuadrilateralStrings.a11y.voicing.equalTo;
+const equalToAdjacentCornersString = QuadrilateralStrings.a11y.voicing.equalToAdjacentCorners;
+const equalToOneAdjacentCornerString = QuadrilateralStrings.a11y.voicing.equalToOneAdjacentCorner;
+const equalAdjacentCornersPatternString = QuadrilateralStrings.a11y.voicing.equalAdjacentCornersPattern;
+const smallerThanAdjacentCornersString = QuadrilateralStrings.a11y.voicing.smallerThanAdjacentCorners;
+const widerThanAdjacentCornersString = QuadrilateralStrings.a11y.voicing.widerThanAdjacentCorners;
+const notEqualToAdjacentCornersString = QuadrilateralStrings.a11y.voicing.notEqualToAdjacentCorners;
 
 // Maps a vertex to its accessible name, like "Corner A".
 const vertexCornerLabelMap = new Map<VertexLabel, string>( [

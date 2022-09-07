@@ -13,17 +13,17 @@ import TextPushButton from '../../../sun/js/buttons/TextPushButton.js';
 import Dialog from '../../../sun/js/Dialog.js';
 import nullSoundPlayer from '../../../tambo/js/shared-sound-players/nullSoundPlayer.js';
 import quadrilateral from '../quadrilateral.js';
-import quadrilateralStrings from '../quadrilateralStrings.js';
+import QuadrilateralStrings from '../QuadrilateralStrings.js';
 
 class HapticsInfoDialog extends Dialog {
 
   public constructor() {
 
-    const text = new RichText( quadrilateralStrings.hapticsDialogMessage, {
+    const text = new RichText( QuadrilateralStrings.hapticsDialogMessage, {
       font: new PhetFont( 16 )
     } );
 
-    const button = new TextPushButton( quadrilateralStrings.gotIt, {
+    const button = new TextPushButton( QuadrilateralStrings.gotIt, {
       font: new PhetFont( 24 ),
       baseColor: PhetColorScheme.BUTTON_YELLOW,
       soundPlayer: nullSoundPlayer, // the dialog produces sound when dismissed, so no button sound is needed

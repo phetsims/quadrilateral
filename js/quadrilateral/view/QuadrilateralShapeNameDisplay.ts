@@ -15,23 +15,23 @@ import quadrilateral from '../../quadrilateral.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import Multilink from '../../../../axon/js/Multilink.js';
-import quadrilateralStrings from '../../quadrilateralStrings.js';
+import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 
 // constants
-const squareString = quadrilateralStrings.shapeNames.square;
-const rectangleString = quadrilateralStrings.shapeNames.rectangle;
-const rhombusString = quadrilateralStrings.shapeNames.rhombus;
-const kiteString = quadrilateralStrings.shapeNames.kite;
-const isoscelesTrapezoidString = quadrilateralStrings.shapeNames.isoscelesTrapezoid;
-const trapezoidString = quadrilateralStrings.shapeNames.trapezoid;
-const concaveQuadrilateralString = quadrilateralStrings.shapeNames.concaveQuadrilateral;
-const convexQuadrilateralString = quadrilateralStrings.shapeNames.convexQuadrilateral;
-const parallelogramString = quadrilateralStrings.shapeNames.parallelogram;
-const dartString = quadrilateralStrings.shapeNames.dart;
-const showShapeNameString = quadrilateralStrings.showShapeName;
+const squareString = QuadrilateralStrings.shapeNames.square;
+const rectangleString = QuadrilateralStrings.shapeNames.rectangle;
+const rhombusString = QuadrilateralStrings.shapeNames.rhombus;
+const kiteString = QuadrilateralStrings.shapeNames.kite;
+const isoscelesTrapezoidString = QuadrilateralStrings.shapeNames.isoscelesTrapezoid;
+const trapezoidString = QuadrilateralStrings.shapeNames.trapezoid;
+const concaveQuadrilateralString = QuadrilateralStrings.shapeNames.concaveQuadrilateral;
+const convexQuadrilateralString = QuadrilateralStrings.shapeNames.convexQuadrilateral;
+const parallelogramString = QuadrilateralStrings.shapeNames.parallelogram;
+const dartString = QuadrilateralStrings.shapeNames.dart;
+const showShapeNameString = QuadrilateralStrings.showShapeName;
 
 const SHAPE_NAME_MAP = new Map( [
   [ NamedQuadrilateral.SQUARE, squareString ],

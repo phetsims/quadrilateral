@@ -8,11 +8,11 @@
 
 import quadrilateral from '../../quadrilateral.js';
 import { Node } from '../../../../scenery/js/imports.js';
-import quadrilateralStrings from '../../quadrilateralStrings.js';
+import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 
 // constants
-const playAreaDescriptionString = quadrilateralStrings.a11y.screenSummary.playAreaDescription;
-const controlAreaDescriptionString = quadrilateralStrings.a11y.screenSummary.controlAreaDescription;
+const playAreaDescriptionString = QuadrilateralStrings.a11y.screenSummary.playAreaDescription;
+const controlAreaDescriptionString = QuadrilateralStrings.a11y.screenSummary.controlAreaDescription;
 
 class QuadrilateralScreenSummaryContentNode extends Node {
   public constructor() {

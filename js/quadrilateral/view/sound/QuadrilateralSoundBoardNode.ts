@@ -20,12 +20,12 @@ import soundManager from '../../../../../tambo/js/soundManager.js';
 import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
 import PlayIconShape from '../../../../../scenery-phet/js/PlayIconShape.js';
 import ButtonNode from '../../../../../sun/js/buttons/ButtonNode.js';
-import quadrilateralStrings from '../../../quadrilateralStrings.js';
+import QuadrilateralStrings from '../../../QuadrilateralStrings.js';
 
-const allRightAnglesString = quadrilateralStrings.a11y.voicing.allRightAngles;
-const allSidesEqualString = quadrilateralStrings.a11y.voicing.allSidesEqual;
-const foundAParallelogramString = quadrilateralStrings.a11y.voicing.foundAParallelogram;
-const lostYourParallelogramString = quadrilateralStrings.a11y.voicing.lostYourParallelogram;
+const allRightAnglesString = QuadrilateralStrings.a11y.voicing.allRightAngles;
+const allSidesEqualString = QuadrilateralStrings.a11y.voicing.allSidesEqual;
+const foundAParallelogramString = QuadrilateralStrings.a11y.voicing.foundAParallelogram;
+const lostYourParallelogramString = QuadrilateralStrings.a11y.voicing.lostYourParallelogram;
 
 const BUTTON_SPACING = 5;
 

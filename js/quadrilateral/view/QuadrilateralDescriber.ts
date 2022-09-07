@@ -5,7 +5,7 @@
  */
 
 import quadrilateral from '../../quadrilateral.js';
-import quadrilateralStrings from '../../quadrilateralStrings.js';
+import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import Side from '../model/Side.js';
@@ -16,56 +16,56 @@ import VertexDescriber from './VertexDescriber.js';
 import SideDescriber from './SideDescriber.js';
 
 // constants
-const firstDetailsStatementPatternString = quadrilateralStrings.a11y.voicing.firstDetailsStatementPattern;
-const aBString = quadrilateralStrings.a11y.aB;
-const bCString = quadrilateralStrings.a11y.bC;
-const cDString = quadrilateralStrings.a11y.cD;
-const dAString = quadrilateralStrings.a11y.dA;
-const topSideString = quadrilateralStrings.a11y.topSide;
-const rightSideString = quadrilateralStrings.a11y.rightSide;
-const bottomSideString = quadrilateralStrings.a11y.bottomSide;
-const leftSideString = quadrilateralStrings.a11y.leftSide;
-const allString = quadrilateralStrings.a11y.voicing.details.all;
-const oppositeString = quadrilateralStrings.a11y.voicing.details.opposite;
-const rightAnglesString = quadrilateralStrings.a11y.voicing.details.rightAngles;
-const equalString = quadrilateralStrings.a11y.voicing.details.equal;
-const pairsOfAdjacentString = quadrilateralStrings.a11y.voicing.details.pairsOfAdjacent;
-const onePairOfAdjacentString = quadrilateralStrings.a11y.voicing.details.onePairOfAdjacent;
-const onePairOfOppositeString = quadrilateralStrings.a11y.voicing.details.onePairOfOpposite;
-const noString = quadrilateralStrings.a11y.voicing.details.noString;
-const cornersPatternString = quadrilateralStrings.a11y.voicing.details.cornersPattern;
-const cornerPointsPatternString = quadrilateralStrings.a11y.voicing.details.cornerPointsPattern;
-const cornerConcavePatternString = quadrilateralStrings.a11y.voicing.details.cornerConcavePattern;
-const sidesPatternString = quadrilateralStrings.a11y.voicing.details.sidesPattern;
-const kiteSidesPatternString = quadrilateralStrings.a11y.voicing.details.kiteSidesPattern;
-const trapezoidSidesPatternString = quadrilateralStrings.a11y.voicing.details.trapezoidSidesPattern;
-const equalSidesPatternString = quadrilateralStrings.a11y.voicing.details.equalSidesPattern;
-const twoStatementPatternString = quadrilateralStrings.a11y.voicing.details.twoStatementPattern;
-const sideConcavePatternString = quadrilateralStrings.a11y.voicing.details.sideConcavePattern;
-const generalSidePatternString = quadrilateralStrings.a11y.voicing.details.generalSidePattern;
-const generalVertexPatternString = quadrilateralStrings.a11y.voicing.details.generalVertexPattern;
-const cornerAnglePatternString = quadrilateralStrings.a11y.voicing.details.cornerAnglePattern;
-const rightAngleCornersPatternString = quadrilateralStrings.a11y.voicing.details.rightAngleCornersPattern;
-const twoEqualVerticesAnglePatternString = quadrilateralStrings.a11y.voicing.details.twoEqualVerticesAnglePattern;
-const generalSideWithOneAdjacentEqualPairPatternString = quadrilateralStrings.a11y.voicing.details.generalSideWithOneAdjacentEqualPairPattern;
-const twoPairsOfEqualVerticesPatternString = quadrilateralStrings.a11y.voicing.details.twoPairsOfEqualVerticesPattern;
-const cornersAnglePatternString = quadrilateralStrings.a11y.voicing.details.cornersAnglePattern;
-const vertexAString = quadrilateralStrings.vertexA;
-const vertexBString = quadrilateralStrings.vertexB;
-const vertexCString = quadrilateralStrings.vertexC;
-const vertexDString = quadrilateralStrings.vertexD;
+const firstDetailsStatementPatternString = QuadrilateralStrings.a11y.voicing.firstDetailsStatementPattern;
+const aBString = QuadrilateralStrings.a11y.aB;
+const bCString = QuadrilateralStrings.a11y.bC;
+const cDString = QuadrilateralStrings.a11y.cD;
+const dAString = QuadrilateralStrings.a11y.dA;
+const topSideString = QuadrilateralStrings.a11y.topSide;
+const rightSideString = QuadrilateralStrings.a11y.rightSide;
+const bottomSideString = QuadrilateralStrings.a11y.bottomSide;
+const leftSideString = QuadrilateralStrings.a11y.leftSide;
+const allString = QuadrilateralStrings.a11y.voicing.details.all;
+const oppositeString = QuadrilateralStrings.a11y.voicing.details.opposite;
+const rightAnglesString = QuadrilateralStrings.a11y.voicing.details.rightAngles;
+const equalString = QuadrilateralStrings.a11y.voicing.details.equal;
+const pairsOfAdjacentString = QuadrilateralStrings.a11y.voicing.details.pairsOfAdjacent;
+const onePairOfAdjacentString = QuadrilateralStrings.a11y.voicing.details.onePairOfAdjacent;
+const onePairOfOppositeString = QuadrilateralStrings.a11y.voicing.details.onePairOfOpposite;
+const noString = QuadrilateralStrings.a11y.voicing.details.noString;
+const cornersPatternString = QuadrilateralStrings.a11y.voicing.details.cornersPattern;
+const cornerPointsPatternString = QuadrilateralStrings.a11y.voicing.details.cornerPointsPattern;
+const cornerConcavePatternString = QuadrilateralStrings.a11y.voicing.details.cornerConcavePattern;
+const sidesPatternString = QuadrilateralStrings.a11y.voicing.details.sidesPattern;
+const kiteSidesPatternString = QuadrilateralStrings.a11y.voicing.details.kiteSidesPattern;
+const trapezoidSidesPatternString = QuadrilateralStrings.a11y.voicing.details.trapezoidSidesPattern;
+const equalSidesPatternString = QuadrilateralStrings.a11y.voicing.details.equalSidesPattern;
+const twoStatementPatternString = QuadrilateralStrings.a11y.voicing.details.twoStatementPattern;
+const sideConcavePatternString = QuadrilateralStrings.a11y.voicing.details.sideConcavePattern;
+const generalSidePatternString = QuadrilateralStrings.a11y.voicing.details.generalSidePattern;
+const generalVertexPatternString = QuadrilateralStrings.a11y.voicing.details.generalVertexPattern;
+const cornerAnglePatternString = QuadrilateralStrings.a11y.voicing.details.cornerAnglePattern;
+const rightAngleCornersPatternString = QuadrilateralStrings.a11y.voicing.details.rightAngleCornersPattern;
+const twoEqualVerticesAnglePatternString = QuadrilateralStrings.a11y.voicing.details.twoEqualVerticesAnglePattern;
+const generalSideWithOneAdjacentEqualPairPatternString = QuadrilateralStrings.a11y.voicing.details.generalSideWithOneAdjacentEqualPairPattern;
+const twoPairsOfEqualVerticesPatternString = QuadrilateralStrings.a11y.voicing.details.twoPairsOfEqualVerticesPattern;
+const cornersAnglePatternString = QuadrilateralStrings.a11y.voicing.details.cornersAnglePattern;
+const vertexAString = QuadrilateralStrings.vertexA;
+const vertexBString = QuadrilateralStrings.vertexB;
+const vertexCString = QuadrilateralStrings.vertexC;
+const vertexDString = QuadrilateralStrings.vertexD;
 
 const shapeNameMap = new Map<NamedQuadrilateral | null, string>();
-shapeNameMap.set( NamedQuadrilateral.SQUARE, quadrilateralStrings.a11y.voicing.shapeNames.square );
-shapeNameMap.set( NamedQuadrilateral.RECTANGLE, quadrilateralStrings.a11y.voicing.shapeNames.rectangle );
-shapeNameMap.set( NamedQuadrilateral.RHOMBUS, quadrilateralStrings.a11y.voicing.shapeNames.rhombus );
-shapeNameMap.set( NamedQuadrilateral.KITE, quadrilateralStrings.a11y.voicing.shapeNames.kite );
-shapeNameMap.set( NamedQuadrilateral.ISOSCELES_TRAPEZOID, quadrilateralStrings.a11y.voicing.shapeNames.isoscelesTrapezoid );
-shapeNameMap.set( NamedQuadrilateral.TRAPEZOID, quadrilateralStrings.a11y.voicing.shapeNames.trapezoid );
-shapeNameMap.set( NamedQuadrilateral.CONCAVE_QUADRILATERAL, quadrilateralStrings.a11y.voicing.shapeNames.concaveQuadrilateral );
-shapeNameMap.set( NamedQuadrilateral.CONVEX_QUADRILATERAL, quadrilateralStrings.a11y.voicing.shapeNames.convexQuadrilateral );
-shapeNameMap.set( NamedQuadrilateral.PARALLELOGRAM, quadrilateralStrings.a11y.voicing.shapeNames.parallelogram );
-shapeNameMap.set( NamedQuadrilateral.DART, quadrilateralStrings.a11y.voicing.shapeNames.dart );
+shapeNameMap.set( NamedQuadrilateral.SQUARE, QuadrilateralStrings.a11y.voicing.shapeNames.square );
+shapeNameMap.set( NamedQuadrilateral.RECTANGLE, QuadrilateralStrings.a11y.voicing.shapeNames.rectangle );
+shapeNameMap.set( NamedQuadrilateral.RHOMBUS, QuadrilateralStrings.a11y.voicing.shapeNames.rhombus );
+shapeNameMap.set( NamedQuadrilateral.KITE, QuadrilateralStrings.a11y.voicing.shapeNames.kite );
+shapeNameMap.set( NamedQuadrilateral.ISOSCELES_TRAPEZOID, QuadrilateralStrings.a11y.voicing.shapeNames.isoscelesTrapezoid );
+shapeNameMap.set( NamedQuadrilateral.TRAPEZOID, QuadrilateralStrings.a11y.voicing.shapeNames.trapezoid );
+shapeNameMap.set( NamedQuadrilateral.CONCAVE_QUADRILATERAL, QuadrilateralStrings.a11y.voicing.shapeNames.concaveQuadrilateral );
+shapeNameMap.set( NamedQuadrilateral.CONVEX_QUADRILATERAL, QuadrilateralStrings.a11y.voicing.shapeNames.convexQuadrilateral );
+shapeNameMap.set( NamedQuadrilateral.PARALLELOGRAM, QuadrilateralStrings.a11y.voicing.shapeNames.parallelogram );
+shapeNameMap.set( NamedQuadrilateral.DART, QuadrilateralStrings.a11y.voicing.shapeNames.dart );
 
 // A map that goes from VertexLabel -> letter label (like "A")
 const vertexLabelMap = new Map<VertexLabel, string>();
@@ -136,7 +136,7 @@ class QuadrilateralDescriber {
    */
   public getYouHaveAShapeDescription(): string {
     const shapeDescriptionString = this.getShapeDescription();
-    return StringUtils.fillIn( quadrilateralStrings.a11y.voicing.youHaveAShapeHintPattern, {
+    return StringUtils.fillIn( QuadrilateralStrings.a11y.voicing.youHaveAShapeHintPattern, {
       shapeDescription: shapeDescriptionString
     } );
   }

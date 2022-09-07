@@ -10,7 +10,7 @@
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
-import quadrilateralStrings from '../../quadrilateralStrings.js';
+import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import { NodeOptions, Text, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
@@ -22,11 +22,11 @@ import TProperty from '../../../../axon/js/TProperty.js';
 import audioManager from '../../../../joist/js/audioManager.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 
-const musicControlEnabledContextResponse = quadrilateralStrings.a11y.voicing.musicControl.enabledContextResponseStringProperty;
-const musicControlDisabledContextResponse = quadrilateralStrings.a11y.voicing.musicControl.disabledContextResponseStringProperty;
-const musicControlNameResponse = quadrilateralStrings.a11y.voicing.musicControl.nameResponse;
-const resetShapeControlShapesShownContextResponse = quadrilateralStrings.a11y.voicing.resetShapeControl.shapeShownContextResponse;
-const resetShapeControlShapesHiddenContextResponse = quadrilateralStrings.a11y.voicing.resetShapeControl.shapeHiddenContextResponse;
+const musicControlEnabledContextResponse = QuadrilateralStrings.a11y.voicing.musicControl.enabledContextResponseStringProperty;
+const musicControlDisabledContextResponse = QuadrilateralStrings.a11y.voicing.musicControl.disabledContextResponseStringProperty;
+const musicControlNameResponse = QuadrilateralStrings.a11y.voicing.musicControl.nameResponse;
+const resetShapeControlShapesShownContextResponse = QuadrilateralStrings.a11y.voicing.resetShapeControl.shapeShownContextResponse;
+const resetShapeControlShapesHiddenContextResponse = QuadrilateralStrings.a11y.voicing.resetShapeControl.shapeHiddenContextResponse;
 
 type SelfOptions = EmptySelfOptions;
 type QuadrilateralControlsOptions = StrictOmit<VBoxOptions, 'align' | 'children'> & PickRequired<NodeOptions, 'tandem'>;
@@ -43,7 +43,7 @@ class QuadrilateralControls extends VBox {
       spacing: QuadrilateralConstants.CONTROLS_SPACING
     }, providedOptions );
 
-    const resetShapeButton = new TextPushButton( quadrilateralStrings.resetShape, {
+    const resetShapeButton = new TextPushButton( QuadrilateralStrings.resetShape, {
       font: QuadrilateralConstants.SCREEN_TEXT_OPTIONS.font,
       cornerRadius: QuadrilateralConstants.CORNER_RADIUS,
       baseColor: QuadrilateralColors.resetShapeButtonColorProperty,
@@ -67,14 +67,14 @@ class QuadrilateralControls extends VBox {
       maxTextWidth: 250,
 
       // voicing
-      voicingNameResponse: quadrilateralStrings.resetShape,
+      voicingNameResponse: QuadrilateralStrings.resetShape,
       voicingContextResponse: 'You pressed me',
 
       // phet-io
       tandem: options.tandem.createTandem( 'resetShapeButton' )
     } );
 
-    const playMusicLabel = new Text( quadrilateralStrings.playMusic, QuadrilateralConstants.SCREEN_TEXT_OPTIONS );
+    const playMusicLabel = new Text( QuadrilateralStrings.playMusic, QuadrilateralConstants.SCREEN_TEXT_OPTIONS );
     const playMusicCheckbox = new Checkbox( simSoundEnabledProperty, playMusicLabel, {
       voicingNameResponse: musicControlNameResponse,
       checkedContextResponse: musicControlEnabledContextResponse,

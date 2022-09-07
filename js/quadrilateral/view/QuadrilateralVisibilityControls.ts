@@ -12,7 +12,7 @@ import { VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import GridCheckbox from '../../../../scenery-phet/js/GridCheckbox.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
-import quadrilateralStrings from '../../quadrilateralStrings.js';
+import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import Property from '../../../../axon/js/Property.js';
@@ -39,15 +39,15 @@ class QuadrilateralVisibilityControls extends VBox {
 
       // pdom
       labelTagName: 'label',
-      labelContent: quadrilateralStrings.cornerLabels,
+      labelContent: QuadrilateralStrings.cornerLabels,
 
       // voicing
-      voicingNameResponse: quadrilateralStrings.cornerLabels,
-      voicingHintResponse: quadrilateralStrings.a11y.cornerLabelsHintResponse,
+      voicingNameResponse: QuadrilateralStrings.cornerLabels,
+      voicingHintResponse: QuadrilateralStrings.a11y.cornerLabelsHintResponse,
 
       // a11y
-      checkedContextResponse: quadrilateralStrings.a11y.cornerLabelsAddedResponse,
-      uncheckedContextResponse: quadrilateralStrings.a11y.cornerLabelsRemovedResponse,
+      checkedContextResponse: QuadrilateralStrings.a11y.cornerLabelsAddedResponse,
+      uncheckedContextResponse: QuadrilateralStrings.a11y.cornerLabelsRemovedResponse,
 
       // phet-io
       tandem: options.tandem.createTandem( 'cornerLabelsCheckbox' )
@@ -59,15 +59,15 @@ class QuadrilateralVisibilityControls extends VBox {
 
       // pdom
       labelTagName: 'label',
-      labelContent: quadrilateralStrings.cornerGuides,
+      labelContent: QuadrilateralStrings.cornerGuides,
 
       // voicing
-      voicingNameResponse: quadrilateralStrings.cornerGuides,
-      voicingHintResponse: quadrilateralStrings.a11y.angleGuidesHintResponse,
+      voicingNameResponse: QuadrilateralStrings.cornerGuides,
+      voicingHintResponse: QuadrilateralStrings.a11y.angleGuidesHintResponse,
 
       // a11y
-      checkedContextResponse: quadrilateralStrings.a11y.angleGuidesAddedResponse,
-      uncheckedContextResponse: quadrilateralStrings.a11y.angleGuidesRemovedResponse,
+      checkedContextResponse: QuadrilateralStrings.a11y.angleGuidesAddedResponse,
+      uncheckedContextResponse: QuadrilateralStrings.a11y.angleGuidesRemovedResponse,
 
       // phet-io
       tandem: options.tandem.createTandem( 'cornerGuideCheckbox' )
@@ -79,15 +79,15 @@ class QuadrilateralVisibilityControls extends VBox {
 
       // pdom
       labelTagName: 'label',
-      labelContent: quadrilateralStrings.diagonalGuides,
+      labelContent: QuadrilateralStrings.diagonalGuides,
 
       // voicing
-      voicingNameResponse: quadrilateralStrings.diagonalGuides,
-      voicingHintResponse: quadrilateralStrings.a11y.diagonalGuidesHintResponse,
+      voicingNameResponse: QuadrilateralStrings.diagonalGuides,
+      voicingHintResponse: QuadrilateralStrings.a11y.diagonalGuidesHintResponse,
 
       // a11y
-      checkedContextResponse: quadrilateralStrings.a11y.diagonalGuidesAddedResponse,
-      uncheckedContextResponse: quadrilateralStrings.a11y.diagonalGuidesRemovedResponse,
+      checkedContextResponse: QuadrilateralStrings.a11y.diagonalGuidesAddedResponse,
+      uncheckedContextResponse: QuadrilateralStrings.a11y.diagonalGuidesRemovedResponse,
 
       // phet-io
       tandem: options.tandem.createTandem( 'diagonalGuidesCheckbox' )
@@ -102,15 +102,15 @@ class QuadrilateralVisibilityControls extends VBox {
 
       // pdom
       labelTagName: 'label',
-      labelContent: quadrilateralStrings.grid,
+      labelContent: QuadrilateralStrings.grid,
 
       // voicing
-      voicingNameResponse: quadrilateralStrings.grid,
-      voicingHintResponse: quadrilateralStrings.a11y.gridLinesHintResponse,
+      voicingNameResponse: QuadrilateralStrings.grid,
+      voicingHintResponse: QuadrilateralStrings.a11y.gridLinesHintResponse,
 
       // a11y
-      checkedContextResponse: quadrilateralStrings.a11y.gridLinesAddedResponse,
-      uncheckedContextResponse: quadrilateralStrings.a11y.gridLinesRemovedResponse,
+      checkedContextResponse: QuadrilateralStrings.a11y.gridLinesAddedResponse,
+      uncheckedContextResponse: QuadrilateralStrings.a11y.gridLinesRemovedResponse,
 
       // phet-io
       tandem: options.tandem.createTandem( 'gridCheckbox' )

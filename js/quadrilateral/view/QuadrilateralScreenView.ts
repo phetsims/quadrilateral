@@ -17,7 +17,7 @@ import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralNode from './QuadrilateralNode.js';
 import QuadrilateralSoundView from './sound/QuadrilateralSoundView.js';
 import VertexDragAreaNode from './VertexDragAreaNode.js';
-import quadrilateralStrings from '../../quadrilateralStrings.js';
+import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 import Dialog from '../../../../sun/js/Dialog.js';
@@ -285,7 +285,7 @@ class QuadrilateralScreenView extends ScreenView {
    * Get the content that is spoken from the Voicing toolbar to describe this ScreenView.
    */
   public override getVoicingOverviewContent(): string {
-    return quadrilateralStrings.a11y.voicing.overviewContent;
+    return QuadrilateralStrings.a11y.voicing.overviewContent;
   }
 
   /**
@@ -333,11 +333,11 @@ class QuadrilateralScreenView extends ScreenView {
   public override getVoicingHintContent(): string {
 
     const shapeDescriptionString = this.quadrilateralDescriber.getShapeDescription();
-    const youHaveAShapeString = StringUtils.fillIn( quadrilateralStrings.a11y.voicing.youHaveAShapeHintPattern, {
+    const youHaveAShapeString = StringUtils.fillIn( QuadrilateralStrings.a11y.voicing.youHaveAShapeHintPattern, {
       shapeDescription: shapeDescriptionString
     } );
 
-    return StringUtils.fillIn( quadrilateralStrings.a11y.voicing.hintContentPattern, {
+    return StringUtils.fillIn( QuadrilateralStrings.a11y.voicing.hintContentPattern, {
       shapeDescription: youHaveAShapeString
     } );
   }

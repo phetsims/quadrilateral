@@ -425,8 +425,8 @@ type StringsType = {
   }
 };
 
-const quadrilateralStrings = getStringModule( 'QUADRILATERAL' ) as StringsType;
+const QuadrilateralStrings = getStringModule( 'QUADRILATERAL' ) as StringsType;
 
-quadrilateral.register( 'quadrilateralStrings', quadrilateralStrings );
+quadrilateral.register( 'QuadrilateralStrings', QuadrilateralStrings );
 
-export default quadrilateralStrings;
+export default QuadrilateralStrings;

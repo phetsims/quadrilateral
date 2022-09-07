@@ -15,11 +15,11 @@ import vibrationManager from '../../tappi/js/vibrationManager.js';
 import HapticsInfoDialog from './common/HapticsInfoDialog.js';
 import QuadrilateralQueryParameters from './quadrilateral/QuadrilateralQueryParameters.js';
 import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';
-import quadrilateralStrings from './quadrilateralStrings.js';
+import QuadrilateralStrings from './QuadrilateralStrings.js';
 import QuadrilateralPreferencesModel from './quadrilateral/model/QuadrilateralPreferencesModel.js';
 import QuadrilateralPreferencesNode from './quadrilateral/view/QuadrilateralPreferencesNode.js';
 
-const quadrilateralTitleStringProperty = quadrilateralStrings.quadrilateral.titleStringProperty;
+const quadrilateralTitleStringProperty = QuadrilateralStrings.quadrilateral.titleStringProperty;
 const calibrationDemoString = 'Device'; // this will never be translatable, keep out of json file
 
 const preferencesModel = new QuadrilateralPreferencesModel();

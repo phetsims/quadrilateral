@@ -8,16 +8,16 @@
 
 import Range from '../../dot/js/Range.js';
 import quadrilateral from './quadrilateral.js';
-import quadrilateralStrings from './quadrilateralStrings.js';
+import QuadrilateralStrings from './QuadrilateralStrings.js';
 
-const extremelyFarFromStringString = quadrilateralStrings.a11y.voicing.transformations.extremelyFarFrom;
-const extremelyFarFromString = quadrilateralStrings.a11y.voicing.transformations.extremelyFarFrom;
-const veryFarFromString = quadrilateralStrings.a11y.voicing.transformations.veryFarFrom;
-const farFromString = quadrilateralStrings.a11y.voicing.transformations.farFrom;
-const notSoCloseToString = quadrilateralStrings.a11y.voicing.transformations.notSoCloseTo;
-const somewhatCloseToString = quadrilateralStrings.a11y.voicing.transformations.somewhatCloseTo;
-const veryCloseToString = quadrilateralStrings.a11y.voicing.transformations.veryCloseTo;
-const extremelyCloseToString = quadrilateralStrings.a11y.voicing.transformations.extremelyCloseTo;
+const extremelyFarFromStringString = QuadrilateralStrings.a11y.voicing.transformations.extremelyFarFrom;
+const extremelyFarFromString = QuadrilateralStrings.a11y.voicing.transformations.extremelyFarFrom;
+const veryFarFromString = QuadrilateralStrings.a11y.voicing.transformations.veryFarFrom;
+const farFromString = QuadrilateralStrings.a11y.voicing.transformations.farFrom;
+const notSoCloseToString = QuadrilateralStrings.a11y.voicing.transformations.notSoCloseTo;
+const somewhatCloseToString = QuadrilateralStrings.a11y.voicing.transformations.somewhatCloseTo;
+const veryCloseToString = QuadrilateralStrings.a11y.voicing.transformations.veryCloseTo;
+const extremelyCloseToString = QuadrilateralStrings.a11y.voicing.transformations.extremelyCloseTo;
 
 const PARALLEL_PROXIMITY_STRINGS = [
   extremelyCloseToString,

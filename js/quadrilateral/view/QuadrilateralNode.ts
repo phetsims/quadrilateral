@@ -7,7 +7,7 @@
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import { Node, NodeOptions, TPaint } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
-import quadrilateralStrings from '../../quadrilateralStrings.js';
+import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import SideNode from './SideNode.js';
 import VertexNode from './VertexNode.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -21,18 +21,18 @@ import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 
 // constants
-const cornerAString = quadrilateralStrings.a11y.cornerA;
-const cornerBString = quadrilateralStrings.a11y.cornerB;
-const cornerCString = quadrilateralStrings.a11y.cornerC;
-const cornerDString = quadrilateralStrings.a11y.cornerD;
-const topSideString = quadrilateralStrings.a11y.topSide;
-const rightSideString = quadrilateralStrings.a11y.rightSide;
-const bottomSideString = quadrilateralStrings.a11y.bottomSide;
-const leftSideString = quadrilateralStrings.a11y.leftSide;
-const vertexAString = quadrilateralStrings.vertexA;
-const vertexBString = quadrilateralStrings.vertexB;
-const vertexCString = quadrilateralStrings.vertexC;
-const vertexDString = quadrilateralStrings.vertexD;
+const cornerAString = QuadrilateralStrings.a11y.cornerA;
+const cornerBString = QuadrilateralStrings.a11y.cornerB;
+const cornerCString = QuadrilateralStrings.a11y.cornerC;
+const cornerDString = QuadrilateralStrings.a11y.cornerD;
+const topSideString = QuadrilateralStrings.a11y.topSide;
+const rightSideString = QuadrilateralStrings.a11y.rightSide;
+const bottomSideString = QuadrilateralStrings.a11y.bottomSide;
+const leftSideString = QuadrilateralStrings.a11y.leftSide;
+const vertexAString = QuadrilateralStrings.vertexA;
+const vertexBString = QuadrilateralStrings.vertexB;
+const vertexCString = QuadrilateralStrings.vertexC;
+const vertexDString = QuadrilateralStrings.vertexD;
 
 // in seconds,
 const SHAPE_FILL_TIME = 0.35;
@@ -129,7 +129,7 @@ class QuadrilateralNode extends Node {
 
     // add children - parents support layering order as well as traversal order in the PDOM
     // sides first because we want vertices to catch all input
-    const sideParentNode = new ShapeHeadingNode( quadrilateralStrings.a11y.myShapesSides );
+    const sideParentNode = new ShapeHeadingNode( QuadrilateralStrings.a11y.myShapesSides );
     sideParentNode.addChild( topSideNode );
     sideParentNode.addChild( rightSideNode );
     sideParentNode.addChild( bottomSideNode );
@@ -148,7 +148,7 @@ class QuadrilateralNode extends Node {
     this.addChild( vertexCRightAngleIndicator );
     this.addChild( vertexDRightAngleIndicator );
 
-    const vertexParentNode = new ShapeHeadingNode( quadrilateralStrings.a11y.myShapesCorners );
+    const vertexParentNode = new ShapeHeadingNode( QuadrilateralStrings.a11y.myShapesCorners );
     vertexParentNode.addChild( vertexNode1 );
     vertexParentNode.addChild( vertexNode2 );
     vertexParentNode.addChild( vertexNode3 );
