@@ -83,7 +83,7 @@ class ParallelSideChecker {
 
       const verticesPressedArray = [ side1Vertex1Pressed, side1Vertex2Pressed, side2Vertex1Pressed, side2Vertex2Pressed ];
       const numberOfVerticesPressed = _.countBy( verticesPressedArray ).true;
-      const anySelfSidesPressed = side1Pressed || side2Pressed;
+      // const anySelfSidesPressed = side1Pressed || side2Pressed;
       const anyOtherSidesPressed = otherSide1Pressed || otherSide2Pressed;
 
       let toleranceInterval;
@@ -107,20 +107,20 @@ class ParallelSideChecker {
       }
       else {
 
-        // remaining cases apply to mouse, touch, and keyboard input
-        if ( anySelfSidesPressed && this.isParallelProperty.value ) {
-
-          // A side has been picked up while the shape is a parallelogram - it should be impossible for the shape
-          // to go "out" of parallelogram in this case because none of the angles should be changing.
-          toleranceInterval = Number.POSITIVE_INFINITY;
-        }
-        else if ( anySelfSidesPressed && !this.isParallelProperty.value ) {
-
-          // A side as been picked up while the shape is NOT a parallelogram - it should be impossible for the
-          // shape to become a parallelogram while it is being dragged.
-          toleranceInterval = Number.NEGATIVE_INFINITY;
-        }
-        else if ( anyOtherSidesPressed && !this.isParallelProperty.value ) {
+        // // remaining cases apply to mouse, touch, and keyboard input
+        // if ( anySelfSidesPressed && this.isParallelProperty.value ) {
+        //
+        //   // A side has been picked up while the shape is a parallelogram - it should be impossible for the shape
+        //   // to go "out" of parallelogram in this case because none of the angles should be changing.
+        //   toleranceInterval = Number.POSITIVE_INFINITY;
+        // }
+        // else if ( anySelfSidesPressed && !this.isParallelProperty.value ) {
+        //
+        //   // A side as been picked up while the shape is NOT a parallelogram - it should be impossible for the
+        //   // shape to become a parallelogram while it is being dragged.
+        //   toleranceInterval = Number.NEGATIVE_INFINITY;
+        // }
+        if ( anyOtherSidesPressed && !this.isParallelProperty.value ) {
 
           // The other sides are being pressed and my sides are not currently parallel. While dragging a side we
           // do not want the shape to become a parallelogram within a finite angleToleranceInterval so make sure
