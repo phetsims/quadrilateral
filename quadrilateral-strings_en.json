@@ -424,10 +424,10 @@
         "value": "Corner {{inwardCorner}} points inward, Corner {{firstCorner}} and Corner {{secondCorner}} are equal, and pairs of adjacent sides are equal."
       },
       "foundConvexQuadrilateral": {
-        "value": "All sides tilt away from parallel."
+        "value": "No sides in parallel."
       },
       "foundConcaveQuadrilateralPattern": {
-        "value": "Corner {{inwardCorner}} points inward, and all sides tilt away from parallel."
+        "value": "Corner {{inwardCorner}} points inward, no sides in parallel."
       },
       "vertexObjectResponsePattern": {
         "value": "{{oppositeComparison}} opposite corner, {{adjacentVertexDescription}}."
