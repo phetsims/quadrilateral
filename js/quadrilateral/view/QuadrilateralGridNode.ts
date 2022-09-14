@@ -14,10 +14,11 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { Shape } from '../../../../kite/js/imports.js';
-import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 
-const GRID_SPACING = QuadrilateralConstants.MAJOR_GRID_SPACING * 5;
+// constants
+// model coordinates
+const GRID_SPACING = 0.25;
 
 const GRID_LINE_OPTIONS = {
   stroke: QuadrilateralColors.gridColorProperty

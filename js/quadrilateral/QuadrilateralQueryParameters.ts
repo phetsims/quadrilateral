@@ -10,7 +10,6 @@ import IOType from '../../../tandem/js/types/IOType.js';
 import NumberIO from '../../../tandem/js/types/NumberIO.js';
 import quadrilateral from '../quadrilateral.js';
 import { SoundDesign } from './model/QuadrilateralSoundOptionsModel.js';
-import QuadrilateralConstants from '../common/QuadrilateralConstants.js';
 
 const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
 
@@ -196,14 +195,14 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
    */
   majorVertexInterval: {
     type: 'number',
-    defaultValue: QuadrilateralConstants.MAJOR_GRID_SPACING,
-    isValidValue: ( value: number ) => value >= QuadrilateralConstants.MINOR_GRID_SPACING
+    defaultValue: 0.05,
+    isValidValue: ( value: number ) => value > 0
   },
 
   minorVertexInterval: {
     type: 'number',
-    defaultValue: QuadrilateralConstants.MINOR_GRID_SPACING,
-    isValidValue: ( value: number ) => value >= QuadrilateralConstants.MINOR_GRID_SPACING
+    defaultValue: 0.05,
+    isValidValue: ( value: number ) => value > 0
   },
 
   /**
