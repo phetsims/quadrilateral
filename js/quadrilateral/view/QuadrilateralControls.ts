@@ -13,9 +13,9 @@ import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
-import { NodeOptions, Text, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
+import { NodeOptions, Text, TextOptions, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
 import Property from '../../../../axon/js/Property.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import TProperty from '../../../../axon/js/TProperty.js';
@@ -64,7 +64,7 @@ class QuadrilateralControls extends VBox {
       yMargin: 10,
 
       // i18n
-      maxTextWidth: 250,
+      maxTextWidth: 150,
 
       // voicing
       voicingNameResponse: QuadrilateralStrings.resetShape,
@@ -74,7 +74,11 @@ class QuadrilateralControls extends VBox {
       tandem: options.tandem.createTandem( 'resetShapeButton' )
     } );
 
-    const playMusicLabel = new Text( QuadrilateralStrings.playMusic, QuadrilateralConstants.SCREEN_TEXT_OPTIONS );
+    const playMusicLabel = new Text( QuadrilateralStrings.playMusic, combineOptions<TextOptions>( {}, QuadrilateralConstants.SCREEN_TEXT_OPTIONS, {
+
+      // i18n - by inspection
+      maxWidth: 125
+    } ) );
     const playMusicCheckbox = new Checkbox( simSoundEnabledProperty, playMusicLabel, {
       voicingNameResponse: musicControlNameResponse,
       checkedContextResponse: musicControlEnabledContextResponse,
