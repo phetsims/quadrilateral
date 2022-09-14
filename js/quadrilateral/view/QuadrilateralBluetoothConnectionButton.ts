@@ -147,7 +147,7 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
   private handleCharacteristicValueChanged( event: Event ): void {
     if ( event.target ) {
       // @ts-ignore
-      // console.log( '1: ', event.target.value.getFloat32( 0, true ) );
+      console.log( '1: ', event.target.value.getFloat32( 0, true ) );
 
       // @ts-ignore
       this.topLength = event.target.value.getFloat32( 0, true );
@@ -157,7 +157,7 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
   private handleCharacteristicValue2Changed( event: Event ): void {
     if ( event.target ) {
       // @ts-ignore
-      // console.log( '2: ', event.target.value.getFloat32( 0, true ) );
+      console.log( '2: ', event.target.value.getFloat32( 0, true ) );
 
       // @ts-ignore
       this.rightLength = event.target.value.getFloat32( 0, true );
@@ -167,7 +167,7 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
   private handleCharacteristicValue3Changed( event: Event ): void {
     if ( event.target ) {
       // @ts-ignore
-      // console.log( '3: ', event.target.value.getFloat32( 0, true ) );
+      console.log( '3: ', event.target.value.getFloat32( 0, true ) );
 
       // @ts-ignore
       this.leftLength = event.target.value.getFloat32( 0, true );
@@ -177,7 +177,7 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
   private handleCharacteristicValue4Changed( event: Event ): void {
     if ( event.target ) {
       // @ts-ignore
-      // console.log( '4: ', event.target.value.getFloat32( 0, true ) );
+      console.log( '4: ', event.target.value.getFloat32( 0, true ) );
 
       // @ts-ignore
       this.topLeftAngle = event.target.value.getFloat32( 0, true );
@@ -187,7 +187,7 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
   private handleCharacteristicValue5Changed( event: Event ): void {
     if ( event.target ) {
       // @ts-ignore
-      // console.log( '5: ', event.target.value.getFloat32( 0, true ) );
+      console.log( '5: ', event.target.value.getFloat32( 0, true ) );
 
       // @ts-ignore
       this.topRightAngle = event.target.value.getFloat32( 0, true );
