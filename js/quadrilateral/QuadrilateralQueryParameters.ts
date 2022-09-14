@@ -206,6 +206,26 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   },
 
   /**
+   * The "major" vertex interval when the "fine" input spacing is selected from Preferences.
+   * Value is in model coordinates.
+   */
+  majorFineVertexInterval: {
+    type: 'number',
+    defaultValue: 0.05,
+    isValidValue: ( value: number ) => value > 0
+  },
+
+  /**
+   * The "minor" vertex interval when the "fine" input spacing is selected from Preferences.
+   * Value is in model coordinates.
+   */
+  minorFineVertexInterval: {
+    type: 'number',
+    defaultValue: 0.0125,
+    isValidValue: ( value: number ) => value > 0
+  },
+
+  /**
    * Adds more to the QuadrilateralGridNode so that you can visualize the majorVertexInterval
    * and the minorVertexInterval, which determine where vertices are constrained to in model space.
    */

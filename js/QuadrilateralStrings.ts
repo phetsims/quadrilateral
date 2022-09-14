@@ -35,6 +35,8 @@ type StringsType = {
   'resetShapeStringProperty': TReadOnlyProperty<string>;
   'playMusic': string;
   'playMusicStringProperty': TReadOnlyProperty<string>;
+  'fineInputSpacing': string;
+  'fineInputSpacingStringProperty': TReadOnlyProperty<string>;
   'shapeNames': {
     'square': string;
     'squareStringProperty': TReadOnlyProperty<string>;

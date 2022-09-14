@@ -9,7 +9,7 @@
 import PreferencesModel from '../../joist/js/preferences/PreferencesModel.js';
 import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
-import { Color, ColorProperty } from '../../scenery/js/imports.js';
+import { Color, ColorProperty, Node } from '../../scenery/js/imports.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import vibrationManager from '../../tappi/js/vibrationManager.js';
 import HapticsInfoDialog from './common/HapticsInfoDialog.js';
@@ -17,9 +17,11 @@ import QuadrilateralQueryParameters from './quadrilateral/QuadrilateralQueryPara
 import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';
 import QuadrilateralStrings from './QuadrilateralStrings.js';
 import QuadrilateralPreferencesModel from './quadrilateral/model/QuadrilateralPreferencesModel.js';
-import QuadrilateralPreferencesNode from './quadrilateral/view/QuadrilateralPreferencesNode.js';
+import QuadrilateralAudioPreferencesNode from './quadrilateral/view/QuadrilateralAudioPreferencesNode.js';
 import Property from '../../axon/js/Property.js';
 import MappedProperty from '../../axon/js/MappedProperty.js';
+import QuadrilateralSimulationPreferencesNode from './quadrilateral/view/QuadrilateralSimulationPreferencesNode.js';
+import QuadrilateralInputPreferencesNode from './quadrilateral/view/QuadrilateralInputPreferencesNode.js';
 
 const quadrilateralTitleStringProperty = QuadrilateralStrings.quadrilateral.titleStringProperty;
 const calibrationDemoString = new Property( 'Device' ); // this will never be translatable, keep out of json file
@@ -43,8 +45,23 @@ const simOptions: SimOptions = {
   preferencesModel: new PreferencesModel( {
     simulationOptions: {
       customPreferences: [ {
-        createContent: tandem => new QuadrilateralPreferencesNode( preferencesModel, tandem.createTandem( 'simPreferences' ) )
+        createContent: tandem => new QuadrilateralSimulationPreferencesNode( preferencesModel, tandem.createTandem( 'simPreferences' ) )
       } ]
+    },
+    inputOptions: {
+      customPreferences: [ {
+        createContent: tandem => new QuadrilateralInputPreferencesNode( preferencesModel )
+      } ]
+    },
+    audioOptions: {
+      customPreferences: [
+        {
+          createContent: tandem => new Node()
+        },
+        {
+          createContent: tandem => new QuadrilateralAudioPreferencesNode( preferencesModel, tandem.createTandem( 'audioPreferences' ) )
+        }
+      ]
     }
   } )
 };

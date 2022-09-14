@@ -334,9 +334,14 @@ class QuadrilateralModel {
 
   /**
    * Returns the closest position in the model from the point provided that will be constrained to the minor lines
-   * of the model "grid". By default it uses the following minor grid spacing but a different spacing may be necessary.
+   * of the model "grid". By default it uses the minor grid spacing controlled by Preferences. But a different spacing
+   * may be needed depending on the method of input.
    */
-  public static getClosestGridPosition( position: Vector2, interval = QuadrilateralQueryParameters.minorVertexInterval ): Vector2 {
+  public getClosestGridPosition( position: Vector2, interval?: number ): Vector2 {
+    if ( interval === undefined ) {
+      interval = this.preferencesModel.fineInputSpacingProperty.value ? QuadrilateralQueryParameters.minorFineVertexInterval : QuadrilateralQueryParameters.minorVertexInterval;
+    }
+
     return new Vector2( Utils.roundToInterval( position.x, interval ), Utils.roundToInterval( position.y, interval ) );
   }
 }

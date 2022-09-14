@@ -42,6 +42,11 @@ class QuadrilateralPreferencesModel {
   public readonly deviceGridSpacingProperty = new NumberProperty( QuadrilateralQueryParameters.deviceGridSpacing, {
     range: new Range( 0.0125, 0.25 )
   } );
+
+  // Controls the interval that Vertex positions are constrained to for typical simulation control. When true,
+  // Vertices will be constrained to a finer grid for more precise motion. In general that is not necessary but some
+  // users may want that amount of control.
+  public readonly fineInputSpacingProperty = new BooleanProperty( false );
 }
 
 quadrilateral.register( 'QuadrilateralPreferencesModel', QuadrilateralPreferencesModel );

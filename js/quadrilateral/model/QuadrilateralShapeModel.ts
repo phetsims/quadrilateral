@@ -1137,10 +1137,6 @@ class QuadrilateralShapeModel {
           // apply smoothing over a number of values to reduce noise
           constrainedPosition = vertexWithProposedPosition.vertex.smoothPosition( virtualPosition );
 
-          // constrain to the closest grid position
-          // With a high enough smoothingLength, this isn't necessary with MediaPipe.
-          // constrainedPosition = QuadrilateralModel.getClosestGridPosition( virtualPosition, this.model.preferencesModel.deviceGridSpacingProperty.value );
-
           // constrain within model bounds
           constrainedPosition = this.model.modelBoundsProperty.value?.closestPointTo( constrainedPosition );
         }
@@ -1326,7 +1322,7 @@ class QuadrilateralShapeModel {
     ];
 
     // Constrain to intervals of deviceGridSpacingProperty.value to try to reduce noise
-    const constrainedGridPositions = _.map( smoothedPositions, smoothedPosition => QuadrilateralModel.getClosestGridPosition( smoothedPosition, this.model.preferencesModel.deviceGridSpacingProperty.value ) );
+    const constrainedGridPositions = _.map( smoothedPositions, smoothedPosition => this.model.getClosestGridPosition( smoothedPosition, this.model.preferencesModel.deviceGridSpacingProperty.value ) );
 
     const verticesWithProposedPositions = [
       { vertex: this.vertexA, proposedPosition: constrainedGridPositions[ 0 ]! },

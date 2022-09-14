@@ -35,6 +35,9 @@
   "playMusic": {
     "value": "Play Music"
   },
+  "fineInputSpacing": {
+    "value": "Fine Input Spacing"
+  },
   "shapeNames.square": {
     "value": "Square"
   },

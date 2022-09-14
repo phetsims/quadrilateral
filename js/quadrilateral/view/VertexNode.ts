@@ -98,8 +98,6 @@ class VertexNode extends Voicing( Circle ) {
       vertexLabelText.visible = vertexLabelsVisible;
     } );
 
-    const largeViewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralQueryParameters.majorVertexInterval );
-    const smallViewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralQueryParameters.minorVertexInterval );
     const keyboardDragListener = new KeyboardDragListener( {
       transform: modelViewTransform,
       drag: ( modelDelta: Vector2 ) => {
@@ -113,8 +111,6 @@ class VertexNode extends Voicing( Circle ) {
       // velocity defined in view coordinates per second, assuming 60 fps
       dragBoundsProperty: vertex.dragBoundsProperty,
 
-      dragDelta: largeViewDragDelta,
-      shiftDragDelta: smallViewDragDelta,
       moveOnHoldDelay: 750,
       moveOnHoldInterval: 50,
 
@@ -124,6 +120,18 @@ class VertexNode extends Voicing( Circle ) {
       tandem: options.tandem.createTandem( 'keyboardDragListener' )
     } );
     this.addInputListener( keyboardDragListener );
+
+    // The user is able to control the interval for positioning each vertex, a "fine" control or default
+    model.preferencesModel.fineInputSpacingProperty.link( fineInputSpacing => {
+      const largeModelDelta = fineInputSpacing ? QuadrilateralQueryParameters.majorFineVertexInterval : QuadrilateralQueryParameters.majorVertexInterval;
+      const smallModelDelta = fineInputSpacing ? QuadrilateralQueryParameters.minorFineVertexInterval : QuadrilateralQueryParameters.minorVertexInterval;
+
+      const largeViewDragDelta = modelViewTransform.modelToViewDeltaX( largeModelDelta );
+      const smallViewDragDelta = modelViewTransform.modelToViewDeltaX( smallModelDelta );
+
+      keyboardDragListener.dragDelta = largeViewDragDelta;
+      keyboardDragListener.shiftDragDelta = smallViewDragDelta;
+    } );
 
     const dragListener = new DragListener( {
       transform: modelViewTransform,
@@ -138,7 +146,7 @@ class VertexNode extends Voicing( Circle ) {
         const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
 
         // constrain to the allowable positions in the model along the grid
-        const constrainedPosition = QuadrilateralModel.getClosestGridPosition( modelPoint );
+        const constrainedPosition = model.getClosestGridPosition( modelPoint );
 
         if ( model.isVertexPositionAllowed( vertex, constrainedPosition ) ) {
           vertex.positionProperty.value = constrainedPosition;

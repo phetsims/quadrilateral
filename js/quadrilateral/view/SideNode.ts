@@ -159,24 +159,30 @@ class SideNode extends Voicing( Path ) {
       this.focusHighlight = lineNode.getStrokedShape();
     } );
 
-    // supports keyboard dragging, attempts to move both vertices in the direction of motion of the line
-    const viewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralQueryParameters.majorVertexInterval );
-    const minorViewDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralQueryParameters.minorVertexInterval );
-
-    this.addInputListener( new KeyboardDragListener( {
+    const keyboardDragListener = new KeyboardDragListener( {
       transform: modelViewTransform,
       drag: ( vectorDelta: Vector2 ) => {
         this.moveVerticesFromModelDelta( vectorDelta );
       },
 
-      // velocity defined in view coordinates per second, assuming 60 fps
-      dragDelta: viewDragDelta,
-      shiftDragDelta: minorViewDelta,
       moveOnHoldDelay: 750,
       moveOnHoldInterval: 50,
 
       tandem: options.tandem?.createTandem( 'keyboardDragListener' )
-    } ) );
+    } );
+    this.addInputListener( keyboardDragListener );
+
+    // The user is able to control the interval for positioning each vertex, a "fine" control or default
+    quadrilateralModel.preferencesModel.fineInputSpacingProperty.link( fineInputSpacing => {
+      const largeModelDelta = fineInputSpacing ? QuadrilateralQueryParameters.majorFineVertexInterval : QuadrilateralQueryParameters.majorVertexInterval;
+      const smallModelDelta = fineInputSpacing ? QuadrilateralQueryParameters.minorFineVertexInterval : QuadrilateralQueryParameters.minorVertexInterval;
+
+      const largeViewDragDelta = modelViewTransform.modelToViewDeltaX( largeModelDelta );
+      const smallViewDragDelta = modelViewTransform.modelToViewDeltaX( smallModelDelta );
+
+      keyboardDragListener.dragDelta = largeViewDragDelta;
+      keyboardDragListener.shiftDragDelta = smallViewDragDelta;
+    } );
 
     // Vectors between the start position during drag and each vertex so that we can translate vertex positions
     // relative to a pointer position on a side.
@@ -223,8 +229,8 @@ class SideNode extends Voicing( Path ) {
           const modelVertex2Position = modelPoint.plus( vectorToVertex2! );
 
           // constrain each to the model grid
-          const proposedVertex1Position = QuadrilateralModel.getClosestGridPosition( modelVertex1Position );
-          const proposedVertex2Position = QuadrilateralModel.getClosestGridPosition( modelVertex2Position );
+          const proposedVertex1Position = quadrilateralModel.getClosestGridPosition( modelVertex1Position );
+          const proposedVertex2Position = quadrilateralModel.getClosestGridPosition( modelVertex2Position );
 
           // only update positions if both are allowed
           if ( quadrilateralModel.areVertexPositionsAllowed( side.vertex1, proposedVertex1Position, side.vertex2, proposedVertex2Position ) ) {
@@ -296,8 +302,8 @@ class SideNode extends Voicing( Path ) {
     let proposedVertex2Position = this.side.vertex2.positionProperty.get().plus( deltaVector );
 
     // constrain positions to the "grid" of the model
-    proposedVertex1Position = QuadrilateralModel.getClosestGridPosition( proposedVertex1Position );
-    proposedVertex2Position = QuadrilateralModel.getClosestGridPosition( proposedVertex2Position );
+    proposedVertex1Position = this.quadrilateralModel.getClosestGridPosition( proposedVertex1Position );
+    proposedVertex2Position = this.quadrilateralModel.getClosestGridPosition( proposedVertex2Position );
 
     // if the positions are outside of model bounds, the shape is not allowed
     // TODO: I am not sure how to put this in the isQuadrilateralShapeAllowed, because to set the shape
@@ -343,7 +349,7 @@ class SideNode extends Voicing( Path ) {
    */
   private rotateVertexAroundOther( anchorVertex: Vertex, armVertex: Vertex, modelDelta: Vector2 ): void {
     const modelPosition = armVertex.positionProperty.get().plus( modelDelta );
-    const proposedPosition = QuadrilateralModel.getClosestGridPosition( modelPosition );
+    const proposedPosition = this.quadrilateralModel.getClosestGridPosition( modelPosition );
     if ( this.quadrilateralModel.isVertexPositionAllowed( armVertex, proposedPosition ) ) {
       armVertex.positionProperty.value = proposedPosition;
     }
