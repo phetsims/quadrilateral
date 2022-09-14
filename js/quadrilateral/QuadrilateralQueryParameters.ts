@@ -28,7 +28,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   angleToleranceInterval: {
     type: 'number',
     isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
-    defaultValue: 0.005
+    defaultValue: 0.002
   },
 
   // Behaves like angleToleranceInterval, but the default when connected to a tangible
@@ -58,7 +58,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   shapeAngleToleranceInterval: {
     type: 'number',
     isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
-    defaultValue: 0.01
+    defaultValue: 0.001
   },
 
   // The default value for the angleToleranceInterval when we are connected to the device. Otherwise
@@ -97,7 +97,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // A tolerance interval for comparing lengths for the purposes of shape detection.
   shapeLengthToleranceInterval: {
     type: 'number',
-    defaultValue: 0.01
+    defaultValue: 0.002
   },
 
   // A flag that controls when the "maintenance" sound is played. When provided, the success sound for maintenance
