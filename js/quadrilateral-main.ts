@@ -18,9 +18,11 @@ import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';
 import QuadrilateralStrings from './QuadrilateralStrings.js';
 import QuadrilateralPreferencesModel from './quadrilateral/model/QuadrilateralPreferencesModel.js';
 import QuadrilateralPreferencesNode from './quadrilateral/view/QuadrilateralPreferencesNode.js';
+import Property from '../../axon/js/Property.js';
+import MappedProperty from '../../axon/js/MappedProperty.js';
 
 const quadrilateralTitleStringProperty = QuadrilateralStrings.quadrilateral.titleStringProperty;
-const calibrationDemoString = 'Device'; // this will never be translatable, keep out of json file
+const calibrationDemoString = new Property( 'Device' ); // this will never be translatable, keep out of json file
 
 const preferencesModel = new QuadrilateralPreferencesModel();
 
@@ -54,7 +56,12 @@ simLauncher.launch( () => {
   // if in the "calibration" demo, use two screens to test communication between them, see
   // https://github.com/phetsims/quadrilateral/issues/18
   const quadrilateralScreen = new QuadrilateralScreen( preferencesModel, {
-    name: quadrilateralTitleStringProperty,
+
+    // You cannot pass the same Property instance as a single as the sim and screen name.
+    name: new MappedProperty<string, string>( quadrilateralTitleStringProperty, {
+      bidirectional: true,
+      map: _.identity, inverseMap: _.identity
+    } ),
     tandem: Tandem.ROOT.createTandem( 'quadrilateralScreen' )
   } );
   const calibrationDemoScreen = new QuadrilateralScreen( preferencesModel, {
