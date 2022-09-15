@@ -16,6 +16,7 @@ import Side from '../model/Side.js';
 import { Line, Shape } from '../../../../kite/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import Emitter from '../../../../axon/js/Emitter.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 
 const PATH_OPTIONS = {
   stroke: QuadrilateralColors.interactionCueColorProperty,
@@ -24,7 +25,7 @@ const PATH_OPTIONS = {
 };
 
 class QuadrilateralInteractionCueNode extends Path {
-  public constructor( quadrilateralShapeModel: QuadrilateralShapeModel, resetEmitter: Emitter, modelViewTransform: ModelViewTransform2 ) {
+  public constructor( quadrilateralShapeModel: QuadrilateralShapeModel, connectedToDeviceProperty: TReadOnlyProperty<boolean>, resetEmitter: Emitter, modelViewTransform: ModelViewTransform2 ) {
     const nodeShape = new Shape();
 
     // vertices
@@ -65,12 +66,19 @@ class QuadrilateralInteractionCueNode extends Path {
     quadrilateralShapeModel.vertices.forEach( vertex => {
       vertex.isPressedProperty.lazyLink( () => this.setVisible( false ) );
     } );
-
     quadrilateralShapeModel.sides.forEach( side => {
       side.isPressedProperty.lazyLink( () => this.setVisible( false ) );
     } );
 
-    resetEmitter.addListener( () => this.setVisible( true ) );
+    // When connection is first made to a tangible, the interaction cues are invisible.
+    connectedToDeviceProperty.link( connectedToDevice => {
+      if ( connectedToDevice ) {
+        this.setVisible( false );
+      }
+    } );
+
+    // If reset is pressed, we should see the cue again
+    resetEmitter.addListener( () => this.setVisible( !connectedToDeviceProperty.value ) );
   }
 }
 

@@ -100,7 +100,7 @@ class QuadrilateralScreenView extends ScreenView {
     this.addChild( this.resetAllButton );
 
     const shapeNameDisplay = new QuadrilateralShapeNameDisplay( model.shapeNameVisibleProperty, model.quadrilateralShapeModel.shapeNameProperty, this.quadrilateralDescriber, tandem.createTandem( 'quadrilateralShapeNameDisplay' ) );
-    this.addChild( shapeNameDisplay );
+    this.pdomPlayAreaNode.addChild( shapeNameDisplay );
 
     // the model bounds are defined by available view space. Some padding is added around the screen and we make
     // sure that the vertices cannot overlap with simulation controls. Otherwise the quadrilateral can move freely in
@@ -144,7 +144,7 @@ class QuadrilateralScreenView extends ScreenView {
       tandem: tandem.createTandem( 'quadrilateralNode' )
     } );
 
-    const interactionCueNode = new QuadrilateralInteractionCueNode( model.quadrilateralShapeModel, model.resetEmitter, modelViewTransform );
+    const interactionCueNode = new QuadrilateralInteractionCueNode( model.quadrilateralShapeModel, model.connectedToDeviceProperty, model.resetEmitter, modelViewTransform );
 
     this.quadrilateralSoundView = new QuadrilateralSoundView( model, preferencesModel.soundOptionsModel );
 
@@ -271,7 +271,7 @@ class QuadrilateralScreenView extends ScreenView {
     }
 
     // pdom
-    this.pdomPlayAreaNode.pdomOrder = [ this.quadrilateralNode, shapeNameDisplay, simulationControls ];
+    this.pdomPlayAreaNode.pdomOrder = [ this.quadrilateralNode, null, simulationControls ];
     this.pdomControlAreaNode.pdomOrder = [ visibilityControls, this.resetAllButton ];
     this.setScreenSummaryContent( new QuadrilateralScreenSummaryContentNode() );
 

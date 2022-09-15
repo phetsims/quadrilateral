@@ -35,6 +35,8 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
 
   public readonly allDataCollectedEmitter = new Emitter();
 
+  private readonly model: QuadrilateralModel;
+
   private topLength = 0;
   private rightLength = 0;
   private leftLength = 0;
@@ -48,6 +50,8 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
     super( 'Search for device', {
       textNodeOptions: QuadrilateralConstants.PANEL_LABEL_TEXT_OPTIONS
     } );
+
+    this.model = quadrilateralModel;
 
     this.addListener( this.requestQuadDevice.bind( this ) );
 
@@ -134,8 +138,11 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
         notifySuccess5.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
           this.handleCharacteristicValue5Changed( event );
         } );
+
         // At this time we can assume that connections are successful
+        // TODO: Set to false when connection is lost?
         console.log( 'connection successful' );
+        this.model.connectedToDeviceProperty.value = true;
       }
     }
   }
