@@ -11,7 +11,6 @@ import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
 import { Node } from '../../scenery/js/imports.js';
 import Tandem from '../../tandem/js/Tandem.js';
-import vibrationManager from '../../tappi/js/vibrationManager.js';
 import HapticsInfoDialog from './common/HapticsInfoDialog.js';
 import QuadrilateralQueryParameters from './quadrilateral/QuadrilateralQueryParameters.js';
 import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';
@@ -97,5 +96,6 @@ simLauncher.launch( () => {
   // Initialize the vibration manager.  This is necessary because the vibration manager needs certain things from the
   // sim object instance to complete its setup.  If the vibration feature becomes widely used, this may be moved into
   // Sim.js, but as of now (May 2022) we don't want Sim.js to have a dependency on this library.
-  vibrationManager.initialize( sim.browserTabVisibleProperty, sim.activeProperty );
+  // Removed for now until we return to this work, see https://github.com/phetsims/quadrilateral/issues/104
+  // vibrationManager.initialize( sim.browserTabVisibleProperty, sim.activeProperty );
 } );

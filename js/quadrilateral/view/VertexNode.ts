@@ -15,7 +15,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import vibrationManager from '../../../../tappi/js/vibrationManager.js';
 import VertexDescriber from './VertexDescriber.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import optionize from '../../../../phet-core/js/optionize.js';
@@ -179,16 +178,16 @@ class VertexNode extends Voicing( Circle ) {
     this.voicingObjectResponse = vertexDescriber.getVertexObjectResponse();
 
     // vibration
-    vertex.isPressedProperty.lazyLink( isPressed => {
-      if ( navigator !== undefined && navigator.vibrate !== undefined ) {
-        if ( isPressed ) {
-          vibrationManager.startRepeatingVibrationPattern( [ 75, 75 ] );
-        }
-        else {
-          vibrationManager.stopRepeatingVibrationPattern();
-        }
-      }
-    } );
+    // vertex.isPressedProperty.lazyLink( isPressed => {
+    //   if ( navigator !== undefined && navigator.vibrate !== undefined ) {
+    //     if ( isPressed ) {
+    //       vibrationManager.startRepeatingVibrationPattern( [ 75, 75 ] );
+    //     }
+    //     else {
+    //       vibrationManager.stopRepeatingVibrationPattern();
+    //     }
+    //   }
+    // } );
 
     this.mutate( options );
   }

@@ -29,7 +29,6 @@ import SideLengthAreaNode from './SideLengthAreaNode.js';
 import QuadrilateralVisibilityControls from './QuadrilateralVisibilityControls.js';
 import QuadrilateralGridNode from './QuadrilateralGridNode.js';
 import QuadrilateralScreenSummaryContentNode from './QuadrilateralScreenSummaryContentNode.js';
-import vibrationManager from '../../../../tappi/js/vibrationManager.js';
 import QuadrilateralAlerter from './QuadrilateralAlerter.js';
 import QuadrilateralBluetoothConnectionButton from './QuadrilateralBluetoothConnectionButton.js';
 import QuadrilateralPreferencesModel from '../model/QuadrilateralPreferencesModel.js';
@@ -370,7 +369,8 @@ class QuadrilateralScreenView extends ScreenView {
 
     this.quadrilateralNode && this.quadrilateralNode.step( dt );
 
-    vibrationManager.step( dt );
+    // Removed for now, see https://github.com/phetsims/quadrilateral/issues/104
+    // vibrationManager.step( dt );
   }
 }
 

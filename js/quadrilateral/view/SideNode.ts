@@ -18,7 +18,6 @@ import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import { Line, Shape } from '../../../../kite/js/imports.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
-import vibrationManager from '../../../../tappi/js/vibrationManager.js';
 import SideDescriber from './SideDescriber.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import optionize from '../../../../phet-core/js/optionize.js';
@@ -277,17 +276,17 @@ class SideNode extends Voicing( Path ) {
     // vibration
     // TODO: This code for vibration is a prototype, and only vibrates for a finite time.  It will need to be improved
     //       and finalized before publication.  See https://github.com/phetsims/quake/issues/13.
-    side.isPressedProperty.lazyLink( isPressed => {
-
-      if ( navigator !== undefined && navigator.vibrate !== undefined ) {
-        if ( isPressed ) {
-          vibrationManager.startVibrate( [ 200, 200 ] );
-        }
-        else {
-          vibrationManager.stopVibrate();
-        }
-      }
-    } );
+    // side.isPressedProperty.lazyLink( isPressed => {
+    //
+    //   if ( navigator !== undefined && navigator.vibrate !== undefined ) {
+    //     if ( isPressed ) {
+    //       vibrationManager.startVibrate( [ 200, 200 ] );
+    //     }
+    //     else {
+    //       vibrationManager.stopVibrate();
+    //     }
+    //   }
+    // } );
   }
 
   /**
