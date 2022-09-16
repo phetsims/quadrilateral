@@ -77,7 +77,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
 
   // The default value for the angleToleranceInterval when we are connected to the device. Otherwise
   // behaves like angleToleranceInterval.
-  deviceShapeAngleToleranceInterval: {
+  deviceInterAngleToleranceInterval: {
     type: 'number',
     isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
     defaultValue: 0.02
@@ -242,7 +242,7 @@ type ToleranceDefaultsCollection = {
   deviceAngleToleranceInterval: number;
   toleranceIntervalScaleFactor: number;
   interAngleToleranceInterval: number;
-  deviceShapeAngleToleranceInterval: number;
+  deviceInterAngleToleranceInterval: number;
   deviceShapeLengthToleranceInterval: number;
   lengthToleranceIntervalScaleFactor: number;
   shapeLengthToleranceInterval: number;
@@ -263,7 +263,7 @@ class ToleranceDefaults extends PhetioObject {
           deviceAngleToleranceInterval: NumberIO,
           toleranceIntervalScaleFactor: NumberIO,
           interAngleToleranceInterval: NumberIO,
-          deviceShapeAngleToleranceInterval: NumberIO,
+          deviceInterAngleToleranceInterval: NumberIO,
           deviceShapeLengthToleranceInterval: NumberIO,
           lengthToleranceIntervalScaleFactor: NumberIO,
           shapeLengthToleranceInterval: NumberIO
@@ -279,7 +279,7 @@ class ToleranceDefaults extends PhetioObject {
       deviceAngleToleranceInterval: QuadrilateralQueryParameters.deviceAngleToleranceInterval,
       toleranceIntervalScaleFactor: QuadrilateralQueryParameters.toleranceIntervalScaleFactor,
       interAngleToleranceInterval: QuadrilateralQueryParameters.interAngleToleranceInterval,
-      deviceShapeAngleToleranceInterval: QuadrilateralQueryParameters.deviceShapeAngleToleranceInterval,
+      deviceInterAngleToleranceInterval: QuadrilateralQueryParameters.deviceInterAngleToleranceInterval,
       deviceShapeLengthToleranceInterval: QuadrilateralQueryParameters.deviceShapeLengthToleranceInterval,
       lengthToleranceIntervalScaleFactor: QuadrilateralQueryParameters.lengthToleranceIntervalScaleFactor,
       shapeLengthToleranceInterval: QuadrilateralQueryParameters.shapeLengthToleranceInterval

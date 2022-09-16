@@ -361,7 +361,7 @@ class QuadrilateralShapeModel {
     this.interAngleToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty ], shapeName => {
       return QuadrilateralShapeModel.toleranceIntervalWideningListener(
         QuadrilateralQueryParameters.interAngleToleranceInterval,
-        QuadrilateralQueryParameters.deviceShapeAngleToleranceInterval,
+        QuadrilateralQueryParameters.deviceInterAngleToleranceInterval,
         shapeName
       );
     }, {
