@@ -351,6 +351,14 @@ type StringsType = {
       'aLittleWiderThanStringProperty': TReadOnlyProperty<string>;
       'aLittleSmallerThan': string;
       'aLittleSmallerThanStringProperty': TReadOnlyProperty<string>;
+      'halfTheSizeOf': string;
+      'halfTheSizeOfStringProperty': TReadOnlyProperty<string>;
+      'twiceTheSizeOf': string;
+      'twiceTheSizeOfStringProperty': TReadOnlyProperty<string>;
+      'smallerAndSimilarTo': string;
+      'smallerAndSimilarToStringProperty': TReadOnlyProperty<string>;
+      'widerAndSimilarTo': string;
+      'widerAndSimilarToStringProperty': TReadOnlyProperty<string>;
       'almostEqualTo': string;
       'almostEqualToStringProperty': TReadOnlyProperty<string>;
       'equalTo': string;

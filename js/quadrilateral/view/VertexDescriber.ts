@@ -6,7 +6,6 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Utils from '../../../../dot/js/Utils.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
@@ -14,7 +13,6 @@ import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import Vertex from '../model/Vertex.js';
 import VertexLabel from '../model/VertexLabel.js';
 import Range from '../../../../dot/js/Range.js';
-import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 
 // constants
 const cornerAString = QuadrilateralStrings.a11y.cornerA;
@@ -31,9 +29,10 @@ const muchWiderThanString = QuadrilateralStrings.a11y.voicing.muchWiderThan;
 const muchSmallerThanString = QuadrilateralStrings.a11y.voicing.muchSmallerThan;
 const somewhatWiderThanString = QuadrilateralStrings.a11y.voicing.somewhatWiderThan;
 const somewhatSmallerThanString = QuadrilateralStrings.a11y.voicing.somewhatSmallerThan;
-const aLittleWiderThanString = QuadrilateralStrings.a11y.voicing.aLittleWiderThan;
-const aLittleSmallerThanString = QuadrilateralStrings.a11y.voicing.aLittleSmallerThan;
-const almostEqualToString = QuadrilateralStrings.a11y.voicing.almostEqualTo;
+const halfTheSizeOfString = QuadrilateralStrings.a11y.voicing.halfTheSizeOf;
+const twiceTheSizeOfString = QuadrilateralStrings.a11y.voicing.twiceTheSizeOf;
+const smallerAndSimilarToString = QuadrilateralStrings.a11y.voicing.smallerAndSimilarTo;
+const widerAndSimilarToString = QuadrilateralStrings.a11y.voicing.widerAndSimilarTo;
 const equalToString = QuadrilateralStrings.a11y.voicing.equalTo;
 const equalToAdjacentCornersString = QuadrilateralStrings.a11y.voicing.equalToAdjacentCorners;
 const equalToOneAdjacentCornerString = QuadrilateralStrings.a11y.voicing.equalToOneAdjacentCorner;
@@ -52,19 +51,16 @@ const vertexCornerLabelMap = new Map<VertexLabel, string>( [
 
 // Maps the difference in angles between two vertices to a description string.
 const angleComparisonDescriptionMap = new Map<Range, string>();
-
-const createAngleComparisonDescriptionMapEntry = ( minAngle: number, maxAngle: number, widerString: string, smallerString: string ) => {
-  angleComparisonDescriptionMap.set( new Range( minAngle, maxAngle ), widerString );
-  angleComparisonDescriptionMap.set( new Range( -maxAngle, -minAngle ), smallerString );
-};
-
-createAngleComparisonDescriptionMapEntry( Math.PI, 2 * Math.PI, farWiderThanString, farSmallerThanString );
-createAngleComparisonDescriptionMapEntry( Utils.toRadians( 135 ), Math.PI, muchMuchWiderThanString, muchMuchSmallerThanString );
-createAngleComparisonDescriptionMapEntry( Math.PI / 2, Utils.toRadians( 135 ), muchWiderThanString, muchSmallerThanString );
-createAngleComparisonDescriptionMapEntry( Math.PI / 4, Math.PI / 2, somewhatWiderThanString, somewhatSmallerThanString );
-createAngleComparisonDescriptionMapEntry( Utils.toRadians( 15 ), Math.PI / 4, aLittleWiderThanString, aLittleSmallerThanString );
-createAngleComparisonDescriptionMapEntry( QuadrilateralQueryParameters.interAngleToleranceInterval, Utils.toRadians( 15 ), almostEqualToString, almostEqualToString );
-createAngleComparisonDescriptionMapEntry( 0, QuadrilateralQueryParameters.interAngleToleranceInterval, equalToString, equalToString );
+angleComparisonDescriptionMap.set( new Range( 0, 0.2 ), farSmallerThanString );
+angleComparisonDescriptionMap.set( new Range( 0.2, 0.5 ), muchMuchSmallerThanString );
+angleComparisonDescriptionMap.set( new Range( 0.5, 0.6 ), muchSmallerThanString );
+angleComparisonDescriptionMap.set( new Range( 0.6, 0.9 ), somewhatSmallerThanString );
+angleComparisonDescriptionMap.set( new Range( 0.9, 1 ), smallerAndSimilarToString );
+angleComparisonDescriptionMap.set( new Range( 1, 1.1 ), widerAndSimilarToString );
+angleComparisonDescriptionMap.set( new Range( 1.1, 1.5 ), somewhatWiderThanString );
+angleComparisonDescriptionMap.set( new Range( 1.5, 2 ), muchWiderThanString );
+angleComparisonDescriptionMap.set( new Range( 2, 2.5 ), muchMuchWiderThanString );
+angleComparisonDescriptionMap.set( new Range( 2.5, Number.POSITIVE_INFINITY ), farWiderThanString );
 
 class VertexDescriber {
 
@@ -197,15 +193,29 @@ class VertexDescriber {
 
     const angle1 = vertex1.angleProperty.value!;
     const angle2 = vertex2.angleProperty.value!;
-    const angleDifference = angle2 - angle1;
 
-    angleComparisonDescriptionMap.forEach( ( value, key ) => {
-      if ( key.contains( angleDifference ) ) {
-        description = value;
-      }
-    } );
+    if ( QuadrilateralShapeModel.isStaticAngleEqualToOther( angle2, angle1 * 2 ) ) {
+      description = twiceTheSizeOfString;
+    }
+    else if ( QuadrilateralShapeModel.isStaticAngleEqualToOther( angle2, angle1 ) ) {
+      description = equalToString;
+    }
+    else if ( QuadrilateralShapeModel.isStaticAngleEqualToOther( angle2, angle1 / 2 ) ) {
+      description = halfTheSizeOfString;
+    }
 
-    assert && assert( description, `Description not found for angle difference ${angleDifference}` );
+    const angleRatio = angle2 / angle1;
+    if ( description === null ) {
+      angleComparisonDescriptionMap.forEach( ( value, key ) => {
+        if ( key.contains( angleRatio ) ) {
+          description = value;
+        }
+      } );
+    }
+
+    // console.log( vertex1.vertexLabel.name, vertex2.vertexLabel.name, description );
+
+    assert && assert( description, `Description not found for angle difference ${angleRatio}` );
     return description!;
   }
 }

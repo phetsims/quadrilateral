@@ -499,6 +499,18 @@
       "aLittleSmallerThan": {
         "value": "a little smaller than"
       },
+      "halfTheSizeOf": {
+        "value": "half the size of"
+      },
+      "twiceTheSizeOf": {
+        "value": "twice the size of"
+      },
+      "smallerAndSimilarTo": {
+        "value": "smaller and similar to"
+      },
+      "widerAndSimilarTo": {
+        "value": "wider and similar to"
+      },
       "almostEqualTo": {
         "value": "almost equal to"
       },

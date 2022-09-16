@@ -890,6 +890,19 @@ class QuadrilateralShapeModel {
   }
 
   /**
+   * Compare two angles with staticAngleToleranceInterval. Useful when comparing one angle to a static unchanging
+   * value such as right angles.
+   *
+   * TODO: The staticAngleToleranceInterval is actually a DerivedProperty but it would be much easier if it was
+   * a static value and I think it should be. But if it cannot be, come back and change this.
+   * @param angle1
+   * @param angle2
+   */
+  public static isStaticAngleEqualToOther( angle1: number, angle2: number ): boolean {
+    return Utils.equalsEpsilon( angle1, angle2, QuadrilateralQueryParameters.staticAngleToleranceInterval );
+  }
+
+  /**
    * Returns true if two sides are close enough in length that they should be considered equal. Uses the
    * shapeLengthAngleToleranceInterval.
    */
