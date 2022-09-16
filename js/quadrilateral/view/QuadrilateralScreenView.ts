@@ -39,9 +39,10 @@ import QuadrilateralDiagonalGuidesNode from './QuadrilateralDiagonalGuidesNode.j
 import QuadrilateralShapeNameDisplay from './QuadrilateralShapeNameDisplay.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import MediaPipeQueryParameters from '../../../../tangible/js/mediaPipe/MediaPipeQueryParameters.js';
-import QuadrilateralControls from './QuadrilateralControls.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralInteractionCueNode from './QuadrilateralInteractionCueNode.js';
+import ResetShapeButton from './ResetShapeButton.js';
+import PlayMusicCheckbox from './PlayMusicCheckbox.js';
 
 const MODEL_BOUNDS = QuadrilateralQueryParameters.calibrationDemoDevice ? new Bounds2( -4.5, -4.5, 4.5, 4.5 ) :
                      new Bounds2( -1, -1, 1, 1 );
@@ -64,14 +65,6 @@ class QuadrilateralScreenView extends ScreenView {
       tandem: tandem
     } );
 
-    const simulationControls = new QuadrilateralControls( model.quadrilateralShapeModel, model.resetNotInProgressProperty, model.simSoundEnabledProperty, model.shapeNameVisibleProperty, {
-
-      // top is aligned with ShapeNameDisplay below after other layout is finished
-      right: this.layoutBounds.right - QuadrilateralConstants.SCREEN_VIEW_X_MARGIN,
-      tandem: tandem.createTandem( 'simulationControls' )
-    } );
-    this.addChild( simulationControls );
-
     // Responsible for generating descriptions of the state of the quadrilateral for accessibility.
     this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel );
 
@@ -81,7 +74,7 @@ class QuadrilateralScreenView extends ScreenView {
       model.gridVisibleProperty,
       model.diagonalGuidesVisibleProperty,
       {
-        leftCenter: new Vector2( simulationControls.left, this.layoutBounds.centerY ),
+        rightCenter: this.layoutBounds.rightCenter.minusXY( QuadrilateralConstants.SCREEN_VIEW_X_MARGIN, 0 ),
         tandem: tandem.createTandem( 'visibilityControls' )
       } );
     this.addChild( visibilityControls );
@@ -93,14 +86,26 @@ class QuadrilateralScreenView extends ScreenView {
         this.reset();
       },
 
-      left: Math.min( visibilityControls.left, simulationControls.left ),
+      left: visibilityControls.left,
       bottom: this.layoutBounds.maxY - QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN,
       tandem: tandem.createTandem( 'resetAllButton' )
     } );
     this.addChild( this.resetAllButton );
 
+    const playMusicCheckbox = new PlayMusicCheckbox( model.simSoundEnabledProperty, tandem.createTandem( 'playMusicCheckbox' ) );
+    playMusicCheckbox.leftBottom = this.resetAllButton.leftTop.minusXY( 0, 45 );
+    this.addChild( playMusicCheckbox );
+
     const shapeNameDisplay = new QuadrilateralShapeNameDisplay( model.shapeNameVisibleProperty, model.quadrilateralShapeModel.shapeNameProperty, this.quadrilateralDescriber, tandem.createTandem( 'quadrilateralShapeNameDisplay' ) );
-    this.pdomPlayAreaNode.addChild( shapeNameDisplay );
+    this.addChild( shapeNameDisplay );
+
+    const resetShapeButton = new ResetShapeButton(
+      model.quadrilateralShapeModel,
+      model.resetNotInProgressProperty,
+      model.shapeNameVisibleProperty,
+      tandem.createTandem( 'resetShapeButton' )
+    );
+    this.addChild( resetShapeButton );
 
     // the model bounds are defined by available view space. Some padding is added around the screen and we make
     // sure that the vertices cannot overlap with simulation controls. Otherwise the quadrilateral can move freely in
@@ -191,7 +196,7 @@ class QuadrilateralScreenView extends ScreenView {
 
     // layout for components that depend on the play area bounds being defined
     shapeNameDisplay.centerBottom = boundsRectangle.centerTop.minusXY( 0, QuadrilateralConstants.VIEW_SPACING );
-    simulationControls.top = shapeNameDisplay.top;
+    resetShapeButton.rightCenter = new Vector2( boundsRectangle.right, shapeNameDisplay.centerY );
 
     if ( QuadrilateralQueryParameters.soundBoard ) {
 
@@ -271,8 +276,8 @@ class QuadrilateralScreenView extends ScreenView {
     }
 
     // pdom
-    this.pdomPlayAreaNode.pdomOrder = [ this.quadrilateralNode, null, simulationControls ];
-    this.pdomControlAreaNode.pdomOrder = [ visibilityControls, this.resetAllButton ];
+    this.pdomPlayAreaNode.pdomOrder = [ this.quadrilateralNode, shapeNameDisplay, resetShapeButton ];
+    this.pdomControlAreaNode.pdomOrder = [ visibilityControls, playMusicCheckbox, this.resetAllButton ];
     this.setScreenSummaryContent( new QuadrilateralScreenSummaryContentNode() );
 
     // voicing
