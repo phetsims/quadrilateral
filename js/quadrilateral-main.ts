@@ -9,7 +9,7 @@
 import PreferencesModel from '../../joist/js/preferences/PreferencesModel.js';
 import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
-import { Color, ColorProperty, Node } from '../../scenery/js/imports.js';
+import { Node } from '../../scenery/js/imports.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import vibrationManager from '../../tappi/js/vibrationManager.js';
 import HapticsInfoDialog from './common/HapticsInfoDialog.js';
@@ -18,13 +18,11 @@ import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';
 import QuadrilateralStrings from './QuadrilateralStrings.js';
 import QuadrilateralPreferencesModel from './quadrilateral/model/QuadrilateralPreferencesModel.js';
 import QuadrilateralAudioPreferencesNode from './quadrilateral/view/QuadrilateralAudioPreferencesNode.js';
-import Property from '../../axon/js/Property.js';
 import MappedProperty from '../../axon/js/MappedProperty.js';
 import QuadrilateralSimulationPreferencesNode from './quadrilateral/view/QuadrilateralSimulationPreferencesNode.js';
 import QuadrilateralInputPreferencesNode from './quadrilateral/view/QuadrilateralInputPreferencesNode.js';
 
 const quadrilateralTitleStringProperty = QuadrilateralStrings.quadrilateral.titleStringProperty;
-const calibrationDemoString = new Property( 'Device' ); // this will never be translatable, keep out of json file
 
 const preferencesModel = new QuadrilateralPreferencesModel();
 
@@ -69,9 +67,6 @@ const simOptions: SimOptions = {
 // launch the sim - beware that scenery Image nodes created outside of simLauncher.launch() will have zero bounds
 // until the images are fully loaded, see https://github.com/phetsims/coulombs-law/issues/70
 simLauncher.launch( () => {
-
-  // if in the "calibration" demo, use two screens to test communication between them, see
-  // https://github.com/phetsims/quadrilateral/issues/18
   const quadrilateralScreen = new QuadrilateralScreen( preferencesModel, {
 
     // You cannot pass the same Property instance as a single as the sim and screen name.
@@ -81,14 +76,8 @@ simLauncher.launch( () => {
     } ),
     tandem: Tandem.ROOT.createTandem( 'quadrilateralScreen' )
   } );
-  const calibrationDemoScreen = new QuadrilateralScreen( preferencesModel, {
-    name: calibrationDemoString,
-    backgroundColorProperty: new ColorProperty( new Color( 'white' ) ),
-    tandem: Tandem.ROOT.createTandem( 'calibrationDemoScreen' )
-  } );
-  const simScreens = QuadrilateralQueryParameters.calibrationDemo ? [ quadrilateralScreen, calibrationDemoScreen ] : [ quadrilateralScreen ];
 
-  const sim = new Sim( quadrilateralTitleStringProperty, simScreens, simOptions );
+  const sim = new Sim( quadrilateralTitleStringProperty, [ quadrilateralScreen ], simOptions );
   sim.start();
 
   // @ts-ignore

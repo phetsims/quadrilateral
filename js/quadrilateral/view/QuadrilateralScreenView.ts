@@ -44,8 +44,7 @@ import QuadrilateralInteractionCueNode from './QuadrilateralInteractionCueNode.j
 import ResetShapeButton from './ResetShapeButton.js';
 import PlayMusicCheckbox from './PlayMusicCheckbox.js';
 
-const MODEL_BOUNDS = QuadrilateralQueryParameters.calibrationDemoDevice ? new Bounds2( -4.5, -4.5, 4.5, 4.5 ) :
-                     new Bounds2( -1, -1, 1, 1 );
+const MODEL_BOUNDS = new Bounds2( -1, -1, 1, 1 );
 
 const BORDER_RECTANGLE_LINE_WIDTH = 2;
 
@@ -219,7 +218,7 @@ class QuadrilateralScreenView extends ScreenView {
       this.addChild( showSoundBoardButton );
     }
 
-    if ( QuadrilateralQueryParameters.deviceConnection && !QuadrilateralQueryParameters.calibrationDemoDevice ) {
+    if ( QuadrilateralQueryParameters.deviceConnection ) {
 
       // Add a Dialog that will calibrate the device to the simulation (mapping physical data to modelled data).
       const calibrationDialog = new Dialog( new CalibrationContentNode( model ), {

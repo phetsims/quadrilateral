@@ -112,19 +112,6 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     type: 'flag'
   },
 
-  // If provided, some extra things will be done in the simulation to test connection with a device. The sim will
-  // have two screens, one that acts as the "simulation" and the other that acts as the "device". The "device" screen
-  // runs in one iframe and the simulation screen runs in another. The two communicat to test calibration/communication.
-  calibrationDemo: {
-    type: 'flag'
-  },
-
-  // If provided, the simulation will act as a "device" to be used in the calibration demo. The model bounds will be
-  // adjusted slightly to look more like a physical device.
-  calibrationDemoDevice: {
-    type: 'flag'
-  },
-
   // If provided, the simulation will act as a
   showModelValues: {
     type: 'flag'
