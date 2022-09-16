@@ -43,8 +43,12 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralInteractionCueNode from './QuadrilateralInteractionCueNode.js';
 import ResetShapeButton from './ResetShapeButton.js';
 import PlayMusicCheckbox from './PlayMusicCheckbox.js';
+import Vertex from '../model/Vertex.js';
 
-const MODEL_BOUNDS = new Bounds2( -1, -1, 1, 1 );
+// Defines the units of model space, a 2x2 grid that quadrilateral vertices can move within. It is dilated by
+// half of the vertex width so that model space is large enough for Vertices to perfectly align with the bounds
+// limits, requested in https://github.com/phetsims/quadrilateral/issues/220
+const MODEL_BOUNDS = new Bounds2( -1, -1, 1, 1 ).dilated( Vertex.VERTEX_WIDTH / 2 );
 
 const BORDER_RECTANGLE_LINE_WIDTH = 2;
 
