@@ -136,6 +136,11 @@ class QuadrilateralShapeModel {
   public readonly interAngleToleranceIntervalProperty: TReadOnlyProperty<number>;
   public readonly shapeLengthToleranceIntervalProperty: TReadOnlyProperty<number>;
 
+  // The tolerance interval when values comparing angles against constants. This needs to be a different value
+  // than interAngleToleranceIntervalProperty because that tolerance is used for sums of values so there may be
+  // compounding error.
+  public readonly staticAngleToleranceIntervalProperty: TReadOnlyProperty<number>;
+
   // Emits an event whenever the shape of the Quadrilateral changes
   public shapeChangedEmitter: TEmitter;
 
@@ -361,6 +366,19 @@ class QuadrilateralShapeModel {
       );
     }, {
       tandem: options.tandem.createTandem( 'interAngleToleranceIntervalProperty' ),
+      phetioValueType: NumberIO
+    } );
+
+    this.staticAngleToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty ], shapeName => {
+
+      // TODO: Should this be "widened" when connected to a device? See https://github.com/phetsims/quadrilateral/issues/210
+      return QuadrilateralShapeModel.toleranceIntervalWideningListener(
+        QuadrilateralQueryParameters.staticAngleToleranceInterval,
+        QuadrilateralQueryParameters.deviceStaticAngleToleranceInterval,
+        shapeName
+      );
+    }, {
+      tandem: options.tandem.createTandem( 'staticAngleToleranceIntervalProperty' ),
       phetioValueType: NumberIO
     } );
 
@@ -880,7 +898,7 @@ class QuadrilateralShapeModel {
   }
 
   public isRightAngle( angle: number ): boolean {
-    return this.isShapeAngleEqualToOther( angle, Math.PI / 2 );
+    return Utils.equalsEpsilon( angle, Math.PI / 2, this.staticAngleToleranceIntervalProperty.value );
   }
 
   public isTiltEqualToOther( tilt1: number, tilt2: number ): boolean {

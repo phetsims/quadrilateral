@@ -59,6 +59,22 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     defaultValue: 0.001
   },
 
+  // A tolerance interval when comparing an angle to a constant of some kind, such as Math.PI or Math.PI / 2 when
+  // determining when angles are right or the shape is concave. This needs to be a separate value from
+  // interAngleToleranceInterval because that value involves sums of values and errors get compounded.
+  staticAngleToleranceInterval: {
+    type: 'number',
+    isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
+    defaultValue: 0.001
+  },
+
+  // TODO: Do we need this 'widening' of the tolerance interval when connected to a device still?
+  deviceStaticAngleToleranceInterval: {
+    type: 'number',
+    isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
+    defaultValue: 0.001
+  },
+
   // The default value for the angleToleranceInterval when we are connected to the device. Otherwise
   // behaves like angleToleranceInterval.
   deviceShapeAngleToleranceInterval: {
