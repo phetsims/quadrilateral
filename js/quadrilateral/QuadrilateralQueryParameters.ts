@@ -24,7 +24,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // The tolerance interval for the angle calculations which determine when the quadrilateral is a parallelogram.
   // This is in radians, so it is limited between 0 and 2 PI. If maximum value, the quadrilateral will always
   // register as a parallelogram.
-  angleToleranceInterval: {
+  parallelAngleToleranceInterval: {
     type: 'number',
     isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
     defaultValue: 0.002
@@ -223,7 +223,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
 
 // Collection of properties that appear in ToleranceDefaults state object.
 type ToleranceDefaultsCollection = {
-  angleToleranceInterval: number;
+  parallelAngleToleranceInterval: number;
   deviceAngleToleranceInterval: number;
   toleranceIntervalScaleFactor: number;
   shapeAngleToleranceInterval: number;
@@ -244,7 +244,7 @@ class ToleranceDefaults extends PhetioObject {
 
         toStateObject: ( object: ToleranceDefaults ) => object.toStateObject(),
         stateSchema: {
-          angleToleranceInterval: NumberIO,
+          parallelAngleToleranceInterval: NumberIO,
           deviceAngleToleranceInterval: NumberIO,
           toleranceIntervalScaleFactor: NumberIO,
           shapeAngleToleranceInterval: NumberIO,
@@ -260,7 +260,7 @@ class ToleranceDefaults extends PhetioObject {
 
   public toStateObject(): ToleranceDefaultsCollection {
     return {
-      angleToleranceInterval: QuadrilateralQueryParameters.angleToleranceInterval,
+      parallelAngleToleranceInterval: QuadrilateralQueryParameters.parallelAngleToleranceInterval,
       deviceAngleToleranceInterval: QuadrilateralQueryParameters.deviceAngleToleranceInterval,
       toleranceIntervalScaleFactor: QuadrilateralQueryParameters.toleranceIntervalScaleFactor,
       shapeAngleToleranceInterval: QuadrilateralQueryParameters.shapeAngleToleranceInterval,

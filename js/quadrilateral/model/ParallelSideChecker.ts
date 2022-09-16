@@ -4,7 +4,7 @@
  * Responsible for keeping two opposite sides of the quadrilateral and managing a tolerance interval so that we
  * can determine if the two sides are considered parallel with each other. The angleToleranceInterval changes
  * depending on the method of input to accomplish the learning goals of this sim. See documentation for
- * angleToleranceIntervalProperty for more information.
+ * parallelAngleToleranceIntervalProperty for more information.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -29,7 +29,7 @@ class ParallelSideChecker {
   // Without a margin of error it would be extremely difficult to create parallel sides. The value changes
   // depending on input so that it is easier to maintain a parallelogram when controlling with less fine-grained
   // control (like multitouch). See derivation of Property for more details.
-  private readonly angleToleranceIntervalProperty: TReadOnlyProperty<number>;
+  private readonly parallelAngleToleranceIntervalProperty: TReadOnlyProperty<number>;
 
   public readonly side1: Side;
   public readonly side2: Side;
@@ -64,7 +64,7 @@ class ParallelSideChecker {
       phetioReadOnly: true
     } );
 
-    this.angleToleranceIntervalProperty = new DerivedProperty( [
+    this.parallelAngleToleranceIntervalProperty = new DerivedProperty( [
       this.side1.isPressedProperty,
       this.side2.isPressedProperty,
       otherSide1.isPressedProperty,
@@ -94,33 +94,33 @@ class ParallelSideChecker {
       else if ( !resetNotInProgress ) {
 
         // A reset has just begun, set the tolerance interval back to its initial value on load
-        toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval;
+        toleranceInterval = QuadrilateralQueryParameters.parallelAngleToleranceInterval;
       }
       else {
         if ( numberOfVerticesPressed >= 2 ) {
 
           // Two or more vertices pressed at once, increase the tolerance interval by a scale factor so that
           // it is easier to find and remain a parallelogram with this input
-          toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval * QuadrilateralQueryParameters.toleranceIntervalScaleFactor;
+          toleranceInterval = QuadrilateralQueryParameters.parallelAngleToleranceInterval * QuadrilateralQueryParameters.toleranceIntervalScaleFactor;
         }
         else if ( numberOfVerticesPressed === 1 ) {
 
           // Only one vertex is moving, we can afford to be as precise as possible from this form of input, and
           // so we have the smallest tolerance interval.
-          toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval;
+          toleranceInterval = QuadrilateralQueryParameters.parallelAngleToleranceInterval;
         }
         else {
 
           // We are dragging a side while out of parallelogram, or we just released all sides and vertices. Do NOT
           // change the angleToleranceInterval because we don't want the quadrilateral to suddenly appear out of
           // parallelogram at the end of the interaction. The ternary handles initialization.
-          toleranceInterval = this.angleToleranceIntervalProperty ? this.angleToleranceIntervalProperty.value : QuadrilateralQueryParameters.angleToleranceInterval;
+          toleranceInterval = this.parallelAngleToleranceIntervalProperty ? this.parallelAngleToleranceIntervalProperty.value : QuadrilateralQueryParameters.parallelAngleToleranceInterval;
         }
       }
 
       return toleranceInterval;
     }, {
-      tandem: tandem.createTandem( 'angleToleranceIntervalProperty' ),
+      tandem: tandem.createTandem( 'parallelAngleToleranceIntervalProperty' ),
       phetioValueType: NumberIO
     } );
 
@@ -134,13 +134,13 @@ class ParallelSideChecker {
 
   /**
    * Returns true if two angles are close enough to each other that they should be considered equal. They are close
-   * enough if they are within the angleToleranceIntervalProperty.
+   * enough if they are within the parallelAngleToleranceIntervalProperty.
    *
    * NOTE: If we need to detect proximity to "parallelness" the smaller absolute values of difference between
    * angle1 and angle2 would be closer to parallel.
    */
   public isAngleEqualToOther( angle1: number, angle2: number ): boolean {
-    return Utils.equalsEpsilon( angle1, angle2, this.angleToleranceIntervalProperty.value );
+    return Utils.equalsEpsilon( angle1, angle2, this.parallelAngleToleranceIntervalProperty.value );
   }
 
   /**

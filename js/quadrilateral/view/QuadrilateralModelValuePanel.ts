@@ -33,7 +33,7 @@ class QuadrilateralModelValuePanel extends Node {
   public constructor( model: QuadrilateralModel, providedOptions?: NodeOptions ) {
 
     // Controlled by a slider at the bottom of the panel to show more or less decimal places in debugging values
-    const decimalPlacesProperty = new NumberProperty( 2, {
+    const decimalPlacesProperty = new NumberProperty( 3, {
       range: new Range( 2, 5 )
     } );
 
@@ -150,10 +150,10 @@ class QuadrilateralModelValuePanel extends Node {
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 1 ].isParallelProperty, sideBCDAParallelText, '(BC, DA) parallel', decimalPlacesProperty );
 
     // angleToleranceIntervals for each opposite side pair
-    // @ts-ignore - angleToleranceInterval is private, but I want to use it here for now just for debugging
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 0 ].angleToleranceIntervalProperty, sideABCDToleranceIntervalText, '(AB, CD) angleToleranceInterval', decimalPlacesProperty );
-    // @ts-ignore - angleToleranceInterval is private, but I want to use it here for now just for debugging
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 1 ].angleToleranceIntervalProperty, sideBCDAToleranceIntervalText, '(BC, DA) angleToleranceInterval', decimalPlacesProperty );
+    // @ts-ignore - parallelAngleToleranceInterval is private, but I want to use it here for now just for debugging
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 0 ].parallelAngleToleranceIntervalProperty, sideABCDToleranceIntervalText, '(AB, CD) parallelAngleToleranceInterval', decimalPlacesProperty );
+    // @ts-ignore - parallelAngleToleranceInterval is private, but I want to use it here for now just for debugging
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 1 ].parallelAngleToleranceIntervalProperty, sideBCDAToleranceIntervalText, '(BC, DA) parallelAngleToleranceInterval', decimalPlacesProperty );
     // @ts-ignore - shapeAngleToleranceInterval is private, but I want to use it here for now just for debugging
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.shapeAngleToleranceIntervalProperty, shapeAngleToleranceIntervalText, 'shapeAngleToleranceInterval', decimalPlacesProperty );
     // @ts-ignore - shapeLengthToleranceInterval is private, but I want to use it here for now just for debugging

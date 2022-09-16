@@ -87,7 +87,7 @@ class QuadrilateralShapeModel {
   public readonly sideBCSideDAParallelSideChecker: ParallelSideChecker;
 
   // ParallelSideCheckers are responsible for determining if opposite SidePairs are parallel within their dynamic
-  // angleToleranceIntervalProperty. This is the collection of both checkers, one for each OppositeSidePair.
+  // parallelAngleToleranceIntervalProperty. This is the collection of both checkers, one for each OppositeSidePair.
   public readonly parallelSideCheckers: ParallelSideChecker[];
 
   // Observables that indicate when the sides become parallel. Updated after all vertex positions have been set
@@ -504,7 +504,7 @@ class QuadrilateralShapeModel {
   private getVertexAnglesEqualToSaved( currentVertexAngles: VertexAngles ): boolean {
 
     // A value requested by https://github.com/phetsims/quadrilateral/issues/59#issuecomment-1048004794
-    const vertexAnglesToleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval * 2;
+    const vertexAnglesToleranceInterval = QuadrilateralQueryParameters.parallelAngleToleranceInterval * 2;
 
     return Utils.equalsEpsilon( currentVertexAngles.vertexAAngle!, this.savedVertexAngles.vertexAAngle!, vertexAnglesToleranceInterval ) &&
            Utils.equalsEpsilon( currentVertexAngles.vertexBAngle!, this.savedVertexAngles.vertexBAngle!, vertexAnglesToleranceInterval ) &&
@@ -813,7 +813,7 @@ class QuadrilateralShapeModel {
 
   /**
    * Returns whether or not the quadrilateral shape is a parallelogram, within the tolerance defined by
-   * angleToleranceIntervalProperty. This function uses parallelSidePairsProperty and requires that Property
+   * parallelAngleToleranceIntervalProperty. This function uses parallelSidePairsProperty and requires that Property
    * value to be up to date.
    */
   public getIsParallelogram(): boolean {
