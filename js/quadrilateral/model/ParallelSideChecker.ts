@@ -3,8 +3,8 @@
 /**
  * Responsible for keeping two opposite sides of the quadrilateral and managing a tolerance interval so that we
  * can determine if the two sides are considered parallel with each other. The angleToleranceInterval changes
- * substantially depending on the method of input to accomplish the learning goals of this sim. See documentation
- * for angleToleranceIntervalProperty for more information.
+ * depending on the method of input to accomplish the learning goals of this sim. See documentation for
+ * angleToleranceIntervalProperty for more information.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -26,16 +26,9 @@ import Side from './Side.js';
 class ParallelSideChecker {
 
   // A Property that controls the threshold for equality when determining if the opposite sides are parallel.
-  // Without a margin of error it would be extremely difficult to create parallel shapes. The value changes
-  // depending on input.
-  //
-  // Adding a tolerance interval means isParallelProperty will be true when we are not exactly
-  // in parallel. This means that angles will NOT remain constant while dragging sides that are currently
-  // parallel. They are NOT perfectly parallel (even though we are telling the user that they are) so geometric
-  // properties of parallelism do not apply. As such, we make it more or less difficult to remain in parallel
-  // depending on what is moving. For example, if dragging a side that is parallel with another, the tolerance
-  // interval becomes infinite because it should be impossible for two sides to go out of parallel during this
-  // interaction. See the derivation for more specific behaviors.
+  // Without a margin of error it would be extremely difficult to create parallel sides. The value changes
+  // depending on input so that it is easier to maintain a parallelogram when controlling with less fine-grained
+  // control (like multitouch). See derivation of Property for more details.
   private readonly angleToleranceIntervalProperty: TReadOnlyProperty<number>;
 
   public readonly side1: Side;
@@ -83,8 +76,6 @@ class ParallelSideChecker {
 
       const verticesPressedArray = [ side1Vertex1Pressed, side1Vertex2Pressed, side2Vertex1Pressed, side2Vertex2Pressed ];
       const numberOfVerticesPressed = _.countBy( verticesPressedArray ).true;
-      const anySelfSidesPressed = side1Pressed || side2Pressed;
-      const anyOtherSidesPressed = otherSide1Pressed || otherSide2Pressed;
 
       let toleranceInterval;
 
@@ -106,34 +97,7 @@ class ParallelSideChecker {
         toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval;
       }
       else {
-
-        // remaining cases apply to mouse, touch, and keyboard input
-        if ( anySelfSidesPressed && this.isParallelProperty.value ) {
-
-          // A side has been picked up while the shape is a parallelogram - it should be impossible for the shape
-          // to go "out" of parallelogram in this case because none of the angles should be changing.
-          toleranceInterval = Number.POSITIVE_INFINITY;
-        }
-        else if ( anySelfSidesPressed && !this.isParallelProperty.value ) {
-
-          // A side as been picked up while the shape is NOT a parallelogram - it should be impossible for the
-          // shape to become a parallelogram while it is being dragged.
-          toleranceInterval = Number.NEGATIVE_INFINITY;
-        }
-        else if ( anyOtherSidesPressed && !this.isParallelProperty.value ) {
-
-          // The other sides are being pressed and my sides are not currently parallel. While dragging a side we
-          // do not want the shape to become a parallelogram within a finite angleToleranceInterval so make sure
-          // my sides will never become parallel.
-          toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval;
-        }
-        else if ( anyOtherSidesPressed && this.isParallelProperty.value ) {
-
-          // The other sides are being pressed and my sides are currently parallel. It is possible in this case
-          // that my sides go in/out of parallel while they move, so reduce the tolerance interval to a defined value.
-          toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval;
-        }
-        else if ( numberOfVerticesPressed >= 2 ) {
+        if ( numberOfVerticesPressed >= 2 ) {
 
           // Two or more vertices pressed at once, increase the tolerance interval by a scale factor so that
           // it is easier to find and remain a parallelogram with this input

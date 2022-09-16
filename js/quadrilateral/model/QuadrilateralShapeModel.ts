@@ -130,9 +130,9 @@ class QuadrilateralShapeModel {
   public tiltToleranceIntervalProperty: Property<number>;
 
   // The tolerance interval for angle and length comparisons when detecting shape names. This needs to be different
-  // from the angleToleranceInterval of the ParallelSideCheckers because those tolerance intervals can go to infinity
-  // to support certain learning goals. The shape detection comparisons need a more consistent angle tolerance
-  // interval. However, there is some unique behavior when connected to the tangible device.
+  // from the angleToleranceInterval of the ParallelSideCheckers because those tolerance intervals can change depending
+  // on method of input to support learning goals. The shape detection comparisons need a more consistent angle
+  // tolerance interval. However, there is some unique behavior when connected to the tangible device.
   public readonly shapeAngleToleranceIntervalProperty: TReadOnlyProperty<number>;
   public readonly shapeLengthToleranceIntervalProperty: TReadOnlyProperty<number>;
 
@@ -863,10 +863,9 @@ class QuadrilateralShapeModel {
 
   /**
    * Returns true if two angles are close enough together that they should be considered equal. This uses the
-   * shapeAngleToleranceProperty, the most strict interval available. The angleToleranceInterval can be set
-   * to infinity and is very dynamic to accomplish comparisons required to detect parallelogram state during
-   * various interactions. But when detecting shapes we need to be more strict so that when the tolerance is
-   * very high the shape isn't incorrectly described.
+   * shapeAngleToleranceProperty, the most strict interval available. The angleToleranceInterval can be very dynamic
+   * during various interactions to support sim learning goals. But when detecting shapes we need to be more static so
+   * that when the tolerance is very high the shape isn't incorrectly described.
    */
   public isShapeAngleEqualToOther( angle1: number, angle2: number ): boolean {
     return Utils.equalsEpsilon( angle1, angle2, this.shapeAngleToleranceIntervalProperty.value );
