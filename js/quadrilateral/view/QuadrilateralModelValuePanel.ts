@@ -75,10 +75,10 @@ class QuadrilateralModelValuePanel extends Node {
 
     const sideABCDToleranceIntervalText = new Text( '', TEXT_OPTIONS );
     const sideBCDAToleranceIntervalText = new Text( '', TEXT_OPTIONS );
-    const shapeAngleToleranceIntervalText = new Text( '', TEXT_OPTIONS );
+    const interAngleToleranceIntervalText = new Text( '', TEXT_OPTIONS );
     const shapeLengthToleranceIntervalText = new Text( '', TEXT_OPTIONS );
     const toleranceIntervalBox = new VBox( {
-      children: [ sideABCDToleranceIntervalText, sideBCDAToleranceIntervalText, shapeAngleToleranceIntervalText, shapeLengthToleranceIntervalText ],
+      children: [ sideABCDToleranceIntervalText, sideBCDAToleranceIntervalText, interAngleToleranceIntervalText, shapeLengthToleranceIntervalText ],
       align: 'left'
     } );
 
@@ -154,8 +154,8 @@ class QuadrilateralModelValuePanel extends Node {
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 0 ].parallelAngleToleranceIntervalProperty, sideABCDToleranceIntervalText, '(AB, CD) parallelAngleToleranceInterval', decimalPlacesProperty );
     // @ts-ignore - parallelAngleToleranceInterval is private, but I want to use it here for now just for debugging
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 1 ].parallelAngleToleranceIntervalProperty, sideBCDAToleranceIntervalText, '(BC, DA) parallelAngleToleranceInterval', decimalPlacesProperty );
-    // @ts-ignore - shapeAngleToleranceInterval is private, but I want to use it here for now just for debugging
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.shapeAngleToleranceIntervalProperty, shapeAngleToleranceIntervalText, 'shapeAngleToleranceInterval', decimalPlacesProperty );
+    // @ts-ignore - interAngleToleranceInterval is private, but I want to use it here for now just for debugging
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.interAngleToleranceIntervalProperty, interAngleToleranceIntervalText, 'interAngleToleranceInterval', decimalPlacesProperty );
     // @ts-ignore - shapeLengthToleranceInterval is private, but I want to use it here for now just for debugging
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.shapeLengthToleranceIntervalProperty, shapeLengthToleranceIntervalText, 'shapeLengthToleranceInterval', decimalPlacesProperty );
 

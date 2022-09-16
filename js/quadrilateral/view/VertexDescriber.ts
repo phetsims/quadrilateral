@@ -63,8 +63,8 @@ createAngleComparisonDescriptionMapEntry( Utils.toRadians( 135 ), Math.PI, muchM
 createAngleComparisonDescriptionMapEntry( Math.PI / 2, Utils.toRadians( 135 ), muchWiderThanString, muchSmallerThanString );
 createAngleComparisonDescriptionMapEntry( Math.PI / 4, Math.PI / 2, somewhatWiderThanString, somewhatSmallerThanString );
 createAngleComparisonDescriptionMapEntry( Utils.toRadians( 15 ), Math.PI / 4, aLittleWiderThanString, aLittleSmallerThanString );
-createAngleComparisonDescriptionMapEntry( QuadrilateralQueryParameters.shapeAngleToleranceInterval, Utils.toRadians( 15 ), almostEqualToString, almostEqualToString );
-createAngleComparisonDescriptionMapEntry( 0, QuadrilateralQueryParameters.shapeAngleToleranceInterval, equalToString, equalToString );
+createAngleComparisonDescriptionMapEntry( QuadrilateralQueryParameters.interAngleToleranceInterval, Utils.toRadians( 15 ), almostEqualToString, almostEqualToString );
+createAngleComparisonDescriptionMapEntry( 0, QuadrilateralQueryParameters.interAngleToleranceInterval, equalToString, equalToString );
 
 class VertexDescriber {
 

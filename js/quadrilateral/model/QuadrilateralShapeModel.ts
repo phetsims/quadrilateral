@@ -130,10 +130,10 @@ class QuadrilateralShapeModel {
   public tiltToleranceIntervalProperty: Property<number>;
 
   // The tolerance interval for angle and length comparisons when detecting shape names. This needs to be different
-  // from the angleToleranceInterval of the ParallelSideCheckers because those tolerance intervals can change depending
-  // on method of input to support learning goals. The shape detection comparisons need a more consistent angle
-  // tolerance interval. However, there is some unique behavior when connected to the tangible device.
-  public readonly shapeAngleToleranceIntervalProperty: TReadOnlyProperty<number>;
+  // from the parallelAToleranceInterval of the ParallelSideCheckers because those tolerance intervals can change
+  // depending on method of input to support learning goals. The shape detection comparisons need a more consistent
+  // angle tolerance interval. However, there is some unique behavior when connected to the tangible device.
+  public readonly interAngleToleranceIntervalProperty: TReadOnlyProperty<number>;
   public readonly shapeLengthToleranceIntervalProperty: TReadOnlyProperty<number>;
 
   // Emits an event whenever the shape of the Quadrilateral changes
@@ -152,7 +152,7 @@ class QuadrilateralShapeModel {
   // with this work resolves the problem.
   public isParallelogramProperty: Property<boolean>;
 
-  // Whether or not all angles of the quadrilateral are right angles within shapeAngleToleranceInterval.
+  // Whether or not all angles of the quadrilateral are right angles within interAngleToleranceInterval.
   // This is set in step because we need to wait until all vertices are positioned during model
   // updates.
   public allAnglesRightProperty: Property<boolean>;
@@ -353,14 +353,14 @@ class QuadrilateralShapeModel {
 
     this.firstSeriesShapeChangedEmitter = new Emitter<[]>();
 
-    this.shapeAngleToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty ], shapeName => {
+    this.interAngleToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty ], shapeName => {
       return QuadrilateralShapeModel.toleranceIntervalWideningListener(
-        QuadrilateralQueryParameters.shapeAngleToleranceInterval,
+        QuadrilateralQueryParameters.interAngleToleranceInterval,
         QuadrilateralQueryParameters.deviceShapeAngleToleranceInterval,
         shapeName
       );
     }, {
-      tandem: options.tandem.createTandem( 'shapeAngleToleranceIntervalProperty' ),
+      tandem: options.tandem.createTandem( 'interAngleToleranceIntervalProperty' ),
       phetioValueType: NumberIO
     } );
 
@@ -868,7 +868,7 @@ class QuadrilateralShapeModel {
    * that when the tolerance is very high the shape isn't incorrectly described.
    */
   public isShapeAngleEqualToOther( angle1: number, angle2: number ): boolean {
-    return Utils.equalsEpsilon( angle1, angle2, this.shapeAngleToleranceIntervalProperty.value );
+    return Utils.equalsEpsilon( angle1, angle2, this.interAngleToleranceIntervalProperty.value );
   }
 
   /**

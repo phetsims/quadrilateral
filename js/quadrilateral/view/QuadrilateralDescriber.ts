@@ -366,7 +366,7 @@ class QuadrilateralDescriber {
       if ( this.shapeModel.isParallelogramProperty.value ) {
 
         // We cannot nececssarily use parallelSidePairsProperty because the angleToleranceInterval can allow for
-        // a parallelogram without parallel sides within shapeAngleToleranceInterval. But we should still describe
+        // a parallelogram without parallel sides within interAngleToleranceInterval. But we should still describe
         // the opposite sides as if they are parallelo
         // assert && assert( parallelSidePairs.length === 2, 'Should be two pairs of parallel sides for a parallelogram' );
         const oppositeSides = this.shapeModel.oppositeSides;
