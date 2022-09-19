@@ -5,6 +5,18 @@
   "cornerLabels": {
     "value": "Corner Labels"
   },
+  "labels": {
+    "value": "Labels"
+  },
+  "corners": {
+    "value": "Corners"
+  },
+  "diagonals": {
+    "value": "Diagonals"
+  },
+  "music": {
+    "value": "Music"
+  },
   "cornerGuides": {
     "value": "Corner Guides"
   },

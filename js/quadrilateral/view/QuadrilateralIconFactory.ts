@@ -4,7 +4,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { Circle, Line, Node, Path, Text } from '../../../../scenery/js/imports.js';
+import { Circle, HBox, Line, Node, Path, Text } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
@@ -70,6 +70,43 @@ const QuadrilateralIconFactory = {
     return new Path( musicSolidShape, {
       maxHeight: QuadrilateralIconFactory.ICON_HEIGHT,
       fill: QuadrilateralColors.visibilityIconsColorProperty
+    } );
+  },
+
+  createGridIcon(): Node {
+
+    // TODO: Copied from GridCheckbox. Either modify that checkbox to support the layout of this sim or refactor
+    // out this drawing code.
+    const height = QuadrilateralIconFactory.ICON_HEIGHT;
+    const iconShape = new Shape()
+      .moveTo( height / 4, 0 )
+      .lineTo( height / 4, height )
+      .moveTo( height / 2, 0 )
+      .lineTo( height / 2, height )
+      .moveTo( height * 3 / 4, 0 )
+      .lineTo( height * 3 / 4, height )
+      .moveTo( 0, height / 4 )
+      .lineTo( height, height / 4 )
+      .moveTo( 0, height / 2 )
+      .lineTo( height, height / 2 )
+      .moveTo( 0, height * 3 / 4 )
+      .lineTo( height, height * 3 / 4 );
+
+    return new Path( iconShape, {
+      stroke: QuadrilateralColors.visibilityIconsColorProperty,
+      lineWidth: QuadrilateralIconFactory.ICON_LINE_WIDTH
+    } );
+  },
+
+  /**
+   * Layout an icon and a label text, in that order for various UI controls.
+   */
+  createLabelledIcon( iconNode: Node, labelString: string ): Node {
+    const labelText = new Text( labelString, QuadrilateralConstants.SCREEN_TEXT_OPTIONS );
+
+    return new HBox( {
+      children: [ iconNode, labelText ],
+      spacing: 15
     } );
   },
 

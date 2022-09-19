@@ -22,7 +22,12 @@ const musicControlNameResponse = QuadrilateralStrings.a11y.voicing.musicControl.
 
 class PlayMusicCheckbox extends Checkbox {
   public constructor( simSoundEnabledProperty: Property<boolean>, tandem: Tandem ) {
-    super( simSoundEnabledProperty, QuadrilateralIconFactory.createSoundIcon(), {
+
+    const checkboxIcon = QuadrilateralIconFactory.createLabelledIcon(
+      QuadrilateralIconFactory.createSoundIcon(),
+      QuadrilateralStrings.music
+    );
+    super( simSoundEnabledProperty, checkboxIcon, {
       voicingNameResponse: musicControlNameResponse,
       checkedContextResponse: musicControlEnabledContextResponse,
       uncheckedContextResponse: musicControlDisabledContextResponse,
