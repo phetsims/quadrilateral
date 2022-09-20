@@ -8,7 +8,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { DragListener, KeyboardDragListener, Line as LineNode, Path, PathOptions, SceneryEvent, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
+import { DragListener, KeyboardDragListener, KeyboardUtils, Line as LineNode, Path, PathOptions, SceneryEvent, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import Side from '../model/Side.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -272,6 +272,16 @@ class SideNode extends Voicing( Path ) {
       this.voicingObjectResponse = sideDescriber.getSideObjectResponse();
     } );
     this.voicingObjectResponse = sideDescriber.getSideObjectResponse();
+
+    // Voicing - for debugging, speak the full response again on spacebar/enter
+    // TODO: remove this
+    this.addInputListener( {
+      keydown: event => {
+        if ( KeyboardUtils.isAnyKeyEvent( event.domEvent, [ KeyboardUtils.KEY_ENTER, KeyboardUtils.KEY_SPACE ] ) ) {
+          this.voicingSpeakFullResponse();
+        }
+      }
+    } );
 
     // vibration
     // TODO: This code for vibration is a prototype, and only vibrates for a finite time.  It will need to be improved
