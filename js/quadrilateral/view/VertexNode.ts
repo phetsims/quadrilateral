@@ -6,7 +6,7 @@
  * @author Jesse Greenberg
  */
 
-import { Circle, CircleOptions, DragListener, KeyboardDragListener, Path, SceneryEvent, Text, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
+import { Circle, CircleOptions, DragListener, KeyboardDragListener, KeyboardUtils, Path, SceneryEvent, Text, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import quadrilateral from '../../quadrilateral.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -176,6 +176,16 @@ class VertexNode extends Voicing( Circle ) {
       this.voicingObjectResponse = vertexDescriber.getVertexObjectResponse();
     } );
     this.voicingObjectResponse = vertexDescriber.getVertexObjectResponse();
+
+    // Voicing - for debugging, speak the full response again on spacebar/enter
+    // TODO: remove this
+    this.addInputListener( {
+      keydown: event => {
+        if ( KeyboardUtils.isAnyKeyEvent( event.domEvent, [ KeyboardUtils.KEY_ENTER, KeyboardUtils.KEY_SPACE ] ) ) {
+          this.voicingSpeakFullResponse();
+        }
+      }
+    } );
 
     // vibration
     // vertex.isPressedProperty.lazyLink( isPressed => {
