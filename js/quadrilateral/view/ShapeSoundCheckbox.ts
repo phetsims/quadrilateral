@@ -1,8 +1,9 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * The checkbox that controls output of music in this sim. To avoid convusion this component
- * will become disabled when sim sounds are off globally.
+ * The checkbox that controls output of shape sounds in this sim. To avoid confusion this component
+ * will become disabled when sim sounds are off globally. The unique and musical nature of the sound design in this
+ * sim warranted an extra control in the ScreenView to turn these sounds off quickly if desired.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -16,16 +17,16 @@ import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralIconFactory from './QuadrilateralIconFactory.js';
 
 // constants
-const musicControlEnabledContextResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.enabledContextResponseStringProperty;
-const musicControlDisabledContextResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.disabledContextResponseStringProperty;
-const musicControlNameResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.nameResponse;
+const shapeSoundControlEnabledContextResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.enabledContextResponseStringProperty;
+const shapeSoundControlDisabledContextResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.disabledContextResponseStringProperty;
+const shapeSoundControlNameResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.nameResponse;
 
 class ShapeSoundCheckbox extends Checkbox {
   public constructor( simSoundEnabledProperty: Property<boolean>, tandem: Tandem ) {
     super( simSoundEnabledProperty, QuadrilateralIconFactory.createSoundIcon(), {
-      voicingNameResponse: musicControlNameResponse,
-      checkedContextResponse: musicControlEnabledContextResponse,
-      uncheckedContextResponse: musicControlDisabledContextResponse,
+      voicingNameResponse: shapeSoundControlNameResponse,
+      checkedContextResponse: shapeSoundControlEnabledContextResponse,
+      uncheckedContextResponse: shapeSoundControlDisabledContextResponse,
       tandem: tandem
     } );
 
