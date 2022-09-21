@@ -93,8 +93,8 @@ const NAMED_QUADRILATERAL_TO_BACKGROUND_TRACKS_MAP = new Map( [
 class TracksArpeggioSoundView extends TracksSoundView {
   private readonly disposeTracksArpeggioSoundView: () => void;
 
-  public constructor( shapeModel: QuadrilateralShapeModel, simSoundEnabledProperty: TReadOnlyProperty<boolean>, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
-    super( shapeModel, simSoundEnabledProperty, resetNotInProgressProperty, soundOptionsModel, ARPEGGIO_TRACKS );
+  public constructor( shapeModel: QuadrilateralShapeModel, shapeSoundEnabledProperty: TReadOnlyProperty<boolean>, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
+    super( shapeModel, shapeSoundEnabledProperty, resetNotInProgressProperty, soundOptionsModel, ARPEGGIO_TRACKS );
 
     const shapeNameListener = ( shapeName: NamedQuadrilateral ) => {
 

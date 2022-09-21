@@ -22,8 +22,8 @@ const shapeSoundControlDisabledContextResponse = QuadrilateralStrings.a11y.voici
 const shapeSoundControlNameResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.nameResponse;
 
 class ShapeSoundCheckbox extends Checkbox {
-  public constructor( simSoundEnabledProperty: Property<boolean>, tandem: Tandem ) {
-    super( simSoundEnabledProperty, QuadrilateralIconFactory.createSoundIcon(), {
+  public constructor( shapeSoundEnabledProperty: Property<boolean>, tandem: Tandem ) {
+    super( shapeSoundEnabledProperty, QuadrilateralIconFactory.createSoundIcon(), {
       voicingNameResponse: shapeSoundControlNameResponse,
       checkedContextResponse: shapeSoundControlEnabledContextResponse,
       uncheckedContextResponse: shapeSoundControlDisabledContextResponse,
