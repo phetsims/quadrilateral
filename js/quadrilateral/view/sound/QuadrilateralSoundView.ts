@@ -49,29 +49,29 @@ class QuadrilateralSoundView {
         this.activeSoundView = new SuccessSoundView( model, soundOptionsModel );
       }
       else if ( soundDesign === SoundDesign.TRACKS_BUILD_UP ) {
-        this.activeSoundView = new TracksBuildUpSoundView( model.quadrilateralShapeModel, model.simSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
+        this.activeSoundView = new TracksBuildUpSoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
       }
       else if ( soundDesign === SoundDesign.TRACKS_VOLUME_EMPHASIS ) {
-        this.activeSoundView = new TracksVolumeEmphasisSoundView( model.quadrilateralShapeModel, model.simSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
+        this.activeSoundView = new TracksVolumeEmphasisSoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
       }
       else if ( soundDesign === SoundDesign.TRACKS_MELODY ) {
-        this.activeSoundView = new TracksMelodySoundView( model.quadrilateralShapeModel, model.simSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
+        this.activeSoundView = new TracksMelodySoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
       }
       else if ( soundDesign === SoundDesign.TRACKS_ARPEGGIO ) {
-        this.activeSoundView = new TracksArpeggioSoundView( model.quadrilateralShapeModel, model.simSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
+        this.activeSoundView = new TracksArpeggioSoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
       }
       else if ( soundDesign === SoundDesign.TRACKS_BUILD_UP_SIMPLE ) {
-        this.activeSoundView = new TracksBuildUpSoundView( model.quadrilateralShapeModel, model.simSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel, {
+        this.activeSoundView = new TracksBuildUpSoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel, {
           simple: true
         } );
       }
       else if ( soundDesign === SoundDesign.TRACKS_MELODY_SIMPLE ) {
-        this.activeSoundView = new TracksMelodySoundView( model.quadrilateralShapeModel, model.simSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel, {
+        this.activeSoundView = new TracksMelodySoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel, {
           simple: true
         } );
       }
       else if ( soundDesign === SoundDesign.TRACKS_MELODY_MAPPING ) {
-        this.activeSoundView = new TracksMelodyMappingSoundView( model.quadrilateralShapeModel, model.simSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
+        this.activeSoundView = new TracksMelodyMappingSoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
       }
     } );
   }

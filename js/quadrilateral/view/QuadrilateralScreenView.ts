@@ -94,7 +94,7 @@ class QuadrilateralScreenView extends ScreenView {
     } );
     this.addChild( this.resetAllButton );
 
-    const playMusicCheckbox = new PlayMusicCheckbox( model.simSoundEnabledProperty, tandem.createTandem( 'playMusicCheckbox' ) );
+    const playMusicCheckbox = new PlayMusicCheckbox( model.shapeSoundEnabledProperty, tandem.createTandem( 'playMusicCheckbox' ) );
     playMusicCheckbox.leftBottom = this.resetAllButton.leftTop.minusXY( 0, 45 );
     this.addChild( playMusicCheckbox );
 
