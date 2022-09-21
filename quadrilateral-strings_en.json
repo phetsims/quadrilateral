@@ -527,7 +527,7 @@
       "cornerDetectedPattern": {
         "value": "Corner {{label}} {{state}}"
       },
-      "musicControl": {
+      "shapeSoundControl": {
         "nameResponse": {
           "value": "Shape Sound"
         },

@@ -21,8 +21,6 @@ type StringsType = {
   'cornersStringProperty': TReadOnlyProperty<string>;
   'diagonals': string;
   'diagonalsStringProperty': TReadOnlyProperty<string>;
-  'music': string;
-  'musicStringProperty': TReadOnlyProperty<string>;
   'cornerGuides': string;
   'cornerGuidesStringProperty': TReadOnlyProperty<string>;
   'grid': string;
@@ -41,8 +39,6 @@ type StringsType = {
   'showShapeNameStringProperty': TReadOnlyProperty<string>;
   'resetShape': string;
   'resetShapeStringProperty': TReadOnlyProperty<string>;
-  'playMusic': string;
-  'playMusicStringProperty': TReadOnlyProperty<string>;
   'fineInputSpacing': string;
   'fineInputSpacingStringProperty': TReadOnlyProperty<string>;
   'shapeNames': {
@@ -137,12 +133,6 @@ type StringsType = {
       'hintContentPatternStringProperty': TReadOnlyProperty<string>;
       'youHaveAShapeHintPattern': string;
       'youHaveAShapeHintPatternStringProperty': TReadOnlyProperty<string>;
-      'namedShapeParalleogramHintPattern': string;
-      'namedShapeParalleogramHintPatternStringProperty': TReadOnlyProperty<string>;
-      'namedShapeNotAParallelogramHintPattern': string;
-      'namedShapeNotAParallelogramHintPatternStringProperty': TReadOnlyProperty<string>;
-      'detailsPattern': string;
-      'detailsPatternStringProperty': TReadOnlyProperty<string>;
       'firstDetailsStatementPattern': string;
       'firstDetailsStatementPatternStringProperty': TReadOnlyProperty<string>;
       'details': {
@@ -239,60 +229,10 @@ type StringsType = {
         'dart': string;
         'dartStringProperty': TReadOnlyProperty<string>;
       };
-      'transformations': {
-        'tiltingPattern': string;
-        'tiltingPatternStringProperty': TReadOnlyProperty<string>;
-        'oppositeSides': string;
-        'oppositeSidesStringProperty': TReadOnlyProperty<string>;
-        'rightSide': string;
-        'rightSideStringProperty': TReadOnlyProperty<string>;
-        'leftSide': string;
-        'leftSideStringProperty': TReadOnlyProperty<string>;
-        'upperSide': string;
-        'upperSideStringProperty': TReadOnlyProperty<string>;
-        'lowerSide': string;
-        'lowerSideStringProperty': TReadOnlyProperty<string>;
-        'up': string;
-        'upStringProperty': TReadOnlyProperty<string>;
-        'down': string;
-        'downStringProperty': TReadOnlyProperty<string>;
-        'left': string;
-        'leftStringProperty': TReadOnlyProperty<string>;
-        'right': string;
-        'rightStringProperty': TReadOnlyProperty<string>;
-        'keepingAParallelogram': string;
-        'keepingAParallelogramStringProperty': TReadOnlyProperty<string>;
-        'youLostYourParallelogramPattern': string;
-        'youLostYourParallelogramPatternStringProperty': TReadOnlyProperty<string>;
-        'youMadeAParallelogram': string;
-        'youMadeAParallelogramStringProperty': TReadOnlyProperty<string>;
-        'extremelyFarFrom': string;
-        'extremelyFarFromStringProperty': TReadOnlyProperty<string>;
-        'veryFarFrom': string;
-        'veryFarFromStringProperty': TReadOnlyProperty<string>;
-        'farFrom': string;
-        'farFromStringProperty': TReadOnlyProperty<string>;
-        'notSoCloseTo': string;
-        'notSoCloseToStringProperty': TReadOnlyProperty<string>;
-        'somewhatCloseTo': string;
-        'somewhatCloseToStringProperty': TReadOnlyProperty<string>;
-        'veryCloseTo': string;
-        'veryCloseToStringProperty': TReadOnlyProperty<string>;
-        'extremelyCloseTo': string;
-        'extremelyCloseToStringProperty': TReadOnlyProperty<string>;
-        'proximityToParallelogramPattern': string;
-        'proximityToParallelogramPatternStringProperty': TReadOnlyProperty<string>;
-      };
       'foundAParallelogram': string;
       'foundAParallelogramStringProperty': TReadOnlyProperty<string>;
       'lostYourParallelogram': string;
       'lostYourParallelogramStringProperty': TReadOnlyProperty<string>;
-      'foundAParallelogramWithAllRightAngles': string;
-      'foundAParallelogramWithAllRightAnglesStringProperty': TReadOnlyProperty<string>;
-      'foundAParallelogramWithAllSidesEqual': string;
-      'foundAParallelogramWithAllSidesEqualStringProperty': TReadOnlyProperty<string>;
-      'foundParallelogramWithAnglesAndSidesEqual': string;
-      'foundParallelogramWithAnglesAndSidesEqualStringProperty': TReadOnlyProperty<string>;
       'allRightAnglesAndAllSidesEqual': string;
       'allRightAnglesAndAllSidesEqualStringProperty': TReadOnlyProperty<string>;
       'allSidesEqual': string;
@@ -324,16 +264,12 @@ type StringsType = {
         'smallerStringProperty': TReadOnlyProperty<string>;
         'vertexDragObjectResponsePattern': string;
         'vertexDragObjectResponsePatternStringProperty': TReadOnlyProperty<string>;
-        'partialVertexDragObjectResponsePattern': string;
-        'partialVertexDragObjectResponsePatternStringProperty': TReadOnlyProperty<string>;
       };
       'sideDragObjectResponse': {
         'shorter': string;
         'shorterStringProperty': TReadOnlyProperty<string>;
         'longer': string;
         'longerStringProperty': TReadOnlyProperty<string>;
-        'sideDragObjectResponsePattern': string;
-        'sideDragObjectResponsePatternStringProperty': TReadOnlyProperty<string>;
         'adjacentSidesChangePattern': string;
         'adjacentSidesChangePatternStringProperty': TReadOnlyProperty<string>;
         'adjacentSidesChangeUnequally': string;
@@ -355,10 +291,6 @@ type StringsType = {
       'somewhatWiderThanStringProperty': TReadOnlyProperty<string>;
       'somewhatSmallerThan': string;
       'somewhatSmallerThanStringProperty': TReadOnlyProperty<string>;
-      'aLittleWiderThan': string;
-      'aLittleWiderThanStringProperty': TReadOnlyProperty<string>;
-      'aLittleSmallerThan': string;
-      'aLittleSmallerThanStringProperty': TReadOnlyProperty<string>;
       'halfTheSizeOf': string;
       'halfTheSizeOfStringProperty': TReadOnlyProperty<string>;
       'twiceTheSizeOf': string;
@@ -409,8 +341,6 @@ type StringsType = {
       'sideObjectResponsePatternStringProperty': TReadOnlyProperty<string>;
       'equalToAdjacentSides': string;
       'equalToAdjacentSidesStringProperty': TReadOnlyProperty<string>;
-      'equalToParallelAdjacentSides': string;
-      'equalToParallelAdjacentSidesStringProperty': TReadOnlyProperty<string>;
       'equalToOneAdjacentSide': string;
       'equalToOneAdjacentSideStringProperty': TReadOnlyProperty<string>;
       'equalAdjacentSidesPattern': string;
@@ -439,7 +369,7 @@ type StringsType = {
       'cornersGoneStringProperty': TReadOnlyProperty<string>;
       'cornerDetectedPattern': string;
       'cornerDetectedPatternStringProperty': TReadOnlyProperty<string>;
-      'musicControl': {
+      'shapeSoundControl': {
         'nameResponse': string;
         'nameResponseStringProperty': TReadOnlyProperty<string>;
         'enabledContextResponse': string;

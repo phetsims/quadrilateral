@@ -16,9 +16,9 @@ import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralIconFactory from './QuadrilateralIconFactory.js';
 
 // constants
-const musicControlEnabledContextResponse = QuadrilateralStrings.a11y.voicing.musicControl.enabledContextResponseStringProperty;
-const musicControlDisabledContextResponse = QuadrilateralStrings.a11y.voicing.musicControl.disabledContextResponseStringProperty;
-const musicControlNameResponse = QuadrilateralStrings.a11y.voicing.musicControl.nameResponse;
+const musicControlEnabledContextResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.enabledContextResponseStringProperty;
+const musicControlDisabledContextResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.disabledContextResponseStringProperty;
+const musicControlNameResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.nameResponse;
 
 class ShapeSoundCheckbox extends Checkbox {
   public constructor( simSoundEnabledProperty: Property<boolean>, tandem: Tandem ) {
