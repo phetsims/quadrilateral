@@ -28,6 +28,7 @@ import SideLabel from '../model/SideLabel.js';
 import SidePair from '../model/SidePair.js';
 import VertexPair from '../model/VertexPair.js';
 import VertexLabel from '../model/VertexLabel.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 
 const foundIsoscelesTrapezoidPatternString = QuadrilateralStrings.a11y.voicing.foundIsoscelesTrapezoidPattern;
 const allRightAnglesAndAllSidesEqualString = QuadrilateralStrings.a11y.voicing.allRightAnglesAndAllSidesEqual;
@@ -347,11 +348,7 @@ class QuadrilateralAlerter extends Alerter {
       // adjacent sides did not change enough, just include a direction description
       const currentVertex1Position = side.vertex1.positionProperty.value;
       const previousVertex1Position = this.previousObjectResponseShapeSnapshot.getVertexPositionsFromSideLabel( side.sideLabel )[ 0 ];
-      const translationVector = currentVertex1Position.minus( previousVertex1Position );
-      const movementAngle = translationVector.angle;
-      response = MovementAlerter.getDirectionDescriptionFromAngle( movementAngle, {
-        modelViewTransform: this.modelViewTransform
-      } );
+      response = QuadrilateralAlerter.getDirectionDescription( previousVertex1Position, currentVertex1Position, this.modelViewTransform );
     }
 
     return response;
@@ -524,6 +521,18 @@ class QuadrilateralAlerter extends Alerter {
    */
   private static distanceFromRightAngle( angle: number ): number {
     return Math.abs( Math.PI / 2 - angle );
+  }
+
+  /**
+   * Returns a direction description for the change in position as an object moves from position1 to position2.
+   * Positions in model coordinates.
+   */
+  private static getDirectionDescription( position1: Vector2, position2: Vector2, modelViewTransform: ModelViewTransform2 ): string {
+    const translationVector = position2.minus( position1 );
+    const movementAngle = translationVector.angle;
+    return MovementAlerter.getDirectionDescriptionFromAngle( movementAngle, {
+      modelViewTransform: modelViewTransform
+    } );
   }
 
   /**
