@@ -21,12 +21,12 @@ type StringsType = {
   'cornersStringProperty': TReadOnlyProperty<string>;
   'diagonals': string;
   'diagonalsStringProperty': TReadOnlyProperty<string>;
-  'grid': string;
-  'gridStringProperty': TReadOnlyProperty<string>;
   'music': string;
   'musicStringProperty': TReadOnlyProperty<string>;
   'cornerGuides': string;
   'cornerGuidesStringProperty': TReadOnlyProperty<string>;
+  'grid': string;
+  'gridStringProperty': TReadOnlyProperty<string>;
   'diagonalGuides': string;
   'diagonalGuidesStringProperty': TReadOnlyProperty<string>;
   'vertexA': string;
@@ -326,8 +326,8 @@ type StringsType = {
         'fartherFromStringProperty': TReadOnlyProperty<string>;
         'closerTo': string;
         'closerToStringProperty': TReadOnlyProperty<string>;
-        'fullVertexDragObjectResponsePattern': string;
-        'fullVertexDragObjectResponsePatternStringProperty': TReadOnlyProperty<string>;
+        'vertexDragObjectResponsePattern': string;
+        'vertexDragObjectResponsePatternStringProperty': TReadOnlyProperty<string>;
         'partialVertexDragObjectResponsePattern': string;
         'partialVertexDragObjectResponsePatternStringProperty': TReadOnlyProperty<string>;
       };

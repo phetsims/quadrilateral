@@ -68,10 +68,7 @@ const shorterString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.s
 const longerString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.longer;
 const widerString = QuadrilateralStrings.a11y.voicing.vertexDragObjectResponse.wider;
 const vertexDragSmallerString = QuadrilateralStrings.a11y.voicing.vertexDragObjectResponse.smaller;
-const fartherFromString = QuadrilateralStrings.a11y.voicing.vertexDragObjectResponse.fartherFrom;
-const closerToString = QuadrilateralStrings.a11y.voicing.vertexDragObjectResponse.closerTo;
-const fullVertexDragObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.vertexDragObjectResponse.fullVertexDragObjectResponsePattern;
-const partialVertexDragObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.vertexDragObjectResponse.partialVertexDragObjectResponsePattern;
+const vertexDragObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.vertexDragObjectResponse.vertexDragObjectResponsePattern;
 
 // Constants that control side object responses. See the getSideChangeObjectResponse for more information.
 const DESCRIBE_CLOSER_TO_OPPOSITE_SIDE_THRESHOLD = 0.04; // Large, more strict requirement for describing proximity
@@ -360,40 +357,32 @@ class QuadrilateralAlerter extends Alerter {
    * are sufficient for the Voicing output to describe the changing shape. With keyboard, the user
    * needs a response every key press to know that changes are happening. Will return something like
    *
-   * "angle smaller, farther from opposite corner" or
-   * "angle smaller, closer to opposite corner" or
-   * "angle wider, farther from opposite corner"
+   * "angle smaller" or
+   * "angle wider" or
+   * "left"
    *
    * Note that since this is dependent on angles and not just position Properties, this must be called after
    * shapeChangedEmitter emits when we know that all angle and shape Properties have been updated. See
    * QuadrilateralShapeModel.updateOrderDependentProperties for more information.
    */
   private getVertexChangeObjectResponse( vertex: Vertex ): string {
-    let response = '';
+    let response;
 
     const currentAngle = vertex.angleProperty.value!;
     const previousAngle = this.previousObjectResponseShapeSnapshot.getAngleFromVertexLabel( vertex.vertexLabel );
 
-    const oppositeVertex = this.quadrilateralShapeModel.oppositeVertexMap.get( vertex )!;
-    const currentOppositeDistance = QuadrilateralShapeModel.getDistanceBetweenVertices( vertex, oppositeVertex );
-    const previousOppositeDistance = this.previousObjectResponseShapeSnapshot.getDistanceBetweenVertices( vertex.vertexLabel, oppositeVertex.vertexLabel );
-
-    const distanceChangeString = currentOppositeDistance > previousOppositeDistance ? fartherFromString : closerToString;
-
     if ( previousAngle === currentAngle ) {
 
       // Moving around symmetric shapes, it is possible to move the vertex into a new position where the angle
-      // stayed the same. In this case, only describe position relative to the opposite vertex.
-      response = StringUtils.fillIn( partialVertexDragObjectResponsePatternString, {
-        distanceChange: distanceChangeString
-      } );
+      // stayed the same. In this case, only describe the direction of movement.
+      const currentPosition = vertex.positionProperty.value;
+      const previousPosition = this.previousObjectResponseShapeSnapshot.getPositionFromVertexLabel( vertex.vertexLabel );
+      response = QuadrilateralAlerter.getDirectionDescription( previousPosition, currentPosition, this.modelViewTransform );
     }
     else {
       const angleChangeString = currentAngle > previousAngle ? widerString : vertexDragSmallerString;
-
-      response = StringUtils.fillIn( fullVertexDragObjectResponsePatternString, {
-        angleChange: angleChangeString,
-        distanceChange: distanceChangeString
+      response = StringUtils.fillIn( vertexDragObjectResponsePatternString, {
+        angleChange: angleChangeString
       } );
     }
 
@@ -527,8 +516,8 @@ class QuadrilateralAlerter extends Alerter {
    * Returns a direction description for the change in position as an object moves from position1 to position2.
    * Positions in model coordinates.
    */
-  private static getDirectionDescription( position1: Vector2, position2: Vector2, modelViewTransform: ModelViewTransform2 ): string {
-    const translationVector = position2.minus( position1 );
+  private static getDirectionDescription( previousPosition: Vector2, currentPosition: Vector2, modelViewTransform: ModelViewTransform2 ): string {
+    const translationVector = currentPosition.minus( previousPosition );
     const movementAngle = translationVector.angle;
     return MovementAlerter.getDirectionDescriptionFromAngle( movementAngle, {
       modelViewTransform: modelViewTransform

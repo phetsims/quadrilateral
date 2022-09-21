@@ -457,14 +457,8 @@
         "smaller": {
           "value": "smaller"
         },
-        "fartherFrom": {
-          "value": "farther from"
-        },
-        "closerTo": {
-          "value": "closer to"
-        },
-        "fullVertexDragObjectResponsePattern": {
-          "value": "angle {{angleChange}}, {{distanceChange}} opposite corner"
+        "vertexDragObjectResponsePattern": {
+          "value": "angle {{angleChange}}"
         },
         "partialVertexDragObjectResponsePattern": {
           "value": "{{distanceChange}} opposite corner"
