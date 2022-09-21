@@ -20,7 +20,7 @@ const musicControlEnabledContextResponse = QuadrilateralStrings.a11y.voicing.mus
 const musicControlDisabledContextResponse = QuadrilateralStrings.a11y.voicing.musicControl.disabledContextResponseStringProperty;
 const musicControlNameResponse = QuadrilateralStrings.a11y.voicing.musicControl.nameResponse;
 
-class PlayMusicCheckbox extends Checkbox {
+class ShapeSoundCheckbox extends Checkbox {
   public constructor( simSoundEnabledProperty: Property<boolean>, tandem: Tandem ) {
     super( simSoundEnabledProperty, QuadrilateralIconFactory.createSoundIcon(), {
       voicingNameResponse: musicControlNameResponse,
@@ -36,5 +36,5 @@ class PlayMusicCheckbox extends Checkbox {
   }
 }
 
-quadrilateral.register( 'PlayMusicCheckbox', PlayMusicCheckbox );
-export default PlayMusicCheckbox;
+quadrilateral.register( 'ShapeSoundCheckbox', ShapeSoundCheckbox );
+export default ShapeSoundCheckbox;

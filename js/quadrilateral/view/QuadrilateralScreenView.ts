@@ -41,7 +41,7 @@ import MediaPipeQueryParameters from '../../../../tangible/js/mediaPipe/MediaPip
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralInteractionCueNode from './QuadrilateralInteractionCueNode.js';
 import ResetShapeButton from './ResetShapeButton.js';
-import PlayMusicCheckbox from './PlayMusicCheckbox.js';
+import ShapeSoundCheckbox from './ShapeSoundCheckbox.js';
 import Vertex from '../model/Vertex.js';
 
 // Defines the units of model space, a 2x2 grid that quadrilateral vertices can move within. It is dilated by
@@ -94,9 +94,9 @@ class QuadrilateralScreenView extends ScreenView {
     } );
     this.addChild( this.resetAllButton );
 
-    const playMusicCheckbox = new PlayMusicCheckbox( model.shapeSoundEnabledProperty, tandem.createTandem( 'playMusicCheckbox' ) );
-    playMusicCheckbox.leftBottom = this.resetAllButton.leftTop.minusXY( 0, 45 );
-    this.addChild( playMusicCheckbox );
+    const shapeSoundCheckbox = new ShapeSoundCheckbox( model.shapeSoundEnabledProperty, tandem.createTandem( 'shapeSoundCheckbox' ) );
+    shapeSoundCheckbox.leftBottom = this.resetAllButton.leftTop.minusXY( 0, 45 );
+    this.addChild( shapeSoundCheckbox );
 
     const shapeNameDisplay = new QuadrilateralShapeNameDisplay( model.shapeNameVisibleProperty, model.quadrilateralShapeModel.shapeNameProperty, this.quadrilateralDescriber, tandem.createTandem( 'quadrilateralShapeNameDisplay' ) );
     this.addChild( shapeNameDisplay );
@@ -279,7 +279,7 @@ class QuadrilateralScreenView extends ScreenView {
 
     // pdom
     this.pdomPlayAreaNode.pdomOrder = [ this.quadrilateralNode, shapeNameDisplay, resetShapeButton ];
-    this.pdomControlAreaNode.pdomOrder = [ visibilityControls, playMusicCheckbox, this.resetAllButton ];
+    this.pdomControlAreaNode.pdomOrder = [ visibilityControls, shapeSoundCheckbox, this.resetAllButton ];
     this.setScreenSummaryContent( new QuadrilateralScreenSummaryContentNode() );
 
     // voicing
