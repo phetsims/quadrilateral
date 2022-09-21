@@ -30,9 +30,13 @@ const ALL_TRACKS_PLAY_TIME = 4;
 // In seconds, how long tracks fade in or fade out when sound transitions between playing and stopped.
 const FADE_TIME = 1;
 
+// The maximum output level for all tracks of this sound design. Applied to this SoundGenerator, so that all tracks
+// connected to this one will be limited by this output level.
+const MAX_OUTPUT_LEVEL = 0.5;
+
 // linear maps that determine output level from remaining fade time
-const REMAINING_FADE_IN_TIME_TO_GAIN = new LinearFunction( FADE_TIME, 0, 0, 1 );
-const REMAINING_FADE_OUT_TIME_TO_GAIN = new LinearFunction( FADE_TIME, 0, 1, 0 );
+const REMAINING_FADE_IN_TIME_TO_GAIN = new LinearFunction( FADE_TIME, 0, 0, MAX_OUTPUT_LEVEL );
+const REMAINING_FADE_OUT_TIME_TO_GAIN = new LinearFunction( FADE_TIME, 0, MAX_OUTPUT_LEVEL, 0 );
 
 // For the state of the sound view, indicating how sound is currently behaving.
 class PlayingState extends EnumerationValue {
