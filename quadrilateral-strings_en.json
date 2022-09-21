@@ -14,9 +14,6 @@
   "diagonals": {
     "value": "Diagonals"
   },
-  "music": {
-    "value": "Music"
-  },
   "cornerGuides": {
     "value": "Corner Guides"
   },
@@ -43,9 +40,6 @@
   },
   "resetShape": {
     "value": "Reset Shape"
-  },
-  "playMusic": {
-    "value": "Play Music"
   },
   "fineInputSpacing": {
     "value": "Fine Input Spacing"
@@ -182,15 +176,6 @@
       },
       "youHaveAShapeHintPattern": {
         "value": "You have {{shapeDescription}}."
-      },
-      "namedShapeParalleogramHintPattern": {
-        "value": "a parallelogram, and {{shapeName}}"
-      },
-      "namedShapeNotAParallelogramHintPattern": {
-        "value": "{{shapeName}}, not a parallelogram"
-      },
-      "detailsPattern": {
-        "value": "Currently, your shape is {{description}}."
       },
       "firstDetailsStatementPattern": {
         "value": "Right now, {{cornerType}} corners are {{angleEquality}}, and {{sideType}} sides are equal."
@@ -334,85 +319,11 @@
           "value": "a dart"
         }
       },
-      "transformations": {
-        "tiltingPattern": {
-          "value": "Tilting {{sideDescription}} {{direction}}."
-        },
-        "oppositeSides": {
-          "value": "opposite sides"
-        },
-        "rightSide": {
-          "value": "right side"
-        },
-        "leftSide": {
-          "value": "left side"
-        },
-        "upperSide": {
-          "value": "upper side"
-        },
-        "lowerSide": {
-          "value": "lower side"
-        },
-        "up": {
-          "value": "up"
-        },
-        "down": {
-          "value": "down"
-        },
-        "left": {
-          "value": "left"
-        },
-        "right": {
-          "value": "right"
-        },
-        "keepingAParallelogram": {
-          "value": "Sides in parallel. Keeping a parallelogram."
-        },
-        "youLostYourParallelogramPattern": {
-          "value": "You lost your parallelogram! Opposite sides {{proximityDescription}} parallel."
-        },
-        "youMadeAParallelogram": {
-          "value": "You made a parallelogram! Opposite sides in parallel."
-        },
-        "extremelyFarFrom": {
-          "value": "extremely far from"
-        },
-        "veryFarFrom": {
-          "value": "very far from"
-        },
-        "farFrom": {
-          "value": "far from"
-        },
-        "notSoCloseTo": {
-          "value": "not so close to"
-        },
-        "somewhatCloseTo": {
-          "value": "somewhat close to"
-        },
-        "veryCloseTo": {
-          "value": "very close to"
-        },
-        "extremelyCloseTo": {
-          "value": "extremely close to"
-        },
-        "proximityToParallelogramPattern": {
-          "value": "{{changeDescription}}. Opposite sides {{proximityDescription}} parallel."
-        }
-      },
       "foundAParallelogram": {
         "value": "Found a parallelogram!"
       },
       "lostYourParallelogram": {
         "value": "Lost your parallelogram!"
-      },
-      "foundAParallelogramWithAllRightAngles": {
-        "value": "Found a parallelogram with all right angles!"
-      },
-      "foundAParallelogramWithAllSidesEqual": {
-        "value": "Found a parallelogram with all sides equal!"
-      },
-      "foundParallelogramWithAnglesAndSidesEqual": {
-        "value": "Found a parallelogram with all right angles and all sides equal!"
       },
       "allRightAnglesAndAllSidesEqual": {
         "value": "All right angles and all sides equal."
@@ -459,9 +370,6 @@
         },
         "vertexDragObjectResponsePattern": {
           "value": "angle {{angleChange}}"
-        },
-        "partialVertexDragObjectResponsePattern": {
-          "value": "{{distanceChange}} opposite corner"
         }
       },
       "sideDragObjectResponse": {
@@ -470,9 +378,6 @@
         },
         "longer": {
           "value": "longer"
-        },
-        "sideDragObjectResponsePattern": {
-          "value": "{{directionChange}}, adjacent sides {{lengthChange}}"
         },
         "adjacentSidesChangePattern": {
           "value": "adjacent sides {{lengthChange}}"
@@ -504,12 +409,6 @@
       },
       "somewhatSmallerThan": {
         "value": "somewhat smaller than"
-      },
-      "aLittleWiderThan": {
-        "value": "a little wider than"
-      },
-      "aLittleSmallerThan": {
-        "value": "a little smaller than"
       },
       "halfTheSizeOf": {
         "value": "half the size of"
@@ -585,9 +484,6 @@
       },
       "equalToAdjacentSides": {
         "value": "equal to adjacent sides"
-      },
-      "equalToParallelAdjacentSides": {
-        "value": "equal to parallel adjacent sides"
       },
       "equalToOneAdjacentSide": {
         "value": "equal to one adjacent side"
