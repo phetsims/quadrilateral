@@ -473,6 +473,12 @@
         },
         "sideDragObjectResponsePattern": {
           "value": "{{directionChange}}, adjacent sides {{lengthChange}}"
+        },
+        "adjacentSidesChangePattern": {
+          "value": "adjacent sides {{lengthChange}}"
+        },
+        "adjacentSidesChangeUnequally": {
+          "value": "adjacent sides change unequally"
         }
       },
       "farWiderThan": {

@@ -69,6 +69,8 @@ const longerString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.lo
 const widerString = QuadrilateralStrings.a11y.voicing.vertexDragObjectResponse.wider;
 const vertexDragSmallerString = QuadrilateralStrings.a11y.voicing.vertexDragObjectResponse.smaller;
 const vertexDragObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.vertexDragObjectResponse.vertexDragObjectResponsePattern;
+const adjacentSidesChangePatternString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesChangePattern;
+const adjacentSidesChangeUnequallyString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesChangeUnequally;
 
 // Constants that control side object responses. See the getSideChangeObjectResponse for more information.
 const DESCRIBE_LONGER_ADJACENT_SIDES_THRESHOLD = 0.002;
@@ -315,15 +317,15 @@ class QuadrilateralAlerter extends Alerter {
         // both adjacent sides changed about the same so we can combine a description to say that adjacent sides
         // got shorter or longer
         const changeString = adjacentSidesLonger ? longerString : shorterString;
-        adjacentSideChangeString = StringUtils.fillIn( 'adjacent sides {{change}}', {
-          change: changeString
+        adjacentSideChangeString = StringUtils.fillIn( adjacentSidesChangePatternString, {
+          lengthChange: changeString
         } );
       }
       else {
 
         // both adjacent sides changed but in very different amounts so we combine the description to say that both
         // sides changed unequally
-        adjacentSideChangeString = 'adjacent sides change unequally';
+        adjacentSideChangeString = adjacentSidesChangeUnequallyString;
       }
 
       response = adjacentSideChangeString;

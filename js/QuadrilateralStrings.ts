@@ -322,10 +322,6 @@ type StringsType = {
         'widerStringProperty': TReadOnlyProperty<string>;
         'smaller': string;
         'smallerStringProperty': TReadOnlyProperty<string>;
-        'fartherFrom': string;
-        'fartherFromStringProperty': TReadOnlyProperty<string>;
-        'closerTo': string;
-        'closerToStringProperty': TReadOnlyProperty<string>;
         'vertexDragObjectResponsePattern': string;
         'vertexDragObjectResponsePatternStringProperty': TReadOnlyProperty<string>;
         'partialVertexDragObjectResponsePattern': string;
@@ -338,6 +334,10 @@ type StringsType = {
         'longerStringProperty': TReadOnlyProperty<string>;
         'sideDragObjectResponsePattern': string;
         'sideDragObjectResponsePatternStringProperty': TReadOnlyProperty<string>;
+        'adjacentSidesChangePattern': string;
+        'adjacentSidesChangePatternStringProperty': TReadOnlyProperty<string>;
+        'adjacentSidesChangeUnequally': string;
+        'adjacentSidesChangeUnequallyStringProperty': TReadOnlyProperty<string>;
       };
       'farWiderThan': string;
       'farWiderThanStringProperty': TReadOnlyProperty<string>;
