@@ -71,7 +71,6 @@ const vertexDragSmallerString = QuadrilateralStrings.a11y.voicing.vertexDragObje
 const vertexDragObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.vertexDragObjectResponse.vertexDragObjectResponsePattern;
 
 // Constants that control side object responses. See the getSideChangeObjectResponse for more information.
-const DESCRIBE_CLOSER_TO_OPPOSITE_SIDE_THRESHOLD = 0.04; // Large, more strict requirement for describing proximity
 const DESCRIBE_LONGER_ADJACENT_SIDES_THRESHOLD = 0.002;
 const BOTH_ADJACENT_SIDES_CHANGE_THE_SAME_THRESHOLD = 0.001; // Changes should be about equal to be described as such
 
@@ -279,15 +278,14 @@ class QuadrilateralAlerter extends Alerter {
 
   /**
    * Returns the object response for the side as it changes from user input like dragging. Describes the change in
-   * length of adjacent side and possibly proximity of the changing side to its opposite side. Amount of content in
-   * the response depends on whether the adjacent sides change the same amount, and how much the length of adjacent
-   * sides changed. Will return something like
+   * length of adjacent side. Amount of content in the response depends on whether the adjacent sides change the same
+   * amount, and how much the length of adjacent sides changed. Will return something like
    *
    * "right" or
    * "left" or
    * "adjacent sides change unequally" or
    * "adjacent sides longer" or
-   * "adjacent sides longer, farther from opposite side"
+   * "adjacent sides longer"
    */
   private getSideChangeObjectResponse( side: Side ): string {
     let response = '';
@@ -326,16 +324,6 @@ class QuadrilateralAlerter extends Alerter {
         // both adjacent sides changed but in very different amounts so we combine the description to say that both
         // sides changed unequally
         adjacentSideChangeString = 'adjacent sides change unequally';
-      }
-
-      if ( firstSideAbsoluteDifference > DESCRIBE_CLOSER_TO_OPPOSITE_SIDE_THRESHOLD && secondSideAbsoluteDifference > DESCRIBE_CLOSER_TO_OPPOSITE_SIDE_THRESHOLD ) {
-
-        // both adjacent sides have changed enough to include a description about proximity to the other side
-        const proximityString = adjacentSidesLonger ? 'farther from opposite side' : 'closer to opposite side';
-        adjacentSideChangeString = StringUtils.fillIn( '{{change}}, {{proximity}}', {
-          change: adjacentSideChangeString,
-          proximity: proximityString
-        } );
       }
 
       response = adjacentSideChangeString;
