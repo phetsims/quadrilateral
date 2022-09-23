@@ -889,6 +889,10 @@ class QuadrilateralShapeModel {
     return Utils.equalsEpsilon( angle1, angle2, this.interAngleToleranceIntervalProperty.value );
   }
 
+  public static isInterAngleEqualToOther( angle1: number, angle2: number, interAngleToleranceInterval: number ): boolean {
+    return Utils.equalsEpsilon( angle1, angle2, interAngleToleranceInterval );
+  }
+
   /**
    * Compare two angles with staticAngleToleranceInterval. Useful when comparing one angle to a static unchanging
    * value such as right angles.

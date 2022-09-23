@@ -386,29 +386,44 @@
           "value": "adjacent sides change unequally"
         }
       },
-      "farWiderThan": {
-        "value": "far wider than"
-      },
       "farSmallerThan": {
         "value": "far smaller than"
-      },
-      "muchMuchWiderThan": {
-        "value": "much much wider than"
       },
       "muchMuchSmallerThan": {
         "value": "much much smaller than"
       },
-      "muchWiderThan": {
-        "value": "much wider than"
+      "aboutHalfAsWideAs": {
+        "value": "about half as wide as"
       },
       "muchSmallerThan": {
         "value": "much smaller than"
       },
+      "somewhatSmallerThan": {
+        "value": "somewhat smaller than"
+      },
+      "similarButSmallerThan": {
+        "value": "similar but smaller than"
+      },
+      "equalTo": {
+        "value": "equal to"
+      },
+      "similarButWiderThan": {
+        "value": "similar but wider than"
+      },
       "somewhatWiderThan": {
         "value": "somewhat wider than"
       },
-      "somewhatSmallerThan": {
-        "value": "somewhat smaller than"
+      "muchWiderThan": {
+        "value": "much wider than"
+      },
+      "aboutTwiceAsWideAs": {
+        "value": "about twice as wide as"
+      },
+      "muchMuchWiderThan": {
+        "value": "much much wider than"
+      },
+      "farWiderThan": {
+        "value": "far wider than"
       },
       "halfTheSizeOf": {
         "value": "half the size of"
@@ -424,9 +439,6 @@
       },
       "almostEqualTo": {
         "value": "almost equal to"
-      },
-      "equalTo": {
-        "value": "equal to"
       },
       "equalToAdjacentCorners": {
         "value": "equal to adjacent corners"

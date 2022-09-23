@@ -257,10 +257,10 @@ class QuadrilateralDescriber {
         const fourthCornerString = this.getCornerAngleDescription( orderedUnequalVertices[ 1 ] );
 
         // how the equal vertex angles compare qualitatively to the fist unequal vertex
-        const firstComparisonString = VertexDescriber.getAngleComparisonDescription( orderedUnequalVertices[ 0 ], orderedEqualVertices[ 0 ] );
+        const firstComparisonString = VertexDescriber.getAngleComparisonDescription( orderedUnequalVertices[ 0 ], orderedEqualVertices[ 0 ], this.shapeModel.interAngleToleranceIntervalProperty.value );
 
         // how the equal vertex angles compare qualitatively to the second unequal vertex
-        const secondComparisonString = VertexDescriber.getAngleComparisonDescription( orderedUnequalVertices[ 1 ], orderedEqualVertices[ 0 ] );
+        const secondComparisonString = VertexDescriber.getAngleComparisonDescription( orderedUnequalVertices[ 1 ], orderedEqualVertices[ 0 ], this.shapeModel.interAngleToleranceIntervalProperty.value );
 
         const patternString = cornersPatternString;
         statement = StringUtils.fillIn( patternString, {
@@ -512,8 +512,9 @@ class QuadrilateralDescriber {
     const thirdCornerString = this.getCornerAngleDescription( orderedOppositeVertexPairs[ 1 ].vertex1 );
     const fourthCornerString = this.getCornerAngleDescription( orderedOppositeVertexPairs[ 1 ].vertex2 );
 
-    const firstComparisonString = VertexDescriber.getAngleComparisonDescription( orderedOppositeVertexPairs[ 0 ].vertex2, orderedOppositeVertexPairs[ 0 ].vertex1 );
-    const secondComparisonString = VertexDescriber.getAngleComparisonDescription( orderedOppositeVertexPairs[ 1 ].vertex2, orderedOppositeVertexPairs[ 1 ].vertex1 );
+    const interAngleToleranceInterval = this.shapeModel.interAngleToleranceIntervalProperty.value;
+    const firstComparisonString = VertexDescriber.getAngleComparisonDescription( orderedOppositeVertexPairs[ 0 ].vertex2, orderedOppositeVertexPairs[ 0 ].vertex1, interAngleToleranceInterval );
+    const secondComparisonString = VertexDescriber.getAngleComparisonDescription( orderedOppositeVertexPairs[ 1 ].vertex2, orderedOppositeVertexPairs[ 1 ].vertex1, interAngleToleranceInterval );
 
     return StringUtils.fillIn( generalVertexPatternString, {
       firstCorner: firstCornerString,
@@ -600,8 +601,9 @@ class QuadrilateralDescriber {
     const fourthCornerString = this.getCornerAngleDescription( sortedUndescribedVertices[ 1 ] );
 
     // describe the relative size of the equal angles compared to eqch unequal angle
-    const firstComparisonString = VertexDescriber.getAngleComparisonDescription( sortedUndescribedVertices[ 0 ], firstVertex );
-    const secondComparisonString = VertexDescriber.getAngleComparisonDescription( sortedUndescribedVertices[ 1 ], firstVertex );
+    const interAngleToleranceInterval = this.shapeModel.interAngleToleranceIntervalProperty.value;
+    const firstComparisonString = VertexDescriber.getAngleComparisonDescription( sortedUndescribedVertices[ 0 ], firstVertex, interAngleToleranceInterval );
+    const secondComparisonString = VertexDescriber.getAngleComparisonDescription( sortedUndescribedVertices[ 1 ], firstVertex, interAngleToleranceInterval );
 
     return StringUtils.fillIn( patternString, {
       firstCorners: firstCornersString,
@@ -628,7 +630,8 @@ class QuadrilateralDescriber {
     const secondCornersString = this.getCornersAngleDescription( orderedVertexPairs[ 1 ].vertex1, orderedVertexPairs[ 1 ].vertex2 );
 
     // we are comparing the angles of the vertex pairs, relative to the first described pair
-    const comparisonString = VertexDescriber.getAngleComparisonDescription( orderedVertexPairs[ 1 ].vertex1, orderedVertexPairs[ 0 ].vertex1 );
+    const interToleranceInterval = this.shapeModel.interAngleToleranceIntervalProperty.value;
+    const comparisonString = VertexDescriber.getAngleComparisonDescription( orderedVertexPairs[ 1 ].vertex1, orderedVertexPairs[ 0 ].vertex1, interToleranceInterval );
 
     const patternString = twoPairsOfEqualVerticesPatternString;
     return StringUtils.fillIn( patternString, {
