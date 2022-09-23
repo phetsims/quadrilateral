@@ -742,7 +742,7 @@ class QuadrilateralAlerter extends Alerter {
       // the vertices with equal angles for a dart will be the ones adjacent to the inward vertex
       let firstCornerLabel: VertexLabel;
       let secondCornerLabel: VertexLabel;
-      if ( inwardCornerLabel === VertexLabel.VERTEX_A || inwardCornerLabel === VertexLabel.VERTEX_D ) {
+      if ( inwardCornerLabel === VertexLabel.VERTEX_A || inwardCornerLabel === VertexLabel.VERTEX_C ) {
         firstCornerLabel = VertexLabel.VERTEX_B;
         secondCornerLabel = VertexLabel.VERTEX_D;
       }
