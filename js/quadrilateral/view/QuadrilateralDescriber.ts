@@ -361,6 +361,8 @@ class QuadrilateralDescriber {
 
     const shapeName = this.shapeModel.shapeNameProperty.value;
 
+    const interLengthToleranceInterval = this.shapeModel.shapeLengthToleranceIntervalProperty.value;
+
     // no description if all sides are equal in length
     if ( adjacentEqualSidePairs.length < 4 ) {
       if ( this.shapeModel.isParallelogramProperty.value ) {
@@ -399,10 +401,10 @@ class QuadrilateralDescriber {
           const fourthSide = orderedOtherSidePairs[ 0 ].side2;
 
           // comparing the length of the first side to the second side, relative to the first side
-          const firstComparisonString = SideDescriber.getLengthComparisonDescription( secondSide, firstSide );
+          const firstComparisonString = SideDescriber.getLengthComparisonDescription( secondSide, firstSide, interLengthToleranceInterval );
 
           // comparing third and fourth sides, relative to the third side
-          const secondComparisonString = SideDescriber.getLengthComparisonDescription( fourthSide, thirdSide );
+          const secondComparisonString = SideDescriber.getLengthComparisonDescription( fourthSide, thirdSide, interLengthToleranceInterval );
 
           const trapezoidPatternString = trapezoidSidesPatternString;
           const parallelSidesStatement = StringUtils.fillIn( trapezoidPatternString, {
@@ -468,13 +470,13 @@ class QuadrilateralDescriber {
           const fourthSide = orderedRemainingSides[ 0 ].side2;
 
           // first comparison is the equal sides against the third side, relative to the first side
-          const firstComparisonString = SideDescriber.getLengthComparisonDescription( thirdSide, firstSide );
+          const firstComparisonString = SideDescriber.getLengthComparisonDescription( thirdSide, firstSide, interLengthToleranceInterval );
 
           // second comparison is the equal sides aginst the fourth side, relative to the first side
-          const secondComparisonString = SideDescriber.getLengthComparisonDescription( fourthSide, firstSide );
+          const secondComparisonString = SideDescriber.getLengthComparisonDescription( fourthSide, firstSide, interLengthToleranceInterval );
 
           // third comparison is the fourth side against the third side, relative to the third side
-          const thirdComparisonString = SideDescriber.getLengthComparisonDescription( fourthSide, thirdSide );
+          const thirdComparisonString = SideDescriber.getLengthComparisonDescription( fourthSide, thirdSide, interLengthToleranceInterval );
 
           statement = StringUtils.fillIn( generalSideWithOneAdjacentEqualPairPatternString, {
             firstSide: this.getSideDescription( firstSide ),
@@ -544,8 +546,9 @@ class QuadrilateralDescriber {
     const fourthSide = sortedOppositeSidePairs[ 1 ].side2;
 
     // comparing the lengths of each opposite side pair, relative to the first side in the pair
-    const firstComparisonString = SideDescriber.getLengthComparisonDescription( secondSide, firstSide );
-    const secondComparisonString = SideDescriber.getLengthComparisonDescription( fourthSide, thirdSide );
+    const interLengthToleranceInterval = this.shapeModel.shapeLengthToleranceIntervalProperty.value;
+    const firstComparisonString = SideDescriber.getLengthComparisonDescription( secondSide, firstSide, interLengthToleranceInterval );
+    const secondComparisonString = SideDescriber.getLengthComparisonDescription( fourthSide, thirdSide, interLengthToleranceInterval );
 
     return StringUtils.fillIn( patternString, {
       firstSide: this.getSideDescription( firstSide ),
@@ -564,7 +567,8 @@ class QuadrilateralDescriber {
 
     // Compare the lengths of the first two parallel sides against the lengths of the second two parallel sides,
     // relative to the first two parallel sides.
-    const comparisonString = SideDescriber.getLengthComparisonDescription( orderedSidePairs[ 1 ].side1, orderedSidePairs[ 0 ].side1 );
+    const toleranceInterval = this.shapeModel.shapeLengthToleranceIntervalProperty.value;
+    const comparisonString = SideDescriber.getLengthComparisonDescription( orderedSidePairs[ 1 ].side1, orderedSidePairs[ 0 ].side1, toleranceInterval );
 
     // const patternString = 'Equal Sides {{firstSide}} and {{secondSide}} are {{comparison}} equal Sides {{thirdSide}} and {{fourthSide}}.';
     return StringUtils.fillIn( patternString, {

@@ -10,24 +10,24 @@ import quadrilateral from '../../quadrilateral.js';
 import Side from '../model/Side.js';
 import Range from '../../../../dot/js/Range.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
-import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 
 // constants
-const farLongerThanString = QuadrilateralStrings.a11y.voicing.farLongerThan;
 const farShorterThanString = QuadrilateralStrings.a11y.voicing.farShorterThan;
-const muchMuchLongerThanString = QuadrilateralStrings.a11y.voicing.muchMuchLongerThan;
 const muchMuchShorterThanString = QuadrilateralStrings.a11y.voicing.muchMuchShorterThan;
-const muchLongerThanString = QuadrilateralStrings.a11y.voicing.muchLongerThan;
+const aboutHalfAsLongAsString = QuadrilateralStrings.a11y.voicing.aboutHalfAsLongAs;
 const muchShorterThanString = QuadrilateralStrings.a11y.voicing.muchShorterThan;
-const somewhatLongerThanString = QuadrilateralStrings.a11y.voicing.somewhatLongerThan;
 const somewhatShorterThanString = QuadrilateralStrings.a11y.voicing.somewhatShorterThan;
-const aLittleLongerThanString = QuadrilateralStrings.a11y.voicing.aLittleLongerThan;
-const aLittleShorterThanString = QuadrilateralStrings.a11y.voicing.aLittleShorterThan;
-const almostEqualTo = QuadrilateralStrings.a11y.voicing.almostEqualTo;
+const similarButShorterThanString = QuadrilateralStrings.a11y.voicing.similarButShorterThan;
+const similarButLongerThanString = QuadrilateralStrings.a11y.voicing.similarButLongerThan;
+const somewhatLongerThanString = QuadrilateralStrings.a11y.voicing.somewhatLongerThan;
+const muchLongerThanString = QuadrilateralStrings.a11y.voicing.muchLongerThan;
+const aboutTwiceAsLongAsString = QuadrilateralStrings.a11y.voicing.aboutTwiceAsLongAs;
+const muchMuchLongerThanString = QuadrilateralStrings.a11y.voicing.muchMuchLongerThan;
+const farLongerThanString = QuadrilateralStrings.a11y.voicing.farLongerThan;
 const equalToString = QuadrilateralStrings.a11y.voicing.equalTo;
 const parallelSideObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.parallelSideObjectResponsePattern;
 const sideObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.sideObjectResponsePattern;
@@ -44,25 +44,18 @@ const notEqualToParallelAdjacentSidesString = QuadrilateralStrings.a11y.voicing.
 
 // A map that will provide comparison descriptions for side lengths. Lengths in model units.
 const lengthComparisonDescriptionMap = new Map<Range, string>();
-
-// Populate entries of the lengthComparisonDescriptionMap - They are symmetric in that ranges for "longer" strings
-// have the same ranges as the "shorter" strings with values inverted. Lengths for this function are provided in the
-// number of segments, since that is how it is described in the design doc. That is converted to model units for
-// the map.
-const createLengthComparisonMapEntry = ( minSegments: number, maxSegments: number, longerString: string, comparisonShorterString: string ) => {
-  const minLength = minSegments * Side.SIDE_SEGMENT_LENGTH;
-  const maxLength = maxSegments * Side.SIDE_SEGMENT_LENGTH;
-  lengthComparisonDescriptionMap.set( new Range( minLength, maxLength ), longerString );
-  lengthComparisonDescriptionMap.set( new Range( -maxLength, -minLength ), comparisonShorterString );
-};
-
-createLengthComparisonMapEntry( 6, Number.POSITIVE_INFINITY, farLongerThanString, farShorterThanString );
-createLengthComparisonMapEntry( 4.5, 6, muchMuchLongerThanString, muchMuchShorterThanString );
-createLengthComparisonMapEntry( 3, 4.5, muchLongerThanString, muchShorterThanString );
-createLengthComparisonMapEntry( 1.5, 3, somewhatLongerThanString, somewhatShorterThanString );
-createLengthComparisonMapEntry( 0.5, 1.5, aLittleLongerThanString, aLittleShorterThanString );
-createLengthComparisonMapEntry( QuadrilateralQueryParameters.shapeLengthToleranceInterval, 0.5, almostEqualTo, almostEqualTo );
-createLengthComparisonMapEntry( 0, QuadrilateralQueryParameters.shapeLengthToleranceInterval, equalToString, equalToString );
+lengthComparisonDescriptionMap.set( new Range( 0, 0.2 ), farShorterThanString );
+lengthComparisonDescriptionMap.set( new Range( 0.2, 0.4 ), muchMuchShorterThanString );
+lengthComparisonDescriptionMap.set( new Range( 0.4, 0.6 ), aboutHalfAsLongAsString );
+lengthComparisonDescriptionMap.set( new Range( 0.6, 0.7 ), muchShorterThanString );
+lengthComparisonDescriptionMap.set( new Range( 0.7, 0.9 ), somewhatShorterThanString );
+lengthComparisonDescriptionMap.set( new Range( 0.9, 1 ), similarButShorterThanString );
+lengthComparisonDescriptionMap.set( new Range( 1, 1.2 ), similarButLongerThanString );
+lengthComparisonDescriptionMap.set( new Range( 1.2, 1.5 ), somewhatLongerThanString );
+lengthComparisonDescriptionMap.set( new Range( 1.5, 1.8 ), muchLongerThanString );
+lengthComparisonDescriptionMap.set( new Range( 1.8, 2.2 ), aboutTwiceAsLongAsString );
+lengthComparisonDescriptionMap.set( new Range( 2.2, 2.6 ), muchMuchLongerThanString );
+lengthComparisonDescriptionMap.set( new Range( 2.6, Number.POSITIVE_INFINITY ), farLongerThanString );
 
 class SideDescriber {
 
@@ -98,8 +91,9 @@ class SideDescriber {
     // other. This may not happen naturally by comparing side lengths because a rhombus and square may be detected
     // when sides are not perfectly equal due to the angle tolerance interval.
     const shapeName = this.quadrilateralShapeModel.shapeNameProperty.value;
+    const toleranceInterval = this.quadrilateralShapeModel.shapeLengthToleranceIntervalProperty.value;
     const oppositeComparison = shapeName === NamedQuadrilateral.SQUARE || shapeName === NamedQuadrilateral.RHOMBUS ?
-                               equalToString : SideDescriber.getLengthComparisonDescription( oppositeSide, this.side );
+                               equalToString : SideDescriber.getLengthComparisonDescription( oppositeSide, this.side, toleranceInterval );
 
     response = StringUtils.fillIn( patternString, {
       oppositeComparison: oppositeComparison,
@@ -161,8 +155,9 @@ class SideDescriber {
 
       // the adjacent sides are equal in length but not equal to this side, describe the length of
       // this side relative to the other sides but we can use either side since they are equal in length
+      const toleranceInterval = this.quadrilateralShapeModel.shapeLengthToleranceIntervalProperty.value;
       description = StringUtils.fillIn( patternString, {
-        comparison: SideDescriber.getLengthComparisonDescription( adjacentSides[ 0 ], this.side )
+        comparison: SideDescriber.getLengthComparisonDescription( adjacentSides[ 0 ], this.side, toleranceInterval )
       } );
     }
     else {
@@ -190,22 +185,28 @@ class SideDescriber {
    * Returns a description of comparison between two sides, using entries of lengthComparisonDescriptionMap.
    * Description compares side2 to side1. For example, if side2 is longer than side1 the output will be something
    * like:
-   * "Side2 is much longer than side1."
+   * "SideAB is much longer than sideCD."
    */
-  public static getLengthComparisonDescription( side1: Side, side2: Side ): string {
+  public static getLengthComparisonDescription( side1: Side, side2: Side, interLengthToleranceInterval: number ): string {
     let description: string | null = null;
 
     const length1 = side1.lengthProperty.value;
     const length2 = side2.lengthProperty.value;
-    const lengthDifference = length2 - length1;
 
-    lengthComparisonDescriptionMap.forEach( ( value, key ) => {
-      if ( key.contains( lengthDifference ) ) {
-        description = value;
-      }
-    } );
+    if ( QuadrilateralShapeModel.isInterLengthEqualToOther( length1, length2, interLengthToleranceInterval ) ) {
+      description = equalToString;
+    }
 
-    assert && assert( description, 'Length comparison description not found for provided Sides' );
+    const lengthRatio = length2 / length1;
+    if ( description === null ) {
+      lengthComparisonDescriptionMap.forEach( ( value, key ) => {
+        if ( key.contains( lengthRatio ) ) {
+          description = value;
+        }
+      } );
+    }
+
+    assert && assert( description, `Length comparison description not found for length ratio: ${lengthRatio}` );
     return description!;
   }
 }

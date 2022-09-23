@@ -914,6 +914,13 @@ class QuadrilateralShapeModel {
     return Utils.equalsEpsilon( length1, length2, this.shapeLengthToleranceIntervalProperty.value );
   }
 
+  /**
+   * Returns true if the lengths are equal to eachother within interLengthToleranceInterval.
+   */
+  public static isInterLengthEqualToOther( length1: number, length2: number, interLengthToleranceInterval: number ): boolean {
+    return Utils.equalsEpsilon( length1, length2, interLengthToleranceInterval );
+  }
+
   public isRightAngle( angle: number ): boolean {
     return Utils.equalsEpsilon( angle, Math.PI / 2, this.staticAngleToleranceIntervalProperty.value );
   }

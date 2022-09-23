@@ -458,35 +458,41 @@
       "notEqualToAdjacentCorners": {
         "value": "not equal to adjacent corners"
       },
-      "farLongerThan": {
-        "value": "far longer than"
-      },
       "farShorterThan": {
         "value": "far shorter than"
-      },
-      "muchMuchLongerThan": {
-        "value": "much much longer than"
       },
       "muchMuchShorterThan": {
         "value": "much much shorter than"
       },
-      "muchLongerThan": {
-        "value": "much longer than"
+      "aboutHalfAsLongAs": {
+        "value": "about half as long as"
       },
       "muchShorterThan": {
         "value": "much shorter than"
       },
-      "somewhatLongerThan": {
-        "value": "somewhat longer than"
-      },
       "somewhatShorterThan": {
         "value": "somewhat shorter than"
       },
-      "aLittleLongerThan": {
-        "value": "a little longer than"
+      "similarButShorterThan": {
+        "value": "similar but shorter than"
       },
-      "aLittleShorterThan": {
-        "value": "a little shorter than"
+      "similarButLongerThan": {
+        "value": "similar but longer than"
+      },
+      "somewhatLongerThan": {
+        "value": "somewhat longer than"
+      },
+      "muchLongerThan": {
+        "value": "much longer than"
+      },
+      "aboutTwiceAsLongAs": {
+        "value": "about twice as long as"
+      },
+      "muchMuchLongerThan": {
+        "value": "much much longer than"
+      },
+      "farLongerThan": {
+        "value": "far longer than"
       },
       "parallelSideObjectResponsePattern": {
         "value": "parallel to and {{oppositeComparison}} opposite side, {{adjacentSideDescription}}"
