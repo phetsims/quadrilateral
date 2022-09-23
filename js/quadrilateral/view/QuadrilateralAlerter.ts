@@ -31,7 +31,7 @@ import VertexLabel from '../model/VertexLabel.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 
 const foundIsoscelesTrapezoidPatternString = QuadrilateralStrings.a11y.voicing.foundIsoscelesTrapezoidPattern;
-const allRightAnglesAndAllSidesEqualString = QuadrilateralStrings.a11y.voicing.allRightAnglesAndAllSidesEqual;
+const allRightAnglesAllSidesEqualString = QuadrilateralStrings.a11y.voicing.allRightAnglesAllSidesEqual;
 const oppositeSidesInParallelString = QuadrilateralStrings.a11y.voicing.oppositeSidesInParallel;
 const foundTrapezoidPatternString = QuadrilateralStrings.a11y.voicing.foundTrapezoidPattern;
 const foundKitePatternString = QuadrilateralStrings.a11y.voicing.foundKitePattern;
@@ -587,7 +587,7 @@ class QuadrilateralAlerter extends Alerter {
       response = this.getFoundShapeResponse( NamedQuadrilateral.SQUARE );
     }
     else {
-      response = allRightAnglesAndAllSidesEqualString;
+      response = allRightAnglesAllSidesEqualString;
     }
 
     return response;
@@ -637,12 +637,12 @@ class QuadrilateralAlerter extends Alerter {
       let secondSideLabel: string;
 
       if ( parallelSidePair.includesSide( this.quadrilateralShapeModel.topSide ) ) {
-        firstSideLabel = QuadrilateralDescriber.getFullSideLabelString( SideLabel.SIDE_AB );
-        secondSideLabel = QuadrilateralDescriber.getFullSideLabelString( SideLabel.SIDE_CD );
+        firstSideLabel = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_AB );
+        secondSideLabel = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_CD );
       }
       else {
-        firstSideLabel = QuadrilateralDescriber.getFullSideLabelString( SideLabel.SIDE_BC );
-        secondSideLabel = QuadrilateralDescriber.getFullSideLabelString( SideLabel.SIDE_DA );
+        firstSideLabel = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_BC );
+        secondSideLabel = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_DA );
       }
       response = StringUtils.fillIn( foundTrapezoidPatternString, {
         firstSide: firstSideLabel,
@@ -670,16 +670,16 @@ class QuadrilateralAlerter extends Alerter {
       if ( oppositeEqualSidePair.includesSide( this.quadrilateralShapeModel.topSide ) ) {
 
         // top sides and bottom side are equal in length, left and right sides are parallel
-        equalFirstSideString = QuadrilateralDescriber.getFullSideLabelString( SideLabel.SIDE_AB );
-        equalSecondSideString = QuadrilateralDescriber.getFullSideLabelString( SideLabel.SIDE_CD );
+        equalFirstSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_AB );
+        equalSecondSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_CD );
         parallelFirstSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_DA );
         parallelSecondSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_BC );
       }
       else {
 
         // left and right sides are equal in length, top and bottom sides are parallel
-        equalFirstSideString = QuadrilateralDescriber.getFullSideLabelString( SideLabel.SIDE_DA );
-        equalSecondSideString = QuadrilateralDescriber.getFullSideLabelString( SideLabel.SIDE_BC );
+        equalFirstSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_DA );
+        equalSecondSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_BC );
         parallelFirstSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_AB );
         parallelSecondSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_CD );
       }

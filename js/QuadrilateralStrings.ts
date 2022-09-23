@@ -233,8 +233,8 @@ type StringsType = {
       'foundAParallelogramStringProperty': TReadOnlyProperty<string>;
       'lostYourParallelogram': string;
       'lostYourParallelogramStringProperty': TReadOnlyProperty<string>;
-      'allRightAnglesAndAllSidesEqual': string;
-      'allRightAnglesAndAllSidesEqualStringProperty': TReadOnlyProperty<string>;
+      'allRightAnglesAllSidesEqual': string;
+      'allRightAnglesAllSidesEqualStringProperty': TReadOnlyProperty<string>;
       'allSidesEqual': string;
       'allSidesEqualStringProperty': TReadOnlyProperty<string>;
       'allRightAngles': string;
