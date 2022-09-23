@@ -28,7 +28,11 @@ class QuadrilateralVisibilityControls extends VBox {
 
     const options = optionize<QuadrilateralVisibilityControlsOptions, SelfOptions, VBoxOptions>()( {
       align: 'left',
-      spacing: QuadrilateralConstants.CONTROLS_SPACING
+      spacing: QuadrilateralConstants.CONTROLS_SPACING,
+
+      // "stretches" the checkbox icons and their labels so that the icons align
+      // as if they are in their own column
+      stretch: true
     }, providedOptions );
 
     const cornerLabelsIcon = QuadrilateralIconFactory.createLabelledIcon(

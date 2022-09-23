@@ -4,7 +4,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { Circle, HBox, Line, Node, Path, Text } from '../../../../scenery/js/imports.js';
+import { Circle, FlowBox, HBox, Line, Node, Path, Text } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
@@ -99,13 +99,15 @@ const QuadrilateralIconFactory = {
   },
 
   /**
-   * Layout an icon and a label text, in that order for various UI controls.
+   * Layout a label Text and icon Node, in that order for various UI controls. Returns
+   * a flowbox so that 'stretch' can be used to align text and icons in a parent layout
+   * container.
    */
-  createLabelledIcon( iconNode: Node, labelString: string ): Node {
+  createLabelledIcon( iconNode: Node, labelString: string ): FlowBox {
     const labelText = new Text( labelString, QuadrilateralConstants.SCREEN_TEXT_OPTIONS );
 
     return new HBox( {
-      children: [ iconNode, labelText ],
+      children: [ labelText, iconNode ],
       spacing: 15
     } );
   },
