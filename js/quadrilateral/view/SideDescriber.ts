@@ -42,7 +42,8 @@ const shorterThanParallelAdjacentSidesString = QuadrilateralStrings.a11y.voicing
 const longerThanParallelAdjacentSidesString = QuadrilateralStrings.a11y.voicing.longerThanParallelAdjacentSides;
 const notEqualToParallelAdjacentSidesString = QuadrilateralStrings.a11y.voicing.notEqualToParallelAdjacentSides;
 
-// A map that will provide comparison descriptions for side lengths. Lengths in model units.
+// A map that will provide comparison descriptions for side lengths. Range values are the ratio between lengths
+// between the sides.
 const lengthComparisonDescriptionMap = new Map<Range, string>();
 lengthComparisonDescriptionMap.set( new Range( 0, 0.2 ), farShorterThanString );
 lengthComparisonDescriptionMap.set( new Range( 0.2, 0.4 ), muchMuchShorterThanString );
