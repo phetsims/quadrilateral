@@ -33,6 +33,8 @@ const QuadrilateralConstants = {
   // spacing between grouped controls
   CONTROLS_SPACING: 15,
 
+  SCREEN_TEXT_FONT: new PhetFont( { size: 18 } ),
+
   SCREEN_TEXT_OPTIONS: {
     font: new PhetFont( { size: 18 } )
   },
