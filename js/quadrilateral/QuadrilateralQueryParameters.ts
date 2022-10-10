@@ -68,6 +68,15 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     defaultValue: 0.01
   },
 
+  // A scale factor to apply to all tolerance intervals when the "Fine Input Spacing" checkbox is checked.
+  // Should be less than one because we want the tolerance intervals to be smaller when using fine input.
+  // See https://github.com/phetsims/quadrilateral/issues/197#issuecomment-1258194919
+  fineInputSpacingToleranceIntervalScaleFactor: {
+    type: 'number',
+    isValidValue: ( value: number ) => value < 1,
+    defaultValue: 0.2 // makes tolerances intervals 1/5 of the value when "fine input" enabled
+  },
+
   // TODO: Do we need this 'widening' of the tolerance interval when connected to a device still?
   deviceStaticAngleToleranceInterval: {
     type: 'number',

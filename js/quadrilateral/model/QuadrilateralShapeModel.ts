@@ -358,9 +358,14 @@ class QuadrilateralShapeModel {
 
     this.firstSeriesShapeChangedEmitter = new Emitter<[]>();
 
-    this.interAngleToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty ], shapeName => {
+    this.interAngleToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty, model.preferencesModel.fineInputSpacingProperty ], ( shapeName, fineInputSpacing ) => {
+
+      // reduce the value when "Fine Input Spacing" is selected
+      const interAngleToleranceInterval = fineInputSpacing ? QuadrilateralQueryParameters.interAngleToleranceInterval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor :
+                                          QuadrilateralQueryParameters.interAngleToleranceInterval;
+
       return QuadrilateralShapeModel.toleranceIntervalWideningListener(
-        QuadrilateralQueryParameters.interAngleToleranceInterval,
+        interAngleToleranceInterval,
         QuadrilateralQueryParameters.deviceInterAngleToleranceInterval,
         shapeName
       );
@@ -369,11 +374,15 @@ class QuadrilateralShapeModel {
       phetioValueType: NumberIO
     } );
 
-    this.staticAngleToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty ], shapeName => {
+    this.staticAngleToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty, model.preferencesModel.fineInputSpacingProperty ], ( shapeName, fineInputSpacing ) => {
+
+      // reduce the value when "Fine Input Spacing" is selected
+      const staticAngleToleranceInterval = fineInputSpacing ? QuadrilateralQueryParameters.staticAngleToleranceInterval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor :
+                                           QuadrilateralQueryParameters.staticAngleToleranceInterval;
 
       // TODO: Should this be "widened" when connected to a device? See https://github.com/phetsims/quadrilateral/issues/210
       return QuadrilateralShapeModel.toleranceIntervalWideningListener(
-        QuadrilateralQueryParameters.staticAngleToleranceInterval,
+        staticAngleToleranceInterval,
         QuadrilateralQueryParameters.deviceStaticAngleToleranceInterval,
         shapeName
       );
@@ -382,9 +391,15 @@ class QuadrilateralShapeModel {
       phetioValueType: NumberIO
     } );
 
-    this.shapeLengthToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty ], shapeName => {
+    this.shapeLengthToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty, model.preferencesModel.fineInputSpacingProperty ], ( shapeName, fineInputSpacing ) => {
+
+      // reduce the value when "Fine Input Spacing" is selected
+      const staticAngleToleranceInterval = fineInputSpacing ? QuadrilateralQueryParameters.shapeLengthToleranceInterval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor :
+                                           QuadrilateralQueryParameters.shapeLengthToleranceInterval;
+
+
       return QuadrilateralShapeModel.toleranceIntervalWideningListener(
-        QuadrilateralQueryParameters.shapeLengthToleranceInterval,
+        staticAngleToleranceInterval,
         QuadrilateralQueryParameters.deviceShapeLengthToleranceInterval,
         shapeName
       );
@@ -398,6 +413,7 @@ class QuadrilateralShapeModel {
       new SidePair( this.rightSide, this.leftSide ),
       this.shapeChangedEmitter,
       model.resetNotInProgressProperty,
+      model.preferencesModel.fineInputSpacingProperty,
       options.tandem.createTandem( 'sideABSideCDParallelSideChecker' )
     );
 
@@ -406,6 +422,7 @@ class QuadrilateralShapeModel {
       new SidePair( this.topSide, this.bottomSide ),
       this.shapeChangedEmitter,
       model.resetNotInProgressProperty,
+      model.preferencesModel.fineInputSpacingProperty,
       options.tandem.createTandem( 'sideBCSideDAParallelSideChecker' )
     );
 
@@ -891,19 +908,6 @@ class QuadrilateralShapeModel {
 
   public static isInterAngleEqualToOther( angle1: number, angle2: number, interAngleToleranceInterval: number ): boolean {
     return Utils.equalsEpsilon( angle1, angle2, interAngleToleranceInterval );
-  }
-
-  /**
-   * Compare two angles with staticAngleToleranceInterval. Useful when comparing one angle to a static unchanging
-   * value such as right angles.
-   *
-   * TODO: The staticAngleToleranceInterval is actually a DerivedProperty but it would be much easier if it was
-   * a static value and I think it should be. But if it cannot be, come back and change this.
-   * @param angle1
-   * @param angle2
-   */
-  public static isStaticAngleEqualToOther( angle1: number, angle2: number ): boolean {
-    return Utils.equalsEpsilon( angle1, angle2, QuadrilateralQueryParameters.staticAngleToleranceInterval );
   }
 
   /**

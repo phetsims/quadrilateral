@@ -47,9 +47,16 @@ class ParallelSideChecker {
    * @param otherOppositeSidePair - The state of interaction with the other sides may determine this checker's tolerance
    * @param shapeChangedEmitter - Emitter for when the quadrilateral shape changes in some way.
    * @param resetNotInProgressProperty - Is the model currently not resetting?
+   * @param fineInputSpacingProperty
    * @param tandem
    */
-  public constructor( oppositeSidePair: SidePair, otherOppositeSidePair: SidePair, shapeChangedEmitter: TEmitter, resetNotInProgressProperty: TProperty<boolean>, tandem: Tandem ) {
+  public constructor(
+    oppositeSidePair: SidePair,
+    otherOppositeSidePair: SidePair,
+    shapeChangedEmitter: TEmitter,
+    resetNotInProgressProperty: TProperty<boolean>,
+    fineInputSpacingProperty: TReadOnlyProperty<boolean>,
+    tandem: Tandem ) {
 
     this.sidePair = oppositeSidePair;
 
@@ -71,11 +78,17 @@ class ParallelSideChecker {
       otherSide2.isPressedProperty,
       this.side1.vertex1.isPressedProperty, this.side1.vertex2.isPressedProperty,
       this.side2.vertex1.isPressedProperty, this.side2.vertex2.isPressedProperty,
-      resetNotInProgressProperty
-    ], ( side1Pressed, side2Pressed, otherSide1Pressed, otherSide2Pressed, side1Vertex1Pressed, side1Vertex2Pressed, side2Vertex1Pressed, side2Vertex2Pressed, resetNotInProgress ) => {
+      resetNotInProgressProperty,
+      fineInputSpacingProperty
+    ], ( side1Pressed, side2Pressed, otherSide1Pressed, otherSide2Pressed, side1Vertex1Pressed, side1Vertex2Pressed, side2Vertex1Pressed, side2Vertex2Pressed, resetNotInProgress, fineInputSpacing ) => {
 
       const verticesPressedArray = [ side1Vertex1Pressed, side1Vertex2Pressed, side2Vertex1Pressed, side2Vertex2Pressed ];
       const numberOfVerticesPressed = _.countBy( verticesPressedArray ).true;
+
+      // The default value may be modified by user input and device connection. Otherwise the value is reduced when
+      // using "Fine Input Spacing".
+      const defaultAngleToleranceInterval = fineInputSpacing ? QuadrilateralQueryParameters.parallelAngleToleranceInterval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor :
+                                            QuadrilateralQueryParameters.parallelAngleToleranceInterval;
 
       let toleranceInterval;
 
@@ -94,27 +107,22 @@ class ParallelSideChecker {
       else if ( !resetNotInProgress ) {
 
         // A reset has just begun, set the tolerance interval back to its initial value on load
-        toleranceInterval = QuadrilateralQueryParameters.parallelAngleToleranceInterval;
+        toleranceInterval = defaultAngleToleranceInterval;
       }
       else {
         if ( numberOfVerticesPressed >= 2 ) {
 
           // Two or more vertices pressed at once, increase the tolerance interval by a scale factor so that
           // it is easier to find and remain a parallelogram with this input
-          toleranceInterval = QuadrilateralQueryParameters.parallelAngleToleranceInterval * QuadrilateralQueryParameters.toleranceIntervalScaleFactor;
-        }
-        else if ( numberOfVerticesPressed === 1 ) {
-
-          // Only one vertex is moving, we can afford to be as precise as possible from this form of input, and
-          // so we have the smallest tolerance interval.
-          toleranceInterval = QuadrilateralQueryParameters.parallelAngleToleranceInterval;
+          toleranceInterval = defaultAngleToleranceInterval * QuadrilateralQueryParameters.toleranceIntervalScaleFactor;
         }
         else {
 
-          // We are dragging a side while out of parallelogram, or we just released all sides and vertices. Do NOT
-          // change the angleToleranceInterval because we don't want the quadrilateral to suddenly appear out of
-          // parallelogram at the end of the interaction. The ternary handles initialization.
-          toleranceInterval = this.parallelAngleToleranceIntervalProperty ? this.parallelAngleToleranceIntervalProperty.value : QuadrilateralQueryParameters.parallelAngleToleranceInterval;
+          // Only one vertex is moving, we just released all Vertices/sides or we just changed the "Fine Input Spacing"
+          // checkbox. We can afford to be as precise as possible in these cases without widening the tolerance interval
+          // Only one vertex is moving, we can afford to be as precise as possible from this form of input, and
+          // so we have the smallest tolerance interval.
+          toleranceInterval = defaultAngleToleranceInterval;
         }
       }
 
