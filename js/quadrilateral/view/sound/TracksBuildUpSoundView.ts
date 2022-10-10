@@ -23,7 +23,6 @@ import quadBeatTracksBuildingBuildingTracks005_mp3 from '../../../../sounds/quad
 import quadBeatTracksBuildingBuildingTracks006_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks006_mp3.js';
 import quadBaseBeatSimpler_mp3 from '../../../../sounds/quadBaseBeatSimpler_mp3.js';
 import quadBaseBeatSimplerConcaveQuadrilateralJustRhythmV2_mp3 from '../../../../sounds/quadBaseBeatSimplerConcaveQuadrilateralJustRhythmV2_mp3.js';
-import quadSimpleBuildingTracks004Trapezoid_mp3 from '../../../../sounds/quadSimpleBuildingTracks004Trapezoid_mp3.js';
 import quadSimpleBuildingTracks007_mp3 from '../../../../sounds/quadSimpleBuildingTracks007_mp3.js';
 import quadMelodyTracks004_mp3 from '../../../../sounds/quadMelodyTracks004_mp3.js';
 import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
@@ -50,7 +49,7 @@ const BUILD_UP_TRACKS_SIMPLE = [
   quadBaseBeatSimplerConcaveQuadrilateralJustRhythmV2_mp3,
   quadBeatTracksBuildingBuildingTracks000_mp3,
   quadSimpleBuildingTracks007_mp3,
-  quadSimpleBuildingTracks004Trapezoid_mp3,
+  quadBeatTracksBuildingBuildingTracks003_mp3,
   quadBeatTracksBuildingBuildingTracks004_mp3,
   quadMelodyTracks004_mp3,
   quadBeatTracksBuildingBuildingTracks005_mp3
