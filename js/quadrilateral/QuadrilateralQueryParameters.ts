@@ -27,7 +27,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   parallelAngleToleranceInterval: {
     type: 'number',
     isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
-    defaultValue: 0.002
+    defaultValue: 0.01
   },
 
   // Behaves like angleToleranceInterval, but the default when connected to a tangible
@@ -56,7 +56,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   interAngleToleranceInterval: {
     type: 'number',
     isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
-    defaultValue: 0.001
+    defaultValue: 0.02
   },
 
   // A tolerance interval when comparing an angle to a constant of some kind, such as Math.PI or Math.PI / 2 when
@@ -65,7 +65,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   staticAngleToleranceInterval: {
     type: 'number',
     isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
-    defaultValue: 0.001
+    defaultValue: 0.01
   },
 
   // TODO: Do we need this 'widening' of the tolerance interval when connected to a device still?
@@ -111,7 +111,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // A tolerance interval for comparing lengths for the purposes of shape detection.
   shapeLengthToleranceInterval: {
     type: 'number',
-    defaultValue: 0.002
+    defaultValue: 0.01
   },
 
   // A flag that controls when the "maintenance" sound is played. When provided, the success sound for maintenance
