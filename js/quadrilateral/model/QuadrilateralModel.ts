@@ -306,6 +306,7 @@ class QuadrilateralModel {
     this.gridVisibleProperty.reset();
     this.diagonalGuidesVisibleProperty.reset();
     this.shapeNameVisibleProperty.reset();
+    this.shapeSoundEnabledProperty.reset();
 
     this.resetEmitter.emit();
 
