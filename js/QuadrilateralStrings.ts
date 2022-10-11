@@ -195,6 +195,8 @@ type StringsType = {
       'oppositeSidesInParallelAsCornersChangeEquallyPatternStringProperty': LinkableProperty<string>;
       'oppositeSidesTiltAsShapeChangesPattern': string;
       'oppositeSidesTiltAsShapeChangesPatternStringProperty': LinkableProperty<string>;
+      'adjacentSidesChangeEquallyAsShapeChangesPattern': string;
+      'adjacentSidesChangeEquallyAsShapeChangesPatternStringProperty': LinkableProperty<string>;
       'oppositeSidesEqualAsShapeChangesPattern': string;
       'oppositeSidesEqualAsShapeChangesPatternStringProperty': LinkableProperty<string>;
       'maintainingAParallelogramResponsePattern': string;

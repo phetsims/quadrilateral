@@ -269,6 +269,9 @@
       "oppositeSidesTiltAsShapeChangesPattern": {
         "value": "Opposite sides {{firstSide}} and {{secondSide}} tilt in parallel as shape gets {{areaChange}}."
       },
+      "adjacentSidesChangeEquallyAsShapeChangesPattern": {
+        "value": "Adjacent sides change equally as shape gets {{areaChange}}."
+      },
       "oppositeSidesEqualAsShapeChangesPattern": {
         "value": "Opposite sides {{firstSide}} and {{secondSide}} equal as shape gets {{areaChange}}."
       },

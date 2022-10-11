@@ -56,6 +56,7 @@ const allRightAnglesAsShapeChangesPatternString = QuadrilateralStrings.a11y.voic
 const oppositeCornersChangeEquallyAsSidesChangePatternString = QuadrilateralStrings.a11y.voicing.oppositeCornersChangeEquallyAsSidesChangePattern;
 const allSidesEqualAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.allSidesEqualAsShapeChangesPattern;
 const cornerFlatAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.cornerFlatAsShapeChangesPattern;
+const adjacentSidesChangeEquallyAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.cornerFlatAsShapeChangesPattern;
 const allSidesTiltAwayFromParallelString = QuadrilateralStrings.a11y.voicing.allSidesTiltAwayFromParallel;
 const allSidesTiltAwayFromParallelAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.allSidesTiltAwayFromParallelAsShapeChangesPattern;
 const tiltString = QuadrilateralStrings.a11y.voicing.tilt;
@@ -503,7 +504,8 @@ class QuadrilateralAlerter extends Alerter {
 
   /**
    * Returns a description of the shape for a context response as movements occur that maintain the same
-   * name for the quadrilateral.
+   * name for the quadrilateral. See https://github.com/phetsims/quadrilateral/issues/198 for more information
+   * about the design for this function.
    */
   private getShapeMaintenanceContextResponse( shapeName: NamedQuadrilateral, previousShapeSnapshot: ShapeSnapshot ): string | null {
     let response: string | null = null;
@@ -532,12 +534,9 @@ class QuadrilateralAlerter extends Alerter {
       }
     }
     else if ( shapeName === NamedQuadrilateral.DART || shapeName === NamedQuadrilateral.KITE ) {
-
-      // TODO: Need to come back and do something special for dart/kite
-      response = StringUtils.fillIn( 'Adjacent sides change equally as shape gets {{areaChange}}', {
+      response = StringUtils.fillIn( adjacentSidesChangeEquallyAsShapeChangesPatternString, {
         areaChange: areaChangeString
       } );
-
     }
     else if ( shapeName === NamedQuadrilateral.TRAPEZOID ) {
       const sideABSideCDParallel = previousShapeSnapshot.sideABsideCDParallel;
@@ -605,7 +604,6 @@ class QuadrilateralAlerter extends Alerter {
       } );
     }
 
-    console.log( response );
     return response;
   }
 
