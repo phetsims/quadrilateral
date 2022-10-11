@@ -99,13 +99,13 @@
       "value": "Explore shapes with or without visual labels."
     },
     "angleGuidesAddedResponse": {
-      "value": "Angle guides added to corners."
+      "value": "Angle guides with 30 degree slices added to corners."
     },
     "angleGuidesRemovedResponse": {
       "value": "Guides hidden."
     },
     "angleGuidesHintResponse": {
-      "value": "Explore shapes with or without visual angle guides."
+      "value": "Explore shapes with or without angle guides."
     },
     "gridLinesAddedResponse": {
       "value": "Grid lines added."
