@@ -35,8 +35,8 @@ type StringsType = {
   'vertexCStringProperty': LinkableProperty<string>;
   'vertexD': string;
   'vertexDStringProperty': LinkableProperty<string>;
-  'showShapeName': string;
-  'showShapeNameStringProperty': LinkableProperty<string>;
+  'shapeNameHidden': string;
+  'shapeNameHiddenStringProperty': LinkableProperty<string>;
   'resetShape': string;
   'resetShapeStringProperty': LinkableProperty<string>;
   'fineInputSpacing': string;
@@ -409,6 +409,10 @@ type StringsType = {
       };
       'foundShapePattern': string;
       'foundShapePatternStringProperty': LinkableProperty<string>;
+      'shapeNameHiddenContextResponse': string;
+      'shapeNameHiddenContextResponseStringProperty': LinkableProperty<string>;
+      'shapeNameShownContextResponse': string;
+      'shapeNameShownContextResponseStringProperty': LinkableProperty<string>;
     }
   }
 };

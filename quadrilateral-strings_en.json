@@ -35,8 +35,8 @@
   "vertexD": {
     "value": "D"
   },
-  "showShapeName": {
-    "value": "Shape Name"
+  "shapeNameHidden": {
+    "value": "Shape Name Hidden"
   },
   "resetShape": {
     "value": "Reset Shape"
@@ -584,6 +584,12 @@
       },
       "foundShapePattern": {
         "value": "Found {{shapeName}}"
+      },
+      "shapeNameHiddenContextResponse": {
+        "value": "Listen for changing shape properties."
+      },
+      "shapeNameShownContextResponse": {
+        "value": "Listen for changing shape names."
       }
     }
   }

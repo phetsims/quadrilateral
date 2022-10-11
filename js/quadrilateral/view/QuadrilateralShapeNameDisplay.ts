@@ -31,7 +31,9 @@ const concaveQuadrilateralString = QuadrilateralStrings.shapeNames.concaveQuadri
 const convexQuadrilateralString = QuadrilateralStrings.shapeNames.convexQuadrilateral;
 const parallelogramString = QuadrilateralStrings.shapeNames.parallelogram;
 const dartString = QuadrilateralStrings.shapeNames.dart;
-const showShapeNameString = QuadrilateralStrings.showShapeName;
+const shapeNameHiddenString = QuadrilateralStrings.shapeNameHidden;
+const shapeNameHiddenContextResponseString = QuadrilateralStrings.a11y.voicing.shapeNameHiddenContextResponse;
+const shapeNameShownContextResponseString = QuadrilateralStrings.a11y.voicing.shapeNameShownContextResponse;
 
 const SHAPE_NAME_MAP = new Map( [
   [ NamedQuadrilateral.SQUARE, squareString ],
@@ -59,10 +61,7 @@ class QuadrilateralShapeNameDisplay extends Node {
       sideLength: 20,
 
       // phet-io
-      tandem: tandem.createTandem( 'expandCollapseButton' ),
-
-      // voicing
-      voicingNameResponse: showShapeNameString
+      tandem: tandem.createTandem( 'expandCollapseButton' )
     } );
     const shapeNameText = new Text( '', QuadrilateralConstants.SHAPE_NAME_TEXT_OPTIONS );
     const backgroundRectangle = new Rectangle( 0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT, QuadrilateralConstants.CORNER_RADIUS, QuadrilateralConstants.CORNER_RADIUS, {
@@ -71,35 +70,43 @@ class QuadrilateralShapeNameDisplay extends Node {
     } );
     this.children = [ backgroundRectangle, expandCollapseButton, shapeNameText ];
 
-    // Update display text
+    let wasVisible = shapeNameVisibleProperty.value;
+
+    // Update display text and contents to be spoken from Voicing interactions. See
+    // https://github.com/phetsims/quadrilateral/issues/238 for the design requirements of the Voicing responses.
     Multilink.multilink( [ shapeNameVisibleProperty, shapeNameProperty ], ( shapeNameVisible, shapeName ) => {
-      let text = showShapeNameString;
+      let textString;
+
       if ( shapeNameVisible ) {
         assert && assert( SHAPE_NAME_MAP.has( shapeName ), 'Shape is not named in SHAPE_NAME_MAP' );
-        text = SHAPE_NAME_MAP.get( shapeName )!;
+        textString = SHAPE_NAME_MAP.get( shapeName )!;
 
         // Text is bold when shape name is visible
         shapeNameText.fontWeight = 'bold';
+
+        // voicing - when shape name is shown we should include the detected shape in the name response
+        expandCollapseButton.voicingNameResponse = quadrilateralDescriber.getYouHaveAShapeDescription();
+        expandCollapseButton.voicingContextResponse = shapeNameShownContextResponseString;
       }
       else {
+        textString = shapeNameHiddenString;
         shapeNameText.fontWeight = 'normal';
+
+        // voicing
+        expandCollapseButton.voicingNameResponse = shapeNameHiddenString;
+        expandCollapseButton.voicingContextResponse = shapeNameHiddenContextResponseString;
       }
 
-      shapeNameText.text = text;
+      // Only after updating voicing response content, speak the response. We only announce this when visibility
+      // changes, not when shapeNameProperty changes. Done in this multilink instead of its own link so that
+      // the output is independent of listener order.
+      if ( wasVisible !== shapeNameVisibleProperty.value ) {
+        expandCollapseButton.voicingSpeakFullResponse();
+        wasVisible = shapeNameVisibleProperty.value;
+      }
+
+      shapeNameText.text = textString;
       shapeNameText.center = backgroundRectangle.center;
-    } );
-
-    shapeNameVisibleProperty.lazyLink( visible => {
-      let objectResponse = '';
-      if ( visible ) {
-        objectResponse = quadrilateralDescriber.getYouHaveAShapeDescription();
-      }
-      else {
-        objectResponse = 'shape name hidden';
-      }
-
-      expandCollapseButton.voicingObjectResponse = objectResponse;
-      expandCollapseButton.voicingSpeakObjectResponse();
     } );
 
     // layout
