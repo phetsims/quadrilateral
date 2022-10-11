@@ -407,6 +407,12 @@
       "aboutHalfAsWideAs": {
         "value": "about half as wide as"
       },
+      "halfAsWideAs": {
+        "value": "half as wide as"
+      },
+      "aLittleSmallerThan": {
+        "value": "a little smaller than"
+      },
       "muchSmallerThan": {
         "value": "much smaller than"
       },
@@ -422,6 +428,9 @@
       "similarButWiderThan": {
         "value": "similar but wider than"
       },
+      "aLittleWiderThan": {
+        "value": "a little wider than"
+      },
       "somewhatWiderThan": {
         "value": "somewhat wider than"
       },
@@ -430,6 +439,9 @@
       },
       "aboutTwiceAsWideAs": {
         "value": "about twice as wide as"
+      },
+      "twiceAsWideAs": {
+        "value": "twice as wide as"
       },
       "muchMuchWiderThan": {
         "value": "much much wider than"

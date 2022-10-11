@@ -289,6 +289,10 @@ type StringsType = {
       'muchMuchSmallerThanStringProperty': LinkableProperty<string>;
       'aboutHalfAsWideAs': string;
       'aboutHalfAsWideAsStringProperty': LinkableProperty<string>;
+      'halfAsWideAs': string;
+      'halfAsWideAsStringProperty': LinkableProperty<string>;
+      'aLittleSmallerThan': string;
+      'aLittleSmallerThanStringProperty': LinkableProperty<string>;
       'muchSmallerThan': string;
       'muchSmallerThanStringProperty': LinkableProperty<string>;
       'somewhatSmallerThan': string;
@@ -299,12 +303,16 @@ type StringsType = {
       'equalToStringProperty': LinkableProperty<string>;
       'similarButWiderThan': string;
       'similarButWiderThanStringProperty': LinkableProperty<string>;
+      'aLittleWiderThan': string;
+      'aLittleWiderThanStringProperty': LinkableProperty<string>;
       'somewhatWiderThan': string;
       'somewhatWiderThanStringProperty': LinkableProperty<string>;
       'muchWiderThan': string;
       'muchWiderThanStringProperty': LinkableProperty<string>;
       'aboutTwiceAsWideAs': string;
       'aboutTwiceAsWideAsStringProperty': LinkableProperty<string>;
+      'twiceAsWideAs': string;
+      'twiceAsWideAsStringProperty': LinkableProperty<string>;
       'muchMuchWiderThan': string;
       'muchMuchWiderThanStringProperty': LinkableProperty<string>;
       'farWiderThan': string;

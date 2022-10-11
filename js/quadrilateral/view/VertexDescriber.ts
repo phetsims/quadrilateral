@@ -22,17 +22,17 @@ const cornerDString = QuadrilateralStrings.a11y.cornerD;
 const rightAngleVertexObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.rightAngleVertexObjectResponsePattern;
 const vertexObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.vertexObjectResponsePattern;
 const farSmallerThanString = QuadrilateralStrings.a11y.voicing.farSmallerThan;
-const muchMuchSmallerThanString = QuadrilateralStrings.a11y.voicing.muchMuchSmallerThan;
 const aboutHalfAsWideAsString = QuadrilateralStrings.a11y.voicing.aboutHalfAsWideAs;
+const halfAsWideAsString = QuadrilateralStrings.a11y.voicing.halfAsWideAs;
+const aLittleSmallerThanString = QuadrilateralStrings.a11y.voicing.aLittleSmallerThan;
 const muchSmallerThanString = QuadrilateralStrings.a11y.voicing.muchSmallerThan;
-const somewhatSmallerThanString = QuadrilateralStrings.a11y.voicing.somewhatSmallerThan;
 const similarButSmallerThanString = QuadrilateralStrings.a11y.voicing.similarButSmallerThan;
 const equalToString = QuadrilateralStrings.a11y.voicing.equalTo;
 const similarButWiderThanString = QuadrilateralStrings.a11y.voicing.similarButWiderThan;
-const somewhatWiderThanString = QuadrilateralStrings.a11y.voicing.somewhatWiderThan;
 const muchWiderThanString = QuadrilateralStrings.a11y.voicing.muchWiderThan;
 const aboutTwiceAsWideAsString = QuadrilateralStrings.a11y.voicing.aboutTwiceAsWideAs;
-const muchMuchWiderThanString = QuadrilateralStrings.a11y.voicing.muchMuchWiderThan;
+const twiceAsWideAsString = QuadrilateralStrings.a11y.voicing.twiceAsWideAs;
+const aLittleWiderThanString = QuadrilateralStrings.a11y.voicing.aLittleWiderThan;
 const farWiderThanString = QuadrilateralStrings.a11y.voicing.farWiderThan;
 const equalToAdjacentCornersString = QuadrilateralStrings.a11y.voicing.equalToAdjacentCorners;
 const equalToOneAdjacentCornerString = QuadrilateralStrings.a11y.voicing.equalToOneAdjacentCorner;
@@ -51,18 +51,16 @@ const vertexCornerLabelMap = new Map<VertexLabel, string>( [
 
 // Maps the difference in angles between two vertices to a description string.
 const angleComparisonDescriptionMap = new Map<Range, string>();
-angleComparisonDescriptionMap.set( new Range( 0, 0.2 ), farSmallerThanString );
-angleComparisonDescriptionMap.set( new Range( 0.2, 0.4 ), muchMuchSmallerThanString );
+angleComparisonDescriptionMap.set( new Range( 0, 0.1 ), farSmallerThanString );
+angleComparisonDescriptionMap.set( new Range( 0.1, 0.4 ), muchSmallerThanString );
 angleComparisonDescriptionMap.set( new Range( 0.4, 0.6 ), aboutHalfAsWideAsString );
-angleComparisonDescriptionMap.set( new Range( 0.6, 0.7 ), muchSmallerThanString );
-angleComparisonDescriptionMap.set( new Range( 0.7, 0.9 ), somewhatSmallerThanString );
-angleComparisonDescriptionMap.set( new Range( 0.9, 1 ), similarButSmallerThanString );
-angleComparisonDescriptionMap.set( new Range( 1, 1.2 ), similarButWiderThanString );
-angleComparisonDescriptionMap.set( new Range( 1.2, 1.5 ), somewhatWiderThanString );
-angleComparisonDescriptionMap.set( new Range( 1.5, 1.8 ), muchWiderThanString );
-angleComparisonDescriptionMap.set( new Range( 1.8, 2.2 ), aboutTwiceAsWideAsString );
-angleComparisonDescriptionMap.set( new Range( 2.2, 2.6 ), muchMuchWiderThanString );
-angleComparisonDescriptionMap.set( new Range( 2.6, Number.POSITIVE_INFINITY ), farWiderThanString );
+angleComparisonDescriptionMap.set( new Range( 0.6, 0.8 ), aLittleSmallerThanString );
+angleComparisonDescriptionMap.set( new Range( 0.8, 1 ), similarButSmallerThanString );
+angleComparisonDescriptionMap.set( new Range( 1, 1.3 ), similarButWiderThanString );
+angleComparisonDescriptionMap.set( new Range( 1.3, 1.6 ), aLittleWiderThanString );
+angleComparisonDescriptionMap.set( new Range( 1.6, 1.9 ), muchWiderThanString );
+angleComparisonDescriptionMap.set( new Range( 1.9, 2.1 ), aboutTwiceAsWideAsString );
+angleComparisonDescriptionMap.set( new Range( 2.1, Number.POSITIVE_INFINITY ), farWiderThanString );
 
 class VertexDescriber {
 
@@ -198,6 +196,12 @@ class VertexDescriber {
 
     if ( QuadrilateralShapeModel.isInterAngleEqualToOther( angle2, angle1, interAngleToleranceInterval ) ) {
       description = equalToString;
+    }
+    else if ( QuadrilateralShapeModel.isInterAngleEqualToOther( angle2, angle1 * 2, interAngleToleranceInterval ) ) {
+      description = twiceAsWideAsString;
+    }
+    else if ( QuadrilateralShapeModel.isInterAngleEqualToOther( angle2, angle1 * 0.5, interAngleToleranceInterval ) ) {
+      description = halfAsWideAsString;
     }
 
     const angleRatio = angle2 / angle1;
