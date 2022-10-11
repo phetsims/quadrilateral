@@ -929,6 +929,14 @@ class QuadrilateralShapeModel {
     return Utils.equalsEpsilon( angle, Math.PI / 2, this.staticAngleToleranceIntervalProperty.value );
   }
 
+  /**
+   * Returns true if two angles are equal within staticAngleToleranceIntervalProperty. See that value for more
+   * information.
+   */
+  public isStaticAngleEqualToOther( angle: number, otherAngle: number ): boolean {
+    return Utils.equalsEpsilon( angle, otherAngle, this.staticAngleToleranceIntervalProperty.value );
+  }
+
   public isTiltEqualToOther( tilt1: number, tilt2: number ): boolean {
     return Utils.equalsEpsilon( tilt1, tilt2, this.tiltToleranceIntervalProperty.value );
   }

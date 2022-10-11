@@ -29,6 +29,7 @@ import SidePair from '../model/SidePair.js';
 import VertexPair from '../model/VertexPair.js';
 import VertexLabel from '../model/VertexLabel.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import VertexDescriber from './VertexDescriber.js';
 
 const foundIsoscelesTrapezoidPatternString = QuadrilateralStrings.a11y.voicing.foundIsoscelesTrapezoidPattern;
 const allRightAnglesAllSidesEqualString = QuadrilateralStrings.a11y.voicing.allRightAnglesAllSidesEqual;
@@ -49,6 +50,12 @@ const oppositeSidesTiltPatternString = QuadrilateralStrings.a11y.voicing.opposit
 const oppositeSidesInParallelPatternString = QuadrilateralStrings.a11y.voicing.oppositeSidesInParallelPattern;
 const oppositeSidesInParallelAsCornersChangeEquallyPatternString = QuadrilateralStrings.a11y.voicing.oppositeSidesInParallelAsCornersChangeEquallyPattern;
 const oppositeSidesTiltAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.oppositeSidesTiltAsShapeChangesPattern;
+const oppositeSidesEqualAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.oppositeSidesEqualAsShapeChangesPattern;
+const maintainingAParallelogramResponsePatternString = QuadrilateralStrings.a11y.voicing.maintainingAParallelogramResponsePattern;
+const allRightAnglesAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.allRightAnglesAsShapeChangesPattern;
+const oppositeCornersChangeEquallyAsSidesChangePatternString = QuadrilateralStrings.a11y.voicing.oppositeCornersChangeEquallyAsSidesChangePattern;
+const allSidesEqualAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.allSidesEqualAsShapeChangesPattern;
+const cornerFlatAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.cornerFlatAsShapeChangesPattern;
 const allSidesTiltAwayFromParallelString = QuadrilateralStrings.a11y.voicing.allSidesTiltAwayFromParallel;
 const allSidesTiltAwayFromParallelAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.allSidesTiltAwayFromParallelAsShapeChangesPattern;
 const tiltString = QuadrilateralStrings.a11y.voicing.tilt;
@@ -204,10 +211,21 @@ class QuadrilateralAlerter extends Alerter {
           utterance = highPriorityUtterance;
         }
         else if ( this.angleResponseReady || this.lengthResponseReady || parallelSideResponseReady ) {
-          const thisResponseReason = angleDifferencesLarge ? 'angle' : 'length';
-          const tiltChangeResponse = this.getShapeChangeResponse( this.quadrilateralShapeModel, this.previousContextResponseShapeSnapshot, thisResponseReason );
+          if ( this.previousContextResponseShapeSnapshot.namedQuadrilateral === this.quadrilateralShapeModel.shapeNameProperty.value ) {
+
+            // the shape has changed enough to provide a context response, but the named quadrilateral has not
+            // changed, so we provide a unique alert specific to the shape maintenance
+            const shapeMaintenanceResponse = this.getShapeMaintenanceContextResponse( this.quadrilateralShapeModel.shapeNameProperty.value, this.previousContextResponseShapeSnapshot );
+            responsePacket.contextResponse = shapeMaintenanceResponse;
+
+          }
+          else {
+            const thisResponseReason = angleDifferencesLarge ? 'angle' : 'length';
+            const tiltChangeResponse = this.getShapeChangeResponse( this.quadrilateralShapeModel, this.previousContextResponseShapeSnapshot, thisResponseReason );
+            responsePacket.contextResponse = tiltChangeResponse!;
+          }
+
           utterance = mediumPriorityUtterance;
-          responsePacket.contextResponse = tiltChangeResponse!;
         }
 
         model.quadrilateralShapeModel.sides.forEach( side => {
@@ -407,20 +425,8 @@ class QuadrilateralAlerter extends Alerter {
       if ( responseReason === 'angle' ) {
 
         // angle is the dominant response and caused the change, we are describing change in side tilt
-        const currentDistancesToRight = [ shapeModel.vertexA.angleProperty.value!, shapeModel.vertexB.angleProperty.value!, shapeModel.vertexC.angleProperty.value!, shapeModel.vertexD.angleProperty.value! ].map( QuadrilateralAlerter.distanceFromRightAngle );
-        const previousDistancesToRight = [ previousShapeSnapshot.vertexAAngle, previousShapeSnapshot.vertexBAngle, previousShapeSnapshot.vertexCAngle, previousShapeSnapshot.vertexDAngle ].map( QuadrilateralAlerter.distanceFromRightAngle );
-
-        const differences = [];
-        for ( let i = 0; i < currentDistancesToRight.length; i++ ) {
-          differences.push( currentDistancesToRight[ i ]! - previousDistancesToRight[ i ] );
-        }
-
-        // If the distances to pi for every angle have gotten smaller, we are getting closer to right angles, that is
-        // described as "straighten"
-        const tiltChangeString = _.every( differences, difference => difference > 0 ) ? tiltString : straightenString;
-        const patternString = oppositeSidesTiltPatternString;
-
-        response = StringUtils.fillIn( patternString, {
+        const tiltChangeString = this.getTiltOrStraightenDescription( previousShapeSnapshot );
+        response = StringUtils.fillIn( oppositeSidesTiltPatternString, {
           tiltChange: tiltChangeString
         } );
       }
@@ -493,6 +499,145 @@ class QuadrilateralAlerter extends Alerter {
     }
 
     return response;
+  }
+
+  /**
+   * Returns a description of the shape for a context response as movements occur that maintain the same
+   * name for the quadrilateral.
+   */
+  private getShapeMaintenanceContextResponse( shapeName: NamedQuadrilateral, previousShapeSnapshot: ShapeSnapshot ): string | null {
+    let response: string | null = null;
+
+    const areaDifference = this.quadrilateralShapeModel.areaProperty.value - previousShapeSnapshot.area;
+    const areaChangeString = areaDifference > 0 ? biggerString : smallerString;
+
+    if ( shapeName === NamedQuadrilateral.CONVEX_QUADRILATERAL || shapeName === NamedQuadrilateral.CONCAVE_QUADRILATERAL ) {
+
+      const flatVertex = _.find(
+        this.quadrilateralShapeModel.vertices,
+        vertex => this.quadrilateralShapeModel.isStaticAngleEqualToOther( vertex.angleProperty.value!, Math.PI )
+      );
+      if ( areaDifference === 0 && flatVertex ) {
+
+        // We have a convex shape where one vertex is 180 degrees and the shape is moving such that the area
+        // is not changing. Describe the "flat" vertex and how its adjacent sides get longer or shorter
+        response = StringUtils.fillIn( cornerFlatAsShapeChangesPatternString, {
+          cornerLabel: VertexDescriber.VertexCornerLabelMap.get( flatVertex.vertexLabel )
+        } );
+      }
+      else {
+        response = StringUtils.fillIn( allSidesTiltAwayFromParallelAsShapeChangesPatternString, {
+          areaChange: areaChangeString
+        } );
+      }
+    }
+    else if ( shapeName === NamedQuadrilateral.DART || shapeName === NamedQuadrilateral.KITE ) {
+
+      // TODO: Need to come back and do something special for dart/kite
+      response = StringUtils.fillIn( 'Adjacent sides change equally as shape gets {{areaChange}}', {
+        areaChange: areaChangeString
+      } );
+
+    }
+    else if ( shapeName === NamedQuadrilateral.TRAPEZOID ) {
+      const sideABSideCDParallel = previousShapeSnapshot.sideABsideCDParallel;
+
+      let firstSideString;
+      let secondSideString;
+      if ( sideABSideCDParallel ) {
+        firstSideString = aBString;
+        secondSideString = cDString;
+      }
+      else {
+        firstSideString = bCString;
+        secondSideString = dAString;
+      }
+
+      response = StringUtils.fillIn( oppositeSidesTiltAsShapeChangesPatternString, {
+        firstSide: firstSideString,
+        secondSide: secondSideString,
+        areaChange: areaChangeString
+      } );
+    }
+    else if ( shapeName === NamedQuadrilateral.ISOSCELES_TRAPEZOID ) {
+
+      // For an isosceles trapezoid, describe the sides that remain equal in length
+      const sideABSideCDParallel = previousShapeSnapshot.sideABsideCDParallel;
+
+      // For an isosceles trapezoid, the non-parallel sides are the equal ones in length - we can use that without
+      // searching through model Properties
+      let firstSideString;
+      let secondSideString;
+      if ( sideABSideCDParallel ) {
+        firstSideString = bCString;
+        secondSideString = dAString;
+      }
+      else {
+        firstSideString = aBString;
+        secondSideString = cDString;
+      }
+
+      response = StringUtils.fillIn( oppositeSidesEqualAsShapeChangesPatternString, {
+        firstSide: firstSideString,
+        secondSide: secondSideString,
+        areaChange: areaChangeString
+      } );
+    }
+    else if ( shapeName === NamedQuadrilateral.PARALLELOGRAM ) {
+      response = StringUtils.fillIn( maintainingAParallelogramResponsePatternString, {
+        tiltOrStraighten: this.getTiltOrStraightenDescription( previousShapeSnapshot ),
+        areaChange: areaChangeString
+      } );
+    }
+    else if ( shapeName === NamedQuadrilateral.RECTANGLE ) {
+      response = StringUtils.fillIn( allRightAnglesAsShapeChangesPatternString, {
+        areaChange: areaChangeString
+      } );
+    }
+    else if ( shapeName === NamedQuadrilateral.RHOMBUS ) {
+      response = StringUtils.fillIn( oppositeCornersChangeEquallyAsSidesChangePatternString, {
+        tiltOrStraighten: this.getTiltOrStraightenDescription( previousShapeSnapshot )
+      } );
+    }
+    else if ( shapeName === NamedQuadrilateral.SQUARE ) {
+      response = StringUtils.fillIn( allSidesEqualAsShapeChangesPatternString, {
+        areaChange: areaChangeString
+      } );
+    }
+
+    console.log( response );
+    return response;
+  }
+
+  /**
+   * Returns a description about whether the shape is tilting or straightening based on how the angles at each vertex
+   * changed from the previous snapshot.
+   */
+  private getTiltOrStraightenDescription( previousShapeSnapshot: ShapeSnapshot ): string {
+
+    // angle is the dominant response and caused the change, we are describing change in side tilt
+    const currentDistancesToRight = [
+      this.quadrilateralShapeModel.vertexA.angleProperty.value!,
+      this.quadrilateralShapeModel.vertexB.angleProperty.value!,
+      this.quadrilateralShapeModel.vertexC.angleProperty.value!,
+      this.quadrilateralShapeModel.vertexD.angleProperty.value!
+    ].map( QuadrilateralAlerter.distanceFromRightAngle );
+
+    const previousDistancesToRight = [
+      previousShapeSnapshot.vertexAAngle,
+      previousShapeSnapshot.vertexBAngle,
+      previousShapeSnapshot.vertexCAngle,
+      previousShapeSnapshot.vertexDAngle
+    ].map( QuadrilateralAlerter.distanceFromRightAngle );
+
+    const differences = [];
+    for ( let i = 0; i < currentDistancesToRight.length; i++ ) {
+      differences.push( currentDistancesToRight[ i ]! - previousDistancesToRight[ i ] );
+    }
+
+    // If the distances to pi for every angle have gotten smaller, we are getting closer to right angles, that is
+    // described as "straighten"
+    return _.every( differences, difference => difference > 0 ) ? tiltString : straightenString;
   }
 
   /**

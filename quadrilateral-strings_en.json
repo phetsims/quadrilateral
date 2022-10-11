@@ -269,6 +269,24 @@
       "oppositeSidesTiltAsShapeChangesPattern": {
         "value": "Opposite sides {{firstSide}} and {{secondSide}} tilt in parallel as shape gets {{areaChange}}."
       },
+      "oppositeSidesEqualAsShapeChangesPattern": {
+        "value": "Opposite sides {{firstSide}} and {{secondSide}} equal as shape gets {{areaChange}}."
+      },
+      "maintainingAParallelogramResponsePattern": {
+        "value": "Opposite sides {{tiltOrStraighten}} in parallel as opposite corners change equally. Opposite sides in parallel as shape gets {{areaChange}}."
+      },
+      "allRightAnglesAsShapeChangesPattern": {
+        "value": "All right angles as shape gets {{areaChange}}."
+      },
+      "oppositeCornersChangeEquallyAsSidesChangePattern": {
+        "value": "Opposite corners change equally as equal sides {{tiltOrStraighten}} in parallel."
+      },
+      "allSidesEqualAsShapeChangesPattern": {
+        "value": "All sides equal as shape gets {{areaChange}}."
+      },
+      "cornerFlatAsShapeChangesPattern": {
+        "value": "{{cornerLabel}} {{flat}} as adjacent sides change in length."
+      },
       "allSidesTiltAwayFromParallel": {
         "value": "All sides tilt away from parallel as opposite corners change unequally."
       },
