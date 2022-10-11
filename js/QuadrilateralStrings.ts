@@ -345,6 +345,10 @@ type StringsType = {
       'muchMuchShorterThanStringProperty': LinkableProperty<string>;
       'aboutHalfAsLongAs': string;
       'aboutHalfAsLongAsStringProperty': LinkableProperty<string>;
+      'halfAsLongAs': string;
+      'halfAsLongAsStringProperty': LinkableProperty<string>;
+      'aLittleShorterThan': string;
+      'aLittleShorterThanStringProperty': LinkableProperty<string>;
       'muchShorterThan': string;
       'muchShorterThanStringProperty': LinkableProperty<string>;
       'somewhatShorterThan': string;
@@ -353,12 +357,16 @@ type StringsType = {
       'similarButShorterThanStringProperty': LinkableProperty<string>;
       'similarButLongerThan': string;
       'similarButLongerThanStringProperty': LinkableProperty<string>;
+      'aLittleLongerThan': string;
+      'aLittleLongerThanStringProperty': LinkableProperty<string>;
       'somewhatLongerThan': string;
       'somewhatLongerThanStringProperty': LinkableProperty<string>;
       'muchLongerThan': string;
       'muchLongerThanStringProperty': LinkableProperty<string>;
       'aboutTwiceAsLongAs': string;
       'aboutTwiceAsLongAsStringProperty': LinkableProperty<string>;
+      'twiceAsLongAs': string;
+      'twiceAsLongAsStringProperty': LinkableProperty<string>;
       'muchMuchLongerThan': string;
       'muchMuchLongerThanStringProperty': LinkableProperty<string>;
       'farLongerThan': string;

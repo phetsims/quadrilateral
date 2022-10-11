@@ -17,18 +17,18 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 
 // constants
 const farShorterThanString = QuadrilateralStrings.a11y.voicing.farShorterThan;
-const muchMuchShorterThanString = QuadrilateralStrings.a11y.voicing.muchMuchShorterThan;
 const aboutHalfAsLongAsString = QuadrilateralStrings.a11y.voicing.aboutHalfAsLongAs;
+const aLittleShorterThanString = QuadrilateralStrings.a11y.voicing.aLittleShorterThan;
 const muchShorterThanString = QuadrilateralStrings.a11y.voicing.muchShorterThan;
-const somewhatShorterThanString = QuadrilateralStrings.a11y.voicing.somewhatShorterThan;
 const similarButShorterThanString = QuadrilateralStrings.a11y.voicing.similarButShorterThan;
 const similarButLongerThanString = QuadrilateralStrings.a11y.voicing.similarButLongerThan;
-const somewhatLongerThanString = QuadrilateralStrings.a11y.voicing.somewhatLongerThan;
+const aLittleLongerThanString = QuadrilateralStrings.a11y.voicing.aLittleLongerThan;
 const muchLongerThanString = QuadrilateralStrings.a11y.voicing.muchLongerThan;
 const aboutTwiceAsLongAsString = QuadrilateralStrings.a11y.voicing.aboutTwiceAsLongAs;
-const muchMuchLongerThanString = QuadrilateralStrings.a11y.voicing.muchMuchLongerThan;
 const farLongerThanString = QuadrilateralStrings.a11y.voicing.farLongerThan;
 const equalToString = QuadrilateralStrings.a11y.voicing.equalTo;
+const twiceAsLongAsString = QuadrilateralStrings.a11y.voicing.twiceAsLongAs;
+const halfAsLongAsString = QuadrilateralStrings.a11y.voicing.halfAsLongAs;
 const parallelSideObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.parallelSideObjectResponsePattern;
 const sideObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.sideObjectResponsePattern;
 const equalToAdjacentSidesString = QuadrilateralStrings.a11y.voicing.equalToAdjacentSides;
@@ -45,18 +45,16 @@ const notEqualToParallelAdjacentSidesString = QuadrilateralStrings.a11y.voicing.
 // A map that will provide comparison descriptions for side lengths. Range values are the ratio between lengths
 // between the sides.
 const lengthComparisonDescriptionMap = new Map<Range, string>();
-lengthComparisonDescriptionMap.set( new Range( 0, 0.2 ), farShorterThanString );
-lengthComparisonDescriptionMap.set( new Range( 0.2, 0.4 ), muchMuchShorterThanString );
+lengthComparisonDescriptionMap.set( new Range( 0, 0.1 ), farShorterThanString );
+lengthComparisonDescriptionMap.set( new Range( 0.1, 0.4 ), muchShorterThanString );
 lengthComparisonDescriptionMap.set( new Range( 0.4, 0.6 ), aboutHalfAsLongAsString );
-lengthComparisonDescriptionMap.set( new Range( 0.6, 0.7 ), muchShorterThanString );
-lengthComparisonDescriptionMap.set( new Range( 0.7, 0.9 ), somewhatShorterThanString );
-lengthComparisonDescriptionMap.set( new Range( 0.9, 1 ), similarButShorterThanString );
-lengthComparisonDescriptionMap.set( new Range( 1, 1.2 ), similarButLongerThanString );
-lengthComparisonDescriptionMap.set( new Range( 1.2, 1.5 ), somewhatLongerThanString );
-lengthComparisonDescriptionMap.set( new Range( 1.5, 1.8 ), muchLongerThanString );
-lengthComparisonDescriptionMap.set( new Range( 1.8, 2.2 ), aboutTwiceAsLongAsString );
-lengthComparisonDescriptionMap.set( new Range( 2.2, 2.6 ), muchMuchLongerThanString );
-lengthComparisonDescriptionMap.set( new Range( 2.6, Number.POSITIVE_INFINITY ), farLongerThanString );
+lengthComparisonDescriptionMap.set( new Range( 0.6, 0.8 ), aLittleShorterThanString );
+lengthComparisonDescriptionMap.set( new Range( 0.8, 1 ), similarButShorterThanString );
+lengthComparisonDescriptionMap.set( new Range( 1, 1.3 ), similarButLongerThanString );
+lengthComparisonDescriptionMap.set( new Range( 1.3, 1.6 ), aLittleLongerThanString );
+lengthComparisonDescriptionMap.set( new Range( 1.6, 1.9 ), muchLongerThanString );
+lengthComparisonDescriptionMap.set( new Range( 1.9, 2.1 ), aboutTwiceAsLongAsString );
+lengthComparisonDescriptionMap.set( new Range( 2.1, Number.POSITIVE_INFINITY ), farLongerThanString );
 
 class SideDescriber {
 
@@ -194,8 +192,14 @@ class SideDescriber {
     const length1 = side1.lengthProperty.value;
     const length2 = side2.lengthProperty.value;
 
-    if ( QuadrilateralShapeModel.isInterLengthEqualToOther( length1, length2, interLengthToleranceInterval ) ) {
+    if ( QuadrilateralShapeModel.isInterLengthEqualToOther( length2, length1, interLengthToleranceInterval ) ) {
       description = equalToString;
+    }
+    else if ( QuadrilateralShapeModel.isInterLengthEqualToOther( length2, length1 * 2, interLengthToleranceInterval ) ) {
+      description = twiceAsLongAsString;
+    }
+    else if ( QuadrilateralShapeModel.isInterLengthEqualToOther( length2, length1 / 2, interLengthToleranceInterval ) ) {
+      description = halfAsLongAsString;
     }
 
     const lengthRatio = length2 / length1;

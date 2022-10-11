@@ -491,6 +491,12 @@
       "aboutHalfAsLongAs": {
         "value": "about half as long as"
       },
+      "halfAsLongAs": {
+        "value": "half as long as"
+      },
+      "aLittleShorterThan": {
+        "value": "a little shorter than"
+      },
       "muchShorterThan": {
         "value": "much shorter than"
       },
@@ -503,6 +509,9 @@
       "similarButLongerThan": {
         "value": "similar but longer than"
       },
+      "aLittleLongerThan": {
+        "value": "a little longer than"
+      },
       "somewhatLongerThan": {
         "value": "somewhat longer than"
       },
@@ -511,6 +520,9 @@
       },
       "aboutTwiceAsLongAs": {
         "value": "about twice as long as"
+      },
+      "twiceAsLongAs": {
+        "value": "twice as long as"
       },
       "muchMuchLongerThan": {
         "value": "much much longer than"
