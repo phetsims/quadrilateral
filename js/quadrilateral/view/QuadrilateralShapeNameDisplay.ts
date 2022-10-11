@@ -9,7 +9,7 @@
 
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Property from '../../../../axon/js/Property.js';
-import { Node, Rectangle, Text } from '../../../../scenery/js/imports.js';
+import { Node, Rectangle, VoicingText } from '../../../../scenery/js/imports.js';
 import ExpandCollapseButton from '../../../../sun/js/ExpandCollapseButton.js';
 import quadrilateral from '../../quadrilateral.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
@@ -63,7 +63,7 @@ class QuadrilateralShapeNameDisplay extends Node {
       // phet-io
       tandem: tandem.createTandem( 'expandCollapseButton' )
     } );
-    const shapeNameText = new Text( '', QuadrilateralConstants.SHAPE_NAME_TEXT_OPTIONS );
+    const shapeNameText = new VoicingText( '', QuadrilateralConstants.SHAPE_NAME_TEXT_OPTIONS );
     const backgroundRectangle = new Rectangle( 0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT, QuadrilateralConstants.CORNER_RADIUS, QuadrilateralConstants.CORNER_RADIUS, {
       fill: QuadrilateralColors.panelFillColorProperty,
       stroke: QuadrilateralColors.panelStrokeColorProperty
@@ -87,6 +87,7 @@ class QuadrilateralShapeNameDisplay extends Node {
         // voicing - when shape name is shown we should include the detected shape in the name response
         expandCollapseButton.voicingNameResponse = quadrilateralDescriber.getYouHaveAShapeDescription();
         expandCollapseButton.voicingContextResponse = shapeNameShownContextResponseString;
+        shapeNameText.readingBlockNameResponse = textString;
       }
       else {
         textString = shapeNameHiddenString;
@@ -95,6 +96,7 @@ class QuadrilateralShapeNameDisplay extends Node {
         // voicing
         expandCollapseButton.voicingNameResponse = shapeNameHiddenString;
         expandCollapseButton.voicingContextResponse = shapeNameHiddenContextResponseString;
+        shapeNameText.readingBlockNameResponse = textString;
       }
 
       // Only after updating voicing response content, speak the response. We only announce this when visibility
