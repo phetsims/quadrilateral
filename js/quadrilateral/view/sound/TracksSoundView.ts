@@ -117,12 +117,28 @@ class TracksSoundView extends SoundGenerator {
       else {
 
         // shape just changed due to reset, do not transition to fading in, stop all sound imediately
-        this.shapeDirty = false;
-        this.playingState = PlayingState.STOPPED;
-        this.remainingPlayTime = 0;
-        this.remainingFadeTime = 0;
+        this.stopPlayingImmediately();
       }
     } );
+
+    // When shape sounds are disabled, stop playing all sounds immediately and reset state variables
+    shapeSoundEnabledProperty.link( shapeSoundEnabled => {
+      if ( !shapeSoundEnabled ) {
+        this.stopPlayingImmediately();
+      }
+    } );
+  }
+
+  /**
+   * Stop playing all sounds immediately and reset all timing variables and state so that sound is stopped.
+   */
+  private stopPlayingImmediately(): void {
+
+    // shape just changed due to reset, do not transition to fading in, stop all sound immediately
+    this.shapeDirty = false;
+    this.playingState = PlayingState.STOPPED;
+    this.remainingPlayTime = 0;
+    this.remainingFadeTime = 0;
   }
 
   /**
