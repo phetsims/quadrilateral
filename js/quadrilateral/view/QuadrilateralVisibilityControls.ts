@@ -44,10 +44,10 @@ class QuadrilateralVisibilityControls extends VBox {
 
       // pdom
       labelTagName: 'label',
-      labelContent: QuadrilateralStrings.cornerLabels,
+      labelContent: QuadrilateralStrings.labels,
 
       // voicing
-      voicingNameResponse: QuadrilateralStrings.cornerLabels,
+      voicingNameResponse: QuadrilateralStrings.labels,
       voicingHintResponse: QuadrilateralStrings.a11y.cornerLabelsHintResponse,
 
       // a11y
@@ -60,17 +60,17 @@ class QuadrilateralVisibilityControls extends VBox {
 
     const cornerGuidesIcon = QuadrilateralIconFactory.createLabelledIcon(
       QuadrilateralIconFactory.createCornerGuidesIcon(),
-      QuadrilateralStrings.corners
+      QuadrilateralStrings.angles
     );
     const cornerGuideCheckbox = new Checkbox( cornerGuideVisibleProperty, cornerGuidesIcon, {
       spacing: CHECKBOX_ICON_SPACING,
 
       // pdom
       labelTagName: 'label',
-      labelContent: QuadrilateralStrings.cornerGuides,
+      labelContent: QuadrilateralStrings.angles,
 
       // voicing
-      voicingNameResponse: QuadrilateralStrings.cornerGuides,
+      voicingNameResponse: QuadrilateralStrings.angles,
       voicingHintResponse: QuadrilateralStrings.a11y.angleGuidesHintResponse,
 
       // a11y
@@ -90,10 +90,10 @@ class QuadrilateralVisibilityControls extends VBox {
 
       // pdom
       labelTagName: 'label',
-      labelContent: QuadrilateralStrings.diagonalGuides,
+      labelContent: QuadrilateralStrings.diagonals,
 
       // voicing
-      voicingNameResponse: QuadrilateralStrings.diagonalGuides,
+      voicingNameResponse: QuadrilateralStrings.diagonals,
       voicingHintResponse: QuadrilateralStrings.a11y.diagonalGuidesHintResponse,
 
       // a11y

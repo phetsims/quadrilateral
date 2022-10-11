@@ -2,26 +2,17 @@
   "quadrilateral.title": {
     "value": "Quadrilateral"
   },
-  "cornerLabels": {
-    "value": "Corner Labels"
-  },
   "labels": {
     "value": "Labels"
   },
-  "corners": {
-    "value": "Corners"
+  "angles": {
+    "value": "Angles"
   },
   "diagonals": {
     "value": "Diagonals"
   },
-  "cornerGuides": {
-    "value": "Corner Guides"
-  },
   "grid": {
     "value": "Grid"
-  },
-  "diagonalGuides": {
-    "value": "Diagonal Guides"
   },
   "vertexA": {
     "value": "A"
@@ -93,37 +84,37 @@
       "value": "Letters A through D added to corners."
     },
     "cornerLabelsRemovedResponse": {
-      "value": "Names hidden."
+      "value": "Corner labels hidden."
     },
     "cornerLabelsHintResponse": {
-      "value": "Explore shapes with or without visual labels."
+      "value": "Create shapes with or without help of visual corner labels."
     },
     "angleGuidesAddedResponse": {
-      "value": "Angle guides with 30 degree slices added to corners."
+      "value": "Guides showing 30 degree slices added to corners."
     },
     "angleGuidesRemovedResponse": {
       "value": "Guides hidden."
     },
     "angleGuidesHintResponse": {
-      "value": "Explore shapes with or without angle guides."
+      "value": "Create shapes with or without help of angle guides."
     },
     "gridLinesAddedResponse": {
       "value": "Grid lines added."
     },
     "gridLinesRemovedResponse": {
-      "value": "Lines hidden."
+      "value": "Grid lines hidden."
     },
     "diagonalGuidesAddedResponse": {
-      "value": "Diagonal guides added."
+      "value": "Guides pass diagonally through opposite corners."
     },
     "diagonalGuidesRemovedResponse": {
       "value": "Diagonal guides removed."
     },
     "diagonalGuidesHintResponse": {
-      "value": "Explore shapes with or without diagonal guides."
+      "value": "Create shapes with or without help of diagonal symmetry guides."
     },
     "gridLinesHintResponse": {
-      "value": "Explore shapes with or without visual grid."
+      "value": "Create shapes with or without help of visual grid."
     },
     "myShapesCorners": {
       "value": "My Shape's Corners"
