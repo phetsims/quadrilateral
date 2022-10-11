@@ -402,6 +402,8 @@ type StringsType = {
         'enabledContextResponseStringProperty': LinkableProperty<string>;
         'disabledContextResponse': string;
         'disabledContextResponseStringProperty': LinkableProperty<string>;
+        'hintResponse': string;
+        'hintResponseStringProperty': LinkableProperty<string>;
       };
       'resetShapeControl': {
         'shapeShownContextResponse': string;

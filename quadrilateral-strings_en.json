@@ -568,13 +568,16 @@
       },
       "shapeSoundControl": {
         "nameResponse": {
-          "value": "Shape Sound"
+          "value": "Shape Sounds"
         },
         "enabledContextResponse": {
           "value": "On for shape changes"
         },
         "disabledContextResponse": {
           "value": "Off for shape changes"
+        },
+        "hintResponse": {
+          "value": "Explore with or without sounds for shape changes."
         }
       },
       "resetShapeControl": {

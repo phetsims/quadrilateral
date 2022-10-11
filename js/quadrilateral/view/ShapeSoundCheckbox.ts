@@ -20,12 +20,14 @@ import QuadrilateralIconFactory from './QuadrilateralIconFactory.js';
 const shapeSoundControlEnabledContextResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.enabledContextResponseStringProperty;
 const shapeSoundControlDisabledContextResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.disabledContextResponseStringProperty;
 const shapeSoundControlNameResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.nameResponse;
+const shapeSoundControlHintResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.hintResponse;
 
 class ShapeSoundCheckbox extends Checkbox {
   public constructor( shapeSoundEnabledProperty: Property<boolean>, tandem: Tandem ) {
     super( shapeSoundEnabledProperty, QuadrilateralIconFactory.createSoundIcon(), {
       voicingNameResponse: shapeSoundControlNameResponse,
       checkedContextResponse: shapeSoundControlEnabledContextResponse,
+      voicingHintResponse: shapeSoundControlHintResponse,
       uncheckedContextResponse: shapeSoundControlDisabledContextResponse,
       tandem: tandem
     } );
