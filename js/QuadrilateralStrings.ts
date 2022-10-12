@@ -289,6 +289,22 @@ type StringsType = {
       'justOverNumberOfSlicesPatternStringProperty': LinkableProperty<string>;
       'justUnderNumberOfSlicesPattern': string;
       'justUnderNumberOfSlicesPatternStringProperty': LinkableProperty<string>;
+      'oneUnit': string;
+      'oneUnitStringProperty': LinkableProperty<string>;
+      'numberOfUnitsPattern': string;
+      'numberOfUnitsPatternStringProperty': LinkableProperty<string>;
+      'aboutHalfOneUnit': string;
+      'aboutHalfOneUnitStringProperty': LinkableProperty<string>;
+      'numberOfUnitsAndAHalfPattern': string;
+      'numberOfUnitsAndAHalfPatternStringProperty': LinkableProperty<string>;
+      'lessThanHalfOneUnit': string;
+      'lessThanHalfOneUnitStringProperty': LinkableProperty<string>;
+      'justOverNumberOfUnitsPattern': string;
+      'justOverNumberOfUnitsPatternStringProperty': LinkableProperty<string>;
+      'justUnderOneUnit': string;
+      'justUnderOneUnitStringProperty': LinkableProperty<string>;
+      'justUnderNumberOfUnitsPattern': string;
+      'justUnderNumberOfUnitsPatternStringProperty': LinkableProperty<string>;
       'vertexDragObjectResponse': {
         'wider': string;
         'widerStringProperty': LinkableProperty<string>;

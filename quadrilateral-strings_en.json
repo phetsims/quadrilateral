@@ -409,6 +409,30 @@
       "justUnderNumberOfSlicesPattern": {
         "value": "just under {{numberOfSlices}} slices"
       },
+      "oneUnit": {
+        "value": "1 unit"
+      },
+      "numberOfUnitsPattern": {
+        "value": "{{numberOfUnits}} units"
+      },
+      "aboutHalfOneUnit": {
+        "value": "about half 1 unit"
+      },
+      "numberOfUnitsAndAHalfPattern": {
+        "value": "{{numberOfUnits}} and a half units"
+      },
+      "lessThanHalfOneUnit": {
+        "value": "less than half 1 unit"
+      },
+      "justOverNumberOfUnitsPattern": {
+        "value": "just over {{numberOfUnits}} units"
+      },
+      "justUnderOneUnit": {
+        "value": "just under one unit"
+      },
+      "justUnderNumberOfUnitsPattern": {
+        "value": "just under {{numberOfUnits}} units"
+      },
       "vertexDragObjectResponse": {
         "wider": {
           "value": "wider"
@@ -567,10 +591,10 @@
         "value": "far longer than"
       },
       "parallelSideObjectResponsePattern": {
-        "value": "parallel to and {{oppositeComparison}} opposite side, {{adjacentSideDescription}}"
+        "value": "{{unitsDescription}}, parallel to and {{oppositeComparison}} opposite side, {{adjacentSideDescription}}"
       },
       "sideObjectResponsePattern": {
-        "value": "{{oppositeComparison}} opposite side, {{adjacentSideDescription}}"
+        "value": "{{unitsDescription}}, {{oppositeComparison}} opposite side, {{adjacentSideDescription}}"
       },
       "equalToAdjacentSides": {
         "value": "equal to adjacent sides"

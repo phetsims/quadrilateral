@@ -41,6 +41,14 @@ const notEqualToAdjacentSidesString = QuadrilateralStrings.a11y.voicing.notEqual
 const shorterThanParallelAdjacentSidesString = QuadrilateralStrings.a11y.voicing.shorterThanParallelAdjacentSides;
 const longerThanParallelAdjacentSidesString = QuadrilateralStrings.a11y.voicing.longerThanParallelAdjacentSides;
 const notEqualToParallelAdjacentSidesString = QuadrilateralStrings.a11y.voicing.notEqualToParallelAdjacentSides;
+const oneUnitString = QuadrilateralStrings.a11y.voicing.oneUnit;
+const numberOfUnitsPatternString = QuadrilateralStrings.a11y.voicing.numberOfUnitsPattern;
+const aboutHalfOneUnitString = QuadrilateralStrings.a11y.voicing.aboutHalfOneUnit;
+const numberOfUnitsAndAHalfPatternString = QuadrilateralStrings.a11y.voicing.numberOfUnitsAndAHalfPattern;
+const lessThanHalfOneUnitString = QuadrilateralStrings.a11y.voicing.lessThanHalfOneUnit;
+const justOverNumberOfUnitsPatternString = QuadrilateralStrings.a11y.voicing.justOverNumberOfUnitsPattern;
+const justUnderOneUnitString = QuadrilateralStrings.a11y.voicing.justUnderOneUnit;
+const justUnderNumberOfUnitsPatternString = QuadrilateralStrings.a11y.voicing.justUnderNumberOfUnitsPattern;
 
 // A map that will provide comparison descriptions for side lengths. Range values are the ratio between lengths
 // between the sides.
@@ -95,11 +103,71 @@ class SideDescriber {
                                equalToString : SideDescriber.getLengthComparisonDescription( oppositeSide, this.side, toleranceInterval );
 
     response = StringUtils.fillIn( patternString, {
+      unitsDescription: this.getSideUnitsDescription( this.side.lengthProperty.value ),
       oppositeComparison: oppositeComparison,
       adjacentSideDescription: this.getAdjacentSideDescription()
     } );
 
     return response;
+  }
+
+  /**
+   * Returns a description of the number of length units for this side. Returns something like
+   *
+   * "1 unit" or
+   * "just over 3 units" or
+   * "2 and a half units" or
+   * "less than half 1 unit"
+   */
+  private getSideUnitsDescription( sideLength: number ): string {
+    let sideDescription: string | null = null;
+
+    const numberOfFullUnits = Math.floor( sideLength / Side.SIDE_SEGMENT_LENGTH );
+    const remainder = sideLength % Side.SIDE_SEGMENT_LENGTH;
+
+    if ( this.quadrilateralShapeModel.isShapeLengthEqualToOther( remainder, 0 ) ) {
+      if ( numberOfFullUnits === 1 ) {
+        sideDescription = oneUnitString;
+      }
+      else {
+        sideDescription = StringUtils.fillIn( numberOfUnitsPatternString, {
+          numberOfUnits: numberOfFullUnits
+        } );
+      }
+    }
+    else if ( this.quadrilateralShapeModel.isShapeLengthEqualToOther( remainder, Side.SIDE_SEGMENT_LENGTH / 2 ) ) {
+      if ( numberOfFullUnits === 0 ) {
+        sideDescription = aboutHalfOneUnitString;
+      }
+      else {
+        sideDescription = StringUtils.fillIn( numberOfUnitsAndAHalfPatternString, {
+          numberOfUnits: numberOfFullUnits
+        } );
+      }
+    }
+    else if ( remainder < Side.SIDE_SEGMENT_LENGTH / 2 ) {
+      if ( numberOfFullUnits === 0 ) {
+        sideDescription = lessThanHalfOneUnitString;
+      }
+      else {
+        sideDescription = StringUtils.fillIn( justOverNumberOfUnitsPatternString, {
+          numberOfUnits: numberOfFullUnits
+        } );
+      }
+    }
+    else if ( remainder > Side.SIDE_SEGMENT_LENGTH / 2 ) {
+      if ( numberOfFullUnits === 0 ) {
+        sideDescription = justUnderOneUnitString;
+      }
+      else {
+        sideDescription = StringUtils.fillIn( justUnderNumberOfUnitsPatternString, {
+          numberOfUnits: numberOfFullUnits + 1
+        } );
+      }
+    }
+
+    assert && assert( sideDescription, `side description not found for length ${sideLength}` );
+    return sideDescription!;
   }
 
   /**

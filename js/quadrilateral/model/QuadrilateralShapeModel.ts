@@ -913,6 +913,8 @@ class QuadrilateralShapeModel {
   /**
    * Returns true if two sides are close enough in length that they should be considered equal. Uses the
    * shapeLengthAngleToleranceInterval.
+   *
+   * TODO: Rename to isInterLengthEqualToOTher to match interAngleToleranceInterval.
    */
   public isShapeLengthEqualToOther( length1: number, length2: number ): boolean {
     return Utils.equalsEpsilon( length1, length2, this.shapeLengthToleranceIntervalProperty.value );
