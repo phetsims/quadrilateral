@@ -25,6 +25,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 
 const TEXT_OPTIONS = { fontSize: 16 };
 const valuePatternString = '{{label}}: {{value}}';
+const valueWithDegreesPatternString = '{{label}}: {{value}} ({{degrees}} degrees)';
 
 const CONTENT_PADDING = 10;
 
@@ -138,10 +139,10 @@ class QuadrilateralModelValuePanel extends Node {
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.leftSide.lengthProperty, leftSideLengthText, 'Side DA', decimalPlacesProperty );
 
     // angle
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexA.angleProperty, leftTopAngleText, 'Corner A', decimalPlacesProperty );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexB.angleProperty, rightTopAngleText, 'Corner B', decimalPlacesProperty );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexC.angleProperty, rightBottomAngleText, 'Corner C', decimalPlacesProperty );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexD.angleProperty, leftBottomAngleText, 'Corner D', decimalPlacesProperty );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexA.angleProperty, leftTopAngleText, 'Corner A', decimalPlacesProperty, true );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexB.angleProperty, rightTopAngleText, 'Corner B', decimalPlacesProperty, true );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexC.angleProperty, rightBottomAngleText, 'Corner C', decimalPlacesProperty, true );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexD.angleProperty, leftBottomAngleText, 'Corner D', decimalPlacesProperty, true );
 
     // parallelogram and paralle sides
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.isParallelogramProperty, isParallelogramText, 'Is parallelogram', decimalPlacesProperty );
@@ -177,11 +178,18 @@ class QuadrilateralModelValuePanel extends Node {
    * type DebuggableProperty = TReadOnlyProperty<number | null> | TReadOnlyProperty<boolean> | TReadOnlyProperty<NamedQuadrilateral>;
    *
    * After 10 minutes of tinkering with types I decided it wasn't worth figuring out for this debugging code.
+   *
+   * @param property - the Property whose value you want to watch
+   * @param text - Text instance to update
+   * @param label - a label for the value we are watching
+   * @param decimalPlacesProperty - controls precision of values
+   * @param showDegrees - If the value would be helpful to also show in degrees for debugging, set to true
    */
   private static addRedrawValueTextListener( property: TReadOnlyProperty<IntentionalAny>,
                                              text: Text,
                                              label: string,
-                                             decimalPlacesProperty: Property<number> ): void {
+                                             decimalPlacesProperty: Property<number>,
+                                             showDegrees = false ): void {
 
     Multilink.multilink( [ property, decimalPlacesProperty ], ( value, decimalPlaces ) => {
 
@@ -192,10 +200,23 @@ class QuadrilateralModelValuePanel extends Node {
         formattedValue = Utils.toFixedNumber( value, decimalPlaces );
       }
 
-      text.text = StringUtils.fillIn( valuePatternString, {
-        value: formattedValue,
-        label: label
-      } );
+      if ( showDegrees ) {
+
+        // just show two decimals instead of the number of decimals shown to avoid confusion with tolerance intervals
+        // which are in radians
+        const formattedDegrees = Utils.toFixedNumber( Utils.toDegrees( value ), 2 );
+        text.text = StringUtils.fillIn( valueWithDegreesPatternString, {
+          value: formattedValue,
+          degrees: formattedDegrees,
+          label: label
+        } );
+      }
+      else {
+        text.text = StringUtils.fillIn( valuePatternString, {
+          value: formattedValue,
+          label: label
+        } );
+      }
     } );
   }
 }
