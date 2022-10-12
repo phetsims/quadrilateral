@@ -108,7 +108,7 @@
       "value": "Guides pass diagonally through opposite corners."
     },
     "diagonalGuidesRemovedResponse": {
-      "value": "Diagonal guides removed."
+      "value": "Diagonal guides hidden."
     },
     "diagonalGuidesHintResponse": {
       "value": "Create shapes with or without help of diagonal symmetry guides."
