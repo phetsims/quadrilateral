@@ -279,7 +279,7 @@
         "value": "All sides equal as shape gets {{areaChange}}."
       },
       "cornerFlatAsShapeChangesPattern": {
-        "value": "{{cornerLabel}} {{flat}} as adjacent sides change in length."
+        "value": "{{cornerLabel}} flat as adjacent sides change in length testing."
       },
       "allSidesTiltAwayFromParallel": {
         "value": "All sides tilt away from parallel as opposite corners change unequally."
