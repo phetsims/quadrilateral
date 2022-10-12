@@ -930,6 +930,13 @@ class QuadrilateralShapeModel {
   }
 
   /**
+   * Returns true if the angle is equal to PI within staticAngleToleranceInterval.
+   */
+  public isFlatAngle( angle: number ): boolean {
+    return Utils.equalsEpsilon( angle, Math.PI, this.staticAngleToleranceIntervalProperty.value );
+  }
+
+  /**
    * Returns true if two angles are equal within staticAngleToleranceIntervalProperty. See that value for more
    * information.
    */

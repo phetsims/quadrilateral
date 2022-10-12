@@ -13,13 +13,14 @@ import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import Vertex from '../model/Vertex.js';
 import VertexLabel from '../model/VertexLabel.js';
 import Range from '../../../../dot/js/Range.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import CornerGuideNode from './CornerGuideNode.js';
 
 // constants
 const cornerAString = QuadrilateralStrings.a11y.cornerA;
 const cornerBString = QuadrilateralStrings.a11y.cornerB;
 const cornerCString = QuadrilateralStrings.a11y.cornerC;
 const cornerDString = QuadrilateralStrings.a11y.cornerD;
-const rightAngleVertexObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.rightAngleVertexObjectResponsePattern;
 const vertexObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.vertexObjectResponsePattern;
 const farSmallerThanString = QuadrilateralStrings.a11y.voicing.farSmallerThan;
 const aboutHalfAsWideAsString = QuadrilateralStrings.a11y.voicing.aboutHalfAsWideAs;
@@ -40,6 +41,18 @@ const equalAdjacentCornersPatternString = QuadrilateralStrings.a11y.voicing.equa
 const smallerThanAdjacentCornersString = QuadrilateralStrings.a11y.voicing.smallerThanAdjacentCorners;
 const widerThanAdjacentCornersString = QuadrilateralStrings.a11y.voicing.widerThanAdjacentCorners;
 const notEqualToAdjacentCornersString = QuadrilateralStrings.a11y.voicing.notEqualToAdjacentCorners;
+const vertexObjectResponseWithSlicesPatternString = QuadrilateralStrings.a11y.voicing.vertexObjectResponseWithSlicesPattern;
+const rightAngleString = QuadrilateralStrings.a11y.voicing.rightAngle;
+const angleFlatString = QuadrilateralStrings.a11y.voicing.angleFlat;
+const oneSliceString = QuadrilateralStrings.a11y.voicing.oneSlice;
+const halfOneSliceString = QuadrilateralStrings.a11y.voicing.halfOneSlice;
+const lessThanHalfOneSliceString = QuadrilateralStrings.a11y.voicing.lessThanHalfOneSlice;
+const justOverOneSliceString = QuadrilateralStrings.a11y.voicing.justOverOneSlice;
+const justUnderOneSliceString = QuadrilateralStrings.a11y.voicing.justUnderOneSlice;
+const numberOfSlicesPatternString = QuadrilateralStrings.a11y.voicing.numberOfSlicesPattern;
+const numberOfSlicesAndAHalfPatternString = QuadrilateralStrings.a11y.voicing.numberOfSlicesAndAHalfPattern;
+const justOverNumberOfSlicesPatternString = QuadrilateralStrings.a11y.voicing.justOverNumberOfSlicesPattern;
+const justUnderNumberOfSlicesPatternString = QuadrilateralStrings.a11y.voicing.justUnderNumberOfSlicesPattern;
 
 // Maps a vertex to its accessible name, like "Corner A".
 const vertexCornerLabelMap = new Map<VertexLabel, string>( [
@@ -67,13 +80,15 @@ class VertexDescriber {
   // A reference to the model components that drive description.
   private vertex: Vertex;
   private quadrilateralShapeModel: QuadrilateralShapeModel;
+  private cornerGuidesVisibleProperty: TReadOnlyProperty<boolean>;
 
   // See above documentation.
   public static VertexCornerLabelMap = vertexCornerLabelMap;
 
-  public constructor( vertex: Vertex, quadrilateralShapeModel: QuadrilateralShapeModel ) {
+  public constructor( vertex: Vertex, quadrilateralShapeModel: QuadrilateralShapeModel, cornerGuidesVisibleProperty: TReadOnlyProperty<boolean> ) {
     this.vertex = vertex;
     this.quadrilateralShapeModel = quadrilateralShapeModel;
+    this.cornerGuidesVisibleProperty = cornerGuidesVisibleProperty;
   }
 
   /**
@@ -91,25 +106,104 @@ class VertexDescriber {
    * Returns the Object response for the vertex. Will return something like
    *
    * "right angle, equal to opposite corner, equal to adjacent corners" or
-   * "somewhat wider than opposite corner, much smaller than adjacent equal corners."
+   * "somewhat wider than opposite corner, much smaller than adjacent equal corners." or
+   * "1 slice, far smaller than opposite corner, smaller than adjacent corners."
    */
   public getVertexObjectResponse(): string {
     let response = '';
 
-    const vertexAngle = this.vertex.angleProperty.value!;
     const oppositeVertex = this.quadrilateralShapeModel.oppositeVertexMap.get( this.vertex )!;
 
-    // Prepend "right angle" if this vertex is currently a right angle
-    const patternString = this.quadrilateralShapeModel.isRightAngle( vertexAngle ) ?
-                          rightAngleVertexObjectResponsePatternString :
-                          vertexObjectResponsePatternString;
+    const oppositeComparisonString = VertexDescriber.getAngleComparisonDescription( oppositeVertex, this.vertex, this.quadrilateralShapeModel.interAngleToleranceIntervalProperty.value );
+    const adjacentVertexDescriptionString = this.getAdjacentVertexObjectDescription();
 
-    response = StringUtils.fillIn( patternString, {
-      oppositeComparison: VertexDescriber.getAngleComparisonDescription( oppositeVertex, this.vertex, this.quadrilateralShapeModel.interAngleToleranceIntervalProperty.value ),
-      adjacentVertexDescription: this.getAdjacentVertexObjectDescription()
-    } );
+    // if corner guides are visible, a description of the number of slices is included
+    if ( this.cornerGuidesVisibleProperty.value ) {
+      response = StringUtils.fillIn( vertexObjectResponseWithSlicesPatternString, {
+        slicesDescription: this.getSlicesDescription( this.vertex.angleProperty.value! ),
+        oppositeComparison: oppositeComparisonString,
+        adjacentVertexDescription: adjacentVertexDescriptionString
+      } );
+    }
+    else {
+      response = StringUtils.fillIn( vertexObjectResponsePatternString, {
+        oppositeComparison: oppositeComparisonString,
+        adjacentVertexDescription: adjacentVertexDescriptionString
+      } );
+    }
 
     return response;
+  }
+
+  /**
+   * Returns a description for the number of slices, to be used when corner guides are shown. Returns something like
+   * "just under 1 slice" or
+   * "just over 3 slices" or
+   * "1 slice" or
+   * "right angle" or
+   * "3 and a half slice" or
+   * "half one slice"
+   *
+   * For the design request of this feature please see https://github.com/phetsims/quadrilateral/issues/231
+   */
+  private getSlicesDescription( vertexAngle: number ): string {
+    let sliceDescription: string | null = null;
+
+    const numberOfFullSlices = Math.floor( vertexAngle / CornerGuideNode.SLICE_SIZE_RADIANS );
+    const remainder = vertexAngle % CornerGuideNode.SLICE_SIZE_RADIANS;
+
+    if ( this.quadrilateralShapeModel.isRightAngle( vertexAngle ) ) {
+      sliceDescription = rightAngleString;
+    }
+    else if ( this.quadrilateralShapeModel.isFlatAngle( vertexAngle ) ) {
+      sliceDescription = angleFlatString;
+    }
+    else if ( this.quadrilateralShapeModel.isStaticAngleEqualToOther( remainder, 0 ) ) {
+      if ( numberOfFullSlices === 1 ) {
+        sliceDescription = oneSliceString;
+      }
+      else {
+        sliceDescription = StringUtils.fillIn( numberOfSlicesPatternString, {
+          numberOfSlices: numberOfFullSlices
+        } );
+      }
+    }
+    else if ( this.quadrilateralShapeModel.isStaticAngleEqualToOther( remainder, CornerGuideNode.SLICE_SIZE_RADIANS / 2 ) ) {
+      if ( numberOfFullSlices === 0 ) {
+        sliceDescription = halfOneSliceString;
+      }
+      else {
+        sliceDescription = StringUtils.fillIn( numberOfSlicesAndAHalfPatternString, {
+          numberOfSlices: numberOfFullSlices
+        } );
+      }
+    }
+    else if ( remainder < CornerGuideNode.SLICE_SIZE_RADIANS / 2 ) {
+      if ( numberOfFullSlices === 0 ) {
+        sliceDescription = lessThanHalfOneSliceString;
+      }
+      else if ( numberOfFullSlices === 1 ) {
+        sliceDescription = justOverOneSliceString;
+      }
+      else {
+        sliceDescription = StringUtils.fillIn( justOverNumberOfSlicesPatternString, {
+          numberOfSlices: numberOfFullSlices
+        } );
+      }
+    }
+    else if ( remainder > CornerGuideNode.SLICE_SIZE_RADIANS / 2 ) {
+      if ( numberOfFullSlices === 0 ) {
+        sliceDescription = justUnderOneSliceString;
+      }
+      else {
+        sliceDescription = StringUtils.fillIn( justUnderNumberOfSlicesPatternString, {
+          numberOfSlices: numberOfFullSlices + 1
+        } );
+      }
+    }
+
+    assert && assert( sliceDescription, `did not find a slice description for the provided angle: ${vertexAngle}` );
+    return sliceDescription!;
   }
 
   /**

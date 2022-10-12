@@ -29,7 +29,8 @@ import Multilink from '../../../../axon/js/Multilink.js';
 
 // constants
 // The size of each slice of the angle guide, in radians
-const SLICE_SIZE_RADIANS = Utils.toRadians( 30 );
+const SLICE_SIZE_DEGREES = 30;
+const SLICE_SIZE_RADIANS = Utils.toRadians( SLICE_SIZE_DEGREES );
 
 // in model coordinates, width of the arc (outer radius - inner radius of the annulus)
 const SLICE_RADIAL_LENGTH = 0.05;
@@ -41,6 +42,9 @@ const OUTER_RADIUS = Vertex.VERTEX_WIDTH / 2 + SLICE_RADIAL_LENGTH;
 const EXTERNAL_ANGLE_GUIDE_LENGTH = SLICE_RADIAL_LENGTH * 8;
 
 class CornerGuideNode extends Node {
+  public static readonly SLICE_SIZE_DEGREES = SLICE_SIZE_DEGREES;
+  public static readonly SLICE_SIZE_RADIANS = SLICE_SIZE_RADIANS;
+
   public constructor( vertex1: Vertex, vertex2: Vertex, visibleProperty: BooleanProperty, shapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2 ) {
     super();
 

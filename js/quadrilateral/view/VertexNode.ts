@@ -56,7 +56,7 @@ class VertexNode extends Voicing( Circle ) {
     this.voicingNameResponse = options.nameResponse;
     this.innerContent = options.nameResponse;
 
-    const vertexDescriber = new VertexDescriber( vertex, model.quadrilateralShapeModel );
+    const vertexDescriber = new VertexDescriber( vertex, model.quadrilateralShapeModel, model.cornerGuideVisibleProperty );
 
     this.model = model;
 
@@ -175,7 +175,11 @@ class VertexNode extends Voicing( Circle ) {
     model.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
       this.voicingObjectResponse = vertexDescriber.getVertexObjectResponse();
     } );
-    this.voicingObjectResponse = vertexDescriber.getVertexObjectResponse();
+
+    // when corner guides are visible more information is also included in the object response
+    model.cornerGuideVisibleProperty.link( visible => {
+      this.voicingObjectResponse = vertexDescriber.getVertexObjectResponse();
+    } );
 
     // Voicing - for debugging, speak the full response again on spacebar/enter
     // TODO: remove this
