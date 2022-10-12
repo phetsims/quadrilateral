@@ -9,7 +9,7 @@
 
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Property from '../../../../axon/js/Property.js';
-import { Node, Rectangle, VoicingText } from '../../../../scenery/js/imports.js';
+import { Node, Rectangle, VoicingText, VoicingTextOptions } from '../../../../scenery/js/imports.js';
 import ExpandCollapseButton from '../../../../sun/js/ExpandCollapseButton.js';
 import quadrilateral from '../../quadrilateral.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
@@ -19,6 +19,7 @@ import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
+import { combineOptions } from '../../../../phet-core/js/optionize.js';
 
 // constants
 const squareString = QuadrilateralStrings.shapeNames.square;
@@ -63,7 +64,15 @@ class QuadrilateralShapeNameDisplay extends Node {
       // phet-io
       tandem: tandem.createTandem( 'expandCollapseButton' )
     } );
-    const shapeNameText = new VoicingText( '', QuadrilateralConstants.SHAPE_NAME_TEXT_OPTIONS );
+
+    const shapeNameText = new VoicingText( '', combineOptions<VoicingTextOptions>( {
+
+      // Remove this component from the traversal order even though it uses Voicing. For alt input + voicing,
+      // the expandCollapseButton as an interactive component is sufficient, see
+      // https://github.com/phetsims/quadrilateral/issues/238#issuecomment-1276306315 for this request
+      readingBlockTagName: null
+    }, QuadrilateralConstants.SHAPE_NAME_TEXT_OPTIONS ) );
+
     const backgroundRectangle = new Rectangle( 0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT, QuadrilateralConstants.CORNER_RADIUS, QuadrilateralConstants.CORNER_RADIUS, {
       fill: QuadrilateralColors.panelFillColorProperty,
       stroke: QuadrilateralColors.panelStrokeColorProperty
