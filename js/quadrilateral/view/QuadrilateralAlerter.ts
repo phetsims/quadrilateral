@@ -51,9 +51,11 @@ const oppositeSidesInParallelPatternString = QuadrilateralStrings.a11y.voicing.o
 const oppositeSidesInParallelAsCornersChangeEquallyPatternString = QuadrilateralStrings.a11y.voicing.oppositeSidesInParallelAsCornersChangeEquallyPattern;
 const oppositeSidesTiltAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.oppositeSidesTiltAsShapeChangesPattern;
 const oppositeSidesEqualAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.oppositeSidesEqualAsShapeChangesPattern;
-const maintainingAParallelogramResponsePatternString = QuadrilateralStrings.a11y.voicing.maintainingAParallelogramResponsePattern;
+const maintainingAParallelogramAngleResponseString = QuadrilateralStrings.a11y.voicing.maintainingAParallelogramAngleResponse;
+const maintainingAParallelogramLengthResponsePatternString = QuadrilateralStrings.a11y.voicing.maintainingAParallelogramLengthResponsePattern;
+const maintainingATrapezoidAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.maintainingATrapezoidAsShapeChangesPattern;
 const allRightAnglesAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.allRightAnglesAsShapeChangesPattern;
-const oppositeCornersChangeEquallyAsSidesChangePatternString = QuadrilateralStrings.a11y.voicing.oppositeCornersChangeEquallyAsSidesChangePattern;
+const maintainingARhombusString = QuadrilateralStrings.a11y.voicing.maintainingARhombus;
 const allSidesEqualAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.allSidesEqualAsShapeChangesPattern;
 const cornerFlatAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.cornerFlatAsShapeChangesPattern;
 const adjacentSidesChangeEquallyAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.adjacentSidesChangeEquallyAsShapeChangesPattern;
@@ -212,16 +214,17 @@ class QuadrilateralAlerter extends Alerter {
           utterance = highPriorityUtterance;
         }
         else if ( this.angleResponseReady || this.lengthResponseReady || parallelSideResponseReady ) {
+          const thisResponseReason = angleDifferencesLarge ? 'angle' : 'length';
+
           if ( this.previousContextResponseShapeSnapshot.namedQuadrilateral === this.quadrilateralShapeModel.shapeNameProperty.value ) {
 
             // the shape has changed enough to provide a context response, but the named quadrilateral has not
             // changed, so we provide a unique alert specific to the shape maintenance
-            const shapeMaintenanceResponse = this.getShapeMaintenanceContextResponse( this.quadrilateralShapeModel.shapeNameProperty.value, this.previousContextResponseShapeSnapshot );
+            const shapeMaintenanceResponse = this.getShapeMaintenanceContextResponse( this.quadrilateralShapeModel.shapeNameProperty.value, this.previousContextResponseShapeSnapshot, thisResponseReason );
             responsePacket.contextResponse = shapeMaintenanceResponse;
 
           }
           else {
-            const thisResponseReason = angleDifferencesLarge ? 'angle' : 'length';
             const tiltChangeResponse = this.getShapeChangeResponse( this.quadrilateralShapeModel, this.previousContextResponseShapeSnapshot, thisResponseReason );
             responsePacket.contextResponse = tiltChangeResponse!;
           }
@@ -507,7 +510,7 @@ class QuadrilateralAlerter extends Alerter {
    * name for the quadrilateral. See https://github.com/phetsims/quadrilateral/issues/198 for more information
    * about the design for this function.
    */
-  private getShapeMaintenanceContextResponse( shapeName: NamedQuadrilateral, previousShapeSnapshot: ShapeSnapshot ): string | null {
+  private getShapeMaintenanceContextResponse( shapeName: NamedQuadrilateral, previousShapeSnapshot: ShapeSnapshot, thisResponseReason: ResponseReason ): string | null {
     let response: string | null = null;
 
     const areaDifference = this.quadrilateralShapeModel.areaProperty.value - previousShapeSnapshot.area;
@@ -552,7 +555,7 @@ class QuadrilateralAlerter extends Alerter {
         secondSideString = dAString;
       }
 
-      response = StringUtils.fillIn( oppositeSidesTiltAsShapeChangesPatternString, {
+      response = StringUtils.fillIn( maintainingATrapezoidAsShapeChangesPatternString, {
         firstSide: firstSideString,
         secondSide: secondSideString,
         areaChange: areaChangeString
@@ -583,10 +586,16 @@ class QuadrilateralAlerter extends Alerter {
       } );
     }
     else if ( shapeName === NamedQuadrilateral.PARALLELOGRAM ) {
-      response = StringUtils.fillIn( maintainingAParallelogramResponsePatternString, {
-        tiltOrStraighten: this.getTiltOrStraightenDescription( previousShapeSnapshot ),
-        areaChange: areaChangeString
-      } );
+      if ( thisResponseReason === 'angle' ) {
+        response = StringUtils.fillIn( maintainingAParallelogramAngleResponseString, {
+          areaChange: areaChangeString
+        } );
+      }
+      else {
+        response = StringUtils.fillIn( maintainingAParallelogramLengthResponsePatternString, {
+          areaChange: areaChangeString
+        } );
+      }
     }
     else if ( shapeName === NamedQuadrilateral.RECTANGLE ) {
       response = StringUtils.fillIn( allRightAnglesAsShapeChangesPatternString, {
@@ -594,9 +603,7 @@ class QuadrilateralAlerter extends Alerter {
       } );
     }
     else if ( shapeName === NamedQuadrilateral.RHOMBUS ) {
-      response = StringUtils.fillIn( oppositeCornersChangeEquallyAsSidesChangePatternString, {
-        tiltOrStraighten: this.getTiltOrStraightenDescription( previousShapeSnapshot )
-      } );
+      response = maintainingARhombusString;
     }
     else if ( shapeName === NamedQuadrilateral.SQUARE ) {
       response = StringUtils.fillIn( allSidesEqualAsShapeChangesPatternString, {

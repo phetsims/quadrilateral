@@ -260,20 +260,26 @@
       "oppositeSidesTiltAsShapeChangesPattern": {
         "value": "Opposite sides {{firstSide}} and {{secondSide}} tilt in parallel as shape gets {{areaChange}}."
       },
+      "maintainingATrapezoidAsShapeChangesPattern": {
+        "value": "Opposite sides {{firstSide}} and {{secondSide}} in parallel as shape gets {{areaChange}}."
+      },
       "adjacentSidesChangeEquallyAsShapeChangesPattern": {
         "value": "Adjacent sides change equally as shape gets {{areaChange}}."
       },
       "oppositeSidesEqualAsShapeChangesPattern": {
         "value": "Opposite sides {{firstSide}} and {{secondSide}} equal as shape gets {{areaChange}}."
       },
-      "maintainingAParallelogramResponsePattern": {
-        "value": "Opposite sides {{tiltOrStraighten}} in parallel as opposite corners change equally. Opposite sides in parallel as shape gets {{areaChange}}."
+      "maintainingAParallelogramAngleResponse": {
+        "value": "Opposite sides in parallel as opposite corners change equally."
+      },
+      "maintainingAParallelogramLengthResponsePattern": {
+        "value": "Opposite sides in parallel as shape gets {{areaChange}}."
       },
       "allRightAnglesAsShapeChangesPattern": {
         "value": "All right angles as shape gets {{areaChange}}."
       },
-      "oppositeCornersChangeEquallyAsSidesChangePattern": {
-        "value": "Opposite corners change equally as equal sides {{tiltOrStraighten}} in parallel."
+      "maintainingARhombus": {
+        "value": "Opposite corners change equally, opposite equal sides in parallel."
       },
       "allSidesEqualAsShapeChangesPattern": {
         "value": "All sides equal as shape gets {{areaChange}}."
