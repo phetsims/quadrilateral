@@ -17,8 +17,8 @@ import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralIconFactory from './QuadrilateralIconFactory.js';
 
 // constants
-const shapeSoundControlEnabledContextResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.enabledContextResponseStringProperty;
-const shapeSoundControlDisabledContextResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.disabledContextResponseStringProperty;
+const shapeSoundControlEnabledContextResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.enabledContextResponse;
+const shapeSoundControlDisabledContextResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.disabledContextResponse;
 const shapeSoundControlNameResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.nameResponse;
 const shapeSoundControlHintResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.hintResponse;
 
