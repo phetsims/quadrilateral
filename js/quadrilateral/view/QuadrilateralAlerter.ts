@@ -522,7 +522,10 @@ class QuadrilateralAlerter extends Alerter {
         this.quadrilateralShapeModel.vertices,
         vertex => this.quadrilateralShapeModel.isStaticAngleEqualToOther( vertex.angleProperty.value!, Math.PI )
       );
-      if ( areaDifference === 0 && flatVertex ) {
+
+      // consider small enough values as 'constant area' because the area might change by negligible values within
+      // precision error
+      if ( areaDifference < 1e-5 && flatVertex ) {
 
         // We have a convex shape where one vertex is 180 degrees and the shape is moving such that the area
         // is not changing. Describe the "flat" vertex and how its adjacent sides get longer or shorter
