@@ -100,7 +100,7 @@ class CornerGuideNode extends Node {
 
       // now draw the remainder - check to make sure that it is large enough to display because ellipticalArcTo doesn't
       // work with angles that are close to zero.
-      const remainingAngle = definedAngle % SLICE_SIZE_RADIANS;
+      const remainingAngle = ( definedAngle - ( numberOfSlices * SLICE_SIZE_RADIANS ) );
       if ( remainingAngle > 0.0005 ) {
 
         // slices alternate from light to dark, so we can count on the remaining slice being the alternating color
