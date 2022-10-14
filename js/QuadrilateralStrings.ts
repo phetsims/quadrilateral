@@ -207,6 +207,8 @@ type StringsType = {
       'allSidesEqualAsShapeChangesPatternStringProperty': LinkableProperty<string>;
       'cornerFlatAsShapeChangesPattern': string;
       'cornerFlatAsShapeChangesPatternStringProperty': LinkableProperty<string>;
+      'doesShapeHaveThreeOrFourSidesQuestion': string;
+      'doesShapeHaveThreeOrFourSidesQuestionStringProperty': LinkableProperty<string>;
       'allSidesTiltAwayFromParallel': string;
       'allSidesTiltAwayFromParallelStringProperty': LinkableProperty<string>;
       'allSidesTiltAwayFromParallelAsShapeChangesPattern': string;

@@ -287,6 +287,9 @@
       "cornerFlatAsShapeChangesPattern": {
         "value": "{{cornerLabel}} flat as adjacent sides change in length."
       },
+      "doesShapeHaveThreeOrFourSidesQuestion": {
+        "value": "Wait? Does shape have 3 sides or 4?"
+      },
       "allSidesTiltAwayFromParallel": {
         "value": "All sides tilt away from parallel as opposite corners change unequally."
       },

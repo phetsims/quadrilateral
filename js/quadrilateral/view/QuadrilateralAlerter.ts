@@ -30,6 +30,7 @@ import VertexPair from '../model/VertexPair.js';
 import VertexLabel from '../model/VertexLabel.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import VertexDescriber from './VertexDescriber.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 
 const foundIsoscelesTrapezoidPatternString = QuadrilateralStrings.a11y.voicing.foundIsoscelesTrapezoidPattern;
 const allRightAnglesAllSidesEqualString = QuadrilateralStrings.a11y.voicing.allRightAnglesAllSidesEqual;
@@ -58,6 +59,7 @@ const allRightAnglesAsShapeChangesPatternString = QuadrilateralStrings.a11y.voic
 const maintainingARhombusString = QuadrilateralStrings.a11y.voicing.maintainingARhombus;
 const allSidesEqualAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.allSidesEqualAsShapeChangesPattern;
 const cornerFlatAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.cornerFlatAsShapeChangesPattern;
+const doesShapeHaveThreeOrFourSidesQuestionString = QuadrilateralStrings.a11y.voicing.doesShapeHaveThreeOrFourSidesQuestion;
 const adjacentSidesChangeEquallyAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.adjacentSidesChangeEquallyAsShapeChangesPattern;
 const allSidesTiltAwayFromParallelString = QuadrilateralStrings.a11y.voicing.allSidesTiltAwayFromParallel;
 const allSidesTiltAwayFromParallelAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.allSidesTiltAwayFromParallelAsShapeChangesPattern;
@@ -527,11 +529,20 @@ class QuadrilateralAlerter extends Alerter {
       // precision error
       if ( areaDifference < 1e-5 && flatVertex ) {
 
-        // We have a convex shape where one vertex is 180 degrees and the shape is moving such that the area
-        // is not changing. Describe the "flat" vertex and how its adjacent sides get longer or shorter
-        response = StringUtils.fillIn( cornerFlatAsShapeChangesPatternString, {
-          cornerLabel: VertexDescriber.VertexCornerLabelMap.get( flatVertex.vertexLabel )
-        } );
+        // As an "Easter egg" half of the time in this case add a leading question taht indicates that this
+        // shape could also be described as a triangle. See https://github.com/phetsims/quadrilateral/issues/236
+        // for the request.
+        if ( dotRandom.nextBoolean() ) {
+          response = doesShapeHaveThreeOrFourSidesQuestionString;
+        }
+        else {
+
+          // We have a convex shape where one vertex is 180 degrees and the shape is moving such that the area
+          // is not changing. Describe the "flat" vertex and how its adjacent sides get longer or shorter
+          response = StringUtils.fillIn( cornerFlatAsShapeChangesPatternString, {
+            cornerLabel: VertexDescriber.VertexCornerLabelMap.get( flatVertex.vertexLabel )
+          } );
+        }
       }
       else {
         response = StringUtils.fillIn( allSidesTiltAwayFromParallelAsShapeChangesPatternString, {
