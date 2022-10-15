@@ -139,11 +139,6 @@ class TracksSoundView extends SoundGenerator {
     this.playingState = PlayingState.STOPPED;
     this.remainingPlayTime = 0;
     this.remainingFadeTime = 0;
-
-    // The zero time constant is a workaround for https://github.com/phetsims/quadrilateral/issues/226 and
-    // https://github.com/phetsims/tambo/issues/170. Maybe that arg or this line can be removed when that issue
-    // is resolved.
-    this.setOutputLevel( 0, 0 );
   }
 
   /**
