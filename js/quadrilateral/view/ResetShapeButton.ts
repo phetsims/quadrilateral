@@ -1,6 +1,8 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
+ * A button that will reset just the quadrilateral shape.
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
@@ -31,6 +33,7 @@ class ResetShapeButton extends TextPushButton {
 
       // voicing
       voicingNameResponse: QuadrilateralStrings.resetShape,
+      voicingHintResponse: QuadrilateralStrings.a11y.voicing.resetShapeHintResponse,
 
       // phet-io
       tandem: tandem,
@@ -44,7 +47,10 @@ class ResetShapeButton extends TextPushButton {
 
         this.voicingSpeakFullResponse( {
           contextResponse: shapeNameVisibleProperty.value ?
-                           resetShapeControlShapesShownContextResponse : resetShapeControlShapesHiddenContextResponse
+                           resetShapeControlShapesShownContextResponse : resetShapeControlShapesHiddenContextResponse,
+
+          // don't repeat the hint content on activation since the button has been pressed
+          hintResponse: null
         } );
       }
     } );

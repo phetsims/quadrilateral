@@ -473,6 +473,8 @@ type StringsType = {
       'shapeNameHiddenContextResponseStringProperty': LinkableProperty<string>;
       'shapeNameShownContextResponse': string;
       'shapeNameShownContextResponseStringProperty': LinkableProperty<string>;
+      'resetShapeHintResponse': string;
+      'resetShapeHintResponseStringProperty': LinkableProperty<string>;
     }
   }
 };

@@ -680,6 +680,9 @@
       },
       "shapeNameShownContextResponse": {
         "value": "Listen for changing shape names."
+      },
+      "resetShapeHintResponse": {
+        "value": "Keep chosen guides visible. Only reset shape."
       }
     }
   }
