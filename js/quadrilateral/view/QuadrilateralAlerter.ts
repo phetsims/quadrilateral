@@ -83,6 +83,15 @@ const vertexDragSmallerString = QuadrilateralStrings.a11y.voicing.vertexDragObje
 const vertexDragObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.vertexDragObjectResponse.vertexDragObjectResponsePattern;
 const adjacentSidesChangePatternString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesChangePattern;
 const adjacentSidesChangeUnequallyString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesChangeUnequally;
+const rightAngleString = QuadrilateralStrings.a11y.voicing.rightAngle;
+const angleFlatString = QuadrilateralStrings.a11y.voicing.angleFlat;
+const anglePointingInwardString = QuadrilateralStrings.a11y.voicing.anglePointingInward;
+const angleComparisonPatternString = QuadrilateralStrings.a11y.voicing.angleComparisonPattern;
+const oppositeCornerString = QuadrilateralStrings.a11y.voicing.oppositeCorner;
+const adjacentCornersEqualString = QuadrilateralStrings.a11y.voicing.adjacentCornersEqual;
+const adjacentCornersRightAnglesString = QuadrilateralStrings.a11y.voicing.adjacentCornersRightAngles;
+const allCornersEqualString = QuadrilateralStrings.a11y.voicing.allCornersEqual;
+const progressStatePatternString = QuadrilateralStrings.a11y.voicing.progressStatePattern;
 
 // Constants that control side object responses. See the getSideChangeObjectResponse for more information.
 const DESCRIBE_LONGER_ADJACENT_SIDES_THRESHOLD = 0.002;
@@ -369,11 +378,10 @@ class QuadrilateralAlerter extends Alerter {
    * Returns the Object Response that is announced every movement with keyboard dragging. This
    * is unique to keyboard input. With mouse/touch input, the less frequent rate of context responses
    * are sufficient for the Voicing output to describe the changing shape. With keyboard, the user
-   * needs a response every key press to know that changes are happening. Will return something like
+   * needs a response every key press to know that changes are happening.
    *
-   * "angle smaller" or
-   * "angle wider" or
-   * "left"
+   * This function is absurdly complicated, see https://github.com/phetsims/quadrilateral/issues/237 for
+   * the request.
    *
    * Note that since this is dependent on angles and not just position Properties, this must be called after
    * shapeChangedEmitter emits when we know that all angle and shape Properties have been updated. See
@@ -382,25 +390,117 @@ class QuadrilateralAlerter extends Alerter {
   private getVertexChangeObjectResponse( vertex: Vertex ): string {
     let response;
 
+    // The phrase like the direction change, how the vertex angle changes, or whether the vertex angle is at
+    // a critical value like 90/180 degrees
+    let progressResponse: string;
+
+    // Additional state information about other vertices, or how wide the moving vertex is relative to others in the
+    // shape.
+    let stateResponse: string | null = null;
+
+    const interAngleToleranceInterval = this.quadrilateralShapeModel.interAngleToleranceIntervalProperty.value;
+
     const currentAngle = vertex.angleProperty.value!;
     const previousAngle = this.previousObjectResponseShapeSnapshot.getAngleFromVertexLabel( vertex.vertexLabel );
 
+    const oppositeVertex = this.quadrilateralShapeModel.oppositeVertexMap.get( vertex )!;
+    const oppositeVertexAngle = oppositeVertex.angleProperty.value!;
+
+    const adjacentVertices = this.quadrilateralShapeModel.adjacentVertexMap.get( vertex )!;
+    const firstAdjacentVertex = adjacentVertices[ 0 ];
+    const firstAdjacentAngle = firstAdjacentVertex.angleProperty.value!;
+    const secondAdjacentVertex = adjacentVertices[ 1 ];
+    const secondAdjacentAngle = secondAdjacentVertex.angleProperty.value!;
+
+    // Get the "progress" portion of the object response, describing how this vertex has changed or if it has
+    // reached some critical angle. This portion of the description is always included.
     if ( previousAngle === currentAngle ) {
 
       // Moving around symmetric shapes, it is possible to move the vertex into a new position where the angle
       // stayed the same. In this case, only describe the direction of movement.
       const currentPosition = vertex.positionProperty.value;
       const previousPosition = this.previousObjectResponseShapeSnapshot.getPositionFromVertexLabel( vertex.vertexLabel );
-      response = QuadrilateralAlerter.getDirectionDescription( previousPosition, currentPosition, this.modelViewTransform );
+      progressResponse = QuadrilateralAlerter.getDirectionDescription( previousPosition, currentPosition, this.modelViewTransform );
+    }
+    else if ( this.quadrilateralShapeModel.isRightAngle( currentAngle ) ) {
+      progressResponse = rightAngleString;
+    }
+    else if ( this.quadrilateralShapeModel.isFlatAngle( currentAngle ) ) {
+      progressResponse = angleFlatString;
+    }
+    else if ( this.quadrilateralShapeModel.isConvexAngle( currentAngle ) ) {
+      progressResponse = anglePointingInwardString;
     }
     else {
+
+      // fallback case, just 'angle wider' or 'angle smaller'
       const angleChangeString = currentAngle > previousAngle ? widerString : vertexDragSmallerString;
-      response = StringUtils.fillIn( vertexDragObjectResponsePatternString, {
+      progressResponse = StringUtils.fillIn( vertexDragObjectResponsePatternString, {
         angleChange: angleChangeString
       } );
     }
 
+    // get the "state" portion of the object response, which describes important state information about the
+    // quadrilateral like when there are all right angles, when a pair of adjacent angles are equal, or when
+    // the moving angle is twice/half of another angle in the shape. There may not always be important
+    // state information.
+    if ( previousAngle !== currentAngle ) {
+      if ( this.quadrilateralShapeModel.getAreAllAnglesRight() ) {
+        stateResponse = allCornersEqualString;
+      }
+      else if ( this.shouldUseAngleComparisonDescription( currentAngle, oppositeVertexAngle ) ) {
+        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( oppositeVertex, vertex, interAngleToleranceInterval );
+        stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
+          comparison: comparisonDescription,
+          cornerLabel: oppositeCornerString
+        } );
+      }
+      else if ( this.quadrilateralShapeModel.isInterAngleEqualToOther( firstAdjacentAngle, secondAdjacentAngle ) ) {
+        if ( this.quadrilateralShapeModel.isRightAngle( firstAdjacentAngle ) ) {
+          stateResponse = adjacentCornersRightAnglesString;
+        }
+        else {
+          stateResponse = adjacentCornersEqualString;
+        }
+      }
+      else if ( this.shouldUseAngleComparisonDescription( currentAngle, firstAdjacentAngle ) ) {
+        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( firstAdjacentVertex, vertex, interAngleToleranceInterval );
+        stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
+          comparison: comparisonDescription,
+          cornerLabel: VertexDescriber.VertexCornerLabelMap.get( firstAdjacentVertex.vertexLabel )
+        } );
+      }
+      else if ( this.shouldUseAngleComparisonDescription( currentAngle, secondAdjacentAngle ) ) {
+        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( secondAdjacentVertex, vertex, interAngleToleranceInterval );
+        stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
+          comparison: comparisonDescription,
+          cornerLabel: VertexDescriber.VertexCornerLabelMap.get( secondAdjacentVertex.vertexLabel )
+        } );
+      }
+    }
+
+    if ( progressResponse && stateResponse ) {
+      response = StringUtils.fillIn( progressStatePatternString, {
+        progress: progressResponse,
+        state: stateResponse
+      } );
+    }
+    else {
+      response = progressResponse;
+    }
+
     return response;
+  }
+
+  /**
+   * Returns whether the changing vertex object response should include a description of the angle compared to another.
+   * This is only included if the changingVertexAngle is around half, twice, or equal to the other angle. The other
+   * angle might be an opposite or adjacent angle.
+   */
+  private shouldUseAngleComparisonDescription( changingVertexAngle: number, otherVertexAngle: number ): boolean {
+    return VertexDescriber.isAngleAboutHalfOther( changingVertexAngle, otherVertexAngle ) ||
+           VertexDescriber.isAngleAboutTwiceOther( changingVertexAngle, otherVertexAngle ) ||
+           QuadrilateralShapeModel.isInterAngleEqualToOther( changingVertexAngle, otherVertexAngle, this.quadrilateralShapeModel.interAngleToleranceIntervalProperty.value );
   }
 
   /**

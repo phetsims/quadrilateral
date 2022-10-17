@@ -901,6 +901,8 @@ class QuadrilateralShapeModel {
    * shapeAngleToleranceProperty, the most strict interval available. The angleToleranceInterval can be very dynamic
    * during various interactions to support sim learning goals. But when detecting shapes we need to be more static so
    * that when the tolerance is very high the shape isn't incorrectly described.
+   *
+   * TODO: Replace with isInterAngleEqualToOther throughout.
    */
   public isShapeAngleEqualToOther( angle1: number, angle2: number ): boolean {
     return Utils.equalsEpsilon( angle1, angle2, this.interAngleToleranceIntervalProperty.value );
@@ -908,6 +910,10 @@ class QuadrilateralShapeModel {
 
   public static isInterAngleEqualToOther( angle1: number, angle2: number, interAngleToleranceInterval: number ): boolean {
     return Utils.equalsEpsilon( angle1, angle2, interAngleToleranceInterval );
+  }
+
+  public isInterAngleEqualToOther( angle1: number, angle2: number ): boolean {
+    return Utils.equalsEpsilon( angle1, angle2, this.interAngleToleranceIntervalProperty.value );
   }
 
   /**
@@ -936,6 +942,13 @@ class QuadrilateralShapeModel {
    */
   public isFlatAngle( angle: number ): boolean {
     return Utils.equalsEpsilon( angle, Math.PI, this.staticAngleToleranceIntervalProperty.value );
+  }
+
+  /**
+   * Returns true when the angle is convex (greater than 180 degrees).
+   */
+  public isConvexAngle( angle: number ): boolean {
+    return angle > Math.PI;
   }
 
   /**

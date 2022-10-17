@@ -391,6 +391,9 @@
       "angleFlat": {
         "value": "angle flat"
       },
+      "anglePointingInward": {
+        "value": "angle pointing inward"
+      },
       "oneSlice": {
         "value": "one slice"
       },
@@ -683,6 +686,24 @@
       },
       "resetShapeHintResponse": {
         "value": "Keep chosen guides visible. Only reset shape."
+      },
+      "angleComparisonPattern": {
+        "value": "{{comparison}} {{cornerLabel}}"
+      },
+      "oppositeCorner": {
+        "value": "opposite corner"
+      },
+      "adjacentCornersEqual": {
+        "value": "adjacent corners equal"
+      },
+      "adjacentCornersRightAngles": {
+        "value": "adjacent corners right angles"
+      },
+      "allCornersEqual": {
+        "value": "all corners equal"
+      },
+      "progressStatePattern": {
+        "value": "{{progress}}, {{state}}"
       }
     }
   }

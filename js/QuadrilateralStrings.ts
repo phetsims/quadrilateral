@@ -277,6 +277,8 @@ type StringsType = {
       'rightAngleStringProperty': LinkableProperty<string>;
       'angleFlat': string;
       'angleFlatStringProperty': LinkableProperty<string>;
+      'anglePointingInward': string;
+      'anglePointingInwardStringProperty': LinkableProperty<string>;
       'oneSlice': string;
       'oneSliceStringProperty': LinkableProperty<string>;
       'halfOneSlice': string;
@@ -475,6 +477,18 @@ type StringsType = {
       'shapeNameShownContextResponseStringProperty': LinkableProperty<string>;
       'resetShapeHintResponse': string;
       'resetShapeHintResponseStringProperty': LinkableProperty<string>;
+      'angleComparisonPattern': string;
+      'angleComparisonPatternStringProperty': LinkableProperty<string>;
+      'oppositeCorner': string;
+      'oppositeCornerStringProperty': LinkableProperty<string>;
+      'adjacentCornersEqual': string;
+      'adjacentCornersEqualStringProperty': LinkableProperty<string>;
+      'adjacentCornersRightAngles': string;
+      'adjacentCornersRightAnglesStringProperty': LinkableProperty<string>;
+      'allCornersEqual': string;
+      'allCornersEqualStringProperty': LinkableProperty<string>;
+      'progressStatePattern': string;
+      'progressStatePatternStringProperty': LinkableProperty<string>;
     }
   }
 };

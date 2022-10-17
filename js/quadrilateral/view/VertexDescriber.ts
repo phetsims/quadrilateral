@@ -62,17 +62,23 @@ const vertexCornerLabelMap = new Map<VertexLabel, string>( [
   [ VertexLabel.VERTEX_D, cornerDString ]
 ] );
 
+// If ratio of an angle to another is within this range it is 'about half as large as the other'.
+const ABOUT_HALF_RANGE = new Range( 0.4, 0.6 );
+
+// If ratio of angle to another is within this range it is 'about twice as large as the other'.
+const ABOUT_TWICE_RANGE = new Range( 1.9, 2.1 );
+
 // Maps the difference in angles between two vertices to a description string.
 const angleComparisonDescriptionMap = new Map<Range, string>();
 angleComparisonDescriptionMap.set( new Range( 0, 0.1 ), farSmallerThanString );
 angleComparisonDescriptionMap.set( new Range( 0.1, 0.4 ), muchSmallerThanString );
-angleComparisonDescriptionMap.set( new Range( 0.4, 0.6 ), aboutHalfAsWideAsString );
+angleComparisonDescriptionMap.set( ABOUT_HALF_RANGE, aboutHalfAsWideAsString );
 angleComparisonDescriptionMap.set( new Range( 0.6, 0.8 ), aLittleSmallerThanString );
 angleComparisonDescriptionMap.set( new Range( 0.8, 1 ), similarButSmallerThanString );
 angleComparisonDescriptionMap.set( new Range( 1, 1.3 ), similarButWiderThanString );
 angleComparisonDescriptionMap.set( new Range( 1.3, 1.6 ), aLittleWiderThanString );
 angleComparisonDescriptionMap.set( new Range( 1.6, 1.9 ), muchWiderThanString );
-angleComparisonDescriptionMap.set( new Range( 1.9, 2.1 ), aboutTwiceAsWideAsString );
+angleComparisonDescriptionMap.set( ABOUT_TWICE_RANGE, aboutTwiceAsWideAsString );
 angleComparisonDescriptionMap.set( new Range( 2.1, Number.POSITIVE_INFINITY ), farWiderThanString );
 
 class VertexDescriber {
@@ -309,6 +315,34 @@ class VertexDescriber {
 
     assert && assert( description, `Description not found for angle difference ${angleRatio}` );
     return description!;
+  }
+
+  /**
+   * Returns true if value of angle is equal to half of value of other, within provided tolerance interval.
+   */
+  public static isAngleHalfOther( angle: number, other: number, interAngleToleranceInterval: number ): boolean {
+    return QuadrilateralShapeModel.isInterAngleEqualToOther( angle, other / 2, interAngleToleranceInterval );
+  }
+
+  /**
+   * Returns true if value of angle is equal to twice value of other, within provided tolerance interval.
+   */
+  public static isAngleTwiceOther( angle: number, other: number, interAngleToleranceInterval: number ): boolean {
+    return QuadrilateralShapeModel.isInterAngleEqualToOther( angle, other * 2, interAngleToleranceInterval );
+  }
+
+  /**
+   * Returns true if value of angle is "about" half of value of other, within defined ranges.
+   */
+  public static isAngleAboutHalfOther( angle: number, other: number ): boolean {
+    return ABOUT_HALF_RANGE.contains( angle / other );
+  }
+
+  /**
+   * Returns true if value of angle is "about" twice value of other, within defined ranges.
+   */
+  public static isAngleAboutTwiceOther( angle: number, other: number ): boolean {
+    return ABOUT_TWICE_RANGE.contains( angle / other );
   }
 }
 
