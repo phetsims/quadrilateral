@@ -17,7 +17,6 @@ import Tandem from '../../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralSoundOptionsModel, { QuartetSoundFile, SoundDesign, SuccessSoundFile } from '../../model/QuadrilateralSoundOptionsModel.js';
 import Checkbox from '../../../../../sun/js/Checkbox.js';
-import CarouselComboBox from '../../../../../sun/js/CarouselComboBox.js';
 import { AquaRadioButtonGroupItem } from '../../../../../sun/js/AquaRadioButtonGroup.js';
 import EnumerationProperty from '../../../../../axon/js/EnumerationProperty.js';
 
@@ -53,77 +52,18 @@ class QuadrilateralSoundOptionsNode extends Panel {
     const soundDesignLabelText = new Text( 'Sound Design', TITLE_TEXT_OPTIONS );
 
     const optionsParentNode = new Node();
-    const designComboBox = new CarouselComboBox( model.soundDesignProperty, [
-      {
-        value: SoundDesign.MAINTENANCE_SOUNDS,
-        node: new Text( 'Maintenance Sounds', LABEL_TEXT_OPTIONS ),
-        tandemName: `successWithMaintenance${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
-      },
-      {
-        value: SoundDesign.SUCCESS_SOUNDS,
-        node: new Text( 'Success Sounds', LABEL_TEXT_OPTIONS ),
-        tandemName: `success${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
-      },
-      {
-        value: SoundDesign.QUARTET,
-        node: new Text( 'Quartet', LABEL_TEXT_OPTIONS ),
-        tandemName: `quartet${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
-      },
-      {
-        value: SoundDesign.PARALLELS_VOLUME,
-        node: new Text( 'Parallels Volume', LABEL_TEXT_OPTIONS ),
-        tandemName: `parallelsVolume${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
-      },
-      {
-        value: SoundDesign.PARALLELS_STACCATO,
-        node: new Text( 'Parallels Staccato', LABEL_TEXT_OPTIONS ),
-        tandemName: `parallelsStaccato${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
-      },
-      {
-        value: SoundDesign.TRACKS_BUILD_UP,
-        node: new Text( 'Tracks - Build Up', LABEL_TEXT_OPTIONS ),
-        tandemName: `tracksBuildUp${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
-      },
-      {
-        value: SoundDesign.TRACKS_VOLUME_EMPHASIS,
-        node: new Text( 'Tracks - Volume Emphasis', LABEL_TEXT_OPTIONS ),
-        tandemName: `tracksVolume${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
-      },
-      {
-        value: SoundDesign.TRACKS_MELODY,
-        node: new Text( 'Tracks - Melody', LABEL_TEXT_OPTIONS ),
-        tandemName: `tracksMelody${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
-      },
-      {
-        value: SoundDesign.TRACKS_ARPEGGIO,
-        node: new Text( 'Tracks - Arpeggio', LABEL_TEXT_OPTIONS ),
-        tandemName: `tracksArpeggio${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
-      },
+    const designComboBox = new ComboBox( model.soundDesignProperty, [
       {
         value: SoundDesign.TRACKS_BUILD_UP_SIMPLE,
-        node: new Text( 'Tracks - Build Up - Simple', LABEL_TEXT_OPTIONS ),
+        node: new Text( 'Building (Default)', LABEL_TEXT_OPTIONS ),
         tandemName: `tracksBuildUpSimple${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
       },
       {
-        value: SoundDesign.TRACKS_MELODY_SIMPLE,
-        node: new Text( 'Tracks - Melody - Simple', LABEL_TEXT_OPTIONS ),
-        tandemName: `tracksMelodySimple${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
-      },
-      {
-        value: SoundDesign.TRACKS_MELODY_MAPPING,
-        node: new Text( 'Tracks - Melody - Mapping', LABEL_TEXT_OPTIONS ),
-        tandemName: `tracksMelodyMapping${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
+        value: SoundDesign.TRACKS_VOLUME_EMPHASIS,
+        node: new Text( 'Shape Emphasis', LABEL_TEXT_OPTIONS ),
+        tandemName: `tracksVolume${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
       }
-    ], {
-      carouselOptions: {
-        orientation: 'vertical',
-        itemsPerPage: 5
-      },
-      pageControlOptions: {
-
-        // NOTE: the carousel has no default tandem for the page control
-        tandem: tandem.createTandem( 'pageControl' )
-      },
+    ], optionsParentNode, {
       tandem: tandem.createTandem( 'designComboBox' )
     } );
 
