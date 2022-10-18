@@ -48,6 +48,7 @@ const VOLUME_EMPHASIS_TRACKS = [
 const NAMED_QUADRILATERAL_TO_HIGH_VOLUME_TRACKS_MAP = new Map( [
   [ NamedQuadrilateral.CONVEX_QUADRILATERAL, [ 0 ] ],
   [ NamedQuadrilateral.CONCAVE_QUADRILATERAL, [ 8 ] ],
+  [ NamedQuadrilateral.TRIANGLE, [] ],
   [ NamedQuadrilateral.DART, [ 9 ] ],
   [ NamedQuadrilateral.KITE, [ 2 ] ],
   [ NamedQuadrilateral.TRAPEZOID, [ 1 ] ],

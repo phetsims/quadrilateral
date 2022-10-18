@@ -80,6 +80,7 @@ const NAMED_QUADRILATERAL_TO_TRACKS_MAP = new Map( [
 const NAMED_QUADRILATERAL_TO_BACKGROUND_TRACKS_MAP = new Map( [
   [ NamedQuadrilateral.CONVEX_QUADRILATERAL, [] ],
   [ NamedQuadrilateral.CONCAVE_QUADRILATERAL, [] ],
+  [ NamedQuadrilateral.TRIANGLE, [] ],
   [ NamedQuadrilateral.DART, [ 8 ] ],
   [ NamedQuadrilateral.KITE, [ 8 ] ],
   [ NamedQuadrilateral.TRAPEZOID, [ 13 ] ],

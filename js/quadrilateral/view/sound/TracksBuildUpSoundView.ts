@@ -61,6 +61,7 @@ const BUILD_UP_TRACKS_SIMPLE = [
 const NAMED_QUADRILATERAL_TO_TRACKS_MAP = new Map( [
   [ NamedQuadrilateral.CONVEX_QUADRILATERAL, [ 0 ] ],
   [ NamedQuadrilateral.CONCAVE_QUADRILATERAL, [ 1 ] ],
+  [ NamedQuadrilateral.TRIANGLE, [] ],
   [ NamedQuadrilateral.DART, [ 1, 2 ] ],
   [ NamedQuadrilateral.KITE, [ 0, 2 ] ],
   [ NamedQuadrilateral.TRAPEZOID, [ 0, 4 ] ],

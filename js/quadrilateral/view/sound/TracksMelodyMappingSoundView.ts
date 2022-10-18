@@ -38,6 +38,7 @@ const MELODY_MAPPING_TRACKS = [
 const NAMED_QUADRILATERAL_TO_TRACKS_MAP = new Map( [
   [ NamedQuadrilateral.CONVEX_QUADRILATERAL, [ 3 ] ],
   [ NamedQuadrilateral.CONCAVE_QUADRILATERAL, [ 0 ] ],
+  [ NamedQuadrilateral.TRIANGLE, [] ],
   [ NamedQuadrilateral.DART, [ 1, 2 ] ],
   [ NamedQuadrilateral.KITE, [ 3, 4 ] ],
   [ NamedQuadrilateral.TRAPEZOID, [ 3, 9 ] ],

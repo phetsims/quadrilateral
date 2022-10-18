@@ -20,6 +20,7 @@ class NamedQuadrilateral extends EnumerationValue {
   public static TRAPEZOID = new NamedQuadrilateral();
   public static CONCAVE_QUADRILATERAL = new NamedQuadrilateral();
   public static CONVEX_QUADRILATERAL = new NamedQuadrilateral();
+  public static TRIANGLE = new NamedQuadrilateral();
   public static PARALLELOGRAM = new NamedQuadrilateral();
   public static DART = new NamedQuadrilateral();
 

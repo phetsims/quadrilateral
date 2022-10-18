@@ -33,9 +33,13 @@ const TWO_EQUAL_ADJACENT_SIDE_PAIR = Math.pow( 2, 9 );
 const ONE_EQUAL_OPPOSITE_SIDE_PAIR = Math.pow( 2, 10 );
 const TWO_EQUAL_OPPOSITE_SIDE_PAIR = Math.pow( 2, 11 );
 const ALL_EQUAL_SIDE = Math.pow( 2, 12 );
+const ONE_ANGLE_PIE = Math.pow( 2, 13 );
 
 // Set up shape masks for each shape. The quadrilateral must have each of these attributes to be considered that shape.
 const CONCAVE_MASK = CONCAVE;
+
+const TRIANGLE_MASK = ONE_ANGLE_PIE;
+
 const DART_MASK = CONCAVE |
                   ONE_EQUAL_OPPOSITE_ANGLE_PAIR |
                   TWO_EQUAL_ADJACENT_SIDE_PAIR;
@@ -100,40 +104,48 @@ class QuadrilateralShapeDetector {
   public getShapeName(): NamedQuadrilateral {
     let currentConditionMask = 0;
 
-    // First, assemple a bitwise value representing the attributes of the current shape
+    // First, assemble a bitwise value representing the attributes of the current shape. Start by looking for
+    // a triangle, which is a unique case. If we have a triangle we can stop looking for more properties
+    // because it will always be labelled as a triangle. All of the other shapes have attributes that accumulate
+    // to produce the final attributes of the shape.
     const shapeModel = this.quadrilateralShapeModel;
-    if ( _.some( shapeModel.vertices, vertex => vertex.angleProperty.value! > Math.PI ) ) {
-      currentConditionMask = currentConditionMask | CONCAVE;
+    if ( _.some( shapeModel.vertices, vertex => shapeModel.isFlatAngle( vertex.angleProperty.value! ) ) ) {
+      currentConditionMask = currentConditionMask | TRIANGLE_MASK;
     }
-    if ( shapeModel.parallelSidePairsProperty.value.length > 0 ) {
-      currentConditionMask = currentConditionMask | ONE_PARALLEL_PAIR;
-    }
-    if ( shapeModel.parallelSidePairsProperty.value.length > 1 ) {
-      currentConditionMask = currentConditionMask | TWO_PARALLEL_PAIR;
-    }
-    if ( shapeModel.adjacentEqualVertexPairsProperty.value.length > 1 ) {
-      currentConditionMask = currentConditionMask | TWO_EQUAL_ADJACENT_ANGLE_PAIR;
-    }
-    if ( shapeModel.oppositeEqualVertexPairsProperty.value.length > 0 ) {
-      currentConditionMask = currentConditionMask | ONE_EQUAL_OPPOSITE_ANGLE_PAIR;
-    }
-    if ( shapeModel.oppositeEqualVertexPairsProperty.value.length > 1 ) {
-      currentConditionMask = currentConditionMask | TWO_EQUAL_OPPOSITE_ANGLE_PAIR;
-    }
-    if ( shapeModel.allAnglesRightProperty.value ) {
-      currentConditionMask = currentConditionMask | ALL_EQUAL_ANGLE;
-    }
-    if ( shapeModel.adjacentEqualSidePairsProperty.value.length > 1 ) {
-      currentConditionMask = currentConditionMask | TWO_EQUAL_ADJACENT_SIDE_PAIR;
-    }
-    if ( shapeModel.oppositeEqualSidePairsProperty.value.length > 0 ) {
-      currentConditionMask = currentConditionMask | ONE_EQUAL_OPPOSITE_SIDE_PAIR;
-    }
-    if ( shapeModel.oppositeEqualSidePairsProperty.value.length > 1 ) {
-      currentConditionMask = currentConditionMask | TWO_EQUAL_OPPOSITE_SIDE_PAIR;
-    }
-    if ( shapeModel.allLengthsEqualProperty.value ) {
-      currentConditionMask = currentConditionMask | ALL_EQUAL_SIDE;
+    else {
+      if ( _.some( shapeModel.vertices, vertex => vertex.angleProperty.value! > Math.PI ) ) {
+        currentConditionMask = currentConditionMask | CONCAVE;
+      }
+      if ( shapeModel.parallelSidePairsProperty.value.length > 0 ) {
+        currentConditionMask = currentConditionMask | ONE_PARALLEL_PAIR;
+      }
+      if ( shapeModel.parallelSidePairsProperty.value.length > 1 ) {
+        currentConditionMask = currentConditionMask | TWO_PARALLEL_PAIR;
+      }
+      if ( shapeModel.adjacentEqualVertexPairsProperty.value.length > 1 ) {
+        currentConditionMask = currentConditionMask | TWO_EQUAL_ADJACENT_ANGLE_PAIR;
+      }
+      if ( shapeModel.oppositeEqualVertexPairsProperty.value.length > 0 ) {
+        currentConditionMask = currentConditionMask | ONE_EQUAL_OPPOSITE_ANGLE_PAIR;
+      }
+      if ( shapeModel.oppositeEqualVertexPairsProperty.value.length > 1 ) {
+        currentConditionMask = currentConditionMask | TWO_EQUAL_OPPOSITE_ANGLE_PAIR;
+      }
+      if ( shapeModel.allAnglesRightProperty.value ) {
+        currentConditionMask = currentConditionMask | ALL_EQUAL_ANGLE;
+      }
+      if ( shapeModel.adjacentEqualSidePairsProperty.value.length > 1 ) {
+        currentConditionMask = currentConditionMask | TWO_EQUAL_ADJACENT_SIDE_PAIR;
+      }
+      if ( shapeModel.oppositeEqualSidePairsProperty.value.length > 0 ) {
+        currentConditionMask = currentConditionMask | ONE_EQUAL_OPPOSITE_SIDE_PAIR;
+      }
+      if ( shapeModel.oppositeEqualSidePairsProperty.value.length > 1 ) {
+        currentConditionMask = currentConditionMask | TWO_EQUAL_OPPOSITE_SIDE_PAIR;
+      }
+      if ( shapeModel.allLengthsEqualProperty.value ) {
+        currentConditionMask = currentConditionMask | ALL_EQUAL_SIDE;
+      }
     }
 
     // Find matches for the current condition - Order of these checks is very important. conditionMatchesMask
@@ -141,10 +153,12 @@ class QuadrilateralShapeDetector {
     // we will continue to search for the most specific attribute matches.
     let quadrilateralName: NamedQuadrilateral;
 
-
-    // Look for triangle here, above concave/convex check.
-
-    if ( this.conditionMatchesMask( currentConditionMask, CONCAVE_MASK ) ) {
+    // First look for a triangle - it is unique in that if we have a triangle there are no more shapes "under"
+    // it that share attributes so we can return this right away.
+    if ( this.conditionMatchesMask( currentConditionMask, TRIANGLE_MASK ) ) {
+      quadrilateralName = NamedQuadrilateral.TRIANGLE;
+    }
+    else if ( this.conditionMatchesMask( currentConditionMask, CONCAVE_MASK ) ) {
       quadrilateralName = NamedQuadrilateral.CONCAVE_QUADRILATERAL;
 
       if ( this.conditionMatchesMask( currentConditionMask, DART_MASK ) ) {

@@ -56,6 +56,8 @@ type StringsType = {
     'parallelogramStringProperty': LinkableProperty<string>;
     'dart': string;
     'dartStringProperty': LinkableProperty<string>;
+    'triangle': string;
+    'triangleStringProperty': LinkableProperty<string>;
   };
   'hapticsDialogMessage': string;
   'hapticsDialogMessageStringProperty': LinkableProperty<string>;
@@ -242,6 +244,8 @@ type StringsType = {
         'parallelogramStringProperty': LinkableProperty<string>;
         'dart': string;
         'dartStringProperty': LinkableProperty<string>;
+        'triangle': string;
+        'triangleStringProperty': LinkableProperty<string>;
       };
       'foundAParallelogram': string;
       'foundAParallelogramStringProperty': LinkableProperty<string>;

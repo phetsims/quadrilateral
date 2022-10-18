@@ -32,6 +32,7 @@ const concaveQuadrilateralString = QuadrilateralStrings.shapeNames.concaveQuadri
 const convexQuadrilateralString = QuadrilateralStrings.shapeNames.convexQuadrilateral;
 const parallelogramString = QuadrilateralStrings.shapeNames.parallelogram;
 const dartString = QuadrilateralStrings.shapeNames.dart;
+const triangleString = QuadrilateralStrings.shapeNames.triangle;
 const shapeNameHiddenString = QuadrilateralStrings.shapeNameHidden;
 const shapeNameHiddenContextResponseString = QuadrilateralStrings.a11y.voicing.shapeNameHiddenContextResponse;
 const shapeNameShownContextResponseString = QuadrilateralStrings.a11y.voicing.shapeNameShownContextResponse;
@@ -46,7 +47,8 @@ const SHAPE_NAME_MAP = new Map( [
   [ NamedQuadrilateral.CONCAVE_QUADRILATERAL, concaveQuadrilateralString ],
   [ NamedQuadrilateral.CONVEX_QUADRILATERAL, convexQuadrilateralString ],
   [ NamedQuadrilateral.PARALLELOGRAM, parallelogramString ],
-  [ NamedQuadrilateral.DART, dartString ]
+  [ NamedQuadrilateral.DART, dartString ],
+  [ NamedQuadrilateral.TRIANGLE, triangleString ]
 ] );
 
 // empirically determined

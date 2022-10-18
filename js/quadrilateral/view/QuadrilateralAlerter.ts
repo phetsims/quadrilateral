@@ -838,6 +838,9 @@ class QuadrilateralAlerter extends Alerter {
       else if ( currentShapeName === NamedQuadrilateral.CONVEX_QUADRILATERAL ) {
         contextResponse = this.getFoundConvexQuadrilateralResponse( shapeNameVisible );
       }
+      else if ( currentShapeName === NamedQuadrilateral.TRIANGLE ) {
+        contextResponse = this.getFoundTriangleResponse( shapeNameVisible );
+      }
     }
 
     return contextResponse;
@@ -1075,6 +1078,23 @@ class QuadrilateralAlerter extends Alerter {
     }
     else {
       response = foundConvexQuadrilateralString;
+    }
+    return response;
+  }
+
+
+  /**
+   * Returns the response when you create a triangle. Describing the triangle or its attributes depending on if the
+   * shape name is shown.
+   */
+  private getFoundTriangleResponse( shapeNameVisible: boolean ): string {
+    let response: string;
+    if ( shapeNameVisible ) {
+      response = this.getFoundShapeResponse( NamedQuadrilateral.TRIANGLE );
+    }
+    else {
+      // TODO: https://github.com/phetsims/quadrilateral/issues/215
+      response = 'Hello Taliesin! How would you like to describe finding a triangle when shape name is hidden?';
     }
     return response;
   }
