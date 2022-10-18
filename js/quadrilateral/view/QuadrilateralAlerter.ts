@@ -491,7 +491,6 @@ class QuadrilateralAlerter extends Alerter {
       response = progressResponse;
     }
 
-    console.log( response );
     return response;
   }
 
