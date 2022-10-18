@@ -8,6 +8,8 @@
  * See https://github.com/phetsims/quadrilateral/issues/175#issuecomment-1201643077 for more information about this
  * design.
  *
+ * TODO: This will be renamed once a name is decided in https://github.com/phetsims/quadrilateral/issues/248
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
