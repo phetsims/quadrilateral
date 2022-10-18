@@ -685,7 +685,7 @@
         "value": "Listen for changing shape names."
       },
       "resetShapeHintResponse": {
-        "value": "Keep chosen guides on with reset shape."
+        "value": "Keep guides visible with reset shape."
       },
       "angleComparisonPattern": {
         "value": "{{comparison}} {{cornerLabel}}"
