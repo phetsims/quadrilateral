@@ -16,10 +16,6 @@ import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 
-// constants
-const resetShapeControlShapesShownContextResponse = QuadrilateralStrings.a11y.voicing.resetShapeControl.shapeShownContextResponse;
-const resetShapeControlShapesHiddenContextResponse = QuadrilateralStrings.a11y.voicing.resetShapeControl.shapeHiddenContextResponse;
-
 class ResetShapeButton extends TextPushButton {
   public constructor( quadrilateralShapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: TProperty<boolean>, shapeNameVisibleProperty: TReadOnlyProperty<boolean>, tandem: Tandem ) {
     super( QuadrilateralStrings.resetShape, {
@@ -33,7 +29,7 @@ class ResetShapeButton extends TextPushButton {
 
       // voicing
       voicingNameResponse: QuadrilateralStrings.resetShape,
-      voicingHintResponse: QuadrilateralStrings.a11y.voicing.resetShapeHintResponse,
+      voicingContextResponse: QuadrilateralStrings.a11y.voicing.resetShapeControl.contextResponse,
 
       // phet-io
       tandem: tandem,
@@ -46,8 +42,6 @@ class ResetShapeButton extends TextPushButton {
         resetNotInProgressProperty.value = true;
 
         this.voicingSpeakFullResponse( {
-          contextResponse: shapeNameVisibleProperty.value ?
-                           resetShapeControlShapesShownContextResponse : resetShapeControlShapesHiddenContextResponse,
 
           // don't repeat the hint content on activation since the button has been pressed
           hintResponse: null

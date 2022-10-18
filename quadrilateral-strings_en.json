@@ -674,10 +674,7 @@
         }
       },
       "resetShapeControl": {
-        "shapeShownContextResponse": {
-          "value": "All right angles, all sides two units."
-        },
-        "shapeHiddenContextResponse": {
+        "contextResponse": {
           "value": "All right angles, all sides two units."
         }
       },

@@ -468,10 +468,8 @@ type StringsType = {
         'hintResponseStringProperty': LinkableProperty<string>;
       };
       'resetShapeControl': {
-        'shapeShownContextResponse': string;
-        'shapeShownContextResponseStringProperty': LinkableProperty<string>;
-        'shapeHiddenContextResponse': string;
-        'shapeHiddenContextResponseStringProperty': LinkableProperty<string>;
+        'contextResponse': string;
+        'contextResponseStringProperty': LinkableProperty<string>;
       };
       'foundShapePattern': string;
       'foundShapePatternStringProperty': LinkableProperty<string>;
