@@ -140,6 +140,10 @@ class QuadrilateralShapeDetector {
     // returns true if the condition matches the minimum requirements for a shape. But even after there is a match,
     // we will continue to search for the most specific attribute matches.
     let quadrilateralName: NamedQuadrilateral;
+
+
+    // Look for triangle here, above concave/convex check.
+
     if ( this.conditionMatchesMask( currentConditionMask, CONCAVE_MASK ) ) {
       quadrilateralName = NamedQuadrilateral.CONCAVE_QUADRILATERAL;
 

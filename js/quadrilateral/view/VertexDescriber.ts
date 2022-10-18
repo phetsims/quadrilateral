@@ -15,6 +15,7 @@ import VertexLabel from '../model/VertexLabel.js';
 import Range from '../../../../dot/js/Range.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import CornerGuideNode from './CornerGuideNode.js';
+import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 
 // constants
 const cornerAString = QuadrilateralStrings.a11y.cornerA;
@@ -120,7 +121,8 @@ class VertexDescriber {
 
     const oppositeVertex = this.quadrilateralShapeModel.oppositeVertexMap.get( this.vertex )!;
 
-    const oppositeComparisonString = VertexDescriber.getAngleComparisonDescription( oppositeVertex, this.vertex, this.quadrilateralShapeModel.interAngleToleranceIntervalProperty.value );
+    const shapeName = this.quadrilateralShapeModel.shapeNameProperty.value;
+    const oppositeComparisonString = VertexDescriber.getAngleComparisonDescription( oppositeVertex, this.vertex, this.quadrilateralShapeModel.interAngleToleranceIntervalProperty.value, shapeName );
     const adjacentVertexDescriptionString = this.getAdjacentVertexObjectDescription();
 
     // if corner guides are visible, a description of the number of slices is included
@@ -248,8 +250,9 @@ class VertexDescriber {
 
       // the adjacent corners are equal but not equal to provided vertex, combine their description and use either
       // to describe the relative description
+      const shapeName = this.quadrilateralShapeModel.shapeNameProperty.value;
       description = StringUtils.fillIn( equalAdjacentCornersPatternString, {
-        comparison: VertexDescriber.getAngleComparisonDescription( adjacentCorners[ 0 ], this.vertex, this.quadrilateralShapeModel.interAngleToleranceIntervalProperty.value )
+        comparison: VertexDescriber.getAngleComparisonDescription( adjacentCorners[ 0 ], this.vertex, this.quadrilateralShapeModel.interAngleToleranceIntervalProperty.value, shapeName )
       } );
     }
     else {
@@ -285,7 +288,7 @@ class VertexDescriber {
    * "much much smaller than" or
    * "a little smaller than"
    */
-  public static getAngleComparisonDescription( vertex1: Vertex, vertex2: Vertex, interAngleToleranceInterval: number ): string {
+  public static getAngleComparisonDescription( vertex1: Vertex, vertex2: Vertex, interAngleToleranceInterval: number, shapeName: NamedQuadrilateral ): string {
     assert && assert( vertex1.angleProperty.value !== null, 'angles need to be initialized for descriptions' );
     assert && assert( vertex2.angleProperty.value !== null, 'angles need to be initialized for descriptions' );
 
@@ -294,13 +297,16 @@ class VertexDescriber {
     const angle1 = vertex1.angleProperty.value!;
     const angle2 = vertex2.angleProperty.value!;
 
-    if ( QuadrilateralShapeModel.isInterAngleEqualToOther( angle2, angle1, interAngleToleranceInterval ) ) {
+    // If we are a trapezoid, only describe angles as equal when they are EXACTLY equal, otherwise we may run into
+    // cases where we move out of isoceles trapezoid while the angles are still described as "equal".
+    const usableToleranceInterval = shapeName === NamedQuadrilateral.TRAPEZOID ? 0 : interAngleToleranceInterval;
+    if ( QuadrilateralShapeModel.isInterAngleEqualToOther( angle2, angle1, usableToleranceInterval ) ) {
       description = equalToString;
     }
-    else if ( QuadrilateralShapeModel.isInterAngleEqualToOther( angle2, angle1 * 2, interAngleToleranceInterval ) ) {
+    else if ( QuadrilateralShapeModel.isInterAngleEqualToOther( angle2, angle1 * 2, usableToleranceInterval ) ) {
       description = twiceAsWideAsString;
     }
-    else if ( QuadrilateralShapeModel.isInterAngleEqualToOther( angle2, angle1 * 0.5, interAngleToleranceInterval ) ) {
+    else if ( QuadrilateralShapeModel.isInterAngleEqualToOther( angle2, angle1 * 0.5, usableToleranceInterval ) ) {
       description = halfAsWideAsString;
     }
 

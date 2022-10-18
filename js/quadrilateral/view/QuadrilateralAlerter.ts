@@ -440,6 +440,8 @@ class QuadrilateralAlerter extends Alerter {
       } );
     }
 
+    const shapeName = this.quadrilateralShapeModel.shapeNameProperty.value;
+
     // get the "state" portion of the object response, which describes important state information about the
     // quadrilateral like when there are all right angles, when a pair of adjacent angles are equal, or when
     // the moving angle is twice/half of another angle in the shape. There may not always be important
@@ -449,7 +451,7 @@ class QuadrilateralAlerter extends Alerter {
         stateResponse = allCornersEqualString;
       }
       else if ( this.shouldUseAngleComparisonDescription( currentAngle, oppositeVertexAngle ) ) {
-        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( oppositeVertex, vertex, interAngleToleranceInterval );
+        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( oppositeVertex, vertex, interAngleToleranceInterval, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
           comparison: comparisonDescription,
           cornerLabel: oppositeCornerString
@@ -464,14 +466,14 @@ class QuadrilateralAlerter extends Alerter {
         }
       }
       else if ( this.shouldUseAngleComparisonDescription( currentAngle, firstAdjacentAngle ) ) {
-        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( firstAdjacentVertex, vertex, interAngleToleranceInterval );
+        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( firstAdjacentVertex, vertex, interAngleToleranceInterval, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
           comparison: comparisonDescription,
           cornerLabel: VertexDescriber.VertexCornerLabelMap.get( firstAdjacentVertex.vertexLabel )
         } );
       }
       else if ( this.shouldUseAngleComparisonDescription( currentAngle, secondAdjacentAngle ) ) {
-        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( secondAdjacentVertex, vertex, interAngleToleranceInterval );
+        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( secondAdjacentVertex, vertex, interAngleToleranceInterval, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
           comparison: comparisonDescription,
           cornerLabel: VertexDescriber.VertexCornerLabelMap.get( secondAdjacentVertex.vertexLabel )
@@ -489,6 +491,7 @@ class QuadrilateralAlerter extends Alerter {
       response = progressResponse;
     }
 
+    console.log( response );
     return response;
   }
 

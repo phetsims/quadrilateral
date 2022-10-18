@@ -256,11 +256,13 @@ class QuadrilateralDescriber {
         const thirdCornerString = this.getCornerAngleDescription( orderedUnequalVertices[ 0 ] );
         const fourthCornerString = this.getCornerAngleDescription( orderedUnequalVertices[ 1 ] );
 
+        const shapeName = this.shapeModel.shapeNameProperty.value;
+
         // how the equal vertex angles compare qualitatively to the fist unequal vertex
-        const firstComparisonString = VertexDescriber.getAngleComparisonDescription( orderedUnequalVertices[ 0 ], orderedEqualVertices[ 0 ], this.shapeModel.interAngleToleranceIntervalProperty.value );
+        const firstComparisonString = VertexDescriber.getAngleComparisonDescription( orderedUnequalVertices[ 0 ], orderedEqualVertices[ 0 ], this.shapeModel.interAngleToleranceIntervalProperty.value, shapeName );
 
         // how the equal vertex angles compare qualitatively to the second unequal vertex
-        const secondComparisonString = VertexDescriber.getAngleComparisonDescription( orderedUnequalVertices[ 1 ], orderedEqualVertices[ 0 ], this.shapeModel.interAngleToleranceIntervalProperty.value );
+        const secondComparisonString = VertexDescriber.getAngleComparisonDescription( orderedUnequalVertices[ 1 ], orderedEqualVertices[ 0 ], this.shapeModel.interAngleToleranceIntervalProperty.value, shapeName );
 
         const patternString = cornersPatternString;
         statement = StringUtils.fillIn( patternString, {
@@ -515,8 +517,9 @@ class QuadrilateralDescriber {
     const fourthCornerString = this.getCornerAngleDescription( orderedOppositeVertexPairs[ 1 ].vertex2 );
 
     const interAngleToleranceInterval = this.shapeModel.interAngleToleranceIntervalProperty.value;
-    const firstComparisonString = VertexDescriber.getAngleComparisonDescription( orderedOppositeVertexPairs[ 0 ].vertex2, orderedOppositeVertexPairs[ 0 ].vertex1, interAngleToleranceInterval );
-    const secondComparisonString = VertexDescriber.getAngleComparisonDescription( orderedOppositeVertexPairs[ 1 ].vertex2, orderedOppositeVertexPairs[ 1 ].vertex1, interAngleToleranceInterval );
+    const shapeName = this.shapeModel.shapeNameProperty.value;
+    const firstComparisonString = VertexDescriber.getAngleComparisonDescription( orderedOppositeVertexPairs[ 0 ].vertex2, orderedOppositeVertexPairs[ 0 ].vertex1, interAngleToleranceInterval, shapeName );
+    const secondComparisonString = VertexDescriber.getAngleComparisonDescription( orderedOppositeVertexPairs[ 1 ].vertex2, orderedOppositeVertexPairs[ 1 ].vertex1, interAngleToleranceInterval, shapeName );
 
     return StringUtils.fillIn( generalVertexPatternString, {
       firstCorner: firstCornerString,
@@ -606,8 +609,9 @@ class QuadrilateralDescriber {
 
     // describe the relative size of the equal angles compared to eqch unequal angle
     const interAngleToleranceInterval = this.shapeModel.interAngleToleranceIntervalProperty.value;
-    const firstComparisonString = VertexDescriber.getAngleComparisonDescription( sortedUndescribedVertices[ 0 ], firstVertex, interAngleToleranceInterval );
-    const secondComparisonString = VertexDescriber.getAngleComparisonDescription( sortedUndescribedVertices[ 1 ], firstVertex, interAngleToleranceInterval );
+    const shapeName = this.shapeModel.shapeNameProperty.value;
+    const firstComparisonString = VertexDescriber.getAngleComparisonDescription( sortedUndescribedVertices[ 0 ], firstVertex, interAngleToleranceInterval, shapeName );
+    const secondComparisonString = VertexDescriber.getAngleComparisonDescription( sortedUndescribedVertices[ 1 ], firstVertex, interAngleToleranceInterval, shapeName );
 
     return StringUtils.fillIn( patternString, {
       firstCorners: firstCornersString,
@@ -635,7 +639,8 @@ class QuadrilateralDescriber {
 
     // we are comparing the angles of the vertex pairs, relative to the first described pair
     const interToleranceInterval = this.shapeModel.interAngleToleranceIntervalProperty.value;
-    const comparisonString = VertexDescriber.getAngleComparisonDescription( orderedVertexPairs[ 1 ].vertex1, orderedVertexPairs[ 0 ].vertex1, interToleranceInterval );
+    const shapeName = this.shapeModel.shapeNameProperty.value;
+    const comparisonString = VertexDescriber.getAngleComparisonDescription( orderedVertexPairs[ 1 ].vertex1, orderedVertexPairs[ 0 ].vertex1, interToleranceInterval, shapeName );
 
     const patternString = twoPairsOfEqualVerticesPatternString;
     return StringUtils.fillIn( patternString, {
