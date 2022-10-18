@@ -193,6 +193,12 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     type: 'flag'
   },
 
+  // If present, a button in the Preferences dialog will be present to play a sound and graphical
+  // marker to synchronize with any recordings.
+  includeClapperButton: {
+    type: 'flag'
+  },
+
   // Sets the initial sound design on startup. Values are the enumeration values of
   // QuadrilateralSoundOptionsModel.SoundDesign as a string. See https://github.com/phetsims/quadrilateral/blob/master/js/quadrilateral/model/QuadrilateralSoundOptionsModel.ts#L37-L53
   soundDesign: {
