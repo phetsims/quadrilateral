@@ -10,49 +10,45 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { HBox, Node, Text, VBox } from '../../../../../scenery/js/imports.js';
+import { Node, Text, VoicingText } from '../../../../../scenery/js/imports.js';
 import ComboBox from '../../../../../sun/js/ComboBox.js';
-import Panel from '../../../../../sun/js/Panel.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralSoundOptionsModel, { SoundDesign } from '../../model/QuadrilateralSoundOptionsModel.js';
 import Checkbox from '../../../../../sun/js/Checkbox.js';
 import PreferencesDialog from '../../../../../joist/js/preferences/PreferencesDialog.js';
+import AquaRadioButtonGroup from '../../../../../sun/js/AquaRadioButtonGroup.js';
+import PreferencesPanelSection from '../../../../../joist/js/preferences/PreferencesPanelSection.js';
 
-// spacing between title for option and the content Node
-const TITLE_SPACING = 15;
-
-class QuadrilateralSoundOptionsNode extends Panel {
+// Extending a PreferencesPanelSection will by default indent this section under the "Sounds" content in the Preferences
+// dialog
+class QuadrilateralSoundOptionsNode extends PreferencesPanelSection {
 
   // Necessary for PhET-iO state and disposal since these components become dynamic when they live in a phetio capsule
   private readonly disposeQuadrilateralSoundOptionsNode: () => void;
 
   public constructor( model: QuadrilateralSoundOptionsModel, tandem: Tandem ) {
 
-    const soundDesignLabelText = new Text( 'Sound Design', PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
+    const soundDesignLabelText = new VoicingText( 'Sound Design', PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
+    const soundDesignDescriptionText = new VoicingText( 'Hi Brett! Would you like a description here?', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS );
+    soundDesignDescriptionText.fill = 'hotPink';
 
-    const optionsParentNode = new Node();
-    const designComboBox = new ComboBox( model.soundDesignProperty, [
+    const soundDesignRadioButtonGroup = new AquaRadioButtonGroup( model.soundDesignProperty, [
       {
         value: SoundDesign.TRACKS_BUILD_UP_SIMPLE,
-        node: new Text( 'Building (Default)', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
+        createNode: () => new Text( 'Building (Default)', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
         tandemName: `tracksBuildUpSimple${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
       },
       {
         value: SoundDesign.TRACKS_VOLUME_EMPHASIS,
-        node: new Text( 'Shape Emphasis', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
+        createNode: () => new Text( 'Shape Emphasis', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
         tandemName: `tracksVolume${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
       }
-    ], optionsParentNode, {
-      tandem: tandem.createTandem( 'designComboBox' )
-    } );
-
-    const labelledComboBox = new HBox( {
-      children: [ soundDesignLabelText, designComboBox ],
-      align: 'top',
-      minContentHeight: 200,
-      resize: false,
-      spacing: TITLE_SPACING
+    ], {
+      spacing: 4,
+      radioButtonOptions: {
+        radius: 9
+      }
     } );
 
     const tracksPlayForeverLabel = new Text( 'Tracks play forever', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS );
@@ -60,21 +56,21 @@ class QuadrilateralSoundOptionsNode extends Panel {
       tandem: tandem.createTandem( 'tracksPlayForeverCheckbox' )
     } );
 
-    const content = new VBox( {
-      children: [
-        labelledComboBox, tracksPlayForeverCheckbox
-      ],
-      spacing: 15,
-      align: 'left'
+    const content = new Node( {
+      children: [ soundDesignLabelText, soundDesignDescriptionText, soundDesignRadioButtonGroup, tracksPlayForeverCheckbox ]
     } );
 
-    super( content );
+    super( {
+      contentNode: content
+    } );
 
-    // TODO replace ComboBox with something else in https://github.com/phetsims/quadrilateral/issues/248
-    this.addChild( optionsParentNode );
+    // layout
+    soundDesignDescriptionText.leftTop = soundDesignLabelText.leftBottom.plusXY( 0, 5 );
+    soundDesignRadioButtonGroup.leftTop = soundDesignDescriptionText.leftBottom.plusXY( 15, 5 );
+    tracksPlayForeverCheckbox.leftTop = soundDesignRadioButtonGroup.leftBottom.plusXY( 0, 8 );
 
     this.disposeQuadrilateralSoundOptionsNode = () => {
-      designComboBox.dispose();
+      soundDesignRadioButtonGroup.dispose();
     };
   }
 
