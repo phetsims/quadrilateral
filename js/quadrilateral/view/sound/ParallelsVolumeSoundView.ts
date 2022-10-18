@@ -15,7 +15,7 @@ import SoundClipChord from '../../../../../tambo/js/sound-generators/SoundClipCh
 import soundManager from '../../../../../tambo/js/soundManager.js';
 import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralModel from '../../model/QuadrilateralModel.js';
-import QuadrilateralSoundOptionsModel, { SuccessSoundFile } from '../../model/QuadrilateralSoundOptionsModel.js';
+import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
 import WrappedAudioBuffer from '../../../../../tambo/js/WrappedAudioBuffer.js';
 import ParallelSideChecker from '../../model/ParallelSideChecker.js';
 import SoundClip from '../../../../../tambo/js/sound-generators/SoundClip.js';
@@ -55,14 +55,6 @@ class ParallelsVolumeSoundView {
 
   public constructor( model: QuadrilateralModel, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
     this.model = model;
-
-    const createSoundClipsListener = ( soundFile: SuccessSoundFile ) => {
-      const audioBuffer = QuadrilateralSoundOptionsModel.AUDIO_BUFFER_MAP.get( soundFile );
-
-      assert && assert( audioBuffer, 'No WrappedAudioBuffer found for soundFile' );
-      this.createSoundClips( audioBuffer! );
-    };
-    soundOptionsModel.baseSoundFileProperty.link( createSoundClipsListener );
 
     const shapeChangeListener = () => {
       this.isPlaying = true;
@@ -127,7 +119,6 @@ class ParallelsVolumeSoundView {
 
     this.disposeParallelsVolumeSoundView = () => {
       this.model.quadrilateralShapeModel.shapeChangedEmitter.removeListener( shapeChangeListener );
-      soundOptionsModel.baseSoundFileProperty.unlink( createSoundClipsListener );
       this.model.resetNotInProgressProperty.unlink( resetListener );
 
       model.quadrilateralShapeModel.sideABSideCDParallelProperty.unlink( inParallelListener );

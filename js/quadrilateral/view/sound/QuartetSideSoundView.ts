@@ -27,7 +27,6 @@ import { QuartetSoundFile } from '../../model/QuadrilateralSoundOptionsModel.js'
 import Side from '../../model/Side.js';
 import WrappedAudioBuffer from '../../../../../tambo/js/WrappedAudioBuffer.js';
 import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
-import EnumerationProperty from '../../../../../axon/js/EnumerationProperty.js';
 
 // constants
 // TODO: calculate these from constants, should be based on the limitations of each vertex bounds
@@ -81,17 +80,9 @@ class QuartetSideSoundView {
   private readonly disposeQuartetSideSoundView: () => void;
   private readonly resetNotInProgressProperty: TReadOnlyProperty<boolean>;
 
-  public constructor( side: Side, resetNotInProgressProperty: TReadOnlyProperty<boolean>, quartetSoundFileProperty: EnumerationProperty<QuartetSoundFile> ) {
+  public constructor( side: Side, resetNotInProgressProperty: TReadOnlyProperty<boolean> ) {
     this.side = side;
     this.resetNotInProgressProperty = resetNotInProgressProperty;
-
-    // TODO: selectedSound is one of SoundFile enumeration, how do we do this?
-    const createSoundClipsListener = ( selectedSound: QuartetSoundFile ) => {
-      this.createSoundClips( selectedSound );
-    };
-
-    // Create sound clips for the chosen sound - while still exploring different sounds we will
-    quartetSoundFileProperty.link( createSoundClipsListener );
 
     const resetListener = ( notInProgress: boolean ) => {
       if ( this.activeSoundClipCollection ) {
@@ -102,7 +93,6 @@ class QuartetSideSoundView {
 
     this.disposeQuartetSideSoundView = () => {
       this.resetNotInProgressProperty.unlink( resetListener );
-      quartetSoundFileProperty.unlink( createSoundClipsListener );
     };
   }
 
