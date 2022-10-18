@@ -104,6 +104,7 @@ class TracksArpeggioSoundView extends TracksSoundView {
         soundClip.setOutputLevel( 0 );
       } );
 
+      // @ts-ignore
       if ( soundOptionsModel.arpeggioBackgroundProperty.value ) {
         
         // play the background sound for the named quadrilateral - lower output level since it is in the
