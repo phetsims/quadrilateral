@@ -38,6 +38,9 @@ const simOptions: SimOptions = {
     thanks: ''
   },
 
+  //
+  hasKeyboardHelpContent: true,
+
   // preferences configuration with defaults from package.json
   preferencesModel: new PreferencesModel( {
     simulationOptions: {
