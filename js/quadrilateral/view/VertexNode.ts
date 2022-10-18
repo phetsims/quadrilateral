@@ -21,6 +21,9 @@ import optionize from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
+import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
+import grab_mp3 from '../../../../tambo/sounds/grab_mp3.js';
+import soundManager from '../../../../tambo/js/soundManager.js';
 
 // constants
 const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
@@ -168,6 +171,17 @@ class VertexNode extends Voicing( Circle ) {
       },
       blur: () => {
         vertex.isPressedProperty.value = false;
+      }
+    } );
+
+
+    // sound - the grab sound is played on press but there is no release sound for this component since there is
+    // no behavioral relevance to the release
+    const pressedSoundPlayer = new SoundClip( grab_mp3 );
+    soundManager.addSoundGenerator( pressedSoundPlayer );
+    vertex.isPressedProperty.lazyLink( isPressed => {
+      if ( isPressed ) {
+        pressedSoundPlayer.play();
       }
     } );
 

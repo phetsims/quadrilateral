@@ -23,6 +23,9 @@ import Multilink from '../../../../axon/js/Multilink.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
+import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
+import soundManager from '../../../../tambo/js/soundManager.js';
+import release_mp3 from '../../../../tambo/sounds/release_mp3.js';
 
 // The dilation around side shapes when drawing the focus highlight.
 const FOCUS_HIGHLIGHT_DILATION = 15;
@@ -264,6 +267,17 @@ class SideNode extends Voicing( Path ) {
       },
       blur: () => {
         side.isPressedProperty.value = false;
+      }
+    } );
+
+    // sound - the grab sound is played on press but there is no release sound for this component since there is
+    // no behavioral relevance to the release. The 'release' sound is used instead of 'grab' to distinguish sides
+    // from vertices
+    const pressedSoundPlayer = new SoundClip( release_mp3 );
+    soundManager.addSoundGenerator( pressedSoundPlayer );
+    side.isPressedProperty.lazyLink( isPressed => {
+      if ( isPressed ) {
+        pressedSoundPlayer.play();
       }
     } );
 
