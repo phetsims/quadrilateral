@@ -32,7 +32,6 @@ import QuadrilateralScreenSummaryContentNode from './QuadrilateralScreenSummaryC
 import QuadrilateralAlerter from './QuadrilateralAlerter.js';
 import QuadrilateralBluetoothConnectionButton from './QuadrilateralBluetoothConnectionButton.js';
 import QuadrilateralPreferencesModel from '../model/QuadrilateralPreferencesModel.js';
-import QuadrilateralSoundBoardNode from './sound/QuadrilateralSoundBoardNode.js';
 import QuadrilateralMediaPipe from './QuadrilateralMediaPipe.js';
 import QuadrilateralDiagonalGuidesNode from './QuadrilateralDiagonalGuidesNode.js';
 import QuadrilateralShapeNameDisplay from './QuadrilateralShapeNameDisplay.js';
@@ -200,27 +199,6 @@ class QuadrilateralScreenView extends ScreenView {
     shapeNameDisplay.centerBottom = boundsRectangle.centerTop.minusXY( 0, QuadrilateralConstants.VIEW_SPACING );
     resetShapeButton.rightCenter = new Vector2( boundsRectangle.right, shapeNameDisplay.centerY );
 
-    if ( QuadrilateralQueryParameters.soundBoard ) {
-
-      const soundBoardDialog = new Dialog( new QuadrilateralSoundBoardNode(), {
-        title: new Text( 'QuadrilateralSoundBoard', QuadrilateralConstants.PANEL_TITLE_TEXT_OPTIONS )
-      } );
-
-      // this is the "sim", add a button to start calibration
-      const showSoundBoardButton = new TextPushButton( 'Sound Board', {
-        listener: () => {
-          soundBoardDialog.show();
-        },
-
-        textNodeOptions: QuadrilateralConstants.SCREEN_TEXT_OPTIONS,
-
-        // position is relative to the ResetAllButton for now
-        leftBottom: visibilityControls.leftTop.minusXY( 0, 15 )
-      } );
-
-      this.addChild( showSoundBoardButton );
-    }
-
     if ( QuadrilateralQueryParameters.deviceConnection ) {
 
       // Add a Dialog that will calibrate the device to the simulation (mapping physical data to modelled data).
@@ -284,7 +262,7 @@ class QuadrilateralScreenView extends ScreenView {
 
     // voicing
     // Disabling eslint here because this variable is not used but I am sure that it will be soon.
-     
+
     const quadrilateralAlerter = new QuadrilateralAlerter( model, this, modelViewTransform ); // eslint-disable-line @typescript-eslint/no-unused-vars
   }
 
