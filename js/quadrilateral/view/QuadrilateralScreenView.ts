@@ -284,7 +284,7 @@ class QuadrilateralScreenView extends ScreenView {
 
     // voicing
     // Disabling eslint here because this variable is not used but I am sure that it will be soon.
-    // eslint-disable-next-line no-unused-vars
+     
     const quadrilateralAlerter = new QuadrilateralAlerter( model, this, modelViewTransform ); // eslint-disable-line @typescript-eslint/no-unused-vars
   }
 
