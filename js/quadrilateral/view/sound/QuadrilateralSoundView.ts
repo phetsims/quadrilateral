@@ -1,7 +1,8 @@
 // Copyright 2021-2022, University of Colorado Boulder
 
 /**
- * File responsible for the sound view of the quadrilateral.
+ * File responsible for the sound view of the quadrilateral. There are two sound designs
+ * that can be used. Controls the active view and is responsible for stepping it forward.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -12,11 +13,6 @@ import QuadrilateralSoundOptionsModel, { SoundDesign } from '../../model/Quadril
 import TracksBuildUpSoundView from './TracksBuildUpSoundView.js';
 import TracksSoundView from './TracksSoundView.js';
 import TracksVolumeEmphasisSoundView from './TracksVolumeEmphasisSoundView.js';
-import TracksMelodySoundView from './TracksMelodySoundView.js';
-import TracksArpeggioSoundView from './TracksArpeggioSoundView.js';
-import TracksMelodyMappingSoundView from './TracksMelodyMappingSoundView.js';
-
-// constants
 
 class QuadrilateralSoundView {
 
@@ -29,30 +25,13 @@ class QuadrilateralSoundView {
     soundOptionsModel.soundDesignProperty.link( soundDesign => {
       this.activeSoundView && this.activeSoundView.dispose();
 
-      if ( soundDesign === SoundDesign.TRACKS_BUILD_UP ) {
-        this.activeSoundView = new TracksBuildUpSoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
-      }
-      else if ( soundDesign === SoundDesign.TRACKS_VOLUME_EMPHASIS ) {
-        this.activeSoundView = new TracksVolumeEmphasisSoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
-      }
-      else if ( soundDesign === SoundDesign.TRACKS_MELODY ) {
-        this.activeSoundView = new TracksMelodySoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
-      }
-      else if ( soundDesign === SoundDesign.TRACKS_ARPEGGIO ) {
-        this.activeSoundView = new TracksArpeggioSoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
-      }
-      else if ( soundDesign === SoundDesign.TRACKS_BUILD_UP_SIMPLE ) {
+      if ( soundDesign === SoundDesign.TRACKS_BUILD_UP_SIMPLE ) {
         this.activeSoundView = new TracksBuildUpSoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel, {
           simple: true
         } );
       }
-      else if ( soundDesign === SoundDesign.TRACKS_MELODY_SIMPLE ) {
-        this.activeSoundView = new TracksMelodySoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel, {
-          simple: true
-        } );
-      }
-      else if ( soundDesign === SoundDesign.TRACKS_MELODY_MAPPING ) {
-        this.activeSoundView = new TracksMelodyMappingSoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
+      else if ( soundDesign === SoundDesign.TRACKS_VOLUME_EMPHASIS ) {
+        this.activeSoundView = new TracksVolumeEmphasisSoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
       }
     } );
   }
