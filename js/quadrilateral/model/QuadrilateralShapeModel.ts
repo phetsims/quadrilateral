@@ -380,7 +380,6 @@ class QuadrilateralShapeModel {
       const staticAngleToleranceInterval = fineInputSpacing ? QuadrilateralQueryParameters.staticAngleToleranceInterval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor :
                                            QuadrilateralQueryParameters.staticAngleToleranceInterval;
 
-      // TODO: Should this be "widened" when connected to a device? See https://github.com/phetsims/quadrilateral/issues/210
       return QuadrilateralShapeModel.toleranceIntervalWideningListener(
         staticAngleToleranceInterval,
         QuadrilateralQueryParameters.deviceStaticAngleToleranceInterval,
