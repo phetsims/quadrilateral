@@ -28,17 +28,10 @@ class QuadrilateralSimulationPreferencesNode extends PreferencesPanelSection {
     // An event and other data that may be used to signify when user recording begins.
     const clapperButton = new ClapperboardButton( { tandem: tandem.createTandem( 'clapperboardButton' ) } );
 
-    // Whether to include various shape identification feedback features - it is unclear whether we want these in the sim.
-    const shapeIdentificationFeedbackCheckbox = new Checkbox(
-      preferencesModel.shapeIdentificationFeedbackEnabledProperty,
-      new Text( 'Shape Identification Feedback', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ), {
-      tandem: tandem.createTandem( 'shapeIdentificationFeedbackCheckbox' )
-    } );
-
     const content = new VBox( {
       align: 'left',
       spacing: PreferencesDialog.CONTENT_SPACING,
-      children: [ fineSpacingCheckbox, shapeIdentificationFeedbackCheckbox, clapperButton ]
+      children: [ fineSpacingCheckbox, clapperButton ]
     } );
 
     super( {

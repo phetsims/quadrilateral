@@ -74,7 +74,7 @@ class SuccessSoundView {
     this.model = model;
     const shapeModel = model.quadrilateralShapeModel;
 
-    this.shapeIdentificationSound = new ShapeIdentificationSoundView( shapeModel, model.resetNotInProgressProperty, model.shapeIdentificationFeedbackEnabledProperty );
+    this.shapeIdentificationSound = new ShapeIdentificationSoundView( shapeModel, model.resetNotInProgressProperty );
 
     // link is called eagerly so that we have SoundClips to play in the following listeners
     soundOptionsModel.successSoundFileProperty.link( successSoundFile => {

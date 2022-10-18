@@ -105,9 +105,6 @@ class QuadrilateralModel {
   // we will still hear general and common code sounds.
   public readonly shapeSoundEnabledProperty: BooleanProperty;
 
-  // Whether additional feedback (mostly sounds) are enabled to indicate shape changes.
-  public shapeIdentificationFeedbackEnabledProperty: BooleanProperty;
-
   // A reference to the "main" shape model for the simulation. Controls vertex positions.
   public quadrilateralShapeModel: QuadrilateralShapeModel;
 
@@ -152,8 +149,6 @@ class QuadrilateralModel {
     } );
 
     this.rotationMarkerDetectedProperty = new BooleanProperty( false );
-
-    this.shapeIdentificationFeedbackEnabledProperty = preferencesModel.shapeIdentificationFeedbackEnabledProperty;
 
     this.tangibleRotationProperty = new NumberProperty( 0 );
 

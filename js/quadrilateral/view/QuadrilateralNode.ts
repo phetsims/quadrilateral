@@ -16,7 +16,6 @@ import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import CornerGuideNode from './CornerGuideNode.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import RightAngleIndicatorNode from './RightAngleIndicatorNode.js';
-import Multilink from '../../../../axon/js/Multilink.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 
@@ -163,8 +162,8 @@ class QuadrilateralNode extends Node {
 
     // only if shape identification feedback is enabled, reset the timer so that we change the color for a short
     // period when we become a named shape
-    Multilink.multilink( [ this.quadrilateralShapeModel.isParallelogramProperty, this.quadrilateralShapeModel.shapeNameProperty ], ( isParallelogram, shapeName ) => {
-      if ( shapeName !== null && quadrilateralModel.shapeIdentificationFeedbackEnabledProperty.value ) {
+    this.quadrilateralShapeModel.shapeNameProperty.link( shapeName => {
+      if ( shapeName !== null ) {
         this.remainingTimeForShapeChangeFill = SHAPE_FILL_TIME;
       }
     } );

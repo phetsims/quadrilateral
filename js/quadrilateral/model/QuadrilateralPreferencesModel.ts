@@ -23,9 +23,6 @@ class QuadrilateralPreferencesModel {
   // Sound preferences
   public readonly soundOptionsModel = new QuadrilateralSoundOptionsModel();
 
-  // Is shape identification feedback enabled? Sound and visual.
-  public readonly shapeIdentificationFeedbackEnabledProperty = new BooleanProperty( QuadrilateralQueryParameters.shapeIdentificationFeedback, {} );
-
   // How many values to save and use in the average for calculating new vertex positions. Higher value will reduce
   // noise but the sim will respond slower.
   public readonly smoothingLengthProperty = new NumberProperty( QuadrilateralQueryParameters.smoothingLength, {
