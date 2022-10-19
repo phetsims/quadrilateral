@@ -63,6 +63,8 @@ type StringsType = {
   'hapticsDialogMessageStringProperty': LinkableProperty<string>;
   'gotIt': string;
   'gotItStringProperty': LinkableProperty<string>;
+  'fineInputSpacingDescription': string;
+  'fineInputSpacingDescriptionStringProperty': LinkableProperty<string>;
   'a11y': {
     'screenSummary': {
       'playAreaDescription': string;

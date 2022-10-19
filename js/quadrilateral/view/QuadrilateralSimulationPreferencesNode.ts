@@ -8,7 +8,7 @@
 
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralPreferencesModel from '../model/QuadrilateralPreferencesModel.js';
-import { Text, VBox, Node, VoicingText } from '../../../../scenery/js/imports.js';
+import { Node, Text, VBox, VoicingText, VoicingTextOptions } from '../../../../scenery/js/imports.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import PreferencesDialog from '../../../../joist/js/preferences/PreferencesDialog.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -16,13 +16,19 @@ import ClapperboardButton from '../../../../scenery-phet/js/ClapperboardButton.j
 import PreferencesPanelSection from '../../../../joist/js/preferences/PreferencesPanelSection.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import PreferencesToggleSwitch from '../../../../joist/js/preferences/PreferencesToggleSwitch.js';
+import { combineOptions } from '../../../../phet-core/js/optionize.js';
 
 class QuadrilateralSimulationPreferencesNode extends PreferencesPanelSection {
   public constructor( preferencesModel: QuadrilateralPreferencesModel, tandem: Tandem ) {
 
     // A control for vertex spacing.
-    const fineInputDescriptionText = new VoicingText( 'Hi Brett! Would you like a description here?', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS );
-    fineInputDescriptionText.fill = 'hotPink';
+    const fineInputDescriptionText = new VoicingText(
+      QuadrilateralStrings.fineInputSpacingDescriptionStringProperty,
+
+      // let the maxWidth get a bit bigger for this very long string
+      // TODO: Its probably too long, see https://github.com/phetsims/quadrilateral/issues/197
+      combineOptions<VoicingTextOptions>( {}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, { maxWidth: 750 } )
+    );
 
     const fineSpacingSwitch = new PreferencesToggleSwitch( preferencesModel.fineInputSpacingProperty, false, true, {
       labelNode: new Text( QuadrilateralStrings.fineInputSpacingStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
