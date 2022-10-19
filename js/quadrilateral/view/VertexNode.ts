@@ -8,7 +8,6 @@
 
 import { Circle, CircleOptions, DragListener, KeyboardDragListener, KeyboardUtils, Path, SceneryEvent, Text, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
-import quadrilateral from '../../quadrilateral.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vertex from '../model/Vertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -24,6 +23,7 @@ import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
 import grab_mp3 from '../../../../tambo/sounds/grab_mp3.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
+import quadrilateral from '../../quadrilateral.js';
 
 // constants
 const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
@@ -135,12 +135,14 @@ class VertexNode extends Voicing( Circle ) {
       keyboardDragListener.shiftDragDelta = smallViewDragDelta;
     } );
 
+    // Position on drag start, in model coordinate frame.
+    let startPosition: Vector2;
     const dragListener = new DragListener( {
       transform: modelViewTransform,
-      start: () => {
-
-        // TODO: See #130, I am not sure what should be spoken during interaction
-        this.voicingSpeakFullResponse();
+      start: event => {
+        const pointerPoint = event.pointer.point;
+        const parentPoint = this.globalToParentPoint( pointerPoint );
+        startPosition = modelViewTransform.viewToModelPosition( parentPoint );
       },
       drag: ( event: SceneryEvent, listener: DragListener ) => {
         const pointerPoint = event.pointer.point;
@@ -152,6 +154,19 @@ class VertexNode extends Voicing( Circle ) {
 
         if ( model.isVertexPositionAllowed( vertex, constrainedPosition ) ) {
           vertex.positionProperty.value = constrainedPosition;
+        }
+      },
+      end: event => {
+
+        // event may be null if interupted or cancelled
+        if ( event ) {
+          const pointerPoint = event.pointer.point;
+          const parentPoint = this.globalToParentPoint( pointerPoint );
+          const endPosition = modelViewTransform.viewToModelPosition( parentPoint );
+
+          if ( startPosition.equals( endPosition ) ) {
+            this.voicingSpeakFullResponse();
+          }
         }
       },
 
