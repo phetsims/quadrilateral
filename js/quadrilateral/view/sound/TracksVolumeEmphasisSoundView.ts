@@ -29,6 +29,7 @@ import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
 import NamedQuadrilateral from '../../model/NamedQuadrilateral.js';
 import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
+import Multilink from '../../../../../axon/js/Multilink.js';
 
 // All the sounds played in this sound design
 const VOLUME_EMPHASIS_TRACKS = [
@@ -62,6 +63,8 @@ const NAMED_QUADRILATERAL_TO_HIGH_VOLUME_TRACKS_MAP = new Map( [
 ] );
 
 class TracksVolumeEmphasisSoundView extends TracksSoundView {
+  private readonly disposeTracksVolumeEmphasisSoundView: () => void;
+
   public constructor( shapeModel: QuadrilateralShapeModel, shapeSoundEnabledProperty: TReadOnlyProperty<boolean>, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
     super( shapeModel, shapeSoundEnabledProperty, resetNotInProgressProperty, soundOptionsModel, VOLUME_EMPHASIS_TRACKS );
 
@@ -75,12 +78,25 @@ class TracksVolumeEmphasisSoundView extends TracksSoundView {
       const tracksToEmphasize = NAMED_QUADRILATERAL_TO_HIGH_VOLUME_TRACKS_MAP.get( shapeName );
       assert && assert( tracksToEmphasize, 'NamedQuadrilateral does not have a TracksVolumeEmphasisSoundView design' );
       tracksToEmphasize!.forEach( index => {
-        this.soundClips[ index ].setOutputLevel( 1 );
+        this.soundClips[ index ].setOutputLevel( this.indexToOutputLevelPropertyMap.get( index )!.value );
       } );
     };
     shapeModel.shapeNameProperty.link( shapeNameListener );
 
+    const outputLevelProperties = Array.from( this.indexToOutputLevelPropertyMap.values() );
+    const outputLevelMultilink = Multilink.multilinkAny( outputLevelProperties, () => {
+      shapeNameListener( shapeModel.shapeNameProperty.value );
+    } );
 
+    this.disposeTracksVolumeEmphasisSoundView = () => {
+      shapeModel.shapeNameProperty.unlink( shapeNameListener );
+      outputLevelMultilink.dispose();
+    };
+  }
+
+  public override dispose(): void {
+    this.disposeTracksVolumeEmphasisSoundView();
+    super.dispose();
   }
 }
 

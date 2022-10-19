@@ -12,6 +12,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
 import LinearFunction from '../../../../../dot/js/LinearFunction.js';
 import Enumeration from '../../../../../phet-core/js/Enumeration.js';
@@ -23,6 +24,7 @@ import WrappedAudioBuffer from '../../../../../tambo/js/WrappedAudioBuffer.js';
 import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
+import Range from '../../../../../dot/js/Range.js';
 
 // In seconds, how long all tracks should play after there has been some change in shape.
 const ALL_TRACKS_PLAY_TIME = 4;
@@ -33,6 +35,9 @@ const FADE_TIME = 1;
 // The maximum output level for all tracks of this sound design. Applied to this SoundGenerator, so that all tracks
 // connected to this one will be limited by this output level.
 const MAX_OUTPUT_LEVEL = 0.5;
+
+// Range of output levels for individual sound clips under this sound view.
+const OUTPUT_LEVEL_RANGE = new Range( 0, 1 );
 
 // linear maps that determine output level from remaining fade time
 const REMAINING_FADE_IN_TIME_TO_GAIN = new LinearFunction( FADE_TIME, 0, 0, MAX_OUTPUT_LEVEL );
@@ -56,6 +61,8 @@ class TracksSoundView extends SoundGenerator {
   // Array of all SoundGenerators from the provided tracks. They will play and loop forever in the background. Depending
   // on input and state of the quadrilateral shape, their output level will change.
   public readonly soundClips: SoundClip[];
+
+  public readonly indexToOutputLevelPropertyMap = new Map<number, NumberProperty>();
 
   // How much time sounds should continue to play after interaction with the quadrilateral. If the user has
   // selected to play sounds forever, this variable is meaningless.
@@ -101,6 +108,13 @@ class TracksSoundView extends SoundGenerator {
       generator.play();
 
       return generator;
+    } );
+
+    // For each SoundClip, set up a Property that will control its output level. To be used by the sim sound board,
+    // only for development. TODO This feature should be removed after design is complete.
+    this.soundClips.forEach( ( soundClip, i ) => {
+      const outputLevelProperty = new NumberProperty( 1, { range: OUTPUT_LEVEL_RANGE } );
+      this.indexToOutputLevelPropertyMap.set( i, outputLevelProperty );
     } );
 
     soundManager.addSoundGenerator( this );
@@ -210,6 +224,12 @@ class TracksSoundView extends SoundGenerator {
     this.soundClips.forEach( generator => {
       generator.disconnect( this.masterGainNode );
       generator.dispose();
+    } );
+
+    // dispose all output level Properties that are externally controlling the output level of the
+    // sound clips
+    this.indexToOutputLevelPropertyMap.forEach( ( value, key ) => {
+      value.dispose();
     } );
 
     super.dispose();

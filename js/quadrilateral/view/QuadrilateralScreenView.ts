@@ -42,6 +42,7 @@ import QuadrilateralInteractionCueNode from './QuadrilateralInteractionCueNode.j
 import ResetShapeButton from './ResetShapeButton.js';
 import ShapeSoundCheckbox from './ShapeSoundCheckbox.js';
 import Vertex from '../model/Vertex.js';
+import QuadrilateralSoundBoardNode from './sound/QuadrilateralSoundBoardNode.js';
 
 // Defines the units of model space, a 2x2 grid that quadrilateral vertices can move within. It is dilated by
 // half of the vertex width so that model space is large enough for Vertices to perfectly align with the bounds
@@ -249,6 +250,26 @@ class QuadrilateralScreenView extends ScreenView {
         connectionPanel.leftBottom = calibrationButton.leftTop.minusXY( 0, 15 );
         this.addChild( connectionPanel );
       }
+    }
+
+    if ( QuadrilateralQueryParameters.soundBoard ) {
+
+      const soundBoardDialog = new Dialog( new QuadrilateralSoundBoardNode( this.quadrilateralSoundView ), {
+        title: new Text( 'Sound Board', QuadrilateralConstants.PANEL_TITLE_TEXT_OPTIONS )
+      } );
+
+      const showSoundBoardButton = new TextPushButton( 'Sound Board', {
+        listener: () => {
+          soundBoardDialog.show();
+        },
+
+        textNodeOptions: QuadrilateralConstants.SCREEN_TEXT_OPTIONS,
+
+        // position is relative to the ResetAllButton for now
+        leftBottom: visibilityControls.leftTop.minusXY( 0, 15 )
+      } );
+
+      this.addChild( showSoundBoardButton );
     }
 
     if ( MediaPipeQueryParameters.cameraInput === 'hands' ) {

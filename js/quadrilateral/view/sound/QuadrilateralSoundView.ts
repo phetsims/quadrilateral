@@ -7,6 +7,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import Emitter from '../../../../../axon/js/Emitter.js';
 import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralModel from '../../model/QuadrilateralModel.js';
 import QuadrilateralSoundOptionsModel, { SoundDesign } from '../../model/QuadrilateralSoundOptionsModel.js';
@@ -18,7 +19,11 @@ class QuadrilateralSoundView {
 
   // The sound view that is currently "active" with playing sounds. The active sound view is chosen by user in the
   // Preferences dialog.
-  private activeSoundView: null | TracksSoundView = null;
+  public activeSoundView: null | TracksSoundView = null;
+
+  // Emits an event when the active sound view has changed, after the new sound view is constructed so that clients
+  // can be sure that sound tracks are ready for use.
+  public readonly soundViewChangedEmitter = new Emitter();
 
   public constructor( model: QuadrilateralModel, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
 
@@ -33,6 +38,8 @@ class QuadrilateralSoundView {
       else if ( soundDesign === SoundDesign.TRACKS_VOLUME_EMPHASIS ) {
         this.activeSoundView = new TracksVolumeEmphasisSoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
       }
+
+      this.soundViewChangedEmitter.emit();
     } );
   }
 

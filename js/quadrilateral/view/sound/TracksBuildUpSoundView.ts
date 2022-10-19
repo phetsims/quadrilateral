@@ -32,6 +32,7 @@ import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
 import NamedQuadrilateral from '../../model/NamedQuadrilateral.js';
 import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
 import optionize from '../../../../../phet-core/js/optionize.js';
+import Multilink from '../../../../../axon/js/Multilink.js';
 
 // All the sounds played in this sound design.
 const BUILD_UP_TRACKS = [
@@ -102,17 +103,19 @@ class TracksBuildUpSoundView extends TracksSoundView {
       const soundIndicesToPlay = NAMED_QUADRILATERAL_TO_TRACKS_MAP.get( shapeName );
       assert && assert( soundIndicesToPlay, 'NamedQuadrilateral does not have a TracksBuildUpSoundView design' );
       soundIndicesToPlay!.forEach( index => {
-
-        // The 'base' beat (first item in BUILD_UP_TRACKS and therefore index 0), it should be a much lower output level
-        // See https://github.com/phetsims/quadrilateral/issues/175#issuecomment-1212025691
-        const outputLevel = index === 0 ? 0.25 : 1;
-        this.soundClips[ index ].setOutputLevel( outputLevel );
+        this.soundClips[ index ].setOutputLevel( this.indexToOutputLevelPropertyMap.get( index )!.value );
       } );
     };
     shapeModel.shapeNameProperty.link( shapeNameListener );
 
+    const outputLevelProperties = Array.from( this.indexToOutputLevelPropertyMap.values() );
+    const outputLevelMultilink = Multilink.multilinkAny( outputLevelProperties, () => {
+      shapeNameListener( shapeModel.shapeNameProperty.value );
+    } );
+
     this.disposeTracksBuildUpSoundView = () => {
       shapeModel.shapeNameProperty.unlink( shapeNameListener );
+      outputLevelMultilink.dispose();
     };
   }
 
