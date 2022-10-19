@@ -127,7 +127,8 @@ class QuadrilateralVisibilityControls extends VBox {
       tandem: options.tandem.createTandem( 'gridCheckbox' )
     } );
 
-    options.children = [ cornerLabelsCheckbox, cornerGuideCheckbox, diagonalGuidesCheckbox, gridCheckbox ];
+    // Order for checkboxes was requested in https://github.com/phetsims/quadrilateral/issues/213#issuecomment-1282681500
+    options.children = [ cornerGuideCheckbox, gridCheckbox, diagonalGuidesCheckbox, cornerLabelsCheckbox ];
 
     super( options );
   }
