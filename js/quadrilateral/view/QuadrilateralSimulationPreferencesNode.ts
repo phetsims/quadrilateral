@@ -31,7 +31,7 @@ class QuadrilateralSimulationPreferencesNode extends PreferencesPanelSection {
     );
 
     const fineSpacingSwitch = new PreferencesToggleSwitch( preferencesModel.fineInputSpacingProperty, false, true, {
-      labelNode: new Text( QuadrilateralStrings.fineInputSpacingStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
+      labelNode: new Text( QuadrilateralStrings.fineInputSpacingStringProperty, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS ),
       descriptionNode: fineInputDescriptionText,
       tandem: tandem.createTandem( 'fineInputSpacingCheckbox' )
     } );
