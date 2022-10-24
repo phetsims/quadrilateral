@@ -80,10 +80,10 @@
   "a11y": {
     "screenSummary": {
       "playAreaDescription": {
-        "value": "In the Play Area you find your closed four-sided shape. Four grabbable sides and four grabbable corners allow you to create different shapes, and explore what makes a parallelogram."
+        "value": "The Play Area is your shape. It has four movable sides and four movable corners that allow you to play with side lengths and angle widths, and create different shapes in the quadrilateral family. Quadrilaterals are closed four-sided shapes."
       },
       "controlAreaDescription": {
-        "value": "The Control Area has checkboxes to add labels and guides, and a button to reset the sim."
+        "value": "The Control Area has options to show shape name, add visual guides, and mute shape sounds. Use Reset Shape to keep selected guides visible, or reset sim with Reset All."
       }
     },
     "cornerLabelsAddedResponse": {
@@ -166,7 +166,7 @@
     },
     "voicing": {
       "overviewContent": {
-        "value": "Quadrilaterals are closed four-sided shapes. This quadrilateral is an interactive sim. It changes as you play with it. Movable sides and movable corners allow you to change side lengths and angle widths, and create different shapes in the quadrilateral family. You have options to show shape name, mute shape sound, and add visual guides and grid lines. Reset Shape to keep selected guides visible, or reset the sim with Reset All."
+        "value": "Quadrilaterals are closed four-sided shapes. This quadrilateral is an interactive sim. It changes as you play with it. Movable sides and movable corners allow you to play with side lengths and angle widths, and create different shapes in the quadrilateral family. You have options to show shape name, add visual guides, and mute shape sounds. Use Reset Shape to keep selected guides visible, or reset sim with Reset All."
       },
       "hintContentPattern": {
         "value": "{{shapeDescription}} Explore what shapes you can make."
