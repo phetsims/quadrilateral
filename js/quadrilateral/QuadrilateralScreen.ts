@@ -19,7 +19,7 @@ class QuadrilateralScreen extends Screen<QuadrilateralModel, QuadrilateralScreen
 
     const options = optionize<ScreenOptions, EmptySelfOptions, ScreenOptions>()( {
       backgroundColorProperty: QuadrilateralColors.screenBackgroundColorProperty,
-      keyboardHelpNode: new QuadrilateralKeyboardHelpContent()
+      createKeyboardHelpNode: () => new QuadrilateralKeyboardHelpContent()
     }, providedOptions );
 
     super(
