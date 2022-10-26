@@ -374,7 +374,7 @@
         "value": "Opposite sides {{equalFirstSide}} and {{equalSecondSide}} equal, opposite sides {{parallelFirstSide}} and {{parallelSecondSide}} in parallel."
       },
       "foundKitePattern": {
-        "value": "Opposite corners {{firstCorner}} and {{secondCorner}} are equal, and pairs of adjacent sides are equal."
+        "value": "Corners {{firstCorner}} and {{secondCorner}} are equal, and pairs of adjacent sides are equal."
       },
       "foundDartPattern": {
         "value": "Corner {{inwardCorner}} points inward, Corner {{firstCorner}} and Corner {{secondCorner}} are equal, and pairs of adjacent sides are equal."
