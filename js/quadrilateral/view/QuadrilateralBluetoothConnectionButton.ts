@@ -77,6 +77,13 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
 
           // wait for the update interval before setting positions to the sim again
           this.timeSinceUpdatingSim = 0;
+
+          console.log( `top length - ${this.topLength}` );
+          console.log( `right length - ${this.rightLength}` );
+          console.log( `left length - ${this.leftLength}` );
+          console.log( `top left angle - ${this.topLeftAngle}` );
+          console.log( `top top right angle - ${this.topRightAngle}` );
+
         }
       }
     } );
