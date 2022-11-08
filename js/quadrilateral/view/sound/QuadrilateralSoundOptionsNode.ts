@@ -11,7 +11,6 @@
  */
 
 import { Node, Text, VoicingText } from '../../../../../scenery/js/imports.js';
-import ComboBox from '../../../../../sun/js/ComboBox.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralSoundOptionsModel, { SoundDesign } from '../../model/QuadrilateralSoundOptionsModel.js';
@@ -19,6 +18,7 @@ import Checkbox from '../../../../../sun/js/Checkbox.js';
 import PreferencesDialog from '../../../../../joist/js/preferences/PreferencesDialog.js';
 import AquaRadioButtonGroup from '../../../../../sun/js/AquaRadioButtonGroup.js';
 import PreferencesPanelSection from '../../../../../joist/js/preferences/PreferencesPanelSection.js';
+import AquaRadioButton from '../../../../../sun/js/AquaRadioButton.js';
 
 // Extending a PreferencesPanelSection will by default indent this section under the "Sounds" content in the Preferences
 // dialog
@@ -37,18 +37,19 @@ class QuadrilateralSoundOptionsNode extends PreferencesPanelSection {
       {
         value: SoundDesign.TRACKS_BUILD_UP_SIMPLE,
         createNode: () => new Text( 'Building (Default)', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
-        tandemName: `tracksBuildUpSimple${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
+        tandemName: `tracksBuildUpSimple${AquaRadioButton.TANDEM_NAME_SUFFIX}`
       },
       {
         value: SoundDesign.TRACKS_VOLUME_EMPHASIS,
         createNode: () => new Text( 'Shape Emphasis', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
-        tandemName: `tracksVolume${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`
+        tandemName: `tracksVolume${AquaRadioButton.TANDEM_NAME_SUFFIX}`
       }
     ], {
       spacing: 4,
       radioButtonOptions: {
         radius: 9
-      }
+      },
+      tandem: tandem.createTandem( 'soundDesignRadioButtonGroup' )
     } );
 
     const tracksPlayForeverLabel = new Text( 'Tracks play forever', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS );
