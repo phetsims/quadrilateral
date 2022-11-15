@@ -42,6 +42,8 @@ import TEmitter from '../../../../axon/js/TEmitter.js';
 import QuadrilateralShapeDetector from './QuadrilateralShapeDetector.js';
 import SidePair from './SidePair.js';
 import VertexPair from './VertexPair.js';
+import CollisionDetector from './CollisionDetector.js';
+import stepTimer from '../../../../axon/js/stepTimer.js';
 
 // A useful type for calculations for the vertex Shapes which define where the Vertex can move depending on
 // the positions of the other vertices. Lines are along the bounds of model space and RayIntersections
@@ -303,6 +305,12 @@ class QuadrilateralShapeModel {
       new SidePair( this.topSide, this.bottomSide ),
       new SidePair( this.rightSide, this.leftSide )
     ];
+
+    const collisionDetector = new CollisionDetector( this );
+
+    stepTimer.addListener( () => {
+      collisionDetector.churn();
+    } );
 
     this.adjacentEqualVertexPairsProperty = new Property<VertexPair[]>( [] );
     this.oppositeEqualVertexPairsProperty = new Property<VertexPair[]>( [] );
@@ -778,6 +786,7 @@ class QuadrilateralShapeModel {
    * (TODO) No vertex can overlap another side.
    */
   public isQuadrilateralShapeAllowed(): boolean {
+    return true;
     let shapeAllowed = true;
 
     for ( let i = 0; i < this.vertices.length; i++ ) {
