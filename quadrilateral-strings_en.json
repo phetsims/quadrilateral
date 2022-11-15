@@ -80,7 +80,7 @@
   "a11y": {
     "screenSummary": {
       "playAreaDescription": {
-        "value": "The Play Area is your shape. It has four movable sides and four movable corners that allow you to play with side lengths and angle widths, and create different shapes in the quadrilateral family. Quadrilaterals are closed four-sided shapes."
+        "value": "The Play Area is your shape. It has four movable sides and four movable corners that allow you to play with side length and angle width, and create different shapes in the quadrilateral family. Quadrilaterals are closed four-sided shapes."
       },
       "controlAreaDescription": {
         "value": "The Control Area has options to show shape name, add visual guides, and mute shape sounds. Use Reset Shape to keep selected guides visible, or reset sim with Reset All."
