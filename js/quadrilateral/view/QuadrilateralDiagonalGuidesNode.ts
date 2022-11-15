@@ -78,6 +78,7 @@ class QuadrilateralDiagonalGuidesNode extends Node {
     const vertex1RayIntersections = boundsShape.intersection( vertex1Ray );
     const vertex2RayIntersections = boundsShape.intersection( vertex2Ray );
 
+    return;
     assert && assert( vertex1RayIntersections.length === 1 && vertex2RayIntersections.length === 1,
       'There should be one and only one intersection for each ray from vertices within bounds' );
 

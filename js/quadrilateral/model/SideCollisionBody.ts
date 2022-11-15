@@ -46,6 +46,9 @@ class SideCollisionBody extends CollisionBody {
   public updatePoints( lineShape: Line ): void {
 
     const rightStroke = lineShape.strokeRight( Side.SIDE_WIDTH )[ 0 ];
+
+    // make the left stroke really big so that 1) Objects cannot "tunnel" through another object and so that 2)
+    // it is impossible to move an object around to another side of
     const leftStroke = lineShape.strokeLeft( Side.SIDE_WIDTH * 1000000 )[ 0 ];
 
     const p1 = rightStroke.end; // {x: -0.21, y: -0.25}  bottom right

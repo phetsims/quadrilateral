@@ -13,6 +13,8 @@ import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
 import VertexCollisionBody from './VertexCollisionBody.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralPreferencesModel from './QuadrilateralPreferencesModel.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 
 class CollisionDetector {
 
@@ -24,7 +26,7 @@ class CollisionDetector {
 
   private readonly preferencesModel: QuadrilateralPreferencesModel;
 
-  public constructor( shapeModel: QuadrilateralShapeModel ) {
+  public constructor( shapeModel: QuadrilateralShapeModel, modelBoundsProperty: TReadOnlyProperty<Bounds2> ) {
     this.response = new SAT.Response();
     this.bodies = [];
 
@@ -36,14 +38,44 @@ class CollisionDetector {
     const vertexCCollisionBody = new VertexCollisionBody( shapeModel.vertexC );
     const vertexDCollisionBody = new VertexCollisionBody( shapeModel.vertexD );
 
+    const sideABCollisionBody = new SideCollisionBody( shapeModel.topSide, vertexACollisionBody, vertexBCollisionBody );
+    const sideBCCollisionBody = new SideCollisionBody( shapeModel.rightSide, vertexBCollisionBody, vertexCCollisionBody );
+    const sideCDCollisionBody = new SideCollisionBody( shapeModel.bottomSide, vertexCCollisionBody, vertexDCollisionBody );
     const sideDACollisionBody = new SideCollisionBody( shapeModel.leftSide, vertexDCollisionBody, vertexACollisionBody );
+
+    this.sideABCollisionBody = sideABCollisionBody;
+    this.sideBCCollisionBody = sideBCCollisionBody;
+    this.sideCDCollisionBody = sideCDCollisionBody;
+    this.sideDACollisionBody = sideDACollisionBody;
+
+    const modelBoundsListener = ( modelBounds: Bounds2 ) => {
+      if ( modelBounds ) {
+        const hugePolygonWorkaroundValue = 1000000;
+        const topBoundsCollisionBody = new BoundsCollisionBody( modelBounds.minX - hugePolygonWorkaroundValue, modelBounds.maxY, modelBounds.maxX + hugePolygonWorkaroundValue, modelBounds.maxY + hugePolygonWorkaroundValue );
+        const rightBoundsCollisionBody = new BoundsCollisionBody( modelBounds.maxX, modelBounds.minY - hugePolygonWorkaroundValue, modelBounds.maxX + hugePolygonWorkaroundValue, modelBounds.maxY + hugePolygonWorkaroundValue );
+        const bottomBoundsCollisionBody = new BoundsCollisionBody( modelBounds.minX - hugePolygonWorkaroundValue, modelBounds.minY - hugePolygonWorkaroundValue, modelBounds.maxX + hugePolygonWorkaroundValue, modelBounds.minY );
+        const leftBoundsCollisionBody = new BoundsCollisionBody( modelBounds.minX - hugePolygonWorkaroundValue, modelBounds.minY - hugePolygonWorkaroundValue, modelBounds.minX, modelBounds.maxY + hugePolygonWorkaroundValue );
+
+        this.addBody( topBoundsCollisionBody );
+        this.addBody( rightBoundsCollisionBody );
+        this.addBody( bottomBoundsCollisionBody );
+        this.addBody( leftBoundsCollisionBody );
+
+        // at this time, model bounds do not change, only initiate boundary collision objects once
+        modelBoundsProperty.unlink( modelBoundsListener );
+      }
+    };
+    modelBoundsProperty.link( modelBoundsListener );
 
     this.addBody( vertexACollisionBody );
     this.addBody( vertexBCollisionBody );
     this.addBody( vertexCCollisionBody );
     this.addBody( vertexDCollisionBody );
 
+    this.addBody( sideABCollisionBody );
+    this.addBody( sideBCCollisionBody );
     this.addBody( sideDACollisionBody );
+    this.addBody( sideCDCollisionBody );
   }
 
   /**
@@ -74,11 +106,16 @@ class CollisionDetector {
         const bodyB = this.bodies[ j ];
 
         if ( bodyA === bodyB || // ignore overlaps with self
-             bodyA instanceof SideCollisionBody && bodyB instanceof SideCollisionBody || // ignore side-side collisions
+
+             // ignore side-side collisions
+             bodyA instanceof SideCollisionBody && bodyB instanceof SideCollisionBody ||
 
              // ignore side-boundary collision
              ( bodyA instanceof BoundsCollisionBody && bodyB instanceof SideCollisionBody ) ||
              ( bodyA instanceof SideCollisionBody && bodyB instanceof BoundsCollisionBody ) ||
+
+             // ignore boundary-boundary collisions
+             bodyA instanceof BoundsCollisionBody && bodyB instanceof BoundsCollisionBody ||
 
              // ignore overlap between sides and their connected Vertices
              ( bodyA instanceof SideCollisionBody && bodyB === bodyA.vertex1Body ) ||
@@ -105,7 +142,6 @@ class CollisionDetector {
   private respondToCollision( bodyA: CollisionBody, bodyB: CollisionBody ): void {
     const overlapX = this.response.overlapV.x;
     const overlapY = this.response.overlapV.y;
-    const overlapVector = new Vector2( overlapX, overlapY );
 
     if ( bodyA.dragging && bodyB.dragging ) {
 
@@ -115,16 +151,61 @@ class CollisionDetector {
 
       if ( bodyA instanceof SideCollisionBody ) {
 
-        // move each vertex by the overlap vector so the side does not collide
-      }
-      else {
+        const bodyASide = ( bodyA as unknown as SideCollisionBody ).side;
+        if ( bodyASide.isPressedProperty.value ) {
 
-        // bodyA is a dragging vertex and should be moved out of the other body
-        // update model position Properties from this.response
+        }
+      }
+      else if ( bodyA instanceof VertexCollisionBody ) {
+
         const bodyAVertex = ( bodyA as unknown as VertexCollisionBody ).vertex;
-        bodyAVertex.positionProperty.set( bodyAVertex.positionProperty.value.minus( overlapVector ) );
+
+        if ( bodyB instanceof SideCollisionBody ) {
+          // vertex-side collision
+
+          // the vertex is overlapping with a side - use the overlapVector that whose normal points toward the
+          // vertex
+          // NOTE: This may not be necessary, if we are using a workaround where we
+          const bestOverlap = _.minBy( this.response.overlaps, overlap => {
+            return CollisionDetector.SATVectorToVector2( overlap.axis ).angleBetween( bodyB.side.lineProperty.value.startTangent.getPerpendicular() );
+          } );
+
+          if ( bestOverlap ) {
+            bodyAVertex.positionProperty.set( bodyAVertex.positionProperty.value.minus( CollisionDetector.SATVectorToVector2( bestOverlap.overlapV ) ) );
+          }
+        }
+        else if ( bodyB instanceof BoundsCollisionBody ) {
+          // vertex-bounds collision
+
+          bodyAVertex.positionProperty.set( bodyAVertex.positionProperty.value.minus( CollisionDetector.SATVectorToVector2( this.response.overlapV ) ) );
+        }
       }
     }
+    else {
+
+      // this.sideABCollisionBody = sideABCollisionBody;
+      // this.sideBCCollisionBody = sideBCCollisionBody;
+      // this.sideCDCollisionBody = sideCDCollisionBody;
+      // this.sideDACollisionBody = sideDACollisionBody;
+      const sideBodies = [ this.sideABCollisionBody, this.sideBCCollisionBody, this.sideCDCollisionBody, this.sideDACollisionBody ];
+      const pressedBodies = _.filter( sideBodies, sideBody => sideBody.side.isPressedProperty.value );
+
+      // console.log( pressedBodies );
+      if ( pressedBodies.length > 0 ) {
+        debugger;
+      }
+      // a collision has been detected without dragging
+      for ( let i = 0; i < pressedBodies.length; i++ ) {
+        const pressedBody = pressedBodies[ i ];
+        if ( pressedBody.side.vertex1 === bodyA.vertex || pressedBody.side.vertex2 === bodyB.vertex ) {
+          debugger;
+        }
+      }
+    }
+  }
+
+  private static SATVectorToVector2( satVector: SAT.Vector ): Vector2 {
+    return new Vector2( satVector.x, satVector.y );
   }
 }
 

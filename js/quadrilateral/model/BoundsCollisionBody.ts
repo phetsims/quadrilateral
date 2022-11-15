@@ -8,23 +8,19 @@ import quadrilateral from '../../quadrilateral.js';
 import CollisionBody from './CollisionBody.js';
 
 class BoundsCollisionBody extends CollisionBody {
-  public constructor( x: number, y: number, width: number, height: number ) {
+  public constructor( minX: number, minY: number, maxX: number, maxY: number ) {
 
     const data = new SAT.Polygon(
-      new SAT.Vector( x, y ),
+      new SAT.Vector( 0, 0 ),
       [
-        new SAT.Vector( 0, 0 ),
-        new SAT.Vector( width, 0 ),
-        new SAT.Vector( width, height ),
-        new SAT.Vector( 0, height )
+        new SAT.Vector( minX, minY ),
+        new SAT.Vector( maxX, minY ),
+        new SAT.Vector( maxX, maxY ),
+        new SAT.Vector( minX, maxY )
       ]
     );
 
     super( data );
-  }
-
-  public static createBoundsData( x, y, width, height ) {
-
   }
 }
 

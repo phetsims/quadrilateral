@@ -15,7 +15,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { Line } from '../../../../scenery/js/imports.js';
-import { Shape } from '../../../../kite/js/imports.js';
+import { Shape, Line as KiteLine } from '../../../../kite/js/imports.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import SideLabel from './SideLabel.js';
@@ -119,6 +119,14 @@ class Side {
         } );
 
         return lineShape.getStrokedShape();
+      } );
+
+    this.lineProperty = new DerivedProperty(
+      [ this.vertex1.positionProperty, this.vertex2.positionProperty ],
+      ( position1, position2 ) => {
+
+        // TODO: make reusable
+        return new KiteLine( position1, position2 );
       } );
 
     this.lengthToleranceIntervalProperty = new DerivedProperty( [ this.lengthProperty ], length => {
