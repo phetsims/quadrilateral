@@ -12,7 +12,6 @@ import BoundsCollisionBody from './BoundsCollisionBody.js';
 import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
 import VertexCollisionBody from './VertexCollisionBody.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralPreferencesModel from './QuadrilateralPreferencesModel.js';
 
 class CollisionDetector {
@@ -34,9 +33,17 @@ class CollisionDetector {
     // set up the collision detection model from the shape model
     const vertexACollisionBody = new VertexCollisionBody( shapeModel.vertexA );
     const vertexBCollisionBody = new VertexCollisionBody( shapeModel.vertexB );
+    const vertexCCollisionBody = new VertexCollisionBody( shapeModel.vertexC );
+    const vertexDCollisionBody = new VertexCollisionBody( shapeModel.vertexD );
+
+    const sideDACollisionBody = new SideCollisionBody( shapeModel.leftSide, vertexDCollisionBody, vertexACollisionBody );
 
     this.addBody( vertexACollisionBody );
     this.addBody( vertexBCollisionBody );
+    this.addBody( vertexCCollisionBody );
+    this.addBody( vertexDCollisionBody );
+
+    this.addBody( sideDACollisionBody );
   }
 
   /**
@@ -96,11 +103,10 @@ class CollisionDetector {
   }
 
   private respondToCollision( bodyA: CollisionBody, bodyB: CollisionBody ): void {
-    const overlapVector = new Vector2( this.response.overlapV.x, this.response.overlapV.y );
+    const overlapX = this.response.overlapV.x;
+    const overlapY = this.response.overlapV.y;
+    const overlapVector = new Vector2( overlapX, overlapY );
 
-    const interval = this.preferencesModel.fineInputSpacingProperty.value ? QuadrilateralQueryParameters.minorFineVertexInterval : QuadrilateralQueryParameters.minorVertexInterval;
-    const overlapX = Math.max( this.response.overlapV.x, interval );
-    const overlapX = Math.max( this.response.overlapV.x, interval );0
     if ( bodyA.dragging && bodyB.dragging ) {
 
       // TODO: How to handle multitouch?
@@ -116,7 +122,6 @@ class CollisionDetector {
         // bodyA is a dragging vertex and should be moved out of the other body
         // update model position Properties from this.response
         const bodyAVertex = ( bodyA as unknown as VertexCollisionBody ).vertex;
-        console.log( this.response.overlapV );
         bodyAVertex.positionProperty.set( bodyAVertex.positionProperty.value.minus( overlapVector ) );
       }
     }
