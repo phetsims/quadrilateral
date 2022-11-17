@@ -15,7 +15,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { Line } from '../../../../scenery/js/imports.js';
-import { Shape } from '../../../../kite/js/imports.js';
+import { Line as KiteLine, Shape } from '../../../../kite/js/imports.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import SideLabel from './SideLabel.js';
@@ -41,6 +41,9 @@ class Side {
 
   // Has this side been connected to another to form a shape?
   private isConnected: boolean;
+
+  private outerLine: KiteLine;
+  private innerLine: KiteLine;
 
   // Angle of this line against a perpendicular line that would be drawn across it when the vertices are at their
   // initial positions, used to determine the amount of tilt of the line.
@@ -109,9 +112,18 @@ class Side {
       tandem: tandem.createTandem( 'lengthProperty' )
     } );
 
+    this.outerLine = new KiteLine( new Vector2( 0, 0 ), new Vector2( 0, 0 ) );
+    this.innerLine = new KiteLine( new Vector2( 0, 0 ), new Vector2( 0, 0 ) );
+    const centerLine = new KiteLine( new Vector2( 0, 0 ), new Vector2( 0, 0 ) );
+
     this.shapeProperty = new DerivedProperty(
       [ this.vertex1.positionProperty, this.vertex2.positionProperty ],
       ( position1, position2 ) => {
+        centerLine.setStart( position1 );
+        centerLine.setEnd( position2 );
+
+        this.outerLine = centerLine.strokeLeft( Side.SIDE_WIDTH )[ 0 ];
+        this.innerLine = centerLine.strokeRight( Side.SIDE_WIDTH )[ 0 ];
 
         // TODO: make reusable
         const lineShape = new Line( position1.x, position1.y, position2.x, position2.y, {
@@ -169,6 +181,13 @@ class Side {
     return this.vertex2.positionProperty.value.average( this.vertex1.positionProperty.value );
   }
 
+  public getLeadingEdges( translation: Vector2 ): KiteLine[] {
+    return [ this.outerLine, this.innerLine ];
+  }
+
+  public getConstrainingEdges(): KiteLine[] {
+    return [ this.outerLine, this.innerLine ];
+  }
 
   /**
    * Returns the lowest vertex between the two Vertices of this side. If the vertices have the same

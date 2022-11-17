@@ -14,7 +14,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import { Shape } from '../../../../kite/js/imports.js';
+import { Line, Shape } from '../../../../kite/js/imports.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import VertexLabel from './VertexLabel.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
@@ -71,6 +71,11 @@ class Vertex {
   private vertex1: Vertex | null;
   private vertex2: Vertex | null;
 
+  private leftLine: Line;
+  private topLine: Line;
+  private rightLine: Line;
+  private bottomLine: Line;
+
   // The collection of SMOOTHING_LENGTH number of positions
   private readonly positions: Vector2[] = [];
 
@@ -110,6 +115,27 @@ class Vertex {
 
       // TODO: possibly reduce allocations?
       return new Bounds2( position.x - HALF_WIDTH, position.y - HALF_HEIGHT, position.x + HALF_WIDTH, position.y + HALF_HEIGHT );
+    } );
+
+    this.leftLine = new Line( new Vector2( 0, 0 ), new Vector2( 0, 0 ) );
+    this.topLine = new Line( new Vector2( 0, 0 ), new Vector2( 0, 0 ) );
+    this.rightLine = new Line( new Vector2( 0, 0 ), new Vector2( 0, 0 ) );
+    this.bottomLine = new Line( new Vector2( 0, 0 ), new Vector2( 0, 0 ) );
+
+    this.modelBoundsProperty.link( modelBounds => {
+      // Note that top/button are reversed in dot/Bounds2 to match scenery conventions!!! But that doesnt apply
+      // to our model coordinate frame.
+      this.leftLine.start = modelBounds.leftBottom;
+      this.leftLine.end = modelBounds.leftTop;
+
+      this.topLine.start = modelBounds.leftBottom; // Reversed for dot/Bounds2!!
+      this.topLine.end = modelBounds.rightBottom; // Reversed for dot/Bounds2!!
+
+      this.rightLine.start = modelBounds.rightTop;
+      this.rightLine.end = modelBounds.rightBottom;
+
+      this.bottomLine.start = modelBounds.rightTop; // Reversed for dot/Bounds2!!
+      this.bottomLine.end = modelBounds.leftTop; // Reversed for dot/Bounds2!!
     } );
 
     this.isPressedProperty = new BooleanProperty( false, {
@@ -204,6 +230,21 @@ class Vertex {
     }
 
     return Vector2.average( this.positions );
+  }
+
+  public getLeadingEdges( translation: Vector2 ): Line[] {
+    const leadingEdges = [];
+
+    translation.x > 0 && leadingEdges.push( this.rightLine );
+    translation.x < 0 && leadingEdges.push( this.leftLine );
+    translation.y > 0 && leadingEdges.push( this.topLine );
+    translation.y < 0 && leadingEdges.push( this.bottomLine );
+
+    return leadingEdges;
+  }
+
+  public getConstrainingEdges(): Line[] {
+    return [ this.rightLine, this.leftLine, this.topLine, this.bottomLine ];
   }
 
   /**

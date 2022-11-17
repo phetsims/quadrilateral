@@ -64,6 +64,7 @@ class CornerGuideNode extends Node {
     } );
 
     Multilink.multilink( [ vertex1.angleProperty, vertex1.positionProperty ], ( angle, position ) => {
+      return;
       assert && assert( angle !== null, 'angleProperty needs to be defined to add listeners in CornerGuideNode' );
       assert && assert( angle! > 0, 'CornerGuideNodes cannot support angles at or less than zero' );
       const vertexCenter = vertex1.positionProperty.value;
