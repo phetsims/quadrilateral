@@ -71,7 +71,7 @@ class Side {
 
   // in model coordinates, the width of a side - Sides exist in model space to apply rules that vertices and
   // sides can never overlap
-  public static readonly SIDE_WIDTH = 0.08;
+  public static readonly SIDE_WIDTH = 0.1;
 
   /**
    * @param vertex1 - The first vertex of this Side.
