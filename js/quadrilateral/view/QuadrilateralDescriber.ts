@@ -64,6 +64,13 @@ const allSidesEqualString = QuadrilateralStrings.a11y.voicing.allSidesEqual;
 const allRightAnglesString = QuadrilateralStrings.a11y.voicing.allRightAngles;
 const triangleDetailsPatternString = QuadrilateralStrings.a11y.voicing.triangleDetailsPattern;
 
+const sidesDescriptionPatternString = QuadrilateralStrings.a11y.voicing.sidesDescriptionPattern;
+const longestSidesDescriptionPatternString = QuadrilateralStrings.a11y.voicing.longestSidesDescriptionPattern;
+const longestSideDescriptionPatternString = QuadrilateralStrings.a11y.voicing.longestSideDescriptionPattern;
+const shortestSidesDescriptionPatternString = QuadrilateralStrings.a11y.voicing.shortestSidesDescriptionPattern;
+const shortestSideDescriptionPatternString = QuadrilateralStrings.a11y.voicing.shortestSideDescriptionPattern;
+const sideLengthDescriptionPatternString = QuadrilateralStrings.a11y.voicing.sideLengthDescriptionPattern;
+
 const shapeNameWithArticlesMap = new Map<NamedQuadrilateral | null, string>();
 shapeNameWithArticlesMap.set( NamedQuadrilateral.SQUARE, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.square );
 shapeNameWithArticlesMap.set( NamedQuadrilateral.RECTANGLE, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.rectangle );
@@ -259,7 +266,7 @@ class QuadrilateralDescriber {
   }
 
   /**
-   * Returns the first details statement. Details are broken up into three categorized statements. This one is a
+   * Returns the second "details" statement. Details are broken up into three categorized statements. This one is a
    * summary about equal corner angles and equal side lengths. Will return something like
    * "Right now, opposite corners are equal and opposite sides are equal." or
    * "Right now, on pair of opposite corners are equal and opposite sides are equal" or
@@ -310,6 +317,10 @@ class QuadrilateralDescriber {
     } );
   }
 
+  /**
+   * Returns the third details statement. This is a qualitative description of the current shape, whithout including
+   * the shape name.
+   */
   public getThirdDetailsStatement(): string | null {
     const shapeName = this.shapeModel.shapeNameProperty.value;
 
@@ -501,8 +512,68 @@ class QuadrilateralDescriber {
   //   return statement;
   // }
 
+
+  /**
+   * Returns a description of the longest and shortest sides of the shape. Only returns a string if side unit length
+   * is displayed.
+   *
+   * TODO: Return null if necessary, but that Property doesn't exist in the sim yet.
+   */
   public getFourthDetailsStatement(): null | string {
-    return null;
+    let description: null | string = null;
+
+    const longestSide = _.maxBy( this.shapeModel.sides, side => side.lengthProperty.value )!;
+    const shortestSide = _.minBy( this.shapeModel.sides, side => side.lengthProperty.value )!;
+
+    const longestSideDescription = SideDescriber.getSideUnitsDescription( longestSide.lengthProperty.value, this.shapeModel.shapeLengthToleranceIntervalProperty.value );
+    const shortestSideDescription = SideDescriber.getSideUnitsDescription( shortestSide.lengthProperty.value, this.shapeModel.shapeLengthToleranceIntervalProperty.value );
+
+    if ( this.shapeModel.allLengthsEqualProperty.value ) {
+
+      // All sides the same length, combine into a shorter string
+      description = StringUtils.fillIn( sidesDescriptionPatternString, {
+        description: longestSideDescription
+      } );
+    }
+    else {
+
+      let longestSubString;
+      let shortestSubString;
+      if ( _.some( this.shapeModel.oppositeEqualSidePairsProperty.value, oppositeEqualSidePair => oppositeEqualSidePair.includesSide( longestSide ) ) ||
+           _.some( this.shapeModel.adjacentEqualSidePairsProperty.value, adjacentEqualSidePair => adjacentEqualSidePair.includesSide( longestSide ) ) ) {
+
+        // multiple sides of the same "longest" length, pluralize
+        longestSubString = StringUtils.fillIn( longestSidesDescriptionPatternString, {
+          description: longestSideDescription
+        } );
+      }
+      else {
+        longestSubString = StringUtils.fillIn( longestSideDescriptionPatternString, {
+          description: longestSideDescription
+        } );
+      }
+
+      if ( _.some( this.shapeModel.oppositeEqualSidePairsProperty.value, oppositeEqualSidePair => oppositeEqualSidePair.includesSide( shortestSide ) ) ||
+           _.some( this.shapeModel.adjacentEqualSidePairsProperty.value, adjacentEqualSidePair => adjacentEqualSidePair.includesSide( shortestSide ) ) ) {
+
+        // multiple sides of the same "longest" length, pluralize
+        shortestSubString = StringUtils.fillIn( shortestSidesDescriptionPatternString, {
+          description: shortestSideDescription
+        } );
+      }
+      else {
+        shortestSubString = StringUtils.fillIn( shortestSideDescriptionPatternString, {
+          description: shortestSideDescription
+        } );
+      }
+
+      description = StringUtils.fillIn( sideLengthDescriptionPatternString, {
+        longest: longestSubString,
+        shortest: shortestSubString
+      } );
+    }
+
+    return description;
   }
 
   // /**

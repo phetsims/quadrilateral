@@ -103,7 +103,7 @@ class SideDescriber {
                                equalToString : SideDescriber.getLengthComparisonDescription( oppositeSide, this.side, toleranceInterval );
 
     response = StringUtils.fillIn( patternString, {
-      unitsDescription: this.getSideUnitsDescription( this.side.lengthProperty.value ),
+      unitsDescription: SideDescriber.getSideUnitsDescription( this.side.lengthProperty.value, this.quadrilateralShapeModel.shapeLengthToleranceIntervalProperty.value ),
       oppositeComparison: oppositeComparison,
       adjacentSideDescription: this.getAdjacentSideDescription()
     } );
@@ -119,13 +119,13 @@ class SideDescriber {
    * "2 and a half units" or
    * "less than half 1 unit"
    */
-  private getSideUnitsDescription( sideLength: number ): string {
+  public static getSideUnitsDescription( sideLength: number, interLengthToleranceInterval: number ): string {
     let sideDescription: string | null = null;
 
     const numberOfFullUnits = Math.floor( sideLength / Side.SIDE_SEGMENT_LENGTH );
     const remainder = sideLength % Side.SIDE_SEGMENT_LENGTH;
 
-    if ( this.quadrilateralShapeModel.isShapeLengthEqualToOther( remainder, 0 ) ) {
+    if ( QuadrilateralShapeModel.isInterLengthEqualToOther( remainder, 0, interLengthToleranceInterval ) ) {
       if ( numberOfFullUnits === 1 ) {
         sideDescription = oneUnitString;
       }
@@ -135,7 +135,7 @@ class SideDescriber {
         } );
       }
     }
-    else if ( this.quadrilateralShapeModel.isShapeLengthEqualToOther( remainder, Side.SIDE_SEGMENT_LENGTH / 2 ) ) {
+    else if ( QuadrilateralShapeModel.isInterLengthEqualToOther( remainder, Side.SIDE_SEGMENT_LENGTH / 2, interLengthToleranceInterval ) ) {
       if ( numberOfFullUnits === 0 ) {
         sideDescription = aboutHalfOneUnitString;
       }

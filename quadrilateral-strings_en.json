@@ -260,6 +260,24 @@
           "value": "'Corners {{firstCorner}} and {{secondCorner}}"
         }
       },
+      "sidesDescriptionPattern": {
+        "value": "Sides {{description}}."
+      },
+      "longestSidesDescriptionPattern": {
+        "value": "longest sides {{description}}"
+      },
+      "longestSideDescriptionPattern": {
+        "value": "longest side {{description}}"
+      },
+      "shortestSidesDescriptionPattern": {
+        "value": "shortest sides {{description}}"
+      },
+      "shortestSideDescriptionPattern": {
+        "value": "shortest side {{description}}"
+      },
+      "sideLengthDescriptionPattern": {
+        "value": "{{longest}}, {{shortest}}"
+      },
       "oppositeSidesTiltPattern": {
         "value": "Opposite sides {{tiltChange}} in parallel as opposite corners change equally."
       },

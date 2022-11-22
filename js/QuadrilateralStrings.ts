@@ -189,6 +189,18 @@ type StringsType = {
         'cornersAnglePattern': string;
         'cornersAnglePatternStringProperty': LinkableProperty<string>;
       };
+      'sidesDescriptionPattern': string;
+      'sidesDescriptionPatternStringProperty': LinkableProperty<string>;
+      'longestSidesDescriptionPattern': string;
+      'longestSidesDescriptionPatternStringProperty': LinkableProperty<string>;
+      'longestSideDescriptionPattern': string;
+      'longestSideDescriptionPatternStringProperty': LinkableProperty<string>;
+      'shortestSidesDescriptionPattern': string;
+      'shortestSidesDescriptionPatternStringProperty': LinkableProperty<string>;
+      'shortestSideDescriptionPattern': string;
+      'shortestSideDescriptionPatternStringProperty': LinkableProperty<string>;
+      'sideLengthDescriptionPattern': string;
+      'sideLengthDescriptionPatternStringProperty': LinkableProperty<string>;
       'oppositeSidesTiltPattern': string;
       'oppositeSidesTiltPatternStringProperty': LinkableProperty<string>;
       'oppositeSidesInParallelPattern': string;
