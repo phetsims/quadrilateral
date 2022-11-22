@@ -483,6 +483,8 @@ type StringsType = {
       'resetShapeHintResponseStringProperty': LinkableProperty<string>;
       'angleComparisonPattern': string;
       'angleComparisonPatternStringProperty': LinkableProperty<string>;
+      'equalToOppositeCornerEqualToAdjacentCorners': string;
+      'equalToOppositeCornerEqualToAdjacentCornersStringProperty': LinkableProperty<string>;
       'oppositeCorner': string;
       'oppositeCornerStringProperty': LinkableProperty<string>;
       'adjacentCornersEqual': string;

@@ -91,6 +91,7 @@ const oppositeCornerString = QuadrilateralStrings.a11y.voicing.oppositeCorner;
 const adjacentCornersEqualString = QuadrilateralStrings.a11y.voicing.adjacentCornersEqual;
 const adjacentCornersRightAnglesString = QuadrilateralStrings.a11y.voicing.adjacentCornersRightAngles;
 const progressStatePatternString = QuadrilateralStrings.a11y.voicing.progressStatePattern;
+const equalToOppositeCornerEqualToAdjacentCornersString = QuadrilateralStrings.a11y.voicing.equalToOppositeCornerEqualToAdjacentCorners;
 
 // A response may trigger because there is a large enough change in angle or length
 type ResponseReason = 'angle' | 'length';
@@ -449,7 +450,12 @@ class QuadrilateralAlerter extends Alerter {
     // quadrilateral like when a pair of adjacent angles are equal, or when the moving angle is twice/half of another
     // angle in the shape. There may not always be important state information.
     if ( previousAngle !== currentAngle ) {
-      if ( angleEqualToFirstAdjacent || angleEqualToOpposite || angleEqualToSecondAdjacent ) {
+      if ( this.quadrilateralShapeModel.getAreAllAnglesRight() ) {
+
+        // important state described when a square
+        stateResponse = equalToOppositeCornerEqualToAdjacentCornersString;
+      }
+      else if ( angleEqualToFirstAdjacent || angleEqualToOpposite || angleEqualToSecondAdjacent ) {
 
         // If vertex the angle just became equal to another, that is the most important information and should be
         // described

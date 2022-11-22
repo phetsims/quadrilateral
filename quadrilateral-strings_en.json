@@ -696,6 +696,9 @@
       "angleComparisonPattern": {
         "value": "{{comparison}} {{cornerLabel}}"
       },
+      "equalToOppositeCornerEqualToAdjacentCorners": {
+        "value": "equal to opposite corner, equal to adjacent corners"
+      },
       "oppositeCorner": {
         "value": "opposite corner"
       },
