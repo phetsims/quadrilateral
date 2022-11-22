@@ -90,7 +90,6 @@ const angleComparisonPatternString = QuadrilateralStrings.a11y.voicing.angleComp
 const oppositeCornerString = QuadrilateralStrings.a11y.voicing.oppositeCorner;
 const adjacentCornersEqualString = QuadrilateralStrings.a11y.voicing.adjacentCornersEqual;
 const adjacentCornersRightAnglesString = QuadrilateralStrings.a11y.voicing.adjacentCornersRightAngles;
-const allCornersEqualString = QuadrilateralStrings.a11y.voicing.allCornersEqual;
 const progressStatePatternString = QuadrilateralStrings.a11y.voicing.progressStatePattern;
 
 // Constants that control side object responses. See the getSideChangeObjectResponse for more information.
@@ -449,14 +448,10 @@ class QuadrilateralAlerter extends Alerter {
     const shapeName = this.quadrilateralShapeModel.shapeNameProperty.value;
 
     // get the "state" portion of the object response, which describes important state information about the
-    // quadrilateral like when there are all right angles, when a pair of adjacent angles are equal, or when
-    // the moving angle is twice/half of another angle in the shape. There may not always be important
-    // state information.
+    // quadrilateral like when a pair of adjacent angles are equal, or when the moving angle is twice/half of another
+    // angle in the shape. There may not always be important state information.
     if ( previousAngle !== currentAngle ) {
-      if ( this.quadrilateralShapeModel.getAreAllAnglesRight() ) {
-        stateResponse = allCornersEqualString;
-      }
-      else if ( this.shouldUseAngleComparisonDescription( currentAngle, oppositeVertexAngle ) ) {
+      if ( this.shouldUseAngleComparisonDescription( currentAngle, oppositeVertexAngle ) ) {
         const comparisonDescription = VertexDescriber.getAngleComparisonDescription( oppositeVertex, vertex, interAngleToleranceInterval, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
           comparison: comparisonDescription,
