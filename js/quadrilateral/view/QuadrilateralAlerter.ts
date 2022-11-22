@@ -92,10 +92,6 @@ const adjacentCornersEqualString = QuadrilateralStrings.a11y.voicing.adjacentCor
 const adjacentCornersRightAnglesString = QuadrilateralStrings.a11y.voicing.adjacentCornersRightAngles;
 const progressStatePatternString = QuadrilateralStrings.a11y.voicing.progressStatePattern;
 
-// Constants that control side object responses. See the getSideChangeObjectResponse for more information.
-const DESCRIBE_LONGER_ADJACENT_SIDES_THRESHOLD = 0.002;
-const BOTH_ADJACENT_SIDES_CHANGE_THE_SAME_THRESHOLD = 0.001; // Changes should be about equal to be described as such
-
 // A response may trigger because there is a large enough change in angle or length
 type ResponseReason = 'angle' | 'length';
 
@@ -338,13 +334,15 @@ class QuadrilateralAlerter extends Alerter {
     const firstSideAbsoluteDifference = Math.abs( firstAdjacentSideLengthDifference );
     const secondSideAbsoluteDifference = Math.abs( secondAdjacentSideLengthDifference );
 
-    if ( firstSideAbsoluteDifference > DESCRIBE_LONGER_ADJACENT_SIDES_THRESHOLD || secondSideAbsoluteDifference > DESCRIBE_LONGER_ADJACENT_SIDES_THRESHOLD ) {
+    // The threshold for describing relative sizes should be the same as shapeLengthToleranceInterval
+    const threshold = this.model.quadrilateralShapeModel.shapeLengthToleranceIntervalProperty.value;
+    if ( firstSideAbsoluteDifference > threshold || secondSideAbsoluteDifference > threshold ) {
 
       // one of the sides has moved by a large enough distance to describe changes in adjacent side length
       let adjacentSideChangeString = '';
       const adjacentSidesLonger = firstAdjacentSideLengthDifference > 0;
 
-      if ( Utils.equalsEpsilon( firstAdjacentSideLengthDifference, secondAdjacentSideLengthDifference, BOTH_ADJACENT_SIDES_CHANGE_THE_SAME_THRESHOLD ) ) {
+      if ( Utils.equalsEpsilon( firstAdjacentSideLengthDifference, secondAdjacentSideLengthDifference, threshold ) ) {
 
         // both adjacent sides changed about the same so we can combine a description to say that adjacent sides
         // got shorter or longer
