@@ -482,7 +482,7 @@
         "value": "Corner {{inwardCorner}} points inward, Corners {{firstCorner}} and {{secondCorner}} are equal."
       },
       "triangleDetailsPattern": {
-        "value": "Corner {{flatCorner}} flat, adjacent sides look like one side."
+        "value": "Corner {{flatCorner}} flat, adjacent sides look like one."
       },
       "convexQuadrilateralDetails": {
         "value": "No sides in parallel."
