@@ -126,10 +126,11 @@ sideLabelMap.set( SideLabel.SIDE_DA, dAString );
 
 // Thresholds that are used to describe the size of the current shape. All are relative to the
 // displayed grid and the area of a grid cell.
-const TINY_THRESHOLD = Math.pow( QuadrilateralConstants.GRID_SPACING, 2 );
-const VERY_SMALL_THRESHOLD = Math.pow( QuadrilateralConstants.GRID_SPACING * 4, 2 );
-const SMALL_THRESHOLD = Math.pow( QuadrilateralConstants.GRID_SPACING * 24, 2 );
-const MEDIUM_SIZED_THRESHOLD = Math.pow( QuadrilateralConstants.GRID_SPACING * 48, 2 );
+const GRID_CELL_AREA = Math.pow( QuadrilateralConstants.GRID_SPACING, 2 );
+const TINY_THRESHOLD = GRID_CELL_AREA;
+const VERY_SMALL_THRESHOLD = GRID_CELL_AREA * 4;
+const SMALL_THRESHOLD = GRID_CELL_AREA * 24;
+const MEDIUM_SIZED_THRESHOLD = GRID_CELL_AREA * 48;
 
 class QuadrilateralDescriber {
   private readonly shapeModel: QuadrilateralShapeModel;
