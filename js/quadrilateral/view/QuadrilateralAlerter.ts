@@ -449,31 +449,23 @@ class QuadrilateralAlerter extends Alerter {
     // quadrilateral like when a pair of adjacent angles are equal, or when the moving angle is twice/half of another
     // angle in the shape. There may not always be important state information.
     if ( previousAngle !== currentAngle ) {
+      if ( angleEqualToFirstAdjacent || angleEqualToOpposite || angleEqualToSecondAdjacent ) {
 
-      // Prioritize equality. TODO: Refactor this algorithm to reduce duplication. In particular the
-      // shouldUseAngleComparisonDescription needs to be redone now that equality is more important.
-      if ( angleEqualToFirstAdjacent ) {
-        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( firstAdjacentVertex, vertex, interAngleToleranceInterval, shapeName );
+        // If vertex the angle just became equal to another, that is the most important information and should be
+        // described
+        const otherVertex = angleEqualToFirstAdjacent ? firstAdjacentVertex :
+                            angleEqualToOpposite ? oppositeVertex :
+                            secondAdjacentVertex;
+
+        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( otherVertex, vertex, interAngleToleranceInterval, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
           comparison: comparisonDescription,
-          cornerLabel: VertexDescriber.VertexCornerLabelMap.get( firstAdjacentVertex.vertexLabel )
-        } );
-      }
-      else if ( angleEqualToSecondAdjacent ) {
-        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( secondAdjacentVertex, vertex, interAngleToleranceInterval, shapeName );
-        stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
-          comparison: comparisonDescription,
-          cornerLabel: VertexDescriber.VertexCornerLabelMap.get( secondAdjacentVertex.vertexLabel )
-        } );
-      }
-      else if ( angleEqualToOpposite ) {
-        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( oppositeVertex, vertex, interAngleToleranceInterval, shapeName );
-        stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
-          comparison: comparisonDescription,
-          cornerLabel: oppositeCornerString
+          cornerLabel: VertexDescriber.VertexCornerLabelMap.get( otherVertex.vertexLabel )
         } );
       }
       else if ( this.shouldUseAngleComparisonDescription( currentAngle, oppositeVertexAngle ) ) {
+
+        // describe relative size to opposite vertex
         const comparisonDescription = VertexDescriber.getAngleComparisonDescription( oppositeVertex, vertex, interAngleToleranceInterval, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
           comparison: comparisonDescription,
@@ -481,6 +473,8 @@ class QuadrilateralAlerter extends Alerter {
         } );
       }
       else if ( this.quadrilateralShapeModel.isInterAngleEqualToOther( firstAdjacentAngle, secondAdjacentAngle ) ) {
+
+        // The adjacent angles just became equal to eachother, describe that next (after opposite in priority)
         if ( this.quadrilateralShapeModel.isRightAngle( firstAdjacentAngle ) ) {
           stateResponse = adjacentCornersRightAnglesString;
         }
@@ -489,6 +483,8 @@ class QuadrilateralAlerter extends Alerter {
         }
       }
       else if ( this.shouldUseAngleComparisonDescription( currentAngle, firstAdjacentAngle ) ) {
+
+        // decribe relative size (half or twice as large as) to the first adjacent vertex
         const comparisonDescription = VertexDescriber.getAngleComparisonDescription( firstAdjacentVertex, vertex, interAngleToleranceInterval, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
           comparison: comparisonDescription,
@@ -496,6 +492,8 @@ class QuadrilateralAlerter extends Alerter {
         } );
       }
       else if ( this.shouldUseAngleComparisonDescription( currentAngle, secondAdjacentAngle ) ) {
+
+        // decribe relative size (half or twice as large as) to the second adjacent vertex
         const comparisonDescription = VertexDescriber.getAngleComparisonDescription( secondAdjacentVertex, vertex, interAngleToleranceInterval, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
           comparison: comparisonDescription,
