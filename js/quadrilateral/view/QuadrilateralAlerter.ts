@@ -451,7 +451,31 @@ class QuadrilateralAlerter extends Alerter {
     // quadrilateral like when a pair of adjacent angles are equal, or when the moving angle is twice/half of another
     // angle in the shape. There may not always be important state information.
     if ( previousAngle !== currentAngle ) {
-      if ( this.shouldUseAngleComparisonDescription( currentAngle, oppositeVertexAngle ) ) {
+
+      // Prioritize equality. TODO: Refactor this algorithm to reduce duplication. In particular the
+      // shouldUseAngleComparisonDescription needs to be redone now that equality is more important.
+      if ( angleEqualToFirstAdjacent ) {
+        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( firstAdjacentVertex, vertex, interAngleToleranceInterval, shapeName );
+        stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
+          comparison: comparisonDescription,
+          cornerLabel: VertexDescriber.VertexCornerLabelMap.get( firstAdjacentVertex.vertexLabel )
+        } );
+      }
+      else if ( angleEqualToSecondAdjacent ) {
+        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( secondAdjacentVertex, vertex, interAngleToleranceInterval, shapeName );
+        stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
+          comparison: comparisonDescription,
+          cornerLabel: VertexDescriber.VertexCornerLabelMap.get( secondAdjacentVertex.vertexLabel )
+        } );
+      }
+      else if ( angleEqualToOpposite ) {
+        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( oppositeVertex, vertex, interAngleToleranceInterval, shapeName );
+        stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
+          comparison: comparisonDescription,
+          cornerLabel: oppositeCornerString
+        } );
+      }
+      else if ( this.shouldUseAngleComparisonDescription( currentAngle, oppositeVertexAngle ) ) {
         const comparisonDescription = VertexDescriber.getAngleComparisonDescription( oppositeVertex, vertex, interAngleToleranceInterval, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
           comparison: comparisonDescription,
