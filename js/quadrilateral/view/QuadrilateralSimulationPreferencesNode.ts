@@ -17,6 +17,8 @@ import PreferencesPanelSection from '../../../../joist/js/preferences/Preference
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import PreferencesToggleSwitch from '../../../../joist/js/preferences/PreferencesToggleSwitch.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
+import ToggleSwitch, { ToggleSwitchOptions } from '../../../../sun/js/ToggleSwitch.js';
+import PreferencesDialogConstants from '../../../../joist/js/preferences/PreferencesDialogConstants.js';
 
 class QuadrilateralSimulationPreferencesNode extends PreferencesPanelSection {
   public constructor( preferencesModel: QuadrilateralPreferencesModel, tandem: Tandem ) {
@@ -30,17 +32,24 @@ class QuadrilateralSimulationPreferencesNode extends PreferencesPanelSection {
       combineOptions<VoicingTextOptions>( {}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, { maxWidth: 750 } )
     );
 
-    const fineSpacingSwitch = new PreferencesToggleSwitch( preferencesModel.fineInputSpacingProperty, false, true, {
-      labelNode: new Text( QuadrilateralStrings.fineInputSpacingStringProperty, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS ),
+    const fineSpacingSwitch = new ToggleSwitch( preferencesModel.fineInputSpacingProperty, false, true, combineOptions<ToggleSwitchOptions>(
+      PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS,
+      {
+        tandem: tandem.createTandem( 'fineInputSpacingCheckbox' )
+      }
+    ) );
+
+    const fineSpacingControl = new PreferencesToggleSwitch( {
+      labelNode: new Text( QuadrilateralStrings.fineInputSpacingStringProperty, PreferencesDialogConstants.CONTROL_LABEL_OPTIONS ),
       descriptionNode: fineInputDescriptionText,
-      tandem: tandem.createTandem( 'fineInputSpacingCheckbox' )
+      controlNode: fineSpacingSwitch
     } );
 
     // An event and other data that may be used to signify when user recording begins. Note it is always constructed
     // regardless of whether it is added because I think that is important for consistent PhET-iO APIs.
     const clapperButton = new ClapperboardButton( { tandem: tandem.createTandem( 'clapperboardButton' ) } );
 
-    const children: Node[] = [ fineSpacingSwitch ];
+    const children: Node[] = [ fineSpacingControl ];
     if ( QuadrilateralQueryParameters.includeClapperButton ) {
       children.push( clapperButton );
     }

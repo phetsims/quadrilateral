@@ -90,7 +90,6 @@ const angleComparisonPatternString = QuadrilateralStrings.a11y.voicing.angleComp
 const oppositeCornerString = QuadrilateralStrings.a11y.voicing.oppositeCorner;
 const adjacentCornersEqualString = QuadrilateralStrings.a11y.voicing.adjacentCornersEqual;
 const adjacentCornersRightAnglesString = QuadrilateralStrings.a11y.voicing.adjacentCornersRightAngles;
-const allCornersEqualString = QuadrilateralStrings.a11y.voicing.allCornersEqual;
 const progressStatePatternString = QuadrilateralStrings.a11y.voicing.progressStatePattern;
 
 // Constants that control side object responses. See the getSideChangeObjectResponse for more information.
@@ -392,7 +391,7 @@ class QuadrilateralAlerter extends Alerter {
 
     // The phrase like the direction change, how the vertex angle changes, or whether the vertex angle is at
     // a critical value like 90/180 degrees
-    let progressResponse: string;
+    let progressResponse: string | null = null;
 
     // Additional state information about other vertices, or how wide the moving vertex is relative to others in the
     // shape.
@@ -411,6 +410,11 @@ class QuadrilateralAlerter extends Alerter {
     const firstAdjacentAngle = firstAdjacentVertex.angleProperty.value!;
     const secondAdjacentVertex = adjacentVertices[ 1 ];
     const secondAdjacentAngle = secondAdjacentVertex.angleProperty.value!;
+
+    // whether the moving vertex angle becomes equal to any of the other vertices (within interAngleToleranceInterval)
+    const angleEqualToFirstAdjacent = QuadrilateralShapeModel.isInterAngleEqualToOther( currentAngle, firstAdjacentAngle, this.quadrilateralShapeModel.interAngleToleranceIntervalProperty.value );
+    const angleEqualToSecondAdjacent = QuadrilateralShapeModel.isInterAngleEqualToOther( currentAngle, secondAdjacentAngle, this.quadrilateralShapeModel.interAngleToleranceIntervalProperty.value );
+    const angleEqualToOpposite = QuadrilateralShapeModel.isInterAngleEqualToOther( currentAngle, oppositeVertexAngle, this.quadrilateralShapeModel.interAngleToleranceIntervalProperty.value );
 
     // Get the "progress" portion of the object response, describing how this vertex has changed or if it has
     // reached some critical angle. This portion of the description is always included.
@@ -431,9 +435,10 @@ class QuadrilateralAlerter extends Alerter {
     else if ( this.quadrilateralShapeModel.isConvexAngle( currentAngle ) ) {
       progressResponse = anglePointingInwardString;
     }
-    else {
+    else if ( !angleEqualToFirstAdjacent && !angleEqualToSecondAdjacent && !angleEqualToOpposite ) {
 
-      // fallback case, just 'angle wider' or 'angle smaller'
+      // fallback case, just 'angle wider' or 'angle smaller' - but only if the angle is not equal to any other
+      // to prevent the alert from getting too long
       const angleChangeString = currentAngle > previousAngle ? widerString : vertexDragSmallerString;
       progressResponse = StringUtils.fillIn( vertexDragObjectResponsePatternString, {
         angleChange: angleChangeString
@@ -443,12 +448,32 @@ class QuadrilateralAlerter extends Alerter {
     const shapeName = this.quadrilateralShapeModel.shapeNameProperty.value;
 
     // get the "state" portion of the object response, which describes important state information about the
-    // quadrilateral like when there are all right angles, when a pair of adjacent angles are equal, or when
-    // the moving angle is twice/half of another angle in the shape. There may not always be important
-    // state information.
+    // quadrilateral like when a pair of adjacent angles are equal, or when the moving angle is twice/half of another
+    // angle in the shape. There may not always be important state information.
     if ( previousAngle !== currentAngle ) {
-      if ( this.quadrilateralShapeModel.getAreAllAnglesRight() ) {
-        stateResponse = allCornersEqualString;
+
+      // Prioritize equality. TODO: Refactor this algorithm to reduce duplication. In particular the
+      // shouldUseAngleComparisonDescription needs to be redone now that equality is more important.
+      if ( angleEqualToFirstAdjacent ) {
+        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( firstAdjacentVertex, vertex, interAngleToleranceInterval, shapeName );
+        stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
+          comparison: comparisonDescription,
+          cornerLabel: VertexDescriber.VertexCornerLabelMap.get( firstAdjacentVertex.vertexLabel )
+        } );
+      }
+      else if ( angleEqualToSecondAdjacent ) {
+        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( secondAdjacentVertex, vertex, interAngleToleranceInterval, shapeName );
+        stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
+          comparison: comparisonDescription,
+          cornerLabel: VertexDescriber.VertexCornerLabelMap.get( secondAdjacentVertex.vertexLabel )
+        } );
+      }
+      else if ( angleEqualToOpposite ) {
+        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( oppositeVertex, vertex, interAngleToleranceInterval, shapeName );
+        stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
+          comparison: comparisonDescription,
+          cornerLabel: oppositeCornerString
+        } );
       }
       else if ( this.shouldUseAngleComparisonDescription( currentAngle, oppositeVertexAngle ) ) {
         const comparisonDescription = VertexDescriber.getAngleComparisonDescription( oppositeVertex, vertex, interAngleToleranceInterval, shapeName );
@@ -481,17 +506,22 @@ class QuadrilateralAlerter extends Alerter {
       }
     }
 
+    assert && assert( progressResponse || stateResponse, 'There needs to be a response, we have a case that is not described.' );
     if ( progressResponse && stateResponse ) {
+
       response = StringUtils.fillIn( progressStatePatternString, {
         progress: progressResponse,
         state: stateResponse
       } );
     }
+    else if ( stateResponse ) {
+      response = stateResponse;
+    }
     else {
       response = progressResponse;
     }
 
-    return response;
+    return response!;
   }
 
   /**
