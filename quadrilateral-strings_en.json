@@ -168,8 +168,8 @@
       "overviewContent": {
         "value": "Quadrilaterals are closed four-sided shapes. This quadrilateral is an interactive sim. It changes as you play with it. Movable sides and movable corners allow you to play with side lengths and angle widths, and create different shapes in the quadrilateral family. You have options to show shape name, add visual guides, and mute shape sounds. Use Reset Shape to keep selected guides visible, or reset sim with Reset All."
       },
-      "hintContentPattern": {
-        "value": "{{shapeDescription}} Explore what shapes you can make."
+      "hintContent": {
+        "value": "Move sides and corners to change shape properties and explore what shapes you can make. If needed, check out keyboard shortcuts."
       },
       "youHaveAShapeHintPattern": {
         "value": "You have {{shapeDescription}}."

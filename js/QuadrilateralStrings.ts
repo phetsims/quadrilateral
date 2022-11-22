@@ -127,8 +127,8 @@ type StringsType = {
     'voicing': {
       'overviewContent': string;
       'overviewContentStringProperty': LinkableProperty<string>;
-      'hintContentPattern': string;
-      'hintContentPatternStringProperty': LinkableProperty<string>;
+      'hintContent': string;
+      'hintContentStringProperty': LinkableProperty<string>;
       'youHaveAShapeHintPattern': string;
       'youHaveAShapeHintPatternStringProperty': LinkableProperty<string>;
       'youHaveASizedNamedShapePattern': string;

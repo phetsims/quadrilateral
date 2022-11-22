@@ -18,7 +18,6 @@ import QuadrilateralNode from './QuadrilateralNode.js';
 import QuadrilateralSoundView from './sound/QuadrilateralSoundView.js';
 import VertexDragAreaNode from './VertexDragAreaNode.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
-import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 import Dialog from '../../../../sun/js/Dialog.js';
 import CalibrationContentNode from './CalibrationContentNode.js';
@@ -329,15 +328,7 @@ class QuadrilateralScreenView extends ScreenView {
    * button to describe the parallelogram state and shape name of the quadrilateral.
    */
   public override getVoicingHintContent(): string {
-
-    const shapeDescriptionString = this.quadrilateralDescriber.getShapeDescription();
-    const youHaveAShapeString = StringUtils.fillIn( QuadrilateralStrings.a11y.voicing.youHaveAShapeHintPattern, {
-      shapeDescription: shapeDescriptionString
-    } );
-
-    return StringUtils.fillIn( QuadrilateralStrings.a11y.voicing.hintContentPattern, {
-      shapeDescription: youHaveAShapeString
-    } );
+    return QuadrilateralStrings.a11y.voicing.hintContent;
   }
 
   /**
