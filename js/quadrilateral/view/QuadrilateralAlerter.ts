@@ -28,7 +28,6 @@ import SidePair from '../model/SidePair.js';
 import VertexPair from '../model/VertexPair.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import VertexDescriber from './VertexDescriber.js';
-import dotRandom from '../../../../dot/js/dotRandom.js';
 
 const kiteDetailsPatternString = QuadrilateralStrings.a11y.voicing.kiteDetailsPattern;
 const dartDetailsPatternString = QuadrilateralStrings.a11y.voicing.dartDetailsPattern;
@@ -49,7 +48,6 @@ const allRightAnglesAsShapeChangesPatternString = QuadrilateralStrings.a11y.voic
 const maintainingARhombusString = QuadrilateralStrings.a11y.voicing.maintainingARhombus;
 const allSidesEqualAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.allSidesEqualAsShapeChangesPattern;
 const cornerFlatAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.cornerFlatAsShapeChangesPattern;
-const doesShapeHaveThreeOrFourSidesQuestionString = QuadrilateralStrings.a11y.voicing.doesShapeHaveThreeOrFourSidesQuestion;
 const adjacentSidesChangeEquallyAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.adjacentSidesChangeEquallyAsShapeChangesPattern;
 const allSidesTiltAwayFromParallelString = QuadrilateralStrings.a11y.voicing.allSidesTiltAwayFromParallel;
 const allSidesTiltAwayFromParallelAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.allSidesTiltAwayFromParallelAsShapeChangesPattern;
@@ -82,6 +80,7 @@ const adjacentCornersEqualString = QuadrilateralStrings.a11y.voicing.adjacentCor
 const adjacentCornersRightAnglesString = QuadrilateralStrings.a11y.voicing.adjacentCornersRightAngles;
 const progressStatePatternString = QuadrilateralStrings.a11y.voicing.progressStatePattern;
 const equalToOppositeCornerEqualToAdjacentCornersString = QuadrilateralStrings.a11y.voicing.equalToOppositeCornerEqualToAdjacentCorners;
+const adjacentSidesInLinePatternString = QuadrilateralStrings.a11y.voicing.adjacentSidesInLinePattern;
 
 // A response may trigger because there is a large enough change in angle or length
 type ResponseReason = 'angle' | 'length';
@@ -647,7 +646,11 @@ class QuadrilateralAlerter extends Alerter {
     const areaChangeString = areaDifference > 0 ? biggerString : smallerString;
 
     if ( shapeName === NamedQuadrilateral.CONVEX_QUADRILATERAL || shapeName === NamedQuadrilateral.CONCAVE_QUADRILATERAL ) {
-
+      response = StringUtils.fillIn( allSidesTiltAwayFromParallelAsShapeChangesPatternString, {
+        areaChange: areaChangeString
+      } );
+    }
+    else if ( shapeName === NamedQuadrilateral.TRIANGLE ) {
       const flatVertex = _.find(
         this.quadrilateralShapeModel.vertices,
         vertex => this.quadrilateralShapeModel.isStaticAngleEqualToOther( vertex.angleProperty.value!, Math.PI )
@@ -655,25 +658,26 @@ class QuadrilateralAlerter extends Alerter {
 
       // consider small enough values as 'constant area' because the area might change by negligible values within
       // precision error
-      if ( areaDifference < 1e-5 && flatVertex ) {
+      if ( areaDifference < 1e-5 ) {
 
-        // As an "Easter egg" half of the time in this case add a leading question taht indicates that this
-        // shape could also be described as a triangle. See https://github.com/phetsims/quadrilateral/issues/236
-        // for the request.
-        if ( dotRandom.nextBoolean() ) {
-          response = doesShapeHaveThreeOrFourSidesQuestionString;
-        }
-        else {
-
-          // We have a convex shape where one vertex is 180 degrees and the shape is moving such that the area
-          // is not changing. Describe the "flat" vertex and how its adjacent sides get longer or shorter
-          response = StringUtils.fillIn( cornerFlatAsShapeChangesPatternString, {
-            cornerLabel: VertexDescriber.VertexCornerLabelMap.get( flatVertex.vertexLabel )
-          } );
-        }
+        // We have a triangle one vertex is 180 degrees and the shape is moving such that the area
+        // is not changing. Describe the "flat" vertex and how its adjacent sides get longer or shorter
+        response = StringUtils.fillIn( cornerFlatAsShapeChangesPatternString, {
+          cornerLabel: VertexDescriber.VertexCornerLabelMap.get( flatVertex!.vertexLabel )
+        } );
       }
       else {
-        response = StringUtils.fillIn( allSidesTiltAwayFromParallelAsShapeChangesPatternString, {
+
+        // We have a triangle being maintained but the area is changing, so we describe how it the adjacent
+        // sides remain in line as the shape gets bigger or smaller
+
+        // find the sides that are connected to the flat vertex
+        const flatSides = _.filter( this.quadrilateralShapeModel.sides, side => side.vertex1 === flatVertex || side.vertex2 === flatVertex );
+        assert && assert( flatSides.length === 2, 'We should have found two sides connected to the flat vertex' );
+
+        response = StringUtils.fillIn( adjacentSidesInLinePatternString, {
+          firstSide: QuadrilateralDescriber.getSideLabelString( flatSides[ 0 ].sideLabel ),
+          secondSide: QuadrilateralDescriber.getSideLabelString( flatSides[ 1 ].sideLabel ),
           areaChange: areaChangeString
         } );
       }
