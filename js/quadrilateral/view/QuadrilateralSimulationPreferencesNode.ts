@@ -15,7 +15,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import ClapperboardButton from '../../../../scenery-phet/js/ClapperboardButton.js';
 import PreferencesPanelSection from '../../../../joist/js/preferences/PreferencesPanelSection.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
-import PreferencesToggleSwitch from '../../../../joist/js/preferences/PreferencesToggleSwitch.js';
+import PreferencesControl from '../../../../joist/js/preferences/PreferencesControl.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import ToggleSwitch, { ToggleSwitchOptions } from '../../../../sun/js/ToggleSwitch.js';
 import PreferencesDialogConstants from '../../../../joist/js/preferences/PreferencesDialogConstants.js';
@@ -39,7 +39,7 @@ class QuadrilateralSimulationPreferencesNode extends PreferencesPanelSection {
       }
     ) );
 
-    const fineSpacingControl = new PreferencesToggleSwitch( {
+    const fineSpacingControl = new PreferencesControl( {
       labelNode: new Text( QuadrilateralStrings.fineInputSpacingStringProperty, PreferencesDialogConstants.CONTROL_LABEL_OPTIONS ),
       descriptionNode: fineInputDescriptionText,
       controlNode: fineSpacingSwitch
