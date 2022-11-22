@@ -32,7 +32,6 @@ import dotRandom from '../../../../dot/js/dotRandom.js';
 
 const kiteDetailsPatternString = QuadrilateralStrings.a11y.voicing.kiteDetailsPattern;
 const dartDetailsPatternString = QuadrilateralStrings.a11y.voicing.dartDetailsPattern;
-const allRightAnglesString = QuadrilateralStrings.a11y.voicing.allRightAngles;
 const foundShapePatternString = QuadrilateralStrings.a11y.voicing.foundShapePattern;
 const aBString = QuadrilateralStrings.a11y.aB;
 const bCString = QuadrilateralStrings.a11y.bC;
@@ -899,7 +898,7 @@ class QuadrilateralAlerter extends Alerter {
       response = this.getFoundShapeResponse( NamedQuadrilateral.RECTANGLE );
     }
     else {
-      response = allRightAnglesString;
+      response = this.describer.getRectangleDetailsString();
     }
     return response;
   }
