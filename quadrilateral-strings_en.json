@@ -278,6 +278,24 @@
       "sideLengthDescriptionPattern": {
         "value": "{{longest}}, {{shortest}}"
       },
+      "cornersRightDescription": {
+        "value": "Corners 90 degrees."
+      },
+      "widestCornersDescriptionPattern": {
+        "value": "widest corners {{description}}"
+      },
+      "widestCornerDescriptionPattern": {
+        "value": "widest corner {{description}}"
+      },
+      "smallestCornersDescriptionPattern": {
+        "value": "smallest corners {{description}}"
+      },
+      "smallestCornerDescriptionPattern": {
+        "value": "smallest corner {{description}}"
+      },
+      "cornersDescriptionPattern": {
+        "value": "{{longest}}, {{shortest}}"
+      },
       "oppositeSidesTiltPattern": {
         "value": "Opposite sides {{tiltChange}} in parallel as opposite corners change equally."
       },

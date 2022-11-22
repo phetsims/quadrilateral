@@ -71,6 +71,13 @@ const shortestSidesDescriptionPatternString = QuadrilateralStrings.a11y.voicing.
 const shortestSideDescriptionPatternString = QuadrilateralStrings.a11y.voicing.shortestSideDescriptionPattern;
 const sideLengthDescriptionPatternString = QuadrilateralStrings.a11y.voicing.sideLengthDescriptionPattern;
 
+const cornersRightDescriptionString = QuadrilateralStrings.a11y.voicing.cornersRightDescription;
+const widestCornersDescriptionPatternString = QuadrilateralStrings.a11y.voicing.widestCornersDescriptionPattern;
+const widestCornerDescriptionPatternString = QuadrilateralStrings.a11y.voicing.widestCornerDescriptionPattern;
+const smallestCornersDescriptionPatternString = QuadrilateralStrings.a11y.voicing.smallestCornersDescriptionPattern;
+const smallestCornerDescriptionPatternString = QuadrilateralStrings.a11y.voicing.smallestCornerDescriptionPattern;
+const cornersDescriptionPatternString = QuadrilateralStrings.a11y.voicing.cornersDescriptionPattern;
+
 const shapeNameWithArticlesMap = new Map<NamedQuadrilateral | null, string>();
 shapeNameWithArticlesMap.set( NamedQuadrilateral.SQUARE, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.square );
 shapeNameWithArticlesMap.set( NamedQuadrilateral.RECTANGLE, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.rectangle );
@@ -127,14 +134,16 @@ const MEDIUM_SIZED_THRESHOLD = Math.pow( QuadrilateralConstants.GRID_SPACING * 4
 class QuadrilateralDescriber {
   private readonly shapeModel: QuadrilateralShapeModel;
   private readonly shapeNameVisibleProperty: TReadOnlyProperty<boolean>;
+  private readonly cornerGuidesVisibleProperty: TReadOnlyProperty<boolean>;
 
   // The tolerance used to determine if a tilt has changed enough to describe it.
   public readonly tiltDifferenceToleranceInterval: number;
   public readonly lengthDifferenceToleranceInterval: number;
 
-  public constructor( shapeModel: QuadrilateralShapeModel, shapeNameVisibleProperty: TReadOnlyProperty<boolean> ) {
+  public constructor( shapeModel: QuadrilateralShapeModel, shapeNameVisibleProperty: TReadOnlyProperty<boolean>, cornerGuidesVisibleProperty: TReadOnlyProperty<boolean> ) {
     this.shapeModel = shapeModel;
     this.shapeNameVisibleProperty = shapeNameVisibleProperty;
+    this.cornerGuidesVisibleProperty = cornerGuidesVisibleProperty;
 
     // TODO: Do we need a query parameter for this?
     this.tiltDifferenceToleranceInterval = 0.2;
@@ -379,8 +388,8 @@ class QuadrilateralDescriber {
   }
 
   /**
-   * Returns a description of the longest and shortest sides of the shape. Only returns a string if side unit length
-   * is displayed.
+   * The fourth description of the "details" button in the Voicing toolbar. Returns a description of the longest and
+   * shortest sides of the shape. Only returns a string if side unit length is displayed.
    *
    * TODO: Return null if necessary, but that Property doesn't exist in the sim yet.
    */
@@ -439,6 +448,70 @@ class QuadrilateralDescriber {
     }
 
     return description;
+  }
+
+  /**
+   * The fifth statement of the "details" button in the Voicing toolbar. Returns a description of the widest and
+   * smallest angles of the shape. Only returns a string if corner guides are displayed.
+   */
+  public getFifthDetailsStatement(): string | null {
+    let description: null | string = null;
+
+    if ( !this.cornerGuidesVisibleProperty.value ) {
+      return description;
+    }
+    else {
+      const widestVertex = _.maxBy( this.shapeModel.vertices, vertex => vertex.angleProperty.value )!;
+      const smallestVertex = _.minBy( this.shapeModel.vertices, vertex => vertex.angleProperty.value )!;
+
+      const widestVertexDescription = VertexDescriber.getSlicesDescription( widestVertex.angleProperty.value!, this.shapeModel );
+      const smallestVertexDescription = VertexDescriber.getSlicesDescription( smallestVertex.angleProperty.value!, this.shapeModel );
+
+      if ( this.shapeModel.allAnglesRightProperty.value ) {
+
+        // All corners the same angle, combine into a shorter string
+        description = cornersRightDescriptionString;
+      }
+      else {
+
+        let longestSubString;
+        let shortestSubString;
+        if ( _.some( this.shapeModel.oppositeEqualVertexPairsProperty.value, oppositeEQualVertexPair => oppositeEQualVertexPair.includesVertex( widestVertex ) ) ||
+             _.some( this.shapeModel.adjacentEqualVertexPairsProperty.value, adjacentEqualVertexPair => adjacentEqualVertexPair.includesVertex( widestVertex ) ) ) {
+
+          // multiple vertices of the same "widest" angle, pluralize
+          longestSubString = StringUtils.fillIn( widestCornersDescriptionPatternString, {
+            description: widestVertexDescription
+          } );
+        }
+        else {
+          longestSubString = StringUtils.fillIn( widestCornerDescriptionPatternString, {
+            description: widestVertexDescription
+          } );
+        }
+
+        if ( _.some( this.shapeModel.oppositeEqualVertexPairsProperty.value, oppositeEqualVertexPair => oppositeEqualVertexPair.includesVertex( smallestVertex ) ) ||
+             _.some( this.shapeModel.adjacentEqualVertexPairsProperty.value, adjacentEqualVertexPair => adjacentEqualVertexPair.includesVertex( smallestVertex ) ) ) {
+
+          // multiple sides of the same "longest" length, pluralize
+          shortestSubString = StringUtils.fillIn( smallestCornersDescriptionPatternString, {
+            description: smallestVertexDescription
+          } );
+        }
+        else {
+          shortestSubString = StringUtils.fillIn( smallestCornerDescriptionPatternString, {
+            description: smallestVertexDescription
+          } );
+        }
+
+        description = StringUtils.fillIn( cornersDescriptionPatternString, {
+          longest: longestSubString,
+          shortest: shortestSubString
+        } );
+      }
+
+      return description;
+    }
   }
 
   /**

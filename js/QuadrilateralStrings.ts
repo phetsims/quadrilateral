@@ -201,6 +201,18 @@ type StringsType = {
       'shortestSideDescriptionPatternStringProperty': LinkableProperty<string>;
       'sideLengthDescriptionPattern': string;
       'sideLengthDescriptionPatternStringProperty': LinkableProperty<string>;
+      'cornersRightDescription': string;
+      'cornersRightDescriptionStringProperty': LinkableProperty<string>;
+      'widestCornersDescriptionPattern': string;
+      'widestCornersDescriptionPatternStringProperty': LinkableProperty<string>;
+      'widestCornerDescriptionPattern': string;
+      'widestCornerDescriptionPatternStringProperty': LinkableProperty<string>;
+      'smallestCornersDescriptionPattern': string;
+      'smallestCornersDescriptionPatternStringProperty': LinkableProperty<string>;
+      'smallestCornerDescriptionPattern': string;
+      'smallestCornerDescriptionPatternStringProperty': LinkableProperty<string>;
+      'cornersDescriptionPattern': string;
+      'cornersDescriptionPatternStringProperty': LinkableProperty<string>;
       'oppositeSidesTiltPattern': string;
       'oppositeSidesTiltPatternStringProperty': LinkableProperty<string>;
       'oppositeSidesInParallelPattern': string;

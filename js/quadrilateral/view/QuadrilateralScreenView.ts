@@ -68,7 +68,7 @@ class QuadrilateralScreenView extends ScreenView {
     } );
 
     // Responsible for generating descriptions of the state of the quadrilateral for accessibility.
-    this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel, model.shapeNameVisibleProperty );
+    this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel, model.shapeNameVisibleProperty, model.cornerGuideVisibleProperty );
 
     const visibilityControls = new QuadrilateralVisibilityControls(
       model.vertexLabelsVisibleProperty,
@@ -302,6 +302,7 @@ class QuadrilateralScreenView extends ScreenView {
     const secondStatement = this.quadrilateralDescriber.getSecondDetailsStatement();
     const thirdStatement = this.quadrilateralDescriber.getThirdDetailsStatement();
     const fourthStatement = this.quadrilateralDescriber.getFourthDetailsStatement();
+    const fifthStatement = this.quadrilateralDescriber.getFifthDetailsStatement();
     assert && assert( firstStatement, 'there should always be a first statement for details' );
 
     let contentString = firstStatement;
@@ -315,6 +316,9 @@ class QuadrilateralScreenView extends ScreenView {
     }
     if ( fourthStatement ) {
       contentString += ' ' + fourthStatement;
+    }
+    if ( fifthStatement ) {
+      contentString += ' ' + fifthStatement;
     }
 
     return contentString;
