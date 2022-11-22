@@ -51,15 +51,15 @@ class CornerGuideNode extends Node {
     // The guide looks like alternating dark and light slices along the annulus, we accomplish this with two paths
     const darkAnglePath = new Path( null, {
       fill: QuadrilateralColors.cornerGuideDarkColorProperty,
-      stroke: QuadrilateralColors.cornerGuideStrokeColorProperty
+      stroke: QuadrilateralColors.markersStrokeColorProperty
     } );
     const lightAnglePath = new Path( null, {
       fill: QuadrilateralColors.cornerGuideLightColorProperty,
-      stroke: QuadrilateralColors.cornerGuideStrokeColorProperty
+      stroke: QuadrilateralColors.markersStrokeColorProperty
     } );
 
     const crosshairPath = new Path( null, {
-      stroke: QuadrilateralColors.cornerGuideStrokeColorProperty,
+      stroke: QuadrilateralColors.markersStrokeColorProperty,
       lineDash: [ 5, 5 ]
     } );
 

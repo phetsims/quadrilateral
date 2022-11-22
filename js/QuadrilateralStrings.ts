@@ -15,8 +15,8 @@ type StringsType = {
   };
   'labels': string;
   'labelsStringProperty': LinkableProperty<string>;
-  'angles': string;
-  'anglesStringProperty': LinkableProperty<string>;
+  'markers': string;
+  'markersStringProperty': LinkableProperty<string>;
   'diagonals': string;
   'diagonalsStringProperty': LinkableProperty<string>;
   'grid': string;

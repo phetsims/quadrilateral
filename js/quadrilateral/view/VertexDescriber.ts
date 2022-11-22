@@ -87,15 +87,15 @@ class VertexDescriber {
   // A reference to the model components that drive description.
   private vertex: Vertex;
   private quadrilateralShapeModel: QuadrilateralShapeModel;
-  private cornerGuidesVisibleProperty: TReadOnlyProperty<boolean>;
+  private markersVisibleProperty: TReadOnlyProperty<boolean>;
 
   // See above documentation.
   public static VertexCornerLabelMap = vertexCornerLabelMap;
 
-  public constructor( vertex: Vertex, quadrilateralShapeModel: QuadrilateralShapeModel, cornerGuidesVisibleProperty: TReadOnlyProperty<boolean> ) {
+  public constructor( vertex: Vertex, quadrilateralShapeModel: QuadrilateralShapeModel, markersVisibleProperty: TReadOnlyProperty<boolean> ) {
     this.vertex = vertex;
     this.quadrilateralShapeModel = quadrilateralShapeModel;
-    this.cornerGuidesVisibleProperty = cornerGuidesVisibleProperty;
+    this.markersVisibleProperty = markersVisibleProperty;
   }
 
   /**
@@ -126,7 +126,7 @@ class VertexDescriber {
     const adjacentVertexDescriptionString = this.getAdjacentVertexObjectDescription();
 
     // if corner guides are visible, a description of the number of slices is included
-    if ( this.cornerGuidesVisibleProperty.value ) {
+    if ( this.markersVisibleProperty.value ) {
       response = StringUtils.fillIn( vertexObjectResponseWithSlicesPatternString, {
         slicesDescription: VertexDescriber.getSlicesDescription( this.vertex.angleProperty.value!, this.quadrilateralShapeModel ),
         oppositeComparison: oppositeComparisonString,

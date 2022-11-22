@@ -115,16 +115,16 @@ class QuadrilateralNode extends Node {
     } );
 
     // angle guides
-    const vertexACornerGuideNode = new CornerGuideNode( vertexA, vertexB, this.model.cornerGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
-    const vertexBCornerGuideNode = new CornerGuideNode( vertexB, vertexC, this.model.cornerGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
-    const vertexCCornerGuideNode = new CornerGuideNode( vertexC, vertexD, this.model.cornerGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
-    const vertexDCornerGuideNode = new CornerGuideNode( vertexD, vertexA, this.model.cornerGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertexACornerGuideNode = new CornerGuideNode( vertexA, vertexB, this.model.markersVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertexBCornerGuideNode = new CornerGuideNode( vertexB, vertexC, this.model.markersVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertexCCornerGuideNode = new CornerGuideNode( vertexC, vertexD, this.model.markersVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertexDCornerGuideNode = new CornerGuideNode( vertexD, vertexA, this.model.markersVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
 
     // right angle indicators, visible when a vertex has a right angle
-    const vertexARightAngleIndicator = new RightAngleIndicatorNode( vertexA, vertexB, vertexD, this.model.cornerGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
-    const vertexBRightAngleIndicator = new RightAngleIndicatorNode( vertexB, vertexC, vertexA, this.model.cornerGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
-    const vertexCRightAngleIndicator = new RightAngleIndicatorNode( vertexC, vertexD, vertexB, this.model.cornerGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
-    const vertexDRightAngleIndicator = new RightAngleIndicatorNode( vertexD, vertexA, vertexC, this.model.cornerGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertexARightAngleIndicator = new RightAngleIndicatorNode( vertexA, vertexB, vertexD, this.model.markersVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertexBRightAngleIndicator = new RightAngleIndicatorNode( vertexB, vertexC, vertexA, this.model.markersVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertexCRightAngleIndicator = new RightAngleIndicatorNode( vertexC, vertexD, vertexB, this.model.markersVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertexDRightAngleIndicator = new RightAngleIndicatorNode( vertexD, vertexA, vertexC, this.model.markersVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
 
     // add children - parents support layering order as well as traversal order in the PDOM
     // sides first because we want vertices to catch all input

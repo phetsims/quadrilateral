@@ -135,16 +135,16 @@ const MEDIUM_SIZED_THRESHOLD = GRID_CELL_AREA * 48;
 class QuadrilateralDescriber {
   private readonly shapeModel: QuadrilateralShapeModel;
   private readonly shapeNameVisibleProperty: TReadOnlyProperty<boolean>;
-  private readonly cornerGuidesVisibleProperty: TReadOnlyProperty<boolean>;
+  private readonly markersVisibleProperty: TReadOnlyProperty<boolean>;
 
   // The tolerance used to determine if a tilt has changed enough to describe it.
   public readonly tiltDifferenceToleranceInterval: number;
   public readonly lengthDifferenceToleranceInterval: number;
 
-  public constructor( shapeModel: QuadrilateralShapeModel, shapeNameVisibleProperty: TReadOnlyProperty<boolean>, cornerGuidesVisibleProperty: TReadOnlyProperty<boolean> ) {
+  public constructor( shapeModel: QuadrilateralShapeModel, shapeNameVisibleProperty: TReadOnlyProperty<boolean>, markersVisibleProperty: TReadOnlyProperty<boolean> ) {
     this.shapeModel = shapeModel;
     this.shapeNameVisibleProperty = shapeNameVisibleProperty;
-    this.cornerGuidesVisibleProperty = cornerGuidesVisibleProperty;
+    this.markersVisibleProperty = markersVisibleProperty;
 
     // TODO: Do we need a query parameter for this?
     this.tiltDifferenceToleranceInterval = 0.2;
@@ -458,7 +458,7 @@ class QuadrilateralDescriber {
   public getFifthDetailsStatement(): string | null {
     let description: null | string = null;
 
-    if ( !this.cornerGuidesVisibleProperty.value ) {
+    if ( !this.markersVisibleProperty.value ) {
       return description;
     }
     else {

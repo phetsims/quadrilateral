@@ -5,8 +5,8 @@
   "labels": {
     "value": "Labels"
   },
-  "angles": {
-    "value": "Angles"
+  "markers": {
+    "value": "Markers"
   },
   "diagonals": {
     "value": "Diagonals"

@@ -67,11 +67,11 @@ class QuadrilateralScreenView extends ScreenView {
     } );
 
     // Responsible for generating descriptions of the state of the quadrilateral for accessibility.
-    this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel, model.shapeNameVisibleProperty, model.cornerGuideVisibleProperty );
+    this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel, model.shapeNameVisibleProperty, model.markersVisibleProperty );
 
     const visibilityControls = new QuadrilateralVisibilityControls(
       model.vertexLabelsVisibleProperty,
-      model.cornerGuideVisibleProperty,
+      model.markersVisibleProperty,
       model.gridVisibleProperty,
       model.diagonalGuidesVisibleProperty,
       {
