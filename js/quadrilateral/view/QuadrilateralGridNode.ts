@@ -15,11 +15,9 @@ import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
+import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 
 // constants
-// model coordinates
-const GRID_SPACING = 0.25;
-
 const GRID_LINE_OPTIONS = {
   stroke: QuadrilateralColors.gridColorProperty
 };
@@ -52,8 +50,8 @@ class QuadrilateralGridNode extends Path {
         const modelLineWidth = modelViewTransform.viewToModelDeltaX( 1 );
         const erodedBounds = modelBounds.eroded( modelLineWidth );
 
-        this.drawVerticalLines( lineShape, erodedBounds, GRID_SPACING );
-        this.drawHorizontalLines( lineShape, erodedBounds, GRID_SPACING );
+        this.drawVerticalLines( lineShape, erodedBounds, QuadrilateralConstants.GRID_SPACING );
+        this.drawHorizontalLines( lineShape, erodedBounds, QuadrilateralConstants.GRID_SPACING );
         this.shape = modelViewTransform.modelToViewShape( lineShape );
 
         // Only do this work if necessary

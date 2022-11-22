@@ -24,23 +24,14 @@ import Vertex from '../model/Vertex.js';
 import Utils from '../../../../dot/js/Utils.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
-import SideLabel from '../model/SideLabel.js';
 import SidePair from '../model/SidePair.js';
 import VertexPair from '../model/VertexPair.js';
-import VertexLabel from '../model/VertexLabel.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import VertexDescriber from './VertexDescriber.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 
-const foundIsoscelesTrapezoidPatternString = QuadrilateralStrings.a11y.voicing.foundIsoscelesTrapezoidPattern;
-const allRightAnglesAllSidesEqualString = QuadrilateralStrings.a11y.voicing.allRightAnglesAllSidesEqual;
-const oppositeSidesInParallelString = QuadrilateralStrings.a11y.voicing.oppositeSidesInParallel;
-const foundTrapezoidPatternString = QuadrilateralStrings.a11y.voicing.foundTrapezoidPattern;
-const foundKitePatternString = QuadrilateralStrings.a11y.voicing.foundKitePattern;
-const foundDartPatternString = QuadrilateralStrings.a11y.voicing.foundDartPattern;
-const foundConvexQuadrilateralString = QuadrilateralStrings.a11y.voicing.foundConvexQuadrilateral;
-const foundConcaveQuadrilateralPatternString = QuadrilateralStrings.a11y.voicing.foundConcaveQuadrilateralPattern;
-const allSidesEqualString = QuadrilateralStrings.a11y.voicing.allSidesEqual;
+const kiteDetailsPatternString = QuadrilateralStrings.a11y.voicing.kiteDetailsPattern;
+const dartDetailsPatternString = QuadrilateralStrings.a11y.voicing.dartDetailsPattern;
 const allRightAnglesString = QuadrilateralStrings.a11y.voicing.allRightAngles;
 const foundShapePatternString = QuadrilateralStrings.a11y.voicing.foundShapePattern;
 const aBString = QuadrilateralStrings.a11y.aB;
@@ -123,13 +114,17 @@ class QuadrilateralAlerter extends Alerter {
   private previousContextResponseShapeSnapshot: ShapeSnapshot;
   private previousObjectResponseShapeSnapshot: ShapeSnapshot;
 
-  public constructor( model: QuadrilateralModel, screenView: QuadrilateralScreenView, modelViewTransform: ModelViewTransform2 ) {
+  private readonly describer: QuadrilateralDescriber;
+
+  public constructor( model: QuadrilateralModel, screenView: QuadrilateralScreenView, modelViewTransform: ModelViewTransform2, describer: QuadrilateralDescriber ) {
     super();
 
     this.quadrilateralShapeModel = model.quadrilateralShapeModel;
 
     this.model = model;
     this.modelViewTransform = modelViewTransform;
+
+    this.describer = describer;
 
     this.previousContextResponseShapeSnapshot = new ShapeSnapshot( this.quadrilateralShapeModel );
     this.previousObjectResponseShapeSnapshot = new ShapeSnapshot( this.quadrilateralShapeModel );
@@ -865,7 +860,7 @@ class QuadrilateralAlerter extends Alerter {
         contextResponse = this.getFoundDartResponse( shapeNameVisible, this.quadrilateralShapeModel.vertices );
       }
       else if ( currentShapeName === NamedQuadrilateral.CONCAVE_QUADRILATERAL ) {
-        contextResponse = this.getFoundConcaveQuadrilateralResponse( shapeNameVisible, this.quadrilateralShapeModel.vertices );
+        contextResponse = this.getFoundConcaveQuadrilateralResponse( shapeNameVisible );
       }
       else if ( currentShapeName === NamedQuadrilateral.CONVEX_QUADRILATERAL ) {
         contextResponse = this.getFoundConvexQuadrilateralResponse( shapeNameVisible );
@@ -888,7 +883,7 @@ class QuadrilateralAlerter extends Alerter {
       response = this.getFoundShapeResponse( NamedQuadrilateral.SQUARE );
     }
     else {
-      response = allRightAnglesAllSidesEqualString;
+      response = this.describer.getSquareDetailsString();
     }
 
     return response;
@@ -919,7 +914,7 @@ class QuadrilateralAlerter extends Alerter {
       response = this.getFoundShapeResponse( NamedQuadrilateral.RHOMBUS );
     }
     else {
-      response = allSidesEqualString;
+      response = this.describer.getRhombusDetailsString();
     }
     return response;
   }
@@ -934,21 +929,7 @@ class QuadrilateralAlerter extends Alerter {
       response = this.getFoundShapeResponse( NamedQuadrilateral.TRAPEZOID );
     }
     else {
-      let firstSideLabel: string;
-      let secondSideLabel: string;
-
-      if ( parallelSidePair.includesSide( this.quadrilateralShapeModel.topSide ) ) {
-        firstSideLabel = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_AB );
-        secondSideLabel = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_CD );
-      }
-      else {
-        firstSideLabel = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_BC );
-        secondSideLabel = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_DA );
-      }
-      response = StringUtils.fillIn( foundTrapezoidPatternString, {
-        firstSide: firstSideLabel,
-        secondSide: secondSideLabel
-      } );
+      response = this.describer.getTrapezoidDetailsString( parallelSidePair );
     }
     return response;
   }
@@ -963,34 +944,7 @@ class QuadrilateralAlerter extends Alerter {
       response = this.getFoundShapeResponse( NamedQuadrilateral.ISOSCELES_TRAPEZOID );
     }
     else {
-      let equalFirstSideString: string;
-      let equalSecondSideString: string;
-      let parallelFirstSideString: string;
-      let parallelSecondSideString: string;
-
-      if ( oppositeEqualSidePair.includesSide( this.quadrilateralShapeModel.topSide ) ) {
-
-        // top sides and bottom side are equal in length, left and right sides are parallel
-        equalFirstSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_AB );
-        equalSecondSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_CD );
-        parallelFirstSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_DA );
-        parallelSecondSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_BC );
-      }
-      else {
-
-        // left and right sides are equal in length, top and bottom sides are parallel
-        equalFirstSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_DA );
-        equalSecondSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_BC );
-        parallelFirstSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_AB );
-        parallelSecondSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_CD );
-      }
-
-      response = StringUtils.fillIn( foundIsoscelesTrapezoidPatternString, {
-        equalFirstSide: equalFirstSideString,
-        equalSecondSide: equalSecondSideString,
-        parallelFirstSide: parallelFirstSideString,
-        parallelSecondSide: parallelSecondSideString
-      } );
+      response = this.describer.getIsoscelesTrapezoidDetailsString( oppositeEqualSidePair, parallelSidePair );
     }
     return response;
   }
@@ -1005,23 +959,7 @@ class QuadrilateralAlerter extends Alerter {
       response = this.getFoundShapeResponse( NamedQuadrilateral.KITE );
     }
     else {
-      let firstCornerString: string;
-      let secondCornerString: string;
-      if ( oppositeEqualVertexPair.includesVertex( this.quadrilateralShapeModel.vertexA ) ) {
-
-        // opposite equal vertices for the kite are A and C
-        firstCornerString = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_A );
-        secondCornerString = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_C );
-      }
-      else {
-        firstCornerString = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_B );
-        secondCornerString = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_D );
-      }
-
-      response = StringUtils.fillIn( foundKitePatternString, {
-        firstCorner: firstCornerString,
-        secondCorner: secondCornerString
-      } );
+      response = this.describer.getKiteDetailsString( oppositeEqualVertexPair, kiteDetailsPatternString );
     }
     return response;
   }
@@ -1036,27 +974,7 @@ class QuadrilateralAlerter extends Alerter {
       response = this.getFoundShapeResponse( NamedQuadrilateral.DART );
     }
     else {
-      const concaveVertex = vertices.find( vertex => vertex.angleProperty.value! > Math.PI )!;
-      assert && assert( concaveVertex, 'A dart has one vertex with angle greater than Math.PI.' );
-      const inwardCornerLabel = concaveVertex.vertexLabel;
-
-      // the vertices with equal angles for a dart will be the ones adjacent to the inward vertex
-      let firstCornerLabel: VertexLabel;
-      let secondCornerLabel: VertexLabel;
-      if ( inwardCornerLabel === VertexLabel.VERTEX_A || inwardCornerLabel === VertexLabel.VERTEX_C ) {
-        firstCornerLabel = VertexLabel.VERTEX_B;
-        secondCornerLabel = VertexLabel.VERTEX_D;
-      }
-      else {
-        firstCornerLabel = VertexLabel.VERTEX_A;
-        secondCornerLabel = VertexLabel.VERTEX_C;
-      }
-
-      response = StringUtils.fillIn( foundDartPatternString, {
-        inwardCorner: QuadrilateralDescriber.getVertexLabelString( inwardCornerLabel ),
-        firstCorner: QuadrilateralDescriber.getVertexLabelString( firstCornerLabel ),
-        secondCorner: QuadrilateralDescriber.getVertexLabelString( secondCornerLabel )
-      } );
+      response = this.describer.getDartDetailsString( dartDetailsPatternString );
     }
 
     return response;
@@ -1072,7 +990,7 @@ class QuadrilateralAlerter extends Alerter {
       response = this.getFoundShapeResponse( NamedQuadrilateral.PARALLELOGRAM );
     }
     else {
-      response = oppositeSidesInParallelString;
+      response = this.describer.getParallelogramDetailsString();
     }
     return response;
   }
@@ -1081,19 +999,13 @@ class QuadrilateralAlerter extends Alerter {
    * Returns the response when you create a concave quadrilateral. Describing the square or its attributes depending on
    * if shape name is shown.
    */
-  private getFoundConcaveQuadrilateralResponse( shapeNameVisible: boolean, vertices: Vertex[] ): string {
+  private getFoundConcaveQuadrilateralResponse( shapeNameVisible: boolean ): string {
     let response: string;
     if ( shapeNameVisible ) {
       response = this.getFoundShapeResponse( NamedQuadrilateral.CONCAVE_QUADRILATERAL );
     }
     else {
-      const concaveVertex = vertices.find( vertex => vertex.angleProperty.value! > Math.PI )!;
-      assert && assert( concaveVertex, 'A convex quad has one vertex with angle greater than Math.PI.' );
-      const inwardCornerLabel = concaveVertex.vertexLabel;
-
-      response = StringUtils.fillIn( foundConcaveQuadrilateralPatternString, {
-        inwardCorner: QuadrilateralDescriber.getVertexLabelString( inwardCornerLabel )
-      } );
+      response = this.describer.getConcaveQuadrilateralDetailsString();
     }
 
     return response;
@@ -1109,7 +1021,7 @@ class QuadrilateralAlerter extends Alerter {
       response = this.getFoundShapeResponse( NamedQuadrilateral.CONVEX_QUADRILATERAL );
     }
     else {
-      response = foundConvexQuadrilateralString;
+      response = this.describer.getConvexQuadrilateralDetailsString();
     }
     return response;
   }
@@ -1125,8 +1037,7 @@ class QuadrilateralAlerter extends Alerter {
       response = this.getFoundShapeResponse( NamedQuadrilateral.TRIANGLE );
     }
     else {
-      // TODO: https://github.com/phetsims/quadrilateral/issues/215
-      response = 'Hello Taliesin! How would you like to describe finding a triangle when shape name is hidden?';
+      response = this.describer.getTriangleDetailsString();
     }
     return response;
   }
@@ -1138,7 +1049,7 @@ class QuadrilateralAlerter extends Alerter {
    */
   private getFoundShapeResponse( namedQuadrilateral: NamedQuadrilateral ): string {
     return StringUtils.fillIn( foundShapePatternString, {
-      shapeName: QuadrilateralDescriber.getShapeNameDescription( namedQuadrilateral )
+      shapeName: QuadrilateralDescriber.getShapeNameWithArticlesDescription( namedQuadrilateral )
     } );
   }
 }

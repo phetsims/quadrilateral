@@ -174,6 +174,12 @@
       "youHaveAShapeHintPattern": {
         "value": "You have {{shapeDescription}}."
       },
+      "youHaveASizedNamedShapePattern": {
+        "value": "You have a {{size}} {{shapeName}}."
+      },
+      "youHaveASizedShapePattern": {
+        "value": "You have a {{size}} shape."
+      },
       "firstDetailsStatementPattern": {
         "value": "Right now, {{cornerType}} corners are {{angleEquality}}, and {{sideType}} sides are equal."
       },
@@ -314,39 +320,93 @@
       "smaller": {
         "value": "smaller"
       },
+      "sizes": {
+        "tiny": {
+          "value": "tiny"
+        },
+        "verySmall": {
+          "value": "very small"
+        },
+        "small": {
+          "value": "small"
+        },
+        "mediumSized": {
+          "value": "medium-sized"
+        },
+        "large": {
+          "value": "large"
+        }
+      },
       "shapeNames": {
-        "square": {
-          "value": "a square"
+        "withoutArticles": {
+          "square": {
+            "value": "square"
+          },
+          "rectangle": {
+            "value": "rectangle"
+          },
+          "rhombus": {
+            "value": "rhombus"
+          },
+          "kite": {
+            "value": "kite"
+          },
+          "isoscelesTrapezoid": {
+            "value": "isosceles trapezoid"
+          },
+          "trapezoid": {
+            "value": "trapezoid"
+          },
+          "concaveQuadrilateral": {
+            "value": "concave quadrilateral"
+          },
+          "convexQuadrilateral": {
+            "value": "convex quadrilateral"
+          },
+          "parallelogram": {
+            "value": "parallelogram"
+          },
+          "dart": {
+            "value": "dart"
+          },
+          "triangle": {
+            "value": "triangle, is that right?"
+          }
         },
-        "rectangle": {
-          "value": "a rectangle"
-        },
-        "rhombus": {
-          "value": "a rhombus"
-        },
-        "kite": {
-          "value": "a kite"
-        },
-        "isoscelesTrapezoid": {
-          "value": "an isosceles trapezoid"
-        },
-        "trapezoid": {
-          "value": "a trapezoid"
-        },
-        "concaveQuadrilateral": {
-          "value": "a concave quadrilateral"
-        },
-        "convexQuadrilateral": {
-          "value": "a convex quadrilateral"
-        },
-        "parallelogram": {
-          "value": "a parallelogram"
-        },
-        "dart": {
-          "value": "a dart"
-        },
-        "triangle": {
-          "value": "a triangle, is that right?"
+        "withArticles": {
+          "square": {
+            "value": "a square"
+          },
+          "rectangle": {
+            "value": "a rectangle"
+          },
+          "rhombus": {
+            "value": "a rhombus"
+          },
+          "kite": {
+            "value": "a kite"
+          },
+          "isoscelesTrapezoid": {
+            "value": "an isosceles trapezoid"
+          },
+          "trapezoid": {
+            "value": "a trapezoid"
+          },
+          "concaveQuadrilateral": {
+            "value": "a concave quadrilateral"
+          },
+          "convexQuadrilateral": {
+            "value": "a convex quadrilateral"
+          },
+          "parallelogram": {
+            "value": "a parallelogram"
+          },
+          "dart": {
+            "value": "a dart"
+          },
+          "triangle": {
+            "value": "a triangle, is that right?"
+          }
         }
       },
       "foundAParallelogram": {
@@ -367,22 +427,31 @@
       "oppositeSidesInParallel": {
         "value": "Opposite sides in parallel."
       },
-      "foundTrapezoidPattern": {
+      "trapezoidDetailsPattern": {
         "value": "Opposite sides {{firstSide}} and {{secondSide}} in parallel."
       },
-      "foundIsoscelesTrapezoidPattern": {
+      "isoscelesTrapezoidDetailsPattern": {
         "value": "Opposite sides {{equalFirstSide}} and {{equalSecondSide}} equal, opposite sides {{parallelFirstSide}} and {{parallelSecondSide}} in parallel."
       },
-      "foundKitePattern": {
+      "kiteDetailsPattern": {
         "value": "Corners {{firstCorner}} and {{secondCorner}} are equal, and pairs of adjacent sides are equal."
       },
-      "foundDartPattern": {
+      "kiteDetailsShortPattern": {
+        "value": "Corners {{firstCorner}} and {{secondCorner}} are equal."
+      },
+      "dartDetailsPattern": {
         "value": "Corner {{inwardCorner}} points inward, Corners {{firstCorner}} and {{secondCorner}} are equal, and pairs of adjacent sides are equal."
       },
-      "foundConvexQuadrilateral": {
+      "dartDetailsShortPattern": {
+        "value": "Corner {{inwardCorner}} points inward, Corners {{firstCorner}} and {{secondCorner}} are equal."
+      },
+      "triangleDetailsPattern": {
+        "value": "Corner {{flatCorner}} flat, adjacent sides look like one side."
+      },
+      "convexQuadrilateralDetails": {
         "value": "No sides in parallel."
       },
-      "foundConcaveQuadrilateralPattern": {
+      "concaveQuadrilateralDetailsPattern": {
         "value": "Corner {{inwardCorner}} points inward, no sides in parallel."
       },
       "vertexObjectResponsePattern": {

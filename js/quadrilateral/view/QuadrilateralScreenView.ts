@@ -68,7 +68,7 @@ class QuadrilateralScreenView extends ScreenView {
     } );
 
     // Responsible for generating descriptions of the state of the quadrilateral for accessibility.
-    this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel );
+    this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel, model.shapeNameVisibleProperty );
 
     const visibilityControls = new QuadrilateralVisibilityControls(
       model.vertexLabelsVisibleProperty,
@@ -284,7 +284,7 @@ class QuadrilateralScreenView extends ScreenView {
     // voicing
     // Disabling eslint here because this variable is not used but I am sure that it will be soon.
 
-    const quadrilateralAlerter = new QuadrilateralAlerter( model, this, modelViewTransform ); // eslint-disable-line @typescript-eslint/no-unused-vars
+    const quadrilateralAlerter = new QuadrilateralAlerter( model, this, modelViewTransform, this.quadrilateralDescriber ); // eslint-disable-line @typescript-eslint/no-unused-vars
   }
 
   /**
@@ -301,32 +301,20 @@ class QuadrilateralScreenView extends ScreenView {
     const firstStatement = this.quadrilateralDescriber.getFirstDetailsStatement();
     const secondStatement = this.quadrilateralDescriber.getSecondDetailsStatement();
     const thirdStatement = this.quadrilateralDescriber.getThirdDetailsStatement();
+    const fourthStatement = this.quadrilateralDescriber.getFourthDetailsStatement();
     assert && assert( firstStatement, 'there should always be a first statement for details' );
 
     let contentString = firstStatement;
 
-    let patternString;
-    if ( secondStatement && thirdStatement ) {
-      patternString = '{{firstStatement}} {{secondStatement}} {{thirdStatement}}';
-      contentString = StringUtils.fillIn( patternString, {
-        firstStatement: firstStatement,
-        secondStatement: secondStatement,
-        thirdStatement: thirdStatement
-      } );
+    // NOTE: Bad for i18n but much easier for now.
+    if ( secondStatement ) {
+      contentString += ' ' + secondStatement;
     }
-    else if ( secondStatement ) {
-      patternString = '{{firstStatement}} {{secondStatement}}';
-      contentString = StringUtils.fillIn( patternString, {
-        firstStatement: firstStatement,
-        secondStatement: secondStatement
-      } );
+    if ( thirdStatement ) {
+      contentString += ' ' + thirdStatement;
     }
-    else if ( thirdStatement ) {
-      patternString = '{{firstStatement}} {{thirdStatement}}';
-      contentString = StringUtils.fillIn( patternString, {
-        firstStatement: firstStatement,
-        thirdStatement: thirdStatement
-      } );
+    if ( fourthStatement ) {
+      contentString += ' ' + fourthStatement;
     }
 
     return contentString;
