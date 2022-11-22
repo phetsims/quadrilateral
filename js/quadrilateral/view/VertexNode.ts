@@ -155,7 +155,10 @@ class VertexNode extends Voicing( Circle ) {
         const proposedTranslation = constrainedPosition.minus( vertex.positionProperty.value );
         const constrainedTranslation = window.collisionDetector.checkProposedTranslation( proposedTranslation, [ vertex ] );
 
-        vertex.positionProperty.value = vertex.positionProperty.value.plus( constrainedTranslation );
+        const newProposedPosition = vertex.positionProperty.value.plus( constrainedTranslation );
+        const finalConstrainedPosition = model.getClosestGridPosition( newProposedPosition );
+
+        vertex.positionProperty.value = finalConstrainedPosition;
 
         // if ( model.isVertexPositionAllowed( vertex, constrainedPosition ) ) {
         //   vertex.positionProperty.value = constrainedPosition;

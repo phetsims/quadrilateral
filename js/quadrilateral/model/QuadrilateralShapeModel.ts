@@ -358,7 +358,7 @@ class QuadrilateralShapeModel {
     } );
 
     if ( options.validateShape ) {
-      window.collisionDetector = new CollisionDetector( this );
+      window.collisionDetector = new CollisionDetector( this, model.modelBoundsProperty );
     }
 
     this.firstSeriesShapeChangedEmitter = new Emitter<[]>();
@@ -442,11 +442,11 @@ class QuadrilateralShapeModel {
 
     this.saveSideLengths();
 
-    model.modelBoundsProperty.link( modelBounds => {
-      if ( modelBounds ) {
-        this.setVertexDragAreas();
-      }
-    } );
+    // model.modelBoundsProperty.link( modelBounds => {
+    //   if ( modelBounds ) {
+    //     this.setVertexDragAreas();
+    //   }
+    // } );
 
     Multilink.multilink( [
         this.vertexA.positionProperty,
@@ -468,9 +468,9 @@ class QuadrilateralShapeModel {
         this.firstSeriesShapeChangedEmitter.emit();
         this.shapeChangedEmitter.emit();
 
-        if ( model.modelBoundsProperty.value ) {
-          this.setVertexDragAreas();
-        }
+        // if ( model.modelBoundsProperty.value ) {
+        //   this.setVertexDragAreas();
+        // }
       }
     );
   }

@@ -65,6 +65,7 @@ class QuadrilateralDiagonalGuidesNode extends Node {
    * intersection points with simulation bounds.
    */
   private static drawDiagonal( vertex1Position: Vector2, vertex2Position: Vector2, bounds: Bounds2, modelViewTransform: ModelViewTransform2, lineNode: Line ): void {
+    return;
 
     // convert Bounds2 to a Shape so that we can find ray/bounds intersections
     const boundsShape = Shape.bounds( bounds );
