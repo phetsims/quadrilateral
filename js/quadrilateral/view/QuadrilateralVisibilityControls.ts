@@ -71,11 +71,11 @@ class QuadrilateralVisibilityControls extends VBox {
 
       // voicing
       voicingNameResponse: QuadrilateralStrings.markers,
-      voicingHintResponse: QuadrilateralStrings.a11y.angleGuidesHintResponse,
+      voicingHintResponse: QuadrilateralStrings.a11y.markersHintResponse,
 
       // a11y
-      checkedContextResponse: QuadrilateralStrings.a11y.angleGuidesAddedResponse,
-      uncheckedContextResponse: QuadrilateralStrings.a11y.angleGuidesRemovedResponse,
+      checkedContextResponse: QuadrilateralStrings.a11y.markersAddedResponse,
+      uncheckedContextResponse: QuadrilateralStrings.a11y.markersRemovedResponse,
 
       // phet-io
       tandem: options.tandem.createTandem( 'markersCheckbox' )

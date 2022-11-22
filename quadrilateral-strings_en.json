@@ -95,14 +95,14 @@
     "cornerLabelsHintResponse": {
       "value": "Create shapes with or without help of visual corner labels."
     },
-    "angleGuidesAddedResponse": {
-      "value": "Guides showing 30 degree slices added to corners."
+    "markersAddedResponse": {
+      "value": "Evenly spaced side units and 30-degree angle slices added."
     },
-    "angleGuidesRemovedResponse": {
-      "value": "Guides hidden."
+    "markersRemovedResponse": {
+      "value": "Marks for side units and angle slices hidden."
     },
-    "angleGuidesHintResponse": {
-      "value": "Create shapes with or without help of angle guides."
+    "markersHintResponse": {
+      "value": "Create shapes with or without help of marks for rough side length and angle width."
     },
     "gridLinesAddedResponse": {
       "value": "Grid lines added."

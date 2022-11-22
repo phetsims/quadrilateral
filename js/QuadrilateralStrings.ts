@@ -78,12 +78,12 @@ type StringsType = {
     'cornerLabelsRemovedResponseStringProperty': LinkableProperty<string>;
     'cornerLabelsHintResponse': string;
     'cornerLabelsHintResponseStringProperty': LinkableProperty<string>;
-    'angleGuidesAddedResponse': string;
-    'angleGuidesAddedResponseStringProperty': LinkableProperty<string>;
-    'angleGuidesRemovedResponse': string;
-    'angleGuidesRemovedResponseStringProperty': LinkableProperty<string>;
-    'angleGuidesHintResponse': string;
-    'angleGuidesHintResponseStringProperty': LinkableProperty<string>;
+    'markersAddedResponse': string;
+    'markersAddedResponseStringProperty': LinkableProperty<string>;
+    'markersRemovedResponse': string;
+    'markersRemovedResponseStringProperty': LinkableProperty<string>;
+    'markersHintResponse': string;
+    'markersHintResponseStringProperty': LinkableProperty<string>;
     'gridLinesAddedResponse': string;
     'gridLinesAddedResponseStringProperty': LinkableProperty<string>;
     'gridLinesRemovedResponse': string;
