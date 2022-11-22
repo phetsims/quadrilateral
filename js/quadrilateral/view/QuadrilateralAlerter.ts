@@ -392,7 +392,7 @@ class QuadrilateralAlerter extends Alerter {
 
     // The phrase like the direction change, how the vertex angle changes, or whether the vertex angle is at
     // a critical value like 90/180 degrees
-    let progressResponse: string;
+    let progressResponse: string | null = null;
 
     // Additional state information about other vertices, or how wide the moving vertex is relative to others in the
     // shape.
@@ -411,6 +411,11 @@ class QuadrilateralAlerter extends Alerter {
     const firstAdjacentAngle = firstAdjacentVertex.angleProperty.value!;
     const secondAdjacentVertex = adjacentVertices[ 1 ];
     const secondAdjacentAngle = secondAdjacentVertex.angleProperty.value!;
+
+    // whether the moving vertex angle becomes equal to any of the other vertices (within interAngleToleranceInterval)
+    const angleEqualToFirstAdjacent = QuadrilateralShapeModel.isInterAngleEqualToOther( currentAngle, firstAdjacentAngle, this.quadrilateralShapeModel.interAngleToleranceIntervalProperty.value );
+    const angleEqualToSecondAdjacent = QuadrilateralShapeModel.isInterAngleEqualToOther( currentAngle, secondAdjacentAngle, this.quadrilateralShapeModel.interAngleToleranceIntervalProperty.value );
+    const angleEqualToOpposite = QuadrilateralShapeModel.isInterAngleEqualToOther( currentAngle, oppositeVertexAngle, this.quadrilateralShapeModel.interAngleToleranceIntervalProperty.value );
 
     // Get the "progress" portion of the object response, describing how this vertex has changed or if it has
     // reached some critical angle. This portion of the description is always included.
@@ -431,9 +436,10 @@ class QuadrilateralAlerter extends Alerter {
     else if ( this.quadrilateralShapeModel.isConvexAngle( currentAngle ) ) {
       progressResponse = anglePointingInwardString;
     }
-    else {
+    else if ( !angleEqualToFirstAdjacent && !angleEqualToSecondAdjacent && !angleEqualToOpposite ) {
 
-      // fallback case, just 'angle wider' or 'angle smaller'
+      // fallback case, just 'angle wider' or 'angle smaller' - but only if the angle is not equal to any other
+      // to prevent the alert from getting too long
       const angleChangeString = currentAngle > previousAngle ? widerString : vertexDragSmallerString;
       progressResponse = StringUtils.fillIn( vertexDragObjectResponsePatternString, {
         angleChange: angleChangeString
@@ -481,17 +487,22 @@ class QuadrilateralAlerter extends Alerter {
       }
     }
 
+    assert && assert( progressResponse || stateResponse, 'There needs to be a response, we have a case that is not described.' );
     if ( progressResponse && stateResponse ) {
+
       response = StringUtils.fillIn( progressStatePatternString, {
         progress: progressResponse,
         state: stateResponse
       } );
     }
+    else if ( stateResponse ) {
+      response = stateResponse;
+    }
     else {
       response = progressResponse;
     }
 
-    return response;
+    return response!;
   }
 
   /**
