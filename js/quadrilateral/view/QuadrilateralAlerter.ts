@@ -81,6 +81,7 @@ const adjacentCornersRightAnglesString = QuadrilateralStrings.a11y.voicing.adjac
 const progressStatePatternString = QuadrilateralStrings.a11y.voicing.progressStatePattern;
 const equalToOppositeCornerEqualToAdjacentCornersString = QuadrilateralStrings.a11y.voicing.equalToOppositeCornerEqualToAdjacentCorners;
 const adjacentSidesInLinePatternString = QuadrilateralStrings.a11y.voicing.adjacentSidesInLinePattern;
+const equalToAdjacentCornersString = QuadrilateralStrings.a11y.voicing.equalToAdjacentCorners;
 
 // A response may trigger because there is a large enough change in angle or length
 type ResponseReason = 'angle' | 'length';
@@ -447,6 +448,11 @@ class QuadrilateralAlerter extends Alerter {
 
         // important state described when a square
         stateResponse = equalToOppositeCornerEqualToAdjacentCornersString;
+      }
+      else if ( angleEqualToFirstAdjacent && angleEqualToSecondAdjacent ) {
+
+        // the moving angle just became equal to its two adjacent corners
+        stateResponse = equalToAdjacentCornersString;
       }
       else if ( angleEqualToFirstAdjacent || angleEqualToOpposite || angleEqualToSecondAdjacent ) {
 
