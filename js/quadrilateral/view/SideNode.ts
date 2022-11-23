@@ -82,7 +82,7 @@ class SideNode extends Voicing( Path ) {
     this.scratchShapeModel = quadrilateralModel.quadrilateralTestShapeModel;
 
     // Generates descriptions
-    const sideDescriber = new SideDescriber( side, this.quadrilateralShapeModel, modelViewTransform );
+    const sideDescriber = new SideDescriber( side, this.quadrilateralShapeModel, quadrilateralModel.markersVisibleProperty, modelViewTransform );
 
     // Reusable lineNode for calculating the shape of the focus highlight
     const lineNode = new LineNode( 0, 0, 0, 0 );
@@ -281,11 +281,13 @@ class SideNode extends Voicing( Path ) {
       }
     } );
 
-    // voicing
+    // voicing - re-generate the voicing description when dependent Properties change
     this.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
       this.voicingObjectResponse = sideDescriber.getSideObjectResponse();
     } );
-    this.voicingObjectResponse = sideDescriber.getSideObjectResponse();
+    this.quadrilateralModel.markersVisibleProperty.link( () => {
+      this.voicingObjectResponse = sideDescriber.getSideObjectResponse();
+    } );
 
     // Voicing - for debugging, speak the full response again on spacebar/enter
     // TODO: remove this

@@ -503,6 +503,8 @@ type StringsType = {
       'parallelSideObjectResponsePatternStringProperty': LinkableProperty<string>;
       'sideObjectResponsePattern': string;
       'sideObjectResponsePatternStringProperty': LinkableProperty<string>;
+      'sideUnitsObjectResponsePattern': string;
+      'sideUnitsObjectResponsePatternStringProperty': LinkableProperty<string>;
       'equalToAdjacentSides': string;
       'equalToAdjacentSidesStringProperty': LinkableProperty<string>;
       'equalToOneAdjacentSide': string;

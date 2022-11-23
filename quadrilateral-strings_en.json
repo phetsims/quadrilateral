@@ -720,10 +720,13 @@
         "value": "far longer than"
       },
       "parallelSideObjectResponsePattern": {
-        "value": "{{unitsDescription}}, parallel to and {{oppositeComparison}} opposite side, {{adjacentSideDescription}}"
+        "value": "Parallel to and {{oppositeComparison}} opposite side, {{adjacentSideDescription}}"
       },
       "sideObjectResponsePattern": {
-        "value": "{{unitsDescription}}, {{oppositeComparison}} opposite side, {{adjacentSideDescription}}"
+        "value": "{{oppositeComparison}} opposite side, {{adjacentSideDescription}}"
+      },
+      "sideUnitsObjectResponsePattern": {
+        "value": "{{unitsDescription}}, {{objectResponse}}"
       },
       "equalToAdjacentSides": {
         "value": "equal to adjacent sides"
