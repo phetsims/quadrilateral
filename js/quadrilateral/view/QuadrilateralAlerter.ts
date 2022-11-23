@@ -73,7 +73,6 @@ const adjacentSidesChangePatternString = QuadrilateralStrings.a11y.voicing.sideD
 const adjacentSidesChangeUnequallyString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesChangeUnequally;
 const rightAngleString = QuadrilateralStrings.a11y.voicing.rightAngle;
 const angleFlatString = QuadrilateralStrings.a11y.voicing.angleFlat;
-const anglePointingInwardString = QuadrilateralStrings.a11y.voicing.anglePointingInward;
 const angleComparisonPatternString = QuadrilateralStrings.a11y.voicing.angleComparisonPattern;
 const oppositeCornerString = QuadrilateralStrings.a11y.voicing.oppositeCorner;
 const adjacentCornersEqualString = QuadrilateralStrings.a11y.voicing.adjacentCornersEqual;
@@ -424,9 +423,6 @@ class QuadrilateralAlerter extends Alerter {
     }
     else if ( this.quadrilateralShapeModel.isFlatAngle( currentAngle ) ) {
       progressResponse = angleFlatString;
-    }
-    else if ( this.quadrilateralShapeModel.isConvexAngle( currentAngle ) ) {
-      progressResponse = anglePointingInwardString;
     }
     else if ( !angleEqualToFirstAdjacent && !angleEqualToSecondAdjacent && !angleEqualToOpposite ) {
 
