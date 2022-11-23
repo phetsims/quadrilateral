@@ -99,10 +99,10 @@
       "value": "Evenly spaced side units and 30-degree angle slices added."
     },
     "markersRemovedResponse": {
-      "value": "Marks for side units and angle slices hidden."
+      "value": "Shape markers for sides and angles hidden."
     },
     "markersHintResponse": {
-      "value": "Create shapes with or without help of marks for rough side length and angle width."
+      "value": "Create shapes with or without help of rough shape markers for side length and angle width."
     },
     "gridLinesAddedResponse": {
       "value": "Grid lines added."
