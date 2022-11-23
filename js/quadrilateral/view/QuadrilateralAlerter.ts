@@ -462,10 +462,14 @@ class QuadrilateralAlerter extends Alerter {
                             angleEqualToOpposite ? oppositeVertex :
                             secondAdjacentVertex;
 
+        // if equal to the opposite corner, just say "opposite corner" instead of the corner label
+        const otherCornerLabelString = angleEqualToOpposite ? oppositeCornerString :
+                                       VertexDescriber.VertexCornerLabelMap.get( otherVertex.vertexLabel );
+
         const comparisonDescription = VertexDescriber.getAngleComparisonDescription( otherVertex, vertex, interAngleToleranceInterval, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
           comparison: comparisonDescription,
-          cornerLabel: VertexDescriber.VertexCornerLabelMap.get( otherVertex.vertexLabel )
+          cornerLabel: otherCornerLabelString
         } );
       }
       else if ( this.shouldUseAngleComparisonDescription( currentAngle, oppositeVertexAngle ) ) {
