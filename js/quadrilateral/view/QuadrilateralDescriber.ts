@@ -390,12 +390,16 @@ class QuadrilateralDescriber {
 
   /**
    * The fourth description of the "details" button in the Voicing toolbar. Returns a description of the longest and
-   * shortest sides of the shape. Only returns a string if side unit length is displayed.
-   *
-   * TODO: Return null if necessary, but that Property doesn't exist in the sim yet.
+   * shortest sides of the shape. Only returns a string if shape "markers" are displayed - otherwise this more
+   * quantitative content is skipped.
    */
   public getFourthDetailsStatement(): null | string {
     let description: null | string = null;
+
+    // This description is only included if markers are visible
+    if ( !this.markersVisibleProperty.value ) {
+      return description;
+    }
 
     const longestSide = _.maxBy( this.shapeModel.sides, side => side.lengthProperty.value )!;
     const shortestSide = _.minBy( this.shapeModel.sides, side => side.lengthProperty.value )!;
@@ -453,7 +457,8 @@ class QuadrilateralDescriber {
 
   /**
    * The fifth statement of the "details" button in the Voicing toolbar. Returns a description of the widest and
-   * smallest angles of the shape. Only returns a string if corner guides are displayed.
+   * smallest angles of the shape. Only returns a string if corner guides are displayed - otherwise this more
+   * quantitative content is skipped.
    */
   public getFifthDetailsStatement(): string | null {
     let description: null | string = null;
