@@ -87,15 +87,15 @@ class VertexDescriber {
   // A reference to the model components that drive description.
   private vertex: Vertex;
   private quadrilateralShapeModel: QuadrilateralShapeModel;
-  private cornerGuidesVisibleProperty: TReadOnlyProperty<boolean>;
+  private markersVisibleProperty: TReadOnlyProperty<boolean>;
 
   // See above documentation.
   public static VertexCornerLabelMap = vertexCornerLabelMap;
 
-  public constructor( vertex: Vertex, quadrilateralShapeModel: QuadrilateralShapeModel, cornerGuidesVisibleProperty: TReadOnlyProperty<boolean> ) {
+  public constructor( vertex: Vertex, quadrilateralShapeModel: QuadrilateralShapeModel, markersVisibleProperty: TReadOnlyProperty<boolean> ) {
     this.vertex = vertex;
     this.quadrilateralShapeModel = quadrilateralShapeModel;
-    this.cornerGuidesVisibleProperty = cornerGuidesVisibleProperty;
+    this.markersVisibleProperty = markersVisibleProperty;
   }
 
   /**
@@ -126,9 +126,9 @@ class VertexDescriber {
     const adjacentVertexDescriptionString = this.getAdjacentVertexObjectDescription();
 
     // if corner guides are visible, a description of the number of slices is included
-    if ( this.cornerGuidesVisibleProperty.value ) {
+    if ( this.markersVisibleProperty.value ) {
       response = StringUtils.fillIn( vertexObjectResponseWithSlicesPatternString, {
-        slicesDescription: this.getSlicesDescription( this.vertex.angleProperty.value! ),
+        slicesDescription: VertexDescriber.getSlicesDescription( this.vertex.angleProperty.value!, this.quadrilateralShapeModel ),
         oppositeComparison: oppositeComparisonString,
         adjacentVertexDescription: adjacentVertexDescriptionString
       } );
@@ -154,19 +154,19 @@ class VertexDescriber {
    *
    * For the design request of this feature please see https://github.com/phetsims/quadrilateral/issues/231
    */
-  private getSlicesDescription( vertexAngle: number ): string {
+  public static getSlicesDescription( vertexAngle: number, shapeModel: QuadrilateralShapeModel ): string {
     let sliceDescription: string | null = null;
 
     const numberOfFullSlices = Math.floor( vertexAngle / CornerGuideNode.SLICE_SIZE_RADIANS );
     const remainder = vertexAngle % CornerGuideNode.SLICE_SIZE_RADIANS;
 
-    if ( this.quadrilateralShapeModel.isRightAngle( vertexAngle ) ) {
+    if ( shapeModel.isRightAngle( vertexAngle ) ) {
       sliceDescription = rightAngleString;
     }
-    else if ( this.quadrilateralShapeModel.isFlatAngle( vertexAngle ) ) {
+    else if ( shapeModel.isFlatAngle( vertexAngle ) ) {
       sliceDescription = angleFlatString;
     }
-    else if ( this.quadrilateralShapeModel.isStaticAngleEqualToOther( remainder, 0 ) ) {
+    else if ( shapeModel.isStaticAngleEqualToOther( remainder, 0 ) ) {
       if ( numberOfFullSlices === 1 ) {
         sliceDescription = oneSliceString;
       }
@@ -176,7 +176,7 @@ class VertexDescriber {
         } );
       }
     }
-    else if ( this.quadrilateralShapeModel.isStaticAngleEqualToOther( remainder, CornerGuideNode.SLICE_SIZE_RADIANS / 2 ) ) {
+    else if ( shapeModel.isStaticAngleEqualToOther( remainder, CornerGuideNode.SLICE_SIZE_RADIANS / 2 ) ) {
       if ( numberOfFullSlices === 0 ) {
         sliceDescription = halfOneSliceString;
       }

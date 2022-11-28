@@ -86,7 +86,7 @@ class QuadrilateralModel {
   public tangibleRotationProperty: NumberProperty;
 
   // Whether the angle guide graphics are visible at each vertex.
-  public readonly cornerGuideVisibleProperty: BooleanProperty;
+  public readonly markersVisibleProperty: BooleanProperty;
 
   // Whether labels on each vertex are visible.
   public readonly vertexLabelsVisibleProperty: BooleanProperty;
@@ -192,8 +192,8 @@ class QuadrilateralModel {
       tandem: tandem.createTandem( 'diagonalGuidesVisibleProperty' )
     } );
 
-    this.cornerGuideVisibleProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'cornerGuideVisibleProperty' )
+    this.markersVisibleProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'markersVisibleProperty' )
     } );
 
     this.shapeNameVisibleProperty = new BooleanProperty( false, {
@@ -296,7 +296,7 @@ class QuadrilateralModel {
     this.quadrilateralShapeModel.updateOrderDependentProperties();
 
     // reset visibility Properties
-    this.cornerGuideVisibleProperty.reset();
+    this.markersVisibleProperty.reset();
     this.vertexLabelsVisibleProperty.reset();
     this.gridVisibleProperty.reset();
     this.diagonalGuidesVisibleProperty.reset();

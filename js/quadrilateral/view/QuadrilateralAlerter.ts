@@ -24,24 +24,13 @@ import Vertex from '../model/Vertex.js';
 import Utils from '../../../../dot/js/Utils.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
-import SideLabel from '../model/SideLabel.js';
 import SidePair from '../model/SidePair.js';
 import VertexPair from '../model/VertexPair.js';
-import VertexLabel from '../model/VertexLabel.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import VertexDescriber from './VertexDescriber.js';
-import dotRandom from '../../../../dot/js/dotRandom.js';
 
-const foundIsoscelesTrapezoidPatternString = QuadrilateralStrings.a11y.voicing.foundIsoscelesTrapezoidPattern;
-const allRightAnglesAllSidesEqualString = QuadrilateralStrings.a11y.voicing.allRightAnglesAllSidesEqual;
-const oppositeSidesInParallelString = QuadrilateralStrings.a11y.voicing.oppositeSidesInParallel;
-const foundTrapezoidPatternString = QuadrilateralStrings.a11y.voicing.foundTrapezoidPattern;
-const foundKitePatternString = QuadrilateralStrings.a11y.voicing.foundKitePattern;
-const foundDartPatternString = QuadrilateralStrings.a11y.voicing.foundDartPattern;
-const foundConvexQuadrilateralString = QuadrilateralStrings.a11y.voicing.foundConvexQuadrilateral;
-const foundConcaveQuadrilateralPatternString = QuadrilateralStrings.a11y.voicing.foundConcaveQuadrilateralPattern;
-const allSidesEqualString = QuadrilateralStrings.a11y.voicing.allSidesEqual;
-const allRightAnglesString = QuadrilateralStrings.a11y.voicing.allRightAngles;
+const kiteDetailsPatternString = QuadrilateralStrings.a11y.voicing.kiteDetailsPattern;
+const dartDetailsPatternString = QuadrilateralStrings.a11y.voicing.dartDetailsPattern;
 const foundShapePatternString = QuadrilateralStrings.a11y.voicing.foundShapePattern;
 const aBString = QuadrilateralStrings.a11y.aB;
 const bCString = QuadrilateralStrings.a11y.bC;
@@ -59,7 +48,6 @@ const allRightAnglesAsShapeChangesPatternString = QuadrilateralStrings.a11y.voic
 const maintainingARhombusString = QuadrilateralStrings.a11y.voicing.maintainingARhombus;
 const allSidesEqualAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.allSidesEqualAsShapeChangesPattern;
 const cornerFlatAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.cornerFlatAsShapeChangesPattern;
-const doesShapeHaveThreeOrFourSidesQuestionString = QuadrilateralStrings.a11y.voicing.doesShapeHaveThreeOrFourSidesQuestion;
 const adjacentSidesChangeEquallyAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.adjacentSidesChangeEquallyAsShapeChangesPattern;
 const allSidesTiltAwayFromParallelString = QuadrilateralStrings.a11y.voicing.allSidesTiltAwayFromParallel;
 const allSidesTiltAwayFromParallelAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.allSidesTiltAwayFromParallelAsShapeChangesPattern;
@@ -85,16 +73,14 @@ const adjacentSidesChangePatternString = QuadrilateralStrings.a11y.voicing.sideD
 const adjacentSidesChangeUnequallyString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesChangeUnequally;
 const rightAngleString = QuadrilateralStrings.a11y.voicing.rightAngle;
 const angleFlatString = QuadrilateralStrings.a11y.voicing.angleFlat;
-const anglePointingInwardString = QuadrilateralStrings.a11y.voicing.anglePointingInward;
 const angleComparisonPatternString = QuadrilateralStrings.a11y.voicing.angleComparisonPattern;
 const oppositeCornerString = QuadrilateralStrings.a11y.voicing.oppositeCorner;
 const adjacentCornersEqualString = QuadrilateralStrings.a11y.voicing.adjacentCornersEqual;
 const adjacentCornersRightAnglesString = QuadrilateralStrings.a11y.voicing.adjacentCornersRightAngles;
 const progressStatePatternString = QuadrilateralStrings.a11y.voicing.progressStatePattern;
-
-// Constants that control side object responses. See the getSideChangeObjectResponse for more information.
-const DESCRIBE_LONGER_ADJACENT_SIDES_THRESHOLD = 0.002;
-const BOTH_ADJACENT_SIDES_CHANGE_THE_SAME_THRESHOLD = 0.001; // Changes should be about equal to be described as such
+const equalToOppositeCornerEqualToAdjacentCornersString = QuadrilateralStrings.a11y.voicing.equalToOppositeCornerEqualToAdjacentCorners;
+const adjacentSidesInLinePatternString = QuadrilateralStrings.a11y.voicing.adjacentSidesInLinePattern;
+const equalToAdjacentCornersString = QuadrilateralStrings.a11y.voicing.equalToAdjacentCorners;
 
 // A response may trigger because there is a large enough change in angle or length
 type ResponseReason = 'angle' | 'length';
@@ -126,13 +112,17 @@ class QuadrilateralAlerter extends Alerter {
   private previousContextResponseShapeSnapshot: ShapeSnapshot;
   private previousObjectResponseShapeSnapshot: ShapeSnapshot;
 
-  public constructor( model: QuadrilateralModel, screenView: QuadrilateralScreenView, modelViewTransform: ModelViewTransform2 ) {
+  private readonly describer: QuadrilateralDescriber;
+
+  public constructor( model: QuadrilateralModel, screenView: QuadrilateralScreenView, modelViewTransform: ModelViewTransform2, describer: QuadrilateralDescriber ) {
     super();
 
     this.quadrilateralShapeModel = model.quadrilateralShapeModel;
 
     this.model = model;
     this.modelViewTransform = modelViewTransform;
+
+    this.describer = describer;
 
     this.previousContextResponseShapeSnapshot = new ShapeSnapshot( this.quadrilateralShapeModel );
     this.previousObjectResponseShapeSnapshot = new ShapeSnapshot( this.quadrilateralShapeModel );
@@ -338,13 +328,15 @@ class QuadrilateralAlerter extends Alerter {
     const firstSideAbsoluteDifference = Math.abs( firstAdjacentSideLengthDifference );
     const secondSideAbsoluteDifference = Math.abs( secondAdjacentSideLengthDifference );
 
-    if ( firstSideAbsoluteDifference > DESCRIBE_LONGER_ADJACENT_SIDES_THRESHOLD || secondSideAbsoluteDifference > DESCRIBE_LONGER_ADJACENT_SIDES_THRESHOLD ) {
+    // The threshold for describing relative sizes should be the same as shapeLengthToleranceInterval
+    const threshold = this.model.quadrilateralShapeModel.shapeLengthToleranceIntervalProperty.value;
+    if ( firstSideAbsoluteDifference > threshold || secondSideAbsoluteDifference > threshold ) {
 
       // one of the sides has moved by a large enough distance to describe changes in adjacent side length
       let adjacentSideChangeString = '';
       const adjacentSidesLonger = firstAdjacentSideLengthDifference > 0;
 
-      if ( Utils.equalsEpsilon( firstAdjacentSideLengthDifference, secondAdjacentSideLengthDifference, BOTH_ADJACENT_SIDES_CHANGE_THE_SAME_THRESHOLD ) ) {
+      if ( Utils.equalsEpsilon( firstAdjacentSideLengthDifference, secondAdjacentSideLengthDifference, threshold ) ) {
 
         // both adjacent sides changed about the same so we can combine a description to say that adjacent sides
         // got shorter or longer
@@ -432,9 +424,6 @@ class QuadrilateralAlerter extends Alerter {
     else if ( this.quadrilateralShapeModel.isFlatAngle( currentAngle ) ) {
       progressResponse = angleFlatString;
     }
-    else if ( this.quadrilateralShapeModel.isConvexAngle( currentAngle ) ) {
-      progressResponse = anglePointingInwardString;
-    }
     else if ( !angleEqualToFirstAdjacent && !angleEqualToSecondAdjacent && !angleEqualToOpposite ) {
 
       // fallback case, just 'angle wider' or 'angle smaller' - but only if the angle is not equal to any other
@@ -451,31 +440,37 @@ class QuadrilateralAlerter extends Alerter {
     // quadrilateral like when a pair of adjacent angles are equal, or when the moving angle is twice/half of another
     // angle in the shape. There may not always be important state information.
     if ( previousAngle !== currentAngle ) {
+      if ( this.quadrilateralShapeModel.getAreAllAnglesRight() ) {
 
-      // Prioritize equality. TODO: Refactor this algorithm to reduce duplication. In particular the
-      // shouldUseAngleComparisonDescription needs to be redone now that equality is more important.
-      if ( angleEqualToFirstAdjacent ) {
-        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( firstAdjacentVertex, vertex, interAngleToleranceInterval, shapeName );
-        stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
-          comparison: comparisonDescription,
-          cornerLabel: VertexDescriber.VertexCornerLabelMap.get( firstAdjacentVertex.vertexLabel )
-        } );
+        // important state described when a square
+        stateResponse = equalToOppositeCornerEqualToAdjacentCornersString;
       }
-      else if ( angleEqualToSecondAdjacent ) {
-        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( secondAdjacentVertex, vertex, interAngleToleranceInterval, shapeName );
-        stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
-          comparison: comparisonDescription,
-          cornerLabel: VertexDescriber.VertexCornerLabelMap.get( secondAdjacentVertex.vertexLabel )
-        } );
+      else if ( angleEqualToFirstAdjacent && angleEqualToSecondAdjacent ) {
+
+        // the moving angle just became equal to its two adjacent corners
+        stateResponse = equalToAdjacentCornersString;
       }
-      else if ( angleEqualToOpposite ) {
-        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( oppositeVertex, vertex, interAngleToleranceInterval, shapeName );
+      else if ( angleEqualToFirstAdjacent || angleEqualToOpposite || angleEqualToSecondAdjacent ) {
+
+        // If vertex the angle just became equal to another, that is the most important information and should be
+        // described
+        const otherVertex = angleEqualToFirstAdjacent ? firstAdjacentVertex :
+                            angleEqualToOpposite ? oppositeVertex :
+                            secondAdjacentVertex;
+
+        // if equal to the opposite corner, just say "opposite corner" instead of the corner label
+        const otherCornerLabelString = angleEqualToOpposite ? oppositeCornerString :
+                                       VertexDescriber.VertexCornerLabelMap.get( otherVertex.vertexLabel );
+
+        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( otherVertex, vertex, interAngleToleranceInterval, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
           comparison: comparisonDescription,
-          cornerLabel: oppositeCornerString
+          cornerLabel: otherCornerLabelString
         } );
       }
       else if ( this.shouldUseAngleComparisonDescription( currentAngle, oppositeVertexAngle ) ) {
+
+        // describe relative size to opposite vertex
         const comparisonDescription = VertexDescriber.getAngleComparisonDescription( oppositeVertex, vertex, interAngleToleranceInterval, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
           comparison: comparisonDescription,
@@ -483,6 +478,8 @@ class QuadrilateralAlerter extends Alerter {
         } );
       }
       else if ( this.quadrilateralShapeModel.isInterAngleEqualToOther( firstAdjacentAngle, secondAdjacentAngle ) ) {
+
+        // The adjacent angles just became equal to eachother, describe that next (after opposite in priority)
         if ( this.quadrilateralShapeModel.isRightAngle( firstAdjacentAngle ) ) {
           stateResponse = adjacentCornersRightAnglesString;
         }
@@ -491,6 +488,8 @@ class QuadrilateralAlerter extends Alerter {
         }
       }
       else if ( this.shouldUseAngleComparisonDescription( currentAngle, firstAdjacentAngle ) ) {
+
+        // decribe relative size (half or twice as large as) to the first adjacent vertex
         const comparisonDescription = VertexDescriber.getAngleComparisonDescription( firstAdjacentVertex, vertex, interAngleToleranceInterval, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
           comparison: comparisonDescription,
@@ -498,6 +497,8 @@ class QuadrilateralAlerter extends Alerter {
         } );
       }
       else if ( this.shouldUseAngleComparisonDescription( currentAngle, secondAdjacentAngle ) ) {
+
+        // decribe relative size (half or twice as large as) to the second adjacent vertex
         const comparisonDescription = VertexDescriber.getAngleComparisonDescription( secondAdjacentVertex, vertex, interAngleToleranceInterval, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
           comparison: comparisonDescription,
@@ -651,7 +652,11 @@ class QuadrilateralAlerter extends Alerter {
     const areaChangeString = areaDifference > 0 ? biggerString : smallerString;
 
     if ( shapeName === NamedQuadrilateral.CONVEX_QUADRILATERAL || shapeName === NamedQuadrilateral.CONCAVE_QUADRILATERAL ) {
-
+      response = StringUtils.fillIn( allSidesTiltAwayFromParallelAsShapeChangesPatternString, {
+        areaChange: areaChangeString
+      } );
+    }
+    else if ( shapeName === NamedQuadrilateral.TRIANGLE ) {
       const flatVertex = _.find(
         this.quadrilateralShapeModel.vertices,
         vertex => this.quadrilateralShapeModel.isStaticAngleEqualToOther( vertex.angleProperty.value!, Math.PI )
@@ -659,25 +664,26 @@ class QuadrilateralAlerter extends Alerter {
 
       // consider small enough values as 'constant area' because the area might change by negligible values within
       // precision error
-      if ( areaDifference < 1e-5 && flatVertex ) {
+      if ( areaDifference < 1e-5 ) {
 
-        // As an "Easter egg" half of the time in this case add a leading question taht indicates that this
-        // shape could also be described as a triangle. See https://github.com/phetsims/quadrilateral/issues/236
-        // for the request.
-        if ( dotRandom.nextBoolean() ) {
-          response = doesShapeHaveThreeOrFourSidesQuestionString;
-        }
-        else {
-
-          // We have a convex shape where one vertex is 180 degrees and the shape is moving such that the area
-          // is not changing. Describe the "flat" vertex and how its adjacent sides get longer or shorter
-          response = StringUtils.fillIn( cornerFlatAsShapeChangesPatternString, {
-            cornerLabel: VertexDescriber.VertexCornerLabelMap.get( flatVertex.vertexLabel )
-          } );
-        }
+        // We have a triangle one vertex is 180 degrees and the shape is moving such that the area
+        // is not changing. Describe the "flat" vertex and how its adjacent sides get longer or shorter
+        response = StringUtils.fillIn( cornerFlatAsShapeChangesPatternString, {
+          cornerLabel: VertexDescriber.VertexCornerLabelMap.get( flatVertex!.vertexLabel )
+        } );
       }
       else {
-        response = StringUtils.fillIn( allSidesTiltAwayFromParallelAsShapeChangesPatternString, {
+
+        // We have a triangle being maintained but the area is changing, so we describe how it the adjacent
+        // sides remain in line as the shape gets bigger or smaller
+
+        // find the sides that are connected to the flat vertex
+        const flatSides = _.filter( this.quadrilateralShapeModel.sides, side => side.vertex1 === flatVertex || side.vertex2 === flatVertex );
+        assert && assert( flatSides.length === 2, 'We should have found two sides connected to the flat vertex' );
+
+        response = StringUtils.fillIn( adjacentSidesInLinePatternString, {
+          firstSide: QuadrilateralDescriber.getSideLabelString( flatSides[ 0 ].sideLabel ),
+          secondSide: QuadrilateralDescriber.getSideLabelString( flatSides[ 1 ].sideLabel ),
           areaChange: areaChangeString
         } );
       }
@@ -863,7 +869,7 @@ class QuadrilateralAlerter extends Alerter {
         contextResponse = this.getFoundDartResponse( shapeNameVisible, this.quadrilateralShapeModel.vertices );
       }
       else if ( currentShapeName === NamedQuadrilateral.CONCAVE_QUADRILATERAL ) {
-        contextResponse = this.getFoundConcaveQuadrilateralResponse( shapeNameVisible, this.quadrilateralShapeModel.vertices );
+        contextResponse = this.getFoundConcaveQuadrilateralResponse( shapeNameVisible );
       }
       else if ( currentShapeName === NamedQuadrilateral.CONVEX_QUADRILATERAL ) {
         contextResponse = this.getFoundConvexQuadrilateralResponse( shapeNameVisible );
@@ -886,7 +892,7 @@ class QuadrilateralAlerter extends Alerter {
       response = this.getFoundShapeResponse( NamedQuadrilateral.SQUARE );
     }
     else {
-      response = allRightAnglesAllSidesEqualString;
+      response = this.describer.getSquareDetailsString();
     }
 
     return response;
@@ -902,7 +908,7 @@ class QuadrilateralAlerter extends Alerter {
       response = this.getFoundShapeResponse( NamedQuadrilateral.RECTANGLE );
     }
     else {
-      response = allRightAnglesString;
+      response = this.describer.getRectangleDetailsString();
     }
     return response;
   }
@@ -917,7 +923,7 @@ class QuadrilateralAlerter extends Alerter {
       response = this.getFoundShapeResponse( NamedQuadrilateral.RHOMBUS );
     }
     else {
-      response = allSidesEqualString;
+      response = this.describer.getRhombusDetailsString();
     }
     return response;
   }
@@ -932,21 +938,7 @@ class QuadrilateralAlerter extends Alerter {
       response = this.getFoundShapeResponse( NamedQuadrilateral.TRAPEZOID );
     }
     else {
-      let firstSideLabel: string;
-      let secondSideLabel: string;
-
-      if ( parallelSidePair.includesSide( this.quadrilateralShapeModel.topSide ) ) {
-        firstSideLabel = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_AB );
-        secondSideLabel = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_CD );
-      }
-      else {
-        firstSideLabel = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_BC );
-        secondSideLabel = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_DA );
-      }
-      response = StringUtils.fillIn( foundTrapezoidPatternString, {
-        firstSide: firstSideLabel,
-        secondSide: secondSideLabel
-      } );
+      response = this.describer.getTrapezoidDetailsString( parallelSidePair );
     }
     return response;
   }
@@ -961,34 +953,7 @@ class QuadrilateralAlerter extends Alerter {
       response = this.getFoundShapeResponse( NamedQuadrilateral.ISOSCELES_TRAPEZOID );
     }
     else {
-      let equalFirstSideString: string;
-      let equalSecondSideString: string;
-      let parallelFirstSideString: string;
-      let parallelSecondSideString: string;
-
-      if ( oppositeEqualSidePair.includesSide( this.quadrilateralShapeModel.topSide ) ) {
-
-        // top sides and bottom side are equal in length, left and right sides are parallel
-        equalFirstSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_AB );
-        equalSecondSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_CD );
-        parallelFirstSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_DA );
-        parallelSecondSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_BC );
-      }
-      else {
-
-        // left and right sides are equal in length, top and bottom sides are parallel
-        equalFirstSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_DA );
-        equalSecondSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_BC );
-        parallelFirstSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_AB );
-        parallelSecondSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_CD );
-      }
-
-      response = StringUtils.fillIn( foundIsoscelesTrapezoidPatternString, {
-        equalFirstSide: equalFirstSideString,
-        equalSecondSide: equalSecondSideString,
-        parallelFirstSide: parallelFirstSideString,
-        parallelSecondSide: parallelSecondSideString
-      } );
+      response = this.describer.getIsoscelesTrapezoidDetailsString( oppositeEqualSidePair, parallelSidePair );
     }
     return response;
   }
@@ -1003,23 +968,7 @@ class QuadrilateralAlerter extends Alerter {
       response = this.getFoundShapeResponse( NamedQuadrilateral.KITE );
     }
     else {
-      let firstCornerString: string;
-      let secondCornerString: string;
-      if ( oppositeEqualVertexPair.includesVertex( this.quadrilateralShapeModel.vertexA ) ) {
-
-        // opposite equal vertices for the kite are A and C
-        firstCornerString = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_A );
-        secondCornerString = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_C );
-      }
-      else {
-        firstCornerString = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_B );
-        secondCornerString = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_D );
-      }
-
-      response = StringUtils.fillIn( foundKitePatternString, {
-        firstCorner: firstCornerString,
-        secondCorner: secondCornerString
-      } );
+      response = this.describer.getKiteDetailsString( oppositeEqualVertexPair, kiteDetailsPatternString );
     }
     return response;
   }
@@ -1034,27 +983,7 @@ class QuadrilateralAlerter extends Alerter {
       response = this.getFoundShapeResponse( NamedQuadrilateral.DART );
     }
     else {
-      const concaveVertex = vertices.find( vertex => vertex.angleProperty.value! > Math.PI )!;
-      assert && assert( concaveVertex, 'A dart has one vertex with angle greater than Math.PI.' );
-      const inwardCornerLabel = concaveVertex.vertexLabel;
-
-      // the vertices with equal angles for a dart will be the ones adjacent to the inward vertex
-      let firstCornerLabel: VertexLabel;
-      let secondCornerLabel: VertexLabel;
-      if ( inwardCornerLabel === VertexLabel.VERTEX_A || inwardCornerLabel === VertexLabel.VERTEX_C ) {
-        firstCornerLabel = VertexLabel.VERTEX_B;
-        secondCornerLabel = VertexLabel.VERTEX_D;
-      }
-      else {
-        firstCornerLabel = VertexLabel.VERTEX_A;
-        secondCornerLabel = VertexLabel.VERTEX_C;
-      }
-
-      response = StringUtils.fillIn( foundDartPatternString, {
-        inwardCorner: QuadrilateralDescriber.getVertexLabelString( inwardCornerLabel ),
-        firstCorner: QuadrilateralDescriber.getVertexLabelString( firstCornerLabel ),
-        secondCorner: QuadrilateralDescriber.getVertexLabelString( secondCornerLabel )
-      } );
+      response = this.describer.getDartDetailsString( dartDetailsPatternString );
     }
 
     return response;
@@ -1070,7 +999,7 @@ class QuadrilateralAlerter extends Alerter {
       response = this.getFoundShapeResponse( NamedQuadrilateral.PARALLELOGRAM );
     }
     else {
-      response = oppositeSidesInParallelString;
+      response = this.describer.getParallelogramDetailsString();
     }
     return response;
   }
@@ -1079,19 +1008,13 @@ class QuadrilateralAlerter extends Alerter {
    * Returns the response when you create a concave quadrilateral. Describing the square or its attributes depending on
    * if shape name is shown.
    */
-  private getFoundConcaveQuadrilateralResponse( shapeNameVisible: boolean, vertices: Vertex[] ): string {
+  private getFoundConcaveQuadrilateralResponse( shapeNameVisible: boolean ): string {
     let response: string;
     if ( shapeNameVisible ) {
       response = this.getFoundShapeResponse( NamedQuadrilateral.CONCAVE_QUADRILATERAL );
     }
     else {
-      const concaveVertex = vertices.find( vertex => vertex.angleProperty.value! > Math.PI )!;
-      assert && assert( concaveVertex, 'A convex quad has one vertex with angle greater than Math.PI.' );
-      const inwardCornerLabel = concaveVertex.vertexLabel;
-
-      response = StringUtils.fillIn( foundConcaveQuadrilateralPatternString, {
-        inwardCorner: QuadrilateralDescriber.getVertexLabelString( inwardCornerLabel )
-      } );
+      response = this.describer.getConcaveQuadrilateralDetailsString();
     }
 
     return response;
@@ -1107,7 +1030,7 @@ class QuadrilateralAlerter extends Alerter {
       response = this.getFoundShapeResponse( NamedQuadrilateral.CONVEX_QUADRILATERAL );
     }
     else {
-      response = foundConvexQuadrilateralString;
+      response = this.describer.getConvexQuadrilateralDetailsString();
     }
     return response;
   }
@@ -1123,8 +1046,7 @@ class QuadrilateralAlerter extends Alerter {
       response = this.getFoundShapeResponse( NamedQuadrilateral.TRIANGLE );
     }
     else {
-      // TODO: https://github.com/phetsims/quadrilateral/issues/215
-      response = 'Hello Taliesin! How would you like to describe finding a triangle when shape name is hidden?';
+      response = this.describer.getTriangleDetailsString();
     }
     return response;
   }
@@ -1136,7 +1058,7 @@ class QuadrilateralAlerter extends Alerter {
    */
   private getFoundShapeResponse( namedQuadrilateral: NamedQuadrilateral ): string {
     return StringUtils.fillIn( foundShapePatternString, {
-      shapeName: QuadrilateralDescriber.getShapeNameDescription( namedQuadrilateral )
+      shapeName: QuadrilateralDescriber.getShapeNameWithArticlesDescription( namedQuadrilateral )
     } );
   }
 }

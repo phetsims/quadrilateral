@@ -5,8 +5,8 @@
   "labels": {
     "value": "Labels"
   },
-  "angles": {
-    "value": "Angles"
+  "markers": {
+    "value": "Markers"
   },
   "diagonals": {
     "value": "Diagonals"
@@ -83,7 +83,7 @@
         "value": "The Play Area is your shape. It has four movable sides and four movable corners that allow you to play with side length and angle width, and create different shapes in the quadrilateral family. Quadrilaterals are closed four-sided shapes."
       },
       "controlAreaDescription": {
-        "value": "The Control Area has options to show shape name, add visual guides, and mute shape sounds. Use Reset Shape to keep selected guides visible, or reset sim with Reset All."
+        "value": "The Control Area has options to show shape name, add shape markers and guides, and mute shape sounds. Reset Shape to keep selected markers and guides visible, or reset sim with Reset All."
       }
     },
     "cornerLabelsAddedResponse": {
@@ -95,14 +95,14 @@
     "cornerLabelsHintResponse": {
       "value": "Create shapes with or without help of visual corner labels."
     },
-    "angleGuidesAddedResponse": {
-      "value": "Guides showing 30 degree slices added to corners."
+    "markersAddedResponse": {
+      "value": "Evenly spaced side units and 30-degree angle slices added."
     },
-    "angleGuidesRemovedResponse": {
-      "value": "Guides hidden."
+    "markersRemovedResponse": {
+      "value": "Shape markers for sides and angles hidden."
     },
-    "angleGuidesHintResponse": {
-      "value": "Create shapes with or without help of angle guides."
+    "markersHintResponse": {
+      "value": "Create shapes with or without help of rough shape markers for side length and angle width."
     },
     "gridLinesAddedResponse": {
       "value": "Grid lines added."
@@ -166,13 +166,19 @@
     },
     "voicing": {
       "overviewContent": {
-        "value": "Quadrilaterals are closed four-sided shapes. This quadrilateral is an interactive sim. It changes as you play with it. Movable sides and movable corners allow you to play with side lengths and angle widths, and create different shapes in the quadrilateral family. You have options to show shape name, add visual guides, and mute shape sounds. Use Reset Shape to keep selected guides visible, or reset sim with Reset All."
+        "value": "Quadrilaterals are closed four-sided shapes. This quadrilateral is an interactive sim. It changes as you play with it. Movable sides and movable corners allow you to play with side length and angle width, and create different shapes in the quadrilateral family. You have options to show shape name, add shape markers and guides, and mute shape sounds. Reset Shape to keep selected markers and guides visible, or reset sim with Reset All."
       },
-      "hintContentPattern": {
-        "value": "{{shapeDescription}} Explore what shapes you can make."
+      "hintContent": {
+        "value": "Move sides and corners to change shape properties and explore what shapes you can make. If needed, check out keyboard shortcuts."
       },
       "youHaveAShapeHintPattern": {
         "value": "You have {{shapeDescription}}."
+      },
+      "youHaveASizedNamedShapePattern": {
+        "value": "You have a {{size}} {{shapeName}}."
+      },
+      "youHaveASizedShapePattern": {
+        "value": "You have a {{size}} shape."
       },
       "firstDetailsStatementPattern": {
         "value": "Right now, {{cornerType}} corners are {{angleEquality}}, and {{sideType}} sides are equal."
@@ -254,6 +260,42 @@
           "value": "'Corners {{firstCorner}} and {{secondCorner}}"
         }
       },
+      "sidesDescriptionPattern": {
+        "value": "Sides {{description}}."
+      },
+      "longestSidesDescriptionPattern": {
+        "value": "longest sides {{description}}"
+      },
+      "longestSideDescriptionPattern": {
+        "value": "longest side {{description}}"
+      },
+      "shortestSidesDescriptionPattern": {
+        "value": "shortest sides {{description}}"
+      },
+      "shortestSideDescriptionPattern": {
+        "value": "shortest side {{description}}"
+      },
+      "sideLengthDescriptionPattern": {
+        "value": "{{longest}}, {{shortest}}"
+      },
+      "cornersRightDescription": {
+        "value": "Corners 90 degrees."
+      },
+      "widestCornersDescriptionPattern": {
+        "value": "widest corners {{description}}"
+      },
+      "widestCornerDescriptionPattern": {
+        "value": "widest corner {{description}}"
+      },
+      "smallestCornersDescriptionPattern": {
+        "value": "smallest corners {{description}}"
+      },
+      "smallestCornerDescriptionPattern": {
+        "value": "smallest corner {{description}}"
+      },
+      "cornersDescriptionPattern": {
+        "value": "{{longest}}, {{shortest}}"
+      },
       "oppositeSidesTiltPattern": {
         "value": "Opposite sides {{tiltChange}} in parallel as opposite corners change equally."
       },
@@ -293,6 +335,9 @@
       "cornerFlatAsShapeChangesPattern": {
         "value": "{{cornerLabel}} flat as adjacent sides change in length."
       },
+      "adjacentSidesInLinePattern": {
+        "value": "Adjacent sides {{firstSide}} and {{secondSide}} in line as shape gets {{areaChange}}"
+      },
       "doesShapeHaveThreeOrFourSidesQuestion": {
         "value": "Wait? Does shape have 3 sides or 4?"
       },
@@ -314,39 +359,93 @@
       "smaller": {
         "value": "smaller"
       },
+      "sizes": {
+        "tiny": {
+          "value": "tiny"
+        },
+        "verySmall": {
+          "value": "very small"
+        },
+        "small": {
+          "value": "small"
+        },
+        "mediumSized": {
+          "value": "medium-sized"
+        },
+        "large": {
+          "value": "large"
+        }
+      },
       "shapeNames": {
-        "square": {
-          "value": "a square"
+        "withoutArticles": {
+          "square": {
+            "value": "square"
+          },
+          "rectangle": {
+            "value": "rectangle"
+          },
+          "rhombus": {
+            "value": "rhombus"
+          },
+          "kite": {
+            "value": "kite"
+          },
+          "isoscelesTrapezoid": {
+            "value": "isosceles trapezoid"
+          },
+          "trapezoid": {
+            "value": "trapezoid"
+          },
+          "concaveQuadrilateral": {
+            "value": "concave quadrilateral"
+          },
+          "convexQuadrilateral": {
+            "value": "convex quadrilateral"
+          },
+          "parallelogram": {
+            "value": "parallelogram"
+          },
+          "dart": {
+            "value": "dart"
+          },
+          "triangle": {
+            "value": "triangle, is that right?"
+          }
         },
-        "rectangle": {
-          "value": "a rectangle"
-        },
-        "rhombus": {
-          "value": "a rhombus"
-        },
-        "kite": {
-          "value": "a kite"
-        },
-        "isoscelesTrapezoid": {
-          "value": "an isosceles trapezoid"
-        },
-        "trapezoid": {
-          "value": "a trapezoid"
-        },
-        "concaveQuadrilateral": {
-          "value": "a concave quadrilateral"
-        },
-        "convexQuadrilateral": {
-          "value": "a convex quadrilateral"
-        },
-        "parallelogram": {
-          "value": "a parallelogram"
-        },
-        "dart": {
-          "value": "a dart"
-        },
-        "triangle": {
-          "value": "a triangle, is that right?"
+        "withArticles": {
+          "square": {
+            "value": "a square"
+          },
+          "rectangle": {
+            "value": "a rectangle"
+          },
+          "rhombus": {
+            "value": "a rhombus"
+          },
+          "kite": {
+            "value": "a kite"
+          },
+          "isoscelesTrapezoid": {
+            "value": "an isosceles trapezoid"
+          },
+          "trapezoid": {
+            "value": "a trapezoid"
+          },
+          "concaveQuadrilateral": {
+            "value": "a concave quadrilateral"
+          },
+          "convexQuadrilateral": {
+            "value": "a convex quadrilateral"
+          },
+          "parallelogram": {
+            "value": "a parallelogram"
+          },
+          "dart": {
+            "value": "a dart"
+          },
+          "triangle": {
+            "value": "a triangle, is that right?"
+          }
         }
       },
       "foundAParallelogram": {
@@ -367,22 +466,31 @@
       "oppositeSidesInParallel": {
         "value": "Opposite sides in parallel."
       },
-      "foundTrapezoidPattern": {
+      "trapezoidDetailsPattern": {
         "value": "Opposite sides {{firstSide}} and {{secondSide}} in parallel."
       },
-      "foundIsoscelesTrapezoidPattern": {
+      "isoscelesTrapezoidDetailsPattern": {
         "value": "Opposite sides {{equalFirstSide}} and {{equalSecondSide}} equal, opposite sides {{parallelFirstSide}} and {{parallelSecondSide}} in parallel."
       },
-      "foundKitePattern": {
+      "kiteDetailsPattern": {
         "value": "Corners {{firstCorner}} and {{secondCorner}} are equal, and pairs of adjacent sides are equal."
       },
-      "foundDartPattern": {
+      "kiteDetailsShortPattern": {
+        "value": "Corners {{firstCorner}} and {{secondCorner}} are equal."
+      },
+      "dartDetailsPattern": {
         "value": "Corner {{inwardCorner}} points inward, Corners {{firstCorner}} and {{secondCorner}} are equal, and pairs of adjacent sides are equal."
       },
-      "foundConvexQuadrilateral": {
+      "dartDetailsShortPattern": {
+        "value": "Corner {{inwardCorner}} points inward, Corners {{firstCorner}} and {{secondCorner}} are equal."
+      },
+      "triangleDetailsPattern": {
+        "value": "Corner {{flatCorner}} flat, adjacent sides look like one."
+      },
+      "convexQuadrilateralDetails": {
         "value": "No sides in parallel."
       },
-      "foundConcaveQuadrilateralPattern": {
+      "concaveQuadrilateralDetailsPattern": {
         "value": "Corner {{inwardCorner}} points inward, no sides in parallel."
       },
       "vertexObjectResponsePattern": {
@@ -612,10 +720,13 @@
         "value": "far longer than"
       },
       "parallelSideObjectResponsePattern": {
-        "value": "{{unitsDescription}}, parallel to and {{oppositeComparison}} opposite side, {{adjacentSideDescription}}"
+        "value": "Parallel to and {{oppositeComparison}} opposite side, {{adjacentSideDescription}}"
       },
       "sideObjectResponsePattern": {
-        "value": "{{unitsDescription}}, {{oppositeComparison}} opposite side, {{adjacentSideDescription}}"
+        "value": "{{oppositeComparison}} opposite side, {{adjacentSideDescription}}"
+      },
+      "sideUnitsObjectResponsePattern": {
+        "value": "{{unitsDescription}}, {{objectResponse}}"
       },
       "equalToAdjacentSides": {
         "value": "equal to adjacent sides"
@@ -695,6 +806,9 @@
       },
       "angleComparisonPattern": {
         "value": "{{comparison}} {{cornerLabel}}"
+      },
+      "equalToOppositeCornerEqualToAdjacentCorners": {
+        "value": "equal to opposite corner, equal to adjacent corners"
       },
       "oppositeCorner": {
         "value": "opposite corner"

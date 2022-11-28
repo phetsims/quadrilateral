@@ -33,7 +33,7 @@ const QuadrilateralIconFactory = {
   /**
    * Create an icon for the "Corner Guides" checkbox that toggles visual indicators of the angle at each vertex.
    */
-  createCornerGuidesIcon(): Node {
+  createMarkersIcon(): Node {
     const iconHeight = QuadrilateralIconFactory.ICON_HEIGHT;
 
     // draw the "axes"

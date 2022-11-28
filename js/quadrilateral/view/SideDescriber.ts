@@ -14,6 +14,7 @@ import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 
 // constants
 const farShorterThanString = QuadrilateralStrings.a11y.voicing.farShorterThan;
@@ -49,6 +50,7 @@ const lessThanHalfOneUnitString = QuadrilateralStrings.a11y.voicing.lessThanHalf
 const justOverNumberOfUnitsPatternString = QuadrilateralStrings.a11y.voicing.justOverNumberOfUnitsPattern;
 const justUnderOneUnitString = QuadrilateralStrings.a11y.voicing.justUnderOneUnit;
 const justUnderNumberOfUnitsPatternString = QuadrilateralStrings.a11y.voicing.justUnderNumberOfUnitsPattern;
+const sideUnitsObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.sideUnitsObjectResponsePattern;
 
 // A map that will provide comparison descriptions for side lengths. Range values are the ratio between lengths
 // between the sides.
@@ -67,14 +69,16 @@ lengthComparisonDescriptionMap.set( new Range( 2.1, Number.POSITIVE_INFINITY ), 
 class SideDescriber {
 
   // References to model components that will drive the descriptions.
-  private side: Side;
-  private quadrilateralShapeModel: QuadrilateralShapeModel;
-  private modelViewTransform: ModelViewTransform2;
+  private readonly side: Side;
+  private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
+  private readonly modelViewTransform: ModelViewTransform2;
+  private readonly markersVisibleProperty: TReadOnlyProperty<boolean>;
 
-  public constructor( side: Side, quadrilateralShapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2 ) {
+  public constructor( side: Side, quadrilateralShapeModel: QuadrilateralShapeModel, markersVisibleProperty: TReadOnlyProperty<boolean>, modelViewTransform: ModelViewTransform2 ) {
     this.side = side;
     this.quadrilateralShapeModel = quadrilateralShapeModel;
     this.modelViewTransform = modelViewTransform;
+    this.markersVisibleProperty = markersVisibleProperty;
   }
 
   /**
@@ -103,10 +107,18 @@ class SideDescriber {
                                equalToString : SideDescriber.getLengthComparisonDescription( oppositeSide, this.side, toleranceInterval );
 
     response = StringUtils.fillIn( patternString, {
-      unitsDescription: this.getSideUnitsDescription( this.side.lengthProperty.value ),
       oppositeComparison: oppositeComparison,
       adjacentSideDescription: this.getAdjacentSideDescription()
     } );
+
+    // if 'markers' are visible describe the side length units by appending that information to the object response
+    if ( this.markersVisibleProperty.value ) {
+      const unitsDescription = SideDescriber.getSideUnitsDescription( this.side.lengthProperty.value, this.quadrilateralShapeModel.shapeLengthToleranceIntervalProperty.value );
+      response = StringUtils.fillIn( sideUnitsObjectResponsePatternString, {
+        unitsDescription: unitsDescription,
+        objectResponse: response
+      } );
+    }
 
     return response;
   }
@@ -119,13 +131,13 @@ class SideDescriber {
    * "2 and a half units" or
    * "less than half 1 unit"
    */
-  private getSideUnitsDescription( sideLength: number ): string {
+  public static getSideUnitsDescription( sideLength: number, interLengthToleranceInterval: number ): string {
     let sideDescription: string | null = null;
 
     const numberOfFullUnits = Math.floor( sideLength / Side.SIDE_SEGMENT_LENGTH );
     const remainder = sideLength % Side.SIDE_SEGMENT_LENGTH;
 
-    if ( this.quadrilateralShapeModel.isShapeLengthEqualToOther( remainder, 0 ) ) {
+    if ( QuadrilateralShapeModel.isInterLengthEqualToOther( remainder, 0, interLengthToleranceInterval ) ) {
       if ( numberOfFullUnits === 1 ) {
         sideDescription = oneUnitString;
       }
@@ -135,7 +147,7 @@ class SideDescriber {
         } );
       }
     }
-    else if ( this.quadrilateralShapeModel.isShapeLengthEqualToOther( remainder, Side.SIDE_SEGMENT_LENGTH / 2 ) ) {
+    else if ( QuadrilateralShapeModel.isInterLengthEqualToOther( remainder, Side.SIDE_SEGMENT_LENGTH / 2, interLengthToleranceInterval ) ) {
       if ( numberOfFullUnits === 0 ) {
         sideDescription = aboutHalfOneUnitString;
       }

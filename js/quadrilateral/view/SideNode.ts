@@ -81,74 +81,87 @@ class SideNode extends Voicing( Path ) {
     this.quadrilateralShapeModel = quadrilateralModel.quadrilateralShapeModel;
     this.scratchShapeModel = quadrilateralModel.quadrilateralTestShapeModel;
 
+    const markersVisibleProperty = quadrilateralModel.markersVisibleProperty;
+
     // Generates descriptions
-    const sideDescriber = new SideDescriber( side, this.quadrilateralShapeModel, modelViewTransform );
+    const sideDescriber = new SideDescriber( side, this.quadrilateralShapeModel, quadrilateralModel.markersVisibleProperty, modelViewTransform );
 
     // Reusable lineNode for calculating the shape of the focus highlight
     const lineNode = new LineNode( 0, 0, 0, 0 );
 
     // listeners
-    Multilink.multilink( [ side.vertex1.positionProperty, side.vertex2.positionProperty ], ( vertex1Position, vertex2Position ) => {
+    Multilink.multilink( [ side.vertex1.positionProperty, side.vertex2.positionProperty, markersVisibleProperty ], ( vertex1Position, vertex2Position, markersVisible ) => {
 
       // create a single line that will then be divided into segments
       const fullLine = new Line( vertex1Position, vertex2Position );
 
-      // break the viewLine into multiple lines that are of the segment length
-      const lineSegments = [];
-
-      // The length of a segment parametrically relative to the full line length
-      const parametricSegmentLength = Side.SIDE_SEGMENT_LENGTH / fullLine.getArcLength();
-
-      const numberOfFullSegments = Math.floor( 1 / parametricSegmentLength );
-      let t = 0;
-      for ( let i = 0; i < numberOfFullSegments && t < 1; i++ ) {
-        const nextPosition = Math.min( t + parametricSegmentLength, 1 );
-        lineSegments.push( new Line( fullLine.positionAt( t ), fullLine.positionAt( nextPosition ) ) );
-        t = nextPosition;
-      }
-
-      // the final segment should be the remainder from 1 (parametric end) to the last full segment
-      assert && assert( 1 - t >= 0, 'we cannot have gone beyond the end of the full line parametrically' );
-
-      // Ad the remaining portion of a segment if there is one. t might not be exactly one but close enough
-      // that line.positionAt produces a line with zero length, so we only add another segment if it is large enough.
-      if ( 1 - t > 0.0005 ) {
-        const remainderLine = new Line( fullLine.positionAt( t ), fullLine.positionAt( 1 ) );
-        lineSegments.push( remainderLine );
-
-        // ensure that t was large enough that we didnt create a zero-length line
-        assert && assert( !remainderLine.start.equals( remainderLine.end ), 'Should be a non-zero length remainder for the line in this case' );
-      }
-
-      const rightStrokes: Line[] = [];
-      const leftStrokes: Line[] = [];
-      lineSegments.forEach( ( lineSegment, index ) => {
-
-        // The "taper" effect has been removed, but this line makes each segment more narrow than the previous one
-        // and is the reason for such complicated Shape/drawing code. It might be needed again so I am not removing it.
-        // But for now a constant width was requested.
-        // const segmentWidth = Math.max( Side.SIDE_WIDTH - index * Vertex.VERTEX_WIDTH * 0.05, 0 );
-        const segmentWidth = Side.SIDE_WIDTH;
-
-        // stroke functions divide width for us
-        const strokeRight = lineSegment.strokeRight( segmentWidth );
-        const strokeLeft = lineSegment.strokeLeft( segmentWidth );
-
-        rightStrokes.push( strokeRight[ 0 ] );
-        leftStrokes.push( strokeLeft[ 0 ] );
-      } );
-
+      // The Shape for our Path - drawn in model coordinates until a transform at the end
       const lineShape = new Shape();
 
-      rightStrokes.forEach( ( rightStroke, index ) => {
-        lineShape.moveToPoint( rightStroke.start );
-        lineShape.lineToPoint( rightStroke.end );
-        lineShape.lineToPoint( leftStrokes[ index ].start );
-        lineShape.lineToPoint( leftStrokes[ index ].end );
+      if ( markersVisible ) {
 
-        // so that fill will fill each segment individually and so we see strokes in between each segment
+        // If markers are visible we need to draw each unit segment. Break the line into multiple segments.
+        const lineSegments = [];
+
+        // The length of a segment parametrically relative to the full line length
+        const parametricSegmentLength = Side.SIDE_SEGMENT_LENGTH / fullLine.getArcLength();
+
+        const numberOfFullSegments = Math.floor( 1 / parametricSegmentLength );
+        let t = 0;
+        for ( let i = 0; i < numberOfFullSegments && t < 1; i++ ) {
+          const nextPosition = Math.min( t + parametricSegmentLength, 1 );
+          lineSegments.push( new Line( fullLine.positionAt( t ), fullLine.positionAt( nextPosition ) ) );
+          t = nextPosition;
+        }
+
+        // the final segment should be the remainder from 1 (parametric end) to the last full segment
+        assert && assert( 1 - t >= 0, 'we cannot have gone beyond the end of the full line parametrically' );
+
+        // Ad the remaining portion of a segment if there is one. t might not be exactly one but close enough
+        // that line.positionAt produces a line with zero length, so we only add another segment if it is large enough.
+        if ( 1 - t > 0.0005 ) {
+          const remainderLine = new Line( fullLine.positionAt( t ), fullLine.positionAt( 1 ) );
+          lineSegments.push( remainderLine );
+
+          // ensure that t was large enough that we didnt create a zero-length line
+          assert && assert( !remainderLine.start.equals( remainderLine.end ), 'Should be a non-zero length remainder for the line in this case' );
+        }
+
+        const rightStrokes: Line[] = [];
+        const leftStrokes: Line[] = [];
+        lineSegments.forEach( ( lineSegment, index ) => {
+
+          // stroke functions divide width by two for us
+          const strokeRight = lineSegment.strokeRight( Side.SIDE_WIDTH );
+          const strokeLeft = lineSegment.strokeLeft( Side.SIDE_WIDTH );
+
+          rightStrokes.push( strokeRight[ 0 ] );
+          leftStrokes.push( strokeLeft[ 0 ] );
+        } );
+
+        rightStrokes.forEach( ( rightStroke, index ) => {
+          lineShape.moveToPoint( rightStroke.start );
+          lineShape.lineToPoint( rightStroke.end );
+          lineShape.lineToPoint( leftStrokes[ index ].start );
+          lineShape.lineToPoint( leftStrokes[ index ].end );
+
+          // so that fill will fill each segment individually and so we see strokes in between each segment
+          lineShape.close();
+        } );
+      }
+      else {
+
+        // just a rectangular path along the line with the width of SIDE_WIDTH
+        const rightStroke = fullLine.strokeRight( Side.SIDE_WIDTH );
+        const leftStroke = fullLine.strokeLeft( Side.SIDE_WIDTH );
+
+        lineShape.moveToPoint( rightStroke[ 0 ].start );
+        lineShape.lineToPoint( rightStroke[ 0 ].end );
+        lineShape.lineToPoint( leftStroke[ 0 ].start );
+        lineShape.lineToPoint( leftStroke[ 0 ].end );
+
         lineShape.close();
-      } );
+      }
 
       // transform shape to view coordinates
       this.shape = modelViewTransform.modelToViewShape( lineShape );
@@ -281,11 +294,13 @@ class SideNode extends Voicing( Path ) {
       }
     } );
 
-    // voicing
+    // voicing - re-generate the voicing description when dependent Properties change
     this.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
       this.voicingObjectResponse = sideDescriber.getSideObjectResponse();
     } );
-    this.voicingObjectResponse = sideDescriber.getSideObjectResponse();
+    this.quadrilateralModel.markersVisibleProperty.link( () => {
+      this.voicingObjectResponse = sideDescriber.getSideObjectResponse();
+    } );
 
     // Voicing - for debugging, speak the full response again on spacebar/enter
     // TODO: remove this

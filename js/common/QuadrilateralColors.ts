@@ -49,18 +49,18 @@ const QuadrilateralColors = {
     default: 'black'
   } ),
 
-  // Color for the dark segments of the angle guides
+  // Color for the dark segments of the corner guides
   cornerGuideDarkColorProperty: new ProfileColorProperty( quadrilateral, 'cornerGuideDark', {
     default: new Color( 100, 100, 100 )
   } ),
 
-  // Color for the light segments of the angle guides
+  // Color for the light segments of the corner guides
   cornerGuideLightColorProperty: new ProfileColorProperty( quadrilateral, 'cornerGuideLight', {
     default: 'white'
   } ),
 
-  // Color for the stroke around angle guide shapes
-  cornerGuideStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'cornerGuideStroke', {
+  // Color for the stroke of shape markers (corner guides/unit length indicators)
+  markersStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'markersStroke', {
     default: 'black'
   } ),
 

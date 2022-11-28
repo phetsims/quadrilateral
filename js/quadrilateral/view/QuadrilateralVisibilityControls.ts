@@ -24,7 +24,7 @@ type SelfOptions = EmptySelfOptions;
 type QuadrilateralVisibilityControlsOptions = SelfOptions & StrictOmit<VBoxOptions, 'children'> & PickRequired<VBoxOptions, 'tandem'>;
 
 class QuadrilateralVisibilityControls extends VBox {
-  public constructor( cornerLabelsVisibleProperty: Property<boolean>, cornerGuideVisibleProperty: Property<boolean>, gridVisibleProperty: BooleanProperty, diagonalGuidesVisibleProperty: BooleanProperty, providedOptions: QuadrilateralVisibilityControlsOptions ) {
+  public constructor( cornerLabelsVisibleProperty: Property<boolean>, markersVisibleProperty: Property<boolean>, gridVisibleProperty: BooleanProperty, diagonalGuidesVisibleProperty: BooleanProperty, providedOptions: QuadrilateralVisibilityControlsOptions ) {
 
     const options = optionize<QuadrilateralVisibilityControlsOptions, SelfOptions, VBoxOptions>()( {
       align: 'left',
@@ -58,27 +58,27 @@ class QuadrilateralVisibilityControls extends VBox {
       tandem: options.tandem.createTandem( 'cornerLabelsCheckbox' )
     } );
 
-    const cornerGuidesIcon = QuadrilateralIconFactory.createLabelledIcon(
-      QuadrilateralIconFactory.createCornerGuidesIcon(),
-      QuadrilateralStrings.angles
+    const markersIcon = QuadrilateralIconFactory.createLabelledIcon(
+      QuadrilateralIconFactory.createMarkersIcon(),
+      QuadrilateralStrings.markers
     );
-    const cornerGuideCheckbox = new Checkbox( cornerGuideVisibleProperty, cornerGuidesIcon, {
+    const markersCheckbox = new Checkbox( markersVisibleProperty, markersIcon, {
       spacing: CHECKBOX_ICON_SPACING,
 
       // pdom
       labelTagName: 'label',
-      labelContent: QuadrilateralStrings.angles,
+      labelContent: QuadrilateralStrings.markers,
 
       // voicing
-      voicingNameResponse: QuadrilateralStrings.angles,
-      voicingHintResponse: QuadrilateralStrings.a11y.angleGuidesHintResponse,
+      voicingNameResponse: QuadrilateralStrings.markers,
+      voicingHintResponse: QuadrilateralStrings.a11y.markersHintResponse,
 
       // a11y
-      checkedContextResponse: QuadrilateralStrings.a11y.angleGuidesAddedResponse,
-      uncheckedContextResponse: QuadrilateralStrings.a11y.angleGuidesRemovedResponse,
+      checkedContextResponse: QuadrilateralStrings.a11y.markersAddedResponse,
+      uncheckedContextResponse: QuadrilateralStrings.a11y.markersRemovedResponse,
 
       // phet-io
-      tandem: options.tandem.createTandem( 'cornerGuideCheckbox' )
+      tandem: options.tandem.createTandem( 'markersCheckbox' )
     } );
 
     const diagonalGuidesIcon = QuadrilateralIconFactory.createLabelledIcon(
@@ -128,7 +128,7 @@ class QuadrilateralVisibilityControls extends VBox {
     } );
 
     // Order for checkboxes was requested in https://github.com/phetsims/quadrilateral/issues/213#issuecomment-1282681500
-    options.children = [ cornerGuideCheckbox, gridCheckbox, diagonalGuidesCheckbox, cornerLabelsCheckbox ];
+    options.children = [ markersCheckbox, gridCheckbox, diagonalGuidesCheckbox, cornerLabelsCheckbox ];
 
     super( options );
   }
