@@ -77,6 +77,7 @@ const widestCornerDescriptionPatternString = QuadrilateralStrings.a11y.voicing.w
 const smallestCornersDescriptionPatternString = QuadrilateralStrings.a11y.voicing.smallestCornersDescriptionPattern;
 const smallestCornerDescriptionPatternString = QuadrilateralStrings.a11y.voicing.smallestCornerDescriptionPattern;
 const cornersDescriptionPatternString = QuadrilateralStrings.a11y.voicing.cornersDescriptionPattern;
+const numberOfSlicesPatternString = QuadrilateralStrings.a11y.voicing.numberOfSlicesPattern;
 
 const shapeNameWithArticlesMap = new Map<NamedQuadrilateral | null, string>();
 shapeNameWithArticlesMap.set( NamedQuadrilateral.SQUARE, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.square );
@@ -456,6 +457,24 @@ class QuadrilateralDescriber {
   }
 
   /**
+   * For the details button, we are going to describe 'flat' angles as the number of slices as a special case because
+   * in english it sounds nicer when combined with other details content.
+   */
+  private getDetailsSlicesDescription( angle: number ): string {
+    let descriptionString;
+    if ( this.shapeModel.isFlatAngle( angle ) ) {
+      descriptionString = StringUtils.fillIn( numberOfSlicesPatternString, {
+        numberOfSlices: 6
+      } );
+    }
+    else {
+      descriptionString = VertexDescriber.getSlicesDescription( angle, this.shapeModel );
+    }
+
+    return descriptionString;
+  }
+
+  /**
    * The fifth statement of the "details" button in the Voicing toolbar. Returns a description of the widest and
    * smallest angles of the shape. Only returns a string if corner guides are displayed - otherwise this more
    * quantitative content is skipped.
@@ -470,8 +489,8 @@ class QuadrilateralDescriber {
       const widestVertex = _.maxBy( this.shapeModel.vertices, vertex => vertex.angleProperty.value )!;
       const smallestVertex = _.minBy( this.shapeModel.vertices, vertex => vertex.angleProperty.value )!;
 
-      const widestVertexDescription = VertexDescriber.getSlicesDescription( widestVertex.angleProperty.value!, this.shapeModel );
-      const smallestVertexDescription = VertexDescriber.getSlicesDescription( smallestVertex.angleProperty.value!, this.shapeModel );
+      const widestVertexDescription = this.getDetailsSlicesDescription( widestVertex.angleProperty.value! );
+      const smallestVertexDescription = this.getDetailsSlicesDescription( smallestVertex.angleProperty.value! );
 
       if ( this.shapeModel.allAnglesRightProperty.value ) {
 
