@@ -575,13 +575,14 @@ class QuadrilateralShapeModel {
    */
   private createVertexArea( modelBounds: Bounds2, vertexA: Vertex, vertexB: Vertex, vertexC: Vertex, vertexD: Vertex ): Shape {
 
+    return;
     const allVerticesInBounds = _.every( [ vertexA, vertexB, vertexC, vertexD ], vertex => modelBounds.containsPoint( vertex.positionProperty.value ) );
     const vertexPositionsUnique = _.uniqBy( [ vertexA, vertexB, vertexC, vertexD ].map( vertex => vertex.positionProperty.value.toString() ), positionString => {
       return positionString;
     } ).length === 4;
     if ( this.validateShape ) {
-      assert && assert( allVerticesInBounds, 'A vertex is not contained by modelBounds!' );
-      assert && assert( vertexPositionsUnique, 'There are two vertices that overlap! That would create lines of zero length and break this algorithm' );
+      // assert && assert( allVerticesInBounds, 'A vertex is not contained by modelBounds!' );
+      // assert && assert( vertexPositionsUnique, 'There are two vertices that overlap! That would create lines of zero length and break this algorithm' );
     }
 
     if ( !allVerticesInBounds || !vertexPositionsUnique ) {

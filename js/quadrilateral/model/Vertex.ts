@@ -128,12 +128,13 @@ class Vertex {
 
     // p2 engine setup
     this.physicsBody = new p2.Body( {
-      mass: 0.15,
+      mass: 1,
       position: QuadrilateralPhysics.vectorToP2Position( initialPosition ),
       fixedRotation: true,
+      collisionResponse: false
 
       // Prevents tunneling through other objects when moving quickly from dragging
-      ccdSpeedThreshold: 40
+      // ccdSpeedThreshold: 40
     } );
     const shape = new p2.Box( {
       width: VERTEX_BOUNDS.width,
@@ -142,10 +143,7 @@ class Vertex {
 
     if ( usePhysics ) {
       this.physicsBody.addShape( shape );
-      physicsEngine.addBody( this.physicsBody );
-
-      // for some reason this needs to be after the body has a shape
-      this.physicsBody.setDensity( 1e6 );
+      physicsEngine.addBody( this.physicsBody, this );
     }
 
     this.tandem = tandem;
@@ -180,7 +178,7 @@ class Vertex {
   }
 
   public step(): void {
-    // this.readPhysicsData();
+    this.readPhysicsData();
 
     const positionVector = QuadrilateralPhysics.p2PositionToVector( this.physicsBody.position );
     this.positionProperty.value = positionVector;
@@ -277,7 +275,7 @@ class Vertex {
 
     const sidesNonZero = sideA !== 0 && sideB !== 0;
     if ( validateShape ) {
-      assert && assert( sidesNonZero, 'law of cosines will not work when sides are of zero length' );
+      // assert && assert( sidesNonZero, 'law of cosines will not work when sides are of zero length' );
     }
 
     if ( sidesNonZero ) {

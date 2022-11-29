@@ -12,6 +12,13 @@ import quadrilateral from '../../quadrilateral.js';
 const barrierMaterial = new p2.Material();
 const dynamicMaterial = new p2.Material();
 
+function addSubSub( out, a, b, c, d ) {
+  out[ 0 ] = a[ 0 ] + b[ 0 ] - c[ 0 ] - d[ 0 ];
+  out[ 1 ] = a[ 1 ] + b[ 1 ] - c[ 1 ] - d[ 1 ];
+}
+
+const bodyVertexMap = new Map();
+
 class QuadrilateralPhysics {
 
   // Maps {number} body.id => {p2.Body}. Contains bodies that are empty, and specifically used for
@@ -31,18 +38,53 @@ class QuadrilateralPhysics {
 
     // defaults taken from density
     this.world.addContactMaterial( new p2.ContactMaterial( barrierMaterial, dynamicMaterial, {
-      restitution: 0,
-      stiffness: 1e6,
-      relaxation: 4
+      // restitution: 0,
+      // stiffness: 1e6,
+      // relaxation: 4
     } ) );
 
-    this.world.on( 'postStep', () => {
+    window.world = this.world;
+
+    this.world.on( 'postStep', ( p2Event: IntentionalAny ) => {
       this.internalStepEmitter.emit( this.world.lastTimeStep );
+
+      // console.log( this.world.bodies[ 0 ].position );
+      if ( this.world.narrowphase.contactEquations.length > 0 ) {
+        // debugger;
+      }
+    } );
+
+    // all contact equations are cleared here
+    this.world.on( 'postSolve', p2Event => {
+      if ( p2Event.pairs.length > 0 ) {
+        // debugger;
+      }
+      if ( this.world.narrowphase.contactEquations.length > 0 ) {
+        debugger;
+      }
+    } );
+
+    this.world.on( 'preSolve', p2Event => {
+      if ( this.world.narrowphase.contactEquations.length > 0 ) {
+        this.world.narrowphase.contactEquations.forEach( equation => {
+          // const vec = this.computePenetrationVector( equation );
+          //
+          // // correct the Vertex and p2Body by the overlap amount
+          // const vertex = bodyVertexMap.get( equation.bodyA );
+          // const newVector = vertex.positionProperty.value.plusXY( vec[ 0 ], vec[ 1 ] );
+          // vertex.positionProperty.value = newVector;
+          // equation.bodyA.position = QuadrilateralPhysics.vectorToP2Position( newVector );
+
+          equation.enabled = false;
+        } );
+      }
     } );
   }
 
-  public addBody( body: p2.Body ): void {
+  public addBody( body: p2.Body, vertex ): void {
     this.world.addBody( body );
+
+    bodyVertexMap.set( body, vertex );
   }
 
   public addPointerConstraint( body: p2.Body, point: Vector2 ): void {
@@ -129,6 +171,40 @@ class QuadrilateralPhysics {
 
   public step( dt: number ): void {
     this.world.step( dt );
+
+    this.world.narrowphase.contactEquations.forEach( equation => {
+      const vertex = bodyVertexMap.get( equation.bodyA );
+
+      if ( vertex.isPressedProperty.value ) {
+
+        // correct the Vertex and p2Body by the overlap amount
+        const vec = this.computePenetrationVector( equation );
+        const newVector = vertex.positionProperty.value.plusXY( vec[ 0 ], vec[ 1 ] );
+        vertex.positionProperty.value = newVector;
+        equation.bodyA.position = QuadrilateralPhysics.vectorToP2Position( newVector );
+
+        console.log( vec );
+      }
+    } );
+  }
+
+  private computePenetrationVector( contactEquation ) {
+
+    var bi = contactEquation.bodyA,
+      bj = contactEquation.bodyB,
+      ri = contactEquation.contactPointA,
+      rj = contactEquation.contactPointB,
+      xi = bi.position,
+      xj = bj.position;
+
+    // Calculate q = xj+rj -(xi+ri) i.e. the penetration vector
+    var penetrationVec = contactEquation.penetrationVec;
+    addSubSub( penetrationVec, xj, rj, xi, ri );
+
+    return penetrationVec;
+
+    // const Gq = p2.vec2.dot( n, penetrationVec ) + this.offset;
+    // const GW = contactEQuation.computeGW();
   }
 
   /**

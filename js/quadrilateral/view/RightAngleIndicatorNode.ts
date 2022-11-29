@@ -59,6 +59,7 @@ class RightAngleIndicatorNode extends Path {
 
   private redrawShape( vertex1: Vertex, vertex2: Vertex, vertex3: Vertex ): void {
 
+    return;
     assert && assert( vertex1.angleProperty.value, 'Angle must be available to draw the indicator' );
     const angle = vertex1.angleProperty.value!;
 

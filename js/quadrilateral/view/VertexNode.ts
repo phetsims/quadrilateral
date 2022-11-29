@@ -24,6 +24,7 @@ import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
 import grab_mp3 from '../../../../tambo/sounds/grab_mp3.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
 import quadrilateral from '../../quadrilateral.js';
+import QuadrilateralPhysics from '../model/QuadrilateralPhysics.js';
 
 // constants
 const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
@@ -156,11 +157,10 @@ class VertexNode extends Voicing( Circle ) {
 
         // constrain to the allowable positions in the model along the grid
         const constrainedPosition = model.getClosestGridPosition( modelPoint );
+
         vertex.positionProperty.value = constrainedPosition;
 
-        // if ( model.isVertexPositionAllowed( vertex, constrainedPosition ) ) {
-        //   vertex.positionProperty.value = constrainedPosition;
-        // }
+        vertex.physicsBody.position = QuadrilateralPhysics.vectorToP2Position( constrainedPosition );
       },
       end: event => {
 
