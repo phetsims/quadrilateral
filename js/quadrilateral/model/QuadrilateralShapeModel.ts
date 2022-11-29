@@ -1422,10 +1422,12 @@ class QuadrilateralShapeModel {
    * Update the drag areas for all vertices.
    */
   private setVertexDragAreas(): void {
-    this.vertexA.dragAreaProperty.set( this.createVertexArea( this.model.modelBoundsProperty.value!, this.vertexA, this.vertexB, this.vertexC, this.vertexD ) );
-    this.vertexB.dragAreaProperty.set( this.createVertexArea( this.model.modelBoundsProperty.value!, this.vertexB, this.vertexC, this.vertexD, this.vertexA ) );
-    this.vertexC.dragAreaProperty.set( this.createVertexArea( this.model.modelBoundsProperty.value!, this.vertexC, this.vertexD, this.vertexA, this.vertexB ) );
-    this.vertexD.dragAreaProperty.set( this.createVertexArea( this.model.modelBoundsProperty.value!, this.vertexD, this.vertexA, this.vertexB, this.vertexC ) );
+    const dilatedBounds = this.model.modelBoundsProperty.value!.dilated( 1 );
+
+    this.vertexA.dragAreaProperty.set( this.createVertexArea( dilatedBounds, this.vertexA, this.vertexB, this.vertexC, this.vertexD ) );
+    this.vertexB.dragAreaProperty.set( this.createVertexArea( dilatedBounds, this.vertexB, this.vertexC, this.vertexD, this.vertexA ) );
+    this.vertexC.dragAreaProperty.set( this.createVertexArea( dilatedBounds, this.vertexC, this.vertexD, this.vertexA, this.vertexB ) );
+    this.vertexD.dragAreaProperty.set( this.createVertexArea( dilatedBounds, this.vertexD, this.vertexA, this.vertexB, this.vertexC ) );
   }
 
   public setPropertiesDeferred( deferred: boolean ): void {

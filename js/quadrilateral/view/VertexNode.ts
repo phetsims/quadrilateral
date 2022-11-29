@@ -149,8 +149,11 @@ class VertexNode extends Voicing( Circle ) {
         const parentPoint = this.globalToParentPoint( pointerPoint );
         const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
 
+        // constrain to model bounds
+        const inBoundsPosition = model.vertexDragBoundsProperty.value.closestPointTo( modelPoint );
+
         // constrain to the allowable positions in the model along the grid
-        const constrainedPosition = model.getClosestGridPosition( modelPoint );
+        const constrainedPosition = model.getClosestGridPosition( inBoundsPosition );
 
         if ( model.isVertexPositionAllowed( vertex, constrainedPosition ) ) {
           vertex.positionProperty.value = constrainedPosition;

@@ -243,9 +243,23 @@ class SideNode extends Voicing( Path ) {
           const modelVertex1Position = modelPoint.plus( vectorToVertex1! );
           const modelVertex2Position = modelPoint.plus( vectorToVertex2! );
 
+          const vertexDragBounds = quadrilateralModel.vertexDragBoundsProperty.value;
+          const vertex2ToVertex1Vector = modelVertex2Position.minus( modelVertex1Position );
+
+          let constrainedVertex1Position = modelVertex1Position;
+          let constrainedVertex2Position = modelVertex2Position;
+          if ( !vertexDragBounds.containsBounds( side.vertex1.getBoundsFromPoint( modelVertex1Position ) ) ) {
+            constrainedVertex1Position = vertexDragBounds.closestPointTo( modelVertex1Position );
+            constrainedVertex2Position = constrainedVertex1Position.plus( vertex2ToVertex1Vector );
+          }
+          else if ( !vertexDragBounds.containsBounds( side.vertex2.getBoundsFromPoint( modelVertex2Position ) ) ) {
+            constrainedVertex2Position = vertexDragBounds.closestPointTo( modelVertex2Position );
+            constrainedVertex1Position = constrainedVertex2Position.plus( vertex2ToVertex1Vector.negated() );
+          }
+
           // constrain each to the model grid
-          const proposedVertex1Position = quadrilateralModel.getClosestGridPosition( modelVertex1Position );
-          const proposedVertex2Position = quadrilateralModel.getClosestGridPosition( modelVertex2Position );
+          const proposedVertex1Position = quadrilateralModel.getClosestGridPosition( constrainedVertex1Position );
+          const proposedVertex2Position = quadrilateralModel.getClosestGridPosition( constrainedVertex2Position );
 
           // only update positions if both are allowed
           if ( quadrilateralModel.areVertexPositionsAllowed( side.vertex1, proposedVertex1Position, side.vertex2, proposedVertex2Position ) ) {

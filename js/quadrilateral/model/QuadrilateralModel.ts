@@ -25,6 +25,7 @@ import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import QuadrilateralPreferencesModel from './QuadrilateralPreferencesModel.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 
 class QuadrilateralModel {
 
@@ -91,6 +92,10 @@ class QuadrilateralModel {
   // Whether labels on each vertex are visible.
   public readonly vertexLabelsVisibleProperty: BooleanProperty;
 
+  // The available bounds for smooth vertex dragging (the model bounds eroded by the width of a vertex so a vertex
+  // can never go ouside of the model bounds.
+  public readonly vertexDragBoundsProperty: TReadOnlyProperty<Bounds2>;
+  
   // Whether the grid is visible.
   public readonly gridVisibleProperty: BooleanProperty;
 
@@ -131,6 +136,17 @@ class QuadrilateralModel {
     this.modelBoundsProperty = new Property<Bounds2 | null>( null, {
       tandem: tandem.createTandem( 'modelBoundsProperty' ),
       phetioValueType: NullableIO( Bounds2.Bounds2IO )
+    } );
+
+    this.vertexDragBoundsProperty = new DerivedProperty( [ this.modelBoundsProperty ], ( bounds: Bounds2 | null ) => {
+      if ( bounds ) {
+        return bounds.eroded( Vertex.VERTEX_WIDTH / 2 );
+      }
+      else {
+
+        // can drag anywhere until model bounds are initialiized
+        return Bounds2.EVERYTHING;
+      }
     } );
 
     this.physicalModelBoundsProperty = new Property<Bounds2 | null>( null, {
