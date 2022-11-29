@@ -131,10 +131,10 @@ class Vertex {
       mass: 1,
       position: QuadrilateralPhysics.vectorToP2Position( initialPosition ),
       fixedRotation: true,
-      collisionResponse: false
+      collisionResponse: false,
 
       // Prevents tunneling through other objects when moving quickly from dragging
-      // ccdSpeedThreshold: 40
+      ccdSpeedThreshold: 40
     } );
     const shape = new p2.Box( {
       width: VERTEX_BOUNDS.width,
@@ -143,7 +143,7 @@ class Vertex {
 
     if ( usePhysics ) {
       this.physicsBody.addShape( shape );
-      physicsEngine.addBody( this.physicsBody, this );
+      // physicsEngine.addBody( this.physicsBody, this );
     }
 
     this.tandem = tandem;
@@ -178,10 +178,10 @@ class Vertex {
   }
 
   public step(): void {
-    this.readPhysicsData();
-
-    const positionVector = QuadrilateralPhysics.p2PositionToVector( this.physicsBody.position );
-    this.positionProperty.value = positionVector;
+    // this.readPhysicsData();
+    //
+    // const positionVector = QuadrilateralPhysics.p2PositionToVector( this.physicsBody.position );
+    // this.positionProperty.value = positionVector;
   }
 
   /**

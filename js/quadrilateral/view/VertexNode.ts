@@ -158,9 +158,10 @@ class VertexNode extends Voicing( Circle ) {
         // constrain to the allowable positions in the model along the grid
         const constrainedPosition = model.getClosestGridPosition( modelPoint );
 
-        vertex.positionProperty.value = constrainedPosition;
+        vertex.physicsEngine.correctCollisionsAndSet( vertex, constrainedPosition );
 
-        vertex.physicsBody.position = QuadrilateralPhysics.vectorToP2Position( constrainedPosition );
+        // vertex.positionProperty.value = constrainedPosition;
+        // vertex.physicsBody.position = QuadrilateralPhysics.vectorToP2Position( constrainedPosition );
       },
       end: event => {
 
