@@ -3,40 +3,33 @@
 /**
  * Responsible for keeping two opposite sides of the quadrilateral and managing a tolerance interval so that we
  * can determine if the two sides are considered parallel with each other. The angleToleranceInterval changes
- * substantially depending on the method of input to accomplish the learning goals of this sim. See documentation
- * for angleToleranceIntervalProperty for more information.
+ * depending on the method of input to accomplish the learning goals of this sim. See documentation for
+ * parallelAngleToleranceIntervalProperty for more information.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import Emitter from '../../../../axon/js/Emitter.js';
-import IProperty from '../../../../axon/js/IProperty.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import TEmitter from '../../../../axon/js/TEmitter.js';
+import TProperty from '../../../../axon/js/TProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
-import { SidePair } from './QuadrilateralShapeModel.js';
+import SidePair from './SidePair.js';
 import Side from './Side.js';
 
 class ParallelSideChecker {
 
   // A Property that controls the threshold for equality when determining if the opposite sides are parallel.
-  // Without a margin of error it would be extremely difficult to create parallel shapes. The value changes
-  // depending on input.
-  //
-  // Adding a tolerance interval means isParallelProperty will be true when we are not exactly
-  // in parallel. This means that angles will NOT remain constant while dragging sides that are currently
-  // parallel. They are NOT perfectly parallel (even though we are telling the user that they are) so geometric
-  // properties of parallelism do not apply. As such, we make it more or less difficult to remain in parallel
-  // depending on what is moving. For example, if dragging a side that is parallel with another, the tolerance
-  // interval becomes infinite because it should be impossible for two sides to go out of parallel during this
-  // interaction. See the derivation for more specific behaviors.
-  private readonly angleToleranceIntervalProperty: IReadOnlyProperty<number>;
+  // Without a margin of error it would be extremely difficult to create parallel sides. The value changes
+  // depending on input so that it is easier to maintain a parallelogram when controlling with less fine-grained
+  // control (like multitouch). See derivation of Property for more details.
+  private readonly parallelAngleToleranceIntervalProperty: TReadOnlyProperty<number>;
 
   public readonly side1: Side;
   public readonly side2: Side;
@@ -54,9 +47,16 @@ class ParallelSideChecker {
    * @param otherOppositeSidePair - The state of interaction with the other sides may determine this checker's tolerance
    * @param shapeChangedEmitter - Emitter for when the quadrilateral shape changes in some way.
    * @param resetNotInProgressProperty - Is the model currently not resetting?
+   * @param fineInputSpacingProperty
    * @param tandem
    */
-  public constructor( oppositeSidePair: SidePair, otherOppositeSidePair: SidePair, shapeChangedEmitter: Emitter, resetNotInProgressProperty: IProperty<boolean>, tandem: Tandem ) {
+  public constructor(
+    oppositeSidePair: SidePair,
+    otherOppositeSidePair: SidePair,
+    shapeChangedEmitter: TEmitter,
+    resetNotInProgressProperty: TProperty<boolean>,
+    fineInputSpacingProperty: TReadOnlyProperty<boolean>,
+    tandem: Tandem ) {
 
     this.sidePair = oppositeSidePair;
 
@@ -71,20 +71,24 @@ class ParallelSideChecker {
       phetioReadOnly: true
     } );
 
-    this.angleToleranceIntervalProperty = new DerivedProperty( [
+    this.parallelAngleToleranceIntervalProperty = new DerivedProperty( [
       this.side1.isPressedProperty,
       this.side2.isPressedProperty,
       otherSide1.isPressedProperty,
       otherSide2.isPressedProperty,
       this.side1.vertex1.isPressedProperty, this.side1.vertex2.isPressedProperty,
       this.side2.vertex1.isPressedProperty, this.side2.vertex2.isPressedProperty,
-      resetNotInProgressProperty
-    ], ( side1Pressed, side2Pressed, otherSide1Pressed, otherSide2Pressed, side1Vertex1Pressed, side1Vertex2Pressed, side2Vertex1Pressed, side2Vertex2Pressed, resetNotInProgress ) => {
+      resetNotInProgressProperty,
+      fineInputSpacingProperty
+    ], ( side1Pressed, side2Pressed, otherSide1Pressed, otherSide2Pressed, side1Vertex1Pressed, side1Vertex2Pressed, side2Vertex1Pressed, side2Vertex2Pressed, resetNotInProgress, fineInputSpacing ) => {
 
       const verticesPressedArray = [ side1Vertex1Pressed, side1Vertex2Pressed, side2Vertex1Pressed, side2Vertex2Pressed ];
       const numberOfVerticesPressed = _.countBy( verticesPressedArray ).true;
-      const anySelfSidesPressed = side1Pressed || side2Pressed;
-      const anyOtherSidesPressed = otherSide1Pressed || otherSide2Pressed;
+
+      // The default value may be modified by user input and device connection. Otherwise the value is reduced when
+      // using "Fine Input Spacing".
+      const defaultAngleToleranceInterval = fineInputSpacing ? QuadrilateralQueryParameters.parallelAngleToleranceInterval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor :
+                                            QuadrilateralQueryParameters.parallelAngleToleranceInterval;
 
       let toleranceInterval;
 
@@ -103,61 +107,29 @@ class ParallelSideChecker {
       else if ( !resetNotInProgress ) {
 
         // A reset has just begun, set the tolerance interval back to its initial value on load
-        toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval;
+        toleranceInterval = defaultAngleToleranceInterval;
       }
       else {
-
-        // remaining cases apply to mouse, touch, and keyboard input
-        if ( anySelfSidesPressed && this.isParallelProperty.value ) {
-
-          // A side has been picked up while the shape is a parallelogram - it should be impossible for the shape
-          // to go "out" of parallelogram in this case because none of the angles should be changing.
-          toleranceInterval = Number.POSITIVE_INFINITY;
-        }
-        else if ( anySelfSidesPressed && !this.isParallelProperty.value ) {
-
-          // A side as been picked up while the shape is NOT a parallelogram - it should be impossible for the
-          // shape to become a parallelogram while it is being dragged.
-          toleranceInterval = Number.NEGATIVE_INFINITY;
-        }
-        else if ( anyOtherSidesPressed && !this.isParallelProperty.value ) {
-
-          // The other sides are being pressed and my sides are not currently parallel. While dragging a side we
-          // do not want the shape to become a parallelogram within a finite angleToleranceInterval so make sure
-          // my sides will never become parallel.
-          toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval;
-        }
-        else if ( anyOtherSidesPressed && this.isParallelProperty.value ) {
-
-          // The other sides are being pressed and my sides are currently parallel. It is possible in this case
-          // that my sides go in/out of parallel while they move, so reduce the tolerance interval to a defined value.
-          toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval;
-        }
-        else if ( numberOfVerticesPressed >= 2 ) {
+        if ( numberOfVerticesPressed >= 2 ) {
 
           // Two or more vertices pressed at once, increase the tolerance interval by a scale factor so that
           // it is easier to find and remain a parallelogram with this input
-          toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval * QuadrilateralQueryParameters.toleranceIntervalScaleFactor;
-        }
-        else if ( numberOfVerticesPressed === 1 ) {
-
-          // Only one vertex is moving, we can afford to be as precise as possible from this form of input, and
-          // so we have the smallest tolerance interval.
-          toleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval;
+          toleranceInterval = defaultAngleToleranceInterval * QuadrilateralQueryParameters.toleranceIntervalScaleFactor;
         }
         else {
 
-          // We are dragging a side while out of parallelogram, or we just released all sides and vertices. Do NOT
-          // change the angleToleranceInterval because we don't want the quadrilateral to suddenly appear out of
-          // parallelogram at the end of the interaction. The ternary handles initialization.
-          toleranceInterval = this.angleToleranceIntervalProperty ? this.angleToleranceIntervalProperty.value : QuadrilateralQueryParameters.angleToleranceInterval;
+          // Only one vertex is moving, we just released all Vertices/sides or we just changed the "Fine Input Spacing"
+          // checkbox. We can afford to be as precise as possible in these cases without widening the tolerance interval
+          // Only one vertex is moving, we can afford to be as precise as possible from this form of input, and
+          // so we have the smallest tolerance interval.
+          toleranceInterval = defaultAngleToleranceInterval;
         }
       }
 
       return toleranceInterval;
     }, {
-      tandem: tandem.createTandem( 'angleToleranceIntervalProperty' ),
-      phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
+      tandem: tandem.createTandem( 'parallelAngleToleranceIntervalProperty' ),
+      phetioValueType: NumberIO
     } );
 
     // Primarily for debugging in the QuadrilateralModelValuePanel. We cannot actually use this Property because
@@ -170,13 +142,13 @@ class ParallelSideChecker {
 
   /**
    * Returns true if two angles are close enough to each other that they should be considered equal. They are close
-   * enough if they are within the angleToleranceIntervalProperty.
+   * enough if they are within the parallelAngleToleranceIntervalProperty.
    *
    * NOTE: If we need to detect proximity to "parallelness" the smaller absolute values of difference between
    * angle1 and angle2 would be closer to parallel.
    */
   public isAngleEqualToOther( angle1: number, angle2: number ): boolean {
-    return Utils.equalsEpsilon( angle1, angle2, this.angleToleranceIntervalProperty.value );
+    return Utils.equalsEpsilon( angle1, angle2, this.parallelAngleToleranceIntervalProperty.value );
   }
 
   /**

@@ -33,12 +33,16 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import VertexAngles from './VertexAngles.js';
 import ParallelSideChecker from './ParallelSideChecker.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
-import IProperty from '../../../../axon/js/IProperty.js';
+import TProperty from '../../../../axon/js/TProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import QuadrilateralPhysics from './QuadrilateralPhysics.js';
+import TEmitter from '../../../../axon/js/TEmitter.js';
+import QuadrilateralShapeDetector from './QuadrilateralShapeDetector.js';
+import SidePair from './SidePair.js';
+import VertexPair from './VertexPair.js';
 
 // A useful type for calculations for the vertex Shapes which define where the Vertex can move depending on
 // the positions of the other vertices. Lines are along the bounds of model space and RayIntersections
@@ -54,20 +58,6 @@ export type VertexWithProposedPosition = {
 
   // This may not be available if something goes wrong with the marker detection
   proposedPosition?: Vector2;
-};
-
-// A pair of vertices that are grouped together in some way, they are either opposite or adjacent to each other when
-// assembled in the quadrilateral shape
-export type VertexPair = {
-  vertex1: Vertex;
-  vertex2: Vertex;
-};
-
-// A pair of sides that have some relationship, probably either that they are adjacent or opposite to each other when
-// assembled in the quadrilateral shape.
-export type SidePair = {
-  side1: Side;
-  side2: Side;
 };
 
 type QuadrilateralShapeModelOptions = {
@@ -98,7 +88,7 @@ class QuadrilateralShapeModel {
   public readonly sideBCSideDAParallelSideChecker: ParallelSideChecker;
 
   // ParallelSideCheckers are responsible for determining if opposite SidePairs are parallel within their dynamic
-  // angleToleranceIntervalProperty. This is the collection of both checkers, one for each OppositeSidePair.
+  // parallelAngleToleranceIntervalProperty. This is the collection of both checkers, one for each OppositeSidePair.
   public readonly parallelSideCheckers: ParallelSideChecker[];
 
   // Observables that indicate when the sides become parallel. Updated after all vertex positions have been set
@@ -108,10 +98,12 @@ class QuadrilateralShapeModel {
 
   // The area of the quadrilateral. Updated in "deferred" Properties, only after positions of all four vertices are
   // determined.
-  public readonly areaProperty: IProperty<number>;
+  public readonly areaProperty: TProperty<number>;
 
   public readonly vertices: Vertex[];
   public readonly sides: Side[];
+
+  private readonly shapeDetector: QuadrilateralShapeDetector;
 
   // See QuadrilateralShapeModelOptions
   private readonly validateShape: boolean;
@@ -139,14 +131,25 @@ class QuadrilateralShapeModel {
   public tiltToleranceIntervalProperty: Property<number>;
 
   // The tolerance interval for angle and length comparisons when detecting shape names. This needs to be different
-  // from the angleToleranceInterval of the ParallelSideCheckers because those tolerance intervals can go to infinity
-  // to support certain learning goals. The shape detection comparisons need a more consistent angle tolerance
-  // interval. However, there is some unique behavior when connected to the tangible device.
-  public readonly shapeAngleToleranceIntervalProperty: IReadOnlyProperty<number>;
-  public readonly shapeLengthToleranceIntervalProperty: IReadOnlyProperty<number>;
+  // from the parallelAToleranceInterval of the ParallelSideCheckers because those tolerance intervals can change
+  // depending on method of input to support learning goals. The shape detection comparisons need a more consistent
+  // angle tolerance interval. However, there is some unique behavior when connected to the tangible device.
+  public readonly interAngleToleranceIntervalProperty: TReadOnlyProperty<number>;
+  public readonly shapeLengthToleranceIntervalProperty: TReadOnlyProperty<number>;
+
+  // The tolerance interval when values comparing angles against constants. This needs to be a different value
+  // than interAngleToleranceIntervalProperty because that tolerance is used for sums of values so there may be
+  // compounding error.
+  public readonly staticAngleToleranceIntervalProperty: TReadOnlyProperty<number>;
 
   // Emits an event whenever the shape of the Quadrilateral changes
-  public shapeChangedEmitter: Emitter<[]>;
+  public shapeChangedEmitter: TEmitter;
+
+  // Emits an event whenever the Shape of the Quadrilateral changes. Only emits after all order dependent
+  // Properties are up to date (no transient states as individual Vertices move). When the shape changes,
+  // there is distributed view code that needs to run in order. Instead of depending on listener order, breaking
+  // it into multiple Emitters to control the order of callbacks is working OK and easy.
+  public firstSeriesShapeChangedEmitter: TEmitter;
 
   // Whether the quadrilateral is a parallelogram. This Property updates async in the step function! We need to
   // update this Property after all vertex positions and all vertex angles have been updated. When moving more than
@@ -155,7 +158,7 @@ class QuadrilateralShapeModel {
   // with this work resolves the problem.
   public isParallelogramProperty: Property<boolean>;
 
-  // Whether or not all angles of the quadrilateral are right angles within shapeAngleToleranceInterval.
+  // Whether or not all angles of the quadrilateral are right angles within interAngleToleranceInterval.
   // This is set in step because we need to wait until all vertices are positioned during model
   // updates.
   public allAnglesRightProperty: Property<boolean>;
@@ -234,15 +237,15 @@ class QuadrilateralShapeModel {
     this.vertices = [ this.vertexA, this.vertexB, this.vertexC, this.vertexD ];
 
     this.adjacentVertices = [
-      { vertex1: this.vertexA, vertex2: this.vertexB },
-      { vertex1: this.vertexB, vertex2: this.vertexC },
-      { vertex1: this.vertexC, vertex2: this.vertexD },
-      { vertex1: this.vertexD, vertex2: this.vertexA }
+      new VertexPair( this.vertexA, this.vertexB ),
+      new VertexPair( this.vertexB, this.vertexC ),
+      new VertexPair( this.vertexC, this.vertexD ),
+      new VertexPair( this.vertexD, this.vertexA )
     ];
 
     this.oppositeVertices = [
-      { vertex1: this.vertexA, vertex2: this.vertexC },
-      { vertex1: this.vertexB, vertex2: this.vertexD }
+      new VertexPair( this.vertexA, this.vertexC ),
+      new VertexPair( this.vertexB, this.vertexD )
     ];
 
     this.oppositeVertexMap = new Map( [
@@ -287,20 +290,20 @@ class QuadrilateralShapeModel {
     this.adjacentSideMap = new Map( [
       [ this.topSide, [ this.leftSide, this.rightSide ] ],
       [ this.rightSide, [ this.topSide, this.bottomSide ] ],
-      [ this.bottomSide, [ this.leftSide, this.rightSide ] ],
-      [ this.leftSide, [ this.topSide, this.bottomSide ] ]
+      [ this.bottomSide, [ this.rightSide, this.leftSide ] ],
+      [ this.leftSide, [ this.bottomSide, this.topSide ] ]
     ] );
 
     this.adjacentSides = [
-      { side1: this.topSide, side2: this.rightSide },
-      { side1: this.rightSide, side2: this.bottomSide },
-      { side1: this.bottomSide, side2: this.leftSide },
-      { side1: this.leftSide, side2: this.topSide }
+      new SidePair( this.topSide, this.rightSide ),
+      new SidePair( this.rightSide, this.bottomSide ),
+      new SidePair( this.bottomSide, this.leftSide ),
+      new SidePair( this.leftSide, this.topSide )
     ];
 
     this.oppositeSides = [
-      { side1: this.topSide, side2: this.bottomSide },
-      { side1: this.rightSide, side2: this.leftSide }
+      new SidePair( this.topSide, this.bottomSide ),
+      new SidePair( this.rightSide, this.leftSide )
     ];
 
     this.adjacentEqualVertexPairsProperty = new Property<VertexPair[]>( [] );
@@ -343,7 +346,7 @@ class QuadrilateralShapeModel {
       tandem: options.tandem.createTandem( 'allLengthsEqualProperty' )
     } );
 
-    this.shapeNameProperty = new EnumerationProperty( NamedQuadrilateral.GENERAL_QUADRILATERAL, {
+    this.shapeNameProperty = new EnumerationProperty( NamedQuadrilateral.CONVEX_QUADRILATERAL, {
       tandem: options.tandem.createTandem( 'shapeNameProperty' )
     } );
 
@@ -355,41 +358,72 @@ class QuadrilateralShapeModel {
       tandem: options.tandem.createTandem( 'shapeChangedEmitter' )
     } );
 
-    this.shapeAngleToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty ], shapeName => {
+    this.firstSeriesShapeChangedEmitter = new Emitter<[]>();
+
+    this.interAngleToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty, model.preferencesModel.fineInputSpacingProperty ], ( shapeName, fineInputSpacing ) => {
+
+      // reduce the value when "Fine Input Spacing" is selected
+      const interAngleToleranceInterval = fineInputSpacing ? QuadrilateralQueryParameters.interAngleToleranceInterval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor :
+                                          QuadrilateralQueryParameters.interAngleToleranceInterval;
+
       return QuadrilateralShapeModel.toleranceIntervalWideningListener(
-        QuadrilateralQueryParameters.shapeAngleToleranceInterval,
-        QuadrilateralQueryParameters.deviceShapeAngleToleranceInterval,
+        interAngleToleranceInterval,
+        QuadrilateralQueryParameters.deviceInterAngleToleranceInterval,
         shapeName
       );
     }, {
-      tandem: options.tandem.createTandem( 'shapeAngleToleranceIntervalProperty' ),
-      phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
+      tandem: options.tandem.createTandem( 'interAngleToleranceIntervalProperty' ),
+      phetioValueType: NumberIO
     } );
 
-    this.shapeLengthToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty ], shapeName => {
+    this.staticAngleToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty, model.preferencesModel.fineInputSpacingProperty ], ( shapeName, fineInputSpacing ) => {
+
+      // reduce the value when "Fine Input Spacing" is selected
+      const staticAngleToleranceInterval = fineInputSpacing ? QuadrilateralQueryParameters.staticAngleToleranceInterval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor :
+                                           QuadrilateralQueryParameters.staticAngleToleranceInterval;
+
       return QuadrilateralShapeModel.toleranceIntervalWideningListener(
-        QuadrilateralQueryParameters.shapeLengthToleranceInterval,
+        staticAngleToleranceInterval,
+        QuadrilateralQueryParameters.deviceStaticAngleToleranceInterval,
+        shapeName
+      );
+    }, {
+      tandem: options.tandem.createTandem( 'staticAngleToleranceIntervalProperty' ),
+      phetioValueType: NumberIO
+    } );
+
+    this.shapeLengthToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty, model.preferencesModel.fineInputSpacingProperty ], ( shapeName, fineInputSpacing ) => {
+
+      // reduce the value when "Fine Input Spacing" is selected
+      const staticAngleToleranceInterval = fineInputSpacing ? QuadrilateralQueryParameters.shapeLengthToleranceInterval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor :
+                                           QuadrilateralQueryParameters.shapeLengthToleranceInterval;
+
+
+      return QuadrilateralShapeModel.toleranceIntervalWideningListener(
+        staticAngleToleranceInterval,
         QuadrilateralQueryParameters.deviceShapeLengthToleranceInterval,
         shapeName
       );
     }, {
       tandem: options.tandem.createTandem( 'shapeLengthToleranceIntervalProperty' ),
-      phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
+      phetioValueType: NumberIO
     } );
 
     this.sideABSideCDParallelSideChecker = new ParallelSideChecker(
-      { side1: this.topSide, side2: this.bottomSide },
-      { side1: this.rightSide, side2: this.leftSide },
+      new SidePair( this.topSide, this.bottomSide ),
+      new SidePair( this.rightSide, this.leftSide ),
       this.shapeChangedEmitter,
       model.resetNotInProgressProperty,
+      model.preferencesModel.fineInputSpacingProperty,
       options.tandem.createTandem( 'sideABSideCDParallelSideChecker' )
     );
 
     this.sideBCSideDAParallelSideChecker = new ParallelSideChecker(
-      { side1: this.rightSide, side2: this.leftSide },
-      { side1: this.topSide, side2: this.bottomSide },
+      new SidePair( this.rightSide, this.leftSide ),
+      new SidePair( this.topSide, this.bottomSide ),
       this.shapeChangedEmitter,
       model.resetNotInProgressProperty,
+      model.preferencesModel.fineInputSpacingProperty,
       options.tandem.createTandem( 'sideBCSideDAParallelSideChecker' )
     );
 
@@ -397,6 +431,8 @@ class QuadrilateralShapeModel {
       this.sideABSideCDParallelSideChecker,
       this.sideBCSideDAParallelSideChecker
     ];
+
+    this.shapeDetector = new QuadrilateralShapeDetector( this );
 
     this.model = model;
     this.propertiesDeferred = false;
@@ -422,7 +458,11 @@ class QuadrilateralShapeModel {
         // at once.
         this.updateOrderDependentProperties();
 
-        // so that emitter listeners arent called until after order dependent Properties are updated
+        // After updating order dependent Properties so that emitter listeners arent called until after order dependent
+        // Properties are updated. Multiple Emitters for this event control the order of certain listeners distributed
+        // in code that need to happen first. Not thrilled about this approach and may re-implement some things
+        // to do it a different way.
+        this.firstSeriesShapeChangedEmitter.emit();
         this.shapeChangedEmitter.emit();
 
         if ( model.modelBoundsProperty.value ) {
@@ -500,7 +540,7 @@ class QuadrilateralShapeModel {
   private getVertexAnglesEqualToSaved( currentVertexAngles: VertexAngles ): boolean {
 
     // A value requested by https://github.com/phetsims/quadrilateral/issues/59#issuecomment-1048004794
-    const vertexAnglesToleranceInterval = QuadrilateralQueryParameters.angleToleranceInterval * 2;
+    const vertexAnglesToleranceInterval = QuadrilateralQueryParameters.parallelAngleToleranceInterval * 2;
 
     return Utils.equalsEpsilon( currentVertexAngles.vertexAAngle!, this.savedVertexAngles.vertexAAngle!, vertexAnglesToleranceInterval ) &&
            Utils.equalsEpsilon( currentVertexAngles.vertexBAngle!, this.savedVertexAngles.vertexBAngle!, vertexAnglesToleranceInterval ) &&
@@ -516,114 +556,12 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Returns the name of the quadrilateral, one of NamedQuadrilateral enumeration. If the quadrilateral is in a shape
-   * that is not named, returns null.
+   * Shape is a kite if there is at least one set of equal opposite angles and exactly two sets of equal adjacent sides.
    */
-  public getShapeName(): NamedQuadrilateral {
-
-    // basic shape, fallback case
-    let namedQuadrilateral = NamedQuadrilateral.GENERAL_QUADRILATERAL;
-
-    const topSideLengthEqualToRightSideLength = this.isShapeLengthEqualToOther(
-      this.topSide.lengthProperty.value,
-      this.rightSide.lengthProperty.value
-    );
-
-    // equalities for adjacent vertices
-    const adjacentVertexAngles = [
-      [ this.vertexA.angleProperty.value, this.vertexB.angleProperty.value ],
-      [ this.vertexB.angleProperty.value, this.vertexC.angleProperty.value ],
-      [ this.vertexC.angleProperty.value, this.vertexD.angleProperty.value ],
-      [ this.vertexD.angleProperty.value, this.vertexA.angleProperty.value ]
-    ];
-    const vertexAAngleEqualsVertexBAngle = this.isShapeAngleEqualToOther( this.vertexA.angleProperty.value!, this.vertexB.angleProperty.value! );
-    const vertex2AngleEqualsVertex3Angle = this.isShapeAngleEqualToOther( this.vertexB.angleProperty.value!, this.vertexC.angleProperty.value! );
-
-    // If any angles are larger than PI it is a concave shape.
-    if ( _.some( this.vertices, vertex => vertex.angleProperty.value! > Math.PI ) ) {
-      namedQuadrilateral = NamedQuadrilateral.CONCAVE;
-    }
-    else if ( this.isParallelogramProperty.value ) {
-
-      // Square, rhombus, rectangle must be a parallelogram. If we assume this then we can simplify some of the other
-      // comparisons to detect these shapes because we know that opposite angles must be equal and opposite sides must
-      // be the same length.
-
-      // because this is a parallelogram, we only have to check that the adjacent angles are equal, because to be
-      // a parallelogram the angles at opposite vertices must also be equal.
-      if ( vertexAAngleEqualsVertexBAngle && vertex2AngleEqualsVertex3Angle ) {
-
-        // For a parallelogram, opposite sides are equal in length, so if adjacent sides are equal in length as well
-        // it must be a square.
-        if ( topSideLengthEqualToRightSideLength ) {
-          namedQuadrilateral = NamedQuadrilateral.SQUARE;
-        }
-        else {
-
-          // Adjacent side lengths are not equal, but opposite side lengths are. All angles are equal - we must be a
-          // rectangle.
-          namedQuadrilateral = NamedQuadrilateral.RECTANGLE;
-        }
-      }
-      else if ( topSideLengthEqualToRightSideLength ) {
-
-        // Adjacent angles are different for the parallelogram and adjacent sides are equal in length. Since it is
-        // a parallelogram, if the top and right sides are equal in length, the bottom and left sides must be equal
-        // as well.
-        namedQuadrilateral = NamedQuadrilateral.RHOMBUS;
-      }
-    }
-    else {
-
-      // According to https://en.wikipedia.org/wiki/Trapezoid#Characterizations a trapezoid has two adjacent
-      // angles that add up to Math.PI.
-      const trapezoidRequirement = _.some( adjacentVertexAngles, anglePair => {
-        assert && assert( anglePair[ 0 ] !== null && anglePair[ 1 ] !== null, 'angles need to be defined' );
-        return this.isShapeAngleEqualToOther( anglePair[ 0 ]! + anglePair[ 1 ]!, Math.PI );
-      } );
-
-      if ( trapezoidRequirement ) {
-
-        // An isosceles trapezoid will have two pairs of adjacent angles that are equal.
-        const isoscelesRequirement = _.countBy( adjacentVertexAngles, anglePair => {
-          assert && assert( anglePair[ 0 ] !== null && anglePair[ 1 ] !== null, 'angles need to be defined' );
-          return this.isShapeAngleEqualToOther( anglePair[ 0 ]!, anglePair[ 1 ]! );
-        } ).true === 2;
-
-        // If one of the pairs of sides share the same length, it must be an isosceles trapezoid
-        if ( isoscelesRequirement ) {
-          namedQuadrilateral = NamedQuadrilateral.ISOSCELES_TRAPEZOID;
-        }
-        else {
-          namedQuadrilateral = NamedQuadrilateral.TRAPEZOID;
-        }
-      }
-      else {
-
-        // TODO: Define in constructor to reduce allocation?
-        const adjacentSides = [
-          [ this.topSide, this.rightSide ],
-          [ this.rightSide, this.bottomSide ],
-          [ this.bottomSide, this.leftSide ],
-          [ this.leftSide, this.topSide ]
-        ];
-
-        // We have a kite if two pairs of adjacent sides have equal lenghts and we have a pair of opposite
-        // angles that are equal. The angle check shouldn't be required but is because the lengths won't be
-        // exactly equal since they use lengthToleranceInterval in their comparison.
-        const kiteSideLengthRequirement = _.countBy( adjacentSides, ( sidePair: Side[] ) => {
-          return this.isShapeLengthEqualToOther( sidePair[ 0 ].lengthProperty.value, sidePair[ 1 ].lengthProperty.value );
-        } ).true === 2;
-        const kiteAngleRequirement = this.oppositeEqualVertexPairsProperty.value.length === 1;
-        const kiteRequirement = kiteSideLengthRequirement && kiteAngleRequirement;
-
-        if ( kiteRequirement ) {
-          namedQuadrilateral = NamedQuadrilateral.KITE;
-        }
-      }
-    }
-
-    return namedQuadrilateral;
+  private isKite(): boolean {
+    const angleRequirement = this.oppositeEqualVertexPairsProperty.value.length > 0;
+    const lengthRequirement = this.adjacentEqualSidePairsProperty.value.length === 2;
+    return angleRequirement && lengthRequirement;
   }
 
   /**
@@ -911,7 +849,7 @@ class QuadrilateralShapeModel {
 
   /**
    * Returns whether or not the quadrilateral shape is a parallelogram, within the tolerance defined by
-   * angleToleranceIntervalProperty. This function uses parallelSidePairsProperty and requires that Property
+   * parallelAngleToleranceIntervalProperty. This function uses parallelSidePairsProperty and requires that Property
    * value to be up to date.
    */
   public getIsParallelogram(): boolean {
@@ -921,29 +859,20 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Returns true when all angles are right. Uses the current named shape to detect this state. This way
-   * the detected shape will always match whether all angles are right, so for all angles to be right
-   * we must be a square or rectangle. If there was a different calculation here with unique tolerances
-   * we might run into a situation where we have all right angles but we are not a square/rectangle (or vice versa).
-   *
-   * The drawback is that this must be called AFTER the quadrilateral shape is determined by getShapeName().
+   * Returns true when all angles are right.
    */
   public getAreAllAnglesRight(): boolean {
-    return this.shapeNameProperty.value === NamedQuadrilateral.RECTANGLE ||
-           this.shapeNameProperty.value === NamedQuadrilateral.SQUARE;
+    return _.every( this.vertices, vertex => this.isRightAngle( vertex.angleProperty.value! ) );
   }
 
   /**
-   * Returns true when all lengths are equal. Uses the current named shape to detect this state. This way
-   * the detected shape will always match whether all lengths are equal, so for all lengths to be equal
-   * we must be a square or rhombus. If there was a different calculation here with unique tolerances we
-   * might run into a situation where all lengths are equal but we are not a square/rhombus (or vice versa).
-   *
-   * The drawback is that this must be called AFTER the quadrilateral shape is determined by getShapeName().
+   * Returns true when all lengths are equal.
    */
   public getAreAllLengthsEqual(): boolean {
-    return this.shapeNameProperty.value === NamedQuadrilateral.RHOMBUS ||
-           this.shapeNameProperty.value === NamedQuadrilateral.SQUARE;
+    return this.isShapeLengthEqualToOther( this.topSide.lengthProperty.value, this.rightSide.lengthProperty.value ) &&
+           this.isShapeLengthEqualToOther( this.rightSide.lengthProperty.value, this.bottomSide.lengthProperty.value ) &&
+           this.isShapeLengthEqualToOther( this.bottomSide.lengthProperty.value, this.leftSide.lengthProperty.value ) &&
+           this.isShapeLengthEqualToOther( this.leftSide.lengthProperty.value, this.topSide.lengthProperty.value );
   }
 
   /**
@@ -970,25 +899,65 @@ class QuadrilateralShapeModel {
 
   /**
    * Returns true if two angles are close enough together that they should be considered equal. This uses the
-   * shapeAngleToleranceProperty, the most strict interval available. The angleToleranceInterval can be set
-   * to infinity and is very dynamic to accomplish comparisons required to detect parallelogram state during
-   * various interactions. But when detecting shapes we need to be more strict so that when the tolerance is
-   * very high the shape isn't incorrectly described.
+   * shapeAngleToleranceProperty, the most strict interval available. The angleToleranceInterval can be very dynamic
+   * during various interactions to support sim learning goals. But when detecting shapes we need to be more static so
+   * that when the tolerance is very high the shape isn't incorrectly described.
+   *
+   * TODO: Replace with isInterAngleEqualToOther throughout.
    */
   public isShapeAngleEqualToOther( angle1: number, angle2: number ): boolean {
-    return Utils.equalsEpsilon( angle1, angle2, this.shapeAngleToleranceIntervalProperty.value );
+    return Utils.equalsEpsilon( angle1, angle2, this.interAngleToleranceIntervalProperty.value );
+  }
+
+  public static isInterAngleEqualToOther( angle1: number, angle2: number, interAngleToleranceInterval: number ): boolean {
+    return Utils.equalsEpsilon( angle1, angle2, interAngleToleranceInterval );
+  }
+
+  public isInterAngleEqualToOther( angle1: number, angle2: number ): boolean {
+    return Utils.equalsEpsilon( angle1, angle2, this.interAngleToleranceIntervalProperty.value );
   }
 
   /**
    * Returns true if two sides are close enough in length that they should be considered equal. Uses the
    * shapeLengthAngleToleranceInterval.
+   *
+   * TODO: Rename to isInterLengthEqualToOTher to match interAngleToleranceInterval.
    */
   public isShapeLengthEqualToOther( length1: number, length2: number ): boolean {
     return Utils.equalsEpsilon( length1, length2, this.shapeLengthToleranceIntervalProperty.value );
   }
 
+  /**
+   * Returns true if the lengths are equal to eachother within interLengthToleranceInterval.
+   */
+  public static isInterLengthEqualToOther( length1: number, length2: number, interLengthToleranceInterval: number ): boolean {
+    return Utils.equalsEpsilon( length1, length2, interLengthToleranceInterval );
+  }
+
   public isRightAngle( angle: number ): boolean {
-    return this.isShapeAngleEqualToOther( angle, Math.PI / 2 );
+    return Utils.equalsEpsilon( angle, Math.PI / 2, this.staticAngleToleranceIntervalProperty.value );
+  }
+
+  /**
+   * Returns true if the angle is equal to PI within staticAngleToleranceInterval.
+   */
+  public isFlatAngle( angle: number ): boolean {
+    return Utils.equalsEpsilon( angle, Math.PI, this.staticAngleToleranceIntervalProperty.value );
+  }
+
+  /**
+   * Returns true when the angle is convex (greater than 180 degrees).
+   */
+  public isConvexAngle( angle: number ): boolean {
+    return angle > Math.PI;
+  }
+
+  /**
+   * Returns true if two angles are equal within staticAngleToleranceIntervalProperty. See that value for more
+   * information.
+   */
+  public isStaticAngleEqualToOther( angle: number, otherAngle: number ): boolean {
+    return Utils.equalsEpsilon( angle, otherAngle, this.staticAngleToleranceIntervalProperty.value );
   }
 
   public isTiltEqualToOther( tilt1: number, tilt2: number ): boolean {
@@ -1078,11 +1047,11 @@ class QuadrilateralShapeModel {
       this.anglesEqualToSavedProperty.set( this.getVertexAnglesEqualToSaved( this.getVertexAngles() ) );
     }
 
-    this.shapeNameProperty.set( this.getShapeName() );
-
-    // Uses detected shape name so must be called AFTER the shapeNameProperty is set above.
     this.allAnglesRightProperty.set( this.getAreAllAnglesRight() );
     this.allLengthsEqualProperty.set( this.getAreAllLengthsEqual() );
+
+    // getShapeName requires all shape Properties to be calculated, so this is done at the very end
+    this.shapeNameProperty.set( this.shapeDetector.getShapeName() );
   }
 
   /**
@@ -1132,7 +1101,8 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Update particular Property that holds collections of SidePairs that are equal in length.
+   * Update particular Property that holds collections of SidePairs that are equal in length. Uses
+   * shapeLengthToleranceIntervalProperty for comparison tolerances.
    */
   private updateEqualLengthSidePairs( equalSidePairsProperty: Property<SidePair[]>, allSidePairs: SidePair[] ): void {
     const currentSidePairs = equalSidePairsProperty.value;
@@ -1242,10 +1212,6 @@ class QuadrilateralShapeModel {
 
           // apply smoothing over a number of values to reduce noise
           constrainedPosition = vertexWithProposedPosition.vertex.smoothPosition( virtualPosition );
-
-          // constrain to the closest grid position
-          // With a high enough smoothingLength, this isn't necessary with MediaPipe.
-          // constrainedPosition = QuadrilateralModel.getClosestGridPosition( virtualPosition, this.model.preferencesModel.deviceGridSpacingProperty.value );
 
           // constrain within model bounds
           constrainedPosition = this.model.modelBoundsProperty.value?.closestPointTo( constrainedPosition );
@@ -1383,7 +1349,7 @@ class QuadrilateralShapeModel {
    * Set positions from the length and angle data provided. Useful when working with a tangible device that is
    * providing length and angle data. When reconstructing the shape we start by making the top side parallel
    * with the top of model bounds. The remaining vertices are positioned acordingly. Finally, if there is some
-   * rotation to apply (from the experimental marker input), that rotation is applied. TODO: Review this if something should change without marker input, https://github.com/phetsims/tangible/issues/11
+   * rotation to apply (from the experimental marker input), that rotation is applied.
    *
    * @param topLength
    * @param rightLength
@@ -1416,8 +1382,8 @@ class QuadrilateralShapeModel {
     const shiftedPositions = _.map( proposedPositions, shapePosition => shapePosition.plus( centroidOffset ) );
 
     // If there is some marker input, rotate positions to match the marker. Negate the rotation value to mirror the
-    // rotation of the device. TODO: not sure we need this, https://github.com/phetsims/tangible/issues/11
-    const rotatedPositions = _.map( shiftedPositions, shiftedPosition => shiftedPosition.rotated( -this.model.markerRotationProperty.value ) );
+    // rotation of the device.
+    const rotatedPositions = _.map( shiftedPositions, shiftedPosition => shiftedPosition.rotated( -this.model.tangibleRotationProperty.value ) );
 
     // make sure that all positions are within model bounds
     const constrainedPositions = _.map( rotatedPositions, position => this.model.modelBoundsProperty.value?.closestPointTo( position ) );
@@ -1432,7 +1398,7 @@ class QuadrilateralShapeModel {
     ];
 
     // Constrain to intervals of deviceGridSpacingProperty.value to try to reduce noise
-    const constrainedGridPositions = _.map( smoothedPositions, smoothedPosition => QuadrilateralModel.getClosestGridPosition( smoothedPosition, this.model.preferencesModel.deviceGridSpacingProperty.value ) );
+    const constrainedGridPositions = _.map( smoothedPositions, smoothedPosition => this.model.getClosestGridPosition( smoothedPosition, this.model.preferencesModel.deviceGridSpacingProperty.value ) );
 
     const verticesWithProposedPositions = [
       { vertex: this.vertexA, proposedPosition: constrainedGridPositions[ 0 ]! },
@@ -1475,6 +1441,21 @@ class QuadrilateralShapeModel {
     if ( !deferred ) {
       deferredVertexListeners.forEach( deferredListener => deferredListener && deferredListener() );
     }
+  }
+
+  /**
+   * Returns the distance in model space between two vertices.
+   */
+  public static getDistanceBetweenVertices( vertex1: Vertex, vertex2: Vertex ): number {
+    return vertex1.positionProperty.value.distance( vertex2.positionProperty.value );
+  }
+
+  /**
+   * Returns the average length between two sides. Useful when determining how parallel or adjacent
+   * pairs of side lengths change over time.
+   */
+  public static getAverageSideLength( side1: Side, side2: Side ): number {
+    return ( side1.lengthProperty.value + side2.lengthProperty.value ) / 2;
   }
 
   /**

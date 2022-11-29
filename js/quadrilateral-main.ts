@@ -6,21 +6,22 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import PreferencesConfiguration from '../../joist/js/preferences/PreferencesConfiguration.js';
+import PreferencesModel from '../../joist/js/preferences/PreferencesModel.js';
 import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
-import { Color, ColorProperty } from '../../scenery/js/imports.js';
+import { Node } from '../../scenery/js/imports.js';
 import Tandem from '../../tandem/js/Tandem.js';
-import vibrationManager from '../../tappi/js/vibrationManager.js';
 import HapticsInfoDialog from './common/HapticsInfoDialog.js';
 import QuadrilateralQueryParameters from './quadrilateral/QuadrilateralQueryParameters.js';
 import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';
-import quadrilateralStrings from './quadrilateralStrings.js';
+import QuadrilateralStrings from './QuadrilateralStrings.js';
 import QuadrilateralPreferencesModel from './quadrilateral/model/QuadrilateralPreferencesModel.js';
-import QuadrilateralPreferencesNode from './quadrilateral/view/QuadrilateralPreferencesNode.js';
+import QuadrilateralAudioPreferencesNode from './quadrilateral/view/QuadrilateralAudioPreferencesNode.js';
+import MappedProperty from '../../axon/js/MappedProperty.js';
+import QuadrilateralSimulationPreferencesNode from './quadrilateral/view/QuadrilateralSimulationPreferencesNode.js';
+import QuadrilateralInputPreferencesNode from './quadrilateral/view/QuadrilateralInputPreferencesNode.js';
 
-const quadrilateralTitleString = quadrilateralStrings.quadrilateral.title;
-const calibrationDemoString = 'Device'; // this will never be translatable, keep out of json file
+const quadrilateralTitleStringProperty = QuadrilateralStrings.quadrilateral.titleStringProperty;
 
 const preferencesModel = new QuadrilateralPreferencesModel();
 
@@ -38,9 +39,26 @@ const simOptions: SimOptions = {
   },
 
   // preferences configuration with defaults from package.json
-  preferencesConfiguration: new PreferencesConfiguration( {
-    generalOptions: {
-      createSimControls: tandem => new QuadrilateralPreferencesNode( preferencesModel, tandem.createTandem( 'quadrilateralPreferencesNode' ) )
+  preferencesModel: new PreferencesModel( {
+    simulationOptions: {
+      customPreferences: [ {
+        createContent: tandem => new QuadrilateralSimulationPreferencesNode( preferencesModel, tandem.createTandem( 'simPreferences' ) )
+      } ]
+    },
+    inputOptions: {
+      customPreferences: [ {
+        createContent: tandem => new QuadrilateralInputPreferencesNode( preferencesModel )
+      } ]
+    },
+    audioOptions: {
+      customPreferences: [
+        {
+          createContent: tandem => new Node()
+        },
+        {
+          createContent: tandem => new QuadrilateralAudioPreferencesNode( preferencesModel, tandem.createTandem( 'audioPreferences' ) )
+        }
+      ]
     }
   } )
 };
@@ -48,23 +66,20 @@ const simOptions: SimOptions = {
 // launch the sim - beware that scenery Image nodes created outside of simLauncher.launch() will have zero bounds
 // until the images are fully loaded, see https://github.com/phetsims/coulombs-law/issues/70
 simLauncher.launch( () => {
-
-  // if in the "calibration" demo, use two screens to test communication between them, see
-  // https://github.com/phetsims/quadrilateral/issues/18
   const quadrilateralScreen = new QuadrilateralScreen( preferencesModel, {
-    name: quadrilateralTitleString,
+
+    // You cannot pass the same Property instance as a single as the sim and screen name.
+    name: new MappedProperty<string, string>( quadrilateralTitleStringProperty, {
+      bidirectional: true,
+      map: _.identity, inverseMap: _.identity
+    } ),
     tandem: Tandem.ROOT.createTandem( 'quadrilateralScreen' )
   } );
-  const calibrationDemoScreen = new QuadrilateralScreen( preferencesModel, {
-    name: calibrationDemoString,
-    backgroundColorProperty: new ColorProperty( new Color( 'white' ) ),
-    tandem: Tandem.ROOT.createTandem( 'calibrationDemoScreen' )
-  } );
-  const simScreens = QuadrilateralQueryParameters.calibrationDemo ? [ quadrilateralScreen, calibrationDemoScreen ] : [ quadrilateralScreen ];
 
-  const sim = new Sim( quadrilateralTitleString, simScreens, simOptions );
+  const sim = new Sim( quadrilateralTitleStringProperty, [ quadrilateralScreen ], simOptions );
   sim.start();
 
+  // @ts-ignore
   if ( QuadrilateralQueryParameters.showInitialTouchDialog && window.navigator.vibrate ) {
 
     // Put up a dialog that will essentially force the user to interact with the sim, thus enabling haptics right away.
@@ -81,5 +96,6 @@ simLauncher.launch( () => {
   // Initialize the vibration manager.  This is necessary because the vibration manager needs certain things from the
   // sim object instance to complete its setup.  If the vibration feature becomes widely used, this may be moved into
   // Sim.js, but as of now (May 2022) we don't want Sim.js to have a dependency on this library.
-  vibrationManager.initialize( sim.browserTabVisibleProperty, sim.activeProperty );
+  // Removed for now until we return to this work, see https://github.com/phetsims/quadrilateral/issues/104
+  // vibrationManager.initialize( sim.browserTabVisibleProperty, sim.activeProperty );
 } );

@@ -11,14 +11,15 @@ import quadrilateral from '../quadrilateral.js';
 import QuadrilateralModel from './model/QuadrilateralModel.js';
 import QuadrilateralScreenView from './view/QuadrilateralScreenView.js';
 import QuadrilateralPreferencesModel from './model/QuadrilateralPreferencesModel.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import EmptyObjectType from '../../../phet-core/js/types/EmptyObjectType.js';
+import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
+import QuadrilateralKeyboardHelpContent from './view/QuadrilateralKeyboardHelpContent.js';
 
 class QuadrilateralScreen extends Screen<QuadrilateralModel, QuadrilateralScreenView> {
   public constructor( preferencesModel: QuadrilateralPreferencesModel, providedOptions: ScreenOptions ) {
 
-    const options = optionize<ScreenOptions, EmptyObjectType, ScreenOptions>()( {
-      backgroundColorProperty: QuadrilateralColors.screenBackgroundColorProperty
+    const options = optionize<ScreenOptions, EmptySelfOptions, ScreenOptions>()( {
+      backgroundColorProperty: QuadrilateralColors.screenBackgroundColorProperty,
+      createKeyboardHelpNode: () => new QuadrilateralKeyboardHelpContent()
     }, providedOptions );
 
     super(

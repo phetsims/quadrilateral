@@ -35,6 +35,8 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
 
   public readonly allDataCollectedEmitter = new Emitter();
 
+  private readonly model: QuadrilateralModel;
+
   private topLength = 0;
   private rightLength = 0;
   private leftLength = 0;
@@ -48,6 +50,8 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
     super( 'Search for device', {
       textNodeOptions: QuadrilateralConstants.PANEL_LABEL_TEXT_OPTIONS
     } );
+
+    this.model = quadrilateralModel;
 
     this.addListener( this.requestQuadDevice.bind( this ) );
 
@@ -134,8 +138,11 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
         notifySuccess5.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
           this.handleCharacteristicValue5Changed( event );
         } );
+
         // At this time we can assume that connections are successful
+        // TODO: Set to false when connection is lost?
         console.log( 'connection successful' );
+        this.model.connectedToDeviceProperty.value = true;
       }
     }
   }
@@ -147,7 +154,7 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
   private handleCharacteristicValueChanged( event: Event ): void {
     if ( event.target ) {
       // @ts-ignore
-      // console.log( '1: ', event.target.value.getFloat32( 0, true ) );
+      console.log( '1: ', event.target.value.getFloat32( 0, true ) );
 
       // @ts-ignore
       this.topLength = event.target.value.getFloat32( 0, true );
@@ -157,7 +164,7 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
   private handleCharacteristicValue2Changed( event: Event ): void {
     if ( event.target ) {
       // @ts-ignore
-      // console.log( '2: ', event.target.value.getFloat32( 0, true ) );
+      console.log( '2: ', event.target.value.getFloat32( 0, true ) );
 
       // @ts-ignore
       this.rightLength = event.target.value.getFloat32( 0, true );
@@ -167,7 +174,7 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
   private handleCharacteristicValue3Changed( event: Event ): void {
     if ( event.target ) {
       // @ts-ignore
-      // console.log( '3: ', event.target.value.getFloat32( 0, true ) );
+      console.log( '3: ', event.target.value.getFloat32( 0, true ) );
 
       // @ts-ignore
       this.leftLength = event.target.value.getFloat32( 0, true );
@@ -177,7 +184,7 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
   private handleCharacteristicValue4Changed( event: Event ): void {
     if ( event.target ) {
       // @ts-ignore
-      // console.log( '4: ', event.target.value.getFloat32( 0, true ) );
+      console.log( '4: ', event.target.value.getFloat32( 0, true ) );
 
       // @ts-ignore
       this.topLeftAngle = event.target.value.getFloat32( 0, true );
@@ -187,7 +194,7 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
   private handleCharacteristicValue5Changed( event: Event ): void {
     if ( event.target ) {
       // @ts-ignore
-      // console.log( '5: ', event.target.value.getFloat32( 0, true ) );
+      console.log( '5: ', event.target.value.getFloat32( 0, true ) );
 
       // @ts-ignore
       this.topRightAngle = event.target.value.getFloat32( 0, true );

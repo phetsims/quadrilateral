@@ -15,7 +15,7 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import VertexLabel from './VertexLabel.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
@@ -51,13 +51,17 @@ class Vertex {
 
   // The bounds in model coordinates of this vertex, with dimensions VERTEX_BOUNDS, centered at the value of the
   // positionProperty.
-  public modelBoundsProperty: IReadOnlyProperty<Bounds2>;
+  public modelBoundsProperty: TReadOnlyProperty<Bounds2>;
 
   // Referenced so that we can pass the tandem to Properties as they are dynamically created in the methods below.
   private tandem: Tandem;
 
   // Property that controls how many values to include in the "smoothing" of positions. See smoothPosition()
-  private readonly smoothingLengthProperty: IReadOnlyProperty<number>;
+  private readonly smoothingLengthProperty: TReadOnlyProperty<number>;
+
+  // Indicates that the Vertex has received some input and it is time to trigger a new Voicing Object Response
+  // the next time Properties are updated in QuadrilateralShapeModel.
+  public voicingObjectResponseDirty = false;
 
   // A reference to vertices connected to this vertex for the purposes of calculating the angle at this vertex.
   // The orientation of vertex1 and vertex2 for angle calculations are as shown in the following diagram:
@@ -91,9 +95,8 @@ class Vertex {
    *                                  a tangible device.
    * @param tandem
    */
-  public constructor( initialPosition: Vector2, physicsEngine: QuadrilateralPhysics, vertexLabel: VertexLabel, smoothingLengthProperty: IReadOnlyProperty<number>, usePhysics: boolean, tandem: Tandem ) {
+  public constructor( initialPosition: Vector2, physicsEngine: QuadrilateralPhysics, vertexLabel: VertexLabel, smoothingLengthProperty: TReadOnlyProperty<number>, usePhysics: boolean, tandem: Tandem ) {
     this.physicsEngine = physicsEngine;
-
     this.smoothingLengthProperty = smoothingLengthProperty;
     this.positionProperty = new Vector2Property( initialPosition, {
       tandem: tandem.createTandem( 'positionProperty' )
@@ -101,7 +104,7 @@ class Vertex {
 
     this.angleProperty = new Property<null | number>( null, {
       tandem: tandem.createTandem( 'angleProperty' ),
-      phetioType: Property.PropertyIO( NullableIO( NumberIO ) )
+      phetioValueType: NullableIO( NumberIO )
     } );
 
     // The label for this vertex so we can get the same vertex on another QuadrilateralShapeModel.

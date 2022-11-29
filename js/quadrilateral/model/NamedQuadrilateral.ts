@@ -18,8 +18,11 @@ class NamedQuadrilateral extends EnumerationValue {
   public static KITE = new NamedQuadrilateral();
   public static ISOSCELES_TRAPEZOID = new NamedQuadrilateral();
   public static TRAPEZOID = new NamedQuadrilateral();
-  public static CONCAVE = new NamedQuadrilateral();
-  public static GENERAL_QUADRILATERAL = new NamedQuadrilateral();
+  public static CONCAVE_QUADRILATERAL = new NamedQuadrilateral();
+  public static CONVEX_QUADRILATERAL = new NamedQuadrilateral();
+  public static TRIANGLE = new NamedQuadrilateral();
+  public static PARALLELOGRAM = new NamedQuadrilateral();
+  public static DART = new NamedQuadrilateral();
 
   // Gets a list of keys, values and mapping between them.  For use in EnumerationProperty and PhET-iO
   public static enumeration = new Enumeration( NamedQuadrilateral, {

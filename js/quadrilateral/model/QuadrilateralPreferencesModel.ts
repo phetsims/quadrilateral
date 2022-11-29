@@ -23,9 +23,6 @@ class QuadrilateralPreferencesModel {
   // Sound preferences
   public readonly soundOptionsModel = new QuadrilateralSoundOptionsModel();
 
-  // Is shape identification feedback enabled? Sound and visual.
-  public readonly shapeIdentificationFeedbackEnabledProperty = new BooleanProperty( QuadrilateralQueryParameters.shapeIdentificationFeedback, {} );
-
   // How many values to save and use in the average for calculating new vertex positions. Higher value will reduce
   // noise but the sim will respond slower.
   public readonly smoothingLengthProperty = new NumberProperty( QuadrilateralQueryParameters.smoothingLength, {
@@ -42,6 +39,11 @@ class QuadrilateralPreferencesModel {
   public readonly deviceGridSpacingProperty = new NumberProperty( QuadrilateralQueryParameters.deviceGridSpacing, {
     range: new Range( 0.0125, 0.25 )
   } );
+
+  // Controls the interval that Vertex positions are constrained to for typical simulation control. When true,
+  // Vertices will be constrained to a finer grid for more precise motion. In general that is not necessary but some
+  // users may want that amount of control.
+  public readonly fineInputSpacingProperty = new BooleanProperty( false );
 }
 
 quadrilateral.register( 'QuadrilateralPreferencesModel', QuadrilateralPreferencesModel );

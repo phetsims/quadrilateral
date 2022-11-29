@@ -13,14 +13,14 @@ import quadrilateral from '../../quadrilateral.js';
 import Vertex from './Vertex.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { Line } from '../../../../scenery/js/imports.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import QuadrilateralPhysics from './QuadrilateralPhysics.js';
-import vertexLabel from './VertexLabel.js';
-import vertexAngles from './VertexAngles.js';
+import VertexLabel from './VertexLabel.js';
+import SideLabel from './SideLabel.js';
 
 type SideOptions = {
 
@@ -47,20 +47,26 @@ class Side {
 
   // Angle of this line against a perpendicular line that would be drawn across it when the vertices are at their
   // initial positions, used to determine the amount of tilt of the line.
-  public tiltProperty: IReadOnlyProperty<number>;
+  public tiltProperty: TReadOnlyProperty<number>;
   public lengthProperty: NumberProperty;
 
   // Whether or not this Side is pressed and being interacted with. For now this is useful for debugging.
   public readonly isPressedProperty: BooleanProperty;
 
+  // Allows us to label this Side so we know which one we are working with when that is important for
+  // various calculations.
+  public readonly sideLabel: SideLabel;
+
+  public voicingObjectResponseDirty = false;
+
   // The shape of the side, determined by the length and the model width.
-  public shapeProperty: IReadOnlyProperty<Shape>;
+  public shapeProperty: TReadOnlyProperty<Shape>;
 
   // The tolerance for this side to determine if it is equal to another. It is a portion of the full length
   // so that when the side is longer it still as easy for two sides to be equal in length. Otherwise the
   // tolerance interval will be relatively much larger when the length is very small.
   // TODO: I suspect that the usages of this can be removed now that we are not tracking changes in shape length in real time for learning goals.
-  public readonly lengthToleranceIntervalProperty: IReadOnlyProperty<number>;
+  public readonly lengthToleranceIntervalProperty: TReadOnlyProperty<number>;
 
   // In model coordinates, the length of a side segment in model coordinates. The full side is divided into segments of
   // this length with the final segment length being the remainder.
@@ -68,7 +74,7 @@ class Side {
 
   // in model coordinates, the width of a side - Sides exist in model space to apply rules that vertices and
   // sides can never overlap
-  public static readonly SIDE_WIDTH = 0.08;
+  public static readonly SIDE_WIDTH = 0.1;
 
   /**
    * @param vertex1 - The first vertex of this Side.
@@ -88,6 +94,8 @@ class Side {
     this.vertex2 = vertex2;
     this.isConnected = false;
 
+    this.sideLabel = this.determineSideLabel();
+
     this.isPressedProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'isPressedProperty' )
     } );
@@ -97,7 +105,7 @@ class Side {
         return Vertex.calculateAngle( vertex1Position, vertex2Position, vertex2Position.plus( options.offsetVectorForTiltCalculation ), options.validateShape );
       }, {
         tandem: tandem.createTandem( 'tiltProperty' ),
-        phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
+        phetioValueType: NumberIO
       } );
 
     // The distance between the two vertices, in model space.
@@ -121,93 +129,93 @@ class Side {
       return length * QuadrilateralQueryParameters.lengthToleranceIntervalScaleFactor;
     }, {
       tandem: tandem.createTandem( 'lengthToleranceIntervalProperty' ),
-      phetioType: DerivedProperty.DerivedPropertyIO( NumberIO )
+      phetioValueType: NumberIO
     } );
 
-    if ( false ) {
-      // const p2Position = QuadrilateralPhysics.vectorToP2Position( vertex2.positionProperty.value.average( vertex1.positionProperty.value ) );
-
-      this.physicsBody = new p2.Body( {
-        // mass: 0.15,
-        fixedRotation: true,
-
-        // needs to be the center of the shape and update dynamically
-        // position: p2Position,
-        velocity: [ 0, 0 ],
-        angularVelocity: 0,
-
-        ccdSpeedThreshold: 40
-      } );
-
-      let vertex1Constraint: p2.RevoluteConstraint | null = null;
-      let vertex2Constraint: p2.RevoluteConstraint | null = null;
-
-      physicsEngine.addBody( this.physicsBody );
-
-      let physicsShape: p2.Shape | null;
-      this.shapeProperty.link( modelShape => {
-        if ( physicsShape ) {
-          this.physicsBody!.removeShape( physicsShape );
-        }
-
-        const p2Position = QuadrilateralPhysics.vectorToP2Position( vertex2.positionProperty.value.average( vertex1.positionProperty.value ) );
-        this.physicsBody!.position = p2Position;
-
-        assert && assert( modelShape.subpaths.length === 1 );
-        const p2Path: [ number, number ][] = [];
-
-        const subpath = modelShape.subpaths[ 0 ];
-
-        // points need to be in CCW order (opposite of subpath segments)
-        for ( let i = subpath.segments.length - 1; i > -1; i-- ) {
-          const segment = subpath.segments[ i ];
-
-          // create a path around the start point of each segment for the body shape
-          p2Path.push( QuadrilateralPhysics.vectorToP2Position( segment.start ) );
-        }
-
-        const copyPath = p2Path.slice();
-        physicsShape = new p2.Convex( {
-          vertices: p2Path
-        } );
-        this.physicsBody!.addShape( physicsShape );
-
-        this.physicsBody!.setDensity( 1e6 );
-
-        if ( this.vertex1.vertexLabel === vertexLabel.VERTEX_A ) {
-          console.log( copyPath );
-        }
-
-        if ( vertex1Constraint ) {
-          physicsEngine.removePhysicsConstraint( vertex1Constraint );
-          vertex1Constraint = null;
-        }
-        if ( vertex2Constraint ) {
-          physicsEngine.removePhysicsConstraint( vertex2Constraint );
-          vertex2Constraint = null;
-        }
-
-        const localAOut: [ number, number ] = [ 0, 0 ];
-        const localBOut: [ number, number ] = [ 0, 0 ];
-
-        this.physicsBody!.toLocalFrame( localAOut, QuadrilateralPhysics.vectorToP2Position( vertex1.positionProperty.value ) );
-        this.physicsBody!.toLocalFrame( localBOut, QuadrilateralPhysics.vectorToP2Position( vertex2.positionProperty.value ) );
-
-        // constraint for vertex1
-        vertex1Constraint = new p2.RevoluteConstraint( this.physicsBody!, vertex1.physicsBody, {
-          localPivotA: localAOut,
-          localPivotB: [ 0, 0 ]
-        } );
-
-        vertex2Constraint = new p2.RevoluteConstraint( this.physicsBody!, vertex1.physicsBody, {
-          localPivotA: localBOut,
-          localPivotB: [ 0, 0 ]
-        } );
-
-        physicsEngine.addPhysicsConstraint( vertex1Constraint );
-        physicsEngine.addPhysicsConstraint( vertex2Constraint );
-      } );
-    }
+    // if ( false ) {
+    //   // const p2Position = QuadrilateralPhysics.vectorToP2Position( vertex2.positionProperty.value.average( vertex1.positionProperty.value ) );
+    //
+    //   this.physicsBody = new p2.Body( {
+    //     // mass: 0.15,
+    //     fixedRotation: true,
+    //
+    //     // needs to be the center of the shape and update dynamically
+    //     // position: p2Position,
+    //     velocity: [ 0, 0 ],
+    //     angularVelocity: 0,
+    //
+    //     ccdSpeedThreshold: 40
+    //   } );
+    //
+    //   let vertex1Constraint: p2.RevoluteConstraint | null = null;
+    //   let vertex2Constraint: p2.RevoluteConstraint | null = null;
+    //
+    //   physicsEngine.addBody( this.physicsBody );
+    //
+    //   let physicsShape: p2.Shape | null;
+    //   this.shapeProperty.link( modelShape => {
+    //     if ( physicsShape ) {
+    //       this.physicsBody!.removeShape( physicsShape );
+    //     }
+    //
+    //     const p2Position = QuadrilateralPhysics.vectorToP2Position( vertex2.positionProperty.value.average( vertex1.positionProperty.value ) );
+    //     this.physicsBody!.position = p2Position;
+    //
+    //     assert && assert( modelShape.subpaths.length === 1 );
+    //     const p2Path: [ number, number ][] = [];
+    //
+    //     const subpath = modelShape.subpaths[ 0 ];
+    //
+    //     // points need to be in CCW order (opposite of subpath segments)
+    //     for ( let i = subpath.segments.length - 1; i > -1; i-- ) {
+    //       const segment = subpath.segments[ i ];
+    //
+    //       // create a path around the start point of each segment for the body shape
+    //       p2Path.push( QuadrilateralPhysics.vectorToP2Position( segment.start ) );
+    //     }
+    //
+    //     const copyPath = p2Path.slice();
+    //     physicsShape = new p2.Convex( {
+    //       vertices: p2Path
+    //     } );
+    //     this.physicsBody!.addShape( physicsShape );
+    //
+    //     this.physicsBody!.setDensity( 1e6 );
+    //
+    //     if ( this.vertex1.vertexLabel === vertexLabel.VERTEX_A ) {
+    //       console.log( copyPath );
+    //     }
+    //
+    //     if ( vertex1Constraint ) {
+    //       physicsEngine.removePhysicsConstraint( vertex1Constraint );
+    //       vertex1Constraint = null;
+    //     }
+    //     if ( vertex2Constraint ) {
+    //       physicsEngine.removePhysicsConstraint( vertex2Constraint );
+    //       vertex2Constraint = null;
+    //     }
+    //
+    //     const localAOut: [ number, number ] = [ 0, 0 ];
+    //     const localBOut: [ number, number ] = [ 0, 0 ];
+    //
+    //     this.physicsBody!.toLocalFrame( localAOut, QuadrilateralPhysics.vectorToP2Position( vertex1.positionProperty.value ) );
+    //     this.physicsBody!.toLocalFrame( localBOut, QuadrilateralPhysics.vectorToP2Position( vertex2.positionProperty.value ) );
+    //
+    //     // constraint for vertex1
+    //     vertex1Constraint = new p2.RevoluteConstraint( this.physicsBody!, vertex1.physicsBody, {
+    //       localPivotA: localAOut,
+    //       localPivotB: [ 0, 0 ]
+    //     } );
+    //
+    //     vertex2Constraint = new p2.RevoluteConstraint( this.physicsBody!, vertex1.physicsBody, {
+    //       localPivotA: localBOut,
+    //       localPivotB: [ 0, 0 ]
+    //     } );
+    //
+    //     physicsEngine.addPhysicsConstraint( vertex1Constraint );
+    //     physicsEngine.addPhysicsConstraint( vertex2Constraint );
+    //   } );
+    // }
   }
 
   /**
@@ -241,6 +249,13 @@ class Side {
    */
   public includesVertex( vertex: Vertex ): boolean {
     return this.vertex1 === vertex || this.vertex2 === vertex;
+  }
+
+  /**
+   * Returns the position in model coordinates between the two Vertices of this Side.
+   */
+  public getMidpoint(): Vector2 {
+    return this.vertex2.positionProperty.value.average( this.vertex1.positionProperty.value );
   }
 
 
@@ -277,6 +292,17 @@ class Side {
 
     this.isConnected = true;
     this.vertex1.connectToOthers( otherSide.vertex1, this.vertex2 );
+  }
+
+  /**
+   * From the vertices of this side, apply the correct SideLabel. The vertices have enough info to determine
+   * this, so it shouldn't be necessary or possible for the client to provide this as a constructor arg.
+   */
+  private determineSideLabel(): SideLabel {
+    return this.vertex1.vertexLabel === VertexLabel.VERTEX_A ? SideLabel.SIDE_AB :
+           this.vertex1.vertexLabel === VertexLabel.VERTEX_B ? SideLabel.SIDE_BC :
+           this.vertex1.vertexLabel === VertexLabel.VERTEX_C ? SideLabel.SIDE_CD :
+           SideLabel.SIDE_DA;
   }
 }
 

@@ -10,28 +10,33 @@
 
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import { Text, VBox } from '../../../../scenery/js/imports.js';
-import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
+import { Node, NodeOptions, Rectangle, Text, VBox } from '../../../../scenery/js/imports.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
-import IProperty from '../../../../axon/js/IProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import EmptyObjectType from '../../../../phet-core/js/types/EmptyObjectType.js';
-import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import Property from '../../../../axon/js/Property.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Range from '../../../../dot/js/Range.js';
+import NumberControl from '../../../../scenery-phet/js/NumberControl.js';
+import Multilink from '../../../../axon/js/Multilink.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
+import Dimension2 from '../../../../dot/js/Dimension2.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 
 const TEXT_OPTIONS = { fontSize: 16 };
 const valuePatternString = '{{label}}: {{value}}';
+const valueWithDegreesPatternString = '{{label}}: {{value}} ({{degrees}} degrees)';
 
-class QuadrilateralModelValuePanel extends Panel {
-  public constructor( model: QuadrilateralModel, providedOptions?: PanelOptions ) {
+const CONTENT_PADDING = 10;
 
-    const options = optionize<PanelOptions, EmptyObjectType>()( {
+class QuadrilateralModelValuePanel extends Node {
 
-      // looks good for debugging without the panel resizing frequently
-      minWidth: 400
-    }, providedOptions );
+  public constructor( model: QuadrilateralModel, providedOptions?: NodeOptions ) {
+
+    // Controlled by a slider at the bottom of the panel to show more or less decimal places in debugging values
+    const decimalPlacesProperty = new NumberProperty( 3, {
+      range: new Range( 2, 5 )
+    } );
 
     const topSideLengthText = new Text( '', TEXT_OPTIONS );
     const rightSideLengthText = new Text( '', TEXT_OPTIONS );
@@ -71,20 +76,31 @@ class QuadrilateralModelValuePanel extends Panel {
 
     const sideABCDToleranceIntervalText = new Text( '', TEXT_OPTIONS );
     const sideBCDAToleranceIntervalText = new Text( '', TEXT_OPTIONS );
-    const shapeAngleToleranceIntervalText = new Text( '', TEXT_OPTIONS );
+    const interAngleToleranceIntervalText = new Text( '', TEXT_OPTIONS );
+    const staticAngleToleranceIntervalText = new Text( '', TEXT_OPTIONS );
     const shapeLengthToleranceIntervalText = new Text( '', TEXT_OPTIONS );
     const toleranceIntervalBox = new VBox( {
-      children: [ sideABCDToleranceIntervalText, sideBCDAToleranceIntervalText, shapeAngleToleranceIntervalText, shapeLengthToleranceIntervalText ],
+      children: [ sideABCDToleranceIntervalText, sideBCDAToleranceIntervalText, interAngleToleranceIntervalText, staticAngleToleranceIntervalText, shapeLengthToleranceIntervalText ],
       align: 'left'
     } );
 
     const shapeNameText = new Text( '', TEXT_OPTIONS );
 
-    const markerDetectedText = new Text( '', TEXT_OPTIONS );
-    const markerRotationText = new Text( '', TEXT_OPTIONS );
+    const rotationMarkerDetectedText = new Text( '', TEXT_OPTIONS );
+    const tangibleRotationText = new Text( '', TEXT_OPTIONS );
     const markerBox = new VBox( {
-      children: [ markerDetectedText, markerRotationText ],
+      children: [ rotationMarkerDetectedText, tangibleRotationText ],
       align: 'left'
+    } );
+
+    const decimalPlacesControl = new NumberControl( 'Decimal Places', decimalPlacesProperty, decimalPlacesProperty.range!, {
+      sliderOptions: {
+        keyboardStep: 1,
+        thumbSize: new Dimension2( 10, 17 )
+      },
+
+      // no tandems for debugging
+      tandem: Tandem.OPT_OUT
     } );
 
     const content = new VBox( {
@@ -94,66 +110,113 @@ class QuadrilateralModelValuePanel extends Panel {
         parallelogramBox,
         toleranceIntervalBox,
         shapeNameText,
-        markerBox
+        markerBox,
+        decimalPlacesControl
       ],
       align: 'left',
       spacing: 15
     } );
 
-    super( content, options );
+    const backgroundRectangle = new Rectangle( 0, 0, 400, content.height + CONTENT_PADDING, 5, 5, {
+      fill: 'white'
+    } );
+    content.leftTop = backgroundRectangle.leftTop.plusXY( CONTENT_PADDING / 2, CONTENT_PADDING / 2 );
+
+    super();
+    this.children = [ backgroundRectangle, content ];
+
+    // panel is see-through so that the quadrilateral can move and be dragged under it
+    this.opacity = 0.7;
+
+    // mutate after defaults (mostly children for bounds) have been set
+    this.mutate( providedOptions );
 
     // Link to the model to print the values
     // length
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.topSide.lengthProperty, topSideLengthText, 'Side AB' );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.rightSide.lengthProperty, rightSideLengthText, 'Side BC' );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.bottomSide.lengthProperty, bottomSideLengthText, 'Side CD' );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.leftSide.lengthProperty, leftSideLengthText, 'Side DA' );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.topSide.lengthProperty, topSideLengthText, 'Side AB', decimalPlacesProperty );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.rightSide.lengthProperty, rightSideLengthText, 'Side BC', decimalPlacesProperty );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.bottomSide.lengthProperty, bottomSideLengthText, 'Side CD', decimalPlacesProperty );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.leftSide.lengthProperty, leftSideLengthText, 'Side DA', decimalPlacesProperty );
 
     // angle
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexA.angleProperty, leftTopAngleText, 'Corner A' );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexB.angleProperty, rightTopAngleText, 'Corner B' );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexC.angleProperty, rightBottomAngleText, 'Corner C' );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexD.angleProperty, leftBottomAngleText, 'Corner D' );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexA.angleProperty, leftTopAngleText, 'Corner A', decimalPlacesProperty, true );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexB.angleProperty, rightTopAngleText, 'Corner B', decimalPlacesProperty, true );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexC.angleProperty, rightBottomAngleText, 'Corner C', decimalPlacesProperty, true );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexD.angleProperty, leftBottomAngleText, 'Corner D', decimalPlacesProperty, true );
 
     // parallelogram and paralle sides
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.isParallelogramProperty, isParallelogramText, 'Is parallelogram' );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.isParallelogramProperty, isParallelogramText, 'Is parallelogram', decimalPlacesProperty );
     // @ts-ignore - isParallelProperty is private, but I want to use it here as a special exception for debugging
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 0 ].isParallelProperty, sideABCDParallelText, '(AB, CD) parallel' );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 0 ].isParallelProperty, sideABCDParallelText, '(AB, CD) parallel', decimalPlacesProperty );
     // @ts-ignore - isParallelProperty is private, but I want to use it here as a special exception for debugging
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 1 ].isParallelProperty, sideBCDAParallelText, '(BC, DA) parallel' );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 1 ].isParallelProperty, sideBCDAParallelText, '(BC, DA) parallel', decimalPlacesProperty );
 
     // angleToleranceIntervals for each opposite side pair
-    // @ts-ignore - angleToleranceInterval is private, but I want to use it here for now just for debugging
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 0 ].angleToleranceIntervalProperty, sideABCDToleranceIntervalText, '(AB, CD) angleToleranceInterval' );
-    // @ts-ignore - angleToleranceInterval is private, but I want to use it here for now just for debugging
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 1 ].angleToleranceIntervalProperty, sideBCDAToleranceIntervalText, '(BC, DA) angleToleranceInterval' );
-    // @ts-ignore - shapeAngleToleranceInterval is private, but I want to use it here for now just for debugging
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.shapeAngleToleranceIntervalProperty, shapeAngleToleranceIntervalText, 'shapeAngleToleranceInterval' );
+    // @ts-ignore - parallelAngleToleranceInterval is private, but I want to use it here for now just for debugging
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 0 ].parallelAngleToleranceIntervalProperty, sideABCDToleranceIntervalText, '(AB, CD) parallelAngleToleranceInterval', decimalPlacesProperty );
+    // @ts-ignore - parallelAngleToleranceInterval is private, but I want to use it here for now just for debugging
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 1 ].parallelAngleToleranceIntervalProperty, sideBCDAToleranceIntervalText, '(BC, DA) parallelAngleToleranceInterval', decimalPlacesProperty );
+    // @ts-ignore - interAngleToleranceInterval is private, but I want to use it here for now just for debugging
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.interAngleToleranceIntervalProperty, interAngleToleranceIntervalText, 'interAngleToleranceInterval', decimalPlacesProperty );
+    // @ts-ignore - interAngleToleranceInterval is private, but I want to use it here for now just for debugging
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.staticAngleToleranceIntervalProperty, staticAngleToleranceIntervalText, 'staticAngleToleranceInterval', decimalPlacesProperty );
     // @ts-ignore - shapeLengthToleranceInterval is private, but I want to use it here for now just for debugging
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.shapeLengthToleranceIntervalProperty, shapeLengthToleranceIntervalText, 'shapeLengthToleranceInterval' );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.shapeLengthToleranceIntervalProperty, shapeLengthToleranceIntervalText, 'shapeLengthToleranceInterval', decimalPlacesProperty );
 
     // shape name
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.shapeNameProperty, shapeNameText, 'shape name' );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.shapeNameProperty, shapeNameText, 'shape name', decimalPlacesProperty );
 
     // marker detection
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.rotationMarkerDetectedProperty, markerDetectedText, 'Marker detected' );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.markerRotationProperty, markerRotationText, 'Marker rotation' );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.rotationMarkerDetectedProperty, rotationMarkerDetectedText, 'Marker detected', decimalPlacesProperty );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.tangibleRotationProperty, tangibleRotationText, 'Tangible rotation', decimalPlacesProperty );
   }
 
-  private static addRedrawValueTextListener( property: IReadOnlyProperty<number | null> | IProperty<boolean> | Property<NamedQuadrilateral>, text: Text, label: string ): void {
-    property.link( value => {
+  /**
+   * Adds listeners to the Property and decimalPlacesProperty to update debugging text when values change.
+   *
+   * I could not figure out the typing for the Multilink. Type for property arg is
+   * type DebuggableProperty = TReadOnlyProperty<number | null> | TReadOnlyProperty<boolean> | TReadOnlyProperty<NamedQuadrilateral>;
+   *
+   * After 10 minutes of tinkering with types I decided it wasn't worth figuring out for this debugging code.
+   *
+   * @param property - the Property whose value you want to watch
+   * @param text - Text instance to update
+   * @param label - a label for the value we are watching
+   * @param decimalPlacesProperty - controls precision of values
+   * @param showDegrees - If the value would be helpful to also show in degrees for debugging, set to true
+   */
+  private static addRedrawValueTextListener( property: TReadOnlyProperty<IntentionalAny>,
+                                             text: Text,
+                                             label: string,
+                                             decimalPlacesProperty: Property<number>,
+                                             showDegrees = false ): void {
+
+    Multilink.multilink( [ property, decimalPlacesProperty ], ( value, decimalPlaces ) => {
 
       let formattedValue = value;
 
       // if a number, trim so that it is easier to read
       if ( typeof value === 'number' ) {
-        formattedValue = Utils.toFixedNumber( value, 2 );
+        formattedValue = Utils.toFixedNumber( value, decimalPlaces );
       }
 
-      text.text = StringUtils.fillIn( valuePatternString, {
-        value: formattedValue,
-        label: label
-      } );
+      if ( showDegrees ) {
+
+        // just show two decimals instead of the number of decimals shown to avoid confusion with tolerance intervals
+        // which are in radians
+        const formattedDegrees = Utils.toFixedNumber( Utils.toDegrees( value ), 2 );
+        text.text = StringUtils.fillIn( valueWithDegreesPatternString, {
+          value: formattedValue,
+          degrees: formattedDegrees,
+          label: label
+        } );
+      }
+      else {
+        text.text = StringUtils.fillIn( valuePatternString, {
+          value: formattedValue,
+          label: label
+        } );
+      }
     } );
   }
 }

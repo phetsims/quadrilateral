@@ -15,30 +15,38 @@ import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import { Rectangle, Text } from '../../../../scenery/js/imports.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralNode from './QuadrilateralNode.js';
-import QuadrilateralSoundView from './QuadrilateralSoundView.js';
+import QuadrilateralSoundView from './sound/QuadrilateralSoundView.js';
 import VertexDragAreaNode from './VertexDragAreaNode.js';
-import quadrilateralStrings from '../../quadrilateralStrings.js';
-import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
+import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 import Dialog from '../../../../sun/js/Dialog.js';
 import CalibrationContentNode from './CalibrationContentNode.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import PhetColorScheme from '../../../../scenery-phet/js/PhetColorScheme.js';
 import QuadrilateralModelValuePanel from './QuadrilateralModelValuePanel.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
 import SideLengthAreaNode from './SideLengthAreaNode.js';
 import QuadrilateralVisibilityControls from './QuadrilateralVisibilityControls.js';
 import QuadrilateralGridNode from './QuadrilateralGridNode.js';
 import QuadrilateralScreenSummaryContentNode from './QuadrilateralScreenSummaryContentNode.js';
-import vibrationManager from '../../../../tappi/js/vibrationManager.js';
 import QuadrilateralAlerter from './QuadrilateralAlerter.js';
 import QuadrilateralBluetoothConnectionButton from './QuadrilateralBluetoothConnectionButton.js';
 import QuadrilateralPreferencesModel from '../model/QuadrilateralPreferencesModel.js';
-import QuadrilateralSoundBoardNode from './QuadrilateralSoundBoardNode.js';
 import QuadrilateralMediaPipe from './QuadrilateralMediaPipe.js';
+import QuadrilateralDiagonalGuidesNode from './QuadrilateralDiagonalGuidesNode.js';
+import QuadrilateralShapeNameDisplay from './QuadrilateralShapeNameDisplay.js';
+import QuadrilateralColors from '../../common/QuadrilateralColors.js';
+import MediaPipeQueryParameters from '../../../../tangible/js/mediaPipe/MediaPipeQueryParameters.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import QuadrilateralInteractionCueNode from './QuadrilateralInteractionCueNode.js';
+import ResetShapeButton from './ResetShapeButton.js';
+import ShapeSoundCheckbox from './ShapeSoundCheckbox.js';
+import Vertex from '../model/Vertex.js';
+import QuadrilateralSoundBoardNode from './sound/QuadrilateralSoundBoardNode.js';
 
-const MODEL_BOUNDS = QuadrilateralQueryParameters.calibrationDemoDevice ? new Bounds2( -4.5, -4.5, 4.5, 4.5 ) :
-                     new Bounds2( -1, -1, 1, 1 );
+// Defines the units of model space, a 2x2 grid that quadrilateral vertices can move within. It is dilated by
+// half of the vertex width so that model space is large enough for Vertices to perfectly align with the bounds
+// limits, requested in https://github.com/phetsims/quadrilateral/issues/220
+const MODEL_BOUNDS = new Bounds2( -1, -1, 1, 1 ).dilated( Vertex.VERTEX_WIDTH / 2 );
 
 const BORDER_RECTANGLE_LINE_WIDTH = 2;
 
@@ -58,19 +66,15 @@ class QuadrilateralScreenView extends ScreenView {
       tandem: tandem
     } );
 
-    // A panel that displays model values, useful for debugging, useful for debugging. Should be below everything
-    const debugValuesPanel = new QuadrilateralModelValuePanel( model, {
-      leftTop: new Vector2( QuadrilateralConstants.SCREEN_VIEW_X_MARGIN, QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN )
-    } );
-    this.addChild( debugValuesPanel );
-    model.showDebugValuesProperty.link( showValues => {
-      debugValuesPanel.visible = showValues;
-    } );
+    // Responsible for generating descriptions of the state of the quadrilateral for accessibility.
+    this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel, model.shapeNameVisibleProperty, model.markersVisibleProperty );
 
     const visibilityControls = new QuadrilateralVisibilityControls(
       model.vertexLabelsVisibleProperty,
-      model.cornerGuideVisibleProperty,
-      model.symmetryGridVisibleProperty, {
+      model.markersVisibleProperty,
+      model.gridVisibleProperty,
+      model.diagonalGuidesVisibleProperty,
+      {
         rightCenter: this.layoutBounds.rightCenter.minusXY( QuadrilateralConstants.SCREEN_VIEW_X_MARGIN, 0 ),
         tandem: tandem.createTandem( 'visibilityControls' )
       } );
@@ -82,17 +86,34 @@ class QuadrilateralScreenView extends ScreenView {
         model.reset();
         this.reset();
       },
+
       left: visibilityControls.left,
       bottom: this.layoutBounds.maxY - QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN,
       tandem: tandem.createTandem( 'resetAllButton' )
     } );
     this.addChild( this.resetAllButton );
 
+    const shapeSoundCheckbox = new ShapeSoundCheckbox( model.shapeSoundEnabledProperty, tandem.createTandem( 'shapeSoundCheckbox' ) );
+    shapeSoundCheckbox.leftBottom = this.resetAllButton.leftTop.minusXY( 0, 45 );
+    this.addChild( shapeSoundCheckbox );
+
+    const shapeNameDisplay = new QuadrilateralShapeNameDisplay( model.shapeNameVisibleProperty, model.quadrilateralShapeModel.shapeNameProperty, this.quadrilateralDescriber, tandem.createTandem( 'quadrilateralShapeNameDisplay' ) );
+    this.addChild( shapeNameDisplay );
+
+    const resetShapeButton = new ResetShapeButton(
+      model.quadrilateralShapeModel,
+      model.resetNotInProgressProperty,
+      model.shapeNameVisibleProperty,
+      tandem.createTandem( 'resetShapeButton' )
+    );
+    this.addChild( resetShapeButton );
+
     // the model bounds are defined by available view space. Some padding is added around the screen and we make
-    // sure that the vertices cannot overlap with simulation controls (at this time, just the ResetAllButton).
-    // Otherwise the quadrilateral can move around freely in the play area.
+    // sure that the vertices cannot overlap with simulation controls. Otherwise the quadrilateral can move freely in
+    // the ScreenView.
     let reducedViewBounds = this.layoutBounds.eroded( QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN );
     reducedViewBounds = reducedViewBounds.withMaxX( this.resetAllButton.left - QuadrilateralConstants.SCREEN_VIEW_X_MARGIN );
+    reducedViewBounds = reducedViewBounds.withMinY( shapeNameDisplay.height + 2 * QuadrilateralConstants.VIEW_SPACING );
 
     // The bounds used for the ModelViewTransform2 are a square set of bounds constrained by the limiting dimension
     // of the reducedViewBounds and centered around the reducedViewBounds. Must be square so that the deltas in x and y
@@ -119,20 +140,17 @@ class QuadrilateralScreenView extends ScreenView {
 
     const shapeModel = model.quadrilateralShapeModel;
 
-    // Responsible for generating descriptions of the state of the quadrilateral for accessibility.
-    this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel );
-
-    // A reference to the QuadrilateralNode. For now, it is not always created while we have the side query parameters
-    // for development. But we may want
-    this.quadrilateralNode = null;
-
     // A reference to the QuadriladteralSoundView
     this.quadrilateralSoundView = null;
+
+    // Layered under everything else
+    const diagonalGuidesNode = new QuadrilateralDiagonalGuidesNode( model.quadrilateralShapeModel, model.modelBoundsProperty, model.diagonalGuidesVisibleProperty, this.modelViewTransform );
 
     this.quadrilateralNode = new QuadrilateralNode( model, modelViewTransform, this.layoutBounds, {
       tandem: tandem.createTandem( 'quadrilateralNode' )
     } );
-    this.addChild( this.quadrilateralNode );
+
+    const interactionCueNode = new QuadrilateralInteractionCueNode( model.quadrilateralShapeModel, model.connectedToDeviceProperty, model.resetEmitter, modelViewTransform );
 
     this.quadrilateralSoundView = new QuadrilateralSoundView( model, preferencesModel.soundOptionsModel );
 
@@ -140,8 +158,11 @@ class QuadrilateralScreenView extends ScreenView {
     // Rounded corners to look nice, but actual model bounds are pure Bounds2.
     assert && assert( this.model.modelBoundsProperty.value !== null );
     const playAreaViewBounds = modelViewTransform.modelToViewBounds( this.model.modelBoundsProperty.value! );
-    const boundsRectangle = new Rectangle( playAreaViewBounds, 5, 5, { stroke: 'white', lineWidth: BORDER_RECTANGLE_LINE_WIDTH } );
-    this.addChild( boundsRectangle );
+    const boundsRectangle = new Rectangle( playAreaViewBounds, 5, 5, {
+      stroke: QuadrilateralColors.playAreaStrokeColorProperty,
+      fill: QuadrilateralColors.playAreaFillColorProperty,
+      lineWidth: BORDER_RECTANGLE_LINE_WIDTH
+    } );
 
     if ( QuadrilateralQueryParameters.showDragAreas ) {
       this.addChild( new VertexDragAreaNode( shapeModel.vertexA, [ shapeModel.leftSide, shapeModel.topSide ], modelViewTransform ) );
@@ -156,32 +177,29 @@ class QuadrilateralScreenView extends ScreenView {
       this.addChild( new SideLengthAreaNode( shapeModel, shapeModel.leftSide, shapeModel.rightSide, shapeModel.bottomSide, modelViewTransform, { drawRotation: Math.PI / 2 } ) );
     }
 
-    const gridNode = new QuadrilateralGridNode( model.modelBoundsProperty, model.symmetryGridVisibleProperty, this.modelViewTransform );
-    gridNode.leftTop = boundsRectangle.leftTop.plusScalar( BORDER_RECTANGLE_LINE_WIDTH / 2 );
+    const gridNode = new QuadrilateralGridNode( model.modelBoundsProperty, model.gridVisibleProperty, this.modelViewTransform );
+
+    // rendering order - See https://github.com/phetsims/quadrilateral/issues/178
+    this.addChild( boundsRectangle );
+    this.addChild( diagonalGuidesNode );
     this.addChild( gridNode );
+    this.addChild( this.quadrilateralNode );
+    this.addChild( interactionCueNode );
 
-    if ( QuadrilateralQueryParameters.soundBoard ) {
+    // A panel that displays model values, useful for debugging, useful for debugging
+    const debugValuesPanel = new QuadrilateralModelValuePanel( model, {
+      leftTop: boundsRectangle.leftTop.plusXY( 5, 5 )
+    } );
+    model.showDebugValuesProperty.link( showValues => {
+      debugValuesPanel.visible = showValues;
+    } );
+    this.addChild( debugValuesPanel );
 
-      const soundBoardDialog = new Dialog( new QuadrilateralSoundBoardNode(), {
-        title: new Text( 'QuadrilateralSoundBoard', QuadrilateralConstants.PANEL_TITLE_TEXT_OPTIONS )
-      } );
+    // layout for components that depend on the play area bounds being defined
+    shapeNameDisplay.centerBottom = boundsRectangle.centerTop.minusXY( 0, QuadrilateralConstants.VIEW_SPACING );
+    resetShapeButton.rightCenter = new Vector2( boundsRectangle.right, shapeNameDisplay.centerY );
 
-      // this is the "sim", add a button to start calibration
-      const showSoundBoardButton = new TextPushButton( 'Sound Board', {
-        listener: () => {
-          soundBoardDialog.show();
-        },
-
-        textNodeOptions: QuadrilateralConstants.SCREEN_TEXT_OPTIONS,
-
-        // position is relative to the ResetAllButton for now
-        leftBottom: visibilityControls.leftTop.minusXY( 0, 15 )
-      } );
-
-      this.addChild( showSoundBoardButton );
-    }
-
-    if ( QuadrilateralQueryParameters.deviceConnection && !QuadrilateralQueryParameters.calibrationDemoDevice ) {
+    if ( QuadrilateralQueryParameters.deviceConnection ) {
 
       // Add a Dialog that will calibrate the device to the simulation (mapping physical data to modelled data).
       const calibrationDialog = new Dialog( new CalibrationContentNode( model ), {
@@ -233,26 +251,46 @@ class QuadrilateralScreenView extends ScreenView {
       }
     }
 
-    if ( QuadrilateralQueryParameters.mediaPipe ) {
+    if ( QuadrilateralQueryParameters.soundBoard ) {
+
+      const soundBoardDialog = new Dialog( new QuadrilateralSoundBoardNode( this.quadrilateralSoundView ), {
+        title: new Text( 'Sound Board', QuadrilateralConstants.PANEL_TITLE_TEXT_OPTIONS )
+      } );
+
+      const showSoundBoardButton = new TextPushButton( 'Sound Board', {
+        listener: () => {
+          soundBoardDialog.show();
+        },
+
+        textNodeOptions: QuadrilateralConstants.SCREEN_TEXT_OPTIONS,
+
+        // position is relative to the ResetAllButton for now
+        leftBottom: visibilityControls.leftTop.minusXY( 0, 15 )
+      } );
+
+      this.addChild( showSoundBoardButton );
+    }
+
+    if ( MediaPipeQueryParameters.cameraInput === 'hands' ) {
       this.mediaPipe = new QuadrilateralMediaPipe( model );
     }
 
     // pdom
-    this.pdomPlayAreaNode.pdomOrder = [ this.quadrilateralNode ];
-    this.pdomControlAreaNode.pdomOrder = [ visibilityControls, this.resetAllButton ];
+    this.pdomPlayAreaNode.pdomOrder = [ this.quadrilateralNode, shapeNameDisplay, resetShapeButton ];
+    this.pdomControlAreaNode.pdomOrder = [ visibilityControls, shapeSoundCheckbox, this.resetAllButton ];
     this.setScreenSummaryContent( new QuadrilateralScreenSummaryContentNode() );
 
     // voicing
     // Disabling eslint here because this variable is not used but I am sure that it will be soon.
-    // eslint-disable-next-line no-unused-vars
-    const quadrilateralAlerter = new QuadrilateralAlerter( model, this ); // eslint-disable-line @typescript-eslint/no-unused-vars
+
+    const quadrilateralAlerter = new QuadrilateralAlerter( model, this, modelViewTransform, this.quadrilateralDescriber ); // eslint-disable-line @typescript-eslint/no-unused-vars
   }
 
   /**
    * Get the content that is spoken from the Voicing toolbar to describe this ScreenView.
    */
   public override getVoicingOverviewContent(): string {
-    return quadrilateralStrings.a11y.voicing.overviewContent;
+    return QuadrilateralStrings.a11y.voicing.overviewContent;
   }
 
   /**
@@ -262,32 +300,24 @@ class QuadrilateralScreenView extends ScreenView {
     const firstStatement = this.quadrilateralDescriber.getFirstDetailsStatement();
     const secondStatement = this.quadrilateralDescriber.getSecondDetailsStatement();
     const thirdStatement = this.quadrilateralDescriber.getThirdDetailsStatement();
+    const fourthStatement = this.quadrilateralDescriber.getFourthDetailsStatement();
+    const fifthStatement = this.quadrilateralDescriber.getFifthDetailsStatement();
     assert && assert( firstStatement, 'there should always be a first statement for details' );
 
     let contentString = firstStatement;
 
-    let patternString;
-    if ( secondStatement && thirdStatement ) {
-      patternString = '{{firstStatement}} {{secondStatement}} {{thirdStatement}}';
-      contentString = StringUtils.fillIn( patternString, {
-        firstStatement: firstStatement,
-        secondStatement: secondStatement,
-        thirdStatement: thirdStatement
-      } );
+    // NOTE: Bad for i18n but much easier for now.
+    if ( secondStatement ) {
+      contentString += ' ' + secondStatement;
     }
-    else if ( secondStatement ) {
-      patternString = '{{firstStatement}} {{secondStatement}}';
-      contentString = StringUtils.fillIn( patternString, {
-        firstStatement: firstStatement,
-        secondStatement: secondStatement
-      } );
+    if ( thirdStatement ) {
+      contentString += ' ' + thirdStatement;
     }
-    else if ( thirdStatement ) {
-      patternString = '{{firstStatement}} {{thirdStatement}}';
-      contentString = StringUtils.fillIn( patternString, {
-        firstStatement: firstStatement,
-        thirdStatement: thirdStatement
-      } );
+    if ( fourthStatement ) {
+      contentString += ' ' + fourthStatement;
+    }
+    if ( fifthStatement ) {
+      contentString += ' ' + fifthStatement;
     }
 
     return contentString;
@@ -298,15 +328,7 @@ class QuadrilateralScreenView extends ScreenView {
    * button to describe the parallelogram state and shape name of the quadrilateral.
    */
   public override getVoicingHintContent(): string {
-
-    const shapeDescriptionString = this.quadrilateralDescriber.getShapeDescription();
-    const youHaveAShapeString = StringUtils.fillIn( quadrilateralStrings.a11y.voicing.youHaveAShapeHintPattern, {
-      shapeDescription: shapeDescriptionString
-    } );
-
-    return StringUtils.fillIn( quadrilateralStrings.a11y.voicing.hintContentPattern, {
-      shapeDescription: youHaveAShapeString
-    } );
+    return QuadrilateralStrings.a11y.voicing.hintContent;
   }
 
   /**
@@ -329,7 +351,8 @@ class QuadrilateralScreenView extends ScreenView {
 
     this.quadrilateralNode && this.quadrilateralNode.step( dt );
 
-    vibrationManager.step( dt );
+    // Removed for now, see https://github.com/phetsims/quadrilateral/issues/104
+    // vibrationManager.step( dt );
   }
 }
 

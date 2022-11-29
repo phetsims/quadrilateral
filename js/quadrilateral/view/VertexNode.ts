@@ -6,25 +6,27 @@
  * @author Jesse Greenberg
  */
 
-import { Circle, CircleOptions, DragListener, KeyboardDragListener, SceneryEvent, Text, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
+import { Circle, CircleOptions, DragListener, KeyboardDragListener, KeyboardUtils, Path, SceneryEvent, Text, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
-import quadrilateral from '../../quadrilateral.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vertex from '../model/Vertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import vibrationManager from '../../../../tappi/js/vibrationManager.js';
 import VertexDescriber from './VertexDescriber.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
+import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
+import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
+import grab_mp3 from '../../../../tambo/sounds/grab_mp3.js';
+import soundManager from '../../../../tambo/js/soundManager.js';
+import quadrilateral from '../../quadrilateral.js';
 
 // constants
 const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
-
-const POINTER_AREA_DILATION = 5;
 
 type SelfOptions = {
 
@@ -37,11 +39,12 @@ type VertexNodeOptions = SelfOptions & StrictOmit<ParentOptions, 'voicingNameRes
 
 type ParentOptions = VoicingOptions & CircleOptions;
 
-class VertexNode extends Voicing( Circle, 1 ) {
+class VertexNode extends Voicing( Circle ) {
   private readonly model: QuadrilateralModel;
 
   public constructor( vertex: Vertex, vertexLabel: string, model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, providedOptions: VertexNodeOptions ) {
     const options = optionize<VertexNodeOptions, SelfOptions, ParentOptions>()( {
+      cursor: 'pointer',
       fill: QuadrilateralColors.quadrilateralShapeColorProperty,
       stroke: QuadrilateralColors.quadrilateralShapeStrokeColorProperty,
       tagName: 'div',
@@ -56,7 +59,7 @@ class VertexNode extends Voicing( Circle, 1 ) {
     this.voicingNameResponse = options.nameResponse;
     this.innerContent = options.nameResponse;
 
-    const vertexDescriber = new VertexDescriber( vertex, model.quadrilateralShapeModel );
+    const vertexDescriber = new VertexDescriber( vertex, model.quadrilateralShapeModel, model.markersVisibleProperty );
 
     this.model = model;
 
@@ -69,8 +72,24 @@ class VertexNode extends Voicing( Circle, 1 ) {
     } );
     this.addChild( vertexLabelText );
 
+    // Add hatch marks to make it easier to align a vertex with the background grid
+    const hatchMarkShape = new Shape();
+    let angle = 0;
+    while ( angle <= 2 * Math.PI ) {
+      hatchMarkShape.moveTo( Math.cos( angle ) * viewRadius * 3 / 4, Math.sin( angle ) * viewRadius * 3 / 4 );
+      hatchMarkShape.lineTo( Math.cos( angle ) * viewRadius, Math.sin( angle ) * viewRadius );
+      angle += Math.PI / 2;
+    }
+    const hatchMarkPath = new Path( hatchMarkShape, { stroke: 'black' } );
+    this.addChild( hatchMarkPath );
+
+    // hatch marks are only visible when the grid is visible since they are used to create aligned positions.
+    model.gridVisibleProperty.link( visible => {
+      hatchMarkPath.visible = visible;
+    } );
+
     // Expand the pointer areas a bit so that it is difficult to accidentally pick up a side when near the vertex edge
-    this.touchArea = Shape.circle( viewRadius + POINTER_AREA_DILATION );
+    this.touchArea = Shape.circle( viewRadius + QuadrilateralConstants.POINTER_AREA_DILATION );
     this.mouseArea = this.touchArea;
 
     vertex.positionProperty.link( position => {
@@ -81,26 +100,19 @@ class VertexNode extends Voicing( Circle, 1 ) {
       vertexLabelText.visible = vertexLabelsVisible;
     } );
 
-    // A basic keyboard input listener.
-    const largeViewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralModel.MAJOR_GRID_SPACING );
-    const smallViewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralModel.MINOR_GRID_SPACING );
     const keyboardDragListener = new KeyboardDragListener( {
       transform: modelViewTransform,
       drag: ( modelDelta: Vector2 ) => {
         const proposedPosition = vertex.positionProperty.value.plus( modelDelta );
-
         if ( model.isVertexPositionAllowed( vertex, proposedPosition ) ) {
+          vertex.voicingObjectResponseDirty = true;
           vertex.positionProperty.value = proposedPosition;
         }
       },
 
       // velocity defined in view coordinates per second, assuming 60 fps
-      dragVelocity: largeViewDragDelta * 60,
-      shiftDragVelocity: smallViewDragDelta * 60,
       dragBoundsProperty: vertex.dragBoundsProperty,
 
-      downDelta: largeViewDragDelta,
-      shiftDownDelta: smallViewDragDelta,
       moveOnHoldDelay: 750,
       moveOnHoldInterval: 50,
 
@@ -111,6 +123,20 @@ class VertexNode extends Voicing( Circle, 1 ) {
     } );
     this.addInputListener( keyboardDragListener );
 
+    // The user is able to control the interval for positioning each vertex, a "fine" control or default
+    model.preferencesModel.fineInputSpacingProperty.link( fineInputSpacing => {
+      const largeModelDelta = fineInputSpacing ? QuadrilateralQueryParameters.majorFineVertexInterval : QuadrilateralQueryParameters.majorVertexInterval;
+      const smallModelDelta = fineInputSpacing ? QuadrilateralQueryParameters.minorFineVertexInterval : QuadrilateralQueryParameters.minorVertexInterval;
+
+      const largeViewDragDelta = modelViewTransform.modelToViewDeltaX( largeModelDelta );
+      const smallViewDragDelta = modelViewTransform.modelToViewDeltaX( smallModelDelta );
+
+      keyboardDragListener.dragDelta = largeViewDragDelta;
+      keyboardDragListener.shiftDragDelta = smallViewDragDelta;
+    } );
+
+    // Position on drag start, in model coordinate frame.
+    let startPosition: Vector2;
     const dragListener = new DragListener( {
       transform: modelViewTransform,
       start: event => {
@@ -121,9 +147,7 @@ class VertexNode extends Voicing( Circle, 1 ) {
         const pointerPoint = event.pointer.point;
         const parentPoint = this.globalToParentPoint( pointerPoint );
         const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
-        vertex.physicsEngine.addPointerConstraint( vertex.physicsBody, modelPoint );
-
-        vertex.physicsBody.setDensity( 1 );
+        startPosition = modelPoint;
       },
       drag: ( event: SceneryEvent, listener: DragListener ) => {
         const pointerPoint = event.pointer.point;
@@ -131,19 +155,25 @@ class VertexNode extends Voicing( Circle, 1 ) {
         const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
 
         // constrain to the allowable positions in the model along the grid
-        const constrainedPosition = QuadrilateralModel.getClosestGridPosition( modelPoint );
-
-        vertex.physicsEngine.updatePointerConstraint( vertex.physicsBody, modelPoint );
+        const constrainedPosition = model.getClosestGridPosition( modelPoint );
+        vertex.positionProperty.value = constrainedPosition;
 
         // if ( model.isVertexPositionAllowed( vertex, constrainedPosition ) ) {
         //   vertex.positionProperty.value = constrainedPosition;
         // }
       },
       end: event => {
-        vertex.physicsEngine.removePointerConstraint( vertex.physicsBody );
-        vertex.physicsEngine.stopBodyMotion( vertex.physicsBody );
 
-        vertex.physicsBody.setDensity( 1e6 );
+        // event may be null if interupted or cancelled
+        if ( event ) {
+          const pointerPoint = event.pointer.point;
+          const parentPoint = this.globalToParentPoint( pointerPoint );
+          const endPosition = modelViewTransform.viewToModelPosition( parentPoint );
+
+          if ( startPosition.equals( endPosition ) ) {
+            this.voicingSpeakFullResponse();
+          }
+        }
       },
 
       tandem: options.tandem.createTandem( 'dragListener' )
@@ -165,23 +195,47 @@ class VertexNode extends Voicing( Circle, 1 ) {
       }
     } );
 
+    // sound - the grab sound is played on press but there is no release sound for this component since there is
+    // no behavioral relevance to the release
+    const pressedSoundPlayer = new SoundClip( grab_mp3 );
+    soundManager.addSoundGenerator( pressedSoundPlayer );
+    vertex.isPressedProperty.lazyLink( isPressed => {
+      if ( isPressed ) {
+        pressedSoundPlayer.play();
+      }
+    } );
+
     // voicing
     model.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
       this.voicingObjectResponse = vertexDescriber.getVertexObjectResponse();
     } );
-    this.voicingObjectResponse = vertexDescriber.getVertexObjectResponse();
 
-    // vibration
-    vertex.isPressedProperty.lazyLink( isPressed => {
-      if ( navigator !== undefined && navigator.vibrate !== undefined ) {
-        if ( isPressed ) {
-          vibrationManager.startRepeatingVibrationPattern( [ 75, 75 ] );
-        }
-        else {
-          vibrationManager.stopRepeatingVibrationPattern();
+    // when corner guides are visible more information is also included in the object response
+    model.markersVisibleProperty.link( visible => {
+      this.voicingObjectResponse = vertexDescriber.getVertexObjectResponse();
+    } );
+
+    // Voicing - for debugging, speak the full response again on spacebar/enter
+    // TODO: remove this
+    this.addInputListener( {
+      keydown: event => {
+        if ( KeyboardUtils.isAnyKeyEvent( event.domEvent, [ KeyboardUtils.KEY_ENTER, KeyboardUtils.KEY_SPACE ] ) ) {
+          this.voicingSpeakFullResponse();
         }
       }
     } );
+
+    // vibration
+    // vertex.isPressedProperty.lazyLink( isPressed => {
+    //   if ( navigator !== undefined && navigator.vibrate !== undefined ) {
+    //     if ( isPressed ) {
+    //       vibrationManager.startRepeatingVibrationPattern( [ 75, 75 ] );
+    //     }
+    //     else {
+    //       vibrationManager.stopRepeatingVibrationPattern();
+    //     }
+    //   }
+    // } );
 
     this.mutate( options );
   }

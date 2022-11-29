@@ -25,12 +25,12 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
-import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 
 // constants
 // The size of each slice of the angle guide, in radians
-const SLICE_SIZE_RADIANS = Utils.toRadians( 30 );
+const SLICE_SIZE_DEGREES = 30;
+const SLICE_SIZE_RADIANS = Utils.toRadians( SLICE_SIZE_DEGREES );
 
 // in model coordinates, width of the arc (outer radius - inner radius of the annulus)
 const SLICE_RADIAL_LENGTH = 0.05;
@@ -42,21 +42,24 @@ const OUTER_RADIUS = Vertex.VERTEX_WIDTH / 2 + SLICE_RADIAL_LENGTH;
 const EXTERNAL_ANGLE_GUIDE_LENGTH = SLICE_RADIAL_LENGTH * 8;
 
 class CornerGuideNode extends Node {
+  public static readonly SLICE_SIZE_DEGREES = SLICE_SIZE_DEGREES;
+  public static readonly SLICE_SIZE_RADIANS = SLICE_SIZE_RADIANS;
+
   public constructor( vertex1: Vertex, vertex2: Vertex, visibleProperty: BooleanProperty, shapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2 ) {
     super();
 
     // The guide looks like alternating dark and light slices along the annulus, we accomplish this with two paths
     const darkAnglePath = new Path( null, {
       fill: QuadrilateralColors.cornerGuideDarkColorProperty,
-      stroke: QuadrilateralColors.cornerGuideStrokeColorProperty
+      stroke: QuadrilateralColors.markersStrokeColorProperty
     } );
     const lightAnglePath = new Path( null, {
       fill: QuadrilateralColors.cornerGuideLightColorProperty,
-      stroke: QuadrilateralColors.cornerGuideStrokeColorProperty
+      stroke: QuadrilateralColors.markersStrokeColorProperty
     } );
 
     const crosshairPath = new Path( null, {
-      stroke: QuadrilateralColors.cornerGuideStrokeColorProperty,
+      stroke: QuadrilateralColors.markersStrokeColorProperty,
       lineDash: [ 5, 5 ]
     } );
 
@@ -97,7 +100,7 @@ class CornerGuideNode extends Node {
 
       // now draw the remainder - check to make sure that it is large enough to display because ellipticalArcTo doesn't
       // work with angles that are close to zero.
-      const remainingAngle = definedAngle % SLICE_SIZE_RADIANS;
+      const remainingAngle = ( definedAngle - ( numberOfSlices * SLICE_SIZE_RADIANS ) );
       if ( remainingAngle > 0.0005 ) {
 
         // slices alternate from light to dark, so we can count on the remaining slice being the alternating color
@@ -131,13 +134,18 @@ class CornerGuideNode extends Node {
       crosshairPath.shape = modelViewTransform.modelToViewShape( crosshairShape );
     } );
 
-    this.children = [ darkAnglePath, lightAnglePath, crosshairPath ];
+    const arcNode = new Node( { children: [ darkAnglePath, lightAnglePath ] } );
+    this.children = [ arcNode, crosshairPath ];
 
-    // listeners - This Node is only visible when "Angle Guides" are visible by the user and the angle is NOT a right
-    // angle. In that case, the RightAngleIndicatorNode will display the angle.
-    Multilink.multilink( [ visibleProperty, shapeModel.shapeNameProperty ], ( visible, shapeName ) => {
-      const currentShape = shapeModel.shapeNameProperty.value;
-      this.visible = visible && currentShape !== NamedQuadrilateral.SQUARE && currentShape !== NamedQuadrilateral.RECTANGLE;
+    // This node is only visible when "Corner Guides" are enabled by the user
+    visibleProperty.link( visible => {
+      this.visible = visible;
+    } );
+
+    // When right angle, display the RightAngleIndicator, otherwise the arcs representing angle are shown.
+    vertex1.angleProperty.link( angle => {
+      arcNode.visible = !shapeModel.isRightAngle( angle! );
+
     } );
   }
 

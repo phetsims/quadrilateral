@@ -9,6 +9,7 @@ import Tandem from '../../../tandem/js/Tandem.js';
 import IOType from '../../../tandem/js/types/IOType.js';
 import NumberIO from '../../../tandem/js/types/NumberIO.js';
 import quadrilateral from '../quadrilateral.js';
+import { SoundDesign } from './model/QuadrilateralSoundOptionsModel.js';
 
 const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
 
@@ -23,7 +24,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // The tolerance interval for the angle calculations which determine when the quadrilateral is a parallelogram.
   // This is in radians, so it is limited between 0 and 2 PI. If maximum value, the quadrilateral will always
   // register as a parallelogram.
-  angleToleranceInterval: {
+  parallelAngleToleranceInterval: {
     type: 'number',
     isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
     defaultValue: 0.01
@@ -49,19 +50,43 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     isValidValue: ( value: number ) => value >= 1
   },
 
-  // The default value for the angle tolerance that will be used for determining the named shape of the
-  // quadrilateral. This must be different from the angleToleranceInterval, which use complex behavior
-  // and values depending on how the shape is being interacted with. The angleToleranceInterval
-  // can become infinite, which is not appropriate for detecting the shape name.
-  shapeAngleToleranceInterval: {
+  // The default value for the angle tolerance that will be used for single comparisons of one angle against
+  // another. Mostly, this is used to determine the quadrilateral shape name. This must be different from
+  // the parallelAngleToleranceInterval, which has complex behavior depending on mode of interaction.
+  interAngleToleranceInterval: {
+    type: 'number',
+    isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
+    defaultValue: 0.02
+  },
+
+  // A tolerance interval when comparing an angle to a constant of some kind, such as Math.PI or Math.PI / 2 when
+  // determining when angles are right or the shape is concave. This needs to be a separate value from
+  // interAngleToleranceInterval because that value involves sums of values and errors get compounded.
+  staticAngleToleranceInterval: {
     type: 'number',
     isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
     defaultValue: 0.01
   },
 
+  // A scale factor to apply to all tolerance intervals when the "Fine Input Spacing" checkbox is checked.
+  // Should be less than one because we want the tolerance intervals to be smaller when using fine input.
+  // See https://github.com/phetsims/quadrilateral/issues/197#issuecomment-1258194919
+  fineInputSpacingToleranceIntervalScaleFactor: {
+    type: 'number',
+    isValidValue: ( value: number ) => value < 1,
+    defaultValue: 0.2 // makes tolerances intervals 1/5 of the value when "fine input" enabled
+  },
+
+  // TODO: Do we need this 'widening' of the tolerance interval when connected to a device still?
+  deviceStaticAngleToleranceInterval: {
+    type: 'number',
+    isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
+    defaultValue: 0.001
+  },
+
   // The default value for the angleToleranceInterval when we are connected to the device. Otherwise
   // behaves like angleToleranceInterval.
-  deviceShapeAngleToleranceInterval: {
+  deviceInterAngleToleranceInterval: {
     type: 'number',
     isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
     defaultValue: 0.02
@@ -111,19 +136,6 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     type: 'flag'
   },
 
-  // If provided, some extra things will be done in the simulation to test connection with a device. The sim will
-  // have two screens, one that acts as the "simulation" and the other that acts as the "device". The "device" screen
-  // runs in one iframe and the simulation screen runs in another. The two communicat to test calibration/communication.
-  calibrationDemo: {
-    type: 'flag'
-  },
-
-  // If provided, the simulation will act as a "device" to be used in the calibration demo. The model bounds will be
-  // adjusted slightly to look more like a physical device.
-  calibrationDemoDevice: {
-    type: 'flag'
-  },
-
   // If provided, the simulation will act as a
   showModelValues: {
     type: 'flag'
@@ -139,7 +151,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // a named shape like rectangle or kite or trapezoid.
   shapeIdentificationFeedback: {
     type: 'boolean',
-    defaultValue: false
+    defaultValue: true
   },
 
   // If true, a dialog will be shown at startup that will require the user to touch the screen.  This will allow the
@@ -181,20 +193,71 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     type: 'flag'
   },
 
-  // If present, a prototype with mediapipe will be available for use to play with here. Forefiger and thumb on
-  // each hand control positions of each vertex.
-  mediaPipe: {
+  // If present, a button in the Preferences dialog will be present to play a sound and graphical
+  // marker to synchronize with any recordings.
+  includeClapperButton: {
+    type: 'flag'
+  },
+
+  // Sets the initial sound design on startup. Values are the enumeration values of
+  // QuadrilateralSoundOptionsModel.SoundDesign as a string. See https://github.com/phetsims/quadrilateral/blob/master/js/quadrilateral/model/QuadrilateralSoundOptionsModel.ts#L37-L53
+  soundDesign: {
+    type: 'string',
+    defaultValue: 'TRACKS_BUILD_UP_SIMPLE',
+    validValues: SoundDesign.enumeration.keys
+  },
+
+  /**
+   * Controls the interval that the Vertex will be constrained to
+   */
+  majorVertexInterval: {
+    type: 'number',
+    defaultValue: 0.05,
+    isValidValue: ( value: number ) => value > 0
+  },
+
+  minorVertexInterval: {
+    type: 'number',
+    defaultValue: 0.05,
+    isValidValue: ( value: number ) => value > 0
+  },
+
+  /**
+   * The "major" vertex interval when the "fine" input spacing is selected from Preferences.
+   * Value is in model coordinates.
+   */
+  majorFineVertexInterval: {
+    type: 'number',
+    defaultValue: 0.05,
+    isValidValue: ( value: number ) => value > 0
+  },
+
+  /**
+   * The "minor" vertex interval when the "fine" input spacing is selected from Preferences.
+   * Value is in model coordinates.
+   */
+  minorFineVertexInterval: {
+    type: 'number',
+    defaultValue: 0.0125,
+    isValidValue: ( value: number ) => value > 0
+  },
+
+  /**
+   * Adds more to the QuadrilateralGridNode so that you can visualize the majorVertexInterval
+   * and the minorVertexInterval, which determine where vertices are constrained to in model space.
+   */
+  showVertexGrid: {
     type: 'flag'
   }
 } );
 
 // Collection of properties that appear in ToleranceDefaults state object.
 type ToleranceDefaultsCollection = {
-  angleToleranceInterval: number;
+  parallelAngleToleranceInterval: number;
   deviceAngleToleranceInterval: number;
   toleranceIntervalScaleFactor: number;
-  shapeAngleToleranceInterval: number;
-  deviceShapeAngleToleranceInterval: number;
+  interAngleToleranceInterval: number;
+  deviceInterAngleToleranceInterval: number;
   deviceShapeLengthToleranceInterval: number;
   lengthToleranceIntervalScaleFactor: number;
   shapeLengthToleranceInterval: number;
@@ -211,11 +274,11 @@ class ToleranceDefaults extends PhetioObject {
 
         toStateObject: ( object: ToleranceDefaults ) => object.toStateObject(),
         stateSchema: {
-          angleToleranceInterval: NumberIO,
+          parallelAngleToleranceInterval: NumberIO,
           deviceAngleToleranceInterval: NumberIO,
           toleranceIntervalScaleFactor: NumberIO,
-          shapeAngleToleranceInterval: NumberIO,
-          deviceShapeAngleToleranceInterval: NumberIO,
+          interAngleToleranceInterval: NumberIO,
+          deviceInterAngleToleranceInterval: NumberIO,
           deviceShapeLengthToleranceInterval: NumberIO,
           lengthToleranceIntervalScaleFactor: NumberIO,
           shapeLengthToleranceInterval: NumberIO
@@ -227,11 +290,11 @@ class ToleranceDefaults extends PhetioObject {
 
   public toStateObject(): ToleranceDefaultsCollection {
     return {
-      angleToleranceInterval: QuadrilateralQueryParameters.angleToleranceInterval,
+      parallelAngleToleranceInterval: QuadrilateralQueryParameters.parallelAngleToleranceInterval,
       deviceAngleToleranceInterval: QuadrilateralQueryParameters.deviceAngleToleranceInterval,
       toleranceIntervalScaleFactor: QuadrilateralQueryParameters.toleranceIntervalScaleFactor,
-      shapeAngleToleranceInterval: QuadrilateralQueryParameters.shapeAngleToleranceInterval,
-      deviceShapeAngleToleranceInterval: QuadrilateralQueryParameters.deviceShapeAngleToleranceInterval,
+      interAngleToleranceInterval: QuadrilateralQueryParameters.interAngleToleranceInterval,
+      deviceInterAngleToleranceInterval: QuadrilateralQueryParameters.deviceInterAngleToleranceInterval,
       deviceShapeLengthToleranceInterval: QuadrilateralQueryParameters.deviceShapeLengthToleranceInterval,
       lengthToleranceIntervalScaleFactor: QuadrilateralQueryParameters.lengthToleranceIntervalScaleFactor,
       shapeLengthToleranceInterval: QuadrilateralQueryParameters.shapeLengthToleranceInterval

@@ -20,10 +20,11 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import QuadrilateralPreferencesModel from './QuadrilateralPreferencesModel.js';
-import IProperty from '../../../../axon/js/IProperty.js';
+import TProperty from '../../../../axon/js/TProperty.js';
+import Emitter from '../../../../axon/js/Emitter.js';
 import QuadrilateralPhysics from './QuadrilateralPhysics.js';
 
 class QuadrilateralModel {
@@ -43,55 +44,67 @@ class QuadrilateralModel {
   // Whether a reset is currently in progress. Added for sound. If the model is actively resetting,
   // SoundManagers will disable so we don't play sounds for transient model states. It is a value for when
   // the reset is NOT in progress because that is most convenient to pass to SoundGenerator enableControlProperties.
-  public resetNotInProgressProperty: IProperty<boolean>;
+  public resetNotInProgressProperty: TProperty<boolean>;
 
   // If true, the simulation is "calibrating" to a physical device so we don't set the vertex positions in response
   // to changes from the physical device. Instead we are updating physicalModelBounds.
-  public isCalibratingProperty: IProperty<boolean>;
+  public isCalibratingProperty: TProperty<boolean>;
 
   // If true, a panel displaying model values will be added to the view. Only for debugging.
-  public showDebugValuesProperty: IProperty<boolean>;
+  public showDebugValuesProperty: TProperty<boolean>;
 
-  // Whether or not a marker is detected for physical device rotation. TODO: delete? https://github.com/phetsims/tangible/issues/11
-  public rotationMarkerDetectedProperty: IProperty<boolean>;
+  // Whether or not a marker is detected for physical device rotation. This is used for OpenCV prototypes and
+  // historically was used for prototypes using a marker detection library.
+  // TODO: This is a candidate for removal prior to publishing the sim.
+  public rotationMarkerDetectedProperty: TProperty<boolean>;
 
   // True when we are connected to a device in some way, either bluetooth, serial, or
   // opencv. This is mostly for data collection.
-  public connectedToDeviceProperty: IProperty<boolean>;
+  public connectedToDeviceProperty: TProperty<boolean>;
 
   // Controls runtime preferences for the simulation.
   public readonly preferencesModel: QuadrilateralPreferencesModel;
 
   // A Property that indicates that all markers are observed by the camera to control this simulation. Part of
   // a prototype for using OpenCV as an input method for the simulation
-  public allVertexMarkersDetectedProperty: IReadOnlyProperty<boolean>;
+  public allVertexMarkersDetectedProperty: TReadOnlyProperty<boolean>;
 
   // Properties that indicate whether the OpenCV prototype detects an individual vertex. The tool must be able
   // to detect each vertex individually. The tool must be able to detect each marker individually for this to be
   // relevant.
-  public vertexAMarkerDetectedProperty: IReadOnlyProperty<boolean>;
-  public vertexBMarkerDetectedProperty: IReadOnlyProperty<boolean>;
-  public vertexCMarkerDetectedProperty: IReadOnlyProperty<boolean>;
-  public vertexDMarkerDetectedProperty: IReadOnlyProperty<boolean>;
+  public vertexAMarkerDetectedProperty: TReadOnlyProperty<boolean>;
+  public vertexBMarkerDetectedProperty: TReadOnlyProperty<boolean>;
+  public vertexCMarkerDetectedProperty: TReadOnlyProperty<boolean>;
+  public vertexDMarkerDetectedProperty: TReadOnlyProperty<boolean>;
 
   // A Property that controls whether Voicing responses will be enabled for when the OpenCV prototype changes in its
   // ability to see various markers.
   public readonly markerResponsesEnabledProperty: BooleanProperty;
 
-  // The amount of rotation in radians of the marker. TODO: delete? https://github.com/phetsims/tangible/issues/11
-  public markerRotationProperty: NumberProperty;
+  // The amount of rotation in radians of the tangible shape. This is used in OpenCV prototypes as well as historically
+  // in old prototypes using a marker detection library.
+  // TODO: Possibly remove this before publishing, this feature is not in use at the moment.
+  public tangibleRotationProperty: NumberProperty;
 
   // Whether the angle guide graphics are visible at each vertex.
-  public cornerGuideVisibleProperty: BooleanProperty;
+  public readonly markersVisibleProperty: BooleanProperty;
 
   // Whether labels on each vertex are visible.
-  public vertexLabelsVisibleProperty: BooleanProperty;
+  public readonly vertexLabelsVisibleProperty: BooleanProperty;
 
-  // Whether the symmetry grid is visible.
-  public symmetryGridVisibleProperty: BooleanProperty;
+  // Whether the grid is visible.
+  public readonly gridVisibleProperty: BooleanProperty;
 
-  // Whether additional feedback (mostly sounds) are enabled to indicate shape changes.
-  public shapeIdentificationFeedbackEnabledProperty: BooleanProperty;
+  // Whether the diagonal guides are visible.
+  public readonly diagonalGuidesVisibleProperty: BooleanProperty;
+
+  // Whether the shape name is displayed to the user.
+  public readonly shapeNameVisibleProperty: BooleanProperty;
+
+  // Whether the simulation sound design is enabled to play as the shape changes. For now,
+  // this only controls the "Tracks" sound designs in this simulation. When this is false,
+  // we will still hear general and common code sounds.
+  public readonly shapeSoundEnabledProperty: BooleanProperty;
 
   // A reference to the "main" shape model for the simulation. Controls vertex positions.
   public quadrilateralShapeModel: QuadrilateralShapeModel;
@@ -99,6 +112,9 @@ class QuadrilateralModel {
   // A reference to a "test" model for the simulation. Used to validate and verify that vertex positions are
   // reasonable before setting to the "main" shape model.
   public quadrilateralTestShapeModel: QuadrilateralShapeModel;
+
+  // Emits an event when a full model reset happens (but not when a shape reset happens)
+  public readonly resetEmitter = new Emitter();
 
   // The first model step we will disable all sounds. This simulation updates certain Properties in the animation
   // frame so we wait until after the sim has loaded to start playing any sounds (lazyLink is not sufficient when
@@ -122,12 +138,12 @@ class QuadrilateralModel {
 
     this.modelBoundsProperty = new Property<Bounds2 | null>( null, {
       tandem: tandem.createTandem( 'modelBoundsProperty' ),
-      phetioType: Property.PropertyIO( NullableIO( Bounds2.Bounds2IO ) )
+      phetioValueType: NullableIO( Bounds2.Bounds2IO )
     } );
 
     this.physicalModelBoundsProperty = new Property<Bounds2 | null>( null, {
       tandem: tandem.createTandem( 'physicalModelBoundsProperty' ),
-      phetioType: Property.PropertyIO( NullableIO( Bounds2.Bounds2IO ) )
+      phetioValueType: NullableIO( Bounds2.Bounds2IO )
     } );
 
     this.isCalibratingProperty = new BooleanProperty( false, {
@@ -142,9 +158,7 @@ class QuadrilateralModel {
 
     this.rotationMarkerDetectedProperty = new BooleanProperty( false );
 
-    this.shapeIdentificationFeedbackEnabledProperty = preferencesModel.shapeIdentificationFeedbackEnabledProperty;
-
-    this.markerRotationProperty = new NumberProperty( 0 );
+    this.tangibleRotationProperty = new NumberProperty( 0 );
 
     this.allVertexMarkersDetectedProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'allVertexMarkersDetectedProperty' )
@@ -169,7 +183,7 @@ class QuadrilateralModel {
       tandem: tandem.createTandem( 'quadrilateralShapeModel' )
     } );
 
-    this.quadrilateralTestShapeModel = new QuadrilateralShapeModel( this, this.physicsEngine,{
+    this.quadrilateralTestShapeModel = new QuadrilateralShapeModel( this, this.physicsEngine, {
       validateShape: false,
       tandem: tandem.createTandem( 'quadrilateralTestShapeModel' )
     } );
@@ -178,12 +192,24 @@ class QuadrilateralModel {
       tandem: tandem.createTandem( 'vertexLabelsVisibleProperty' )
     } );
 
-    this.symmetryGridVisibleProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'symmetryGridVisibleProperty' )
+    this.gridVisibleProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'gridVisibleProperty' )
     } );
 
-    this.cornerGuideVisibleProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'cornerGuideVisibleProperty' )
+    this.diagonalGuidesVisibleProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'diagonalGuidesVisibleProperty' )
+    } );
+
+    this.markersVisibleProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'markersVisibleProperty' )
+    } );
+
+    this.shapeNameVisibleProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'shapeNameVisibleProperty' )
+    } );
+
+    this.shapeSoundEnabledProperty = new BooleanProperty( true, {
+      tandem: tandem.createTandem( 'shapeSoundEnabledProperty' )
     } );
 
     this.firstModelStep = true;
@@ -278,9 +304,14 @@ class QuadrilateralModel {
     this.quadrilateralShapeModel.updateOrderDependentProperties();
 
     // reset visibility Properties
-    this.cornerGuideVisibleProperty.reset();
+    this.markersVisibleProperty.reset();
     this.vertexLabelsVisibleProperty.reset();
-    this.symmetryGridVisibleProperty.reset();
+    this.gridVisibleProperty.reset();
+    this.diagonalGuidesVisibleProperty.reset();
+    this.shapeNameVisibleProperty.reset();
+    this.shapeSoundEnabledProperty.reset();
+
+    this.resetEmitter.emit();
 
     // reset is not in progress anymore
     this.resetNotInProgressProperty.value = true;
@@ -310,9 +341,14 @@ class QuadrilateralModel {
 
   /**
    * Returns the closest position in the model from the point provided that will be constrained to the minor lines
-   * of the model "grid". By default it uses the following minor grid spacing but a different spacing may be necessary.
+   * of the model "grid". By default it uses the minor grid spacing controlled by Preferences. But a different spacing
+   * may be needed depending on the method of input.
    */
-  public static getClosestGridPosition( position: Vector2, interval = QuadrilateralModel.MINOR_GRID_SPACING ): Vector2 {
+  public getClosestGridPosition( position: Vector2, interval?: number ): Vector2 {
+    if ( interval === undefined ) {
+      interval = this.preferencesModel.fineInputSpacingProperty.value ? QuadrilateralQueryParameters.minorFineVertexInterval : QuadrilateralQueryParameters.minorVertexInterval;
+    }
+
     return new Vector2( Utils.roundToInterval( position.x, interval ), Utils.roundToInterval( position.y, interval ) );
   }
 }

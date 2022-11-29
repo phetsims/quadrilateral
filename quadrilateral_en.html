@@ -22,7 +22,7 @@
   window.phet.chipper.packageObject =
     {
       "name": "quadrilateral",
-      "version": "1.0.0-dev.40",
+      "version": "1.0.0-dev.68",
       "license": "GPL-3.0",
       "repository": {
         "type": "git",
@@ -46,10 +46,6 @@
           "tangible"
         ],
         "preload": [
-          "../sherpa/lib/mediaPipe/hands@0.4.1646424915/mediaPipeDependencies.js",
-          "../sherpa/lib/mediaPipe/hands@0.4.1646424915/hands.js",
-          "../sherpa/lib/mediaPipe/camera_utils-0.3.1640029074.js",
-          "../sherpa/lib/mediaPipe/control_utils-0.6.1629159505.js",
           "../sherpa/lib/p2-0.7.1.js"
         ],
         "simFeatures": {
@@ -100,6 +96,10 @@
         "requirejsNamespace": "TAMBO"
       },
       {
+        "repo": "tangible",
+        "requirejsNamespace": "TANGIBLE"
+      },
+      {
         "repo": "tappi",
         "requirejsNamespace": "TAPPI"
       },
@@ -120,6 +120,7 @@
     '../sherpa/lib/lodash-4.17.4.js',
     '../sherpa/lib/FileSaver-b8054a2.js',
     '../sherpa/lib/himalaya-1.1.0.js',
+    '../sherpa/lib/linebreak-1.1.0.js',
     '../sherpa/lib/flatqueue-1.2.1.js',
     '../sherpa/lib/he-1.1.1.js',
     '../assert/js/assert.js',
@@ -130,10 +131,6 @@
     '../sherpa/lib/TextEncoderLite-3c9f6f0.js',
     '../tandem/js/PhetioIDUtils.js',
     '../perennial-alias/js/common/SimVersion.js',
-    '../sherpa/lib/mediaPipe/hands@0.4.1646424915/mediaPipeDependencies.js',
-    '../sherpa/lib/mediaPipe/hands@0.4.1646424915/hands.js',
-    '../sherpa/lib/mediaPipe/camera_utils-0.3.1640029074.js',
-    '../sherpa/lib/mediaPipe/control_utils-0.6.1629159505.js',
     '../sherpa/lib/p2-0.7.1.js'
   ];
 

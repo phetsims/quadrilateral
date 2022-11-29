@@ -5,9 +5,9 @@
  */
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import { IPaint, Node, NodeOptions } from '../../../../scenery/js/imports.js';
+import { Node, NodeOptions, TPaint } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
-import quadrilateralStrings from '../../quadrilateralStrings.js';
+import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import SideNode from './SideNode.js';
 import VertexNode from './VertexNode.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -15,33 +15,28 @@ import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import CornerGuideNode from './CornerGuideNode.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
-import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import RightAngleIndicatorNode from './RightAngleIndicatorNode.js';
-import Multilink from '../../../../axon/js/Multilink.js';
-import EmptyObjectType from '../../../../phet-core/js/types/EmptyObjectType.js';
+import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 
 // constants
-const cornerAString = quadrilateralStrings.a11y.cornerA;
-const cornerBString = quadrilateralStrings.a11y.cornerB;
-const cornerCString = quadrilateralStrings.a11y.cornerC;
-const cornerDString = quadrilateralStrings.a11y.cornerD;
-const topSideString = quadrilateralStrings.a11y.topSide;
-const rightSideString = quadrilateralStrings.a11y.rightSide;
-const bottomSideString = quadrilateralStrings.a11y.bottomSide;
-const leftSideString = quadrilateralStrings.a11y.leftSide;
-const vertexAString = quadrilateralStrings.vertexA;
-const vertexBString = quadrilateralStrings.vertexB;
-const vertexCString = quadrilateralStrings.vertexC;
-const vertexDString = quadrilateralStrings.vertexD;
-
-const EQUAL_SIDES_SEGMENT_LINE_WIDTH = 2;
-const DEFAULT_SIDES_SEGMENT_LINE_WIDTH = 1;
+const cornerAString = QuadrilateralStrings.a11y.cornerA;
+const cornerBString = QuadrilateralStrings.a11y.cornerB;
+const cornerCString = QuadrilateralStrings.a11y.cornerC;
+const cornerDString = QuadrilateralStrings.a11y.cornerD;
+const topSideString = QuadrilateralStrings.a11y.topSide;
+const rightSideString = QuadrilateralStrings.a11y.rightSide;
+const bottomSideString = QuadrilateralStrings.a11y.bottomSide;
+const leftSideString = QuadrilateralStrings.a11y.leftSide;
+const vertexAString = QuadrilateralStrings.vertexA;
+const vertexBString = QuadrilateralStrings.vertexB;
+const vertexCString = QuadrilateralStrings.vertexC;
+const vertexDString = QuadrilateralStrings.vertexD;
 
 // in seconds,
 const SHAPE_FILL_TIME = 0.35;
 
-type SelfOptions = EmptyObjectType;
+type SelfOptions = EmptySelfOptions;
 
 type QuadrilateralNodeOptions = SelfOptions & NodeOptions & PickRequired<NodeOptions, 'tandem'>;
 
@@ -55,7 +50,7 @@ class QuadrilateralNode extends Node {
   private readonly sideNodes: SideNode[];
 
   private remainingTimeForShapeChangeFill: number;
-  private activeFill: IPaint | null;
+  private activeFill: TPaint | null;
 
   public constructor( quadrilateralModel: QuadrilateralModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, providedOptions: QuadrilateralNodeOptions ) {
     super( providedOptions );
@@ -103,33 +98,37 @@ class QuadrilateralNode extends Node {
     } );
 
     const topSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.topSide, this.model.quadrilateralTestShapeModel.topSide, modelViewTransform, {
-      nameResponse: topSideString
+      nameResponse: topSideString,
+      tandem: providedOptions.tandem.createTandem( 'topSideNode' )
     } );
     const rightSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.rightSide, this.model.quadrilateralTestShapeModel.rightSide, modelViewTransform, {
-      nameResponse: rightSideString
+      nameResponse: rightSideString,
+      tandem: providedOptions.tandem.createTandem( 'rightSideNode' )
     } );
     const bottomSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.bottomSide, this.model.quadrilateralTestShapeModel.bottomSide, modelViewTransform, {
-      nameResponse: bottomSideString
+      nameResponse: bottomSideString,
+      tandem: providedOptions.tandem.createTandem( 'bottomSideNode' )
     } );
     const leftSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.leftSide, this.model.quadrilateralTestShapeModel.leftSide, modelViewTransform, {
-      nameResponse: leftSideString
+      nameResponse: leftSideString,
+      tandem: providedOptions.tandem.createTandem( 'leftSideNode' )
     } );
 
     // angle guides
-    const vertexACornerGuideNode = new CornerGuideNode( vertexA, vertexB, this.model.cornerGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
-    const vertexBCornerGuideNode = new CornerGuideNode( vertexB, vertexC, this.model.cornerGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
-    const vertexCCornerGuideNode = new CornerGuideNode( vertexC, vertexD, this.model.cornerGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
-    const vertexDCornerGuideNode = new CornerGuideNode( vertexD, vertexA, this.model.cornerGuideVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertexACornerGuideNode = new CornerGuideNode( vertexA, vertexB, this.model.markersVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertexBCornerGuideNode = new CornerGuideNode( vertexB, vertexC, this.model.markersVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertexCCornerGuideNode = new CornerGuideNode( vertexC, vertexD, this.model.markersVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertexDCornerGuideNode = new CornerGuideNode( vertexD, vertexA, this.model.markersVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
 
     // right angle indicators, visible when a vertex has a right angle
-    const vertexARightAngleIndicator = new RightAngleIndicatorNode( vertexA, vertexB, vertexD, this.model.quadrilateralShapeModel, modelViewTransform );
-    const vertexBRightAngleIndicator = new RightAngleIndicatorNode( vertexB, vertexC, vertexA, this.model.quadrilateralShapeModel, modelViewTransform );
-    const vertexCRightAngleIndicator = new RightAngleIndicatorNode( vertexC, vertexD, vertexB, this.model.quadrilateralShapeModel, modelViewTransform );
-    const vertexDRightAngleIndicator = new RightAngleIndicatorNode( vertexD, vertexA, vertexC, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertexARightAngleIndicator = new RightAngleIndicatorNode( vertexA, vertexB, vertexD, this.model.markersVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertexBRightAngleIndicator = new RightAngleIndicatorNode( vertexB, vertexC, vertexA, this.model.markersVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertexCRightAngleIndicator = new RightAngleIndicatorNode( vertexC, vertexD, vertexB, this.model.markersVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
+    const vertexDRightAngleIndicator = new RightAngleIndicatorNode( vertexD, vertexA, vertexC, this.model.markersVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
 
     // add children - parents support layering order as well as traversal order in the PDOM
     // sides first because we want vertices to catch all input
-    const sideParentNode = new ShapeHeadingNode( quadrilateralStrings.a11y.myShapesSides );
+    const sideParentNode = new ShapeHeadingNode( QuadrilateralStrings.a11y.myShapesSides );
     sideParentNode.addChild( topSideNode );
     sideParentNode.addChild( rightSideNode );
     sideParentNode.addChild( bottomSideNode );
@@ -148,7 +147,7 @@ class QuadrilateralNode extends Node {
     this.addChild( vertexCRightAngleIndicator );
     this.addChild( vertexDRightAngleIndicator );
 
-    const vertexParentNode = new ShapeHeadingNode( quadrilateralStrings.a11y.myShapesCorners );
+    const vertexParentNode = new ShapeHeadingNode( QuadrilateralStrings.a11y.myShapesCorners );
     vertexParentNode.addChild( vertexNode1 );
     vertexParentNode.addChild( vertexNode2 );
     vertexParentNode.addChild( vertexNode3 );
@@ -163,31 +162,28 @@ class QuadrilateralNode extends Node {
 
     // only if shape identification feedback is enabled, reset the timer so that we change the color for a short
     // period when we become a named shape
-    Multilink.multilink( [ this.quadrilateralShapeModel.isParallelogramProperty, this.quadrilateralShapeModel.shapeNameProperty ], ( isParallelogram, shapeName ) => {
-      if ( shapeName !== null && quadrilateralModel.shapeIdentificationFeedbackEnabledProperty.value ) {
+    this.quadrilateralShapeModel.shapeNameProperty.link( shapeName => {
+      if ( shapeName !== null ) {
         this.remainingTimeForShapeChangeFill = SHAPE_FILL_TIME;
       }
     } );
 
-    // Design request - when all side lengths are equal (which will be true when square or rhombus) increase
-    // side segment line width
-    this.quadrilateralShapeModel.shapeNameProperty.link( shapeName => {
-      const lineWidth = ( shapeName === NamedQuadrilateral.SQUARE || shapeName === NamedQuadrilateral.RHOMBUS ) ? EQUAL_SIDES_SEGMENT_LINE_WIDTH : DEFAULT_SIDES_SEGMENT_LINE_WIDTH;
-      this.sideNodes.forEach( sideNode => { sideNode.lineWidth = lineWidth; } );
-    } );
-
+    // Traversal order for components requested in https://github.com/phetsims/quadrilateral/issues/196.
     this.pdomOrder = [
-      vertexParentNode,
-      sideParentNode
+      leftSideNode,
+      vertexNode1,
+      topSideNode,
+      vertexNode2,
+      rightSideNode,
+      vertexNode3,
+      bottomSideNode,
+      vertexNode4
     ];
   }
 
   public step( dt: number ): void {
     const previousActiveFill = this.activeFill;
-    if ( this.quadrilateralShapeModel.isParallelogramProperty.value ) {
-      this.activeFill = QuadrilateralColors.quadrilateralParallelogramShapeColorProperty;
-    }
-    else if ( this.remainingTimeForShapeChangeFill > 0 ) {
+    if ( this.remainingTimeForShapeChangeFill > 0 ) {
 
       // Note this will only happen if "shapeIdentificationFeedback" is enabled.
       this.activeFill = QuadrilateralColors.quadrilateralNamedShapeColorProperty;

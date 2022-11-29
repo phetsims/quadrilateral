@@ -21,12 +21,12 @@ const QuadrilateralColors = {
 
   // Background color for screens in this sim
   screenBackgroundColorProperty: new ProfileColorProperty( quadrilateral, 'background', {
-    default: new Color( 167, 167, 255 )
+    default: new Color( 133, 133, 255 )
   } ),
 
-  // Color for the symmetry grid
-  symmetryGridColorProperty: new ProfileColorProperty( quadrilateral, 'symmetryGrid', {
-    default: new Color( 200, 200, 200 )
+  // Color for the grid in the play area
+  gridColorProperty: new ProfileColorProperty( quadrilateral, 'grid', {
+    default: 'white'
   } ),
 
   // Color for vertices and sides of the quadrilateral shape.
@@ -49,24 +49,60 @@ const QuadrilateralColors = {
     default: 'black'
   } ),
 
-  // Color for the dark segments of the angle guides
+  // Color for the dark segments of the corner guides
   cornerGuideDarkColorProperty: new ProfileColorProperty( quadrilateral, 'cornerGuideDark', {
     default: new Color( 100, 100, 100 )
   } ),
 
-  // Color for the light segments of the angle guides
+  // Color for the light segments of the corner guides
   cornerGuideLightColorProperty: new ProfileColorProperty( quadrilateral, 'cornerGuideLight', {
     default: 'white'
   } ),
 
-  // Color for the stroke around angle guide shapes
-  cornerGuideStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'cornerGuideStroke', {
+  // Color for the stroke of shape markers (corner guides/unit length indicators)
+  markersStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'markersStroke', {
     default: 'black'
   } ),
 
   // Color for the stroke around right angle indicator
   rightAngleIndicatorStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'rightAngleIndicatorStroke', {
     default: 'black'
+  } ),
+
+  // Color for the stroke for the diagonal guides
+  diagonalGuidesStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'diagonalGuideStroke', {
+    default: new Color( 64, 64, 64 )
+  } ),
+
+  panelFillColorProperty: new ProfileColorProperty( quadrilateral, 'panelFillColor', {
+    default: 'white'
+  } ),
+
+  panelStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'panelStrokeColor', {
+    default: 'black'
+  } ),
+
+  playAreaStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'playAreaStrokeColor', {
+    default: 'white'
+  } ),
+
+  playAreaFillColorProperty: new ProfileColorProperty( quadrilateral, 'playAreaFillColor', {
+    default: new Color( 133, 133, 255 )
+  } ),
+
+  // Fill color for the "Corner Labels" checkbox icon.
+  visibilityIconsColorProperty: new ProfileColorProperty( quadrilateral, 'visibilityIconsColorProperty', {
+    default: new Color( 'black' )
+  } ),
+
+  // Fill for the "Reset Shape" button
+  resetShapeButtonColorProperty: new ProfileColorProperty( quadrilateral, 'resetShapeButtonColor', {
+    default: new Color( 'rgb(247, 151, 34)' )
+  } ),
+
+  // Stroke for the interaction cues
+  interactionCueColorProperty: new ProfileColorProperty( quadrilateral, 'interactionCueColor', {
+    default: new Color( 'rgb(21,255,127)' )
   } )
 };
 

@@ -8,7 +8,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { DragListener, KeyboardDragListener, Line as LineNode, Path, PathOptions, SceneryEvent, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
+import { DragListener, KeyboardDragListener, KeyboardUtils, Line as LineNode, Path, PathOptions, SceneryEvent, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import Side from '../model/Side.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -18,11 +18,14 @@ import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import { Line, Shape } from '../../../../kite/js/imports.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
-import vibrationManager from '../../../../tappi/js/vibrationManager.js';
 import SideDescriber from './SideDescriber.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
+import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
+import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
+import soundManager from '../../../../tambo/js/soundManager.js';
+import release_mp3 from '../../../../tambo/sounds/release_mp3.js';
 
 // The dilation around side shapes when drawing the focus highlight.
 const FOCUS_HIGHLIGHT_DILATION = 15;
@@ -35,7 +38,7 @@ type SelfOptions = {
 type ParentOptions = StrictOmit<VoicingOptions, 'voicingNameResponse'> & StrictOmit<PathOptions, 'innerContent'>;
 type SideNodeOptions = SelfOptions & ParentOptions;
 
-class SideNode extends Voicing( Path, 1 ) {
+class SideNode extends Voicing( Path ) {
 
   // A reference to the model component.
   private side: Side;
@@ -70,83 +73,95 @@ class SideNode extends Voicing( Path, 1 ) {
     this.voicingNameResponse = options.nameResponse;
     this.innerContent = options.nameResponse;
 
+    this.cursor = 'pointer';
+
     this.side = side;
     this.scratchSide = scratchSide;
     this.quadrilateralModel = quadrilateralModel;
     this.quadrilateralShapeModel = quadrilateralModel.quadrilateralShapeModel;
     this.scratchShapeModel = quadrilateralModel.quadrilateralTestShapeModel;
 
-    // Mutate options eagerly, but not in super because that doesn't work with the Voicing trait
-    this.mutate( options );
+    const markersVisibleProperty = quadrilateralModel.markersVisibleProperty;
 
     // Generates descriptions
-    const sideDescriber = new SideDescriber( side, this.quadrilateralShapeModel );
+    const sideDescriber = new SideDescriber( side, this.quadrilateralShapeModel, quadrilateralModel.markersVisibleProperty, modelViewTransform );
 
     // Reusable lineNode for calculating the shape of the focus highlight
     const lineNode = new LineNode( 0, 0, 0, 0 );
 
     // listeners
-    Multilink.multilink( [ side.vertex1.positionProperty, side.vertex2.positionProperty ], ( vertex1Position, vertex2Position ) => {
+    Multilink.multilink( [ side.vertex1.positionProperty, side.vertex2.positionProperty, markersVisibleProperty ], ( vertex1Position, vertex2Position, markersVisible ) => {
 
       // create a single line that will then be divided into segments
       const fullLine = new Line( vertex1Position, vertex2Position );
 
-      // break the viewLine into multiple lines that are of the segment length
-      const lineSegments = [];
-
-      // The length of a segment parametrically relative to the full line length
-      const parametricSegmentLength = Side.SIDE_SEGMENT_LENGTH / fullLine.getArcLength();
-
-      const numberOfFullSegments = Math.floor( 1 / parametricSegmentLength );
-      let t = 0;
-      for ( let i = 0; i < numberOfFullSegments && t < 1; i++ ) {
-        const nextPosition = Math.min( t + parametricSegmentLength, 1 );
-        lineSegments.push( new Line( fullLine.positionAt( t ), fullLine.positionAt( nextPosition ) ) );
-        t = nextPosition;
-      }
-
-      // the final segment should be the remainder from 1 (parametric end) to the last full segment
-      assert && assert( 1 - t >= 0, 'we cannot have gone beyond the end of the full line parametrically' );
-
-      // Ad the remaining portion of a segment if there is one. t might not be exactly one but close enough
-      // that line.positionAt produces a line with zero length, so we only add another segment if it is large enough.
-      if ( 1 - t > 0.0005 ) {
-        const remainderLine = new Line( fullLine.positionAt( t ), fullLine.positionAt( 1 ) );
-        lineSegments.push( remainderLine );
-
-        // ensure that t was large enough that we didnt create a zero-length line
-        assert && assert( !remainderLine.start.equals( remainderLine.end ), 'Should be a non-zero length remainder for the line in this case' );
-      }
-
-      const rightStrokes: Line[] = [];
-      const leftStrokes: Line[] = [];
-      lineSegments.forEach( ( lineSegment, index ) => {
-
-        // The "taper" effect has been removed, but this line makes each segment more narrow than the previous one
-        // and is the reason for such complicated Shape/drawing code. It might be needed again so I am not removing it.
-        // But for now a constant width was requested.
-        // const segmentWidth = Math.max( Side.SIDE_WIDTH - index * Vertex.VERTEX_WIDTH * 0.05, 0 );
-        const segmentWidth = Side.SIDE_WIDTH;
-
-        // stroke functions divide width for us
-        const strokeRight = lineSegment.strokeRight( segmentWidth );
-        const strokeLeft = lineSegment.strokeLeft( segmentWidth );
-
-        rightStrokes.push( strokeRight[ 0 ] );
-        leftStrokes.push( strokeLeft[ 0 ] );
-      } );
-
+      // The Shape for our Path - drawn in model coordinates until a transform at the end
       const lineShape = new Shape();
 
-      rightStrokes.forEach( ( rightStroke, index ) => {
-        lineShape.moveToPoint( rightStroke.start );
-        lineShape.lineToPoint( rightStroke.end );
-        lineShape.lineToPoint( leftStrokes[ index ].start );
-        lineShape.lineToPoint( leftStrokes[ index ].end );
+      if ( markersVisible ) {
 
-        // so that fill will fill each segment individually and so we see strokes in between each segment
+        // If markers are visible we need to draw each unit segment. Break the line into multiple segments.
+        const lineSegments = [];
+
+        // The length of a segment parametrically relative to the full line length
+        const parametricSegmentLength = Side.SIDE_SEGMENT_LENGTH / fullLine.getArcLength();
+
+        const numberOfFullSegments = Math.floor( 1 / parametricSegmentLength );
+        let t = 0;
+        for ( let i = 0; i < numberOfFullSegments && t < 1; i++ ) {
+          const nextPosition = Math.min( t + parametricSegmentLength, 1 );
+          lineSegments.push( new Line( fullLine.positionAt( t ), fullLine.positionAt( nextPosition ) ) );
+          t = nextPosition;
+        }
+
+        // the final segment should be the remainder from 1 (parametric end) to the last full segment
+        assert && assert( 1 - t >= 0, 'we cannot have gone beyond the end of the full line parametrically' );
+
+        // Ad the remaining portion of a segment if there is one. t might not be exactly one but close enough
+        // that line.positionAt produces a line with zero length, so we only add another segment if it is large enough.
+        if ( 1 - t > 0.0005 ) {
+          const remainderLine = new Line( fullLine.positionAt( t ), fullLine.positionAt( 1 ) );
+          lineSegments.push( remainderLine );
+
+          // ensure that t was large enough that we didnt create a zero-length line
+          assert && assert( !remainderLine.start.equals( remainderLine.end ), 'Should be a non-zero length remainder for the line in this case' );
+        }
+
+        const rightStrokes: Line[] = [];
+        const leftStrokes: Line[] = [];
+        lineSegments.forEach( ( lineSegment, index ) => {
+
+          // stroke functions divide width by two for us
+          const strokeRight = lineSegment.strokeRight( Side.SIDE_WIDTH );
+          const strokeLeft = lineSegment.strokeLeft( Side.SIDE_WIDTH );
+
+          rightStrokes.push( strokeRight[ 0 ] );
+          leftStrokes.push( strokeLeft[ 0 ] );
+        } );
+
+        rightStrokes.forEach( ( rightStroke, index ) => {
+          lineShape.moveToPoint( rightStroke.start );
+          lineShape.lineToPoint( rightStroke.end );
+          lineShape.lineToPoint( leftStrokes[ index ].start );
+          lineShape.lineToPoint( leftStrokes[ index ].end );
+
+          // so that fill will fill each segment individually and so we see strokes in between each segment
+          lineShape.close();
+        } );
+      }
+      else {
+
+        // just a rectangular path along the line with the width of SIDE_WIDTH
+        const rightStroke = fullLine.strokeRight( Side.SIDE_WIDTH );
+        const leftStroke = fullLine.strokeLeft( Side.SIDE_WIDTH );
+
+        lineShape.moveToPoint( rightStroke[ 0 ].start );
+        lineShape.lineToPoint( rightStroke[ 0 ].end );
+        lineShape.lineToPoint( leftStroke[ 0 ].start );
+        lineShape.lineToPoint( leftStroke[ 0 ].end );
+
         lineShape.close();
-      } );
+      }
 
       // transform shape to view coordinates
       this.shape = modelViewTransform.modelToViewShape( lineShape );
@@ -159,25 +174,30 @@ class SideNode extends Voicing( Path, 1 ) {
       this.focusHighlight = lineNode.getStrokedShape();
     } );
 
-    // supports keyboard dragging, attempts to move both vertices in the direction of motion of the line
-    const viewDragDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralModel.MAJOR_GRID_SPACING );
-    const minorViewDelta = modelViewTransform.modelToViewDeltaX( QuadrilateralModel.MINOR_GRID_SPACING );
-    this.addInputListener( new KeyboardDragListener( {
+    const keyboardDragListener = new KeyboardDragListener( {
       transform: modelViewTransform,
       drag: ( vectorDelta: Vector2 ) => {
         this.moveVerticesFromModelDelta( vectorDelta );
       },
 
-      // velocity defined in view coordinates per second, assuming 60 fps
-      dragVelocity: viewDragDelta * 60,
-      shiftDragVelocity: minorViewDelta * 60,
-      downDelta: viewDragDelta,
-      shiftDownDelta: minorViewDelta,
       moveOnHoldDelay: 750,
       moveOnHoldInterval: 50,
 
       tandem: options.tandem?.createTandem( 'keyboardDragListener' )
-    } ) );
+    } );
+    this.addInputListener( keyboardDragListener );
+
+    // The user is able to control the interval for positioning each vertex, a "fine" control or default
+    quadrilateralModel.preferencesModel.fineInputSpacingProperty.link( fineInputSpacing => {
+      const largeModelDelta = fineInputSpacing ? QuadrilateralQueryParameters.majorFineVertexInterval : QuadrilateralQueryParameters.majorVertexInterval;
+      const smallModelDelta = fineInputSpacing ? QuadrilateralQueryParameters.minorFineVertexInterval : QuadrilateralQueryParameters.minorVertexInterval;
+
+      const largeViewDragDelta = modelViewTransform.modelToViewDeltaX( largeModelDelta );
+      const smallViewDragDelta = modelViewTransform.modelToViewDeltaX( smallModelDelta );
+
+      keyboardDragListener.dragDelta = largeViewDragDelta;
+      keyboardDragListener.shiftDragDelta = smallViewDragDelta;
+    } );
 
     // Vectors between the start position during drag and each vertex so that we can translate vertex positions
     // relative to a pointer position on a side.
@@ -224,8 +244,8 @@ class SideNode extends Voicing( Path, 1 ) {
           const modelVertex2Position = modelPoint.plus( vectorToVertex2! );
 
           // constrain each to the model grid
-          const proposedVertex1Position = QuadrilateralModel.getClosestGridPosition( modelVertex1Position );
-          const proposedVertex2Position = QuadrilateralModel.getClosestGridPosition( modelVertex2Position );
+          const proposedVertex1Position = quadrilateralModel.getClosestGridPosition( modelVertex1Position );
+          const proposedVertex2Position = quadrilateralModel.getClosestGridPosition( modelVertex2Position );
 
           // only update positions if both are allowed
           if ( quadrilateralModel.areVertexPositionsAllowed( side.vertex1, proposedVertex1Position, side.vertex2, proposedVertex2Position ) ) {
@@ -263,26 +283,49 @@ class SideNode extends Voicing( Path, 1 ) {
       }
     } );
 
-    // voicing
+    // sound - the grab sound is played on press but there is no release sound for this component since there is
+    // no behavioral relevance to the release. The 'release' sound is used instead of 'grab' to distinguish sides
+    // from vertices
+    const pressedSoundPlayer = new SoundClip( release_mp3 );
+    soundManager.addSoundGenerator( pressedSoundPlayer );
+    side.isPressedProperty.lazyLink( isPressed => {
+      if ( isPressed ) {
+        pressedSoundPlayer.play();
+      }
+    } );
+
+    // voicing - re-generate the voicing description when dependent Properties change
     this.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
       this.voicingObjectResponse = sideDescriber.getSideObjectResponse();
     } );
-    this.voicingObjectResponse = sideDescriber.getSideObjectResponse();
+    this.quadrilateralModel.markersVisibleProperty.link( () => {
+      this.voicingObjectResponse = sideDescriber.getSideObjectResponse();
+    } );
+
+    // Voicing - for debugging, speak the full response again on spacebar/enter
+    // TODO: remove this
+    this.addInputListener( {
+      keydown: event => {
+        if ( KeyboardUtils.isAnyKeyEvent( event.domEvent, [ KeyboardUtils.KEY_ENTER, KeyboardUtils.KEY_SPACE ] ) ) {
+          this.voicingSpeakFullResponse();
+        }
+      }
+    } );
 
     // vibration
     // TODO: This code for vibration is a prototype, and only vibrates for a finite time.  It will need to be improved
     //       and finalized before publication.  See https://github.com/phetsims/quake/issues/13.
-    side.isPressedProperty.lazyLink( isPressed => {
-
-      if ( navigator !== undefined && navigator.vibrate !== undefined ) {
-        if ( isPressed ) {
-          vibrationManager.startVibrate( [ 200, 200 ] );
-        }
-        else {
-          vibrationManager.stopVibrate();
-        }
-      }
-    } );
+    // side.isPressedProperty.lazyLink( isPressed => {
+    //
+    //   if ( navigator !== undefined && navigator.vibrate !== undefined ) {
+    //     if ( isPressed ) {
+    //       vibrationManager.startVibrate( [ 200, 200 ] );
+    //     }
+    //     else {
+    //       vibrationManager.stopVibrate();
+    //     }
+    //   }
+    // } );
   }
 
   /**
@@ -297,8 +340,8 @@ class SideNode extends Voicing( Path, 1 ) {
     let proposedVertex2Position = this.side.vertex2.positionProperty.get().plus( deltaVector );
 
     // constrain positions to the "grid" of the model
-    proposedVertex1Position = QuadrilateralModel.getClosestGridPosition( proposedVertex1Position );
-    proposedVertex2Position = QuadrilateralModel.getClosestGridPosition( proposedVertex2Position );
+    proposedVertex1Position = this.quadrilateralModel.getClosestGridPosition( proposedVertex1Position );
+    proposedVertex2Position = this.quadrilateralModel.getClosestGridPosition( proposedVertex2Position );
 
     // if the positions are outside of model bounds, the shape is not allowed
     // TODO: I am not sure how to put this in the isQuadrilateralShapeAllowed, because to set the shape
@@ -323,6 +366,10 @@ class SideNode extends Voicing( Path, 1 ) {
     ] );
 
     if ( this.scratchShapeModel.isQuadrilateralShapeAllowed() ) {
+
+      // signify to the Alerter that it will be time to generate a new object response from input
+      this.side.voicingObjectResponseDirty = true;
+
       this.quadrilateralShapeModel.setVertexPositions( [
         { vertex: this.side.vertex1, proposedPosition: proposedVertex1Position },
         { vertex: this.side.vertex2, proposedPosition: proposedVertex2Position }
@@ -340,7 +387,7 @@ class SideNode extends Voicing( Path, 1 ) {
    */
   private rotateVertexAroundOther( anchorVertex: Vertex, armVertex: Vertex, modelDelta: Vector2 ): void {
     const modelPosition = armVertex.positionProperty.get().plus( modelDelta );
-    const proposedPosition = QuadrilateralModel.getClosestGridPosition( modelPosition );
+    const proposedPosition = this.quadrilateralModel.getClosestGridPosition( modelPosition );
     if ( this.quadrilateralModel.isVertexPositionAllowed( armVertex, proposedPosition ) ) {
       armVertex.positionProperty.value = proposedPosition;
     }

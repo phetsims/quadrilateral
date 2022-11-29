@@ -1,6 +1,6 @@
 {
   "name": "quadrilateral",
-  "version": "1.0.0-dev.40",
+  "version": "1.0.0-dev.68",
   "license": "GPL-3.0",
   "repository": {
     "type": "git",
@@ -41,16 +41,6 @@
     "globals": {
       "p2": "readonly"
     },
-    "extends": "../chipper/eslint/sim_eslintrc.js",
-    "overrides": [
-      {
-        "files": [
-          "**/*.ts"
-        ],
-        "rules": {
-          "@typescript-eslint/no-explicit-any": "error"
-        }
-      }
-    ]
+    "extends": "../chipper/eslint/sim_eslintrc.js"
   }
 }

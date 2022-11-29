@@ -15,14 +15,13 @@ import Utils from '../../../../dot/js/Utils.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import { Circle, Line, Rectangle, Text, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import EmptyObjectType from '../../../../phet-core/js/types/EmptyObjectType.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 
 class CalibrationContentNode extends VBox {
   public constructor( model: QuadrilateralModel, providedOptions?: VBoxOptions ) {
 
-    const options = optionize<VBoxOptions, EmptyObjectType>()( {
+    const options = optionize<VBoxOptions, EmptySelfOptions>()( {
       align: 'center'
     }, providedOptions );
 
