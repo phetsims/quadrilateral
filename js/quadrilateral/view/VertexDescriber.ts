@@ -66,8 +66,10 @@ const vertexCornerLabelMap = new Map<VertexLabel, string>( [
 // If ratio of an angle to another is within this range it is 'about half as large as the other'.
 const ABOUT_HALF_RANGE = new Range( 0.4, 0.6 );
 
-// If ratio of angle to another is within this range it is 'about twice as large as the other'.
-const ABOUT_TWICE_RANGE = new Range( 1.9, 2.1 );
+// If ratio of angle to another is within this range it is 'about twice as large as the other'. Note that this
+// range is twice as wide as the 'about half' range because the ratios around larger values will have a bigger
+// variance. See https://github.com/phetsims/quadrilateral/issues/262.
+const ABOUT_TWICE_RANGE = new Range( 1.8, 2.2 );
 
 // Maps the difference in angles between two vertices to a description string.
 const angleComparisonDescriptionMap = new Map<Range, string>();
@@ -78,9 +80,9 @@ angleComparisonDescriptionMap.set( new Range( 0.6, 0.8 ), aLittleSmallerThanStri
 angleComparisonDescriptionMap.set( new Range( 0.8, 1 ), similarButSmallerThanString );
 angleComparisonDescriptionMap.set( new Range( 1, 1.3 ), similarButWiderThanString );
 angleComparisonDescriptionMap.set( new Range( 1.3, 1.6 ), aLittleWiderThanString );
-angleComparisonDescriptionMap.set( new Range( 1.6, 1.9 ), muchWiderThanString );
+angleComparisonDescriptionMap.set( new Range( 1.6, 1.8 ), muchWiderThanString );
 angleComparisonDescriptionMap.set( ABOUT_TWICE_RANGE, aboutTwiceAsWideAsString );
-angleComparisonDescriptionMap.set( new Range( 2.1, Number.POSITIVE_INFINITY ), farWiderThanString );
+angleComparisonDescriptionMap.set( new Range( 2.2, Number.POSITIVE_INFINITY ), farWiderThanString );
 
 class VertexDescriber {
 

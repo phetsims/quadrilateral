@@ -62,9 +62,9 @@ lengthComparisonDescriptionMap.set( new Range( 0.6, 0.8 ), aLittleShorterThanStr
 lengthComparisonDescriptionMap.set( new Range( 0.8, 1 ), similarButShorterThanString );
 lengthComparisonDescriptionMap.set( new Range( 1, 1.3 ), similarButLongerThanString );
 lengthComparisonDescriptionMap.set( new Range( 1.3, 1.6 ), aLittleLongerThanString );
-lengthComparisonDescriptionMap.set( new Range( 1.6, 1.9 ), muchLongerThanString );
-lengthComparisonDescriptionMap.set( new Range( 1.9, 2.1 ), aboutTwiceAsLongAsString );
-lengthComparisonDescriptionMap.set( new Range( 2.1, Number.POSITIVE_INFINITY ), farLongerThanString );
+lengthComparisonDescriptionMap.set( new Range( 1.6, 1.8 ), muchLongerThanString );
+lengthComparisonDescriptionMap.set( new Range( 1.8, 2.2 ), aboutTwiceAsLongAsString );
+lengthComparisonDescriptionMap.set( new Range( 2.2, Number.POSITIVE_INFINITY ), farLongerThanString );
 
 class SideDescriber {
 
