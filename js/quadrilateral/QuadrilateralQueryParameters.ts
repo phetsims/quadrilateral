@@ -120,7 +120,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // A tolerance interval for comparing lengths for the purposes of shape detection.
   shapeLengthToleranceInterval: {
     type: 'number',
-    defaultValue: 0.01
+    defaultValue: 0.005
   },
 
   // A flag that controls when the "maintenance" sound is played. When provided, the success sound for maintenance
