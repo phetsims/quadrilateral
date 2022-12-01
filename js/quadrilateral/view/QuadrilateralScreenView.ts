@@ -164,6 +164,15 @@ class QuadrilateralScreenView extends ScreenView {
       lineWidth: BORDER_RECTANGLE_LINE_WIDTH
     } );
 
+    const gridNode = new QuadrilateralGridNode( model.modelBoundsProperty, model.gridVisibleProperty, this.modelViewTransform );
+
+    // rendering order - See https://github.com/phetsims/quadrilateral/issues/178
+    this.addChild( boundsRectangle );
+    this.addChild( diagonalGuidesNode );
+    this.addChild( gridNode );
+    this.addChild( this.quadrilateralNode );
+    this.addChild( interactionCueNode );
+
     if ( QuadrilateralQueryParameters.showDragAreas ) {
       this.addChild( new VertexDragAreaNode( shapeModel.vertexA, [ shapeModel.leftSide, shapeModel.topSide ], modelViewTransform ) );
       this.addChild( new VertexDragAreaNode( shapeModel.vertexB, [ shapeModel.topSide, shapeModel.rightSide ], modelViewTransform ) );
@@ -176,15 +185,6 @@ class QuadrilateralScreenView extends ScreenView {
       this.addChild( new SideLengthAreaNode( shapeModel, shapeModel.bottomSide, shapeModel.topSide, shapeModel.rightSide, modelViewTransform, { drawRotation: Math.PI } ) );
       this.addChild( new SideLengthAreaNode( shapeModel, shapeModel.leftSide, shapeModel.rightSide, shapeModel.bottomSide, modelViewTransform, { drawRotation: Math.PI / 2 } ) );
     }
-
-    const gridNode = new QuadrilateralGridNode( model.modelBoundsProperty, model.gridVisibleProperty, this.modelViewTransform );
-
-    // rendering order - See https://github.com/phetsims/quadrilateral/issues/178
-    this.addChild( boundsRectangle );
-    this.addChild( diagonalGuidesNode );
-    this.addChild( gridNode );
-    this.addChild( this.quadrilateralNode );
-    this.addChild( interactionCueNode );
 
     // A panel that displays model values, useful for debugging, useful for debugging
     const debugValuesPanel = new QuadrilateralModelValuePanel( model, {
