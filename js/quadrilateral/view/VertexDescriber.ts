@@ -92,7 +92,7 @@ class VertexDescriber {
   private markersVisibleProperty: TReadOnlyProperty<boolean>;
 
   // See above documentation.
-  public static VertexCornerLabelMap = vertexCornerLabelMap;
+  public static readonly VertexCornerLabelMap = vertexCornerLabelMap;
 
   public constructor( vertex: Vertex, quadrilateralShapeModel: QuadrilateralShapeModel, markersVisibleProperty: TReadOnlyProperty<boolean> ) {
     this.vertex = vertex;

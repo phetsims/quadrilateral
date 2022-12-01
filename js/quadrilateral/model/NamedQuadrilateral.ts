@@ -12,20 +12,20 @@ import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import quadrilateral from '../../quadrilateral.js';
 
 class NamedQuadrilateral extends EnumerationValue {
-  public static SQUARE = new NamedQuadrilateral();
-  public static RECTANGLE = new NamedQuadrilateral();
-  public static RHOMBUS = new NamedQuadrilateral();
-  public static KITE = new NamedQuadrilateral();
-  public static ISOSCELES_TRAPEZOID = new NamedQuadrilateral();
-  public static TRAPEZOID = new NamedQuadrilateral();
-  public static CONCAVE_QUADRILATERAL = new NamedQuadrilateral();
-  public static CONVEX_QUADRILATERAL = new NamedQuadrilateral();
-  public static TRIANGLE = new NamedQuadrilateral();
-  public static PARALLELOGRAM = new NamedQuadrilateral();
-  public static DART = new NamedQuadrilateral();
+  public static readonly SQUARE = new NamedQuadrilateral();
+  public static readonly RECTANGLE = new NamedQuadrilateral();
+  public static readonly RHOMBUS = new NamedQuadrilateral();
+  public static readonly KITE = new NamedQuadrilateral();
+  public static readonly ISOSCELES_TRAPEZOID = new NamedQuadrilateral();
+  public static readonly TRAPEZOID = new NamedQuadrilateral();
+  public static readonly CONCAVE_QUADRILATERAL = new NamedQuadrilateral();
+  public static readonly CONVEX_QUADRILATERAL = new NamedQuadrilateral();
+  public static readonly TRIANGLE = new NamedQuadrilateral();
+  public static readonly PARALLELOGRAM = new NamedQuadrilateral();
+  public static readonly DART = new NamedQuadrilateral();
 
   // Gets a list of keys, values and mapping between them.  For use in EnumerationProperty and PhET-iO
-  public static enumeration = new Enumeration( NamedQuadrilateral, {
+  public static readonly enumeration = new Enumeration( NamedQuadrilateral, {
     phetioDocumentation: 'Possible named shapes for the quadrilateral.'
   } );
 }

@@ -9,12 +9,12 @@ import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import quadrilateral from '../../quadrilateral.js';
 
 class SideLabel extends EnumerationValue {
-  public static SIDE_AB = new SideLabel();
-  public static SIDE_BC = new SideLabel();
-  public static SIDE_CD = new SideLabel();
-  public static SIDE_DA = new SideLabel();
+  public static readonly SIDE_AB = new SideLabel();
+  public static readonly SIDE_BC = new SideLabel();
+  public static readonly SIDE_CD = new SideLabel();
+  public static readonly SIDE_DA = new SideLabel();
 
-  public static enumeration = new Enumeration( SideLabel );
+  public static readonly enumeration = new Enumeration( SideLabel );
 }
 
 quadrilateral.register( 'SideLabel', SideLabel );

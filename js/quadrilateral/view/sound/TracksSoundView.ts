@@ -45,12 +45,12 @@ const REMAINING_FADE_OUT_TIME_TO_GAIN = new LinearFunction( FADE_TIME, 0, MAX_OU
 
 // For the state of the sound view, indicating how sound is currently behaving.
 class PlayingState extends EnumerationValue {
-  public static PLAYING = new PlayingState();
-  public static STOPPED = new PlayingState();
-  public static FADING_IN = new PlayingState();
-  public static FADING_OUT = new PlayingState();
+  public static readonly PLAYING = new PlayingState();
+  public static readonly STOPPED = new PlayingState();
+  public static readonly FADING_IN = new PlayingState();
+  public static readonly FADING_OUT = new PlayingState();
 
-  public static enumeration = new Enumeration( PlayingState );
+  public static readonly enumeration = new Enumeration( PlayingState );
 }
 
 class TracksSoundView extends SoundGenerator {

@@ -18,16 +18,16 @@ import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 // constants
 // Enumeration for named sound designs, each with their own options and parameters
 class SoundDesign extends EnumerationValue {
-  public static TRACKS_BUILD_UP = new SoundDesign();
-  public static TRACKS_VOLUME_EMPHASIS = new SoundDesign();
-  public static TRACKS_MELODY = new SoundDesign();
-  public static TRACKS_ARPEGGIO = new SoundDesign();
-  public static TRACKS_BUILD_UP_SIMPLE = new SoundDesign();
-  public static TRACKS_MELODY_SIMPLE = new SoundDesign();
-  public static TRACKS_MELODY_MAPPING = new SoundDesign();
+  public static readonly TRACKS_BUILD_UP = new SoundDesign();
+  public static readonly TRACKS_VOLUME_EMPHASIS = new SoundDesign();
+  public static readonly TRACKS_MELODY = new SoundDesign();
+  public static readonly TRACKS_ARPEGGIO = new SoundDesign();
+  public static readonly TRACKS_BUILD_UP_SIMPLE = new SoundDesign();
+  public static readonly TRACKS_MELODY_SIMPLE = new SoundDesign();
+  public static readonly TRACKS_MELODY_MAPPING = new SoundDesign();
 
   // gets a list of keys, values and mapping between them for EnumerationProperty and PhET-iO
-  public static enumeration = new Enumeration( SoundDesign );
+  public static readonly enumeration = new Enumeration( SoundDesign );
 }
 
 class QuadrilateralSoundOptionsModel {
