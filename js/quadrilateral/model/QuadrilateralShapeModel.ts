@@ -42,6 +42,7 @@ import TEmitter from '../../../../axon/js/TEmitter.js';
 import QuadrilateralShapeDetector from './QuadrilateralShapeDetector.js';
 import SidePair from './SidePair.js';
 import VertexPair from './VertexPair.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 
 // A useful type for calculations for the vertex Shapes which define where the Vertex can move depending on
 // the positions of the other vertices. Lines are along the bounds of model space and RayIntersections
@@ -821,19 +822,8 @@ class QuadrilateralShapeModel {
       // If no vertices overlap, make sure that the vertex is within the drag area. No need to do this
       // (potentially expensive) Shape work if the shape is already disallowed.
       if ( shapeAllowed ) {
-
-        // A workaround for https://github.com/phetsims/kite/issues/94 - If the proposed position perfectly aligns
-        // with one of the start/end points of a shape segment along the Ray2 used for the winding number calculation,
-        // intersection with the ray will be undefined and the point may incorrectly be counted as inside the Shape.
-        // For now we make sure that the BOTH the top right and bottom right points of the Vertex bounds are within
-        // the Shape. This will work for now because Shape.containsPoint uses a Ray that extends in the +x direction
-        // for the winding number. If the two points we are checking are not vertically aligned it is impossible
-        // that both points align vertically with a Shape start/end point.
-        // When kite #94 is fixed we can replace this with a single check to see if the proposedPosition is within
-        // the Vertex dragArea.
         assert && assert( testVertex.dragAreaProperty.value, 'Drag area must be defined for the Vertex' );
-        shapeAllowed = testVertex.dragAreaProperty.value!.containsPoint( testVertex.modelBoundsProperty.value.rightTop ) &&
-                       testVertex.dragAreaProperty.value!.containsPoint( testVertex.modelBoundsProperty.value.rightBottom );
+        shapeAllowed = this.customShapeContainsPoint( testVertex.dragAreaProperty.value!, testVertex.positionProperty.value );
       }
 
       // Shape is not allowed, no need to keep testing
@@ -843,6 +833,48 @@ class QuadrilateralShapeModel {
     }
 
     return shapeAllowed;
+  }
+
+  /**
+   * A workaround for https://github.com/phetsims/kite/issues/94. Shape.containsPoint implementation does not work
+   * if both the provided point and one of the shape segment vertices lie along the test ray used in the
+   * winding intersection algorithm. This function looks for a different ray to use in the test if that is the case.
+   *
+   * This solution has been proposed in https://github.com/phetsims/kite/issues/94. If it is absorbed or fixed a
+   * different way in kite this function could be removed and replaced with shape.containsPoint.
+   */
+  private customShapeContainsPoint( shape: Shape, point: Vector2 ): boolean {
+    const rayDirectionVector = new Vector2( 1, 0 ); // unit x Vector, but we may mutate it
+    let ray = new Ray2( point, rayDirectionVector );
+
+    // Put a limit on attempts so we don't try forever
+    let count = 0;
+    while ( count < 5 ) {
+      count++;
+
+      // Look for cases where the proposed ray will intersect with one of the vertices of a shape segment - in this case
+      // the intersection in windingIntersection is not well-defined and won't be counted so we need a different to
+      // use a ray with a different direction
+      const rayIntersectsSegmentVertex = _.some( shape.subpaths, subpath => {
+        return _.some( subpath.segments, segment => {
+          return segment.start.minus( point ).normalize().equals( rayDirectionVector );
+        } );
+      } );
+
+      if ( rayIntersectsSegmentVertex ) {
+
+        // the proposed ray will not work because it intersects with a segment Vertex - try another one
+        rayDirectionVector.rotate( dotRandom.nextDouble() );
+      }
+      else {
+
+        // Should be safe to use this Ray for windingIntersection
+        ray = new Ray2( point, rayDirectionVector );
+        break;
+      }
+    }
+
+    return shape.windingIntersection( ray ) !== 0;
   }
 
   /**
