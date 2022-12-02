@@ -136,7 +136,20 @@ class QuadrilateralScreenView extends ScreenView {
     this.modelViewTransform = modelViewTransform;
 
     // The available model bounds are determined by the size of the view
-    model.modelBoundsProperty.value = this.modelViewTransform.viewToModelBounds( reducedViewBounds );
+    const availableModelBounds = this.modelViewTransform.viewToModelBounds( reducedViewBounds );
+
+    // Makes the grid displaying model bounds look nice by making the remaining width/height beyond GRID_SPACING equal
+    const remainingWidth = ( availableModelBounds.width / 2 ) % QuadrilateralConstants.GRID_SPACING;
+    const remainingHeight = ( availableModelBounds.height / 2 ) % QuadrilateralConstants.GRID_SPACING;
+    if ( remainingWidth > remainingHeight ) {
+      availableModelBounds.erodeX( remainingWidth - remainingHeight );
+    }
+    else if ( remainingHeight > remainingWidth ) {
+      availableModelBounds.erodeY( remainingHeight - remainingWidth );
+    }
+
+    // so that the remaining bounds of the
+    model.modelBoundsProperty.value = availableModelBounds;
 
     const shapeModel = model.quadrilateralShapeModel;
 
