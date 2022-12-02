@@ -1,15 +1,15 @@
 {
-  "comment": "# quadrilateral 1.0.0-dev.68 Fri Nov 04 2022 13:50:52 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# quadrilateral 1.0.0-dev.69 Fri Dec 02 2022 18:39:17 GMT-0500 (Eastern Standard Time)",
   "assert": {
     "sha": "c13a8c7741d95fbd8e37619c66ebcca8686dffe7",
     "branch": "master"
   },
   "axon": {
-    "sha": "c11072799db6056220e5922d1b30f71447868bc0",
+    "sha": "6d6c7ef93322054d68e8228576bc6514c268e165",
     "branch": "master"
   },
   "bamboo": {
-    "sha": "f1dc7766a3f685722c6f5ab1423d64922bee0861",
+    "sha": "6c7295091ae83f151757825d261abc8b06313f97",
     "branch": "master"
   },
   "brand": {
@@ -17,39 +17,39 @@
     "branch": "master"
   },
   "chipper": {
-    "sha": "846483609b9fc4db926983715de18e01cceff1e5",
+    "sha": "e6ed9d4af08abb1e529e2e1b7b87fc705ee7ed96",
     "branch": "master"
   },
   "dot": {
-    "sha": "6efa1c824c0aea7b6670bbd3e2ae250dc6c4170b",
+    "sha": "bcb5018fadc95e02a92d38ee71e872c47a737f8e",
     "branch": "master"
   },
   "joist": {
-    "sha": "0d162fab6359e197a55a634316e0a02e3008ffb0",
+    "sha": "07d09cdb04fef225ea978beb666685669f0d5a03",
     "branch": "master"
   },
   "kite": {
-    "sha": "82cc108b7790cd9a1b72e5950ce5f72b9f663d3c",
+    "sha": "2b81960e39e895ae0c3d76d83d7c1e1fffb6a01b",
     "branch": "master"
   },
   "perennial-alias": {
-    "sha": "24decc6b648229b6816e1f57a4323ae66d853f6a",
+    "sha": "c9a3183e73fc5a84337143896247f0116f96b4a1",
     "branch": "master"
   },
   "phet-core": {
-    "sha": "955837b7b74bc7816d0c755b83eef4d8c6c2688a",
+    "sha": "08ef648c569b092876abaa41ae3ce0af26c4c59a",
     "branch": "master"
   },
   "phet-io": {
-    "sha": "3dd8813ee39213080f8fd014b6076fb4ca579deb",
+    "sha": "d680eb79f0b959553dde83b1a09824115e3964f4",
     "branch": "master"
   },
   "phet-io-sim-specific": {
-    "sha": "05f5c37e44e85a1e01a8f1d1acd30402aef8af5f",
+    "sha": "ccf4b71ab7a6130adf3b60ee2630f814f1cea1d5",
     "branch": "master"
   },
   "phet-io-wrappers": {
-    "sha": "8fb8234a61a7a2e387d23976f37f18fbe8951c0a",
+    "sha": "4561b5ea8c137661654d6ebafb0c72218141769e",
     "branch": "master"
   },
   "phetcommon": {
@@ -61,7 +61,7 @@
     "branch": "master"
   },
   "quadrilateral": {
-    "sha": "37d0691c54366b3bc103319fdaf3d34e6e62f9c9",
+    "sha": "e8902e9963b9843ac3516245fea330515582a609",
     "branch": "master"
   },
   "query-string-machine": {
@@ -69,39 +69,39 @@
     "branch": "master"
   },
   "scenery": {
-    "sha": "db2acc03529c4088cccfc963796b6ad3427b55dd",
+    "sha": "17bb534c507613a8103e5c7b981dbfacddcc4866",
     "branch": "master"
   },
   "scenery-phet": {
-    "sha": "1c113fb1247da45c7d74f01faa00acfb8e0f0acb",
+    "sha": "42c4c3d0088b4aebed5b4323b4ea461ee0c751ba",
     "branch": "master"
   },
   "sherpa": {
-    "sha": "45afe7dd94ac065e1f54e82fdfce01ba2c8c3a2c",
+    "sha": "aab1eadd3a81d21d3731c2fa520d4492c0c889f2",
     "branch": "master"
   },
   "studio": {
-    "sha": "da310ee16acc13e7baa958e9ee7c4896fb7c0323",
+    "sha": "019d611ecbbdf8287ee4f34b4fe9d2eea771a44f",
     "branch": "master"
   },
   "sun": {
-    "sha": "fcca55d30aa60da73b79508d7001aab67947d250",
+    "sha": "46ab028470b455a8fa1ee1bb5af1db63314ed642",
     "branch": "master"
   },
   "tambo": {
-    "sha": "a9826c1dbac6de85e621bb3c9bd176af052ab985",
+    "sha": "10bef92ea88e192a138c4af9ec8b5e728b6b84d0",
     "branch": "master"
   },
   "tandem": {
-    "sha": "f73cdb9a86a568f955a52a15616ed8235f2b9e37",
+    "sha": "460e86cdd12dd1b0988389e1512b516079f3d3d5",
     "branch": "master"
   },
   "tangible": {
-    "sha": "9612cba1db4d00abddf1b92be32880f4d07a2e73",
+    "sha": "a000e5d99d82184adc625fb272d3af0b3783e5d7",
     "branch": "master"
   },
   "tappi": {
-    "sha": "2dec0eb512aa7779f937da8b780d2b5b8702bed4",
+    "sha": "f9ed582a8d96226aa2188c384cd010daf0757508",
     "branch": "master"
   },
   "twixt": {
@@ -109,7 +109,7 @@
     "branch": "master"
   },
   "utterance-queue": {
-    "sha": "87cccf9f05dbf4514f606004e31809a31a693abb",
+    "sha": "0a2d8044d9fb58612831d4f379746ad9ffae180d",
     "branch": "master"
   }
 }
