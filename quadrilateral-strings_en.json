@@ -175,10 +175,10 @@
         "value": "You have {{shapeDescription}}."
       },
       "youHaveASizedNamedShapePattern": {
-        "value": "You have a {{size}} {{shapeName}}."
+        "value": "Your {{shapeName}} has a {{size}} area."
       },
       "youHaveASizedShapePattern": {
-        "value": "You have a {{size}} shape."
+        "value": "Your shape has a {{size}} area."
       },
       "firstDetailsStatementPattern": {
         "value": "Right now, {{cornerType}} corners are {{angleEquality}}, and {{sideType}} sides are equal."
