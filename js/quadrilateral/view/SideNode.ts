@@ -26,6 +26,7 @@ import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
 import release_mp3 from '../../../../tambo/sounds/release_mp3.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 
 // The dilation around side shapes when drawing the focus highlight.
 const FOCUS_HIGHLIGHT_DILATION = 15;
@@ -243,19 +244,34 @@ class SideNode extends Voicing( Path ) {
           const modelVertex1Position = modelPoint.plus( vectorToVertex1! );
           const modelVertex2Position = modelPoint.plus( vectorToVertex2! );
 
-          const vertexDragBounds = quadrilateralModel.vertexDragBoundsProperty.value;
-          const vertex2ToVertex1Vector = modelVertex2Position.minus( modelVertex1Position );
+          // Absolute bounding box around the side - useful for determine allowable vertex positions while supporting
+          // smooth dragging
+          const sideBounds = new Bounds2( 0, 0, 0, 0 );
+          sideBounds.addPoint( modelVertex1Position );
+          sideBounds.addPoint( modelVertex2Position );
 
-          let constrainedVertex1Position = modelVertex1Position;
-          let constrainedVertex2Position = modelVertex2Position;
-          if ( !vertexDragBounds.containsBounds( side.vertex1.getBoundsFromPoint( modelVertex1Position ) ) ) {
-            constrainedVertex1Position = vertexDragBounds.closestPointTo( modelVertex1Position );
-            constrainedVertex2Position = constrainedVertex1Position.plus( vertex2ToVertex1Vector );
+          // now shift the proposed positions by a delta that would keep the sideBounds within vertexDragBounds
+          const vertexDragBounds = quadrilateralModel.vertexDragBoundsProperty.value;
+          const correctingVector = new Vector2( 0, 0 );
+          if ( !vertexDragBounds.containsBounds( sideBounds ) ) {
+
+            if ( sideBounds.maxY > vertexDragBounds.maxY ) {
+              correctingVector.y = vertexDragBounds.maxY - sideBounds.maxY;
+            }
+            else if ( sideBounds.minY < vertexDragBounds.minY ) {
+              correctingVector.y = vertexDragBounds.minY - sideBounds.minY;
+            }
+
+            if ( sideBounds.maxX > vertexDragBounds.maxX ) {
+              correctingVector.x = vertexDragBounds.maxX - sideBounds.maxX;
+            }
+            else if ( sideBounds.minX < vertexDragBounds.minX ) {
+              correctingVector.x = vertexDragBounds.minX - sideBounds.minX;
+            }
           }
-          else if ( !vertexDragBounds.containsBounds( side.vertex2.getBoundsFromPoint( modelVertex2Position ) ) ) {
-            constrainedVertex2Position = vertexDragBounds.closestPointTo( modelVertex2Position );
-            constrainedVertex1Position = constrainedVertex2Position.plus( vertex2ToVertex1Vector.negated() );
-          }
+
+          const constrainedVertex1Position = modelVertex1Position.plus( correctingVector );
+          const constrainedVertex2Position = modelVertex2Position.plus( correctingVector );
 
           // constrain each to the model grid
           const proposedVertex1Position = quadrilateralModel.getClosestGridPosition( constrainedVertex1Position );
