@@ -70,7 +70,6 @@ const widerString = QuadrilateralStrings.a11y.voicing.vertexDragObjectResponse.w
 const vertexDragSmallerString = QuadrilateralStrings.a11y.voicing.vertexDragObjectResponse.smaller;
 const vertexDragObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.vertexDragObjectResponse.vertexDragObjectResponsePattern;
 const adjacentSidesChangePatternString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesChangePattern;
-const adjacentSidesChangeUnequallyString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesChangeUnequally;
 const rightAngleString = QuadrilateralStrings.a11y.voicing.rightAngle;
 const angleFlatString = QuadrilateralStrings.a11y.voicing.angleFlat;
 const angleComparisonPatternString = QuadrilateralStrings.a11y.voicing.angleComparisonPattern;
@@ -81,6 +80,12 @@ const progressStatePatternString = QuadrilateralStrings.a11y.voicing.progressSta
 const equalToOppositeCornerEqualToAdjacentCornersString = QuadrilateralStrings.a11y.voicing.equalToOppositeCornerEqualToAdjacentCorners;
 const adjacentSidesInLinePatternString = QuadrilateralStrings.a11y.voicing.adjacentSidesInLinePattern;
 const equalToAdjacentCornersString = QuadrilateralStrings.a11y.voicing.equalToAdjacentCorners;
+const adjacentSidesChangeInLengthString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesChangeInLength;
+const parallelAdjacentSidesChangePatternString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.parallelAdjacentSidesChangePattern;
+const equalAdjacentSidesChangePatternString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.equalAdjacentSidesChangePattern;
+const adjacentSidesEqualString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesEqual;
+const adjacentSidesParallelString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesParallel;
+const equalToOneAdjacentSideString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.equalToOneAdjacentSide;
 
 // A response may trigger because there is a large enough change in angle or length
 type ResponseReason = 'angle' | 'length';
@@ -305,22 +310,43 @@ class QuadrilateralAlerter extends Alerter {
    * length of adjacent side. Amount of content in the response depends on whether the adjacent sides change the same
    * amount, and how much the length of adjacent sides changed. Will return something like
    *
-   * "right" or
-   * "left" or
-   * "adjacent sides change unequally" or
+   * "adjacent sides equal" or
+   * "equal to one adjacent side" or
+   * "parallel adjacent sides longer" or
+   * "equal adjacent sides shorter" or
    * "adjacent sides longer" or
-   * "adjacent sides longer"
+   * "left" or
+   * "up"
+   *
+   * TODO: Two more cases missing from this function: "Two random sides equal" and "Three random sides equal"
    */
   private getSideChangeObjectResponse( side: Side ): string {
     let response = '';
 
+    const lengthTolerance = this.model.quadrilateralShapeModel.shapeLengthToleranceIntervalProperty.value;
+    const shapeModel = this.model.quadrilateralShapeModel;
+
+    const currentShapeSnapshot = new ShapeSnapshot( this.model.quadrilateralShapeModel );
+
     const previousAdjacentLengths = this.previousObjectResponseShapeSnapshot.getAdjacentSideLengthsFromSideLabel( side.sideLabel );
     const firstPreviousAdjacentSideLength = previousAdjacentLengths[ 0 ];
     const secondPreviousAdjacentSideLength = previousAdjacentLengths[ 1 ];
+    const previousAdjacentSidesEqual = Utils.equalsEpsilon( firstPreviousAdjacentSideLength, secondPreviousAdjacentSideLength, lengthTolerance );
+    const previousAdjacentSidesParallel = this.previousObjectResponseShapeSnapshot.getAdjacentSidesParallelFromSideLabel( side.sideLabel );
+    const previousLength = this.previousObjectResponseShapeSnapshot.getLengthFromSideLabel( side.sideLabel );
+    const previousEqualToFirstAdjacent = shapeModel.isShapeLengthEqualToOther( previousLength, firstPreviousAdjacentSideLength );
+    const previousEqualToSecondAdjacent = shapeModel.isShapeLengthEqualToOther( previousLength, secondPreviousAdjacentSideLength );
+    const previousEqualToOneAdjacent = previousEqualToFirstAdjacent !== previousEqualToSecondAdjacent;
 
-    const adjacentSides = this.quadrilateralShapeModel.adjacentSideMap.get( side )!;
-    const firstAdjacentSideLength = adjacentSides[ 0 ].lengthProperty.value;
-    const secondAdjacentSideLength = adjacentSides[ 1 ].lengthProperty.value;
+    const adjacentSides = currentShapeSnapshot.getAdjacentSideLengthsFromSideLabel( side.sideLabel );
+    const firstAdjacentSideLength = adjacentSides[ 0 ];
+    const secondAdjacentSideLength = adjacentSides[ 1 ];
+    const adjacentSidesEqual = Utils.equalsEpsilon( firstAdjacentSideLength, secondAdjacentSideLength, lengthTolerance );
+    const adjacentSidesParallel = currentShapeSnapshot.getAdjacentSidesParallelFromSideLabel( side.sideLabel );
+    const sideLength = currentShapeSnapshot.getLengthFromSideLabel( side.sideLabel );
+    const equalToFirstAdjacent = shapeModel.isShapeLengthEqualToOther( sideLength, firstAdjacentSideLength );
+    const equalToSecondAdjacent = shapeModel.isShapeLengthEqualToOther( sideLength, secondAdjacentSideLength );
+    const equalToOneAdjacent = equalToFirstAdjacent !== equalToSecondAdjacent;
 
     const firstAdjacentSideLengthDifference = firstAdjacentSideLength - firstPreviousAdjacentSideLength;
     const secondAdjacentSideLengthDifference = secondAdjacentSideLength - secondPreviousAdjacentSideLength;
@@ -328,31 +354,50 @@ class QuadrilateralAlerter extends Alerter {
     const firstSideAbsoluteDifference = Math.abs( firstAdjacentSideLengthDifference );
     const secondSideAbsoluteDifference = Math.abs( secondAdjacentSideLengthDifference );
 
-    // The threshold for describing relative sizes should be the same as shapeLengthToleranceInterval
-    const threshold = this.model.quadrilateralShapeModel.shapeLengthToleranceIntervalProperty.value;
-    if ( firstSideAbsoluteDifference > threshold || secondSideAbsoluteDifference > threshold ) {
+    if ( adjacentSidesEqual && !previousAdjacentSidesEqual ) {
 
-      // one of the sides has moved by a large enough distance to describe changes in adjacent side length
-      let adjacentSideChangeString = '';
-      const adjacentSidesLonger = firstAdjacentSideLengthDifference > 0;
+      // adjacent sides just became equal, that is the most important state to describe
+      response = adjacentSidesEqualString;
+    }
+    else if ( adjacentSidesParallel && !previousAdjacentSidesParallel ) {
 
-      if ( Utils.equalsEpsilon( firstAdjacentSideLengthDifference, secondAdjacentSideLengthDifference, threshold ) ) {
+      // adjacent sides just became parallel, describe that next
+      response = adjacentSidesParallelString;
+    }
+    else if ( equalToOneAdjacent && !previousEqualToOneAdjacent ) {
 
-        // both adjacent sides changed about the same so we can combine a description to say that adjacent sides
-        // got shorter or longer
+      // the moving side just became equal to ONE of its adjacent sides, call that out
+      response = equalToOneAdjacentSideString;
+    }
+    else if ( firstSideAbsoluteDifference > lengthTolerance || secondSideAbsoluteDifference > lengthTolerance ) {
+      if ( shapeModel.isShapeLengthEqualToOther( firstAdjacentSideLengthDifference, secondAdjacentSideLengthDifference ) ) {
+
+        const adjacentSidesLonger = firstAdjacentSideLengthDifference > 0;
         const changeString = adjacentSidesLonger ? longerString : shorterString;
-        adjacentSideChangeString = StringUtils.fillIn( adjacentSidesChangePatternString, {
-          lengthChange: changeString
-        } );
+
+        // adjacent sides have changed in the same way as the side moves, this is a class of important things to
+        // describe
+        if ( adjacentSidesParallel ) {
+          response = StringUtils.fillIn( parallelAdjacentSidesChangePatternString, {
+            lengthChange: changeString
+          } );
+        }
+        else if ( adjacentSidesEqual ) {
+          response = StringUtils.fillIn( equalAdjacentSidesChangePatternString, {
+            lengthChange: changeString
+          } );
+        }
+        else {
+          response = StringUtils.fillIn( adjacentSidesChangePatternString, {
+            lengthChange: changeString
+          } );
+        }
       }
       else {
 
-        // both adjacent sides changed but in very different amounts so we combine the description to say that both
-        // sides changed unequally
-        adjacentSideChangeString = adjacentSidesChangeUnequallyString;
+        // they are changing by a large amount, but in different ways so describe them generally
+        response = adjacentSidesChangeInLengthString;
       }
-
-      response = adjacentSideChangeString;
     }
     else {
 

@@ -34,6 +34,7 @@ class ShapeSnapshot {
   public readonly vertexCAngle: number;
   public readonly vertexDAngle: number;
 
+  // TODO: Rename to letter names
   public readonly topSideLength: number;
   public readonly rightSideLength: number;
   public readonly leftSideLength: number;
@@ -80,6 +81,13 @@ class ShapeSnapshot {
            label === VertexLabel.VERTEX_B ? this.vertexBAngle :
            label === VertexLabel.VERTEX_C ? this.vertexCAngle :
            this.vertexDAngle; // VERTEX_D
+  }
+
+  public getLengthFromSideLabel( label: SideLabel ): number {
+    return label === SideLabel.SIDE_AB ? this.topSideLength :
+           label === SideLabel.SIDE_BC ? this.rightSideLength :
+           label === SideLabel.SIDE_CD ? this.bottomSideLength :
+           this.leftSideLength; // SIDE_DA
   }
 
   /**
@@ -129,6 +137,13 @@ class ShapeSnapshot {
            label === SideLabel.SIDE_BC ? [ this.topSideLength, this.bottomSideLength ] :
            label === SideLabel.SIDE_CD ? [ this.rightSideLength, this.leftSideLength ] :
              [ this.bottomSideLength, this.topSideLength ]; // SIDE_DA
+  }
+
+  public getAdjacentSidesParallelFromSideLabel( label: SideLabel ): boolean {
+    return label === SideLabel.SIDE_AB ? this.sideBCsideDAParallel :
+           label === SideLabel.SIDE_BC ? this.sideABsideCDParallel :
+           label === SideLabel.SIDE_CD ? this.sideBCsideDAParallel :
+           this.sideABsideCDParallel; // SIDE_DA
   }
 }
 

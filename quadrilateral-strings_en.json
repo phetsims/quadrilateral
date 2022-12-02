@@ -585,6 +585,24 @@
         },
         "adjacentSidesChangeUnequally": {
           "value": "adjacent sides change unequally"
+        },
+        "adjacentSidesChangeInLength": {
+          "value": "adjacent sides change in length"
+        },
+        "parallelAdjacentSidesChangePattern": {
+          "value": "parallel adjacent sides {{lengthChange}}"
+        },
+        "equalAdjacentSidesChangePattern": {
+          "value": "equal adjacent sides {{lengthChange}}"
+        },
+        "adjacentSidesEqual": {
+          "value": "adjacent sides equal"
+        },
+        "adjacentSidesParallel": {
+          "value": "adjacent sides parallel"
+        },
+        "equalToOneAdjacentSide": {
+          "value": "equal to one adjacent side"
         }
       },
       "farSmallerThan": {

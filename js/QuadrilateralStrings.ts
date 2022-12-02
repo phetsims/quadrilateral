@@ -410,6 +410,18 @@ type StringsType = {
         'adjacentSidesChangePatternStringProperty': LinkableProperty<string>;
         'adjacentSidesChangeUnequally': string;
         'adjacentSidesChangeUnequallyStringProperty': LinkableProperty<string>;
+        'adjacentSidesChangeInLength': string;
+        'adjacentSidesChangeInLengthStringProperty': LinkableProperty<string>;
+        'parallelAdjacentSidesChangePattern': string;
+        'parallelAdjacentSidesChangePatternStringProperty': LinkableProperty<string>;
+        'equalAdjacentSidesChangePattern': string;
+        'equalAdjacentSidesChangePatternStringProperty': LinkableProperty<string>;
+        'adjacentSidesEqual': string;
+        'adjacentSidesEqualStringProperty': LinkableProperty<string>;
+        'adjacentSidesParallel': string;
+        'adjacentSidesParallelStringProperty': LinkableProperty<string>;
+        'equalToOneAdjacentSide': string;
+        'equalToOneAdjacentSideStringProperty': LinkableProperty<string>;
       };
       'farSmallerThan': string;
       'farSmallerThanStringProperty': LinkableProperty<string>;
