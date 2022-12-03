@@ -68,7 +68,7 @@ class QuadrilateralInputPreferencesNode extends PreferencesPanelSection {
  */
 class TangiblePropertyNumberControl extends NumberControl {
   public constructor( label: string, property: NumberProperty, providedOptions?: NumberControlOptions ) {
-    const propertyRange = property.range!;
+    const propertyRange = property.range;
     assert && assert( propertyRange, 'range required for NumberControl' );
 
     const options = optionize<NumberControlOptions, EmptySelfOptions, NumberControlOptions>()( {

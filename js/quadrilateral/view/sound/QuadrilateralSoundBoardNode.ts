@@ -29,7 +29,7 @@ class QuadrilateralSoundBoardNode extends VBox {
       assert && assert( soundView.activeSoundView, 'Need an active sound view for output level Properties' );
       soundView.activeSoundView!.indexToOutputLevelPropertyMap.forEach( ( value, key ) => {
         assert && assert( value.range, 'output level Property needs a defined range' );
-        const outputLevelSlider = new NumberControl( `Track ${key}`, value, value.range!, {
+        const outputLevelSlider = new NumberControl( `Track ${key}`, value, value.range, {
           layoutFunction: NumberControl.createLayoutFunction4(),
           delta: 0.01,
           titleNodeOptions: QuadrilateralConstants.PANEL_LABEL_TEXT_OPTIONS,

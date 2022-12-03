@@ -93,7 +93,7 @@ class QuadrilateralModelValuePanel extends Node {
       align: 'left'
     } );
 
-    const decimalPlacesControl = new NumberControl( 'Decimal Places', decimalPlacesProperty, decimalPlacesProperty.range!, {
+    const decimalPlacesControl = new NumberControl( 'Decimal Places', decimalPlacesProperty, decimalPlacesProperty.range, {
       sliderOptions: {
         keyboardStep: 1,
         thumbSize: new Dimension2( 10, 17 )
