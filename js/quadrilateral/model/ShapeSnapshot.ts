@@ -43,6 +43,8 @@ class ShapeSnapshot {
 
   public readonly namedQuadrilateral: NamedQuadrilateral;
 
+  private readonly sideLengths: number[];
+
   public constructor( shapeModel: QuadrilateralShapeModel ) {
     this.topSideTilt = shapeModel.topSide.tiltProperty.value;
     this.rightSideTilt = shapeModel.rightSide.tiltProperty.value;
@@ -71,6 +73,13 @@ class ShapeSnapshot {
     this.area = shapeModel.areaProperty.value;
 
     this.namedQuadrilateral = shapeModel.shapeNameProperty.value;
+
+    this.sideLengths = [
+      this.topSideLength,
+      this.rightSideLength,
+      this.leftSideLength,
+      this.bottomSideLength
+    ];
   }
 
   /**
@@ -144,6 +153,32 @@ class ShapeSnapshot {
            label === SideLabel.SIDE_BC ? this.sideABsideCDParallel :
            label === SideLabel.SIDE_CD ? this.sideBCsideDAParallel :
            this.sideABsideCDParallel; // SIDE_DA
+  }
+
+  /**
+   * Counts the number of sides that have the same length, returning the largest count. If all are the same,
+   * returns 4. Otherwise, three, then two, then zero.
+   */
+  public countNumberOfEqualSides( toleranceInterval: number ): number {
+    let numberOfEqualSides = 0;
+    for ( let i = 0; i < this.sideLengths.length; i++ ) {
+      const currentLength = this.sideLengths[ i ];
+
+      let numberEqualToCurrentLength = 0;
+      for ( let j = 0; j < this.sideLengths.length; j++ ) {
+        const nextLength = this.sideLengths[ j ];
+
+        if ( QuadrilateralShapeModel.isInterLengthEqualToOther( currentLength, nextLength, toleranceInterval ) ) {
+          numberEqualToCurrentLength++;
+        }
+      }
+
+      if ( numberEqualToCurrentLength > numberOfEqualSides ) {
+        numberOfEqualSides = numberEqualToCurrentLength;
+      }
+    }
+
+    return numberOfEqualSides;
   }
 }
 

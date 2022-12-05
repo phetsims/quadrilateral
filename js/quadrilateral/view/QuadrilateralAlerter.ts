@@ -86,6 +86,9 @@ const equalAdjacentSidesChangePatternString = QuadrilateralStrings.a11y.voicing.
 const adjacentSidesEqualString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesEqual;
 const adjacentSidesParallelString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesParallel;
 const equalToOneAdjacentSideString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.equalToOneAdjacentSide;
+const twoSidesEqualString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.twoSidesEqual;
+const threeSidesEqualString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.threeSidesEqual;
+
 
 // A response may trigger because there is a large enough change in angle or length
 type ResponseReason = 'angle' | 'length';
@@ -337,6 +340,7 @@ class QuadrilateralAlerter extends Alerter {
     const previousEqualToFirstAdjacent = shapeModel.isShapeLengthEqualToOther( previousLength, firstPreviousAdjacentSideLength );
     const previousEqualToSecondAdjacent = shapeModel.isShapeLengthEqualToOther( previousLength, secondPreviousAdjacentSideLength );
     const previousEqualToOneAdjacent = previousEqualToFirstAdjacent !== previousEqualToSecondAdjacent;
+    const previousNumberOfEqualSides = this.previousObjectResponseShapeSnapshot.countNumberOfEqualSides( this.quadrilateralShapeModel.shapeLengthToleranceIntervalProperty.value );
 
     const adjacentSides = currentShapeSnapshot.getAdjacentSideLengthsFromSideLabel( side.sideLabel );
     const firstAdjacentSideLength = adjacentSides[ 0 ];
@@ -347,6 +351,7 @@ class QuadrilateralAlerter extends Alerter {
     const equalToFirstAdjacent = shapeModel.isShapeLengthEqualToOther( sideLength, firstAdjacentSideLength );
     const equalToSecondAdjacent = shapeModel.isShapeLengthEqualToOther( sideLength, secondAdjacentSideLength );
     const equalToOneAdjacent = equalToFirstAdjacent !== equalToSecondAdjacent;
+    const numberOfEqualSides = currentShapeSnapshot.countNumberOfEqualSides( this.quadrilateralShapeModel.shapeLengthToleranceIntervalProperty.value );
 
     const firstAdjacentSideLengthDifference = firstAdjacentSideLength - firstPreviousAdjacentSideLength;
     const secondAdjacentSideLengthDifference = secondAdjacentSideLength - secondPreviousAdjacentSideLength;
@@ -368,6 +373,16 @@ class QuadrilateralAlerter extends Alerter {
 
       // the moving side just became equal to ONE of its adjacent sides, call that out
       response = equalToOneAdjacentSideString;
+    }
+    else if ( numberOfEqualSides === 3 && previousNumberOfEqualSides < 3 ) {
+
+      // we just found a shape with three equal sides (moving from two equal sides)
+      response = threeSidesEqualString;
+    }
+    else if ( numberOfEqualSides === 2 && previousNumberOfEqualSides < 2 ) {
+
+      // we just found a shape with two equal sides (moving from no equal sides)
+      response = twoSidesEqualString;
     }
     else if ( firstSideAbsoluteDifference > lengthTolerance || secondSideAbsoluteDifference > lengthTolerance ) {
       if ( shapeModel.isShapeLengthEqualToOther( firstAdjacentSideLengthDifference, secondAdjacentSideLengthDifference ) ) {

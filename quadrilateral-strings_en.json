@@ -603,6 +603,12 @@
         },
         "equalToOneAdjacentSide": {
           "value": "equal to one adjacent side"
+        },
+        "threeSidesEqual": {
+          "value": "three sides equal"
+        },
+        "twoSidesEqual": {
+          "value": "two sides equal"
         }
       },
       "farSmallerThan": {

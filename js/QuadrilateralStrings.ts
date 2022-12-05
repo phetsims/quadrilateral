@@ -422,6 +422,10 @@ type StringsType = {
         'adjacentSidesParallelStringProperty': LinkableProperty<string>;
         'equalToOneAdjacentSide': string;
         'equalToOneAdjacentSideStringProperty': LinkableProperty<string>;
+        'threeSidesEqual': string;
+        'threeSidesEqualStringProperty': LinkableProperty<string>;
+        'twoSidesEqual': string;
+        'twoSidesEqualStringProperty': LinkableProperty<string>;
       };
       'farSmallerThan': string;
       'farSmallerThanStringProperty': LinkableProperty<string>;
