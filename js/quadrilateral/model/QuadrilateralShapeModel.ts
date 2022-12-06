@@ -107,12 +107,6 @@ class QuadrilateralShapeModel {
   // See QuadrilateralShapeModelOptions
   private readonly validateShape: boolean;
 
-  // Whether the Side lengths have changed relative to the saved side lengths that were stored at the beginning
-  // of an interaction. This helps accomplish a learning goal of determining if the quad remains a parallelogram
-  // while also keeping side lengths the same. This is set in the step function asynchronously(!!) so that
-  // it can be calculated only after all vertex positions have been set by listeners.
-  public readonly lengthsEqualToSavedProperty: BooleanProperty;
-
   // Whether the current angles are equal to the saved set of savedVertexAngles. The savedVertexAngles are updated
   // every time the quadrilateral side lengths change, so that we can track the condition that both the sides
   // are remaining constant AND the angles are changing.
@@ -315,10 +309,6 @@ class QuadrilateralShapeModel {
     this.savedSideLengths = this.getSideLengths();
     this.savedVertexAngles = this.getVertexAngles();
 
-    this.lengthsEqualToSavedProperty = new BooleanProperty( false, {
-      tandem: options.tandem.createTandem( 'lengthsEqualToSavedProperty' )
-    } );
-
     this.anglesEqualToSavedProperty = new BooleanProperty( true, {
       tandem: options.tandem?.createTandem( 'anglesEqualToSavedProperty' )
     } );
@@ -452,33 +442,6 @@ class QuadrilateralShapeModel {
       this.bottomSide.lengthProperty.value,
       this.leftSide.lengthProperty.value
     );
-  }
-
-  /**
-   * Returns true if the side lengths have changed relative to the savedSideLengths.
-   */
-  public getSideLengthsEqualToSaved( currentSideLengths: SideLengths ): boolean {
-
-    // TODO: For the usages of this function It might be best to compare using lengthToleranceIntervalProperty of the
-    // sides that intersect with the moving sides, but that is more complicated and it isn't clear if this will be
-    // necessary at all. Doing something easy for now.
-    const toleranceInterval = this.getLargestLengthToleranceInterval();
-
-    return Utils.equalsEpsilon( currentSideLengths.topSideLength, this.savedSideLengths.topSideLength, toleranceInterval ) &&
-           Utils.equalsEpsilon( currentSideLengths.rightSideLength, this.savedSideLengths.rightSideLength, toleranceInterval ) &&
-           Utils.equalsEpsilon( currentSideLengths.bottomSideLength, this.savedSideLengths.bottomSideLength, toleranceInterval ) &&
-           Utils.equalsEpsilon( currentSideLengths.leftSideLength, this.savedSideLengths.leftSideLength, toleranceInterval );
-  }
-
-  /**
-   * The length tolerance interval is dependent on side length. Get the largest value of all sides for comparisons
-   * that only care about the largest value.
-   */
-  public getLargestLengthToleranceInterval(): number {
-    const sideWithLargestInterval = _.maxBy( this.sides, side => side.lengthToleranceIntervalProperty.value );
-
-    assert && assert( sideWithLargestInterval, 'failed to find a side with a lengthToleranceIntervalProperty value' );
-    return sideWithLargestInterval!.lengthToleranceIntervalProperty.value;
   }
 
   /**
@@ -1016,26 +979,6 @@ class QuadrilateralShapeModel {
     this.sideBCSideDAParallelProperty.value = this.sideBCSideDAParallelSideChecker.areSidesParallel();
 
     this.areaProperty.set( this.getArea() );
-
-    // We need to determine if side lengths have changed in the step function because we need to calculate
-    // lengths after all positions have been set.
-    this.lengthsEqualToSavedProperty.set( this.getSideLengthsEqualToSaved( this.getSideLengths() ) );
-
-    if ( !this.lengthsEqualToSavedProperty.value ) {
-
-      // eagerly save a new set of side lengths to compare for the next iteration
-      this.saveSideLengths();
-
-      // when we save a new set of side lengths, we also want to save a new set of angles so that we can make sure
-      // that the side lengths will be equal to the newly saved set AND the angles are changing during quadrilateral
-      // shape changes
-      this.saveVertexAngles();
-
-      // After saving the new set of new vertex angles, the angles must be equal to the saved set. This is
-      // necessary because we will only update this Property again once after it is set to false for a set
-      // of equal side lengths
-      this.anglesEqualToSavedProperty.set( true );
-    }
 
     // after potentially updating savedVertexAngles, see if current angles are equal to savedVertexAngles
     // Once this is set to false for a set of saved side lengths, we don't want it to become true again until

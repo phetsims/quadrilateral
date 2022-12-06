@@ -61,16 +61,6 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     defaultValue: 5
   },
 
-  // A scale factor for the tolerance interval for comparing lengths in the model, relative to the
-  // length of one side. For example, two sides will be considered equal in length when both sides
-  // have a same length within ( length * lengthToleranceIntervalScaleFactor).
-  // TODO: I think this one can be deleted, see https://github.com/phetsims/quadrilateral/issues/247
-  lengthToleranceIntervalScaleFactor: {
-    type: 'number',
-    isValidValue: ( value: number ) => value <= 1 && value >= 0,
-    defaultValue: 0.05
-  },
-
   // A tolerance interval for comparing lengths for the purposes of shape detection.
   shapeLengthToleranceInterval: {
     type: 'number',
@@ -209,7 +199,6 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
 type ToleranceDefaultsCollection = {
   parallelAngleToleranceInterval: number;
   interAngleToleranceInterval: number;
-  lengthToleranceIntervalScaleFactor: number;
   shapeLengthToleranceInterval: number;
 };
 
@@ -226,7 +215,6 @@ class ToleranceDefaults extends PhetioObject {
         stateSchema: {
           parallelAngleToleranceInterval: NumberIO,
           interAngleToleranceInterval: NumberIO,
-          lengthToleranceIntervalScaleFactor: NumberIO,
           shapeLengthToleranceInterval: NumberIO
         }
       } ),
@@ -238,7 +226,6 @@ class ToleranceDefaults extends PhetioObject {
     return {
       parallelAngleToleranceInterval: QuadrilateralQueryParameters.parallelAngleToleranceInterval,
       interAngleToleranceInterval: QuadrilateralQueryParameters.interAngleToleranceInterval,
-      lengthToleranceIntervalScaleFactor: QuadrilateralQueryParameters.lengthToleranceIntervalScaleFactor,
       shapeLengthToleranceInterval: QuadrilateralQueryParameters.shapeLengthToleranceInterval
     };
   }

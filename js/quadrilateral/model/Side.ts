@@ -12,7 +12,6 @@ import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import quadrilateral from '../../quadrilateral.js';
 import Vertex from './Vertex.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { Line } from '../../../../scenery/js/imports.js';
 import { Shape } from '../../../../kite/js/imports.js';
@@ -58,12 +57,6 @@ class Side {
 
   // The shape of the side, determined by the length and the model width.
   public shapeProperty: TReadOnlyProperty<Shape>;
-
-  // The tolerance for this side to determine if it is equal to another. It is a portion of the full length
-  // so that when the side is longer it still as easy for two sides to be equal in length. Otherwise the
-  // tolerance interval will be relatively much larger when the length is very small.
-  // TODO: I suspect that the usages of this can be removed now that we are not tracking changes in shape length in real time for learning goals.
-  public readonly lengthToleranceIntervalProperty: TReadOnlyProperty<number>;
 
   // In model coordinates, the length of a side segment in model coordinates. The full side is divided into segments of
   // this length with the final segment length being the remainder.
@@ -120,13 +113,6 @@ class Side {
 
         return lineShape.getStrokedShape();
       } );
-
-    this.lengthToleranceIntervalProperty = new DerivedProperty( [ this.lengthProperty ], length => {
-      return length * QuadrilateralQueryParameters.lengthToleranceIntervalScaleFactor;
-    }, {
-      tandem: tandem.createTandem( 'lengthToleranceIntervalProperty' ),
-      phetioValueType: NumberIO
-    } );
   }
 
   /**
