@@ -107,11 +107,6 @@ class QuadrilateralShapeModel {
   // See QuadrilateralShapeModelOptions
   private readonly validateShape: boolean;
 
-  // Whether the current angles are equal to the saved set of savedVertexAngles. The savedVertexAngles are updated
-  // every time the quadrilateral side lengths change, so that we can track the condition that both the sides
-  // are remaining constant AND the angles are changing.
-  public readonly anglesEqualToSavedProperty: BooleanProperty;
-
   // Reference to the simulation model for other needed state.
   public readonly model: QuadrilateralModel;
 
@@ -309,10 +304,6 @@ class QuadrilateralShapeModel {
     this.savedSideLengths = this.getSideLengths();
     this.savedVertexAngles = this.getVertexAngles();
 
-    this.anglesEqualToSavedProperty = new BooleanProperty( true, {
-      tandem: options.tandem?.createTandem( 'anglesEqualToSavedProperty' )
-    } );
-
     this.isParallelogramProperty = new BooleanProperty( false, {
       tandem: options.tandem.createTandem( 'isParallelogramProperty' )
     } );
@@ -462,23 +453,6 @@ class QuadrilateralShapeModel {
       this.vertexC.angleProperty.value,
       this.vertexD.angleProperty.value
     );
-  }
-
-  /**
-   * Returns true if the current vertex angles are equal to the angles stored in savedVertexAngles, within a unique
-   * tolerance interval. Used to determine if any of the angles have changed during an interaction.
-   *
-   * TODO: I suspect this can be removed, maintining angles like this is no longer a learning goal.
-   */
-  private getVertexAnglesEqualToSaved( currentVertexAngles: VertexAngles ): boolean {
-
-    // A value requested by https://github.com/phetsims/quadrilateral/issues/59#issuecomment-1048004794
-    const vertexAnglesToleranceInterval = QuadrilateralQueryParameters.parallelAngleToleranceInterval * 2;
-
-    return Utils.equalsEpsilon( currentVertexAngles.vertexAAngle!, this.savedVertexAngles.vertexAAngle!, vertexAnglesToleranceInterval ) &&
-           Utils.equalsEpsilon( currentVertexAngles.vertexBAngle!, this.savedVertexAngles.vertexBAngle!, vertexAnglesToleranceInterval ) &&
-           Utils.equalsEpsilon( currentVertexAngles.vertexCAngle!, this.savedVertexAngles.vertexCAngle!, vertexAnglesToleranceInterval ) &&
-           Utils.equalsEpsilon( currentVertexAngles.vertexDAngle!, this.savedVertexAngles.vertexDAngle!, vertexAnglesToleranceInterval );
   }
 
   /**
@@ -979,13 +953,6 @@ class QuadrilateralShapeModel {
     this.sideBCSideDAParallelProperty.value = this.sideBCSideDAParallelSideChecker.areSidesParallel();
 
     this.areaProperty.set( this.getArea() );
-
-    // after potentially updating savedVertexAngles, see if current angles are equal to savedVertexAngles
-    // Once this is set to false for a set of saved side lengths, we don't want it to become true again until
-    // a new set of side lengths are saved because if the angles are brought back to the
-    if ( this.anglesEqualToSavedProperty.value ) {
-      this.anglesEqualToSavedProperty.set( this.getVertexAnglesEqualToSaved( this.getVertexAngles() ) );
-    }
 
     this.allAnglesRightProperty.set( this.getAreAllAnglesRight() );
     this.allLengthsEqualProperty.set( this.getAreAllLengthsEqual() );
