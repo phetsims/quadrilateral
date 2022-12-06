@@ -84,14 +84,6 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     defaultValue: 5
   },
 
-  // The default value for the angleToleranceInterval when we are connected to the device. Otherwise
-  // behaves like angleToleranceInterval.
-  deviceInterAngleToleranceInterval: {
-    type: 'number',
-    isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
-    defaultValue: 0.02
-  },
-
   // The tolerance interval for the angle of tilt for sides.
   tiltToleranceInterval: {
     type: 'number',
@@ -248,7 +240,6 @@ type ToleranceDefaultsCollection = {
   deviceAngleToleranceInterval: number;
   toleranceIntervalScaleFactor: number;
   interAngleToleranceInterval: number;
-  deviceInterAngleToleranceInterval: number;
   lengthToleranceIntervalScaleFactor: number;
   shapeLengthToleranceInterval: number;
 };
@@ -268,7 +259,6 @@ class ToleranceDefaults extends PhetioObject {
           deviceAngleToleranceInterval: NumberIO,
           toleranceIntervalScaleFactor: NumberIO,
           interAngleToleranceInterval: NumberIO,
-          deviceInterAngleToleranceInterval: NumberIO,
           lengthToleranceIntervalScaleFactor: NumberIO,
           shapeLengthToleranceInterval: NumberIO
         }
@@ -283,7 +273,6 @@ class ToleranceDefaults extends PhetioObject {
       deviceAngleToleranceInterval: QuadrilateralQueryParameters.deviceAngleToleranceInterval,
       toleranceIntervalScaleFactor: QuadrilateralQueryParameters.toleranceIntervalScaleFactor,
       interAngleToleranceInterval: QuadrilateralQueryParameters.interAngleToleranceInterval,
-      deviceInterAngleToleranceInterval: QuadrilateralQueryParameters.deviceInterAngleToleranceInterval,
       lengthToleranceIntervalScaleFactor: QuadrilateralQueryParameters.lengthToleranceIntervalScaleFactor,
       shapeLengthToleranceInterval: QuadrilateralQueryParameters.shapeLengthToleranceInterval
     };
