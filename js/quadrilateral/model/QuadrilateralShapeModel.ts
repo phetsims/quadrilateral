@@ -382,15 +382,8 @@ class QuadrilateralShapeModel {
     this.shapeLengthToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty, model.preferencesModel.fineInputSpacingProperty ], ( shapeName, fineInputSpacing ) => {
 
       // reduce the value when "Fine Input Spacing" is selected
-      const staticAngleToleranceInterval = fineInputSpacing ? QuadrilateralQueryParameters.shapeLengthToleranceInterval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor :
+      return fineInputSpacing ? QuadrilateralQueryParameters.shapeLengthToleranceInterval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor :
                                            QuadrilateralQueryParameters.shapeLengthToleranceInterval;
-
-
-      return QuadrilateralShapeModel.toleranceIntervalWideningListener(
-        staticAngleToleranceInterval,
-        QuadrilateralQueryParameters.connectedToleranceIntervalScaleFactor,
-        shapeName
-      );
     }, {
       tandem: options.tandem.createTandem( 'shapeLengthToleranceIntervalProperty' ),
       phetioValueType: NumberIO
@@ -1476,27 +1469,6 @@ class QuadrilateralShapeModel {
    */
   public static getAverageSideLength( side1: Side, side2: Side ): number {
     return ( side1.lengthProperty.value + side2.lengthProperty.value ) / 2;
-  }
-
-  /**
-   * When connected to a tangible, widen the tolerance interval when we have a detected shape Name so that it is more
-   * difficult to leave the quadrilateral state in that condition. This is helpful because it is difficult to make
-   * fine-grained motions with the tangible.
-   */
-  private static toleranceIntervalWideningListener( defaultToleranceInterval: number, defaultDeviceToleranceInterval: number, shapeName: NamedQuadrilateral | null ): number {
-    let toleranceInterval = defaultToleranceInterval;
-
-    // Make the interval larger when we have a detected shape so that it is easier
-    // to maintain the detected shape as interaction continues. This is important because it is not easy to make
-    // fine grain motion with the tangible.
-    if ( QuadrilateralQueryParameters.deviceConnection ) {
-      toleranceInterval = defaultDeviceToleranceInterval;
-      if ( shapeName !== null ) {
-        toleranceInterval = defaultDeviceToleranceInterval * QuadrilateralQueryParameters.toleranceIntervalScaleFactor;
-      }
-    }
-
-    return toleranceInterval;
   }
 
   public reset(): void {
