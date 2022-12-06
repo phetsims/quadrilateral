@@ -30,17 +30,6 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     defaultValue: 0.01
   },
 
-  // A scale factor to apply to the tolerance intervals which determines when the quadrilateral is a
-  // parallelogram. This is multiplied by the angleToleranceInterval when more than one vertex is dragged so
-  // that it is easier to "stay" in parallelogram in that case. It is also used when connected to the tangible.
-  // It should be larger than one so that the angleToleranceInterval is larger in these cases. See
-  // QuadrilateralShapeModel for usage and more information.
-  toleranceIntervalScaleFactor: {
-    type: 'number',
-    defaultValue: 10,
-    isValidValue: ( value: number ) => value >= 1
-  },
-
   // The default value for the angle tolerance that will be used for single comparisons of one angle against
   // another. Mostly, this is used to determine the quadrilateral shape name. This must be different from
   // the parallelAngleToleranceInterval, which has complex behavior depending on mode of interaction.
@@ -221,7 +210,6 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
 // Collection of properties that appear in ToleranceDefaults state object.
 type ToleranceDefaultsCollection = {
   parallelAngleToleranceInterval: number;
-  toleranceIntervalScaleFactor: number;
   interAngleToleranceInterval: number;
   lengthToleranceIntervalScaleFactor: number;
   shapeLengthToleranceInterval: number;
@@ -239,7 +227,6 @@ class ToleranceDefaults extends PhetioObject {
         toStateObject: ( object: ToleranceDefaults ) => object.toStateObject(),
         stateSchema: {
           parallelAngleToleranceInterval: NumberIO,
-          toleranceIntervalScaleFactor: NumberIO,
           interAngleToleranceInterval: NumberIO,
           lengthToleranceIntervalScaleFactor: NumberIO,
           shapeLengthToleranceInterval: NumberIO
@@ -252,7 +239,6 @@ class ToleranceDefaults extends PhetioObject {
   public toStateObject(): ToleranceDefaultsCollection {
     return {
       parallelAngleToleranceInterval: QuadrilateralQueryParameters.parallelAngleToleranceInterval,
-      toleranceIntervalScaleFactor: QuadrilateralQueryParameters.toleranceIntervalScaleFactor,
       interAngleToleranceInterval: QuadrilateralQueryParameters.interAngleToleranceInterval,
       lengthToleranceIntervalScaleFactor: QuadrilateralQueryParameters.lengthToleranceIntervalScaleFactor,
       shapeLengthToleranceInterval: QuadrilateralQueryParameters.shapeLengthToleranceInterval

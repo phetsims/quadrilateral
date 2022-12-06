@@ -82,9 +82,6 @@ class ParallelSideChecker {
       fineInputSpacingProperty
     ], ( side1Pressed, side2Pressed, otherSide1Pressed, otherSide2Pressed, side1Vertex1Pressed, side1Vertex2Pressed, side2Vertex1Pressed, side2Vertex2Pressed, resetNotInProgress, fineInputSpacing ) => {
 
-      const verticesPressedArray = [ side1Vertex1Pressed, side1Vertex2Pressed, side2Vertex1Pressed, side2Vertex2Pressed ];
-      const numberOfVerticesPressed = _.countBy( verticesPressedArray ).true;
-
       // The default value may be modified by user input and device connection. Otherwise the value is reduced when
       // using "Fine Input Spacing".
       const defaultAngleToleranceInterval = fineInputSpacing ? QuadrilateralQueryParameters.parallelAngleToleranceInterval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor :
@@ -101,20 +98,12 @@ class ParallelSideChecker {
         toleranceInterval = defaultAngleToleranceInterval;
       }
       else {
-        if ( numberOfVerticesPressed >= 2 ) {
 
-          // Two or more vertices pressed at once, increase the tolerance interval by a scale factor so that
-          // it is easier to find and remain a parallelogram with this input
-          toleranceInterval = defaultAngleToleranceInterval * QuadrilateralQueryParameters.toleranceIntervalScaleFactor;
-        }
-        else {
-
-          // Only one vertex is moving, we just released all Vertices/sides or we just changed the "Fine Input Spacing"
-          // checkbox. We can afford to be as precise as possible in these cases without widening the tolerance interval
-          // Only one vertex is moving, we can afford to be as precise as possible from this form of input, and
-          // so we have the smallest tolerance interval.
-          toleranceInterval = defaultAngleToleranceInterval;
-        }
+        // Only one vertex is moving, we just released all Vertices/sides or we just changed the "Fine Input Spacing"
+        // checkbox. We can afford to be as precise as possible in these cases without widening the tolerance interval
+        // Only one vertex is moving, we can afford to be as precise as possible from this form of input, and
+        // so we have the smallest tolerance interval.
+        toleranceInterval = defaultAngleToleranceInterval;
       }
 
       return toleranceInterval;
