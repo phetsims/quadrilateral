@@ -64,6 +64,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // A scale factor for the tolerance interval for comparing lengths in the model, relative to the
   // length of one side. For example, two sides will be considered equal in length when both sides
   // have a same length within ( length * lengthToleranceIntervalScaleFactor).
+  // TODO: I think this one can be deleted, see https://github.com/phetsims/quadrilateral/issues/247
   lengthToleranceIntervalScaleFactor: {
     type: 'number',
     isValidValue: ( value: number ) => value <= 1 && value >= 0,
