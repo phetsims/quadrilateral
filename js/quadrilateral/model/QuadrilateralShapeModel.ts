@@ -119,7 +119,7 @@ class QuadrilateralShapeModel {
   // depending on method of input to support learning goals. The shape detection comparisons need a more consistent
   // angle tolerance interval. However, there is some unique behavior when connected to the tangible device.
   public readonly interAngleToleranceIntervalProperty: TReadOnlyProperty<number>;
-  public readonly shapeLengthToleranceIntervalProperty: TReadOnlyProperty<number>;
+  public readonly interLengthToleranceIntervalProperty: TReadOnlyProperty<number>;
 
   // The tolerance interval when values comparing angles against constants. This needs to be a different value
   // than interAngleToleranceIntervalProperty because that tolerance is used for sums of values so there may be
@@ -350,7 +350,7 @@ class QuadrilateralShapeModel {
       phetioValueType: NumberIO
     } );
 
-    this.shapeLengthToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty, model.preferencesModel.fineInputSpacingProperty ], ( shapeName, fineInputSpacing ) => {
+    this.interLengthToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty, model.preferencesModel.fineInputSpacingProperty ], ( shapeName, fineInputSpacing ) => {
 
       // reduce the value when "Fine Input Spacing" is selected
       return fineInputSpacing ? QuadrilateralQueryParameters.interLengthToleranceInterval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor :
@@ -862,7 +862,7 @@ class QuadrilateralShapeModel {
    * TODO: Rename to isInterLengthEqualToOTher to match interAngleToleranceInterval.
    */
   public isShapeLengthEqualToOther( length1: number, length2: number ): boolean {
-    return Utils.equalsEpsilon( length1, length2, this.shapeLengthToleranceIntervalProperty.value );
+    return Utils.equalsEpsilon( length1, length2, this.interLengthToleranceIntervalProperty.value );
   }
 
   /**

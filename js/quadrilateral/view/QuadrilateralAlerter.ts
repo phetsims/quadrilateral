@@ -326,7 +326,7 @@ class QuadrilateralAlerter extends Alerter {
   private getSideChangeObjectResponse( side: Side ): string {
     let response = '';
 
-    const lengthTolerance = this.model.quadrilateralShapeModel.shapeLengthToleranceIntervalProperty.value;
+    const lengthTolerance = this.model.quadrilateralShapeModel.interLengthToleranceIntervalProperty.value;
     const shapeModel = this.model.quadrilateralShapeModel;
 
     const currentShapeSnapshot = new ShapeSnapshot( this.model.quadrilateralShapeModel );
@@ -340,7 +340,7 @@ class QuadrilateralAlerter extends Alerter {
     const previousEqualToFirstAdjacent = shapeModel.isShapeLengthEqualToOther( previousLength, firstPreviousAdjacentSideLength );
     const previousEqualToSecondAdjacent = shapeModel.isShapeLengthEqualToOther( previousLength, secondPreviousAdjacentSideLength );
     const previousEqualToOneAdjacent = previousEqualToFirstAdjacent !== previousEqualToSecondAdjacent;
-    const previousNumberOfEqualSides = this.previousObjectResponseShapeSnapshot.countNumberOfEqualSides( this.quadrilateralShapeModel.shapeLengthToleranceIntervalProperty.value );
+    const previousNumberOfEqualSides = this.previousObjectResponseShapeSnapshot.countNumberOfEqualSides( this.quadrilateralShapeModel.interLengthToleranceIntervalProperty.value );
 
     const adjacentSides = currentShapeSnapshot.getAdjacentSideLengthsFromSideLabel( side.sideLabel );
     const firstAdjacentSideLength = adjacentSides[ 0 ];
@@ -351,7 +351,7 @@ class QuadrilateralAlerter extends Alerter {
     const equalToFirstAdjacent = shapeModel.isShapeLengthEqualToOther( sideLength, firstAdjacentSideLength );
     const equalToSecondAdjacent = shapeModel.isShapeLengthEqualToOther( sideLength, secondAdjacentSideLength );
     const equalToOneAdjacent = equalToFirstAdjacent !== equalToSecondAdjacent;
-    const numberOfEqualSides = currentShapeSnapshot.countNumberOfEqualSides( this.quadrilateralShapeModel.shapeLengthToleranceIntervalProperty.value );
+    const numberOfEqualSides = currentShapeSnapshot.countNumberOfEqualSides( this.quadrilateralShapeModel.interLengthToleranceIntervalProperty.value );
 
     const firstAdjacentSideLengthDifference = firstAdjacentSideLength - firstPreviousAdjacentSideLength;
     const secondAdjacentSideLengthDifference = secondAdjacentSideLength - secondPreviousAdjacentSideLength;

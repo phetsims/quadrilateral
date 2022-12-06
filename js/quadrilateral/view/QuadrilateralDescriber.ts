@@ -405,8 +405,8 @@ class QuadrilateralDescriber {
     const longestSide = _.maxBy( this.shapeModel.sides, side => side.lengthProperty.value )!;
     const shortestSide = _.minBy( this.shapeModel.sides, side => side.lengthProperty.value )!;
 
-    const longestSideDescription = SideDescriber.getSideUnitsDescription( longestSide.lengthProperty.value, this.shapeModel.shapeLengthToleranceIntervalProperty.value );
-    const shortestSideDescription = SideDescriber.getSideUnitsDescription( shortestSide.lengthProperty.value, this.shapeModel.shapeLengthToleranceIntervalProperty.value );
+    const longestSideDescription = SideDescriber.getSideUnitsDescription( longestSide.lengthProperty.value, this.shapeModel.interLengthToleranceIntervalProperty.value );
+    const shortestSideDescription = SideDescriber.getSideUnitsDescription( shortestSide.lengthProperty.value, this.shapeModel.interLengthToleranceIntervalProperty.value );
 
     if ( this.shapeModel.allLengthsEqualProperty.value ) {
 
@@ -765,7 +765,7 @@ class QuadrilateralDescriber {
     const fourthSide = sortedOppositeSidePairs[ 1 ].side2;
 
     // comparing the lengths of each opposite side pair, relative to the first side in the pair
-    const interLengthToleranceInterval = this.shapeModel.shapeLengthToleranceIntervalProperty.value;
+    const interLengthToleranceInterval = this.shapeModel.interLengthToleranceIntervalProperty.value;
     const firstComparisonString = SideDescriber.getLengthComparisonDescription( secondSide, firstSide, interLengthToleranceInterval );
     const secondComparisonString = SideDescriber.getLengthComparisonDescription( fourthSide, thirdSide, interLengthToleranceInterval );
 
@@ -786,7 +786,7 @@ class QuadrilateralDescriber {
 
     // Compare the lengths of the first two parallel sides against the lengths of the second two parallel sides,
     // relative to the first two parallel sides.
-    const toleranceInterval = this.shapeModel.shapeLengthToleranceIntervalProperty.value;
+    const toleranceInterval = this.shapeModel.interLengthToleranceIntervalProperty.value;
     const comparisonString = SideDescriber.getLengthComparisonDescription( orderedSidePairs[ 1 ].side1, orderedSidePairs[ 0 ].side1, toleranceInterval );
 
     // const patternString = 'Equal Sides {{firstSide}} and {{secondSide}} are {{comparison}} equal Sides {{thirdSide}} and {{fourthSide}}.';
