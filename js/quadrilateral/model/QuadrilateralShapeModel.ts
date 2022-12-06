@@ -362,8 +362,8 @@ class QuadrilateralShapeModel {
     this.shapeLengthToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty, model.preferencesModel.fineInputSpacingProperty ], ( shapeName, fineInputSpacing ) => {
 
       // reduce the value when "Fine Input Spacing" is selected
-      return fineInputSpacing ? QuadrilateralQueryParameters.shapeLengthToleranceInterval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor :
-             QuadrilateralQueryParameters.shapeLengthToleranceInterval;
+      return fineInputSpacing ? QuadrilateralQueryParameters.interLengthToleranceInterval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor :
+             QuadrilateralQueryParameters.interLengthToleranceInterval;
     }, {
       tandem: options.tandem.createTandem( 'shapeLengthToleranceIntervalProperty' ),
       phetioValueType: NumberIO

@@ -61,8 +61,8 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     defaultValue: 5
   },
 
-  // A tolerance interval for comparing lengths for the purposes of shape detection.
-  shapeLengthToleranceInterval: {
+  // A tolerance interval for comparing the lengths of two sides.
+  interLengthToleranceInterval: {
     type: 'number',
     defaultValue: 0.005
   },
@@ -215,7 +215,7 @@ class ToleranceDefaults extends PhetioObject {
     return {
       parallelAngleToleranceInterval: QuadrilateralQueryParameters.parallelAngleToleranceInterval,
       interAngleToleranceInterval: QuadrilateralQueryParameters.interAngleToleranceInterval,
-      shapeLengthToleranceInterval: QuadrilateralQueryParameters.shapeLengthToleranceInterval
+      shapeLengthToleranceInterval: QuadrilateralQueryParameters.interLengthToleranceInterval
     };
   }
 }
