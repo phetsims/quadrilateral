@@ -353,18 +353,14 @@ class QuadrilateralShapeModel {
 
     this.sideABSideCDParallelSideChecker = new ParallelSideChecker(
       new SidePair( this.topSide, this.bottomSide ),
-      new SidePair( this.rightSide, this.leftSide ),
       this.shapeChangedEmitter,
-      model.resetNotInProgressProperty,
       model.preferencesModel.fineInputSpacingProperty,
       options.tandem.createTandem( 'sideABSideCDParallelSideChecker' )
     );
 
     this.sideBCSideDAParallelSideChecker = new ParallelSideChecker(
       new SidePair( this.rightSide, this.leftSide ),
-      new SidePair( this.topSide, this.bottomSide ),
       this.shapeChangedEmitter,
-      model.resetNotInProgressProperty,
       model.preferencesModel.fineInputSpacingProperty,
       options.tandem.createTandem( 'sideBCSideDAParallelSideChecker' )
     );

@@ -17,9 +17,9 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // is drawn on screen for debugging and demonstration purposes.
   showDragAreas: { type: 'flag' },
 
-  // The tolerance interval for the angle calculations which determine when the quadrilateral is a parallelogram.
+  // The tolerance interval for the angle calculations which determine when sides opposite sides are parallel.
   // This is in radians, so it is limited between 0 and 2 PI. If maximum value, the quadrilateral will always
-  // register as a parallelogram.
+  // be a parallelogram.
   parallelAngleToleranceInterval: {
     type: 'number',
     isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
