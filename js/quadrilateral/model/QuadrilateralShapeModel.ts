@@ -400,7 +400,7 @@ class QuadrilateralShapeModel {
 
       return QuadrilateralShapeModel.toleranceIntervalWideningListener(
         staticAngleToleranceInterval,
-        QuadrilateralQueryParameters.deviceShapeLengthToleranceInterval,
+        QuadrilateralQueryParameters.connectedToleranceIntervalScaleFactor,
         shapeName
       );
     }, {

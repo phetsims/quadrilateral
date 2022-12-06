@@ -77,6 +77,13 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     defaultValue: 0.2 // makes tolerances intervals 1/5 of the value when "fine input" enabled
   },
 
+  // A scale factor applied to all tolerances when connected to a tangible device so that it is easier to find and
+  // maintain shapes and important shape Properties for the more macroscopic motion inherent to a physical device.
+  connectedToleranceIntervalScaleFactor: {
+    type: 'number',
+    defaultValue: 5
+  },
+
   // TODO: Do we need this 'widening' of the tolerance interval when connected to a device still?
   deviceStaticAngleToleranceInterval: {
     type: 'number',
@@ -87,15 +94,6 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // The default value for the angleToleranceInterval when we are connected to the device. Otherwise
   // behaves like angleToleranceInterval.
   deviceInterAngleToleranceInterval: {
-    type: 'number',
-    isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
-    defaultValue: 0.02
-  },
-
-  // The default value for the shapeLengthToleranceInterval when we are connected to the device. In general
-  // the default value should be larger since fine-grained motion is difficult with the device. Otherwise behaves
-  // like shapeLengthToleranceInterval.
-  deviceShapeLengthToleranceInterval: {
     type: 'number',
     isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
     defaultValue: 0.02
@@ -258,7 +256,6 @@ type ToleranceDefaultsCollection = {
   toleranceIntervalScaleFactor: number;
   interAngleToleranceInterval: number;
   deviceInterAngleToleranceInterval: number;
-  deviceShapeLengthToleranceInterval: number;
   lengthToleranceIntervalScaleFactor: number;
   shapeLengthToleranceInterval: number;
 };
@@ -279,7 +276,6 @@ class ToleranceDefaults extends PhetioObject {
           toleranceIntervalScaleFactor: NumberIO,
           interAngleToleranceInterval: NumberIO,
           deviceInterAngleToleranceInterval: NumberIO,
-          deviceShapeLengthToleranceInterval: NumberIO,
           lengthToleranceIntervalScaleFactor: NumberIO,
           shapeLengthToleranceInterval: NumberIO
         }
@@ -295,7 +291,6 @@ class ToleranceDefaults extends PhetioObject {
       toleranceIntervalScaleFactor: QuadrilateralQueryParameters.toleranceIntervalScaleFactor,
       interAngleToleranceInterval: QuadrilateralQueryParameters.interAngleToleranceInterval,
       deviceInterAngleToleranceInterval: QuadrilateralQueryParameters.deviceInterAngleToleranceInterval,
-      deviceShapeLengthToleranceInterval: QuadrilateralQueryParameters.deviceShapeLengthToleranceInterval,
       lengthToleranceIntervalScaleFactor: QuadrilateralQueryParameters.lengthToleranceIntervalScaleFactor,
       shapeLengthToleranceInterval: QuadrilateralQueryParameters.shapeLengthToleranceInterval
     };
