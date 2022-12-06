@@ -824,8 +824,10 @@ class QuadrilateralShapeModel {
 
     // can use any two opposite angles
     const cosArg = Math.cos( ( this.vertexA.angleProperty.value! + this.vertexC.angleProperty.value! ) / 2 );
+    const area = Math.sqrt( ( s - a ) * ( s - b ) * ( s - c ) * ( s - d ) - ( a * b * c * d ) * cosArg * cosArg );
 
-    return Math.sqrt( ( s - a ) * ( s - b ) * ( s - c ) * ( s - d ) - ( a * b * c * d ) * cosArg * cosArg );
+    assert && assert( !isNaN( area ), 'area is not a number' );
+    return area;
   }
 
   /**
