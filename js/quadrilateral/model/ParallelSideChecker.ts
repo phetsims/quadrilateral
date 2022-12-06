@@ -93,16 +93,7 @@ class ParallelSideChecker {
       let toleranceInterval;
 
       if ( QuadrilateralQueryParameters.deviceConnection ) {
-
-        // The simulation is connected to device hardware, there is some special behavior to make it harder to
-        // leave the important learning goal states, see https://github.com/phetsims/quadrilateral/issues/116. Default
-        // angleToleranceInterval is also generally larger.
-        if ( this.isParallelProperty.value ) {
-          toleranceInterval = QuadrilateralQueryParameters.deviceAngleToleranceInterval * QuadrilateralQueryParameters.toleranceIntervalScaleFactor;
-        }
-        else {
-          toleranceInterval = QuadrilateralQueryParameters.deviceAngleToleranceInterval;
-        }
+        toleranceInterval = defaultAngleToleranceInterval * QuadrilateralQueryParameters.connectedToleranceIntervalScaleFactor;
       }
       else if ( !resetNotInProgress ) {
 
