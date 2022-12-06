@@ -378,14 +378,8 @@ class QuadrilateralShapeModel {
     this.staticAngleToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty, model.preferencesModel.fineInputSpacingProperty ], ( shapeName, fineInputSpacing ) => {
 
       // reduce the value when "Fine Input Spacing" is selected
-      const staticAngleToleranceInterval = fineInputSpacing ? QuadrilateralQueryParameters.staticAngleToleranceInterval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor :
+      return fineInputSpacing ? QuadrilateralQueryParameters.staticAngleToleranceInterval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor :
                                            QuadrilateralQueryParameters.staticAngleToleranceInterval;
-
-      return QuadrilateralShapeModel.toleranceIntervalWideningListener(
-        staticAngleToleranceInterval,
-        QuadrilateralQueryParameters.deviceStaticAngleToleranceInterval,
-        shapeName
-      );
     }, {
       tandem: options.tandem.createTandem( 'staticAngleToleranceIntervalProperty' ),
       phetioValueType: NumberIO

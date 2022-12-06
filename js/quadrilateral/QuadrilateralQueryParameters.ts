@@ -84,13 +84,6 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     defaultValue: 5
   },
 
-  // TODO: Do we need this 'widening' of the tolerance interval when connected to a device still?
-  deviceStaticAngleToleranceInterval: {
-    type: 'number',
-    isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
-    defaultValue: 0.001
-  },
-
   // The default value for the angleToleranceInterval when we are connected to the device. Otherwise
   // behaves like angleToleranceInterval.
   deviceInterAngleToleranceInterval: {
