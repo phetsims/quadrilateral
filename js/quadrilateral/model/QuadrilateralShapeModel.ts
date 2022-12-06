@@ -330,31 +330,22 @@ class QuadrilateralShapeModel {
 
     this.firstSeriesShapeChangedEmitter = new Emitter<[]>();
 
-    this.interAngleToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty, model.preferencesModel.fineInputSpacingProperty ], ( shapeName, fineInputSpacing ) => {
-
-      // reduce the value when "Fine Input Spacing" is selected
-      return fineInputSpacing ? QuadrilateralQueryParameters.interAngleToleranceInterval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor :
-             QuadrilateralQueryParameters.interAngleToleranceInterval;
+    this.interAngleToleranceIntervalProperty = new DerivedProperty( [ model.preferencesModel.fineInputSpacingProperty ], fineInputSpacing => {
+      return QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.interAngleToleranceInterval, fineInputSpacing );
     }, {
       tandem: options.tandem.createTandem( 'interAngleToleranceIntervalProperty' ),
       phetioValueType: NumberIO
     } );
 
-    this.staticAngleToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty, model.preferencesModel.fineInputSpacingProperty ], ( shapeName, fineInputSpacing ) => {
-
-      // reduce the value when "Fine Input Spacing" is selected
-      return fineInputSpacing ? QuadrilateralQueryParameters.staticAngleToleranceInterval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor :
-             QuadrilateralQueryParameters.staticAngleToleranceInterval;
+    this.staticAngleToleranceIntervalProperty = new DerivedProperty( [ model.preferencesModel.fineInputSpacingProperty ], fineInputSpacing => {
+      return QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.staticAngleToleranceInterval, fineInputSpacing );
     }, {
       tandem: options.tandem.createTandem( 'staticAngleToleranceIntervalProperty' ),
       phetioValueType: NumberIO
     } );
 
-    this.interLengthToleranceIntervalProperty = new DerivedProperty( [ this.shapeNameProperty, model.preferencesModel.fineInputSpacingProperty ], ( shapeName, fineInputSpacing ) => {
-
-      // reduce the value when "Fine Input Spacing" is selected
-      return fineInputSpacing ? QuadrilateralQueryParameters.interLengthToleranceInterval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor :
-             QuadrilateralQueryParameters.interLengthToleranceInterval;
+    this.interLengthToleranceIntervalProperty = new DerivedProperty( [ model.preferencesModel.fineInputSpacingProperty ], fineInputSpacing => {
+      return QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.interLengthToleranceInterval, fineInputSpacing );
     }, {
       tandem: options.tandem.createTandem( 'shapeLengthToleranceIntervalProperty' ),
       phetioValueType: NumberIO
@@ -629,6 +620,25 @@ class QuadrilateralShapeModel {
 
     // TODO: This check is susceptible to precision errors but this seems fragile, is there another way to do this?
     return Utils.equalsEpsilon( length, lengthA + lengthB, 0.001 );
+  }
+
+  /**
+   * Returns the tolerance interval to use for a value. Generally, the default value will be returned. If the user
+   * has opted into "fine spacing" then the tolerance is multiplied by a scale factor configurable with query
+   * parameters. Similar case for when the sim is connected to a device.
+   */
+  public static getWidenedToleranceInterval( defaultValue: number, useFineSpacing: boolean ): number {
+    let interval = defaultValue;
+
+    // Note that both cases are possible and the scale factors compound!
+    if ( useFineSpacing ) {
+      interval = interval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor;
+    }
+    if ( QuadrilateralQueryParameters.deviceConnection ) {
+      interval = interval * QuadrilateralQueryParameters.connectedToleranceIntervalScaleFactor;
+    }
+
+    return interval;
   }
 
   /**
