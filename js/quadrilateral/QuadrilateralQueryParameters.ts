@@ -145,6 +145,10 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     isValidValue: ( value: number ) => value > 0
   },
 
+  /**
+   * Controls the "minor" vertex interval. This acts as the smaller keyboard step size for keyboard input. Note
+   * that the default uses the same value as majorVertexInterval.
+   */
   minorVertexInterval: {
     type: 'number',
     defaultValue: 0.05,
