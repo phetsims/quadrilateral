@@ -59,6 +59,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
 
   // A scale factor applied to all tolerances when connected to a tangible device so that it is easier to find and
   // maintain shapes and important shape Properties for the more macroscopic motion inherent to a physical device.
+  // Compounds with fineInputSpacingToleranceIntervalScaleFactor.
   connectedToleranceIntervalScaleFactor: {
     type: 'number',
     defaultValue: 5

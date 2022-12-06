@@ -71,6 +71,7 @@ class ParallelSideChecker {
       phetioReadOnly: true
     } );
 
+    // TODO: This is going to become way simpler, see https://github.com/phetsims/quadrilateral/issues/272
     this.parallelAngleToleranceIntervalProperty = new DerivedProperty( [
       this.side1.isPressedProperty,
       this.side2.isPressedProperty,
