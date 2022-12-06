@@ -67,14 +67,6 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     defaultValue: 0.005
   },
 
-  // A flag that controls when the "maintenance" sound is played. When provided, the success sound for maintenance
-  // will only play when changing the shape, while in parallelogram, while also keeping side lengths the same.
-  // Otherwise, it will be played when changing shape and keeping n parallelogram. This can also be enabled/disabled
-  // from preferences.
-  equalLengthsForMaintenanceSound: {
-    type: 'flag'
-  },
-
   // If provided, some extra things will be done in the simulation to facilitate communication with the hardware/device.
   deviceConnection: {
     type: 'flag'
@@ -89,13 +81,6 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // the simulation with BLE communication.
   bluetooth: {
     type: 'flag'
-  },
-
-  // If true, some additional graphical and auditory feedback will be provided when the quad becomes
-  // a named shape like rectangle or kite or trapezoid.
-  shapeIdentificationFeedback: {
-    type: 'boolean',
-    defaultValue: true
   },
 
   // If true, a dialog will be shown at startup that will require the user to touch the screen.  This will allow the

@@ -160,8 +160,7 @@ class QuadrilateralNode extends Node {
     this.vertexNodes = [ vertexNode1, vertexNode2, vertexNode3, vertexNode4 ];
     this.sideNodes = [ topSideNode, rightSideNode, bottomSideNode, leftSideNode ];
 
-    // only if shape identification feedback is enabled, reset the timer so that we change the color for a short
-    // period when we become a named shape
+    // reset the timer so that we change the color for a short period when we become a named shape
     this.quadrilateralShapeModel.shapeNameProperty.link( shapeName => {
       if ( shapeName !== null ) {
         this.remainingTimeForShapeChangeFill = SHAPE_FILL_TIME;
@@ -184,8 +183,6 @@ class QuadrilateralNode extends Node {
   public step( dt: number ): void {
     const previousActiveFill = this.activeFill;
     if ( this.remainingTimeForShapeChangeFill > 0 ) {
-
-      // Note this will only happen if "shapeIdentificationFeedback" is enabled.
       this.activeFill = QuadrilateralColors.quadrilateralNamedShapeColorProperty;
     }
     else {
