@@ -61,35 +61,66 @@ class QuadrilateralDiagonalGuidesNode extends Node {
   }
 
   /**
-   * Draws a line between the provided vertex positions. The line spans across the vertex positions until the
-   * intersection points with simulation bounds.
+   * Draws a line between the provided vertex positions. The line spans across the positions until it intersects
+   * with model bounds. This could have been done with a clip area but that seemed excessive.
    */
   private static drawDiagonal( vertex1Position: Vector2, vertex2Position: Vector2, bounds: Bounds2, modelViewTransform: ModelViewTransform2, lineNode: Line ): void {
 
-    // convert Bounds2 to a Shape so that we can find ray/bounds intersections
     const boundsShape = Shape.bounds( bounds );
-
-    const vertex1RayDirection = vertex2Position.minus( vertex1Position ).normalized();
-    const vertex1Ray = new Ray2( vertex1Position, vertex1RayDirection );
-
-    const vertex2RayDirection = vertex1Position.minus( vertex2Position ).normalized();
-    const vertex2Ray = new Ray2( vertex2Position, vertex2RayDirection );
-
-    const vertex1RayIntersections = boundsShape.intersection( vertex1Ray );
-    const vertex2RayIntersections = boundsShape.intersection( vertex2Ray );
-
-    assert && assert( vertex1RayIntersections.length === 1 && vertex2RayIntersections.length === 1,
-      'There should be one and only one intersection for each ray from vertices within bounds' );
-
-    // Intersection points along bounds so the line extends across the whole simulation bounds.
-    const p1 = vertex1RayIntersections[ 0 ].point;
-    const p2 = vertex2RayIntersections[ 0 ].point;
+    const p1 = QuadrilateralDiagonalGuidesNode.getBestIntersectionPoint( vertex1Position, vertex2Position, bounds, boundsShape );
+    const p2 = QuadrilateralDiagonalGuidesNode.getBestIntersectionPoint( vertex2Position, vertex1Position, bounds, boundsShape );
 
     const p1View = modelViewTransform.modelToViewPosition( p1 );
     const p2View = modelViewTransform.modelToViewPosition( p2 );
 
     lineNode.setPoint1( p1View );
     lineNode.setPoint2( p2View );
+  }
+
+  /**
+   * Creates a ray from vertex1Position to vertex2Position and returns the intersection point of that ray and the
+   * provided bounds. This will be one of the end points for the Line created by this Node. This functions works around
+   * a Kite limitation that an intersection is undefined if the Ray intersects exactly with a start/end point of a
+   * shape segment.
+   */
+  private static getBestIntersectionPoint( vertex1Position: Vector2, vertex2Position: Vector2, bounds: Bounds2, boundsShape: Shape ): Vector2 {
+    const rayDirection = vertex2Position.minus( vertex1Position ).normalized();
+    const ray = new Ray2( vertex1Position, rayDirection );
+
+    const intersections = boundsShape.intersection( ray );
+    assert && assert( intersections.length < 2, 'There should be at most one intersection along bounds' );
+
+    let point: Vector2;
+    if ( intersections.length === 1 ) {
+      point = intersections[ 0 ].point;
+    }
+    else {
+      point = QuadrilateralDiagonalGuidesNode.getBoundsCornerPositionAlongRay( ray, bounds )!;
+    }
+
+    assert && assert( point, 'Could not find an intersection point for the ray within the bounds.' );
+    return point;
+  }
+
+  /**
+   * Returns one of the corner points of the Bounds2 if the provided ray goes exactly through that point. Works
+   * around a limitation of Shape.intersects( Ray2 ) where if the ray intersects with a start/end point of a shape
+   * segment, the intersection is not defined.
+   */
+  private static getBoundsCornerPositionAlongRay( ray: Ray2, bounds: Bounds2 ): Vector2 | null {
+    return QuadrilateralDiagonalGuidesNode.isPointOnRay( ray, bounds.leftTop ) ? bounds.leftTop :
+           QuadrilateralDiagonalGuidesNode.isPointOnRay( ray, bounds.rightTop ) ? bounds.rightTop :
+           QuadrilateralDiagonalGuidesNode.isPointOnRay( ray, bounds.rightBottom ) ? bounds.rightBottom :
+           QuadrilateralDiagonalGuidesNode.isPointOnRay( ray, bounds.leftBottom ) ? bounds.leftBottom :
+           null;
+  }
+
+  /**
+   * Returns true if the provided point lies on the ray.
+   */
+  private static isPointOnRay( ray: Ray2, point: Vector2 ): boolean {
+    const directionToPoint = point.minus( ray.position ).normalized();
+    return ray.direction.equalsEpsilon( directionToPoint, 1e-2 );
   }
 }
 
