@@ -84,13 +84,6 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     defaultValue: 5
   },
 
-  // The tolerance interval for the angle of tilt for sides.
-  tiltToleranceInterval: {
-    type: 'number',
-    isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
-    defaultValue: 0.2
-  },
-
   // A scale factor for the tolerance interval for comparing lengths in the model, relative to the
   // length of one side. For example, two sides will be considered equal in length when both sides
   // have a same length within ( length * lengthToleranceIntervalScaleFactor).

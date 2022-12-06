@@ -14,7 +14,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import quadrilateral from '../../quadrilateral.js';
 import NamedQuadrilateral from './NamedQuadrilateral.js';
 import Side from './Side.js';
-import Range from '../../../../dot/js/Range.js';
 import Vertex from './Vertex.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Emitter from '../../../../axon/js/Emitter.js';
@@ -125,10 +124,6 @@ class QuadrilateralShapeModel {
   // Whether or not the Properties of the shape are currently being deferred, preventing listeners
   // from being called and new values from being set.
   private propertiesDeferred: boolean;
-
-  // A tolerance value specifically for comparisons relatint to tilt.
-  // TODO: Can we remove this now that we have ParallelSideChecker?
-  public tiltToleranceIntervalProperty: Property<number>;
 
   // The tolerance interval for angle and length comparisons when detecting shape names. This needs to be different
   // from the parallelAToleranceInterval of the ParallelSideCheckers because those tolerance intervals can change
@@ -317,11 +312,6 @@ class QuadrilateralShapeModel {
     this.leftSide.connectToSide( this.bottomSide );
     this.topSide.connectToSide( this.leftSide );
 
-    this.tiltToleranceIntervalProperty = new NumberProperty( QuadrilateralQueryParameters.tiltToleranceInterval, {
-      tandem: options.tandem.createTandem( 'tiltToleranceIntervalProperty' ),
-      range: new Range( 0, 2 * Math.PI )
-    } );
-
     this.savedSideLengths = this.getSideLengths();
     this.savedVertexAngles = this.getVertexAngles();
 
@@ -363,7 +353,7 @@ class QuadrilateralShapeModel {
 
       // reduce the value when "Fine Input Spacing" is selected
       return fineInputSpacing ? QuadrilateralQueryParameters.interAngleToleranceInterval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor :
-                                          QuadrilateralQueryParameters.interAngleToleranceInterval;
+             QuadrilateralQueryParameters.interAngleToleranceInterval;
     }, {
       tandem: options.tandem.createTandem( 'interAngleToleranceIntervalProperty' ),
       phetioValueType: NumberIO
@@ -373,7 +363,7 @@ class QuadrilateralShapeModel {
 
       // reduce the value when "Fine Input Spacing" is selected
       return fineInputSpacing ? QuadrilateralQueryParameters.staticAngleToleranceInterval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor :
-                                           QuadrilateralQueryParameters.staticAngleToleranceInterval;
+             QuadrilateralQueryParameters.staticAngleToleranceInterval;
     }, {
       tandem: options.tandem.createTandem( 'staticAngleToleranceIntervalProperty' ),
       phetioValueType: NumberIO
@@ -383,7 +373,7 @@ class QuadrilateralShapeModel {
 
       // reduce the value when "Fine Input Spacing" is selected
       return fineInputSpacing ? QuadrilateralQueryParameters.shapeLengthToleranceInterval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor :
-                                           QuadrilateralQueryParameters.shapeLengthToleranceInterval;
+             QuadrilateralQueryParameters.shapeLengthToleranceInterval;
     }, {
       tandem: options.tandem.createTandem( 'shapeLengthToleranceIntervalProperty' ),
       phetioValueType: NumberIO
@@ -969,10 +959,6 @@ class QuadrilateralShapeModel {
    */
   public isStaticAngleEqualToOther( angle: number, otherAngle: number ): boolean {
     return Utils.equalsEpsilon( angle, otherAngle, this.staticAngleToleranceIntervalProperty.value );
-  }
-
-  public isTiltEqualToOther( tilt1: number, tilt2: number ): boolean {
-    return Utils.equalsEpsilon( tilt1, tilt2, this.tiltToleranceIntervalProperty.value );
   }
 
   /**
