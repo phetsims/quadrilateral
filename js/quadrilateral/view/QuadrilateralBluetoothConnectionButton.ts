@@ -101,9 +101,9 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
     // typing of the bluetooth web API for this prototype code.
     let device: null | IntentionalAny;
 
-    // @ts-ignore - navigator.bluetooth is experimental and does not exist in the typing
+    // @ts-expect-error - navigator.bluetooth is experimental and does not exist in the typing
     if ( navigator.bluetooth ) {
-      // @ts-ignore - navigator.bluetooth is experimental and does not exist in the typing
+      // @ts-expect-error - navigator.bluetooth is experimental and does not exist in the typing
       device = await navigator.bluetooth.requestDevice( REQUEST_DEVICE_OPTIONS ).catch( err => {
         device = null;
       } );
@@ -153,50 +153,50 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
    */
   private handleCharacteristicValueChanged( event: Event ): void {
     if ( event.target ) {
-      // @ts-ignore
+      // @ts-expect-error
       console.log( '1: ', event.target.value.getFloat32( 0, true ) );
 
-      // @ts-ignore
+      // @ts-expect-error
       this.topLength = event.target.value.getFloat32( 0, true );
     }
   }
 
   private handleCharacteristicValue2Changed( event: Event ): void {
     if ( event.target ) {
-      // @ts-ignore
+      // @ts-expect-error
       console.log( '2: ', event.target.value.getFloat32( 0, true ) );
 
-      // @ts-ignore
+      // @ts-expect-error
       this.rightLength = event.target.value.getFloat32( 0, true );
     }
   }
 
   private handleCharacteristicValue3Changed( event: Event ): void {
     if ( event.target ) {
-      // @ts-ignore
+      // @ts-expect-error
       console.log( '3: ', event.target.value.getFloat32( 0, true ) );
 
-      // @ts-ignore
+      // @ts-expect-error
       this.leftLength = event.target.value.getFloat32( 0, true );
     }
   }
 
   private handleCharacteristicValue4Changed( event: Event ): void {
     if ( event.target ) {
-      // @ts-ignore
+      // @ts-expect-error
       console.log( '4: ', event.target.value.getFloat32( 0, true ) );
 
-      // @ts-ignore
+      // @ts-expect-error
       this.topLeftAngle = event.target.value.getFloat32( 0, true );
     }
   }
 
   private handleCharacteristicValue5Changed( event: Event ): void {
     if ( event.target ) {
-      // @ts-ignore
+      // @ts-expect-error
       console.log( '5: ', event.target.value.getFloat32( 0, true ) );
 
-      // @ts-ignore
+      // @ts-expect-error
       this.topRightAngle = event.target.value.getFloat32( 0, true );
 
       // signify that it is time to update the simulation

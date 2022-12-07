@@ -79,7 +79,7 @@ simLauncher.launch( () => {
   const sim = new Sim( quadrilateralTitleStringProperty, [ quadrilateralScreen ], simOptions );
   sim.start();
 
-  // @ts-ignore
+  // @ts-expect-error
   if ( QuadrilateralQueryParameters.showInitialTouchDialog && window.navigator.vibrate ) {
 
     // Put up a dialog that will essentially force the user to interact with the sim, thus enabling haptics right away.
