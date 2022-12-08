@@ -149,54 +149,57 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
 
   /**
    * Respond to a characteristicvaluechanged event.
-   * TODO: Implement this function. This is the main event we get when we receive new data from the device.
+   *
+   * NOTE: ts-expect-errors are reasonable for this "experimental" web technology. event.target.value is defined for
+   * the `characteristicvaluechanged` event of the Web Bluetooth API. I believe the type of target is
+   * https://developer.mozilla.org/en-US/docs/Web/API/BluetoothRemoteGATTCharacteristic, but haven't tested in a while.
    */
   private handleCharacteristicValueChanged( event: Event ): void {
     if ( event.target ) {
-      // @ts-expect-error
+      // @ts-expect-error - See note at handleCharacteristicValueChanged() about this.
       console.log( '1: ', event.target.value.getFloat32( 0, true ) );
 
-      // @ts-expect-error
+      // @ts-expect-error - See note at handleCharacteristicValueChanged() about this.
       this.topLength = event.target.value.getFloat32( 0, true );
     }
   }
 
   private handleCharacteristicValue2Changed( event: Event ): void {
     if ( event.target ) {
-      // @ts-expect-error
+      // @ts-expect-error - See note at handleCharacteristicValueChanged() about this.
       console.log( '2: ', event.target.value.getFloat32( 0, true ) );
 
-      // @ts-expect-error
+      // @ts-expect-error - See note at handleCharacteristicValueChanged() about this.
       this.rightLength = event.target.value.getFloat32( 0, true );
     }
   }
 
   private handleCharacteristicValue3Changed( event: Event ): void {
     if ( event.target ) {
-      // @ts-expect-error
+      // @ts-expect-error - See note at handleCharacteristicValueChanged() about this.
       console.log( '3: ', event.target.value.getFloat32( 0, true ) );
 
-      // @ts-expect-error
+      // @ts-expect-error - See note at handleCharacteristicValueChanged() about this.
       this.leftLength = event.target.value.getFloat32( 0, true );
     }
   }
 
   private handleCharacteristicValue4Changed( event: Event ): void {
     if ( event.target ) {
-      // @ts-expect-error
+      // @ts-expect-error - See note at handleCharacteristicValueChanged() about this.
       console.log( '4: ', event.target.value.getFloat32( 0, true ) );
 
-      // @ts-expect-error
+      // @ts-expect-error - See note at handleCharacteristicValueChanged() about this.
       this.topLeftAngle = event.target.value.getFloat32( 0, true );
     }
   }
 
   private handleCharacteristicValue5Changed( event: Event ): void {
     if ( event.target ) {
-      // @ts-expect-error
+      // @ts-expect-error - See note at handleCharacteristicValueChanged() about this.
       console.log( '5: ', event.target.value.getFloat32( 0, true ) );
 
-      // @ts-expect-error
+      // @ts-expect-error - See note at handleCharacteristicValueChanged() about this.
       this.topRightAngle = event.target.value.getFloat32( 0, true );
 
       // signify that it is time to update the simulation

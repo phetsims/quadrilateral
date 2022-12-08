@@ -79,7 +79,7 @@ simLauncher.launch( () => {
   const sim = new Sim( quadrilateralTitleStringProperty, [ quadrilateralScreen ], simOptions );
   sim.start();
 
-  // @ts-expect-error
+  // @ts-expect-error - navigator.vibrate isn't available yet in TypeScript's native types (experimental technology)
   if ( QuadrilateralQueryParameters.showInitialTouchDialog && window.navigator.vibrate ) {
 
     // Put up a dialog that will essentially force the user to interact with the sim, thus enabling haptics right away.
