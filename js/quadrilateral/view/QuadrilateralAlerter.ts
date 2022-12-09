@@ -329,6 +329,8 @@ class QuadrilateralAlerter extends Alerter {
     const lengthTolerance = this.model.quadrilateralShapeModel.interLengthToleranceIntervalProperty.value;
     const shapeModel = this.model.quadrilateralShapeModel;
 
+    const toleranceForDescribingLengthChange = lengthTolerance / 3;
+
     const currentShapeSnapshot = new ShapeSnapshot( this.model.quadrilateralShapeModel );
 
     const previousAdjacentLengths = this.previousObjectResponseShapeSnapshot.getAdjacentSideLengthsFromSideLabel( side.sideLabel );
@@ -384,7 +386,7 @@ class QuadrilateralAlerter extends Alerter {
       // we just found a shape with two equal sides (moving from no equal sides)
       response = twoSidesEqualString;
     }
-    else if ( firstSideAbsoluteDifference > lengthTolerance || secondSideAbsoluteDifference > lengthTolerance ) {
+    else if ( firstSideAbsoluteDifference > toleranceForDescribingLengthChange || secondSideAbsoluteDifference > toleranceForDescribingLengthChange ) {
       if ( Math.sign( firstAdjacentSideLengthDifference ) === Math.sign( secondAdjacentSideLengthDifference ) ) {
 
         const adjacentSidesLonger = firstAdjacentSideLengthDifference > 0;
