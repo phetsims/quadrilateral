@@ -87,15 +87,17 @@ class QuadrilateralDiagonalGuidesNode extends Node {
     const rayDirection = vertex2Position.minus( vertex1Position ).normalized();
     const ray = new Ray2( vertex1Position, rayDirection );
 
-    const intersections = boundsShape.intersection( ray );
-    assert && assert( intersections.length < 2, 'There should be at most one intersection along bounds' );
+    // First, look for an intersection against one of the corners of the bounds shape. If there is one here,
+    // Kite shape intersection will either return 0 (because it is undefined) or 2 (because it is close enough to
+    // both intersecting segments at the corner point) intersections.
+    let point = QuadrilateralShapeModel.getBoundsCornerPositionAlongRay( ray, bounds )!;
+    if ( !point ) {
 
-    let point: Vector2;
-    if ( intersections.length === 1 ) {
+      // There was not an intersection with a corner, we should be safe to look for an intersection against a
+      // corner
+      const intersections = boundsShape.intersection( ray );
+      assert && assert( intersections.length === 1, 'There should one (and only one) intersection' );
       point = intersections[ 0 ].point;
-    }
-    else {
-      point = QuadrilateralShapeModel.getBoundsCornerPositionAlongRay( ray, bounds )!;
     }
 
     assert && assert( point, 'Could not find an intersection point for the ray within the bounds.' );
