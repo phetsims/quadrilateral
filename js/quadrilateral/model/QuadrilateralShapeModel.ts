@@ -819,15 +819,28 @@ class QuadrilateralShapeModel {
     const c = this.bottomSide.lengthProperty.value;
     const d = this.leftSide.lengthProperty.value;
 
-    // semiperimeter
-    const s = ( a + b + c + d ) / 2;
+    const firstAngle = this.vertexA.angleProperty.value!;
+    const secondAngle = this.vertexC.angleProperty.value!;
 
-    // can use any two opposite angles
-    const cosArg = Math.cos( ( this.vertexA.angleProperty.value! + this.vertexC.angleProperty.value! ) / 2 );
-    const area = Math.sqrt( ( s - a ) * ( s - b ) * ( s - c ) * ( s - d ) - ( a * b * c * d ) * cosArg * cosArg );
+    const values = [ a, b, c, d, firstAngle, secondAngle ];
+    if ( !this.validateShape && _.some( values, value => value === 0 ) ) {
 
-    assert && assert( !isNaN( area ), 'area is not a number' );
-    return area;
+      // A vertex might be overlapped with a side or another Vertex in the "test" shape while we are trying to find
+      // a good vertex position. Gracefully handle this by returning an area of zero (area is NaN/undefined otherwise).
+      return 0;
+    }
+    else {
+
+      // semiperimeter
+      const s = ( a + b + c + d ) / 2;
+
+      // can use any two opposite angles
+      const cosArg = Math.cos( ( firstAngle + secondAngle ) / 2 );
+      const area = Math.sqrt( ( s - a ) * ( s - b ) * ( s - c ) * ( s - d ) - ( a * b * c * d ) * cosArg * cosArg );
+
+      assert && assert( !isNaN( area ), 'area is not a number' );
+      return area;
+    }
   }
 
   /**
