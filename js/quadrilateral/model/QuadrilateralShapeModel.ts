@@ -555,7 +555,6 @@ class QuadrilateralShapeModel {
       }
     } );
     assert && assert( firstRayIntersectionLinePair && secondRayIntersectionLinePair, 'ray intersections were not found' );
-    assert && assert( firstRayIntersectionLinePair!.line !== secondRayIntersectionLinePair!.line, 'Ray intersections were not found' );
 
     // An array of points that will create the final shape
     let points = [];
