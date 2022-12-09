@@ -385,7 +385,7 @@ class QuadrilateralAlerter extends Alerter {
       response = twoSidesEqualString;
     }
     else if ( firstSideAbsoluteDifference > lengthTolerance || secondSideAbsoluteDifference > lengthTolerance ) {
-      if ( shapeModel.isShapeLengthEqualToOther( firstAdjacentSideLengthDifference, secondAdjacentSideLengthDifference ) ) {
+      if ( Math.sign( firstAdjacentSideLengthDifference ) === Math.sign( secondAdjacentSideLengthDifference ) ) {
 
         const adjacentSidesLonger = firstAdjacentSideLengthDifference > 0;
         const changeString = adjacentSidesLonger ? longerString : shorterString;
