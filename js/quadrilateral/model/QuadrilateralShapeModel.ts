@@ -526,7 +526,7 @@ class QuadrilateralShapeModel {
 
         // There wasn't an intersection, the ray intersected exactly with a corner of the bounds, which is not
         // a defined intersection according to Kite.
-        const intersectionPoint = QuadrilateralShapeModel.getBoundsCornerPositionAlongRay( firstRay!, modelBounds );
+        const intersectionPoint = QuadrilateralShapeModel.getLinePositionAlongRay( firstRay!, line );
         if ( intersectionPoint ) {
           firstRayIntersectionLinePair = {
             line: line,
@@ -545,7 +545,7 @@ class QuadrilateralShapeModel {
 
         // There wasn't an intersection, the ray intersected exactly with a corner of the bounds, which is not
         // a defined intersection according to Kite.
-        const intersectionPoint = QuadrilateralShapeModel.getBoundsCornerPositionAlongRay( secondRay!, modelBounds );
+        const intersectionPoint = QuadrilateralShapeModel.getLinePositionAlongRay( secondRay!, line );
         if ( intersectionPoint ) {
           secondRayIntersectionLinePair = {
             line: line,
@@ -555,6 +555,7 @@ class QuadrilateralShapeModel {
       }
     } );
     assert && assert( firstRayIntersectionLinePair && secondRayIntersectionLinePair, 'ray intersections were not found' );
+    assert && assert( firstRayIntersectionLinePair!.line !== secondRayIntersectionLinePair!.line, 'Ray intersections were not found' );
 
     // An array of points that will create the final shape
     let points = [];
@@ -621,6 +622,16 @@ class QuadrilateralShapeModel {
            QuadrilateralShapeModel.isPointOnRay( ray, bounds.rightTop ) ? bounds.rightTop :
            QuadrilateralShapeModel.isPointOnRay( ray, bounds.rightBottom ) ? bounds.rightBottom :
            QuadrilateralShapeModel.isPointOnRay( ray, bounds.leftBottom ) ? bounds.leftBottom :
+           null;
+  }
+
+  /**
+   * Returns the start or end point of a Line if the ray goes through it. Assists with intersection detection since
+   * Kite functions do not have a defined intersection if a ray goes through an endpoint of a line or segment.
+   */
+  public static getLinePositionAlongRay( ray: Ray2, line: Line ): Vector2 | null {
+    return QuadrilateralShapeModel.isPointOnRay( ray, line.start ) ? line.start :
+           QuadrilateralShapeModel.isPointOnRay( ray, line.end ) ? line.end :
            null;
   }
 
