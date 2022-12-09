@@ -95,32 +95,11 @@ class QuadrilateralDiagonalGuidesNode extends Node {
       point = intersections[ 0 ].point;
     }
     else {
-      point = QuadrilateralDiagonalGuidesNode.getBoundsCornerPositionAlongRay( ray, bounds )!;
+      point = QuadrilateralShapeModel.getBoundsCornerPositionAlongRay( ray, bounds )!;
     }
 
     assert && assert( point, 'Could not find an intersection point for the ray within the bounds.' );
     return point;
-  }
-
-  /**
-   * Returns one of the corner points of the Bounds2 if the provided ray goes exactly through that point. Works
-   * around a limitation of Shape.intersects( Ray2 ) where if the ray intersects with a start/end point of a shape
-   * segment, the intersection is not defined.
-   */
-  private static getBoundsCornerPositionAlongRay( ray: Ray2, bounds: Bounds2 ): Vector2 | null {
-    return QuadrilateralDiagonalGuidesNode.isPointOnRay( ray, bounds.leftTop ) ? bounds.leftTop :
-           QuadrilateralDiagonalGuidesNode.isPointOnRay( ray, bounds.rightTop ) ? bounds.rightTop :
-           QuadrilateralDiagonalGuidesNode.isPointOnRay( ray, bounds.rightBottom ) ? bounds.rightBottom :
-           QuadrilateralDiagonalGuidesNode.isPointOnRay( ray, bounds.leftBottom ) ? bounds.leftBottom :
-           null;
-  }
-
-  /**
-   * Returns true if the provided point lies on the ray.
-   */
-  private static isPointOnRay( ray: Ray2, point: Vector2 ): boolean {
-    const directionToPoint = point.minus( ray.position ).normalized();
-    return ray.direction.equalsEpsilon( directionToPoint, 1e-2 );
   }
 }
 

@@ -522,14 +522,17 @@ class QuadrilateralShapeModel {
           intersectionPoint: firstLineIntersections[ 0 ].point
         };
       }
-      if ( QuadrilateralShapeModel.isPointOnLine( line, firstRay!.position ) ) {
+      else {
 
-        // The point is exactly on the line, so there won't be an intersection - but this is still an intersection
-        // for our purposes, we want include that point in our vertex area.
-        firstRayIntersectionLinePair = {
-          line: line,
-          intersectionPoint: firstRay!.position
-        };
+        // There wasn't an intersection, the ray intersected exactly with a corner of the bounds, which is not
+        // a defined intersection according to Kite.
+        const intersectionPoint = QuadrilateralShapeModel.getBoundsCornerPositionAlongRay( firstRay!, modelBounds );
+        if ( intersectionPoint ) {
+          firstRayIntersectionLinePair = {
+            line: line,
+            intersectionPoint: intersectionPoint
+          };
+        }
       }
 
       if ( secondLineIntersections.length > 0 ) {
@@ -538,14 +541,17 @@ class QuadrilateralShapeModel {
           intersectionPoint: secondLineIntersections[ 0 ].point
         };
       }
-      if ( QuadrilateralShapeModel.isPointOnLine( line, secondRay!.position ) ) {
+      else {
 
-        // The point is exactly on the line, so there won't be an intersection - but this is still an intersection
-        // for our purposes, we want include that point in our vertex area.
-        secondRayIntersectionLinePair = {
-          line: line,
-          intersectionPoint: secondRay!.position
-        };
+        // There wasn't an intersection, the ray intersected exactly with a corner of the bounds, which is not
+        // a defined intersection according to Kite.
+        const intersectionPoint = QuadrilateralShapeModel.getBoundsCornerPositionAlongRay( secondRay!, modelBounds );
+        if ( intersectionPoint ) {
+          secondRayIntersectionLinePair = {
+            line: line,
+            intersectionPoint: intersectionPoint
+          };
+        }
       }
     } );
     assert && assert( firstRayIntersectionLinePair && secondRayIntersectionLinePair, 'ray intersections were not found' );
@@ -603,6 +609,27 @@ class QuadrilateralShapeModel {
 
     // TODO: This check is susceptible to precision errors but this seems fragile, is there another way to do this?
     return Utils.equalsEpsilon( length, lengthA + lengthB, 0.001 );
+  }
+
+  /**
+   * Returns one of the corner points of the Bounds2 if the provided ray goes exactly through that point. Works
+   * around a limitation of Shape.intersects( Ray2 ) where if the ray intersects with a start/end point of a shape
+   * segment, the intersection is not defined.
+   */
+  public static getBoundsCornerPositionAlongRay( ray: Ray2, bounds: Bounds2 ): Vector2 | null {
+    return QuadrilateralShapeModel.isPointOnRay( ray, bounds.leftTop ) ? bounds.leftTop :
+           QuadrilateralShapeModel.isPointOnRay( ray, bounds.rightTop ) ? bounds.rightTop :
+           QuadrilateralShapeModel.isPointOnRay( ray, bounds.rightBottom ) ? bounds.rightBottom :
+           QuadrilateralShapeModel.isPointOnRay( ray, bounds.leftBottom ) ? bounds.leftBottom :
+           null;
+  }
+
+  /**
+   * Returns true if the provided point lies on the ray.
+   */
+  private static isPointOnRay( ray: Ray2, point: Vector2 ): boolean {
+    const directionToPoint = point.minus( ray.position ).normalized();
+    return ray.direction.equalsEpsilon( directionToPoint, 1e-2 );
   }
 
   /**
