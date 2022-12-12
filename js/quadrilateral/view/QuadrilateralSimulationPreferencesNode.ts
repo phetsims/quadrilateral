@@ -30,8 +30,11 @@ class QuadrilateralSimulationPreferencesNode extends PreferencesPanelSection {
     );
 
     const fineSpacingSwitch = new ToggleSwitch( preferencesModel.fineInputSpacingProperty, false, true, combineOptions<ToggleSwitchOptions>(
+      {},
       PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS,
       {
+        leftValueContextResponse: QuadrilateralStrings.a11y.fineInputDisabledContextResponse,
+        rightValueContextResponse: QuadrilateralStrings.a11y.fineInputEnabledContextResponse,
         tandem: tandem.createTandem( 'fineInputSpacingCheckbox' )
       }
     ) );

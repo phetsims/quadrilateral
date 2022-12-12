@@ -587,7 +587,11 @@ type StringsType = {
       'allCornersEqualStringProperty': LinkableProperty<string>;
       'progressStatePattern': string;
       'progressStatePatternStringProperty': LinkableProperty<string>;
-    }
+    };
+    'fineInputEnabledContextResponse': string;
+    'fineInputEnabledContextResponseStringProperty': LinkableProperty<string>;
+    'fineInputDisabledContextResponse': string;
+    'fineInputDisabledContextResponseStringProperty': LinkableProperty<string>;
   }
 };
 

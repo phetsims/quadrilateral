@@ -849,6 +849,12 @@
       "progressStatePattern": {
         "value": "{{progress}}, {{state}}"
       }
+    },
+    "fineInputEnabledContextResponse": {
+      "value": "Fine input on for mouse, touch, and Shift key with keyboard."
+    },
+    "fineInputDisabledContextResponse": {
+      "value": "Fine input off for all inputs."
     }
   }
 }
