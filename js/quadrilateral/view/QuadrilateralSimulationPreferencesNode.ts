@@ -8,7 +8,7 @@
 
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralPreferencesModel from '../model/QuadrilateralPreferencesModel.js';
-import { Node, Text, VBox, VoicingText, VoicingTextOptions } from '../../../../scenery/js/imports.js';
+import { Node, Text, VBox, VoicingRichText, VoicingRichTextOptions } from '../../../../scenery/js/imports.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import PreferencesDialog from '../../../../joist/js/preferences/PreferencesDialog.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -24,12 +24,9 @@ class QuadrilateralSimulationPreferencesNode extends PreferencesPanelSection {
   public constructor( preferencesModel: QuadrilateralPreferencesModel, tandem: Tandem ) {
 
     // A control for vertex spacing.
-    const fineInputDescriptionText = new VoicingText(
+    const fineInputDescriptionText = new VoicingRichText(
       QuadrilateralStrings.fineInputSpacingDescriptionStringProperty,
-
-      // let the maxWidth get a bit bigger for this very long string
-      // TODO: Its probably too long, see https://github.com/phetsims/quadrilateral/issues/197
-      combineOptions<VoicingTextOptions>( {}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, { maxWidth: 750 } )
+      combineOptions<VoicingRichTextOptions>( {}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, { lineWrap: 500 } )
     );
 
     const fineSpacingSwitch = new ToggleSwitch( preferencesModel.fineInputSpacingProperty, false, true, combineOptions<ToggleSwitchOptions>(
