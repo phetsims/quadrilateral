@@ -12,7 +12,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import { Rectangle, Text } from '../../../../scenery/js/imports.js';
+import { Text } from '../../../../scenery/js/imports.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralNode from './QuadrilateralNode.js';
 import QuadrilateralSoundView from './sound/QuadrilateralSoundView.js';
@@ -33,7 +33,6 @@ import QuadrilateralPreferencesModel from '../model/QuadrilateralPreferencesMode
 import QuadrilateralMediaPipe from './QuadrilateralMediaPipe.js';
 import QuadrilateralDiagonalGuidesNode from './QuadrilateralDiagonalGuidesNode.js';
 import QuadrilateralShapeNameDisplay from './QuadrilateralShapeNameDisplay.js';
-import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import MediaPipeQueryParameters from '../../../../tangible/js/mediaPipe/MediaPipeQueryParameters.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralInteractionCueNode from './QuadrilateralInteractionCueNode.js';
@@ -46,8 +45,6 @@ import QuadrilateralSoundBoardNode from './sound/QuadrilateralSoundBoardNode.js'
 // half of the vertex width so that model space is large enough for Vertices to perfectly align with the bounds
 // limits, requested in https://github.com/phetsims/quadrilateral/issues/220
 const MODEL_BOUNDS = new Bounds2( -1, -1, 1, 1 ).dilated( Vertex.VERTEX_WIDTH / 2 );
-
-const BORDER_RECTANGLE_LINE_WIDTH = 2;
 
 class QuadrilateralScreenView extends ScreenView {
   private readonly model: QuadrilateralModel;
@@ -166,20 +163,10 @@ class QuadrilateralScreenView extends ScreenView {
 
     this.quadrilateralSoundView = new QuadrilateralSoundView( model, preferencesModel.soundOptionsModel );
 
-    // Rectangle showing available model bounds, requested in https://github.com/phetsims/quadrilateral/issues/49.
-    // Rounded corners to look nice, but actual model bounds are pure Bounds2.
-    assert && assert( this.model.modelBoundsProperty.value !== null );
-    const playAreaViewBounds = modelViewTransform.modelToViewBounds( this.model.modelBoundsProperty.value! );
-    const boundsRectangle = new Rectangle( playAreaViewBounds, 5, 5, {
-      stroke: QuadrilateralColors.playAreaStrokeColorProperty,
-      fill: QuadrilateralColors.playAreaFillColorProperty,
-      lineWidth: BORDER_RECTANGLE_LINE_WIDTH
-    } );
-
     const gridNode = new QuadrilateralGridNode( model.modelBoundsProperty, model.gridVisibleProperty, this.modelViewTransform );
 
     // rendering order - See https://github.com/phetsims/quadrilateral/issues/178
-    this.addChild( boundsRectangle );
+    // this.addChild( boundsRectangle );
     this.addChild( diagonalGuidesNode );
     this.addChild( gridNode );
     this.addChild( this.quadrilateralNode );
@@ -194,7 +181,7 @@ class QuadrilateralScreenView extends ScreenView {
 
     // A panel that displays model values, useful for debugging, useful for debugging
     const debugValuesPanel = new QuadrilateralModelValuePanel( model, {
-      leftTop: boundsRectangle.leftTop.plusXY( 5, 5 )
+      leftTop: gridNode.leftTop.plusXY( 5, 5 )
     } );
     model.showDebugValuesProperty.link( showValues => {
       debugValuesPanel.visible = showValues;
@@ -202,8 +189,8 @@ class QuadrilateralScreenView extends ScreenView {
     this.addChild( debugValuesPanel );
 
     // layout for components that depend on the play area bounds being defined
-    shapeNameDisplay.centerBottom = boundsRectangle.centerTop.minusXY( 0, QuadrilateralConstants.VIEW_SPACING );
-    resetShapeButton.rightCenter = new Vector2( boundsRectangle.right, shapeNameDisplay.centerY );
+    shapeNameDisplay.centerBottom = gridNode.centerTop.minusXY( 0, QuadrilateralConstants.VIEW_SPACING );
+    resetShapeButton.rightCenter = new Vector2( gridNode.right, shapeNameDisplay.centerY );
 
     if ( QuadrilateralQueryParameters.deviceConnection ) {
 
@@ -288,7 +275,6 @@ class QuadrilateralScreenView extends ScreenView {
 
     // voicing
     // Disabling eslint here because this variable is not used but I am sure that it will be soon.
-
     const quadrilateralAlerter = new QuadrilateralAlerter( model, this, modelViewTransform, this.quadrilateralDescriber ); // eslint-disable-line @typescript-eslint/no-unused-vars
   }
 

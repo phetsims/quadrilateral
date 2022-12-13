@@ -7,7 +7,7 @@
  */
 
 import quadrilateral from '../../quadrilateral.js';
-import { Path } from '../../../../scenery/js/imports.js';
+import { Node, Path, Rectangle } from '../../../../scenery/js/imports.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Property from '../../../../axon/js/Property.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -32,12 +32,26 @@ const MINOR_DEBUG_GRID_LINE_OPTIONS = {
   lineWidth: 0.25
 };
 
-class QuadrilateralGridNode extends Path {
+const BORDER_RECTANGLE_LINE_WIDTH = 2;
+
+class QuadrilateralGridNode extends Node {
   public constructor( modelBoundsProperty: Property<Bounds2 | null>, visibleProperty: TReadOnlyProperty<boolean>, modelViewTransform: ModelViewTransform2 ) {
-    super( null, GRID_LINE_OPTIONS );
+    super();
 
     const majorDebuggingPath = new Path( null, MAJOR_DEBUG_GRID_LINE_OPTIONS );
     const minorDebuggingPath = new Path( null, MINOR_DEBUG_GRID_LINE_OPTIONS );
+
+    // Rectangle showing available model bounds
+    const boundsRectangle = new Rectangle( 0, 0, 0, 0, 5, 5, {
+      stroke: QuadrilateralColors.playAreaStrokeColorProperty,
+      fill: QuadrilateralColors.playAreaFillColorProperty,
+      lineWidth: BORDER_RECTANGLE_LINE_WIDTH
+    } );
+    this.addChild( boundsRectangle );
+
+    const gridPath = new Path( null, GRID_LINE_OPTIONS );
+    this.addChild( gridPath );
+
     if ( QuadrilateralQueryParameters.showVertexGrid ) {
       this.addChild( majorDebuggingPath );
       this.addChild( minorDebuggingPath );
@@ -47,29 +61,32 @@ class QuadrilateralGridNode extends Path {
       if ( modelBounds ) {
         const lineShape = new Shape();
 
-        const modelLineWidth = modelViewTransform.viewToModelDeltaX( 1 );
-        const erodedBounds = modelBounds.eroded( modelLineWidth );
+        // dilate just enough for the quadrilateral shape to never overlap the stroke
+        const modelLineWidth = modelViewTransform.viewToModelDeltaX( BORDER_RECTANGLE_LINE_WIDTH );
+        const dilatedBounds = modelBounds.dilated( modelLineWidth );
 
-        this.drawVerticalLines( lineShape, erodedBounds, QuadrilateralConstants.GRID_SPACING );
-        this.drawHorizontalLines( lineShape, erodedBounds, QuadrilateralConstants.GRID_SPACING );
-        this.shape = modelViewTransform.modelToViewShape( lineShape );
+        boundsRectangle.setRectBounds( modelViewTransform.modelToViewBounds( dilatedBounds ) );
+
+        this.drawVerticalLines( lineShape, dilatedBounds, QuadrilateralConstants.GRID_SPACING );
+        this.drawHorizontalLines( lineShape, dilatedBounds, QuadrilateralConstants.GRID_SPACING );
+        gridPath.shape = modelViewTransform.modelToViewShape( lineShape );
 
         // Only do this work if necessary
         if ( QuadrilateralQueryParameters.showVertexGrid ) {
           const majorDebugShape = new Shape();
-          this.drawVerticalLines( majorDebugShape, erodedBounds, QuadrilateralQueryParameters.majorVertexInterval );
-          this.drawHorizontalLines( majorDebugShape, erodedBounds, QuadrilateralQueryParameters.majorVertexInterval );
+          this.drawVerticalLines( majorDebugShape, dilatedBounds, QuadrilateralQueryParameters.majorVertexInterval );
+          this.drawHorizontalLines( majorDebugShape, dilatedBounds, QuadrilateralQueryParameters.majorVertexInterval );
           majorDebuggingPath.shape = modelViewTransform.modelToViewShape( majorDebugShape );
 
           const minorDebugShape = new Shape();
-          this.drawVerticalLines( minorDebugShape, erodedBounds, QuadrilateralQueryParameters.minorVertexInterval );
-          this.drawHorizontalLines( minorDebugShape, erodedBounds, QuadrilateralQueryParameters.minorVertexInterval );
+          this.drawVerticalLines( minorDebugShape, dilatedBounds, QuadrilateralQueryParameters.minorVertexInterval );
+          this.drawHorizontalLines( minorDebugShape, dilatedBounds, QuadrilateralQueryParameters.minorVertexInterval );
           minorDebuggingPath.shape = modelViewTransform.modelToViewShape( minorDebugShape );
         }
       }
     } );
 
-    visibleProperty.link( visible => { this.visible = visible; } );
+    visibleProperty.link( visible => { gridPath.visible = visible; } );
   }
 
   /**
