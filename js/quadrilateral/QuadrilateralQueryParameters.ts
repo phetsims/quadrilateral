@@ -221,7 +221,7 @@ class ToleranceDefaults extends PhetioObject {
 }
 
 // instantiate so it appears in PhET-iO state
-const toleranceDefaults = new ToleranceDefaults(); //eslint-disable-line @typescript-eslint/no-unused-vars
+const toleranceDefaults = new ToleranceDefaults(); // eslint-disable-line @typescript-eslint/no-unused-vars
 
 quadrilateral.register( 'QuadrilateralQueryParameters', QuadrilateralQueryParameters );
 export default QuadrilateralQueryParameters;
