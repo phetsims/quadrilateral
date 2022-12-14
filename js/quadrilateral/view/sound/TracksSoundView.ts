@@ -34,7 +34,7 @@ const FADE_TIME = 1;
 
 // The maximum output level for all tracks of this sound design. Applied to this SoundGenerator, so that all tracks
 // connected to this one will be limited by this output level.
-const MAX_OUTPUT_LEVEL = 0.5;
+const MAX_OUTPUT_LEVEL = 0.3;
 
 // Range of output levels for individual sound clips under this sound view.
 const OUTPUT_LEVEL_RANGE = new Range( 0, 1 );
