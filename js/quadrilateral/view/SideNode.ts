@@ -26,6 +26,7 @@ import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
 import release_mp3 from '../../../../tambo/sounds/release_mp3.js';
+import boundaryReached_mp3 from '../../../../tambo/sounds/boundaryReached_mp3.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 
 // The dilation around side shapes when drawing the focus highlight.
@@ -253,7 +254,9 @@ class SideNode extends Voicing( Path ) {
           // now shift the proposed positions by a delta that would keep the sideBounds within vertexDragBounds
           const vertexDragBounds = quadrilateralModel.vertexDragBoundsProperty.value;
           const correctingVector = new Vector2( 0, 0 );
-          if ( !vertexDragBounds.containsBounds( sideBounds ) ) {
+
+          const inBounds = vertexDragBounds.containsBounds( sideBounds );
+          if ( !inBounds ) {
 
             if ( sideBounds.maxY > vertexDragBounds.maxY ) {
               correctingVector.y = vertexDragBounds.maxY - sideBounds.maxY;
@@ -278,12 +281,15 @@ class SideNode extends Voicing( Path ) {
           const proposedVertex2Position = quadrilateralModel.getClosestGridPosition( constrainedVertex2Position );
 
           // only update positions if both are allowed
-          if ( quadrilateralModel.areVertexPositionsAllowed( side.vertex1, proposedVertex1Position, side.vertex2, proposedVertex2Position ) ) {
+          const positionsAllowed = quadrilateralModel.areVertexPositionsAllowed( side.vertex1, proposedVertex1Position, side.vertex2, proposedVertex2Position );
+          if ( positionsAllowed ) {
             this.quadrilateralShapeModel.setVertexPositions( [
               { vertex: side.vertex1, proposedPosition: proposedVertex1Position },
               { vertex: side.vertex2, proposedPosition: proposedVertex2Position }
             ] );
           }
+
+          this.updateBlockedState( !positionsAllowed, !inBounds );
         }
         else if ( vertex1Pressed !== vertex2Pressed ) {
 
@@ -321,6 +327,15 @@ class SideNode extends Voicing( Path ) {
     side.isPressedProperty.lazyLink( isPressed => {
       if ( isPressed ) {
         pressedSoundPlayer.play();
+      }
+    } );
+
+    // sound - when the Vertex becomes blocked for any reason, play a sound indicating that the vertex is blocked
+    const blockedSoundPlayer = new SoundClip( boundaryReached_mp3 );
+    soundManager.addSoundGenerator( blockedSoundPlayer );
+    side.movementBlockedProperty.lazyLink( blocked => {
+      if ( blocked ) {
+        blockedSoundPlayer.play();
       }
     } );
 
@@ -373,15 +388,18 @@ class SideNode extends Voicing( Path ) {
     proposedVertex1Position = this.quadrilateralModel.getClosestGridPosition( proposedVertex1Position );
     proposedVertex2Position = this.quadrilateralModel.getClosestGridPosition( proposedVertex2Position );
 
-    // if the positions are outside of model bounds, the shape is not allowed
-    // TODO: I am not sure how to put this in the isQuadrilateralShapeAllowed, because to set the shape
-    // we change the vertex position Properties, which recomputes drag areas. The drag area algorithm requires
-    // that vertex positions are within bounds so we are tyring to avoid reaching that. Perhaps allow infinite drag
-    // shapes for the scratch model?
-    if ( !this.quadrilateralModel.modelBoundsProperty.value?.containsPoint( proposedVertex1Position ) ||
-         !this.quadrilateralModel.modelBoundsProperty.value?.containsPoint( proposedVertex2Position ) ) {
-      return;
-    }
+    const vertexDragBounds = this.quadrilateralModel.vertexDragBoundsProperty.value;
+    const inBounds = vertexDragBounds.containsPoint( proposedVertex1Position ) && vertexDragBounds.containsPoint( proposedVertex2Position );
+
+    // // if the positions are outside of model bounds, the shape is not allowed
+    // // TODO: I am not sure how to put this in the isQuadrilateralShapeAllowed, because to set the shape
+    // // we change the vertex position Properties, which recomputes drag areas. The drag area algorithm requires
+    // // that vertex positions are within bounds so we are tyring to avoid reaching that. Perhaps allow infinite drag
+    // // shapes for the scratch model?
+    // if ( !this.quadrilateralModel.modelBoundsProperty.value?.containsPoint( proposedVertex1Position ) ||
+    //      !this.quadrilateralModel.modelBoundsProperty.value?.containsPoint( proposedVertex2Position ) ) {
+    //   return;
+    // }
 
     // update the scratch model before setting proposed vertex positions
     this.scratchShapeModel.set( this.quadrilateralShapeModel );
@@ -395,7 +413,8 @@ class SideNode extends Voicing( Path ) {
       { vertex: this.scratchSide.vertex2, proposedPosition: proposedVertex2Position }
     ] );
 
-    if ( this.scratchShapeModel.isQuadrilateralShapeAllowed() ) {
+    const isShapeAllowed = this.scratchShapeModel.isQuadrilateralShapeAllowed();
+    if ( isShapeAllowed ) {
 
       // signify to the Alerter that it will be time to generate a new object response from input
       this.side.voicingObjectResponseDirty = true;
@@ -405,6 +424,17 @@ class SideNode extends Voicing( Path ) {
         { vertex: this.side.vertex2, proposedPosition: proposedVertex2Position }
       ] );
     }
+
+    this.updateBlockedState( !isShapeAllowed, !inBounds );
+  }
+
+  /**
+   * Update Properties in response to input indicating that the Side was blocked from moving for some reason.
+   * TODO: Reduce duplication with VertexNode, maybe a superclass?
+   */
+  public updateBlockedState( isBlockedByShape: boolean, isBlockedByBounds: boolean ): void {
+    this.side.movementBlockedByShapeProperty.value = isBlockedByShape;
+    this.side.movementBlockedByBoundsProperty.value = isBlockedByBounds;
   }
 
   /**
