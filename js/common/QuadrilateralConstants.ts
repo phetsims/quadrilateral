@@ -7,6 +7,7 @@
  */
 
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
+import Range from '../../../dot/js/Range.js';
 import Utterance from '../../../utterance-queue/js/Utterance.js';
 import quadrilateral from '../quadrilateral.js';
 
@@ -54,6 +55,10 @@ const QuadrilateralConstants = {
     font: new PhetFont( { size: 22 } ),
     maxWidth: 250
   },
+
+  // sound constants
+  // Range of output levels for individual sound clips under in a sound view.
+  OUTPUT_LEVEL_RANGE: new Range( 0, 1 ),
 
   // VOICING CONSTANTS
   // Object responses that are only triggered from input have a higher priority than context responses so that

@@ -33,6 +33,8 @@ import NamedQuadrilateral from '../../model/NamedQuadrilateral.js';
 import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
 import optionize from '../../../../../phet-core/js/optionize.js';
 import Multilink from '../../../../../axon/js/Multilink.js';
+import NumberProperty from '../../../../../axon/js/NumberProperty.js';
+import QuadrilateralConstants from '../../../common/QuadrilateralConstants.js';
 
 // All the sounds played in this sound design.
 const BUILD_UP_TRACKS = [
@@ -93,6 +95,22 @@ class TracksBuildUpSoundView extends TracksSoundView {
     const tracks = options.simple ? BUILD_UP_TRACKS_SIMPLE : BUILD_UP_TRACKS;
     super( shapeModel, shapeSoundEnabledProperty, resetNotInProgressProperty, soundOptionsModel, tracks );
 
+    // desired output levels for each sound (as requested by design, using manual edit of the gain)
+    // See https://github.com/phetsims/quadrilateral/issues/175#issuecomment-1339626942
+    this.setIndexOutputLevel( 0, 0.5 );
+    this.setIndexOutputLevel( 1, 0.5 );
+    this.setIndexOutputLevel( 2, 1 );
+    this.setIndexOutputLevel( 3, 0.75 );
+    this.setIndexOutputLevel( 4, 0.65 );
+    this.setIndexOutputLevel( 5, 1 );
+    this.setIndexOutputLevel( 6, 0.45 );
+    this.setIndexOutputLevel( 7, 0.70 );
+
+    this.soundClips.forEach( ( soundClip, i ) => {
+      const outputLevelProperty = new NumberProperty( 1, { range: QuadrilateralConstants.OUTPUT_LEVEL_RANGE } );
+      this.indexToOutputLevelPropertyMap.set( i, outputLevelProperty );
+    } );
+
     const shapeNameListener = ( shapeName: NamedQuadrilateral ) => {
 
       // First set all output levels back to nothing before we start playing new sounds
@@ -117,6 +135,11 @@ class TracksBuildUpSoundView extends TracksSoundView {
       shapeModel.shapeNameProperty.unlink( shapeNameListener );
       outputLevelMultilink.dispose();
     };
+  }
+
+  private setIndexOutputLevel( index: number, outputLevel: number ): void {
+    const outputLevelProperty = new NumberProperty( outputLevel, { range: QuadrilateralConstants.OUTPUT_LEVEL_RANGE } );
+    this.indexToOutputLevelPropertyMap.set( index, outputLevelProperty );
   }
 
   public override dispose(): void {

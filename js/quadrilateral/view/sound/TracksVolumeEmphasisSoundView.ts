@@ -30,6 +30,8 @@ import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
 import NamedQuadrilateral from '../../model/NamedQuadrilateral.js';
 import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
 import Multilink from '../../../../../axon/js/Multilink.js';
+import NumberProperty from '../../../../../axon/js/NumberProperty.js';
+import QuadrilateralConstants from '../../../common/QuadrilateralConstants.js';
 
 // All the sounds played in this sound design
 const VOLUME_EMPHASIS_TRACKS = [
@@ -67,6 +69,13 @@ class TracksVolumeEmphasisSoundView extends TracksSoundView {
 
   public constructor( shapeModel: QuadrilateralShapeModel, shapeSoundEnabledProperty: TReadOnlyProperty<boolean>, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
     super( shapeModel, shapeSoundEnabledProperty, resetNotInProgressProperty, soundOptionsModel, VOLUME_EMPHASIS_TRACKS );
+
+    // For each SoundClip, set up a Property that will control its output level. To be used by the sim sound board,
+    // only for development. TODO This feature should be removed after design is complete.
+    this.soundClips.forEach( ( soundClip, i ) => {
+      const outputLevelProperty = new NumberProperty( 1, { range: QuadrilateralConstants.OUTPUT_LEVEL_RANGE } );
+      this.indexToOutputLevelPropertyMap.set( i, outputLevelProperty );
+    } );
 
     const shapeNameListener = ( shapeName: NamedQuadrilateral ) => {
 
