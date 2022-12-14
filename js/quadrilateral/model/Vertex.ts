@@ -61,6 +61,17 @@ class Vertex {
   // the next time Properties are updated in QuadrilateralShapeModel.
   public voicingObjectResponseDirty = false;
 
+  // Property indicating whether the movement of the Vertex was blocked by being constrained in the
+  // model bounds
+  public movementBlockedByBoundsProperty = new BooleanProperty( false );
+
+  // Property indicating whether the movement of the Vertex was blocked because placement would have
+  // resulted in a crossed/overlapping shape.
+  public movementBlockedByShapeProperty = new BooleanProperty( false );
+
+  // Additional Property indicating movement was blocked for either of the above reasons.
+  public movementBlockedProperty = DerivedProperty.or( [ this.movementBlockedByBoundsProperty, this.movementBlockedByShapeProperty ] );
+
   // A reference to vertices connected to this vertex for the purposes of calculating the angle at this vertex.
   // The orientation of vertex1 and vertex2 for angle calculations are as shown in the following diagram:
   //        thisVertex

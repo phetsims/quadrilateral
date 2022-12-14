@@ -22,6 +22,7 @@ import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
 import grab_mp3 from '../../../../tambo/sounds/grab_mp3.js';
+import boundaryReached_mp3 from '../../../../tambo/sounds/boundaryReached_mp3.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
 import quadrilateral from '../../quadrilateral.js';
 
@@ -41,6 +42,7 @@ type ParentOptions = VoicingOptions & CircleOptions;
 
 class VertexNode extends Voicing( Circle ) {
   private readonly model: QuadrilateralModel;
+  private readonly vertex: Vertex;
 
   public constructor( vertex: Vertex, vertexLabel: string, model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, providedOptions: VertexNodeOptions ) {
     const options = optionize<VertexNodeOptions, SelfOptions, ParentOptions>()( {
@@ -58,6 +60,8 @@ class VertexNode extends Voicing( Circle ) {
 
     this.voicingNameResponse = options.nameResponse;
     this.innerContent = options.nameResponse;
+
+    this.vertex = vertex;
 
     const vertexDescriber = new VertexDescriber( vertex, model.quadrilateralShapeModel, model.markersVisibleProperty );
 
@@ -104,10 +108,19 @@ class VertexNode extends Voicing( Circle ) {
       transform: modelViewTransform,
       drag: ( modelDelta: Vector2 ) => {
         const proposedPosition = vertex.positionProperty.value.plus( modelDelta );
-        if ( model.isVertexPositionAllowed( vertex, proposedPosition ) ) {
+
+        // constrain to model bounds
+        const inBoundsPosition = model.vertexDragBoundsProperty.value.closestPointTo( proposedPosition );
+        const isAgainstBounds = !inBoundsPosition.equals( proposedPosition );
+
+        const isPositionAllowed = model.isVertexPositionAllowed( vertex, proposedPosition );
+
+        if ( isPositionAllowed ) {
           vertex.voicingObjectResponseDirty = true;
           vertex.positionProperty.value = proposedPosition;
         }
+
+        this.updateBlockedState( !isPositionAllowed, isAgainstBounds );
       },
 
       // velocity defined in view coordinates per second, assuming 60 fps
@@ -151,13 +164,18 @@ class VertexNode extends Voicing( Circle ) {
 
         // constrain to model bounds
         const inBoundsPosition = model.vertexDragBoundsProperty.value.closestPointTo( modelPoint );
+        const isAgainstBounds = !inBoundsPosition.equals( modelPoint );
 
         // constrain to the allowable positions in the model along the grid
         const constrainedPosition = model.getClosestGridPosition( inBoundsPosition );
 
-        if ( model.isVertexPositionAllowed( vertex, constrainedPosition ) ) {
+        const isPositionAllowed = model.isVertexPositionAllowed( vertex, constrainedPosition );
+
+        if ( isPositionAllowed ) {
           vertex.positionProperty.value = constrainedPosition;
         }
+
+        this.updateBlockedState( !isPositionAllowed, isAgainstBounds );
       },
       end: event => {
 
@@ -203,6 +221,15 @@ class VertexNode extends Voicing( Circle ) {
       }
     } );
 
+    // sound - when the Vertex becomes blocked for any reason, play a sound indicating that the vertex is blocked
+    const blockedSoundPlayer = new SoundClip( boundaryReached_mp3 );
+    soundManager.addSoundGenerator( blockedSoundPlayer );
+    vertex.movementBlockedProperty.lazyLink( blocked => {
+      if ( blocked ) {
+        blockedSoundPlayer.play();
+      }
+    } );
+
     // voicing
     model.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
       this.voicingObjectResponse = vertexDescriber.getVertexObjectResponse();
@@ -236,6 +263,14 @@ class VertexNode extends Voicing( Circle ) {
     // } );
 
     this.mutate( options );
+  }
+
+  /**
+   * Update Properties in response to input indicating that the Vertex was blocked from moving for some reason.
+   */
+  public updateBlockedState( isBlockedByShape: boolean, isBlockedByBounds: boolean ): void {
+    this.vertex.movementBlockedByShapeProperty.value = isBlockedByShape;
+    this.vertex.movementBlockedByBoundsProperty.value = isBlockedByBounds;
   }
 }
 
