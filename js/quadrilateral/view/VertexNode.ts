@@ -113,11 +113,13 @@ class VertexNode extends Voicing( Circle ) {
         const inBoundsPosition = model.vertexDragBoundsProperty.value.closestPointTo( proposedPosition );
         const isAgainstBounds = !inBoundsPosition.equals( proposedPosition );
 
-        const isPositionAllowed = model.isVertexPositionAllowed( vertex, proposedPosition );
+        // constrain to the allowable positions in the model along the grid
+        const constrainedPosition = model.getClosestGridPosition( inBoundsPosition );
 
+        const isPositionAllowed = model.isVertexPositionAllowed( vertex, constrainedPosition );
         if ( isPositionAllowed ) {
           vertex.voicingObjectResponseDirty = true;
-          vertex.positionProperty.value = proposedPosition;
+          vertex.positionProperty.value = constrainedPosition;
         }
 
         this.updateBlockedState( !isPositionAllowed, isAgainstBounds );
