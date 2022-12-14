@@ -166,6 +166,13 @@ class Vertex {
   }
 
   /**
+   * Returns true if the provided Vertex is adjacent to this one.
+   */
+  public isAdjacentToOther( other: Vertex ): boolean {
+    return this.vertex1 === other || this.vertex2 === other;
+  }
+
+  /**
    * Update the angle at this vertex, when it is time. It is unfortunate that it is up to the client to call this,
    * but we need to be sure that angles are up-to-date ONLY after all vertex positions have been updated. See
    * QuadrilateralShapeModel.updateOrderDependentProperties.

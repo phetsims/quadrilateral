@@ -309,8 +309,8 @@ class QuadrilateralDescriber {
                          oppositeEqualVertexPairs.length === 1 ? onePairOfOppositeString :
                          noString;
 
-      angleEqualityString = adjacentEqualVertexPairs.length === 1 && this.shapeModel.isShapeAngleEqualToOther( adjacentEqualVertexPairs[ 0 ].vertex1.angleProperty.value!, Math.PI / 2 ) ? rightAnglesString :
-                            oppositeEqualVertexPairs.length === 1 && this.shapeModel.isShapeAngleEqualToOther( oppositeEqualVertexPairs[ 0 ].vertex1.angleProperty.value!, Math.PI / 2 ) ? rightAnglesString :
+      angleEqualityString = adjacentEqualVertexPairs.length === 1 && this.shapeModel.isRightAngle( adjacentEqualVertexPairs[ 0 ].vertex1.angleProperty.value! ) ? rightAnglesString :
+                            oppositeEqualVertexPairs.length === 1 && this.shapeModel.isRightAngle( oppositeEqualVertexPairs[ 0 ].vertex1.angleProperty.value! ) ? rightAnglesString :
                               // if two pairs of adjacent angles exist but we are not parallelogram, all cannot be
                               // right angles. OR, no angles are equal.
                             equalString;
