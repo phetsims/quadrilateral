@@ -31,9 +31,7 @@ class QuadrilateralSoundView {
       this.activeSoundView && this.activeSoundView.dispose();
 
       if ( soundDesign === SoundDesign.TRACKS_BUILD_UP_SIMPLE ) {
-        this.activeSoundView = new TracksBuildUpSoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel, {
-          simple: true
-        } );
+        this.activeSoundView = new TracksBuildUpSoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
       }
       else if ( soundDesign === SoundDesign.TRACKS_VOLUME_EMPHASIS ) {
         this.activeSoundView = new TracksVolumeEmphasisSoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );

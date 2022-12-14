@@ -15,14 +15,10 @@
 
 import quadrilateral from '../../../quadrilateral.js';
 import TracksSoundView from './TracksSoundView.js';
-import quadBeatTracksBuildingBaseRhythm_mp3 from '../../../../sounds/quadBeatTracksBuildingBaseRhythm_mp3.js';
 import quadBeatTracksBuildingBuildingTracks000_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks000_mp3.js';
-import quadBeatTracksBuildingBuildingTracks001_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks001_mp3.js';
-import quadBeatTracksBuildingBuildingTracks002_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks002_mp3.js';
 import quadBeatTracksBuildingBuildingTracks003_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks003_mp3.js';
 import quadBeatTracksBuildingBuildingTracks004_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks004_mp3.js';
 import quadBeatTracksBuildingBuildingTracks005_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks005_mp3.js';
-import quadBeatTracksBuildingBuildingTracks006_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks006_mp3.js';
 import quadBaseBeatSimpler_mp3 from '../../../../sounds/quadBaseBeatSimpler_mp3.js';
 import quadBaseBeatSimplerConcaveQuadrilateralJustRhythmV2_mp3 from '../../../../sounds/quadBaseBeatSimplerConcaveQuadrilateralJustRhythmV2_mp3.js';
 import quadSimpleBuildingTracks007_mp3 from '../../../../sounds/quadSimpleBuildingTracks007_mp3.js';
@@ -31,25 +27,12 @@ import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
 import NamedQuadrilateral from '../../model/NamedQuadrilateral.js';
 import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
-import optionize from '../../../../../phet-core/js/optionize.js';
 import Multilink from '../../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import QuadrilateralConstants from '../../../common/QuadrilateralConstants.js';
 
-// All the sounds played in this sound design.
-const BUILD_UP_TRACKS = [
-  quadBeatTracksBuildingBaseRhythm_mp3,
-  quadBeatTracksBuildingBuildingTracks000_mp3,
-  quadBeatTracksBuildingBuildingTracks001_mp3,
-  quadBeatTracksBuildingBuildingTracks002_mp3,
-  quadBeatTracksBuildingBuildingTracks003_mp3,
-  quadBeatTracksBuildingBuildingTracks004_mp3,
-  quadBeatTracksBuildingBuildingTracks005_mp3,
-  quadBeatTracksBuildingBuildingTracks006_mp3
-];
-
 // All the sounds played in this sound design in the "simple" case.
-const BUILD_UP_TRACKS_SIMPLE = [
+const BUILD_UP_TRACKS = [
   quadBaseBeatSimpler_mp3,
   quadBaseBeatSimplerConcaveQuadrilateralJustRhythmV2_mp3,
   quadBeatTracksBuildingBuildingTracks000_mp3,
@@ -77,23 +60,11 @@ const NAMED_QUADRILATERAL_TO_TRACKS_MAP = new Map( [
   [ NamedQuadrilateral.SQUARE, [ 0, 2, 3, 5, 6, 7 ] ]
 ] );
 
-type TracksBuildUpSoundViewOptions = {
-
-  // If true, use the "simple" tracks instead of the default BUILD_UP_TRACKS
-  simple: boolean;
-};
-
 class TracksBuildUpSoundView extends TracksSoundView {
   private readonly disposeTracksBuildUpSoundView: () => void;
 
-  public constructor( shapeModel: QuadrilateralShapeModel, shapeSoundEnabledProperty: TReadOnlyProperty<boolean>, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel, providedOptions?: TracksBuildUpSoundViewOptions ) {
-
-    const options = optionize<TracksBuildUpSoundViewOptions>()( {
-      simple: false
-    }, providedOptions );
-
-    const tracks = options.simple ? BUILD_UP_TRACKS_SIMPLE : BUILD_UP_TRACKS;
-    super( shapeModel, shapeSoundEnabledProperty, resetNotInProgressProperty, soundOptionsModel, tracks );
+  public constructor( shapeModel: QuadrilateralShapeModel, shapeSoundEnabledProperty: TReadOnlyProperty<boolean>, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
+    super( shapeModel, shapeSoundEnabledProperty, resetNotInProgressProperty, soundOptionsModel, BUILD_UP_TRACKS );
 
     // desired output levels for each sound (as requested by design, using manual edit of the gain)
     // See https://github.com/phetsims/quadrilateral/issues/175#issuecomment-1339626942
