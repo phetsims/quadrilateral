@@ -49,7 +49,7 @@ const QuadrilateralIconFactory = {
 
     // use CAG to easily combine the sides into a single strokable shape without interior (overlapping) lines
     const sidesShape = bottomSide.shapeUnion( verticalSide );
-    const sidesPath = new Path( sidesShape, { stroke: 'black', fill: QuadrilateralColors.screenBackgroundColorProperty } );
+    const sidesPath = new Path( sidesShape, { stroke: 'black', fill: QuadrilateralColors.screenBackgroundColorProperty, lineWidth: QuadrilateralIconFactory.ICON_LINE_WIDTH } );
 
     // ticks (along the bottom side)
     const ticksShape = new Shape();
@@ -68,11 +68,11 @@ const QuadrilateralIconFactory = {
     // creates two arcs that look like the perpendicular axis angle split into three 30 degree segments
     const innerIconRadius = sideLength / 1.7; // by inspection
     const innerArcShape = Shape.arc( 0, sideHeight, innerIconRadius, 0, 2 * Math.PI - sideAngle, true );
-    const innerArcPath = new Path( innerArcShape, { stroke: QuadrilateralColors.visibilityIconsColorProperty } );
+    const innerArcPath = new Path( innerArcShape, { stroke: QuadrilateralColors.visibilityIconsColorProperty, lineWidth: QuadrilateralIconFactory.ICON_LINE_WIDTH } );
 
     const outerIconRadius = sideLength;
     const outerArcShape = Shape.arc( 0, sideHeight, outerIconRadius, 0, 2 * Math.PI - sideAngle, true );
-    const outerArcPath = new Path( outerArcShape, { stroke: QuadrilateralColors.visibilityIconsColorProperty } );
+    const outerArcPath = new Path( outerArcShape, { stroke: QuadrilateralColors.visibilityIconsColorProperty, lineWidth: QuadrilateralIconFactory.ICON_LINE_WIDTH } );
 
     // Draws an arc shape (returning a Path) between start and end angle, representing the "angle guides"
     const createAngleArcPath = ( startAngle: number, endAngle: number ) => {
