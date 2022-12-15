@@ -23,7 +23,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   parallelAngleToleranceInterval: {
     type: 'number',
     isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
-    defaultValue: 0.01
+    defaultValue: 0.002
   },
 
   // The default value for the angle tolerance that will be used for single comparisons of one angle against
@@ -32,7 +32,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   interAngleToleranceInterval: {
     type: 'number',
     isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
-    defaultValue: 0.02
+    defaultValue: 0.004
   },
 
   // A tolerance interval when comparing an angle to a constant of some kind, such as Math.PI or Math.PI / 2 when
@@ -41,7 +41,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   staticAngleToleranceInterval: {
     type: 'number',
     isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
-    defaultValue: 0.01
+    defaultValue: 0.002
   },
 
   // A scale factor to apply to all tolerance intervals when the "Fine Input Spacing" checkbox is checked.
@@ -64,7 +64,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // A tolerance interval for comparing the lengths of two sides.
   interLengthToleranceInterval: {
     type: 'number',
-    defaultValue: 0.005
+    defaultValue: 0.001
   },
 
   // If provided, some extra things will be done in the simulation to facilitate communication with the hardware/device.
@@ -141,7 +141,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
    */
   majorVertexInterval: {
     type: 'number',
-    defaultValue: 0.05,
+    defaultValue: 0.25,
     isValidValue: ( value: number ) => value > 0
   },
 
@@ -151,7 +151,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
    */
   minorVertexInterval: {
     type: 'number',
-    defaultValue: 0.05,
+    defaultValue: 0.0625,
     isValidValue: ( value: number ) => value > 0
   },
 
@@ -171,7 +171,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
    */
   minorFineVertexInterval: {
     type: 'number',
-    defaultValue: 0.0125,
+    defaultValue: 0.00625,
     isValidValue: ( value: number ) => value > 0
   },
 
