@@ -876,30 +876,20 @@ class QuadrilateralShapeModel {
     return isAreaNaN ? 0 : area;
   }
 
+  /**
+   * Returns true if two angles are close enough together that they should be considered equal. This uses the
+   * shapeAngleToleranceProperty, the most strict interval available. The angleToleranceInterval can be very dynamic
+   * during various interactions to support sim learning goals. But when detecting shapes we need to be more static so
+   * that when the tolerance is very high the shape isn't incorrectly described.
+   *
+   * TODO: Replace with isInterAngleEqualToOther throughout.
+   */
   public isShapeAngleEqualToOther( angle1: number, angle2: number ): boolean {
     return Utils.equalsEpsilon( angle1, angle2, this.interAngleToleranceIntervalProperty.value );
   }
 
-  // public static isInterAngleEqualToOther( angle1: number, angle2: number, interAngleToleranceInterval: number ): boolean {
-  //   return Utils.equalsEpsilon( angle1, angle2, interAngleToleranceInterval );
-  // }
-
-  /**
-   * Returns true if two angles are close enough together that they should be considered equal. This uses the
-   * interAngleToleranceInterval. See implementation notes about special cases required for Trapezoids and
-   * adjacent angles.
-   */
-  public static isInterAngleEqualToOther( angle1: number, angle2: number, toleranceInterval: number, shapeName: NamedQuadrilateral, verticesAdjacent: boolean ): boolean {
-
-    // If we are a trapezoid, only indicate adjacent angles as equal when they are EXACTLY equal. Otherwise, we may run
-    // into cases where conditions for an isoceles trapezoid are lost while the angles are still all described as
-    // "equal". See https://github.com/phetsims/quadrilateral/issues/261 for history of this workaround.
-    let usableToleranceInterval = toleranceInterval;
-    if ( verticesAdjacent && shapeName === NamedQuadrilateral.TRAPEZOID ) {
-      usableToleranceInterval = 0;
-    }
-
-    return Utils.equalsEpsilon( angle1, angle2, usableToleranceInterval );
+  public static isInterAngleEqualToOther( angle1: number, angle2: number, interAngleToleranceInterval: number ): boolean {
+    return Utils.equalsEpsilon( angle1, angle2, interAngleToleranceInterval );
   }
 
   public isInterAngleEqualToOther( angle1: number, angle2: number ): boolean {
@@ -1032,17 +1022,7 @@ class QuadrilateralShapeModel {
       const firstAngle = vertexPair.vertex1.angleProperty.value!;
       const secondAngle = vertexPair.vertex2.angleProperty.value!;
       const currentlyIncludesVertexPair = currentVertexPairs.includes( vertexPair );
-      const areAnglesEqual = QuadrilateralShapeModel.isInterAngleEqualToOther(
-        firstAngle,
-        secondAngle,
-        this.interAngleToleranceIntervalProperty.value,
-        this.shapeNameProperty.value,
-
-        // TODO: MAYBE THIS SHOULD ALWAYS BE FALSE? See the workaround in this function, I don't know if it should
-        //       always apply to the model, or if that should just be for generating descriptions.
-        //       See https://github.com/phetsims/quadrilateral/issues/261
-        vertexPair.vertex1.isAdjacentToOther( vertexPair.vertex2 )
-      );
+      const areAnglesEqual = this.isShapeAngleEqualToOther( firstAngle, secondAngle );
 
       if ( currentlyIncludesVertexPair && !areAnglesEqual ) {
 

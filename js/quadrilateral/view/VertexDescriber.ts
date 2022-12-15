@@ -226,12 +226,9 @@ class VertexDescriber {
     let description = '';
 
     const adjacentCorners = this.quadrilateralShapeModel.adjacentVertexMap.get( this.vertex )!;
-    const adjacentCornersEqual = QuadrilateralShapeModel.isInterAngleEqualToOther(
+    const adjacentCornersEqual = this.quadrilateralShapeModel.isShapeAngleEqualToOther(
       adjacentCorners[ 0 ].angleProperty.value!,
-      adjacentCorners[ 1 ].angleProperty.value!,
-      this.quadrilateralShapeModel.interAngleToleranceIntervalProperty.value,
-      this.quadrilateralShapeModel.shapeNameProperty.value,
-      true
+      adjacentCorners[ 1 ].angleProperty.value!
     );
 
     let numberOfEqualAdjacentVertexPairs = 0;
@@ -301,15 +298,17 @@ class VertexDescriber {
 
     const angle1 = vertex1.angleProperty.value!;
     const angle2 = vertex2.angleProperty.value!;
-    const verticesAdjacent = vertex1.isAdjacentToOther( vertex2 );
 
-    if ( QuadrilateralShapeModel.isInterAngleEqualToOther( angle2, angle1, interAngleToleranceInterval, shapeName, verticesAdjacent ) ) {
+    // If we are a trapezoid, only describe angles as equal when they are EXACTLY equal, otherwise we may run into
+    // cases where we move out of isoceles trapezoid while the angles are still described as "equal".
+    const usableToleranceInterval = shapeName === NamedQuadrilateral.TRAPEZOID ? 0 : interAngleToleranceInterval;
+    if ( QuadrilateralShapeModel.isInterAngleEqualToOther( angle2, angle1, usableToleranceInterval ) ) {
       description = equalToString;
     }
-    else if ( QuadrilateralShapeModel.isInterAngleEqualToOther( angle2, angle1 * 2, interAngleToleranceInterval, shapeName, verticesAdjacent ) ) {
+    else if ( QuadrilateralShapeModel.isInterAngleEqualToOther( angle2, angle1 * 2, usableToleranceInterval ) ) {
       description = twiceAsWideAsString;
     }
-    else if ( QuadrilateralShapeModel.isInterAngleEqualToOther( angle2, angle1 * 0.5, interAngleToleranceInterval, shapeName, verticesAdjacent ) ) {
+    else if ( QuadrilateralShapeModel.isInterAngleEqualToOther( angle2, angle1 * 0.5, usableToleranceInterval ) ) {
       description = halfAsWideAsString;
     }
 
@@ -324,6 +323,20 @@ class VertexDescriber {
 
     assert && assert( description, `Description not found for angle difference ${angleRatio}` );
     return description!;
+  }
+
+  /**
+   * Returns true if value of angle is equal to half of value of other, within provided tolerance interval.
+   */
+  public static isAngleHalfOther( angle: number, other: number, interAngleToleranceInterval: number ): boolean {
+    return QuadrilateralShapeModel.isInterAngleEqualToOther( angle, other / 2, interAngleToleranceInterval );
+  }
+
+  /**
+   * Returns true if value of angle is equal to twice value of other, within provided tolerance interval.
+   */
+  public static isAngleTwiceOther( angle: number, other: number, interAngleToleranceInterval: number ): boolean {
+    return QuadrilateralShapeModel.isInterAngleEqualToOther( angle, other * 2, interAngleToleranceInterval );
   }
 
   /**
