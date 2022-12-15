@@ -161,13 +161,6 @@ class Side {
   }
 
   /**
-   * Returns true when the other side is opposite to this side.
-   */
-  public isOppositeToOther( other: Side ): boolean {
-    return !other.includesVertex( this.vertex1 ) && !other.includesVertex( this.vertex2 );
-  }
-
-  /**
    * Returns the position in model coordinates between the two Vertices of this Side.
    */
   public getMidpoint(): Vector2 {

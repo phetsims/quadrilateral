@@ -168,10 +168,7 @@ class ShapeSnapshot {
       for ( let j = 0; j < this.sideLengths.length; j++ ) {
         const nextLength = this.sideLengths[ j ];
 
-        // A bit of a hack, but side lengths of the snapshot will be opposite to each other when indices are two away
-        // (the array moves clockwise around the sides in order)
-        const sidesOpposite = ( j - i ) % 2 === 0;
-        if ( QuadrilateralShapeModel.isInterLengthEqualToOther( currentLength, nextLength, toleranceInterval, this.namedQuadrilateral, sidesOpposite ) ) {
+        if ( QuadrilateralShapeModel.isInterLengthEqualToOther( currentLength, nextLength, toleranceInterval ) ) {
           numberEqualToCurrentLength++;
         }
       }

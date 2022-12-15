@@ -837,13 +837,10 @@ class QuadrilateralShapeModel {
    * Returns true when all lengths are equal.
    */
   public getAreAllLengthsEqual(): boolean {
-    const shapeName = this.shapeNameProperty.value;
-    const lengthTolerance = this.interLengthToleranceIntervalProperty.value;
-
-    return QuadrilateralShapeModel.isInterLengthEqualToOther( this.topSide.lengthProperty.value, this.rightSide.lengthProperty.value, lengthTolerance, shapeName, false ) &&
-           QuadrilateralShapeModel.isInterLengthEqualToOther( this.rightSide.lengthProperty.value, this.bottomSide.lengthProperty.value, lengthTolerance, shapeName, false ) &&
-           QuadrilateralShapeModel.isInterLengthEqualToOther( this.bottomSide.lengthProperty.value, this.leftSide.lengthProperty.value, lengthTolerance, shapeName, false ) &&
-           QuadrilateralShapeModel.isInterLengthEqualToOther( this.leftSide.lengthProperty.value, this.topSide.lengthProperty.value, lengthTolerance, shapeName, false );
+    return this.isShapeLengthEqualToOther( this.topSide.lengthProperty.value, this.rightSide.lengthProperty.value ) &&
+           this.isShapeLengthEqualToOther( this.rightSide.lengthProperty.value, this.bottomSide.lengthProperty.value ) &&
+           this.isShapeLengthEqualToOther( this.bottomSide.lengthProperty.value, this.leftSide.lengthProperty.value ) &&
+           this.isShapeLengthEqualToOther( this.leftSide.lengthProperty.value, this.topSide.lengthProperty.value );
   }
 
   /**
@@ -909,20 +906,21 @@ class QuadrilateralShapeModel {
     return Utils.equalsEpsilon( angle1, angle2, this.interAngleToleranceIntervalProperty.value );
   }
 
-  public static isStaticLengthEqualToOther( length1: number, length2: number, interLengthToleranceInterval: number ): boolean {
-    return Utils.equalsEpsilon( length1, length2, interLengthToleranceInterval );
+  /**
+   * Returns true if two sides are close enough in length that they should be considered equal. Uses the
+   * shapeLengthAngleToleranceInterval.
+   *
+   * TODO: Rename to isInterLengthEqualToOTher to match interAngleToleranceInterval.
+   */
+  public isShapeLengthEqualToOther( length1: number, length2: number ): boolean {
+    return Utils.equalsEpsilon( length1, length2, this.interLengthToleranceIntervalProperty.value );
   }
 
   /**
    * Returns true if the lengths are equal to eachother within interLengthToleranceInterval.
    */
-  public static isInterLengthEqualToOther( length1: number, length2: number, interLengthToleranceInterval: number, shapeName: NamedQuadrilateral, sidesOpposite: boolean ): boolean {
-    let usableToleranceInterval = interLengthToleranceInterval;
-    if ( sidesOpposite && shapeName === NamedQuadrilateral.TRAPEZOID ) {
-      usableToleranceInterval = 0;
-    }
-
-    return Utils.equalsEpsilon( length1, length2, usableToleranceInterval );
+  public static isInterLengthEqualToOther( length1: number, length2: number, interLengthToleranceInterval: number ): boolean {
+    return Utils.equalsEpsilon( length1, length2, interLengthToleranceInterval );
   }
 
   public isRightAngle( angle: number ): boolean {
@@ -1081,15 +1079,8 @@ class QuadrilateralShapeModel {
 
       const firstLength = sidePair.side1.lengthProperty.value;
       const secondLength = sidePair.side2.lengthProperty.value;
-      const sidesOpposite = sidePair.side1.isOppositeToOther( sidePair.side2 );
       const currentlyIncludesSidePair = currentSidePairs.includes( sidePair );
-      const areLengthsEqual = QuadrilateralShapeModel.isInterLengthEqualToOther(
-        firstLength,
-        secondLength,
-        this.interLengthToleranceIntervalProperty.value,
-        this.shapeNameProperty.value,
-        sidesOpposite
-      );
+      const areLengthsEqual = this.isShapeLengthEqualToOther( firstLength, secondLength );
 
       if ( currentlyIncludesSidePair && !areLengthsEqual ) {
 
