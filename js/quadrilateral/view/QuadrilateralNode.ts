@@ -167,16 +167,16 @@ class QuadrilateralNode extends Node {
       }
     } );
 
-    // Traversal order for components requested in https://github.com/phetsims/quadrilateral/issues/196.
+    // Traversal order for components requested in https://github.com/phetsims/quadrilateral/issues/289.
     this.pdomOrder = [
-      leftSideNode,
       vertexNode1,
       topSideNode,
       vertexNode2,
       rightSideNode,
       vertexNode3,
       bottomSideNode,
-      vertexNode4
+      vertexNode4,
+      leftSideNode
     ];
   }
 
