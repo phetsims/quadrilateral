@@ -235,7 +235,6 @@ class QuadrilateralModel {
 
         let interval: number;
         if ( connectedToDevice ) {
-          console.log( deviceGridSpacing );
           interval = deviceGridSpacing;
         }
         else if ( fineInputSpacing ) {
