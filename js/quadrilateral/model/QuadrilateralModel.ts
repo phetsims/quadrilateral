@@ -13,7 +13,6 @@ import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
 import Vertex from './Vertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -26,6 +25,7 @@ import QuadrilateralPreferencesModel from './QuadrilateralPreferencesModel.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import quadrilateral from '../../quadrilateral.js';
 
 class QuadrilateralModel {
 
@@ -204,7 +204,7 @@ class QuadrilateralModel {
       tandem: tandem.createTandem( 'vertexLabelsVisibleProperty' )
     } );
 
-    this.gridVisibleProperty = new BooleanProperty( false, {
+    this.gridVisibleProperty = new BooleanProperty( true, {
       tandem: tandem.createTandem( 'gridVisibleProperty' )
     } );
 
@@ -377,10 +377,54 @@ class QuadrilateralModel {
    * with the model grid. See vertexIntervalProperty for more information about how the intervals of the grid
    * can change.
    */
-  public getClosestGridPosition( position: Vector2 ): Vector2 {
+  public getClosestGridPosition( ProposedPosition: Vector2 ): Vector2 {
 
     const interval = this.vertexIntervalProperty.value;
-    return new Vector2( Utils.roundToInterval( position.x, interval ), Utils.roundToInterval( position.y, interval ) );
+    return new Vector2( Utils.roundToInterval( ProposedPosition.x, interval ), Utils.roundToInterval( ProposedPosition.y, interval ) );
+  }
+
+  /**
+   * Get the closest crid position to the provided position, in the direction of the provided directionVector.
+   * Use this when you need to move to the closest grid position in one dimension, instead of moving to the
+   * closest grid position in both X and Y.
+   */
+  public getClosestGridPositionInDirection( currentPosition: Vector2, directionVector: Vector2 ): Vector2 {
+    let nextX = currentPosition.x;
+    let nextY = currentPosition.y;
+
+    if ( directionVector.x !== 0 ) {
+      nextX = this.getNextPositionInDimension( currentPosition.x, directionVector.x > 0 );
+    }
+    else if ( directionVector.y !== 0 ) {
+      nextY = this.getNextPositionInDimension( currentPosition.y, directionVector.y > 0 );
+    }
+
+    return new Vector2( nextX, nextY );
+  }
+
+  /**
+   * Returns a new position in x or y dimensions, used by getClosestGridPositionInDirection.
+   * @param currentVal - Current position in x or y dimensions
+   * @param gettingLarger - Are you getting larger in that dimension?
+   */
+  private getNextPositionInDimension( currentVal: number, gettingLarger: boolean ): number {
+    const interval = this.vertexIntervalProperty.value;
+    let remainder = Math.abs( currentVal ) % interval;
+    const onTheInterval = Utils.equalsEpsilon( remainder, 0, 0.01 );
+
+    if ( currentVal < 0 ) {
+      remainder = interval - remainder;
+    }
+
+    let delta;
+    if ( gettingLarger ) {
+      delta = onTheInterval ? interval : interval - remainder;
+    }
+    else {
+      delta = onTheInterval ? -interval : -remainder;
+    }
+
+    return currentVal + delta;
   }
 }
 

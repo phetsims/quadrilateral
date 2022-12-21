@@ -107,19 +107,16 @@ class VertexNode extends Voicing( Circle ) {
     const keyboardDragListener = new KeyboardDragListener( {
       transform: modelViewTransform,
       drag: ( modelDelta: Vector2 ) => {
-        const proposedPosition = vertex.positionProperty.value.plus( modelDelta );
+        const proposedPosition = model.getClosestGridPositionInDirection( vertex.positionProperty.value, modelDelta );
 
         // constrain to model bounds
         const inBoundsPosition = model.vertexDragBoundsProperty.value.closestPointTo( proposedPosition );
         const isAgainstBounds = !inBoundsPosition.equals( proposedPosition );
 
-        // constrain to the allowable positions in the model along the grid
-        const constrainedPosition = model.getClosestGridPosition( inBoundsPosition );
-
-        const isPositionAllowed = model.isVertexPositionAllowed( vertex, constrainedPosition );
+        const isPositionAllowed = model.isVertexPositionAllowed( vertex, inBoundsPosition );
         if ( isPositionAllowed ) {
           vertex.voicingObjectResponseDirty = true;
-          vertex.positionProperty.value = constrainedPosition;
+          vertex.positionProperty.value = inBoundsPosition;
         }
 
         this.updateBlockedState( !isPositionAllowed, isAgainstBounds );
