@@ -45,9 +45,19 @@ const QuadrilateralIconFactory = {
       lineWidth: QuadrilateralIconFactory.ICON_LINE_WIDTH
     };
 
-    const sidesAngle = Utils.toRadians( 110 );
+    // parameters for drawing the icon
+    const sidesAngle = Utils.toRadians( 110 ); // overall angle for the icon
     const sidesLength = QuadrilateralIconFactory.ICON_HEIGHT;
     const sidesHeight = QuadrilateralIconFactory.ICON_HEIGHT * 0.25; // chosen by inspection
+    const sliceAngle = Math.PI / 6; // size of each slice graphic
+    const tickLength = sidesHeight / 2;
+    const innerIconRadius = sidesLength * 0.4; // radius of the inner-most arc and for the inner curve of angle slices
+    const outerIconRadius = sidesLength * 0.8; // radius of the outer-most arc and for the outer curve of angle slices
+
+    assert && assert( outerIconRadius > innerIconRadius, 'Arc radii do not make sense' );
+    assert && assert( tickLength < sidesHeight, 'ticks will be to tall' );
+    assert && assert( sliceAngle < 2 * Math.PI, 'that angle does nto make sense for this icon' );
+    assert && assert( sidesLength > sidesHeight, 'Sides must be longer than they are tall for this icon' );
 
     // draw the "sides"
     const sidesShape = new Shape();
@@ -97,24 +107,24 @@ const QuadrilateralIconFactory = {
 
     const sidesPath = new Path( sidesShape, pathOptions );
 
-    // // creates two arcs that look like the perpendicular axis angle split into three 30 degree segments
-    const innerIconRadius = sidesLength * 0.4; // by inspection
+    // creates two arcs that look like the perpendicular axis angle split into three 30 degree segments
     const innerArcShape = Shape.arc( 0, 0, innerIconRadius, 0, 2 * Math.PI - sidesAngle, true );
     const innerArcPath = new Path( innerArcShape, pathOptions );
 
-    const outerIconRadius = sidesLength * 0.8;
     const outerArcShape = Shape.arc( 0, 0, outerIconRadius, 0, 2 * Math.PI - sidesAngle, true );
     const outerArcPath = new Path( outerArcShape, pathOptions );
 
-    const sliceAngle = Math.PI / 6;
-    const numberOfSlices = Math.floor( sidesAngle / sliceAngle );
-
     const halfRadius = ( outerIconRadius + innerIconRadius ) / 2;
     const arcPaths = [];
-    for ( let i = 0; i < numberOfSlices; i = i + 2 ) {
 
-      const startAngle = i * sliceAngle;
-      const endAngle = startAngle + sliceAngle;
+    // only drawing every other slice
+    for ( let i = 0; i < sidesAngle; i = i + ( 2 * sliceAngle ) ) {
+
+      const startAngle = i;
+
+      // only draw the final slice within the angle range for this icon
+      const endAngle = Math.min( startAngle + sliceAngle, sidesAngle );
+
       const arcShape = Shape.arc( 0, 0, halfRadius, 2 * Math.PI - startAngle, 2 * Math.PI - endAngle, true );
       arcPaths.push( new Path( arcShape, combineOptions<PathOptions>( {}, pathOptions, { lineWidth: outerIconRadius - innerIconRadius } ) ) );
     }
@@ -124,7 +134,7 @@ const QuadrilateralIconFactory = {
     for ( let i = 0; i < 3; i++ ) {
       const tickX = 5 + i * sidesLength / 3; // offset a little from the origin
       ticksShape.moveTo( tickX, sidesHeight );
-      ticksShape.lineTo( tickX, sidesHeight / 2 );
+      ticksShape.lineTo( tickX, sidesHeight - tickLength );
     }
     const bottomTicksPath = new Path( ticksShape, pathOptions );
 
