@@ -5,7 +5,7 @@
  */
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import { Node, NodeOptions, TPaint } from '../../../../scenery/js/imports.js';
+import { KeyboardListener, Node, NodeOptions, TPaint } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import SideNode from './SideNode.js';
@@ -154,9 +154,16 @@ class QuadrilateralNode extends Node {
     vertexParentNode.addChild( vertexNode4 );
     this.addChild( vertexParentNode );
 
+    // listeners - When the shift key is down, Vertices snap to finer intervals
+    this.addInputListener( new KeyboardListener( {
+      keys: [ 'shift' ],
+      fireOnKeyUp: true,
+      callback: ( event, listener ) => {
+        this.model.useMinorIntervalsProperty.value = listener.keysDown;
+      },
+      global: true
+    } ) );
 
-    // listeners
-    // Change colors when we have become a parallelogram
     this.vertexNodes = [ vertexNode1, vertexNode2, vertexNode3, vertexNode4 ];
     this.sideNodes = [ topSideNode, rightSideNode, bottomSideNode, leftSideNode ];
 
