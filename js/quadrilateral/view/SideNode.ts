@@ -379,14 +379,8 @@ class SideNode extends Voicing( Path ) {
    * @param deltaVector - change of position in model coordinates
    */
   private moveVerticesFromModelDelta( deltaVector: Vector2 ): void {
-
-    // vectorDelta is in model coordinates already since we provided a transform to the listener
-    let proposedVertex1Position = this.side.vertex1.positionProperty.get().plus( deltaVector );
-    let proposedVertex2Position = this.side.vertex2.positionProperty.get().plus( deltaVector );
-
-    // constrain positions to the "grid" of the model
-    proposedVertex1Position = this.quadrilateralModel.getClosestGridPosition( proposedVertex1Position );
-    proposedVertex2Position = this.quadrilateralModel.getClosestGridPosition( proposedVertex2Position );
+    const proposedVertex1Position = this.quadrilateralModel.getClosestGridPositionInDirection( this.side.vertex1.positionProperty.value, deltaVector );
+    const proposedVertex2Position = this.quadrilateralModel.getClosestGridPositionInDirection( this.side.vertex2.positionProperty.value, deltaVector );
 
     const vertexDragBounds = this.quadrilateralModel.vertexDragBoundsProperty.value;
     const inBounds = vertexDragBounds.containsPoint( proposedVertex1Position ) && vertexDragBounds.containsPoint( proposedVertex2Position );
