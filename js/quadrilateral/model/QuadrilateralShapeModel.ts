@@ -1149,7 +1149,7 @@ class QuadrilateralShapeModel {
       const scaledProposedPositions: VertexWithProposedPosition[] = proposedPositions.map( vertexWithProposedPosition => {
         const proposedPosition = vertexWithProposedPosition.proposedPosition;
 
-        let constrainedPosition;
+        let constrainedPosition: Vector2;
 
         // only try to set a new position if values look reasonable - we want to handle this gracefully, the sim
         // shouldn't crash if data isn't right
@@ -1162,13 +1162,16 @@ class QuadrilateralShapeModel {
           constrainedPosition = vertexWithProposedPosition.vertex.smoothPosition( virtualPosition );
 
           // constrain within model bounds
-          constrainedPosition = this.model.modelBoundsProperty.value?.closestPointTo( constrainedPosition );
+          constrainedPosition = this.model.modelBoundsProperty.value!.closestPointTo( constrainedPosition );
         }
         else {
 
           // If the value is not reasonable, just fall back to the current position
           constrainedPosition = vertexWithProposedPosition.vertex.positionProperty.value;
         }
+
+        // align with model grid positions
+        constrainedPosition = this.model.getClosestGridPosition( constrainedPosition! );
 
         return {
           vertex: vertexWithProposedPosition.vertex,

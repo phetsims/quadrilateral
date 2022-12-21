@@ -266,6 +266,7 @@ class QuadrilateralScreenView extends ScreenView {
 
     if ( MediaPipeQueryParameters.cameraInput === 'hands' ) {
       this.mediaPipe = new QuadrilateralMediaPipe( model );
+      model.connectedToDeviceProperty.value = true;
     }
 
     // pdom
