@@ -391,16 +391,6 @@ class SideNode extends Voicing( Path ) {
     const vertexDragBounds = this.quadrilateralModel.vertexDragBoundsProperty.value;
     const inBounds = vertexDragBounds.containsPoint( proposedVertex1Position ) && vertexDragBounds.containsPoint( proposedVertex2Position );
 
-    // // if the positions are outside of model bounds, the shape is not allowed
-    // // TODO: I am not sure how to put this in the isQuadrilateralShapeAllowed, because to set the shape
-    // // we change the vertex position Properties, which recomputes drag areas. The drag area algorithm requires
-    // // that vertex positions are within bounds so we are tyring to avoid reaching that. Perhaps allow infinite drag
-    // // shapes for the scratch model?
-    // if ( !this.quadrilateralModel.modelBoundsProperty.value?.containsPoint( proposedVertex1Position ) ||
-    //      !this.quadrilateralModel.modelBoundsProperty.value?.containsPoint( proposedVertex2Position ) ) {
-    //   return;
-    // }
-
     // update the scratch model before setting proposed vertex positions
     this.scratchShapeModel.set( this.quadrilateralShapeModel );
 
