@@ -1346,7 +1346,7 @@ class QuadrilateralShapeModel {
     ];
 
     // Constrain to intervals of deviceGridSpacingProperty.value to try to reduce noise
-    const constrainedGridPositions = _.map( smoothedPositions, smoothedPosition => this.model.getClosestGridPosition( smoothedPosition, this.model.preferencesModel.deviceGridSpacingProperty.value ) );
+    const constrainedGridPositions = _.map( smoothedPositions, smoothedPosition => this.model.getClosestGridPosition( smoothedPosition ) );
 
     const verticesWithProposedPositions = [
       { vertex: this.vertexA, proposedPosition: constrainedGridPositions[ 0 ]! },

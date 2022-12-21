@@ -65,6 +65,8 @@ class QuadrilateralModel {
   // Controls runtime preferences for the simulation.
   public readonly preferencesModel: QuadrilateralPreferencesModel;
 
+  public readonly vertexIntervalProperty: TReadOnlyProperty<number>;
+
   // A Property that indicates that all markers are observed by the camera to control this simulation. Part of
   // a prototype for using OpenCV as an input method for the simulation
   public allVertexMarkersDetectedProperty: TReadOnlyProperty<boolean>;
@@ -95,7 +97,9 @@ class QuadrilateralModel {
   // The available bounds for smooth vertex dragging (the model bounds eroded by the width of a vertex so a vertex
   // can never go ouside of the model bounds.
   public readonly vertexDragBoundsProperty: TReadOnlyProperty<Bounds2>;
-  
+
+  public readonly useMinorIntervalsProperty: BooleanProperty;
+
   // Whether the grid is visible.
   public readonly gridVisibleProperty: BooleanProperty;
 
@@ -219,6 +223,30 @@ class QuadrilateralModel {
     this.shapeSoundEnabledProperty = new BooleanProperty( true, {
       tandem: tandem.createTandem( 'shapeSoundEnabledProperty' )
     } );
+
+    this.useMinorIntervalsProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'useMinorIntervalsProperty' )
+    } );
+
+    // shift key pressed, connected to device, fine input spacing
+    this.vertexIntervalProperty = new DerivedProperty(
+      [ this.useMinorIntervalsProperty, preferencesModel.fineInputSpacingProperty, this.connectedToDeviceProperty, preferencesModel.deviceGridSpacingProperty ],
+      ( useMinorIntervals, fineInputSpacing, connectedToDevice, deviceGridSpacing ) => {
+
+        let interval: number;
+        if ( connectedToDevice ) {
+          interval = deviceGridSpacing;
+        }
+        else if ( fineInputSpacing ) {
+          interval = useMinorIntervals ? QuadrilateralQueryParameters.minorFineVertexInterval : QuadrilateralQueryParameters.majorFineVertexInterval;
+        }
+        else {
+          interval = useMinorIntervals ? QuadrilateralQueryParameters.minorVertexInterval : QuadrilateralQueryParameters.majorVertexInterval;
+        }
+
+        return interval;
+      }
+    );
 
     this.firstModelStep = true;
 
@@ -346,14 +374,12 @@ class QuadrilateralModel {
 
   /**
    * Returns the closest position in the model from the point provided that will be constrained to the minor lines
-   * of the model "grid". By default it uses the minor grid spacing controlled by Preferences. But a different spacing
+   * of the model "grid". By default, it uses the major grid spacing controlled by Preferences. But a different spacing
    * may be needed depending on the method of input.
    */
-  public getClosestGridPosition( position: Vector2, interval?: number ): Vector2 {
-    if ( interval === undefined ) {
-      interval = this.preferencesModel.fineInputSpacingProperty.value ? QuadrilateralQueryParameters.minorFineVertexInterval : QuadrilateralQueryParameters.minorVertexInterval;
-    }
+  public getClosestGridPosition( position: Vector2 ): Vector2 {
 
+    const interval = this.vertexIntervalProperty.value;
     return new Vector2( Utils.roundToInterval( position.x, interval ), Utils.roundToInterval( position.y, interval ) );
   }
 }
