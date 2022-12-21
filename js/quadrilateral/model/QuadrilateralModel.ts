@@ -373,9 +373,9 @@ class QuadrilateralModel {
   }
 
   /**
-   * Returns the closest position in the model from the point provided that will be constrained to the minor lines
-   * of the model "grid". By default, it uses the major grid spacing controlled by Preferences. But a different spacing
-   * may be needed depending on the method of input.
+   * Returns the closest position in the model from the point provided that will be constrain the position to align
+   * with the model grid. See vertexIntervalProperty for more information about how the intervals of the grid
+   * can change.
    */
   public getClosestGridPosition( position: Vector2 ): Vector2 {
 
