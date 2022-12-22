@@ -249,7 +249,6 @@ class SideDescriber {
       }
     }
 
-    console.log( sideDescription );
     return sideDescription;
   }
 
