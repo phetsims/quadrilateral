@@ -44,13 +44,19 @@ const longerThanParallelAdjacentSidesString = QuadrilateralStrings.a11y.voicing.
 const notEqualToParallelAdjacentSidesString = QuadrilateralStrings.a11y.voicing.notEqualToParallelAdjacentSides;
 const oneUnitString = QuadrilateralStrings.a11y.voicing.oneUnit;
 const numberOfUnitsPatternString = QuadrilateralStrings.a11y.voicing.numberOfUnitsPattern;
-const aboutHalfOneUnitString = QuadrilateralStrings.a11y.voicing.aboutHalfOneUnit;
 const numberOfUnitsAndAHalfPatternString = QuadrilateralStrings.a11y.voicing.numberOfUnitsAndAHalfPattern;
-const lessThanHalfOneUnitString = QuadrilateralStrings.a11y.voicing.lessThanHalfOneUnit;
-const justOverNumberOfUnitsPatternString = QuadrilateralStrings.a11y.voicing.justOverNumberOfUnitsPattern;
-const justUnderOneUnitString = QuadrilateralStrings.a11y.voicing.justUnderOneUnit;
-const justUnderNumberOfUnitsPatternString = QuadrilateralStrings.a11y.voicing.justUnderNumberOfUnitsPattern;
 const sideUnitsObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.sideUnitsObjectResponsePattern;
+const oneQuarterUnitString = QuadrilateralStrings.a11y.voicing.oneQuarterUnit;
+const numberAndOneQuarterUnitsPatternString = QuadrilateralStrings.a11y.voicing.numberAndOneQuarterUnitsPattern;
+const threeQuarterUnitsString = QuadrilateralStrings.a11y.voicing.threeQuarterUnits;
+const numberAndThreeQuarterUnitsPatternString = QuadrilateralStrings.a11y.voicing.numberAndThreeQuarterUnitsPattern;
+const aboutOneUnitString = QuadrilateralStrings.a11y.voicing.aboutOneUnit;
+const aboutNumberUnitsPatternString = QuadrilateralStrings.a11y.voicing.aboutNumberUnitsPattern;
+const aboutOneHalfUnitsString = QuadrilateralStrings.a11y.voicing.aboutOneHalfUnits;
+const aboutNumberAndAHalfUnitsPatternString = QuadrilateralStrings.a11y.voicing.aboutNumberAndAHalfUnitsPattern;
+const aboutNumberQuarterUnitsPatternString = QuadrilateralStrings.a11y.voicing.aboutNumberQuarterUnitsPattern;
+const aboutFullNumberAndNumberQuarterUnitsPatternString = QuadrilateralStrings.a11y.voicing.aboutFullNumberAndNumberQuarterUnitsPattern;
+const oneHalfUnitsString = QuadrilateralStrings.a11y.voicing.oneHalfUnits;
 
 // A map that will provide comparison descriptions for side lengths. Range values are the ratio between lengths
 // between the sides.
@@ -129,7 +135,10 @@ class SideDescriber {
    * "1 unit" or
    * "just over 3 units" or
    * "2 and a half units" or
-   * "less than half 1 unit"
+   * "2 and a quarter units" or
+   * "2 and three-quarter units".
+   *
+   * TODO: Look for refactoring opportunities in this function.
    */
   public static getSideUnitsDescription( sideLength: number, interLengthToleranceInterval: number ): string {
     let sideDescription: string | null = null;
@@ -139,9 +148,13 @@ class SideDescriber {
 
     if ( QuadrilateralShapeModel.isInterLengthEqualToOther( remainder, 0, interLengthToleranceInterval ) ) {
       if ( numberOfFullUnits === 1 ) {
+
+        // "one unit"
         sideDescription = oneUnitString;
       }
       else {
+
+        // "3 units"
         sideDescription = StringUtils.fillIn( numberOfUnitsPatternString, {
           numberOfUnits: numberOfFullUnits
         } );
@@ -149,37 +162,95 @@ class SideDescriber {
     }
     else if ( QuadrilateralShapeModel.isInterLengthEqualToOther( remainder, Side.SIDE_SEGMENT_LENGTH / 2, interLengthToleranceInterval ) ) {
       if ( numberOfFullUnits === 0 ) {
-        sideDescription = aboutHalfOneUnitString;
+        sideDescription = oneHalfUnitsString;
       }
       else {
+
+        // three and a half units
         sideDescription = StringUtils.fillIn( numberOfUnitsAndAHalfPatternString, {
           numberOfUnits: numberOfFullUnits
         } );
       }
     }
-    else if ( remainder < Side.SIDE_SEGMENT_LENGTH / 2 ) {
+    else if ( QuadrilateralShapeModel.isInterLengthEqualToOther( remainder, Side.SIDE_SEGMENT_LENGTH / 4, interLengthToleranceInterval ) ) {
       if ( numberOfFullUnits === 0 ) {
-        sideDescription = lessThanHalfOneUnitString;
+
+        // "one quarter units"
+        sideDescription = oneQuarterUnitString;
       }
       else {
-        sideDescription = StringUtils.fillIn( justOverNumberOfUnitsPatternString, {
-          numberOfUnits: numberOfFullUnits
+
+        // 2 and three-quarter units
+        sideDescription = StringUtils.fillIn( numberAndOneQuarterUnitsPatternString, {
+          fullNumber: numberOfFullUnits
         } );
       }
     }
-    else if ( remainder > Side.SIDE_SEGMENT_LENGTH / 2 ) {
+    else if ( QuadrilateralShapeModel.isInterLengthEqualToOther( remainder, 3 * Side.SIDE_SEGMENT_LENGTH / 4, interLengthToleranceInterval ) ) {
       if ( numberOfFullUnits === 0 ) {
-        sideDescription = justUnderOneUnitString;
+
+        // "one quarter units"
+        sideDescription = threeQuarterUnitsString;
       }
       else {
-        sideDescription = StringUtils.fillIn( justUnderNumberOfUnitsPatternString, {
-          numberOfUnits: numberOfFullUnits + 1
+
+        // 2 and three-quarter units
+        sideDescription = StringUtils.fillIn( numberAndThreeQuarterUnitsPatternString, {
+          fullNumber: numberOfFullUnits
         } );
+      }
+    }
+    else {
+
+      const numberOfQuarterUnits = Math.ceil( ( sideLength / Side.SIDE_SEGMENT_LENGTH ) * 4 );
+      const numberOfExtraCornerUnits = numberOfQuarterUnits % 4;
+      if ( numberOfExtraCornerUnits === 0 ) {
+        if ( numberOfFullUnits === 0 ) {
+          sideDescription = aboutOneUnitString;
+        }
+        else {
+          // about 3 units (just under, currently)
+          sideDescription = StringUtils.fillIn( aboutNumberUnitsPatternString, {
+            number: numberOfFullUnits + 1
+          } );
+        }
+      }
+      else if ( numberOfExtraCornerUnits === 2 ) {
+        if ( numberOfFullUnits === 0 ) {
+          // about one-half units
+          sideDescription = aboutOneHalfUnitsString;
+        }
+        else {
+          // about 1 and a half units
+          sideDescription = StringUtils.fillIn( aboutNumberAndAHalfUnitsPatternString, {
+            number: numberOfFullUnits
+          } );
+        }
+      }
+      else {
+
+        if ( numberOfFullUnits === 0 ) {
+
+          // about three-quarter units
+          // about one-quarter units
+          sideDescription = StringUtils.fillIn( aboutNumberQuarterUnitsPatternString, {
+            number: numberOfExtraCornerUnits
+          } );
+        }
+        else {
+
+          // about 2 and one quarter units
+          // about 3 and three-quarter units
+          sideDescription = StringUtils.fillIn( aboutFullNumberAndNumberQuarterUnitsPatternString, {
+            fullNumber: numberOfFullUnits,
+            number: numberOfExtraCornerUnits
+          } );
+        }
       }
     }
 
-    assert && assert( sideDescription, `side description not found for length ${sideLength}` );
-    return sideDescription!;
+    console.log( sideDescription );
+    return sideDescription;
   }
 
   /**

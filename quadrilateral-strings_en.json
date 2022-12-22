@@ -562,6 +562,39 @@
       "justUnderNumberOfUnitsPattern": {
         "value": "just under {{numberOfUnits}} units"
       },
+      "oneQuarterUnit": {
+        "value": "one quarter unit"
+      },
+      "numberAndOneQuarterUnitsPattern": {
+        "value": "{{fullNumber}} and one-quarter units"
+      },
+      "threeQuarterUnits": {
+        "value": "three-quarter units"
+      },
+      "numberAndThreeQuarterUnitsPattern": {
+        "value": "{{fullNumber}} and three-quarter units"
+      },
+      "aboutOneUnit": {
+        "value": "about one unit"
+      },
+      "aboutNumberUnitsPattern": {
+        "value": "about {{number}} units"
+      },
+      "aboutOneHalfUnits": {
+        "value": "about one-half units"
+      },
+      "oneHalfUnits": {
+        "value": "one-half units"
+      },
+      "aboutNumberAndAHalfUnitsPattern": {
+        "value": "about {{number}} and a half units"
+      },
+      "aboutNumberQuarterUnitsPattern": {
+        "value": "about {{number}}-quarter units"
+      },
+      "aboutFullNumberAndNumberQuarterUnitsPattern": {
+        "value": "about {{fullNumber}} and {{number}}-quarter units"
+      },
       "vertexDragObjectResponse": {
         "wider": {
           "value": "wider"

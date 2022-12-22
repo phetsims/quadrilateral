@@ -393,6 +393,28 @@ type StringsType = {
       'justUnderOneUnitStringProperty': LinkableProperty<string>;
       'justUnderNumberOfUnitsPattern': string;
       'justUnderNumberOfUnitsPatternStringProperty': LinkableProperty<string>;
+      'oneQuarterUnit': string;
+      'oneQuarterUnitStringProperty': LinkableProperty<string>;
+      'numberAndOneQuarterUnitsPattern': string;
+      'numberAndOneQuarterUnitsPatternStringProperty': LinkableProperty<string>;
+      'threeQuarterUnits': string;
+      'threeQuarterUnitsStringProperty': LinkableProperty<string>;
+      'numberAndThreeQuarterUnitsPattern': string;
+      'numberAndThreeQuarterUnitsPatternStringProperty': LinkableProperty<string>;
+      'aboutOneUnit': string;
+      'aboutOneUnitStringProperty': LinkableProperty<string>;
+      'aboutNumberUnitsPattern': string;
+      'aboutNumberUnitsPatternStringProperty': LinkableProperty<string>;
+      'aboutOneHalfUnits': string;
+      'aboutOneHalfUnitsStringProperty': LinkableProperty<string>;
+      'oneHalfUnits': string;
+      'oneHalfUnitsStringProperty': LinkableProperty<string>;
+      'aboutNumberAndAHalfUnitsPattern': string;
+      'aboutNumberAndAHalfUnitsPatternStringProperty': LinkableProperty<string>;
+      'aboutNumberQuarterUnitsPattern': string;
+      'aboutNumberQuarterUnitsPatternStringProperty': LinkableProperty<string>;
+      'aboutFullNumberAndNumberQuarterUnitsPattern': string;
+      'aboutFullNumberAndNumberQuarterUnitsPatternStringProperty': LinkableProperty<string>;
       'vertexDragObjectResponse': {
         'wider': string;
         'widerStringProperty': LinkableProperty<string>;
