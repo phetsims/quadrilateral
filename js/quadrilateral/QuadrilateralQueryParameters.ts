@@ -44,7 +44,14 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     defaultValue: 0.002
   },
 
-  // A scale factor to apply to all tolerance intervals when the "Fine Input Spacing" checkbox is checked.
+  // When provided, vertices will snap to a much finer grid in the model. This lets you place vertices in many more
+  // locations in the model, but it will become much more difficult to find named shapes because vertex locations
+  // will be less precise (user has very fine control instead of automatically snapping to a coarse grid).
+  smallerStepSize: {
+    type: 'flag'
+  },
+
+  // A scale factor to apply to all tolerance intervals when the using ?smallerStepSize.
   // Should be less than one because we want the tolerance intervals to be smaller when using fine input.
   // See https://github.com/phetsims/quadrilateral/issues/197#issuecomment-1258194919
   fineInputSpacingToleranceIntervalScaleFactor: {

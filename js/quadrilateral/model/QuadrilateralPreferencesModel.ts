@@ -43,7 +43,8 @@ class QuadrilateralPreferencesModel {
   // Controls the interval that Vertex positions are constrained to for typical simulation control. When true,
   // Vertices will be constrained to a finer grid for more precise motion. In general that is not necessary but some
   // users may want that amount of control.
-  public readonly fineInputSpacingProperty = new BooleanProperty( false );
+  // TODO: This could be removed from QuadrilateralPreferencesModel, it will never change at runtime now
+  public readonly fineInputSpacingProperty = new BooleanProperty( QuadrilateralQueryParameters.smallerStepSize );
 }
 
 quadrilateral.register( 'QuadrilateralPreferencesModel', QuadrilateralPreferencesModel );
