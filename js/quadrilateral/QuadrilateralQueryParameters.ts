@@ -180,14 +180,6 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     type: 'number',
     defaultValue: 0.00625,
     isValidValue: ( value: number ) => value > 0
-  },
-
-  /**
-   * Adds more to the QuadrilateralGridNode so that you can visualize the majorVertexInterval
-   * and the minorVertexInterval, which determine where vertices are constrained to in model space.
-   */
-  showVertexGrid: {
-    type: 'flag'
   }
 } );
 
