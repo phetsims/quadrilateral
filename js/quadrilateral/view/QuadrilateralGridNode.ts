@@ -18,18 +18,13 @@ import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 
 // constants
-const GRID_LINE_OPTIONS = {
+const MAJOR_GRID_LINE_OPTIONS = {
   stroke: QuadrilateralColors.gridColorProperty
 };
 
-// Options for the debugging grid that shows major and minor vertex intervals.
-const MAJOR_DEBUG_GRID_LINE_OPTIONS = {
-  stroke: 'darkred',
-  lineWidth: 0.5
-};
-const MINOR_DEBUG_GRID_LINE_OPTIONS = {
-  stroke: 'lightcoral',
-  lineWidth: 0.25
+const MINOR_GRID_LINE_OPTIONS = {
+  stroke: QuadrilateralColors.gridColorProperty,
+  lineWidth: 0.3
 };
 
 const BORDER_RECTANGLE_LINE_WIDTH = 2;
@@ -37,9 +32,6 @@ const BORDER_RECTANGLE_LINE_WIDTH = 2;
 class QuadrilateralGridNode extends Node {
   public constructor( modelBoundsProperty: Property<Bounds2 | null>, visibleProperty: TReadOnlyProperty<boolean>, modelViewTransform: ModelViewTransform2 ) {
     super();
-
-    const majorDebuggingPath = new Path( null, MAJOR_DEBUG_GRID_LINE_OPTIONS );
-    const minorDebuggingPath = new Path( null, MINOR_DEBUG_GRID_LINE_OPTIONS );
 
     // Rectangle showing available model bounds
     const boundsRectangle = new Rectangle( 0, 0, 0, 0, 5, 5, {
@@ -49,13 +41,13 @@ class QuadrilateralGridNode extends Node {
     } );
     this.addChild( boundsRectangle );
 
-    const gridPath = new Path( null, GRID_LINE_OPTIONS );
-    this.addChild( gridPath );
+    const majorGridLinePath = new Path( null, MAJOR_GRID_LINE_OPTIONS );
+    const minorGridLinePath = new Path( null, MINOR_GRID_LINE_OPTIONS );
 
-    if ( QuadrilateralQueryParameters.showVertexGrid ) {
-      this.addChild( majorDebuggingPath );
-      this.addChild( minorDebuggingPath );
-    }
+    const gridLines = new Node( {
+      children: [ majorGridLinePath, minorGridLinePath ]
+    } );
+    this.addChild( gridLines );
 
     modelBoundsProperty.link( modelBounds => {
       if ( modelBounds ) {
@@ -69,24 +61,16 @@ class QuadrilateralGridNode extends Node {
 
         this.drawVerticalLines( lineShape, dilatedBounds, QuadrilateralConstants.GRID_SPACING );
         this.drawHorizontalLines( lineShape, dilatedBounds, QuadrilateralConstants.GRID_SPACING );
-        gridPath.shape = modelViewTransform.modelToViewShape( lineShape );
+        majorGridLinePath.shape = modelViewTransform.modelToViewShape( lineShape );
 
-        // Only do this work if necessary
-        if ( QuadrilateralQueryParameters.showVertexGrid ) {
-          const majorDebugShape = new Shape();
-          this.drawVerticalLines( majorDebugShape, dilatedBounds, QuadrilateralQueryParameters.majorVertexInterval );
-          this.drawHorizontalLines( majorDebugShape, dilatedBounds, QuadrilateralQueryParameters.majorVertexInterval );
-          majorDebuggingPath.shape = modelViewTransform.modelToViewShape( majorDebugShape );
-
-          const minorDebugShape = new Shape();
-          this.drawVerticalLines( minorDebugShape, dilatedBounds, QuadrilateralQueryParameters.minorVertexInterval );
-          this.drawHorizontalLines( minorDebugShape, dilatedBounds, QuadrilateralQueryParameters.minorVertexInterval );
-          minorDebuggingPath.shape = modelViewTransform.modelToViewShape( minorDebugShape );
-        }
+        const minorDebugShape = new Shape();
+        this.drawVerticalLines( minorDebugShape, dilatedBounds, QuadrilateralQueryParameters.minorVertexInterval );
+        this.drawHorizontalLines( minorDebugShape, dilatedBounds, QuadrilateralQueryParameters.minorVertexInterval );
+        minorGridLinePath.shape = modelViewTransform.modelToViewShape( minorDebugShape );
       }
     } );
 
-    visibleProperty.link( visible => { gridPath.visible = visible; } );
+    visibleProperty.link( visible => { gridLines.visible = visible; } );
   }
 
   /**
@@ -95,7 +79,7 @@ class QuadrilateralGridNode extends Node {
    * @param bounds - bounds for the grid lines
    * @param spacing
    */
-  public drawVerticalLines( shape: Shape, bounds: Bounds2, spacing: number ): void {
+  private drawVerticalLines( shape: Shape, bounds: Bounds2, spacing: number ): void {
 
     // Starting at the origin draw horizontal lines up and down the bounds
     let y = 0;
@@ -113,7 +97,7 @@ class QuadrilateralGridNode extends Node {
    * @param bounds - bounds for the grid lines
    * @param spacing
    */
-  public drawHorizontalLines( shape: Shape, bounds: Bounds2, spacing: number ): void {
+  private drawHorizontalLines( shape: Shape, bounds: Bounds2, spacing: number ): void {
 
     // Starting at the origin draw vertical lines across the bounds
     let x = 0;
