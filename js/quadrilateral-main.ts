@@ -22,8 +22,16 @@ import QuadrilateralSimulationPreferencesNode from './quadrilateral/view/Quadril
 import QuadrilateralInputPreferencesNode from './quadrilateral/view/QuadrilateralInputPreferencesNode.js';
 
 const quadrilateralTitleStringProperty = QuadrilateralStrings.quadrilateral.titleStringProperty;
-
 const preferencesModel = new QuadrilateralPreferencesModel();
+
+// Simulation preferences only include a ClapperBoardButton for user testing, we should only see these contents in
+// that case
+const simulationCustomPreferences = [];
+if ( QuadrilateralQueryParameters.includeClapperButton ) {
+  simulationCustomPreferences.push( {
+    createContent: ( tandem: Tandem ) => new QuadrilateralSimulationPreferencesNode( preferencesModel, tandem.createTandem( 'simPreferences' ) )
+  } );
+}
 
 const simOptions: SimOptions = {
 
@@ -41,9 +49,7 @@ const simOptions: SimOptions = {
   // preferences configuration with defaults from package.json
   preferencesModel: new PreferencesModel( {
     simulationOptions: {
-      customPreferences: [ {
-        createContent: tandem => new QuadrilateralSimulationPreferencesNode( preferencesModel, tandem.createTandem( 'simPreferences' ) )
-      } ]
+      customPreferences: simulationCustomPreferences
     },
     inputOptions: {
       customPreferences: [ {
