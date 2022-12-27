@@ -342,7 +342,9 @@ class SideNode extends Voicing( Path ) {
 
     // sound - when the Vertex becomes blocked because of an intersection with model bounds, play a unique sound
     // TODO: Copy/paste with VertexNode, maybe a superclass for this, with the same Properties watching collision?
-    const blockedSoundPlayer = new SoundClip( boundaryReached_mp3 );
+    const blockedSoundPlayer = new SoundClip( boundaryReached_mp3, {
+      initialOutputLevel: 1.5
+    } );
     soundManager.addSoundGenerator( blockedSoundPlayer );
     side.movementBlockedByBoundsProperty.lazyLink( blocked => {
       if ( blocked ) {
