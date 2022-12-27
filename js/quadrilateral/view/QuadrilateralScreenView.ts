@@ -104,7 +104,7 @@ class QuadrilateralScreenView extends ScreenView {
     );
     this.addChild( resetShapeButton );
 
-    const minorIntervalsToggleSwitch = new MinorIntervalsToggleSwitch( model.useMinorIntervalsProperty );
+    const minorIntervalsToggleSwitch = new MinorIntervalsToggleSwitch( model.lockToMinorIntervalsProperty );
     this.addChild( minorIntervalsToggleSwitch );
     minorIntervalsToggleSwitch.leftBottom = this.resetAllButton.leftTop.minusXY( 0, 45 );
 

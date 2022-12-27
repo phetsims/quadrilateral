@@ -14,8 +14,8 @@ import Dimension2 from '../../../../dot/js/Dimension2.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 
 class MinorIntervalsToggleSwitch extends ToggleSwitch<boolean> {
-  public constructor( userMinorIntervalsProperty: Property<boolean> ) {
-    super( userMinorIntervalsProperty, false, true, {
+  public constructor( lockToMinorIntervalsProperty: Property<boolean> ) {
+    super( lockToMinorIntervalsProperty, false, true, {
       size: new Dimension2( 36, 18 )
     } );
 

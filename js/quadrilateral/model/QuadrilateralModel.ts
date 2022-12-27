@@ -98,7 +98,17 @@ class QuadrilateralModel {
   // can never go ouside of the model bounds.
   public readonly vertexDragBoundsProperty: TReadOnlyProperty<Bounds2>;
 
-  public readonly useMinorIntervalsProperty: BooleanProperty;
+  // Whether vertices are going to snap to the minor intervals of the model grid. The user can "lock" this setting
+  // from the user interface. There is also a global hotkey to toggle this quickly during interaction.
+  private readonly useMinorIntervalsProperty: TReadOnlyProperty<boolean>;
+
+  // Whether the vertices will lock to the minor grid intervals during interaction. Toggled from a UI component
+  // in the screen. When true, the global hotkey for using minor intervals does nothing.
+  public readonly lockToMinorIntervalsProperty: BooleanProperty;
+
+  // Whether the vertices should lock to the minor grid intervals from a specific modifier key. When "locked"
+  // to the minor grid intervals, this Property and its global modifier key have no effect. See the above Property.
+  public readonly minorIntervalsFromGlobalKeyProperty: TProperty<boolean>;
 
   // Whether the grid is visible.
   public readonly gridVisibleProperty: BooleanProperty;
@@ -224,7 +234,15 @@ class QuadrilateralModel {
       tandem: tandem.createTandem( 'shapeSoundEnabledProperty' )
     } );
 
-    this.useMinorIntervalsProperty = new BooleanProperty( false, {
+    this.minorIntervalsFromGlobalKeyProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'minorIntervalsFromGlobalKeyProperty' )
+    } );
+
+    this.lockToMinorIntervalsProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'lockToMinorIntervalsProperty' )
+    } );
+
+    this.useMinorIntervalsProperty = DerivedProperty.or( [ this.minorIntervalsFromGlobalKeyProperty, this.lockToMinorIntervalsProperty ], {
       tandem: tandem.createTandem( 'useMinorIntervalsProperty' )
     } );
 

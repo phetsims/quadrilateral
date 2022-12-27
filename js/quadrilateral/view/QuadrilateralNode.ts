@@ -159,7 +159,7 @@ class QuadrilateralNode extends Node {
       keys: [ 'shift' ],
       fireOnKeyUp: true,
       callback: ( event, listener ) => {
-        this.model.useMinorIntervalsProperty.value = listener.keysDown;
+        this.model.minorIntervalsFromGlobalKeyProperty.value = listener.keysDown;
       },
       global: true
     } ) );
