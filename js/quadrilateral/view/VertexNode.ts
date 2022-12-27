@@ -21,7 +21,7 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
-import grab_mp3 from '../../../../tambo/sounds/grab_mp3.js';
+import grabHighPitch_mp3 from '../../../sounds/grabHighPitch_mp3.js';
 import boundaryReached_mp3 from '../../../../tambo/sounds/boundaryReached_mp3.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
 import quadrilateral from '../../quadrilateral.js';
@@ -209,10 +209,10 @@ class VertexNode extends Voicing( Circle ) {
       }
     } );
 
-
-    // sound - the grab sound is played on press but there is no release sound for this component since there is
-    // no behavioral relevance to the release
-    const pressedSoundPlayer = new SoundClip( grab_mp3 );
+    // sound - The grab sound is played on press but there is no release sound for this component since there is
+    // no behavioral relevance to the release. Uses a custom "higher pitch" sound to distinguish it from
+    // sides.
+    const pressedSoundPlayer = new SoundClip( grabHighPitch_mp3 );
     soundManager.addSoundGenerator( pressedSoundPlayer );
     vertex.isPressedProperty.lazyLink( isPressed => {
       if ( isPressed ) {
