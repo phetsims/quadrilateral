@@ -283,12 +283,19 @@ class SideNode extends Voicing( Path ) {
             }
           }
 
-          const constrainedVertex1Position = modelVertex1Position.plus( correctingVector );
-          const constrainedVertex2Position = modelVertex2Position.plus( correctingVector );
+          const boundsConstrainedVertex1Position = modelVertex1Position.plus( correctingVector );
+          const boundsConstrainedVertex2Position = modelVertex2Position.plus( correctingVector );
 
           // constrain each to the model grid
-          const proposedVertex1Position = quadrilateralModel.getClosestGridPosition( constrainedVertex1Position );
-          const proposedVertex2Position = quadrilateralModel.getClosestGridPosition( constrainedVertex2Position );
+          const gridConstrainedVertex1Position = quadrilateralModel.getClosestGridPosition( boundsConstrainedVertex1Position );
+          const gridConstrainedVertex2Position = quadrilateralModel.getClosestGridPosition( boundsConstrainedVertex2Position );
+
+          // deltas for each Vertex must be the same for the side to not change tilt while dragging - update
+          // both Vertices by the smallest translation vector so they move together
+          const smallestDeltaVector = this.getSmallestTranslationVector( gridConstrainedVertex1Position, gridConstrainedVertex2Position );
+
+          const proposedVertex1Position = side.vertex1.positionProperty.value.plus( smallestDeltaVector );
+          const proposedVertex2Position = side.vertex2.positionProperty.value.plus( smallestDeltaVector );
 
           // only update positions if both are allowed
           const positionsAllowed = quadrilateralModel.areVertexPositionsAllowed( side.vertex1, proposedVertex1Position, side.vertex2, proposedVertex2Position );
@@ -395,14 +402,37 @@ class SideNode extends Voicing( Path ) {
     // } );
   }
 
+  private getSmallestTranslationVector( proposedVertex1Position: Vector2, proposedVertex2Position: Vector2 ): Vector2 {
+    const currentVertex1Position = this.side.vertex1.positionProperty.value;
+    const currentVertex2Position = this.side.vertex2.positionProperty.value;
+
+    // Each Vertex must move by the same amount so that the side does not tile during input. Find the smallest change
+    // after constraining vertices to the grid, and we will move both vertices by that delta.
+    return _.minBy( [
+      proposedVertex1Position.minus( currentVertex1Position ),
+      proposedVertex2Position.minus( currentVertex2Position )
+    ], vector => vector.magnitude )!;
+  }
+
   /**
    * Move both vertices of this side from the change in position specified by deltaVector.
    *
    * @param deltaVector - change of position in model coordinates
    */
   private moveVerticesFromModelDelta( deltaVector: Vector2 ): void {
-    const proposedVertex1Position = this.quadrilateralModel.getClosestGridPositionInDirection( this.side.vertex1.positionProperty.value, deltaVector );
-    const proposedVertex2Position = this.quadrilateralModel.getClosestGridPositionInDirection( this.side.vertex2.positionProperty.value, deltaVector );
+    const currentVertex1Position = this.side.vertex1.positionProperty.value;
+    const currentVertex2Position = this.side.vertex2.positionProperty.value;
+
+    // constrain each Vertex position to the closest allowable grid position
+    const closestVertex1Position = this.quadrilateralModel.getClosestGridPositionInDirection( currentVertex1Position, deltaVector );
+    const closestVertex2Position = this.quadrilateralModel.getClosestGridPositionInDirection( currentVertex2Position, deltaVector );
+
+    // Each Vertex must move by the same amount so that the side does not tile during input. Find the smallest change
+    // after constraining vertices to the grid, and we will move both vertices by that delta.
+    const smallestDeltaVector = this.getSmallestTranslationVector( closestVertex1Position, closestVertex2Position );
+
+    const proposedVertex1Position = currentVertex1Position.plus( smallestDeltaVector );
+    const proposedVertex2Position = currentVertex2Position.plus( smallestDeltaVector );
 
     const vertexDragBounds = this.quadrilateralModel.vertexDragBoundsProperty.value;
     const inBounds = vertexDragBounds.containsPoint( proposedVertex1Position ) && vertexDragBounds.containsPoint( proposedVertex2Position );
