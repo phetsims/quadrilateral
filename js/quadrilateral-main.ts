@@ -18,20 +18,10 @@ import QuadrilateralStrings from './QuadrilateralStrings.js';
 import QuadrilateralPreferencesModel from './quadrilateral/model/QuadrilateralPreferencesModel.js';
 import QuadrilateralAudioPreferencesNode from './quadrilateral/view/QuadrilateralAudioPreferencesNode.js';
 import MappedProperty from '../../axon/js/MappedProperty.js';
-import QuadrilateralSimulationPreferencesNode from './quadrilateral/view/QuadrilateralSimulationPreferencesNode.js';
 import QuadrilateralInputPreferencesNode from './quadrilateral/view/QuadrilateralInputPreferencesNode.js';
 
 const quadrilateralTitleStringProperty = QuadrilateralStrings.quadrilateral.titleStringProperty;
 const preferencesModel = new QuadrilateralPreferencesModel();
-
-// Simulation preferences only include a ClapperBoardButton for user testing, we should only see these contents in
-// that case
-const simulationCustomPreferences = [];
-if ( QuadrilateralQueryParameters.includeClapperButton ) {
-  simulationCustomPreferences.push( {
-    createContent: ( tandem: Tandem ) => new QuadrilateralSimulationPreferencesNode( preferencesModel, tandem.createTandem( 'simPreferences' ) )
-  } );
-}
 
 const simOptions: SimOptions = {
 
@@ -48,9 +38,6 @@ const simOptions: SimOptions = {
 
   // preferences configuration with defaults from package.json
   preferencesModel: new PreferencesModel( {
-    simulationOptions: {
-      customPreferences: simulationCustomPreferences
-    },
     inputOptions: {
       customPreferences: [ {
         createContent: tandem => new QuadrilateralInputPreferencesNode( preferencesModel )
