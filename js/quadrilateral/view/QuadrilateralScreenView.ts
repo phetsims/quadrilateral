@@ -40,6 +40,7 @@ import ShapeSoundCheckbox from './ShapeSoundCheckbox.js';
 import Vertex from '../model/Vertex.js';
 import QuadrilateralSoundBoardNode from './sound/QuadrilateralSoundBoardNode.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import MinorIntervalsToggleSwitch from './MinorIntervalsToggleSwitch.js';
 
 // Defines the units of model space, a 2x2 grid that quadrilateral vertices can move within. It is dilated by
 // half of the vertex width so that model space is large enough for Vertices to perfectly align with the bounds
@@ -102,6 +103,10 @@ class QuadrilateralScreenView extends ScreenView {
       tandem.createTandem( 'resetShapeButton' )
     );
     this.addChild( resetShapeButton );
+
+    const minorIntervalsToggleSwitch = new MinorIntervalsToggleSwitch( model.useMinorIntervalsProperty );
+    this.addChild( minorIntervalsToggleSwitch );
+    minorIntervalsToggleSwitch.leftBottom = this.resetAllButton.leftTop.minusXY( 0, 45 );
 
     // the model bounds are defined by available view space. Some padding is added around the screen and we make
     // sure that the vertices cannot overlap with simulation controls. Otherwise the quadrilateral can move freely in
