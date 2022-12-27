@@ -27,6 +27,7 @@ import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
 import release_mp3 from '../../../../tambo/sounds/release_mp3.js';
 import boundaryReached_mp3 from '../../../../tambo/sounds/boundaryReached_mp3.js';
+import quadShapeCollision_mp3 from '../../../sounds/quadShapeCollision_mp3.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import SideTicksNode from './SideTicksNode.js';
 
@@ -339,12 +340,22 @@ class SideNode extends Voicing( Path ) {
       }
     } );
 
-    // sound - when the Vertex becomes blocked for any reason, play a sound indicating that the vertex is blocked
+    // sound - when the Vertex becomes blocked because of an intersection with model bounds, play a unique sound
+    // TODO: Copy/paste with VertexNode, maybe a superclass for this, with the same Properties watching collision?
     const blockedSoundPlayer = new SoundClip( boundaryReached_mp3 );
     soundManager.addSoundGenerator( blockedSoundPlayer );
-    side.movementBlockedProperty.lazyLink( blocked => {
+    side.movementBlockedByBoundsProperty.lazyLink( blocked => {
       if ( blocked ) {
         blockedSoundPlayer.play();
+      }
+    } );
+
+    // sound - when a vertex becomes blocked because of a collision with the shape itself, play a unique sound
+    const blockedByShapeSoundClip = new SoundClip( quadShapeCollision_mp3 );
+    soundManager.addSoundGenerator( blockedByShapeSoundClip );
+    side.movementBlockedByShapeProperty.lazyLink( blocked => {
+      if ( blocked ) {
+        blockedByShapeSoundClip.play();
       }
     } );
 
