@@ -28,6 +28,7 @@ import soundManager from '../../../../tambo/js/soundManager.js';
 import release_mp3 from '../../../../tambo/sounds/release_mp3.js';
 import boundaryReached_mp3 from '../../../../tambo/sounds/boundaryReached_mp3.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
+import SideTicksNode from './SideTicksNode.js';
 
 // The dilation around side shapes when drawing the focus highlight.
 const FOCUS_HIGHLIGHT_DILATION = 15;
@@ -83,6 +84,9 @@ class SideNode extends Voicing( Path ) {
     this.quadrilateralShapeModel = quadrilateralModel.quadrilateralShapeModel;
     this.scratchShapeModel = quadrilateralModel.quadrilateralTestShapeModel;
 
+    const ticksNode = new SideTicksNode( side, modelViewTransform );
+    this.addChild( ticksNode );
+
     const markersVisibleProperty = quadrilateralModel.markersVisibleProperty;
 
     // Generates descriptions
@@ -93,6 +97,8 @@ class SideNode extends Voicing( Path ) {
 
     // listeners
     Multilink.multilink( [ side.vertex1.positionProperty, side.vertex2.positionProperty, markersVisibleProperty ], ( vertex1Position, vertex2Position, markersVisible ) => {
+
+      ticksNode.visible = markersVisible;
 
       // create a single line that will then be divided into segments
       const fullLine = new Line( vertex1Position, vertex2Position );
@@ -150,6 +156,9 @@ class SideNode extends Voicing( Path ) {
           // so that fill will fill each segment individually and so we see strokes in between each segment
           lineShape.close();
         } );
+
+        // only to the redrawing work for ticks when they are visible
+        ticksNode.redraw();
       }
       else {
 
