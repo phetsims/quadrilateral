@@ -204,7 +204,7 @@ class QuadrilateralModel {
       tandem: tandem.createTandem( 'vertexLabelsVisibleProperty' )
     } );
 
-    this.gridVisibleProperty = new BooleanProperty( true, {
+    this.gridVisibleProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'gridVisibleProperty' )
     } );
 
