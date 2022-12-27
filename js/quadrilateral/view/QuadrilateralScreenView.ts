@@ -34,12 +34,12 @@ import QuadrilateralMediaPipe from './QuadrilateralMediaPipe.js';
 import QuadrilateralDiagonalGuidesNode from './QuadrilateralDiagonalGuidesNode.js';
 import QuadrilateralShapeNameDisplay from './QuadrilateralShapeNameDisplay.js';
 import MediaPipeQueryParameters from '../../../../tangible/js/mediaPipe/MediaPipeQueryParameters.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralInteractionCueNode from './QuadrilateralInteractionCueNode.js';
 import ResetShapeButton from './ResetShapeButton.js';
 import ShapeSoundCheckbox from './ShapeSoundCheckbox.js';
 import Vertex from '../model/Vertex.js';
 import QuadrilateralSoundBoardNode from './sound/QuadrilateralSoundBoardNode.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 
 // Defines the units of model space, a 2x2 grid that quadrilateral vertices can move within. It is dilated by
 // half of the vertex width so that model space is large enough for Vertices to perfectly align with the bounds
@@ -90,7 +90,6 @@ class QuadrilateralScreenView extends ScreenView {
     this.addChild( this.resetAllButton );
 
     const shapeSoundCheckbox = new ShapeSoundCheckbox( model.shapeSoundEnabledProperty, tandem.createTandem( 'shapeSoundCheckbox' ) );
-    shapeSoundCheckbox.leftBottom = this.resetAllButton.leftTop.minusXY( 0, 45 );
     this.addChild( shapeSoundCheckbox );
 
     const shapeNameDisplay = new QuadrilateralShapeNameDisplay( model.shapeNameVisibleProperty, model.quadrilateralShapeModel.shapeNameProperty, this.quadrilateralDescriber, tandem.createTandem( 'quadrilateralShapeNameDisplay' ) );
@@ -190,7 +189,8 @@ class QuadrilateralScreenView extends ScreenView {
 
     // layout for components that depend on the play area bounds being defined
     shapeNameDisplay.centerBottom = gridNode.centerTop.minusXY( 0, QuadrilateralConstants.VIEW_SPACING );
-    resetShapeButton.rightCenter = new Vector2( gridNode.right, shapeNameDisplay.centerY );
+    shapeSoundCheckbox.rightCenter = new Vector2( gridNode.right, shapeNameDisplay.centerY );
+    resetShapeButton.rightCenter = shapeSoundCheckbox.leftCenter.minusXY( QuadrilateralConstants.VIEW_SPACING, 0 );
 
     if ( QuadrilateralQueryParameters.deviceConnection ) {
 
