@@ -190,7 +190,12 @@ class QuadrilateralScreenView extends ScreenView {
     // layout for components that depend on the play area bounds being defined
     shapeNameDisplay.centerBottom = gridNode.centerTop.minusXY( 0, QuadrilateralConstants.VIEW_SPACING );
     shapeSoundCheckbox.rightCenter = new Vector2( gridNode.right, shapeNameDisplay.centerY );
-    resetShapeButton.rightCenter = shapeSoundCheckbox.leftCenter.minusXY( QuadrilateralConstants.VIEW_SPACING, 0 );
+
+    // effectively centers the resetShapeButton between the other two components
+    resetShapeButton.rightCenter = shapeSoundCheckbox.leftCenter.minusXY(
+      ( shapeSoundCheckbox.left - shapeNameDisplay.right - resetShapeButton.width ) / 2,
+      0
+    );
 
     if ( QuadrilateralQueryParameters.deviceConnection ) {
 
