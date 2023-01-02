@@ -19,8 +19,6 @@ class QuadrilateralKeyboardHelpContent extends TwoColumnKeyboardHelpContent {
     // sim-specific help content about how to interact with the shape
     const moveShapeHelpSection = new MoveShapeHelpSection();
     const shapeShortcutsHelpSection = new ShapeShortcutsHelpSection();
-
-    // text and icons become aligned
     KeyboardHelpSection.alignHelpSectionIcons( [ moveShapeHelpSection, shapeShortcutsHelpSection ] );
     const leftContent = [ moveShapeHelpSection, shapeShortcutsHelpSection ];
 
