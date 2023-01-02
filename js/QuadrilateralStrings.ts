@@ -65,6 +65,18 @@ type StringsType = {
   'gotItStringProperty': LinkableProperty<string>;
   'fineInputSpacingDescription': string;
   'fineInputSpacingDescriptionStringProperty': LinkableProperty<string>;
+  'keyboardHelpDialog': {
+    'moveSidesOrCorners': string;
+    'moveSidesOrCornersStringProperty': LinkableProperty<string>;
+    'moveASideOrCorner': string;
+    'moveASideOrCornerStringProperty': LinkableProperty<string>;
+    'moveASideOrCornerInSmallerSteps': string;
+    'moveASideOrCornerInSmallerStepsStringProperty': LinkableProperty<string>;
+    'shapeShortcuts': string;
+    'shapeShortcutsStringProperty': LinkableProperty<string>;
+    'resetShape': string;
+    'resetShapeStringProperty': LinkableProperty<string>;
+  };
   'a11y': {
     'screenSummary': {
       'playAreaDescription': string;

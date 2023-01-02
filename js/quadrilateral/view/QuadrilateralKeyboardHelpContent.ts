@@ -2,21 +2,31 @@
 
 /**
  * The keyboard help content for the Quadrilateral sim. This has yet to be designed and is just ready for more content.
- * TODO: Finish this in https://github.com/phetsims/quadrilateral/issues/249
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
 import quadrilateral from '../../quadrilateral.js';
 import BasicActionsKeyboardHelpSection from '../../../../scenery-phet/js/keyboard/help/BasicActionsKeyboardHelpSection.js';
-import { Node } from '../../../../scenery/js/imports.js';
+import TwoColumnKeyboardHelpContent from '../../../../scenery-phet/js/keyboard/help/TwoColumnKeyboardHelpContent.js';
+import KeyboardHelpSection from '../../../../scenery-phet/js/keyboard/help/KeyboardHelpSection.js';
+import MoveShapeHelpSection from './MoveShapeHelpSection.js';
+import ShapeShortcutsHelpSection from './ShapeShortcutsHelpSection.js';
 
-class QuadrilateralKeyboardHelpContent extends Node {
+class QuadrilateralKeyboardHelpContent extends TwoColumnKeyboardHelpContent {
   public constructor() {
-    const generalContent = new BasicActionsKeyboardHelpSection();
-    super( {
-      children: [ generalContent ]
-    } );
+
+    // sim-specific help content about how to interact with the shape
+    const moveShapeHelpSection = new MoveShapeHelpSection();
+    const shapeShortcutsHelpSection = new ShapeShortcutsHelpSection();
+
+    // text and icons become aligned
+    KeyboardHelpSection.alignHelpSectionIcons( [ moveShapeHelpSection, shapeShortcutsHelpSection ] );
+    const leftContent = [ moveShapeHelpSection, shapeShortcutsHelpSection ];
+
+    const rightContent = [ new BasicActionsKeyboardHelpSection() ];
+
+    super( leftContent, rightContent );
   }
 }
 
