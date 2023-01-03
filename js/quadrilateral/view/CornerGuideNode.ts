@@ -3,7 +3,7 @@
 /**
  * A Node that surrounds a Vertex to represent the current angle. The shape looks like a partial annulus that extends
  * between the sides that define the angles at a vertex. The annulus is broken into alternating light and dark
- * slices so that it is easy to see relative angle sizes by counting the number of slices at each guide.
+ * wedges so that it is easy to see relative angle sizes by counting the number of wedges at each guide.
  *
  * The annulus always starts at the same side so that the whole Node rotates with the entire quadrilateral so that the
  * guide always looks the same regardless of quadrilateral rotation.
@@ -28,27 +28,27 @@ import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 
 // constants
-// The size of each slice of the angle guide, in radians
-const SLICE_SIZE_DEGREES = 30;
-const SLICE_SIZE_RADIANS = Utils.toRadians( SLICE_SIZE_DEGREES );
+// The size of each wedge of the angle guide, in radians
+const WEDGE_SIZE_DEGREES = 30;
+const WEDGE_SIZE_RADIANS = Utils.toRadians( WEDGE_SIZE_DEGREES );
 
 // in model coordinates, width of the arc (outer radius - inner radius of the annulus)
-const SLICE_RADIAL_LENGTH = 0.05;
+const WEDGE_RADIAL_LENGTH = 0.05;
 
 // The radii of the annulus
 const INNER_RADIUS = Vertex.VERTEX_WIDTH / 2;
-const OUTER_RADIUS = Vertex.VERTEX_WIDTH / 2 + SLICE_RADIAL_LENGTH;
+const OUTER_RADIUS = Vertex.VERTEX_WIDTH / 2 + WEDGE_RADIAL_LENGTH;
 
-const EXTERNAL_ANGLE_GUIDE_LENGTH = SLICE_RADIAL_LENGTH * 8;
+const EXTERNAL_ANGLE_GUIDE_LENGTH = WEDGE_RADIAL_LENGTH * 8;
 
 class CornerGuideNode extends Node {
-  public static readonly SLICE_SIZE_DEGREES = SLICE_SIZE_DEGREES;
-  public static readonly SLICE_SIZE_RADIANS = SLICE_SIZE_RADIANS;
+  public static readonly WEDGE_SIZE_DEGREES = WEDGE_SIZE_DEGREES;
+  public static readonly WEDGE_SIZE_RADIANS = WEDGE_SIZE_RADIANS;
 
   public constructor( vertex1: Vertex, vertex2: Vertex, visibleProperty: BooleanProperty, shapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2 ) {
     super();
 
-    // The guide looks like alternating dark and light slices along the annulus, we accomplish this with two paths
+    // The guide looks like alternating dark and light wedges along the annulus, we accomplish this with two paths
     const darkAnglePath = new Path( null, {
       fill: QuadrilateralColors.cornerGuideDarkColorProperty,
       stroke: QuadrilateralColors.markersStrokeColorProperty
@@ -85,12 +85,12 @@ class CornerGuideNode extends Node {
       const lightShape = new Shape();
       const darkShape = new Shape();
 
-      const numberOfSlices = Math.floor( definedAngle / SLICE_SIZE_RADIANS );
-      for ( let i = 0; i < numberOfSlices; i++ ) {
+      const numberOfWedges = Math.floor( definedAngle / WEDGE_SIZE_RADIANS );
+      for ( let i = 0; i < numberOfWedges; i++ ) {
         const nextShape = i % 2 === 0 ? lightShape : darkShape;
 
-        const nextInnerPoint = firstInnerPoint.rotatedAboutPoint( vertexCenter, -SLICE_SIZE_RADIANS );
-        const nextOuterPoint = firstOuterPoint.rotatedAboutPoint( vertexCenter, -SLICE_SIZE_RADIANS );
+        const nextInnerPoint = firstInnerPoint.rotatedAboutPoint( vertexCenter, -WEDGE_SIZE_RADIANS );
+        const nextOuterPoint = firstOuterPoint.rotatedAboutPoint( vertexCenter, -WEDGE_SIZE_RADIANS );
 
         CornerGuideNode.drawAngleSegment( nextShape, firstInnerPoint, firstOuterPoint, nextInnerPoint, nextOuterPoint );
 
@@ -100,11 +100,11 @@ class CornerGuideNode extends Node {
 
       // now draw the remainder - check to make sure that it is large enough to display because ellipticalArcTo doesn't
       // work with angles that are close to zero.
-      const remainingAngle = ( definedAngle - ( numberOfSlices * SLICE_SIZE_RADIANS ) );
+      const remainingAngle = ( definedAngle - ( numberOfWedges * WEDGE_SIZE_RADIANS ) );
       if ( remainingAngle > 0.0005 ) {
 
-        // slices alternate from light to dark, so we can count on the remaining slice being the alternating color
-        const remainderShape = numberOfSlices % 2 === 0 ? lightShape : darkShape;
+        // wedges alternate from light to dark, so we can count on the remaining wedge being the alternating color
+        const remainderShape = numberOfWedges % 2 === 0 ? lightShape : darkShape;
 
         const nextInnerPoint = firstInnerPoint.rotatedAboutPoint( vertexCenter, -remainingAngle );
         const nextOuterPoint = firstOuterPoint.rotatedAboutPoint( vertexCenter, -remainingAngle );

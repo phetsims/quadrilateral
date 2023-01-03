@@ -49,14 +49,14 @@ const QuadrilateralIconFactory = {
     const sidesAngle = Utils.toRadians( 110 ); // overall angle for the icon
     const sidesLength = QuadrilateralIconFactory.ICON_HEIGHT;
     const sidesHeight = QuadrilateralIconFactory.ICON_HEIGHT * 0.25; // chosen by inspection
-    const sliceAngle = Math.PI / 6; // size of each slice graphic
+    const wedgeAngle = Math.PI / 6; // size of each wedge graphic
     const tickLength = sidesHeight / 2;
-    const innerIconRadius = sidesLength * 0.4; // radius of the inner-most arc and for the inner curve of angle slices
-    const outerIconRadius = sidesLength * 0.8; // radius of the outer-most arc and for the outer curve of angle slices
+    const innerIconRadius = sidesLength * 0.4; // radius of the inner-most arc and for the inner curve of angle wedges
+    const outerIconRadius = sidesLength * 0.8; // radius of the outer-most arc and for the outer curve of angle wedges
 
     assert && assert( outerIconRadius > innerIconRadius, 'Arc radii do not make sense' );
     assert && assert( tickLength < sidesHeight, 'ticks will be to tall' );
-    assert && assert( sliceAngle < 2 * Math.PI, 'that angle does nto make sense for this icon' );
+    assert && assert( wedgeAngle < 2 * Math.PI, 'that angle does nto make sense for this icon' );
     assert && assert( sidesLength > sidesHeight, 'Sides must be longer than they are tall for this icon' );
 
     // draw the "sides"
@@ -117,13 +117,13 @@ const QuadrilateralIconFactory = {
     const halfRadius = ( outerIconRadius + innerIconRadius ) / 2;
     const arcPaths = [];
 
-    // only drawing every other slice
-    for ( let i = 0; i < sidesAngle; i = i + ( 2 * sliceAngle ) ) {
+    // only drawing every other wedge
+    for ( let i = 0; i < sidesAngle; i = i + ( 2 * wedgeAngle ) ) {
 
       const startAngle = i;
 
-      // only draw the final slice within the angle range for this icon
-      const endAngle = Math.min( startAngle + sliceAngle, sidesAngle );
+      // only draw the final wedge within the angle range for thiss icon
+      const endAngle = Math.min( startAngle + wedgeAngle, sidesAngle );
 
       const arcShape = Shape.arc( 0, 0, halfRadius, 2 * Math.PI - startAngle, 2 * Math.PI - endAngle, true );
       arcPaths.push( new Path( arcShape, combineOptions<PathOptions>( {}, pathOptions, { lineWidth: outerIconRadius - innerIconRadius } ) ) );

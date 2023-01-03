@@ -514,8 +514,8 @@
       "rightAngleVertexObjectResponsePattern": {
         "value": "right angle, {{oppositeComparison}} opposite corner, {{adjacentVertexDescription}}."
       },
-      "vertexObjectResponseWithSlicesPattern": {
-        "value": "{{slicesDescription}}, {{oppositeComparison}} opposite corner, {{adjacentVertexDescription}}."
+      "vertexObjectResponseWithWedgesPattern": {
+        "value": "{{wedgeDescription}}, {{oppositeComparison}} opposite corner, {{adjacentVertexDescription}}."
       },
       "rightAngle": {
         "value": "right angle"
@@ -526,32 +526,32 @@
       "anglePointingInward": {
         "value": "angle pointing inward"
       },
-      "oneSlice": {
-        "value": "one slice"
+      "oneWedge": {
+        "value": "one wedge"
       },
-      "halfOneSlice": {
-        "value": "half one slice"
+      "halfOneWedge": {
+        "value": "half one wedge"
       },
-      "lessThanHalfOneSlice": {
-        "value": "less than half 1 slice"
+      "lessThanHalfOneWedge": {
+        "value": "less than half 1 wedge"
       },
-      "justUnderOneSlice": {
-        "value": "just under 1 slice"
+      "justUnderOneWedge": {
+        "value": "just under 1 wedge"
       },
-      "justOverOneSlice": {
-        "value": "just over 1 slice"
+      "justOverOneWedge": {
+        "value": "just over 1 wedge"
       },
-      "numberOfSlicesPattern": {
-        "value": "{{numberOfSlices}} slices"
+      "numberOfWedgesPattern": {
+        "value": "{{numberOfWedges}} wedges"
       },
-      "numberOfSlicesAndAHalfPattern": {
-        "value": "{{numberOfSlices}} and a half slices"
+      "numberOfWedgesAndAHalfPattern": {
+        "value": "{{numberOfWedges}} and a half wedges"
       },
-      "justOverNumberOfSlicesPattern": {
-        "value": "just over {{numberOfSlices}} slices"
+      "justOverNumberOfWedgesPattern": {
+        "value": "just over {{numberOfWedges}} wedges"
       },
-      "justUnderNumberOfSlicesPattern": {
-        "value": "just under {{numberOfSlices}} slices"
+      "justUnderNumberOfWedgesPattern": {
+        "value": "just under {{numberOfWedges}} wedges"
       },
       "oneUnit": {
         "value": "1 unit"

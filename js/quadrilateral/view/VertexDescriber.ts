@@ -42,18 +42,18 @@ const equalAdjacentCornersPatternString = QuadrilateralStrings.a11y.voicing.equa
 const smallerThanAdjacentCornersString = QuadrilateralStrings.a11y.voicing.smallerThanAdjacentCorners;
 const widerThanAdjacentCornersString = QuadrilateralStrings.a11y.voicing.widerThanAdjacentCorners;
 const notEqualToAdjacentCornersString = QuadrilateralStrings.a11y.voicing.notEqualToAdjacentCorners;
-const vertexObjectResponseWithSlicesPatternString = QuadrilateralStrings.a11y.voicing.vertexObjectResponseWithSlicesPattern;
+const vertexObjectResponseWithWedgesPatternString = QuadrilateralStrings.a11y.voicing.vertexObjectResponseWithWedgesPattern;
 const rightAngleString = QuadrilateralStrings.a11y.voicing.rightAngle;
 const angleFlatString = QuadrilateralStrings.a11y.voicing.angleFlat;
-const oneSliceString = QuadrilateralStrings.a11y.voicing.oneSlice;
-const halfOneSliceString = QuadrilateralStrings.a11y.voicing.halfOneSlice;
-const lessThanHalfOneSliceString = QuadrilateralStrings.a11y.voicing.lessThanHalfOneSlice;
-const justOverOneSliceString = QuadrilateralStrings.a11y.voicing.justOverOneSlice;
-const justUnderOneSliceString = QuadrilateralStrings.a11y.voicing.justUnderOneSlice;
-const numberOfSlicesPatternString = QuadrilateralStrings.a11y.voicing.numberOfSlicesPattern;
-const numberOfSlicesAndAHalfPatternString = QuadrilateralStrings.a11y.voicing.numberOfSlicesAndAHalfPattern;
-const justOverNumberOfSlicesPatternString = QuadrilateralStrings.a11y.voicing.justOverNumberOfSlicesPattern;
-const justUnderNumberOfSlicesPatternString = QuadrilateralStrings.a11y.voicing.justUnderNumberOfSlicesPattern;
+const oneWedgeString = QuadrilateralStrings.a11y.voicing.oneWedge;
+const halfOneWedgeString = QuadrilateralStrings.a11y.voicing.halfOneWedge;
+const lessThanHalfOneWedgeString = QuadrilateralStrings.a11y.voicing.lessThanHalfOneWedge;
+const justOverOneWedgeString = QuadrilateralStrings.a11y.voicing.justOverOneWedge;
+const justUnderOneWedgeString = QuadrilateralStrings.a11y.voicing.justUnderOneWedge;
+const numberOfWedgesPatternString = QuadrilateralStrings.a11y.voicing.numberOfWedgesPattern;
+const numberOfWedgesAndAHalfPatternString = QuadrilateralStrings.a11y.voicing.numberOfWedgesAndAHalfPattern;
+const justOverNumberOfWedgesPatternString = QuadrilateralStrings.a11y.voicing.justOverNumberOfWedgesPattern;
+const justUnderNumberOfWedgesPatternString = QuadrilateralStrings.a11y.voicing.justUnderNumberOfWedgesPattern;
 
 // Maps a vertex to its accessible name, like "Corner A".
 const vertexCornerLabelMap = new Map<VertexLabel, string>( [
@@ -116,7 +116,7 @@ class VertexDescriber {
    *
    * "right angle, equal to opposite corner, equal to adjacent corners" or
    * "somewhat wider than opposite corner, much smaller than adjacent equal corners." or
-   * "1 slice, far smaller than opposite corner, smaller than adjacent corners."
+   * "1 wedge, far smaller than opposite corner, smaller than adjacent corners."
    */
   public getVertexObjectResponse(): string {
     let response = '';
@@ -127,10 +127,10 @@ class VertexDescriber {
     const oppositeComparisonString = VertexDescriber.getAngleComparisonDescription( oppositeVertex, this.vertex, this.quadrilateralShapeModel.interAngleToleranceIntervalProperty.value, shapeName );
     const adjacentVertexDescriptionString = this.getAdjacentVertexObjectDescription();
 
-    // if corner guides are visible, a description of the number of slices is included
+    // if corner guides are visible, a description of the number of wedges is included
     if ( this.markersVisibleProperty.value ) {
-      response = StringUtils.fillIn( vertexObjectResponseWithSlicesPatternString, {
-        slicesDescription: VertexDescriber.getSlicesDescription( this.vertex.angleProperty.value!, this.quadrilateralShapeModel ),
+      response = StringUtils.fillIn( vertexObjectResponseWithWedgesPatternString, {
+        wedgesDescription: VertexDescriber.getWedgesDescription( this.vertex.angleProperty.value!, this.quadrilateralShapeModel ),
         oppositeComparison: oppositeComparisonString,
         adjacentVertexDescription: adjacentVertexDescriptionString
       } );
@@ -146,74 +146,74 @@ class VertexDescriber {
   }
 
   /**
-   * Returns a description for the number of slices, to be used when corner guides are shown. Returns something like
-   * "just under 1 slice" or
-   * "just over 3 slices" or
-   * "1 slice" or
+   * Returns a description for the number of wedges, to be used when corner guides are shown. Returns something like
+   * "just under 1 wedge" or
+   * "just over 3 wedges" or
+   * "1 wedge" or
    * "right angle" or
-   * "3 and a half slice" or
-   * "half one slice"
+   * "3 and a half wedge" or
+   * "half one wedge"
    *
    * For the design request of this feature please see https://github.com/phetsims/quadrilateral/issues/231
    */
-  public static getSlicesDescription( vertexAngle: number, shapeModel: QuadrilateralShapeModel ): string {
-    let sliceDescription: string | null = null;
+  public static getWedgesDescription( vertexAngle: number, shapeModel: QuadrilateralShapeModel ): string {
+    let wedgeDescription: string | null = null;
 
-    const numberOfFullSlices = Math.floor( vertexAngle / CornerGuideNode.SLICE_SIZE_RADIANS );
-    const remainder = vertexAngle % CornerGuideNode.SLICE_SIZE_RADIANS;
+    const numberOfFullWedges = Math.floor( vertexAngle / CornerGuideNode.WEDGE_SIZE_RADIANS );
+    const remainder = vertexAngle % CornerGuideNode.WEDGE_SIZE_RADIANS;
 
     if ( shapeModel.isRightAngle( vertexAngle ) ) {
-      sliceDescription = rightAngleString;
+      wedgeDescription = rightAngleString;
     }
     else if ( shapeModel.isFlatAngle( vertexAngle ) ) {
-      sliceDescription = angleFlatString;
+      wedgeDescription = angleFlatString;
     }
     else if ( shapeModel.isStaticAngleEqualToOther( remainder, 0 ) ) {
-      if ( numberOfFullSlices === 1 ) {
-        sliceDescription = oneSliceString;
+      if ( numberOfFullWedges === 1 ) {
+        wedgeDescription = oneWedgeString;
       }
       else {
-        sliceDescription = StringUtils.fillIn( numberOfSlicesPatternString, {
-          numberOfSlices: numberOfFullSlices
+        wedgeDescription = StringUtils.fillIn( numberOfWedgesPatternString, {
+          numberOfWedges: numberOfFullWedges
         } );
       }
     }
-    else if ( shapeModel.isStaticAngleEqualToOther( remainder, CornerGuideNode.SLICE_SIZE_RADIANS / 2 ) ) {
-      if ( numberOfFullSlices === 0 ) {
-        sliceDescription = halfOneSliceString;
+    else if ( shapeModel.isStaticAngleEqualToOther( remainder, CornerGuideNode.WEDGE_SIZE_RADIANS / 2 ) ) {
+      if ( numberOfFullWedges === 0 ) {
+        wedgeDescription = halfOneWedgeString;
       }
       else {
-        sliceDescription = StringUtils.fillIn( numberOfSlicesAndAHalfPatternString, {
-          numberOfSlices: numberOfFullSlices
+        wedgeDescription = StringUtils.fillIn( numberOfWedgesAndAHalfPatternString, {
+          numberOfWedges: numberOfFullWedges
         } );
       }
     }
-    else if ( remainder < CornerGuideNode.SLICE_SIZE_RADIANS / 2 ) {
-      if ( numberOfFullSlices === 0 ) {
-        sliceDescription = lessThanHalfOneSliceString;
+    else if ( remainder < CornerGuideNode.WEDGE_SIZE_RADIANS / 2 ) {
+      if ( numberOfFullWedges === 0 ) {
+        wedgeDescription = lessThanHalfOneWedgeString;
       }
-      else if ( numberOfFullSlices === 1 ) {
-        sliceDescription = justOverOneSliceString;
+      else if ( numberOfFullWedges === 1 ) {
+        wedgeDescription = justOverOneWedgeString;
       }
       else {
-        sliceDescription = StringUtils.fillIn( justOverNumberOfSlicesPatternString, {
-          numberOfSlices: numberOfFullSlices
+        wedgeDescription = StringUtils.fillIn( justOverNumberOfWedgesPatternString, {
+          numberOfWedges: numberOfFullWedges
         } );
       }
     }
-    else if ( remainder > CornerGuideNode.SLICE_SIZE_RADIANS / 2 ) {
-      if ( numberOfFullSlices === 0 ) {
-        sliceDescription = justUnderOneSliceString;
+    else if ( remainder > CornerGuideNode.WEDGE_SIZE_RADIANS / 2 ) {
+      if ( numberOfFullWedges === 0 ) {
+        wedgeDescription = justUnderOneWedgeString;
       }
       else {
-        sliceDescription = StringUtils.fillIn( justUnderNumberOfSlicesPatternString, {
-          numberOfSlices: numberOfFullSlices + 1
+        wedgeDescription = StringUtils.fillIn( justUnderNumberOfWedgesPatternString, {
+          numberOfWedges: numberOfFullWedges + 1
         } );
       }
     }
 
-    assert && assert( sliceDescription, `did not find a slice description for the provided angle: ${vertexAngle}` );
-    return sliceDescription!;
+    assert && assert( wedgeDescription, `did not find a wedge description for the provided angle: ${vertexAngle}` );
+    return wedgeDescription!;
   }
 
   /**
