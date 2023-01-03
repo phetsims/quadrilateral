@@ -43,6 +43,11 @@ const simOptions: SimOptions = {
         createContent: tandem => new QuadrilateralInputPreferencesNode( preferencesModel )
       } ]
     },
+    localizationOptions: {
+
+      // Dynamic locales are not supported for initial publication of this sim.
+      supportsDynamicLocales: false
+    },
     audioOptions: {
       customPreferences: [
         {
