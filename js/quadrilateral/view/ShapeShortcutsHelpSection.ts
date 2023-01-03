@@ -12,6 +12,7 @@ import KeyboardHelpSection from '../../../../scenery-phet/js/keyboard/help/Keybo
 import KeyboardHelpSectionRow from '../../../../scenery-phet/js/keyboard/help/KeyboardHelpSectionRow.js';
 import LetterKeyNode from '../../../../scenery-phet/js/keyboard/LetterKeyNode.js';
 import TextKeyNode from '../../../../scenery-phet/js/keyboard/TextKeyNode.js';
+import { voicingManager } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 
@@ -43,7 +44,13 @@ class ShapeShortcutsHelpSection extends KeyboardHelpSection {
       )
     );
 
-    super( QuadrilateralStrings.keyboardHelpDialog.shapeShortcuts, [ checkShapeRow, resetShapeRow ] );
+    const contents = [];
+    if ( voicingManager.initialized ) {
+      contents.push( checkShapeRow );
+    }
+    contents.push( resetShapeRow );
+
+    super( QuadrilateralStrings.keyboardHelpDialog.shapeShortcuts, contents );
   }
 }
 
