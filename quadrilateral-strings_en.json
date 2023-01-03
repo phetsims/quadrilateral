@@ -111,13 +111,13 @@
       "value": "Create shapes with or without help of visual corner labels."
     },
     "markersAddedResponse": {
-      "value": "Evenly spaced side units and 30-degree angle slices added."
+      "value": "30-degree angle wedges and evenly-spaced side units added."
     },
     "markersRemovedResponse": {
-      "value": "Shape markers for sides and angles hidden."
+      "value": "Angle wedges and side units hidden."
     },
     "markersHintResponse": {
-      "value": "Create shapes with or without help of rough shape markers for side length and angle width."
+      "value": "Create shapes with or without help of 30-degree angle wedges and evenly-spaced side-length units."
     },
     "gridLinesAddedResponse": {
       "value": "Grid lines added."
