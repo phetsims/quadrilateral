@@ -1,4 +1,4 @@
-// Copyright 2022, University of Colorado Boulder
+// Copyright 2022-2023, University of Colorado Boulder
 
 /**
  * A Node that surrounds a Vertex to represent the current angle. The shape looks like a partial annulus that extends

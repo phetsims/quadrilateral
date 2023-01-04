@@ -1,4 +1,4 @@
-// Copyright 2022, University of Colorado Boulder
+// Copyright 2022-2023, University of Colorado Boulder
 
 /**
  * Manages descriptions related to the Vertex for both Interactive Descriptoin and Voicing features.
