@@ -242,9 +242,7 @@ class QuadrilateralModel {
       tandem: tandem.createTandem( 'lockToMinorIntervalsProperty' )
     } );
 
-    this.useMinorIntervalsProperty = DerivedProperty.or( [ this.minorIntervalsFromGlobalKeyProperty, this.lockToMinorIntervalsProperty ], {
-      tandem: tandem.createTandem( 'useMinorIntervalsProperty' )
-    } );
+    this.useMinorIntervalsProperty = DerivedProperty.or( [ this.minorIntervalsFromGlobalKeyProperty, this.lockToMinorIntervalsProperty ] );
 
     // shift key pressed, connected to device, fine input spacing
     this.vertexIntervalProperty = new DerivedProperty(
