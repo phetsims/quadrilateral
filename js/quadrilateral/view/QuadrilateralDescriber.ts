@@ -59,6 +59,7 @@ const oppositeSidesInParallelString = QuadrilateralStrings.a11y.voicing.opposite
 const trapezoidDetailsPatternString = QuadrilateralStrings.a11y.voicing.trapezoidDetailsPattern;
 const kiteDetailsShortPatternString = QuadrilateralStrings.a11y.voicing.kiteDetailsShortPattern;
 const dartDetailsShortPatternString = QuadrilateralStrings.a11y.voicing.dartDetailsShortPattern;
+const dartDetailsPatternString = QuadrilateralStrings.a11y.voicing.dartDetailsPattern;
 const convexQuadrilateralDetailsString = QuadrilateralStrings.a11y.voicing.convexQuadrilateralDetails;
 const concaveQuadrilateralDetailsPatternString = QuadrilateralStrings.a11y.voicing.concaveQuadrilateralDetailsPattern;
 const allSidesEqualString = QuadrilateralStrings.a11y.voicing.allSidesEqual;
@@ -228,6 +229,76 @@ class QuadrilateralDescriber {
     return StringUtils.fillIn( QuadrilateralStrings.a11y.voicing.youHaveAShapeHintPattern, {
       shapeDescription: shapeDescriptionString
     } );
+  }
+
+  public getCheckShapeDescription(): string {
+    let description: string;
+    if ( this.shapeNameVisibleProperty.value ) {
+      description = this.getYouHaveAShapeDescription();
+    }
+    else {
+      description = this.getShapePropertiesDescription();
+    }
+
+    return description;
+  }
+
+  public getShapePropertiesDescription(): string {
+    let shapePropertiesDescription = '';
+
+    const currentShapeName = this.shapeModel.shapeNameProperty.value;
+    if ( currentShapeName === NamedQuadrilateral.SQUARE ) {
+      shapePropertiesDescription = this.getSquareDetailsString();
+    }
+    else if ( currentShapeName === NamedQuadrilateral.RECTANGLE ) {
+      shapePropertiesDescription = this.getRectangleDetailsString();
+    }
+    else if ( currentShapeName === NamedQuadrilateral.RHOMBUS ) {
+      shapePropertiesDescription = this.getRhombusDetailsString();
+    }
+    else if ( currentShapeName === NamedQuadrilateral.PARALLELOGRAM ) {
+      shapePropertiesDescription = this.getParallelogramDetailsString();
+    }
+    else if ( currentShapeName === NamedQuadrilateral.TRAPEZOID ) {
+      assert && assert( this.shapeModel.parallelSidePairsProperty.value.length === 1, 'A Trapezoid should have one parallel side pair' );
+      const parallelSidePair = this.shapeModel.parallelSidePairsProperty.value[ 0 ];
+      shapePropertiesDescription = this.getTrapezoidDetailsString( parallelSidePair );
+    }
+    else if ( currentShapeName === NamedQuadrilateral.ISOSCELES_TRAPEZOID ) {
+      assert && assert( this.shapeModel.oppositeEqualSidePairsProperty.value.length === 1,
+        'An Isosceles Trapezoid should have one pair of sides equal in length' );
+      const oppositeEqualSidePair = this.shapeModel.oppositeEqualSidePairsProperty.value[ 0 ];
+
+      assert && assert( this.shapeModel.parallelSidePairsProperty.value.length === 1,
+        'A Trapezoid should have one parallel side pair.' );
+      const parallelSidePair = this.shapeModel.parallelSidePairsProperty.value[ 0 ];
+
+      shapePropertiesDescription = this.getIsoscelesTrapezoidDetailsString(
+        oppositeEqualSidePair,
+        parallelSidePair
+      );
+    }
+    else if ( currentShapeName === NamedQuadrilateral.KITE ) {
+      assert && assert( this.shapeModel.oppositeEqualVertexPairsProperty.value.length === 1,
+        'A kite should have only one pair of opposite equal vertices' );
+      const oppositeEqualVertexPair = this.shapeModel.oppositeEqualVertexPairsProperty.value[ 0 ];
+      shapePropertiesDescription = this.getKiteDetailsString( oppositeEqualVertexPair );
+    }
+    else if ( currentShapeName === NamedQuadrilateral.DART ) {
+      shapePropertiesDescription = this.getDartDetailsString( dartDetailsPatternString );
+    }
+    else if ( currentShapeName === NamedQuadrilateral.CONCAVE_QUADRILATERAL ) {
+      shapePropertiesDescription = this.getConcaveQuadrilateralDetailsString();
+    }
+    else if ( currentShapeName === NamedQuadrilateral.CONVEX_QUADRILATERAL ) {
+      shapePropertiesDescription = this.getConvexQuadrilateralDetailsString();
+    }
+    else if ( currentShapeName === NamedQuadrilateral.TRIANGLE ) {
+      shapePropertiesDescription = this.getTriangleDetailsString();
+    }
+
+    assert && assert( shapePropertiesDescription !== '', 'Could not find shapePropertiesDescription for shape.' );
+    return shapePropertiesDescription;
   }
 
   /**

@@ -19,7 +19,6 @@ import RightAngleIndicatorNode from './RightAngleIndicatorNode.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
-import Utterance from '../../../../utterance-queue/js/Utterance.js';
 
 // constants
 const cornerAString = QuadrilateralStrings.a11y.cornerA;
@@ -42,7 +41,7 @@ type SelfOptions = EmptySelfOptions;
 
 type QuadrilateralNodeOptions = SelfOptions & NodeOptions & PickRequired<NodeOptions, 'tandem'>;
 
-class QuadrilateralNode extends Node {
+class QuadrilateralNode extends Voicing( Node ) {
   private readonly model: QuadrilateralModel;
   private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
   private readonly scratchShapeModel: QuadrilateralShapeModel;
@@ -167,10 +166,6 @@ class QuadrilateralNode extends Node {
     } ) );
 
     // Global key listeners
-    const resetShapeUtterance = new Utterance( {
-      alert: QuadrilateralDescriber.RESET_SHAPE_RESPONSE_PACKET
-    } );
-    Voicing.registerUtteranceToNode( resetShapeUtterance, this );
     this.addInputListener( new KeyboardListener( {
       keys: [ 'alt+shift+r', 'alt+c' ],
       fireOnKeyUp: true,
@@ -182,13 +177,15 @@ class QuadrilateralNode extends Node {
         if ( keysPressed === 'alt+c' ) {
 
           // command to check shape, Voicing the current shape name or its Properties depending on name visibility
-          // TODO: Add support for this
+          this.voicingUtterance.alert = quadrilateralDescriber.getCheckShapeDescription();
+          Voicing.alertUtterance( this.voicingUtterance );
         }
         else if ( keysPressed === 'alt+shift+r' ) {
 
           // command to reset shape
           this.quadrilateralShapeModel.isolatedReset();
-          Voicing.alertUtterance( resetShapeUtterance );
+          this.voicingUtterance.alert = QuadrilateralDescriber.RESET_SHAPE_RESPONSE_PACKET;
+          Voicing.alertUtterance( this.voicingUtterance );
         }
       }
     } ) );
