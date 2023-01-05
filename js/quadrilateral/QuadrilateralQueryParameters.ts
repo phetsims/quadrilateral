@@ -57,7 +57,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   fineInputSpacingToleranceIntervalScaleFactor: {
     type: 'number',
     isValidValue: ( value: number ) => value < 1,
-    defaultValue: 0.2 // makes tolerances intervals 1/5 of the value when "fine input" enabled
+    defaultValue: 0.05 // makes tolerances intervals 5 percent of the value when "fine input" enabled
   },
 
   // A scale factor applied to all tolerances when connected to a tangible device so that it is easier to find and
@@ -162,7 +162,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
    */
   majorFineVertexInterval: {
     type: 'number',
-    defaultValue: 0.05,
+    defaultValue: 0.0625,
     isValidValue: ( value: number ) => value > 0
   },
 
@@ -172,7 +172,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
    */
   minorFineVertexInterval: {
     type: 'number',
-    defaultValue: 0.00625,
+    defaultValue: 0.015625,
     isValidValue: ( value: number ) => value > 0
   }
 } );
