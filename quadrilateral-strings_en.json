@@ -135,7 +135,7 @@
       "value": "Create shapes with or without help of diagonal symmetry guides."
     },
     "gridLinesHintResponse": {
-      "value": "Create shapes with or without help of visual grid."
+      "value": "Create shapes with or without help of background grid."
     },
     "myShapesCorners": {
       "value": "My Shape's Corners"
