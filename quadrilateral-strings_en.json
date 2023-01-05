@@ -184,7 +184,7 @@
         "value": "Quadrilaterals are shapes with four sides. This quadrilateral is interactive, and changes as you play with its corners and sides. Moving a corner changes length and tilt of its 2 connected sides, and might change the angles of up to 3 corners. Moving a side might change the angle of all 4 corners as the moving side changes length and tilt of its 2 connected sides. Shape markers, a background grid, and diagonal guides can be added to help you create and find shapes. You can mute shape sounds, quickly reset shape or start over with reset all."
       },
       "hintContent": {
-        "value": "Move corners and sides in big steps or small steps. Watch for shapes change as you create different kinds of quadrilaterals. You cannot break your shape or make sides or corners cross over. Have fun!"
+        "value": "Move corners and sides in big steps or small steps. Watch for shape changes as you create different kinds of quadrilaterals. You cannot break your shape or make sides or corners cross over. Have fun!"
       },
       "youHaveAShapeHintPattern": {
         "value": "You have {{shapeDescription}}."
