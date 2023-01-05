@@ -859,7 +859,7 @@
           "value": "Explore with or without musical sounds for shape changes."
         }
       },
-      "resetShapeControl": {
+      "resetShape": {
         "contextResponse": {
           "value": "All right angles, all sides two units."
         }

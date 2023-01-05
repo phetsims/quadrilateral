@@ -19,6 +19,7 @@ import SidePair from '../model/SidePair.js';
 import VertexPair from '../model/VertexPair.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
+import ResponsePacket from '../../../../utterance-queue/js/ResponsePacket.js';
 
 // constants
 const firstDetailsStatementPatternString = QuadrilateralStrings.a11y.voicing.firstDetailsStatementPattern;
@@ -1056,6 +1057,15 @@ class QuadrilateralDescriber {
 
     return unusedSides;
   }
+
+  /**
+   * Returns a ResponsePacket with the content for responses that should happen when the shape (and only the shape)
+   * is reset.
+   */
+  public static readonly RESET_SHAPE_RESPONSE_PACKET = new ResponsePacket( {
+    nameResponse: QuadrilateralStrings.resetShape,
+    contextResponse: QuadrilateralStrings.a11y.voicing.resetShape.contextResponse
+  } );
 }
 
 quadrilateral.register( 'QuadrilateralDescriber', QuadrilateralDescriber );

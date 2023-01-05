@@ -595,7 +595,7 @@ type StringsType = {
         'hintResponse': string;
         'hintResponseStringProperty': LinkableProperty<string>;
       };
-      'resetShapeControl': {
+      'resetShape': {
         'contextResponse': string;
         'contextResponseStringProperty': LinkableProperty<string>;
       };

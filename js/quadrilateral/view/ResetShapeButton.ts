@@ -15,6 +15,7 @@ import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
+import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 
 class ResetShapeButton extends TextPushButton {
   public constructor( quadrilateralShapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: TProperty<boolean>, shapeNameVisibleProperty: TReadOnlyProperty<boolean>, tandem: Tandem ) {
@@ -28,8 +29,8 @@ class ResetShapeButton extends TextPushButton {
       maxTextWidth: 150,
 
       // voicing
-      voicingNameResponse: QuadrilateralStrings.resetShape,
-      voicingContextResponse: QuadrilateralStrings.a11y.voicing.resetShapeControl.contextResponse,
+      voicingNameResponse: QuadrilateralDescriber.RESET_SHAPE_RESPONSE_PACKET.nameResponse,
+      voicingContextResponse: QuadrilateralDescriber.RESET_SHAPE_RESPONSE_PACKET.contextResponse,
 
       // phet-io
       tandem: tandem,

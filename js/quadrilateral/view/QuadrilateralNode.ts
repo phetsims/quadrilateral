@@ -5,7 +5,7 @@
  */
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import { KeyboardListener, Node, NodeOptions, TPaint } from '../../../../scenery/js/imports.js';
+import { KeyboardListener, Node, NodeOptions, TPaint, Voicing } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import SideNode from './SideNode.js';
@@ -19,6 +19,7 @@ import RightAngleIndicatorNode from './RightAngleIndicatorNode.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
+import Utterance from '../../../../utterance-queue/js/Utterance.js';
 
 // constants
 const cornerAString = QuadrilateralStrings.a11y.cornerA;
@@ -166,6 +167,10 @@ class QuadrilateralNode extends Node {
     } ) );
 
     // Global key listeners
+    const resetShapeUtterance = new Utterance( {
+      alert: QuadrilateralDescriber.RESET_SHAPE_RESPONSE_PACKET
+    } );
+    Voicing.registerUtteranceToNode( resetShapeUtterance, this );
     this.addInputListener( new KeyboardListener( {
       keys: [ 'alt+shift+r', 'alt+c' ],
       fireOnKeyUp: true,
@@ -183,8 +188,7 @@ class QuadrilateralNode extends Node {
 
           // command to reset shape
           this.quadrilateralShapeModel.isolatedReset();
-
-          // TODO: What is the Voicing response for resetting the shape?
+          Voicing.alertUtterance( resetShapeUtterance );
         }
       }
     } ) );
