@@ -1411,6 +1411,10 @@ class QuadrilateralShapeModel {
     return ( side1.lengthProperty.value + side2.lengthProperty.value ) / 2;
   }
 
+  /**
+   * Reset the shape by resetting vertices. Defer update of Properties so that Properties do not
+   * call listeners until all Vertices have been repositioned.
+   */
   public reset(): void {
 
     // set necessary Properties deferred so that we can update everything together
@@ -1422,6 +1426,17 @@ class QuadrilateralShapeModel {
     this.vertexD.reset();
 
     this.setPropertiesDeferred( false );
+  }
+
+  /**
+   * Reset the shape AND indicate that a reset is in progress (which will disable certain feedback while the
+   * reset is in progress). Use this when just resetting the QuadrilateralShapeModel without resetting other
+   * aspects of the Model.
+   */
+  public isolatedReset(): void {
+    this.model.resetNotInProgressProperty.value = false;
+    this.reset();
+    this.model.resetNotInProgressProperty.value = true;
   }
 }
 

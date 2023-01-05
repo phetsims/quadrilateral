@@ -35,12 +35,7 @@ class ResetShapeButton extends TextPushButton {
       tandem: tandem,
 
       listener: () => {
-
-        // wrapped in the reset Property so that sounds and feedback don't trigger during this reset call
-        resetNotInProgressProperty.value = false;
-        quadrilateralShapeModel.reset();
-        resetNotInProgressProperty.value = true;
-
+        quadrilateralShapeModel.isolatedReset();
         this.voicingSpeakFullResponse( {
 
           // don't repeat the hint content on activation since the button has been pressed

@@ -159,7 +159,7 @@ class QuadrilateralScreenView extends ScreenView {
     // Layered under everything else
     const diagonalGuidesNode = new QuadrilateralDiagonalGuidesNode( model.quadrilateralShapeModel, model.modelBoundsProperty, model.diagonalGuidesVisibleProperty, this.modelViewTransform );
 
-    this.quadrilateralNode = new QuadrilateralNode( model, modelViewTransform, this.layoutBounds, {
+    this.quadrilateralNode = new QuadrilateralNode( model, modelViewTransform, this.layoutBounds, this.quadrilateralDescriber, {
       tandem: tandem.createTandem( 'quadrilateralNode' )
     } );
 

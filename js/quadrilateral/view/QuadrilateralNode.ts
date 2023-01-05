@@ -18,6 +18,7 @@ import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import RightAngleIndicatorNode from './RightAngleIndicatorNode.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 
 // constants
 const cornerAString = QuadrilateralStrings.a11y.cornerA;
@@ -52,7 +53,7 @@ class QuadrilateralNode extends Node {
   private remainingTimeForShapeChangeFill: number;
   private activeFill: TPaint | null;
 
-  public constructor( quadrilateralModel: QuadrilateralModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, providedOptions: QuadrilateralNodeOptions ) {
+  public constructor( quadrilateralModel: QuadrilateralModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, quadrilateralDescriber: QuadrilateralDescriber, providedOptions: QuadrilateralNodeOptions ) {
     super( providedOptions );
 
     this.remainingTimeForShapeChangeFill = 0;
@@ -162,6 +163,30 @@ class QuadrilateralNode extends Node {
         this.model.minorIntervalsFromGlobalKeyProperty.value = listener.keysDown;
       },
       global: true
+    } ) );
+
+    // Global key listeners
+    this.addInputListener( new KeyboardListener( {
+      keys: [ 'alt+shift+r', 'alt+c' ],
+      fireOnKeyUp: true,
+      fireOnKeyDown: false,
+      global: true,
+      callback: ( event, listener ) => {
+        const keysPressed = listener.keysPressed;
+
+        if ( keysPressed === 'alt+c' ) {
+
+          // command to check shape, Voicing the current shape name or its Properties depending on name visibility
+          // TODO: Add support for this
+        }
+        else if ( keysPressed === 'alt+shift+r' ) {
+
+          // command to reset shape
+          this.quadrilateralShapeModel.isolatedReset();
+
+          // TODO: What is the Voicing response for resetting the shape?
+        }
+      }
     } ) );
 
     this.vertexNodes = [ vertexNode1, vertexNode2, vertexNode3, vertexNode4 ];
