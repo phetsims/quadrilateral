@@ -213,7 +213,9 @@ class VertexNode extends Voicing( Circle ) {
     // sound - The grab sound is played on press but there is no release sound for this component since there is
     // no behavioral relevance to the release. Uses a custom "higher pitch" sound to distinguish it from
     // sides.
-    const pressedSoundPlayer = new SoundClip( grabHighPitch_mp3 );
+    const pressedSoundPlayer = new SoundClip( grabHighPitch_mp3, {
+      initialOutputLevel: 0.8
+    } );
     soundManager.addSoundGenerator( pressedSoundPlayer );
     vertex.isPressedProperty.lazyLink( isPressed => {
       if ( isPressed ) {
@@ -223,7 +225,7 @@ class VertexNode extends Voicing( Circle ) {
 
     // sound - when the Vertex becomes blocked because of collision with model bounds, play a unique sound
     const blockedByBoundsSoundClip = new SoundClip( boundaryReached_mp3, {
-      initialOutputLevel: 1.5
+      initialOutputLevel: 1.0
     } );
     soundManager.addSoundGenerator( blockedByBoundsSoundClip );
     vertex.movementBlockedByBoundsProperty.lazyLink( blocked => {
@@ -233,7 +235,9 @@ class VertexNode extends Voicing( Circle ) {
     } );
 
     // sound = when the Vertex becomes blocked because of a collision with the shape itself, play a unique sound
-    const blockedByShapeSoundClip = new SoundClip( quadShapeCollision_mp3 );
+    const blockedByShapeSoundClip = new SoundClip( quadShapeCollision_mp3, {
+      initialOutputLevel: 0.5
+    } );
     soundManager.addSoundGenerator( blockedByShapeSoundClip );
     vertex.movementBlockedByShapeProperty.lazyLink( blocked => {
       if ( blocked ) {

@@ -26,14 +26,14 @@ import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
 
 // In seconds, how long all tracks should play after there has been some change in shape.
-const ALL_TRACKS_PLAY_TIME = 4;
+const ALL_TRACKS_PLAY_TIME = 5;
 
 // In seconds, how long tracks fade in or fade out when sound transitions between playing and stopped.
 const FADE_TIME = 1;
 
 // The maximum output level for all tracks of this sound design. Applied to this SoundGenerator, so that all tracks
 // connected to this one will be limited by this output level.
-const MAX_OUTPUT_LEVEL = 0.3;
+const MAX_OUTPUT_LEVEL = 0.2;
 
 // linear maps that determine output level from remaining fade time
 const REMAINING_FADE_IN_TIME_TO_GAIN = new LinearFunction( FADE_TIME, 0, 0, MAX_OUTPUT_LEVEL );

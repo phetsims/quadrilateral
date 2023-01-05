@@ -339,7 +339,9 @@ class SideNode extends Voicing( Path ) {
     // sound - the grab sound is played on press but there is no release sound for this component since there is
     // no behavioral relevance to the release. The 'release' sound is used instead of 'grab' to distinguish sides
     // from vertices
-    const pressedSoundPlayer = new SoundClip( release_mp3 );
+    const pressedSoundPlayer = new SoundClip( release_mp3, {
+      initialOutputLevel: 0.8
+    } );
     soundManager.addSoundGenerator( pressedSoundPlayer );
     side.isPressedProperty.lazyLink( isPressed => {
       if ( isPressed ) {
@@ -350,7 +352,7 @@ class SideNode extends Voicing( Path ) {
     // sound - when the Vertex becomes blocked because of an intersection with model bounds, play a unique sound
     // TODO: Copy/paste with VertexNode, maybe a superclass for this, with the same Properties watching collision?
     const blockedSoundPlayer = new SoundClip( boundaryReached_mp3, {
-      initialOutputLevel: 1.5
+      initialOutputLevel: 1.0
     } );
     soundManager.addSoundGenerator( blockedSoundPlayer );
     side.movementBlockedByBoundsProperty.lazyLink( blocked => {
@@ -360,7 +362,9 @@ class SideNode extends Voicing( Path ) {
     } );
 
     // sound - when a vertex becomes blocked because of a collision with the shape itself, play a unique sound
-    const blockedByShapeSoundClip = new SoundClip( quadShapeCollision_mp3 );
+    const blockedByShapeSoundClip = new SoundClip( quadShapeCollision_mp3, {
+      initialOutputLevel: 0.5
+    } );
     soundManager.addSoundGenerator( blockedByShapeSoundClip );
     side.movementBlockedByShapeProperty.lazyLink( blocked => {
       if ( blocked ) {
