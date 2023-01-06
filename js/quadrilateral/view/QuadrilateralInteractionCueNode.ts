@@ -62,12 +62,9 @@ class QuadrilateralInteractionCueNode extends Path {
 
     super( nodeShape, PATH_OPTIONS );
 
-    // any interaction makes this content disappear (until reset)
-    quadrilateralShapeModel.vertices.forEach( vertex => {
-      vertex.isPressedProperty.lazyLink( () => this.setVisible( false ) );
-    } );
-    quadrilateralShapeModel.sides.forEach( side => {
-      side.isPressedProperty.lazyLink( () => this.setVisible( false ) );
+    // If the shape changes at all this content disappear (until reset)
+    quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
+      this.visible = false;
     } );
 
     // When connection is first made to a tangible, the interaction cues are invisible.
