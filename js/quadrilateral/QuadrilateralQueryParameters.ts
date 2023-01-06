@@ -154,24 +154,6 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     type: 'number',
     defaultValue: 0.0625,
     isValidValue: ( value: number ) => value > 0
-  },
-
-  /**
-   * The "major" vertex interval when using ?reducedStepSize query parameter. Value is in model coordinates.
-   */
-  majorReducedSizeVertexInterval: {
-    type: 'number',
-    defaultValue: 0.0625,
-    isValidValue: ( value: number ) => value > 0
-  },
-
-  /**
-   * The "minor" vertex interval when the using ?reducedStepSize from Preferences. Value is in model coordinates.
-   */
-  minorReducedStepSizeVertexInterval: {
-    type: 'number',
-    defaultValue: 0.015625,
-    isValidValue: ( value: number ) => value > 0
   }
 } );
 

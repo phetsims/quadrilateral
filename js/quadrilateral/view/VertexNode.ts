@@ -138,8 +138,8 @@ class VertexNode extends Voicing( Circle ) {
 
     // The user is able to control the interval for positioning each vertex, a "fine" control or default
     model.preferencesModel.reducedStepSizeProperty.link( reducedStepSize => {
-      const largeModelDelta = reducedStepSize ? QuadrilateralQueryParameters.majorReducedSizeVertexInterval : QuadrilateralQueryParameters.majorVertexInterval;
-      const smallModelDelta = reducedStepSize ? QuadrilateralQueryParameters.minorReducedStepSizeVertexInterval : QuadrilateralQueryParameters.minorVertexInterval;
+      const largeModelDelta = reducedStepSize ? QuadrilateralConstants.MAJOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralQueryParameters.majorVertexInterval;
+      const smallModelDelta = reducedStepSize ? QuadrilateralConstants.MINOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralQueryParameters.minorVertexInterval;
 
       const largeViewDragDelta = modelViewTransform.modelToViewDeltaX( largeModelDelta );
       const smallViewDragDelta = modelViewTransform.modelToViewDeltaX( smallModelDelta );

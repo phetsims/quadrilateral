@@ -26,6 +26,7 @@ import TProperty from '../../../../axon/js/TProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import quadrilateral from '../../quadrilateral.js';
+import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 
 class QuadrilateralModel {
 
@@ -255,7 +256,7 @@ class QuadrilateralModel {
           interval = deviceGridSpacing;
         }
         else if ( reducedStepSize ) {
-          interval = useMinorIntervals ? QuadrilateralQueryParameters.minorReducedStepSizeVertexInterval : QuadrilateralQueryParameters.majorReducedSizeVertexInterval;
+          interval = useMinorIntervals ? QuadrilateralConstants.MINOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralConstants.MAJOR_REDUCED_SIZE_VERTEX_INTERVAL;
         }
         else {
           interval = useMinorIntervals ? QuadrilateralQueryParameters.minorVertexInterval : QuadrilateralQueryParameters.majorVertexInterval;

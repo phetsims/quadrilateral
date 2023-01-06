@@ -21,6 +21,12 @@ const QuadrilateralConstants = {
   // Amount of spacing in model coordinates between grid lines in the visual grid
   GRID_SPACING: 0.25,
 
+  // The "major" vertex interval when using ?reducedStepSize query parameter. Value is in model coordinates.
+  MAJOR_REDUCED_SIZE_VERTEX_INTERVAL: 0.0625,
+
+  // The "minor" vertex interval when the using ?reducedStepSize from Preferences. Value is in model coordinates.
+  MINOR_REDUCED_SIZE_VERTEX_INTERVAL: 0.015625,
+
   // VIEW CONSTANTS
   SCREEN_VIEW_X_MARGIN: 15,
   SCREEN_VIEW_Y_MARGIN: 15,
