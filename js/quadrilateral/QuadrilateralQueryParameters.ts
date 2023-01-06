@@ -54,7 +54,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // A scale factor to apply to all tolerance intervals when the using ?reducedStepSize.
   // Should be less than one because we want the tolerance intervals to be smaller when using "reduced step size".
   // See https://github.com/phetsims/quadrilateral/issues/197#issuecomment-1258194919
-  fineInputSpacingToleranceIntervalScaleFactor: {
+  reducedStepSizeToleranceIntervalScaleFactor: {
     type: 'number',
     isValidValue: ( value: number ) => value < 1,
     defaultValue: 0.05 // makes tolerances intervals 5 percent of the value when "reduced step size" enabled
@@ -62,7 +62,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
 
   // A scale factor applied to all tolerances when connected to a tangible device so that it is easier to find and
   // maintain shapes and important shape Properties for the more macroscopic motion inherent to a physical device.
-  // Compounds with fineInputSpacingToleranceIntervalScaleFactor.
+  // Compounds with reducedStepSizeToleranceIntervalScaleFactor.
   connectedToleranceIntervalScaleFactor: {
     type: 'number',
     defaultValue: 5

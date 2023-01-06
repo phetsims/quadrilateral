@@ -652,7 +652,7 @@ class QuadrilateralShapeModel {
 
     // Note that both cases are possible and the scale factors compound!
     if ( useFineSpacing ) {
-      interval = interval * QuadrilateralQueryParameters.fineInputSpacingToleranceIntervalScaleFactor;
+      interval = interval * QuadrilateralQueryParameters.reducedStepSizeToleranceIntervalScaleFactor;
     }
     if ( QuadrilateralQueryParameters.deviceConnection ) {
       interval = interval * QuadrilateralQueryParameters.connectedToleranceIntervalScaleFactor;
