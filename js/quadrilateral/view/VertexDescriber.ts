@@ -54,6 +54,8 @@ const numberOfWedgesPatternString = QuadrilateralStrings.a11y.voicing.numberOfWe
 const numberOfWedgesAndAHalfPatternString = QuadrilateralStrings.a11y.voicing.numberOfWedgesAndAHalfPattern;
 const justOverNumberOfWedgesPatternString = QuadrilateralStrings.a11y.voicing.justOverNumberOfWedgesPattern;
 const justUnderNumberOfWedgesPatternString = QuadrilateralStrings.a11y.voicing.justUnderNumberOfWedgesPattern;
+const blockedByInnerShapeString = QuadrilateralStrings.a11y.voicing.blockedByInnerShapeString;
+const blockedByEdgeString = QuadrilateralStrings.a11y.voicing.blockedByEdgeString;
 
 // Maps a vertex to its accessible name, like "Corner A".
 const vertexCornerLabelMap = new Map<VertexLabel, string>( [
@@ -277,6 +279,20 @@ class VertexDescriber {
     }
 
     return description;
+  }
+
+  /**
+   * Returns a context response for when a Vertex cannot move because it is blocked by the shape itself.
+   */
+  public getBlockedByShapeResponse(): string {
+    return blockedByInnerShapeString;
+  }
+
+  /**
+   * Returns a context response for when the Vertex can not move because it is blocked by a boundary edge.
+   */
+  public getBlockedByEdgeResponse(): string {
+    return blockedByEdgeString;
   }
 
   /**

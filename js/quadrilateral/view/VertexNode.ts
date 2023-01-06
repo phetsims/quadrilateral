@@ -231,6 +231,9 @@ class VertexNode extends Voicing( Circle ) {
     vertex.movementBlockedByBoundsProperty.lazyLink( blocked => {
       if ( blocked ) {
         blockedByBoundsSoundClip.play();
+        this.voicingSpeakResponse( {
+          contextResponse: vertexDescriber.getBlockedByEdgeResponse()
+        } );
       }
     } );
 
@@ -242,6 +245,9 @@ class VertexNode extends Voicing( Circle ) {
     vertex.movementBlockedByShapeProperty.lazyLink( blocked => {
       if ( blocked ) {
         blockedByShapeSoundClip.play();
+        this.voicingSpeakResponse( {
+          contextResponse: vertexDescriber.getBlockedByShapeResponse()
+        } );
       }
     } );
 

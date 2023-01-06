@@ -619,6 +619,10 @@ type StringsType = {
       'allCornersEqualStringProperty': LinkableProperty<string>;
       'progressStatePattern': string;
       'progressStatePatternStringProperty': LinkableProperty<string>;
+      'blockedByEdgeString': string;
+      'blockedByEdgeStringStringProperty': LinkableProperty<string>;
+      'blockedByInnerShapeString': string;
+      'blockedByInnerShapeStringStringProperty': LinkableProperty<string>;
     }
   }
 };

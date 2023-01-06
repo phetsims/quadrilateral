@@ -359,6 +359,9 @@ class SideNode extends Voicing( Path ) {
     side.movementBlockedByBoundsProperty.lazyLink( blocked => {
       if ( blocked ) {
         blockedSoundPlayer.play();
+        this.voicingSpeakResponse( {
+          contextResponse: sideDescriber.getBlockedByEdgeResponse()
+        } );
       }
     } );
 
@@ -370,6 +373,9 @@ class SideNode extends Voicing( Path ) {
     side.movementBlockedByShapeProperty.lazyLink( blocked => {
       if ( blocked ) {
         blockedByShapeSoundClip.play();
+        this.voicingSpeakResponse( {
+          contextResponse: sideDescriber.getBlockedByShapeResponse()
+        } );
       }
     } );
 

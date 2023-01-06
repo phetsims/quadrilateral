@@ -57,6 +57,8 @@ const aboutNumberAndAHalfUnitsPatternString = QuadrilateralStrings.a11y.voicing.
 const aboutNumberQuarterUnitsPatternString = QuadrilateralStrings.a11y.voicing.aboutNumberQuarterUnitsPattern;
 const aboutFullNumberAndNumberQuarterUnitsPatternString = QuadrilateralStrings.a11y.voicing.aboutFullNumberAndNumberQuarterUnitsPattern;
 const oneHalfUnitsString = QuadrilateralStrings.a11y.voicing.oneHalfUnits;
+const blockedByInnerShapeString = QuadrilateralStrings.a11y.voicing.blockedByInnerShapeString;
+const blockedByEdgeString = QuadrilateralStrings.a11y.voicing.blockedByEdgeString;
 
 // A map that will provide comparison descriptions for side lengths. Range values are the ratio between lengths
 // between the sides.
@@ -250,6 +252,20 @@ class SideDescriber {
     }
 
     return sideDescription;
+  }
+
+  /**
+   * Returns a context response for when a Side cannot move because it is blocked by the shape itself.
+   */
+  public getBlockedByShapeResponse(): string {
+    return blockedByInnerShapeString;
+  }
+
+  /**
+   * Returns a context response for when the Side can not move because it is blocked by a boundary edge.
+   */
+  public getBlockedByEdgeResponse(): string {
+    return blockedByEdgeString;
   }
 
   /**

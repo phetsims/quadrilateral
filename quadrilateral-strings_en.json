@@ -893,6 +893,12 @@
       },
       "progressStatePattern": {
         "value": "{{progress}}, {{state}}"
+      },
+      "blockedByEdgeString": {
+        "value": "Blocked by Edge."
+      },
+      "blockedByInnerShapeString": {
+        "value": "Blocked by inner shape."
       }
     }
   }
