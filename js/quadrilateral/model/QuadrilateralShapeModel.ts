@@ -322,22 +322,22 @@ class QuadrilateralShapeModel {
       tandem: options.tandem.createTandem( 'shapeChangedEmitter' )
     } );
 
-    this.interAngleToleranceIntervalProperty = new DerivedProperty( [ model.preferencesModel.fineInputSpacingProperty ], fineInputSpacing => {
-      return QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.interAngleToleranceInterval, fineInputSpacing );
+    this.interAngleToleranceIntervalProperty = new DerivedProperty( [ model.preferencesModel.reducedStepSizeProperty ], reducedStepSize => {
+      return QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.interAngleToleranceInterval, reducedStepSize );
     }, {
       tandem: options.tandem.createTandem( 'interAngleToleranceIntervalProperty' ),
       phetioValueType: NumberIO
     } );
 
-    this.staticAngleToleranceIntervalProperty = new DerivedProperty( [ model.preferencesModel.fineInputSpacingProperty ], fineInputSpacing => {
-      return QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.staticAngleToleranceInterval, fineInputSpacing );
+    this.staticAngleToleranceIntervalProperty = new DerivedProperty( [ model.preferencesModel.reducedStepSizeProperty ], reducedStepSize => {
+      return QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.staticAngleToleranceInterval, reducedStepSize );
     }, {
       tandem: options.tandem.createTandem( 'staticAngleToleranceIntervalProperty' ),
       phetioValueType: NumberIO
     } );
 
-    this.interLengthToleranceIntervalProperty = new DerivedProperty( [ model.preferencesModel.fineInputSpacingProperty ], fineInputSpacing => {
-      return QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.interLengthToleranceInterval, fineInputSpacing );
+    this.interLengthToleranceIntervalProperty = new DerivedProperty( [ model.preferencesModel.reducedStepSizeProperty ], reducedStepSize => {
+      return QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.interLengthToleranceInterval, reducedStepSize );
     }, {
       tandem: options.tandem.createTandem( 'shapeLengthToleranceIntervalProperty' ),
       phetioValueType: NumberIO
@@ -346,14 +346,14 @@ class QuadrilateralShapeModel {
     this.sideABSideCDParallelSideChecker = new ParallelSideChecker(
       new SidePair( this.topSide, this.bottomSide ),
       this.shapeChangedEmitter,
-      model.preferencesModel.fineInputSpacingProperty,
+      model.preferencesModel.reducedStepSizeProperty,
       options.tandem.createTandem( 'sideABSideCDParallelSideChecker' )
     );
 
     this.sideBCSideDAParallelSideChecker = new ParallelSideChecker(
       new SidePair( this.rightSide, this.leftSide ),
       this.shapeChangedEmitter,
-      model.preferencesModel.fineInputSpacingProperty,
+      model.preferencesModel.reducedStepSizeProperty,
       options.tandem.createTandem( 'sideBCSideDAParallelSideChecker' )
     );
 

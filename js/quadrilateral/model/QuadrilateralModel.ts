@@ -244,16 +244,17 @@ class QuadrilateralModel {
 
     this.useMinorIntervalsProperty = DerivedProperty.or( [ this.minorIntervalsFromGlobalKeyProperty, this.lockToMinorIntervalsProperty ] );
 
-    // shift key pressed, connected to device, fine input spacing
+    // Vertex intervals are controlled whether we are "locked" to smaller steps, whether we are temporarily using
+    // smaller steps because of a hotkey, or if running with ?reducedStepSize
     this.vertexIntervalProperty = new DerivedProperty(
-      [ this.useMinorIntervalsProperty, preferencesModel.fineInputSpacingProperty, this.connectedToDeviceProperty, preferencesModel.deviceGridSpacingProperty ],
-      ( useMinorIntervals, fineInputSpacing, connectedToDevice, deviceGridSpacing ) => {
+      [ this.useMinorIntervalsProperty, preferencesModel.reducedStepSizeProperty, this.connectedToDeviceProperty, preferencesModel.deviceGridSpacingProperty ],
+      ( useMinorIntervals, reducedStepSize, connectedToDevice, deviceGridSpacing ) => {
 
         let interval: number;
         if ( connectedToDevice ) {
           interval = deviceGridSpacing;
         }
-        else if ( fineInputSpacing ) {
+        else if ( reducedStepSize ) {
           interval = useMinorIntervals ? QuadrilateralQueryParameters.minorFineVertexInterval : QuadrilateralQueryParameters.majorFineVertexInterval;
         }
         else {

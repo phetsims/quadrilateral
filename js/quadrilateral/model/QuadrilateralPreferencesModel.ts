@@ -44,7 +44,7 @@ class QuadrilateralPreferencesModel {
   // Vertices will be constrained to a finer grid for more precise motion. In general that is not necessary but some
   // users may want that amount of control.
   // TODO: This could be removed from QuadrilateralPreferencesModel, it will never change at runtime now
-  public readonly fineInputSpacingProperty = new BooleanProperty( QuadrilateralQueryParameters.reducedStepSize );
+  public readonly reducedStepSizeProperty = new BooleanProperty( QuadrilateralQueryParameters.reducedStepSize );
 }
 
 quadrilateral.register( 'QuadrilateralPreferencesModel', QuadrilateralPreferencesModel );

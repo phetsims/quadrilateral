@@ -41,13 +41,13 @@ class ParallelSideChecker {
   /**
    * @param oppositeSidePair - The SidePair with opposite sides that we want to inspect for parallelism
    * @param shapeChangedEmitter - Emitter for when the quadrilateral shape changes in some way.
-   * @param fineInputSpacingProperty
+   * @param reducedStepSizeProperty
    * @param tandem
    */
   public constructor(
     oppositeSidePair: SidePair,
     shapeChangedEmitter: TEmitter,
-    fineInputSpacingProperty: TReadOnlyProperty<boolean>,
+    reducedStepSizeProperty: TReadOnlyProperty<boolean>,
     tandem: Tandem ) {
 
     this.sidePair = oppositeSidePair;
@@ -61,9 +61,9 @@ class ParallelSideChecker {
     } );
 
     this.parallelAngleToleranceIntervalProperty = new DerivedProperty( [
-      fineInputSpacingProperty
-    ], fineInputSpacing => {
-      return QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.parallelAngleToleranceInterval, fineInputSpacing );
+      reducedStepSizeProperty
+    ], reducedStepSize => {
+      return QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.parallelAngleToleranceInterval, reducedStepSize );
     }, {
       tandem: tandem.createTandem( 'parallelAngleToleranceIntervalProperty' ),
       phetioValueType: NumberIO

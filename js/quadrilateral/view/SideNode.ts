@@ -200,9 +200,9 @@ class SideNode extends Voicing( Path ) {
     this.addInputListener( keyboardDragListener );
 
     // The user is able to control the interval for positioning each vertex, a "fine" control or default
-    quadrilateralModel.preferencesModel.fineInputSpacingProperty.link( fineInputSpacing => {
-      const largeModelDelta = fineInputSpacing ? QuadrilateralQueryParameters.majorFineVertexInterval : QuadrilateralQueryParameters.majorVertexInterval;
-      const smallModelDelta = fineInputSpacing ? QuadrilateralQueryParameters.minorFineVertexInterval : QuadrilateralQueryParameters.minorVertexInterval;
+    quadrilateralModel.preferencesModel.reducedStepSizeProperty.link( reducedStepSize => {
+      const largeModelDelta = reducedStepSize ? QuadrilateralQueryParameters.majorFineVertexInterval : QuadrilateralQueryParameters.majorVertexInterval;
+      const smallModelDelta = reducedStepSize ? QuadrilateralQueryParameters.minorFineVertexInterval : QuadrilateralQueryParameters.minorVertexInterval;
 
       const largeViewDragDelta = modelViewTransform.modelToViewDeltaX( largeModelDelta );
       const smallViewDragDelta = modelViewTransform.modelToViewDeltaX( smallModelDelta );
