@@ -33,8 +33,6 @@ type StringsType = {
   'shapeNameHiddenStringProperty': LinkableProperty<string>;
   'resetShape': string;
   'resetShapeStringProperty': LinkableProperty<string>;
-  'fineInputSpacing': string;
-  'fineInputSpacingStringProperty': LinkableProperty<string>;
   'shapeNames': {
     'square': string;
     'squareStringProperty': LinkableProperty<string>;
@@ -63,8 +61,6 @@ type StringsType = {
   'hapticsDialogMessageStringProperty': LinkableProperty<string>;
   'gotIt': string;
   'gotItStringProperty': LinkableProperty<string>;
-  'fineInputSpacingDescription': string;
-  'fineInputSpacingDescriptionStringProperty': LinkableProperty<string>;
   'keyboardHelpDialog': {
     'moveSidesOrCorners': string;
     'moveSidesOrCornersStringProperty': LinkableProperty<string>;
@@ -623,11 +619,7 @@ type StringsType = {
       'allCornersEqualStringProperty': LinkableProperty<string>;
       'progressStatePattern': string;
       'progressStatePatternStringProperty': LinkableProperty<string>;
-    };
-    'fineInputEnabledContextResponse': string;
-    'fineInputEnabledContextResponseStringProperty': LinkableProperty<string>;
-    'fineInputDisabledContextResponse': string;
-    'fineInputDisabledContextResponseStringProperty': LinkableProperty<string>;
+    }
   }
 };
 
