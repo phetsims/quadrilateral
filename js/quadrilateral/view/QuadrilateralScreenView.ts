@@ -40,7 +40,7 @@ import ShapeSoundCheckbox from './ShapeSoundCheckbox.js';
 import Vertex from '../model/Vertex.js';
 import QuadrilateralSoundBoardNode from './sound/QuadrilateralSoundBoardNode.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import MinorIntervalsToggleSwitch from './MinorIntervalsToggleSwitch.js';
+import MinorIntervalsToggleButton from './MinorIntervalsToggleButton.js';
 
 // Defines the units of model space, a 2x2 grid that quadrilateral vertices can move within. It is dilated by
 // half of the vertex width so that model space is large enough for Vertices to perfectly align with the bounds
@@ -104,7 +104,7 @@ class QuadrilateralScreenView extends ScreenView {
     );
     this.addChild( resetShapeButton );
 
-    const minorIntervalsToggleSwitch = new MinorIntervalsToggleSwitch( model.lockToMinorIntervalsProperty );
+    const minorIntervalsToggleSwitch = new MinorIntervalsToggleButton( model.lockToMinorIntervalsProperty );
     this.addChild( minorIntervalsToggleSwitch );
     minorIntervalsToggleSwitch.leftBottom = this.resetAllButton.leftTop.minusXY( 0, 45 );
 

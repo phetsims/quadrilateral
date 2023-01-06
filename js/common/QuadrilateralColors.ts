@@ -100,6 +100,10 @@ const QuadrilateralColors = {
     default: new Color( 'rgb(247, 151, 34)' )
   } ),
 
+  lockToSmallStepsButtonColorProperty: new ProfileColorProperty( quadrilateral, 'lockToSmallStepsButtonColor', {
+    default: 'lightgrey'
+  } ),
+
   // Stroke for the interaction cues
   interactionCueColorProperty: new ProfileColorProperty( quadrilateral, 'interactionCueColor', {
     default: new Color( 'rgb(21,255,127)' )
