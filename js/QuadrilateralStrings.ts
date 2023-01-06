@@ -452,6 +452,8 @@ type StringsType = {
         'equalAdjacentSidesChangePatternStringProperty': LinkableProperty<string>;
         'adjacentSidesEqual': string;
         'adjacentSidesEqualStringProperty': LinkableProperty<string>;
+        'equalToAdjacentSides': string;
+        'equalToAdjacentSidesStringProperty': LinkableProperty<string>;
         'adjacentSidesParallel': string;
         'adjacentSidesParallelStringProperty': LinkableProperty<string>;
         'equalToOneAdjacentSide': string;

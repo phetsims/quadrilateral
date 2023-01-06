@@ -646,6 +646,9 @@
         "adjacentSidesEqual": {
           "value": "adjacent sides equal"
         },
+        "equalToAdjacentSides": {
+          "value": "equal to adjacent sides"
+        },
         "adjacentSidesParallel": {
           "value": "adjacent sides parallel"
         },

@@ -79,6 +79,7 @@ const equalToAdjacentCornersString = QuadrilateralStrings.a11y.voicing.equalToAd
 const adjacentSidesChangeInLengthString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesChangeInLength;
 const parallelAdjacentSidesChangePatternString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.parallelAdjacentSidesChangePattern;
 const equalAdjacentSidesChangePatternString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.equalAdjacentSidesChangePattern;
+const equalToAdjacentSidesString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.equalToAdjacentSides;
 const adjacentSidesEqualString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesEqual;
 const adjacentSidesParallelString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesParallel;
 const equalToOneAdjacentSideString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.equalToOneAdjacentSide;
@@ -316,8 +317,6 @@ class QuadrilateralAlerter extends Alerter {
    * "adjacent sides longer" or
    * "left" or
    * "up"
-   *
-   * TODO: Two more cases missing from this function: "Two random sides equal" and "Three random sides equal"
    */
   private getSideChangeObjectResponse( side: Side ): string {
     let response = '';
@@ -357,9 +356,14 @@ class QuadrilateralAlerter extends Alerter {
     const firstSideAbsoluteDifference = Math.abs( firstAdjacentSideLengthDifference );
     const secondSideAbsoluteDifference = Math.abs( secondAdjacentSideLengthDifference );
 
-    if ( adjacentSidesEqual && !previousAdjacentSidesEqual ) {
+    if ( adjacentSidesEqual && ( equalToFirstAdjacent && !previousEqualToFirstAdjacent ) || ( equalToSecondAdjacent && !previousEqualToSecondAdjacent ) ) {
 
-      // adjacent sides just became equal, that is the most important state to describe
+      // side just became equal to both adjacent sides
+      response = equalToAdjacentSidesString;
+    }
+    else if ( adjacentSidesEqual && !previousAdjacentSidesEqual ) {
+
+      // adjacent sides just became equal
       response = adjacentSidesEqualString;
     }
     else if ( adjacentSidesParallel && !previousAdjacentSidesParallel ) {
@@ -884,7 +888,7 @@ class QuadrilateralAlerter extends Alerter {
     let contextResponse: string | null = null;
     if ( currentShapeName !== this.previousContextResponseShapeSnapshot.namedQuadrilateral ) {
       if ( this.model.shapeNameVisibleProperty.value ) {
-        contextResponse = this.getFoundShapeResponse( NamedQuadrilateral.RECTANGLE );
+        contextResponse = this.getFoundShapeResponse( currentShapeName );
       }
       else {
         contextResponse = this.describer.getShapePropertiesDescription();
