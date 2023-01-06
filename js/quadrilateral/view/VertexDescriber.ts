@@ -130,7 +130,7 @@ class VertexDescriber {
     // if corner guides are visible, a description of the number of wedges is included
     if ( this.markersVisibleProperty.value ) {
       response = StringUtils.fillIn( vertexObjectResponseWithWedgesPatternString, {
-        wedgesDescription: VertexDescriber.getWedgesDescription( this.vertex.angleProperty.value!, this.quadrilateralShapeModel ),
+        wedgeDescription: VertexDescriber.getWedgesDescription( this.vertex.angleProperty.value!, this.quadrilateralShapeModel ),
         oppositeComparison: oppositeComparisonString,
         adjacentVertexDescription: adjacentVertexDescriptionString
       } );
