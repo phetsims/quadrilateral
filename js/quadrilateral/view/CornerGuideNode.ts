@@ -60,7 +60,7 @@ class CornerGuideNode extends Node {
 
     const crosshairPath = new Path( null, {
       stroke: QuadrilateralColors.markersStrokeColorProperty,
-      lineDash: [ 5, 5 ]
+      lineDash: [ 3, 3 ]
     } );
 
     Multilink.multilink( [ vertex1.angleProperty, vertex1.positionProperty ], ( angle, position ) => {
@@ -117,7 +117,7 @@ class CornerGuideNode extends Node {
 
       // now draw the line so that we can update the angle
       // start of the first guiding line, along the line between vertices parametrically
-      const innerT = Math.min( ( EXTERNAL_ANGLE_GUIDE_LENGTH / 2 ) / line.getArcLength(), 1 );
+      const innerT = Math.min( ( EXTERNAL_ANGLE_GUIDE_LENGTH / 3 ) / line.getArcLength(), 1 );
       const firstCrosshairPoint = CornerGuideNode.customPositionAt( line, innerT );
       const secondCrosshairPoint = CornerGuideNode.customPositionAt( line, -innerT );
 
