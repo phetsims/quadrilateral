@@ -168,8 +168,6 @@ class QuadrilateralNode extends Voicing( Node ) {
     // Global key listeners
     this.addInputListener( new KeyboardListener( {
       keys: [ 'alt+shift+r', 'alt+c' ],
-      fireOnKeyUp: true,
-      fireOnKeyDown: false,
       global: true,
       callback: ( event, listener ) => {
         const keysPressed = listener.keysPressed;
