@@ -1,4 +1,4 @@
-// Copyright 2022, University of Colorado Boulder
+// Copyright 2022-2023, University of Colorado Boulder
 
 /**
  * Base class for the "Tracks" sound designs. In this design there are a collection of sound clips that will play
