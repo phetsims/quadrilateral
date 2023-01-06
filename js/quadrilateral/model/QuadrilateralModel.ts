@@ -255,7 +255,7 @@ class QuadrilateralModel {
           interval = deviceGridSpacing;
         }
         else if ( reducedStepSize ) {
-          interval = useMinorIntervals ? QuadrilateralQueryParameters.minorFineVertexInterval : QuadrilateralQueryParameters.majorFineVertexInterval;
+          interval = useMinorIntervals ? QuadrilateralQueryParameters.minorReducedStepSizeVertexInterval : QuadrilateralQueryParameters.majorReducedSizeVertexInterval;
         }
         else {
           interval = useMinorIntervals ? QuadrilateralQueryParameters.minorVertexInterval : QuadrilateralQueryParameters.majorVertexInterval;
