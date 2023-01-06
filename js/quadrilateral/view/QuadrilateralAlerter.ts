@@ -356,7 +356,7 @@ class QuadrilateralAlerter extends Alerter {
     const firstSideAbsoluteDifference = Math.abs( firstAdjacentSideLengthDifference );
     const secondSideAbsoluteDifference = Math.abs( secondAdjacentSideLengthDifference );
 
-    if ( adjacentSidesEqual && ( equalToFirstAdjacent && !previousEqualToFirstAdjacent ) || ( equalToSecondAdjacent && !previousEqualToSecondAdjacent ) ) {
+    if ( adjacentSidesEqual && ( ( equalToFirstAdjacent && !previousEqualToFirstAdjacent ) || ( equalToSecondAdjacent && !previousEqualToSecondAdjacent ) ) ) {
 
       // side just became equal to both adjacent sides
       response = equalToAdjacentSidesString;
