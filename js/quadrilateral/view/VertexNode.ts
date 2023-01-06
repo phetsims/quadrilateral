@@ -116,8 +116,12 @@ class VertexNode extends Voicing( Circle ) {
 
         const isPositionAllowed = model.isVertexPositionAllowed( vertex, inBoundsPosition );
         if ( isPositionAllowed ) {
-          vertex.voicingObjectResponseDirty = true;
-          vertex.positionProperty.value = inBoundsPosition;
+
+          // only update and trigger a new Voicing response if the position has changed.
+          if ( !vertex.positionProperty.value.equals( inBoundsPosition ) ) {
+            vertex.voicingObjectResponseDirty = true;
+            vertex.positionProperty.value = inBoundsPosition;
+          }
         }
 
         this.updateBlockedState( !isPositionAllowed, isAgainstBounds );
