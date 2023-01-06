@@ -280,8 +280,8 @@ class QuadrilateralScreenView extends ScreenView {
     }
 
     // pdom
-    this.pdomPlayAreaNode.pdomOrder = [ this.quadrilateralNode, shapeNameDisplay, resetShapeButton ];
-    this.pdomControlAreaNode.pdomOrder = [ visibilityControls, shapeSoundCheckbox, this.resetAllButton ];
+    this.pdomPlayAreaNode.pdomOrder = [ this.quadrilateralNode, shapeNameDisplay, resetShapeButton, shapeSoundCheckbox ];
+    this.pdomControlAreaNode.pdomOrder = [ visibilityControls, minorIntervalsToggleSwitch, this.resetAllButton ];
     this.setScreenSummaryContent( new QuadrilateralScreenSummaryContentNode() );
 
     // voicing
