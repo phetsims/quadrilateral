@@ -24,13 +24,9 @@ import Vertex from '../model/Vertex.js';
 import Utils from '../../../../dot/js/Utils.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
-import SidePair from '../model/SidePair.js';
-import VertexPair from '../model/VertexPair.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import VertexDescriber from './VertexDescriber.js';
 
-const kiteDetailsPatternString = QuadrilateralStrings.a11y.voicing.kiteDetailsPattern;
-const dartDetailsPatternString = QuadrilateralStrings.a11y.voicing.dartDetailsPattern;
 const foundShapePatternString = QuadrilateralStrings.a11y.voicing.foundShapePattern;
 const aBString = QuadrilateralStrings.a11y.aB;
 const bCString = QuadrilateralStrings.a11y.bC;
@@ -887,230 +883,15 @@ class QuadrilateralAlerter extends Alerter {
 
     let contextResponse: string | null = null;
     if ( currentShapeName !== this.previousContextResponseShapeSnapshot.namedQuadrilateral ) {
-
-      const shapeNameVisible = this.model.shapeNameVisibleProperty.value;
-      if ( currentShapeName === NamedQuadrilateral.SQUARE ) {
-        contextResponse = this.getFoundSquareResponse( shapeNameVisible );
+      if ( this.model.shapeNameVisibleProperty.value ) {
+        contextResponse = this.getFoundShapeResponse( NamedQuadrilateral.RECTANGLE );
       }
-      else if ( currentShapeName === NamedQuadrilateral.RECTANGLE ) {
-        contextResponse = this.getFoundRectangleResponse( shapeNameVisible );
-      }
-      else if ( currentShapeName === NamedQuadrilateral.RHOMBUS ) {
-        contextResponse = this.getFoundRhombusResponse( shapeNameVisible );
-      }
-      else if ( currentShapeName === NamedQuadrilateral.PARALLELOGRAM ) {
-        contextResponse = this.getFoundParallelogramResponse( shapeNameVisible );
-      }
-      else if ( currentShapeName === NamedQuadrilateral.TRAPEZOID ) {
-        assert && assert( this.quadrilateralShapeModel.parallelSidePairsProperty.value.length === 1, 'A Trapezoid should have one parallel side pair' );
-        const parallelSidePair = this.quadrilateralShapeModel.parallelSidePairsProperty.value[ 0 ];
-        contextResponse = this.getFoundTrapezoidResponse( shapeNameVisible, parallelSidePair );
-      }
-      else if ( currentShapeName === NamedQuadrilateral.ISOSCELES_TRAPEZOID ) {
-        assert && assert( this.quadrilateralShapeModel.oppositeEqualSidePairsProperty.value.length === 1,
-          'An Isosceles Trapezoid should have one pair of sides equal in length' );
-        const oppositeEqualSidePair = this.quadrilateralShapeModel.oppositeEqualSidePairsProperty.value[ 0 ];
-
-        assert && assert( this.quadrilateralShapeModel.parallelSidePairsProperty.value.length === 1,
-          'A Trapezoid should have one parallel side pair.' );
-        const parallelSidePair = this.quadrilateralShapeModel.parallelSidePairsProperty.value[ 0 ];
-
-        contextResponse = this.getFoundIsoscelesTrapezoidResponse(
-          shapeNameVisible,
-          oppositeEqualSidePair,
-          parallelSidePair
-        );
-      }
-      else if ( currentShapeName === NamedQuadrilateral.KITE ) {
-        assert && assert( this.quadrilateralShapeModel.oppositeEqualVertexPairsProperty.value.length === 1,
-          'A kite should have only one pair of opposite equal vertices' );
-        const oppositeEqualVertexPair = this.quadrilateralShapeModel.oppositeEqualVertexPairsProperty.value[ 0 ];
-        contextResponse = this.getFoundKiteResponse( shapeNameVisible, oppositeEqualVertexPair );
-      }
-      else if ( currentShapeName === NamedQuadrilateral.DART ) {
-        contextResponse = this.getFoundDartResponse( shapeNameVisible, this.quadrilateralShapeModel.vertices );
-      }
-      else if ( currentShapeName === NamedQuadrilateral.CONCAVE_QUADRILATERAL ) {
-        contextResponse = this.getFoundConcaveQuadrilateralResponse( shapeNameVisible );
-      }
-      else if ( currentShapeName === NamedQuadrilateral.CONVEX_QUADRILATERAL ) {
-        contextResponse = this.getFoundConvexQuadrilateralResponse( shapeNameVisible );
-      }
-      else if ( currentShapeName === NamedQuadrilateral.TRIANGLE ) {
-        contextResponse = this.getFoundTriangleResponse( shapeNameVisible );
+      else {
+        contextResponse = this.describer.getShapePropertiesDescription();
       }
     }
 
     return contextResponse;
-  }
-
-  /**
-   * Returns the response when you create a square. Describing the square or its attributes depending on if shape
-   * name is shown.
-   */
-  private getFoundSquareResponse( shapeNameVisible: boolean ): string {
-    let response: string;
-    if ( shapeNameVisible ) {
-      response = this.getFoundShapeResponse( NamedQuadrilateral.SQUARE );
-    }
-    else {
-      response = this.describer.getSquareDetailsString();
-    }
-
-    return response;
-  }
-
-  /**
-   * Returns the response when you create a rectangle. Describing the square or its attributes depending on if shape
-   * name is shown.
-   */
-  private getFoundRectangleResponse( shapeNameVisible: boolean ): string {
-    let response: string;
-    if ( shapeNameVisible ) {
-      response = this.getFoundShapeResponse( NamedQuadrilateral.RECTANGLE );
-    }
-    else {
-      response = this.describer.getRectangleDetailsString();
-    }
-    return response;
-  }
-
-  /**
-   * Returns the response when you create a rhombus. Describing the square or its attributes depending on if shape
-   * name is shown.
-   */
-  private getFoundRhombusResponse( shapeNameVisible: boolean ): string {
-    let response: string;
-    if ( shapeNameVisible ) {
-      response = this.getFoundShapeResponse( NamedQuadrilateral.RHOMBUS );
-    }
-    else {
-      response = this.describer.getRhombusDetailsString();
-    }
-    return response;
-  }
-
-  /**
-   * Returns the response when you create a trapezoid. Describing the square or its attributes depending on if shape
-   * name is shown.
-   */
-  private getFoundTrapezoidResponse( shapeNameVisible: boolean, parallelSidePair: SidePair ): string {
-    let response: string;
-    if ( shapeNameVisible ) {
-      response = this.getFoundShapeResponse( NamedQuadrilateral.TRAPEZOID );
-    }
-    else {
-      response = this.describer.getTrapezoidDetailsString( parallelSidePair );
-    }
-    return response;
-  }
-
-  /**
-   * Returns the response when you create an isosceles trapezoid. Describing the square or its attributes depending on
-   * if shape name is shown.
-   */
-  private getFoundIsoscelesTrapezoidResponse( shapeNameVisible: boolean, oppositeEqualSidePair: SidePair, parallelSidePair: SidePair ): string {
-    let response: string;
-    if ( shapeNameVisible ) {
-      response = this.getFoundShapeResponse( NamedQuadrilateral.ISOSCELES_TRAPEZOID );
-    }
-    else {
-      response = this.describer.getIsoscelesTrapezoidDetailsString( oppositeEqualSidePair, parallelSidePair );
-    }
-    return response;
-  }
-
-  /**
-   * Returns the response when you create a kite. Describing the square or its attributes depending on if shape
-   * name is shown.
-   */
-  private getFoundKiteResponse( shapeNameVisible: boolean, oppositeEqualVertexPair: VertexPair ): string {
-    let response: string;
-    if ( shapeNameVisible ) {
-      response = this.getFoundShapeResponse( NamedQuadrilateral.KITE );
-    }
-    else {
-      response = this.describer.getKiteDetailsString( oppositeEqualVertexPair, kiteDetailsPatternString );
-    }
-    return response;
-  }
-
-  /**
-   * Returns the response when you create a dart. Describing the square or its attributes depending on if shape
-   * name is shown.
-   */
-  private getFoundDartResponse( shapeNameVisible: boolean, vertices: Vertex[] ): string {
-    let response: string;
-    if ( shapeNameVisible ) {
-      response = this.getFoundShapeResponse( NamedQuadrilateral.DART );
-    }
-    else {
-      response = this.describer.getDartDetailsString( dartDetailsPatternString );
-    }
-
-    return response;
-  }
-
-  /**
-   * Returns the response when you create a parallelogram. Describing the square or its attributes depending on if shape
-   * name is shown.
-   */
-  private getFoundParallelogramResponse( shapeNameVisible: boolean ): string {
-    let response: string;
-    if ( shapeNameVisible ) {
-      response = this.getFoundShapeResponse( NamedQuadrilateral.PARALLELOGRAM );
-    }
-    else {
-      response = this.describer.getParallelogramDetailsString();
-    }
-    return response;
-  }
-
-  /**
-   * Returns the response when you create a concave quadrilateral. Describing the square or its attributes depending on
-   * if shape name is shown.
-   */
-  private getFoundConcaveQuadrilateralResponse( shapeNameVisible: boolean ): string {
-    let response: string;
-    if ( shapeNameVisible ) {
-      response = this.getFoundShapeResponse( NamedQuadrilateral.CONCAVE_QUADRILATERAL );
-    }
-    else {
-      response = this.describer.getConcaveQuadrilateralDetailsString();
-    }
-
-    return response;
-  }
-
-  /**
-   * Returns the response when you create a convex quadrilateral. Describing the square or its attributes depending on
-   * if shape name is shown.
-   */
-  private getFoundConvexQuadrilateralResponse( shapeNameVisible: boolean ): string {
-    let response: string;
-    if ( shapeNameVisible ) {
-      response = this.getFoundShapeResponse( NamedQuadrilateral.CONVEX_QUADRILATERAL );
-    }
-    else {
-      response = this.describer.getConvexQuadrilateralDetailsString();
-    }
-    return response;
-  }
-
-
-  /**
-   * Returns the response when you create a triangle. Describing the triangle or its attributes depending on if the
-   * shape name is shown.
-   */
-  private getFoundTriangleResponse( shapeNameVisible: boolean ): string {
-    let response: string;
-    if ( shapeNameVisible ) {
-      response = this.getFoundShapeResponse( NamedQuadrilateral.TRIANGLE );
-    }
-    else {
-      response = this.describer.getTriangleDetailsString();
-    }
-    return response;
   }
 
   /**

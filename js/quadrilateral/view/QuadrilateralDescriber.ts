@@ -60,6 +60,7 @@ const trapezoidDetailsPatternString = QuadrilateralStrings.a11y.voicing.trapezoi
 const kiteDetailsShortPatternString = QuadrilateralStrings.a11y.voicing.kiteDetailsShortPattern;
 const dartDetailsShortPatternString = QuadrilateralStrings.a11y.voicing.dartDetailsShortPattern;
 const dartDetailsPatternString = QuadrilateralStrings.a11y.voicing.dartDetailsPattern;
+const kiteDetailsPatternString = QuadrilateralStrings.a11y.voicing.kiteDetailsPattern;
 const convexQuadrilateralDetailsString = QuadrilateralStrings.a11y.voicing.convexQuadrilateralDetails;
 const concaveQuadrilateralDetailsPatternString = QuadrilateralStrings.a11y.voicing.concaveQuadrilateralDetailsPattern;
 const allSidesEqualString = QuadrilateralStrings.a11y.voicing.allSidesEqual;
@@ -282,7 +283,7 @@ class QuadrilateralDescriber {
       assert && assert( this.shapeModel.oppositeEqualVertexPairsProperty.value.length === 1,
         'A kite should have only one pair of opposite equal vertices' );
       const oppositeEqualVertexPair = this.shapeModel.oppositeEqualVertexPairsProperty.value[ 0 ];
-      shapePropertiesDescription = this.getKiteDetailsString( oppositeEqualVertexPair );
+      shapePropertiesDescription = this.getKiteDetailsString( oppositeEqualVertexPair, kiteDetailsPatternString );
     }
     else if ( currentShapeName === NamedQuadrilateral.DART ) {
       shapePropertiesDescription = this.getDartDetailsString( dartDetailsPatternString );
