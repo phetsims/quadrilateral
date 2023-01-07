@@ -26,14 +26,14 @@ const lockedContextResponseString = QuadrilateralStrings.a11y.voicing.minorInter
 const unlockedContextResponseString = QuadrilateralStrings.a11y.voicing.minorIntervalsToggle.unlockedContextResponse;
 
 type SelfOptions = EmptySelfOptions;
-type MinorIntervalsToggleButtonOptions = SelfOptions & StrictOmit<RectangularToggleButtonOptions, 'content'>;
+type SmallStepsLockToggleButtonOptions = SelfOptions & StrictOmit<RectangularToggleButtonOptions, 'content'>;
 
-class MinorIntervalsToggleButton extends RectangularToggleButton<boolean> {
-  public constructor( lockToMinorIntervalsProperty: Property<boolean>, providedOptions?: MinorIntervalsToggleButtonOptions ) {
+class SmallStepsLockToggleButton extends RectangularToggleButton<boolean> {
+  public constructor( lockToMinorIntervalsProperty: Property<boolean>, providedOptions?: SmallStepsLockToggleButtonOptions ) {
 
     const buttonIcon = new LockNode( lockToMinorIntervalsProperty, { scale: 0.4 } );
 
-    const options = optionize<MinorIntervalsToggleButtonOptions, SelfOptions, RectangularToggleButtonOptions>()( {
+    const options = optionize<SmallStepsLockToggleButtonOptions, SelfOptions, RectangularToggleButtonOptions>()( {
       content: buttonIcon,
       baseColor: QuadrilateralColors.lockToSmallStepsButtonColorProperty,
 
@@ -63,5 +63,5 @@ class MinorIntervalsToggleButton extends RectangularToggleButton<boolean> {
   }
 }
 
-quadrilateral.register( 'MinorIntervalsToggleButton', MinorIntervalsToggleButton );
-export default MinorIntervalsToggleButton;
+quadrilateral.register( 'SmallStepsLockToggleButton', SmallStepsLockToggleButton );
+export default SmallStepsLockToggleButton;

@@ -40,7 +40,7 @@ import ShapeSoundCheckbox from './ShapeSoundCheckbox.js';
 import Vertex from '../model/Vertex.js';
 import QuadrilateralSoundBoardNode from './sound/QuadrilateralSoundBoardNode.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import MinorIntervalsToggleButton from './MinorIntervalsToggleButton.js';
+import SmallStepsLockToggleButton from './SmallStepsLockToggleButton.js';
 
 // Defines the units of model space, a 2x2 grid that quadrilateral vertices can move within. It is dilated by
 // half of the vertex width so that model space is large enough for Vertices to perfectly align with the bounds
@@ -104,11 +104,11 @@ class QuadrilateralScreenView extends ScreenView {
     );
     this.addChild( resetShapeButton );
 
-    const minorIntervalsToggleButton = new MinorIntervalsToggleButton( model.lockToMinorIntervalsProperty, {
-      tandem: tandem.createTandem( 'minorIntervalsToggleButton' )
+    const smallStepsLockToggleButton = new SmallStepsLockToggleButton( model.lockToMinorIntervalsProperty, {
+      tandem: tandem.createTandem( 'smallStepsLockToggleButton' )
     } );
-    this.addChild( minorIntervalsToggleButton );
-    minorIntervalsToggleButton.leftBottom = this.resetAllButton.leftTop.minusXY( 0, 45 );
+    this.addChild( smallStepsLockToggleButton );
+    smallStepsLockToggleButton.leftBottom = this.resetAllButton.leftTop.minusXY( 0, 45 );
 
     // the model bounds are defined by available view space. Some padding is added around the screen and we make
     // sure that the vertices cannot overlap with simulation controls. Otherwise the quadrilateral can move freely in
@@ -283,7 +283,7 @@ class QuadrilateralScreenView extends ScreenView {
 
     // pdom
     this.pdomPlayAreaNode.pdomOrder = [ this.quadrilateralNode, shapeNameDisplay, resetShapeButton, shapeSoundCheckbox ];
-    this.pdomControlAreaNode.pdomOrder = [ visibilityControls, minorIntervalsToggleButton, this.resetAllButton ];
+    this.pdomControlAreaNode.pdomOrder = [ visibilityControls, smallStepsLockToggleButton, this.resetAllButton ];
     this.setScreenSummaryContent( new QuadrilateralScreenSummaryContentNode() );
 
     // voicing
