@@ -637,6 +637,16 @@ type StringsType = {
         'unlockedContextResponse': string;
         'unlockedContextResponseStringProperty': LinkableProperty<string>;
       }
+    };
+    'keyboardHelpDialog': {
+      'checkShapeDescription': string;
+      'checkShapeDescriptionStringProperty': LinkableProperty<string>;
+      'resetShapeDescription': string;
+      'resetShapeDescriptionStringProperty': LinkableProperty<string>;
+      'moveShapeDescription': string;
+      'moveShapeDescriptionStringProperty': LinkableProperty<string>;
+      'smallerStepsDescription': string;
+      'smallerStepsDescriptionStringProperty': LinkableProperty<string>;
     }
   }
 };

@@ -17,8 +17,11 @@ import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralKeyboardHelpContent from './QuadrilateralKeyboardHelpContent.js';
 
-// Voicing is NOT translatable and will never be
+// Voicing is NOT translatable and will never be. This content is invisible in non-english locales and when Voicing
+// is not supported.
 const checkShapeWithVoicingString = 'With Voicing enabled Check Current Shape';
+const checkShapeDescriptionString = QuadrilateralStrings.a11y.keyboardHelpDialog.checkShapeDescription;
+const resetShapeDescriptionString = QuadrilateralStrings.a11y.keyboardHelpDialog.resetShapeDescription;
 
 class ShapeShortcutsHelpSection extends KeyboardHelpSection {
   public constructor() {
@@ -29,7 +32,8 @@ class ShapeShortcutsHelpSection extends KeyboardHelpSection {
       KeyboardHelpIconFactory.altPlusIcon( new LetterKeyNode( 'C' ) ), {
         labelOptions: {
           lineWrap: QuadrilateralKeyboardHelpContent.LABEL_LINE_WRAP
-        }
+        },
+        labelInnerContent: checkShapeDescriptionString
       }
     );
 
@@ -42,7 +46,10 @@ class ShapeShortcutsHelpSection extends KeyboardHelpSection {
           TextKeyNode.shift(),
           new LetterKeyNode( 'R' )
         ]
-      )
+      ),
+      {
+        labelInnerContent: resetShapeDescriptionString
+      }
     );
 
     const contents = [];

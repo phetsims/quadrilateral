@@ -15,13 +15,20 @@ import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import { Text } from '../../../../scenery/js/imports.js';
 import QuadrilateralKeyboardHelpContent from './QuadrilateralKeyboardHelpContent.js';
 
+// constants
+const moveShapeDescriptionString = QuadrilateralStrings.a11y.keyboardHelpDialog.moveShapeDescription;
+const smallerStepsDescriptionString = QuadrilateralStrings.a11y.keyboardHelpDialog.smallerStepsDescription;
+
 class MoveShapeHelpSection extends KeyboardHelpSection {
   public constructor() {
 
     // basic movement
     const basicMovementRow = KeyboardHelpSectionRow.labelWithIcon(
       QuadrilateralStrings.keyboardHelpDialog.moveASideOrCorner,
-      KeyboardHelpIconFactory.arrowOrWasdKeysRowIcon()
+      KeyboardHelpIconFactory.arrowOrWasdKeysRowIcon(),
+      {
+        labelInnerContent: moveShapeDescriptionString
+      }
     );
 
     // fine-grained movement
@@ -36,7 +43,8 @@ class MoveShapeHelpSection extends KeyboardHelpSection {
       ], {
         labelOptions: {
           lineWrap: QuadrilateralKeyboardHelpContent.LABEL_LINE_WRAP
-        }
+        },
+        labelInnerContent: smallerStepsDescriptionString
       }
     );
 

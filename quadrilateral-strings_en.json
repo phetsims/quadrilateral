@@ -920,6 +920,20 @@
           "value": "Shift key needed to make small steps."
         }
       }
+    },
+    "keyboardHelpDialog": {
+      "checkShapeDescription": {
+        "value": "With Voicing enabled Check Current Shape with ALT plus C."
+      },
+      "resetShapeDescription": {
+        "value": "Reset Shape with ALT plus Shift plus R."
+      },
+      "moveShapeDescription": {
+        "value": "Move a corner or side up, left, down, or right with Arrow keys or with letter keys W, A, S, or D."
+      },
+      "smallerStepsDescription": {
+        "value": "To move in smaller steps add Shift key to movement keys or mouse."
+      }
     }
   }
 }
