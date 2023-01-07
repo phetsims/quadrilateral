@@ -25,14 +25,18 @@ class MoveShapeHelpSection extends KeyboardHelpSection {
 
     // fine-grained movement
     const fineMovementRow = KeyboardHelpSectionRow.labelWithIconList(
-      QuadrilateralStrings.keyboardHelpDialog.moveSidesOrCorners,
+      QuadrilateralStrings.keyboardHelpDialog.moveASideOrCornerInSmallerSteps,
       [
         KeyboardHelpIconFactory.shiftPlusIcon( KeyboardHelpIconFactory.arrowKeysRowIcon() ),
         KeyboardHelpIconFactory.shiftPlusIcon( KeyboardHelpIconFactory.wasdRowIcon() ),
         KeyboardHelpIconFactory.shiftPlusIcon( new Text( 'Mouse', {
           font: KeyboardHelpSectionRow.LABEL_FONT
         } ) )
-      ]
+      ], {
+        labelOptions: {
+          lineWrap: 175
+        }
+      }
     );
 
     super( QuadrilateralStrings.keyboardHelpDialog.moveSidesOrCorners, [ basicMovementRow, fineMovementRow ] );
