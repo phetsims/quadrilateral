@@ -14,6 +14,10 @@ import MoveShapeHelpSection from './MoveShapeHelpSection.js';
 import ShapeShortcutsHelpSection from './ShapeShortcutsHelpSection.js';
 
 class QuadrilateralKeyboardHelpContent extends TwoColumnKeyboardHelpContent {
+
+  // consistent line wrap for long text in sections of this content
+  public static readonly LABEL_LINE_WRAP = 175;
+
   public constructor() {
 
     // sim-specific help content about how to interact with the shape

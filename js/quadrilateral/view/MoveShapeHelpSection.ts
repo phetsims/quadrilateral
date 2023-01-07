@@ -13,6 +13,7 @@ import KeyboardHelpSectionRow from '../../../../scenery-phet/js/keyboard/help/Ke
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import { Text } from '../../../../scenery/js/imports.js';
+import QuadrilateralKeyboardHelpContent from './QuadrilateralKeyboardHelpContent.js';
 
 class MoveShapeHelpSection extends KeyboardHelpSection {
   public constructor() {
@@ -34,7 +35,7 @@ class MoveShapeHelpSection extends KeyboardHelpSection {
         } ) )
       ], {
         labelOptions: {
-          lineWrap: 175
+          lineWrap: QuadrilateralKeyboardHelpContent.LABEL_LINE_WRAP
         }
       }
     );

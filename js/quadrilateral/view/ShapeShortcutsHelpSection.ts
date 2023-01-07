@@ -15,6 +15,7 @@ import TextKeyNode from '../../../../scenery-phet/js/keyboard/TextKeyNode.js';
 import { voicingManager } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
+import QuadrilateralKeyboardHelpContent from './QuadrilateralKeyboardHelpContent.js';
 
 // Voicing is NOT translatable and will never be
 const checkShapeWithVoicingString = 'With Voicing enabled Check Current Shape';
@@ -27,7 +28,7 @@ class ShapeShortcutsHelpSection extends KeyboardHelpSection {
       checkShapeWithVoicingString,
       KeyboardHelpIconFactory.altPlusIcon( new LetterKeyNode( 'C' ) ), {
         labelOptions: {
-          lineWrap: 175
+          lineWrap: QuadrilateralKeyboardHelpContent.LABEL_LINE_WRAP
         }
       }
     );
