@@ -18,8 +18,6 @@ import Property from '../../../../axon/js/Property.js';
 import QuadrilateralIconFactory from './QuadrilateralIconFactory.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 
-const CHECKBOX_ICON_SPACING = 10;
-
 type SelfOptions = EmptySelfOptions;
 type QuadrilateralVisibilityControlsOptions = SelfOptions & StrictOmit<VBoxOptions, 'children'> & PickRequired<VBoxOptions, 'tandem'>;
 
@@ -40,7 +38,7 @@ class QuadrilateralVisibilityControls extends VBox {
       QuadrilateralStrings.labels
     );
     const cornerLabelsCheckbox = new Checkbox( cornerLabelsVisibleProperty, cornerLabelsIcon, {
-      spacing: CHECKBOX_ICON_SPACING,
+      spacing: QuadrilateralConstants.CONTROL_LABEL_SPACING,
 
       // pdom
       labelTagName: 'label',
@@ -63,7 +61,7 @@ class QuadrilateralVisibilityControls extends VBox {
       QuadrilateralStrings.markers
     );
     const markersCheckbox = new Checkbox( markersVisibleProperty, markersIcon, {
-      spacing: CHECKBOX_ICON_SPACING,
+      spacing: QuadrilateralConstants.CONTROL_LABEL_SPACING,
 
       // pdom
       labelTagName: 'label',
@@ -86,7 +84,7 @@ class QuadrilateralVisibilityControls extends VBox {
       QuadrilateralStrings.diagonals
     );
     const diagonalGuidesCheckbox = new Checkbox( diagonalGuidesVisibleProperty, diagonalGuidesIcon, {
-      spacing: CHECKBOX_ICON_SPACING,
+      spacing: QuadrilateralConstants.CONTROL_LABEL_SPACING,
 
       // pdom
       labelTagName: 'label',
@@ -109,7 +107,7 @@ class QuadrilateralVisibilityControls extends VBox {
       QuadrilateralStrings.grid
     );
     const gridCheckbox = new Checkbox( gridVisibleProperty, gridIcon, {
-      spacing: CHECKBOX_ICON_SPACING,
+      spacing: QuadrilateralConstants.CONTROL_LABEL_SPACING,
 
       // pdom
       labelTagName: 'label',

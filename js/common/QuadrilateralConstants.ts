@@ -31,7 +31,7 @@ const QuadrilateralConstants = {
   SCREEN_VIEW_X_MARGIN: 15,
   SCREEN_VIEW_Y_MARGIN: 15,
 
-  // additional spacing in the view between components
+  // additional spacing in the ScreenView between components
   VIEW_SPACING: 15,
 
   // corner radius used in many rectangles in this sim
@@ -42,6 +42,10 @@ const QuadrilateralConstants = {
 
   // spacing between grouped controls
   CONTROLS_SPACING: 15,
+
+  // horizontal spacing between a UI component and its label (such as between a checkbox and its label or a button
+  // and its label)
+  CONTROL_LABEL_SPACING: 10,
 
   SCREEN_TEXT_FONT: new PhetFont( { size: 18 } ),
 

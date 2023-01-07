@@ -43,10 +43,11 @@ class MinorIntervalsToggleButton extends RectangularToggleButton<boolean> {
 
     super( lockToMinorIntervalsProperty, false, true, options );
 
+    // button is decorated with the label
     const labelNode = new Text( smallStepsString, {
       font: QuadrilateralConstants.SCREEN_TEXT_FONT,
       maxWidth: 250,
-      leftCenter: this.rightCenter.plusXY( 10, 0 )
+      leftCenter: this.rightCenter.plusXY( QuadrilateralConstants.CONTROL_LABEL_SPACING, 0 )
     } );
     this.addChild( labelNode );
 
