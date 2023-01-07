@@ -86,6 +86,9 @@
   "keyboardHelpDialog.resetShape": {
     "value": "Reset Shape"
   },
+  "smallSteps": {
+    "value": "Small Steps"
+  },
   "a11y": {
     "screenSummary": {
       "playAreaDescription": {
@@ -899,6 +902,23 @@
       },
       "blockedByInnerShapeString": {
         "value": "Blocked by inner shape."
+      },
+      "minorIntervalsToggle": {
+        "hintResponse": {
+          "value": "When locked, corners and sides move in small steps."
+        },
+        "lockedNameResponse": {
+          "value": "Small Steps Locked"
+        },
+        "unlockedNameResponse": {
+          "value": "Small Steps Unlocked"
+        },
+        "lockedContextResponse": {
+          "value": "Corner and side movement locked to small steps."
+        },
+        "unlockedContextResponse": {
+          "value": "Shift key needed to make small steps."
+        }
       }
     }
   }

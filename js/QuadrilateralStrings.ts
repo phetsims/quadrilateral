@@ -73,6 +73,8 @@ type StringsType = {
     'resetShape': string;
     'resetShapeStringProperty': LinkableProperty<string>;
   };
+  'smallSteps': string;
+  'smallStepsStringProperty': LinkableProperty<string>;
   'a11y': {
     'screenSummary': {
       'playAreaDescription': string;
@@ -623,6 +625,18 @@ type StringsType = {
       'blockedByEdgeStringStringProperty': LinkableProperty<string>;
       'blockedByInnerShapeString': string;
       'blockedByInnerShapeStringStringProperty': LinkableProperty<string>;
+      'minorIntervalsToggle': {
+        'hintResponse': string;
+        'hintResponseStringProperty': LinkableProperty<string>;
+        'lockedNameResponse': string;
+        'lockedNameResponseStringProperty': LinkableProperty<string>;
+        'unlockedNameResponse': string;
+        'unlockedNameResponseStringProperty': LinkableProperty<string>;
+        'lockedContextResponse': string;
+        'lockedContextResponseStringProperty': LinkableProperty<string>;
+        'unlockedContextResponse': string;
+        'unlockedContextResponseStringProperty': LinkableProperty<string>;
+      }
     }
   }
 };

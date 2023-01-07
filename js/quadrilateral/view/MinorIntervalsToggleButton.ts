@@ -9,24 +9,41 @@
 import Property from '../../../../axon/js/Property.js';
 import quadrilateral from '../../quadrilateral.js';
 import LockNode from '../../../../scenery-phet/js/LockNode.js';
-import RectangularToggleButton from '../../../../sun/js/buttons/RectangularToggleButton.js';
+import RectangularToggleButton, { RectangularToggleButtonOptions } from '../../../../sun/js/buttons/RectangularToggleButton.js';
 import { Text } from '../../../../scenery/js/imports.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
+import QuadrilateralStrings from '../../QuadrilateralStrings.js';
+
+// constants
+const smallStepsString = QuadrilateralStrings.smallSteps;
+const hintResponseString = QuadrilateralStrings.a11y.voicing.minorIntervalsToggle.hintResponse;
+const lockedNameResponseString = QuadrilateralStrings.a11y.voicing.minorIntervalsToggle.lockedNameResponse;
+const unlockedNameResponseString = QuadrilateralStrings.a11y.voicing.minorIntervalsToggle.unlockedNameResponse;
+const lockedContextResponseString = QuadrilateralStrings.a11y.voicing.minorIntervalsToggle.lockedContextResponse;
+const unlockedContextResponseString = QuadrilateralStrings.a11y.voicing.minorIntervalsToggle.unlockedContextResponse;
+
+type SelfOptions = EmptySelfOptions;
+type MinorIntervalsToggleButtonOptions = SelfOptions & StrictOmit<RectangularToggleButtonOptions, 'content'>;
 
 class MinorIntervalsToggleButton extends RectangularToggleButton<boolean> {
-  public constructor( lockToMinorIntervalsProperty: Property<boolean> ) {
+  public constructor( lockToMinorIntervalsProperty: Property<boolean>, providedOptions?: MinorIntervalsToggleButtonOptions ) {
 
     const buttonIcon = new LockNode( lockToMinorIntervalsProperty, { scale: 0.4 } );
-    super( lockToMinorIntervalsProperty, false, true, {
+
+    const options = optionize<MinorIntervalsToggleButtonOptions, SelfOptions, RectangularToggleButtonOptions>()( {
       content: buttonIcon,
       baseColor: QuadrilateralColors.lockToSmallStepsButtonColorProperty,
 
       // voicing
-      voicingHintResponse: 'When locked, corners and sides move in small steps.'
-    } );
+      voicingHintResponse: hintResponseString
+    }, providedOptions );
 
-    const labelNode = new Text( 'Small Steps', {
+    super( lockToMinorIntervalsProperty, false, true, options );
+
+    const labelNode = new Text( smallStepsString, {
       font: QuadrilateralConstants.SCREEN_TEXT_FONT,
       maxWidth: 250,
       leftCenter: this.rightCenter.plusXY( 10, 0 )
@@ -34,8 +51,8 @@ class MinorIntervalsToggleButton extends RectangularToggleButton<boolean> {
     this.addChild( labelNode );
 
     lockToMinorIntervalsProperty.link( lockToMinorIntervals => {
-      this.voicingNameResponse = lockToMinorIntervals ? 'Small Steps Locked' : 'Small Steps Unlocked';
-      this.voicingContextResponse = lockToMinorIntervals ? 'Corner and side movement locked to small steps.' : 'Shift key needed to make small steps.';
+      this.voicingNameResponse = lockToMinorIntervals ? lockedNameResponseString : unlockedNameResponseString;
+      this.voicingContextResponse = lockToMinorIntervals ? lockedContextResponseString : unlockedContextResponseString;
 
       this.voicingSpeakResponse( {
         nameResponse: this.voicingNameResponse,

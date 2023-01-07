@@ -104,9 +104,11 @@ class QuadrilateralScreenView extends ScreenView {
     );
     this.addChild( resetShapeButton );
 
-    const minorIntervalsToggleSwitch = new MinorIntervalsToggleButton( model.lockToMinorIntervalsProperty );
-    this.addChild( minorIntervalsToggleSwitch );
-    minorIntervalsToggleSwitch.leftBottom = this.resetAllButton.leftTop.minusXY( 0, 45 );
+    const minorIntervalsToggleButton = new MinorIntervalsToggleButton( model.lockToMinorIntervalsProperty, {
+      tandem: tandem.createTandem( 'minorIntervalsToggleButton' )
+    } );
+    this.addChild( minorIntervalsToggleButton );
+    minorIntervalsToggleButton.leftBottom = this.resetAllButton.leftTop.minusXY( 0, 45 );
 
     // the model bounds are defined by available view space. Some padding is added around the screen and we make
     // sure that the vertices cannot overlap with simulation controls. Otherwise the quadrilateral can move freely in
@@ -281,7 +283,7 @@ class QuadrilateralScreenView extends ScreenView {
 
     // pdom
     this.pdomPlayAreaNode.pdomOrder = [ this.quadrilateralNode, shapeNameDisplay, resetShapeButton, shapeSoundCheckbox ];
-    this.pdomControlAreaNode.pdomOrder = [ visibilityControls, minorIntervalsToggleSwitch, this.resetAllButton ];
+    this.pdomControlAreaNode.pdomOrder = [ visibilityControls, minorIntervalsToggleButton, this.resetAllButton ];
     this.setScreenSummaryContent( new QuadrilateralScreenSummaryContentNode() );
 
     // voicing
