@@ -23,6 +23,14 @@ import QuadrilateralInputPreferencesNode from './quadrilateral/view/Quadrilatera
 const quadrilateralTitleStringProperty = QuadrilateralStrings.quadrilateral.titleStringProperty;
 const preferencesModel = new QuadrilateralPreferencesModel();
 
+// "Input" options are related to connection to a tangible device, this tab should only be shown when running
+// while connected to some external device.
+const inputPreferencesOptions = QuadrilateralQueryParameters.deviceConnection ? {
+  customPreferences: [ {
+    createContent: () => new QuadrilateralInputPreferencesNode( preferencesModel )
+  } ]
+} : undefined;
+
 const simOptions: SimOptions = {
 
   //TODO fill in credits, all of these fields are optional, see joist.CreditsNode
@@ -38,11 +46,7 @@ const simOptions: SimOptions = {
 
   // preferences configuration with defaults from package.json
   preferencesModel: new PreferencesModel( {
-    inputOptions: {
-      customPreferences: [ {
-        createContent: tandem => new QuadrilateralInputPreferencesNode( preferencesModel )
-      } ]
-    },
+    inputOptions: inputPreferencesOptions,
     localizationOptions: {
 
       // Dynamic locales are not supported for initial publication of this sim.
