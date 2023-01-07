@@ -23,7 +23,7 @@ class MinorIntervalsToggleButton extends RectangularToggleButton<boolean> {
       baseColor: QuadrilateralColors.lockToSmallStepsButtonColorProperty,
 
       // voicing
-      voicingHintResponse: 'When locked, move corners and sides in small steps with or without visual grid.'
+      voicingHintResponse: 'When locked, corners and sides move in small steps.'
     } );
 
     const labelNode = new Text( 'Small Steps', {
@@ -35,7 +35,7 @@ class MinorIntervalsToggleButton extends RectangularToggleButton<boolean> {
 
     lockToMinorIntervalsProperty.link( lockToMinorIntervals => {
       this.voicingNameResponse = lockToMinorIntervals ? 'Small Steps Locked' : 'Small Steps Unlocked';
-      this.voicingContextResponse = lockToMinorIntervals ? 'Corner and side movement locked to small steps.' : 'Small steps no longer locked. Add Shift key to make small steps.';
+      this.voicingContextResponse = lockToMinorIntervals ? 'Corner and side movement locked to small steps.' : 'Shift key needed to make small steps.';
 
       this.voicingSpeakResponse( {
         nameResponse: this.voicingNameResponse,
