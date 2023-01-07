@@ -1,4 +1,4 @@
-// Copyright 2022, University of Colorado Boulder
+// Copyright 2022-2023, University of Colorado Boulder
 
 /**
  * Draws a Node that intends to let the user know that the quadrilateral shape is interactive.
