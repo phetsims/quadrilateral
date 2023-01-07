@@ -43,7 +43,6 @@ class SmallStepsLockToggleButton extends RectangularToggleButton<boolean> {
 
     super( lockToMinorIntervalsProperty, false, true, options );
 
-    // button is decorated with the label
     const labelNode = new Text( smallStepsString, {
       font: QuadrilateralConstants.SCREEN_TEXT_FONT,
       maxWidth: 250,
@@ -51,6 +50,7 @@ class SmallStepsLockToggleButton extends RectangularToggleButton<boolean> {
     } );
     this.addChild( labelNode );
 
+    // voicing - update dynamic content and request Voicing when the change is made
     lockToMinorIntervalsProperty.link( lockToMinorIntervals => {
       this.voicingNameResponse = lockToMinorIntervals ? lockedNameResponseString : unlockedNameResponseString;
       this.voicingContextResponse = lockToMinorIntervals ? lockedContextResponseString : unlockedContextResponseString;
