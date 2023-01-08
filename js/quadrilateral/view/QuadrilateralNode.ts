@@ -5,7 +5,7 @@
  */
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import { KeyboardListener, Node, NodeOptions, TPaint, Voicing } from '../../../../scenery/js/imports.js';
+import { KeyboardListener, Node, NodeOptions, TPaint, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import SideNode from './SideNode.js';
@@ -16,9 +16,10 @@ import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import CornerGuideNode from './CornerGuideNode.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import RightAngleIndicatorNode from './RightAngleIndicatorNode.js';
-import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
+import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 
 // constants
 const cornerAString = QuadrilateralStrings.a11y.cornerA;
@@ -38,8 +39,8 @@ const vertexDString = QuadrilateralStrings.vertexD;
 const SHAPE_FILL_TIME = 0.35;
 
 type SelfOptions = EmptySelfOptions;
-
-type QuadrilateralNodeOptions = SelfOptions & NodeOptions & PickRequired<NodeOptions, 'tandem'>;
+type ParentOptions = NodeOptions & VoicingOptions;
+type QuadrilateralNodeOptions = SelfOptions & StrictOmit<ParentOptions, 'interactiveHighlight'> & PickRequired<ParentOptions, 'tandem'>;
 
 class QuadrilateralNode extends Voicing( Node ) {
   private readonly model: QuadrilateralModel;
@@ -54,7 +55,15 @@ class QuadrilateralNode extends Voicing( Node ) {
   private activeFill: TPaint | null;
 
   public constructor( quadrilateralModel: QuadrilateralModel, modelViewTransform: ModelViewTransform2, layoutBounds: Bounds2, quadrilateralDescriber: QuadrilateralDescriber, providedOptions: QuadrilateralNodeOptions ) {
-    super( providedOptions );
+
+    const options = optionize<QuadrilateralNodeOptions, SelfOptions, ParentOptions>()( {
+
+      // This Node is composed with Voicing so that we can call the voicingSpeak* functions through it. But we do not
+      // want it to use the default InteractiveHighlight, VertexNode/SideNode are independently interactive.
+      interactiveHighlight: 'invisible'
+    }, providedOptions );
+
+    super( options );
 
     this.remainingTimeForShapeChangeFill = 0;
     this.activeFill = null;
