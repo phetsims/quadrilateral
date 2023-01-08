@@ -19,6 +19,14 @@ import PreferencesDialog from '../../../../../joist/js/preferences/PreferencesDi
 import AquaRadioButtonGroup from '../../../../../sun/js/AquaRadioButtonGroup.js';
 import PreferencesPanelSection from '../../../../../joist/js/preferences/PreferencesPanelSection.js';
 import AquaRadioButton from '../../../../../sun/js/AquaRadioButton.js';
+import QuadrilateralStrings from '../../../QuadrilateralStrings.js';
+
+// constants
+const shapeSoundsOptionsString = QuadrilateralStrings.preferencesDialog.shapeSoundOptions;
+const shapeSoundsOptionsDescriptionString = QuadrilateralStrings.preferencesDialog.shapeSoundOptionsDescription;
+const preferencesDialogLayerSoundDesignDescriptionString = QuadrilateralStrings.preferencesDialog.layerSoundDesignDescription;
+const preferencesDialogIndependentSoundDesignDescriptionString = QuadrilateralStrings.preferencesDialog.independentSoundDesignDescription;
+const preferencesDialogPlaySoundsForeverString = QuadrilateralStrings.preferencesDialog.playSoundsForever;
 
 // Extending a PreferencesPanelSection will by default indent this section under the "Sounds" content in the Preferences
 // dialog
@@ -29,19 +37,18 @@ class QuadrilateralSoundOptionsNode extends PreferencesPanelSection {
 
   public constructor( model: QuadrilateralSoundOptionsModel, tandem: Tandem ) {
 
-    const soundDesignLabelText = new VoicingText( 'Sound Design', PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
-    const soundDesignDescriptionText = new VoicingText( 'Hi Brett! Would you like a description here?', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS );
-    soundDesignDescriptionText.fill = 'hotPink';
+    const soundDesignLabelText = new VoicingText( shapeSoundsOptionsString, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
+    const soundDesignDescriptionText = new VoicingText( shapeSoundsOptionsDescriptionString, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS );
 
     const soundDesignRadioButtonGroup = new AquaRadioButtonGroup( model.soundDesignProperty, [
       {
         value: SoundDesign.TRACKS_BUILD_UP_SIMPLE,
-        createNode: () => new Text( 'Building (Default)', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
+        createNode: () => new Text( preferencesDialogLayerSoundDesignDescriptionString, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
         tandemName: `tracksBuildUpSimple${AquaRadioButton.TANDEM_NAME_SUFFIX}`
       },
       {
         value: SoundDesign.TRACKS_VOLUME_EMPHASIS,
-        createNode: () => new Text( 'Shape Emphasis', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
+        createNode: () => new Text( preferencesDialogIndependentSoundDesignDescriptionString, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
         tandemName: `tracksVolume${AquaRadioButton.TANDEM_NAME_SUFFIX}`
       }
     ], {
@@ -52,7 +59,7 @@ class QuadrilateralSoundOptionsNode extends PreferencesPanelSection {
       tandem: tandem.createTandem( 'soundDesignRadioButtonGroup' )
     } );
 
-    const tracksPlayForeverLabel = new Text( 'Tracks play forever', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS );
+    const tracksPlayForeverLabel = new Text( preferencesDialogPlaySoundsForeverString, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS );
     const tracksPlayForeverCheckbox = new Checkbox( model.tracksPlayForeverProperty, tracksPlayForeverLabel, {
       tandem: tandem.createTandem( 'tracksPlayForeverCheckbox' )
     } );

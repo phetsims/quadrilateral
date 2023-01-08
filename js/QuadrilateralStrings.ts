@@ -73,6 +73,18 @@ type StringsType = {
     'resetShape': string;
     'resetShapeStringProperty': LinkableProperty<string>;
   };
+  'preferencesDialog': {
+    'shapeSoundOptions': string;
+    'shapeSoundOptionsStringProperty': LinkableProperty<string>;
+    'shapeSoundOptionsDescription': string;
+    'shapeSoundOptionsDescriptionStringProperty': LinkableProperty<string>;
+    'layerSoundDesignDescription': string;
+    'layerSoundDesignDescriptionStringProperty': LinkableProperty<string>;
+    'independentSoundDesignDescription': string;
+    'independentSoundDesignDescriptionStringProperty': LinkableProperty<string>;
+    'playSoundsForever': string;
+    'playSoundsForeverStringProperty': LinkableProperty<string>;
+  };
   'smallSteps': string;
   'smallStepsStringProperty': LinkableProperty<string>;
   'a11y': {
