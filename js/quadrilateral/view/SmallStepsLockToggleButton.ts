@@ -48,7 +48,6 @@ class SmallStepsLockToggleButton extends RectangularToggleButton<boolean> {
       maxWidth: 100,
       leftCenter: this.rightCenter.plusXY( QuadrilateralConstants.CONTROL_LABEL_SPACING, 0 )
     } );
-    console.log( labelNode.width );
     this.addChild( labelNode );
 
     // voicing - update dynamic content and request Voicing when the change is made
