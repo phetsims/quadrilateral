@@ -396,6 +396,10 @@ class QuadrilateralShapeModel {
       }
     );
 
+    // make adjacent sides non-interactive when a Side is pressed to avoid buggy multitouch cases
+    this.makeAdjacentSidesNonInteractiveWhenPressed( this.topSide, this.bottomSide, this.leftSide, this.rightSide );
+    this.makeAdjacentSidesNonInteractiveWhenPressed( this.leftSide, this.rightSide, this.topSide, this.bottomSide );
+
     // TODO: If modelBounds is not observable, this could just be a link instead of a multilink
     this.vertices.forEach( vertex => {
       Multilink.multilink( [ vertex.modelBoundsProperty, model.modelBoundsProperty ], ( vertexBounds, modelBounds ) => {
@@ -407,6 +411,18 @@ class QuadrilateralShapeModel {
           vertex.leftConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.minX, modelBounds.minX, 0.01 );
         }
       } );
+    } );
+  }
+
+  /**
+   * When a side becomes pressed, its adjacent sides become non-interactive so that input to both do not cause jitter.
+   * Prevents buggy multitouch cases.
+   */
+  private makeAdjacentSidesNonInteractiveWhenPressed( firstOppositeSide: Side, secondOppositeSide: Side, firstAdjacentSide: Side, secondAdjacentSide: Side ): void {
+    Multilink.multilink( [ firstOppositeSide.isPressedProperty, secondOppositeSide.isPressedProperty ], ( firstOppositeSidePressed, secondOppositeSidePressed ) => {
+      const interactive = !firstOppositeSidePressed && !secondOppositeSidePressed;
+      firstAdjacentSide.interactiveProperty.value = interactive;
+      secondAdjacentSide.interactiveProperty.value = interactive;
     } );
   }
 

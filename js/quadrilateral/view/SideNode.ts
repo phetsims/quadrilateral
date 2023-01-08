@@ -336,6 +336,11 @@ class SideNode extends Voicing( Path ) {
       }
     } );
 
+    // Sides may become non-interactive and not movable with user input.
+    side.interactiveProperty.link( interactive => {
+      this.inputEnabled = interactive;
+    } );
+
     // sound - the grab sound is played on press but there is no release sound for this component since there is
     // no behavioral relevance to the release. The 'release' sound is used instead of 'grab' to distinguish sides
     // from vertices
