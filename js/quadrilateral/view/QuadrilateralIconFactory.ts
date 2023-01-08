@@ -185,7 +185,7 @@ const QuadrilateralIconFactory = {
   createLabelledIcon( iconNode: Node, labelString: string ): FlowBox {
     const labelText = new Text( labelString, {
       font: QuadrilateralConstants.SCREEN_TEXT_FONT,
-      maxWidth: 300
+      maxWidth: 100
     } );
 
     return new HBox( {

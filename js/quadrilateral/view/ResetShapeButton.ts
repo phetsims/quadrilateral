@@ -26,7 +26,7 @@ class ResetShapeButton extends TextPushButton {
       baseColor: QuadrilateralColors.quadrilateralShapeColorProperty,
 
       // i18n
-      maxTextWidth: 150,
+      maxTextWidth: 120,
 
       // voicing
       voicingNameResponse: QuadrilateralDescriber.RESET_SHAPE_RESPONSE_PACKET.nameResponse,

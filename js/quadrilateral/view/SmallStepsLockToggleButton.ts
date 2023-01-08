@@ -45,9 +45,10 @@ class SmallStepsLockToggleButton extends RectangularToggleButton<boolean> {
 
     const labelNode = new Text( smallStepsString, {
       font: QuadrilateralConstants.SCREEN_TEXT_FONT,
-      maxWidth: 250,
+      maxWidth: 100,
       leftCenter: this.rightCenter.plusXY( QuadrilateralConstants.CONTROL_LABEL_SPACING, 0 )
     } );
+    console.log( labelNode.width );
     this.addChild( labelNode );
 
     // voicing - update dynamic content and request Voicing when the change is made
