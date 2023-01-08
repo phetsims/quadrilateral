@@ -395,6 +395,19 @@ class QuadrilateralShapeModel {
         }
       }
     );
+
+    // TODO: If modelBounds is not observable, this could just be a link instead of a multilink
+    this.vertices.forEach( vertex => {
+      Multilink.multilink( [ vertex.modelBoundsProperty, model.modelBoundsProperty ], ( vertexBounds, modelBounds ) => {
+        if ( modelBounds ) {
+
+          vertex.topConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.maxY, modelBounds.maxY, 0.01 );
+          vertex.rightConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.maxX, modelBounds.maxX, 0.01 );
+          vertex.bottomConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.minY, modelBounds.minY, 0.01 );
+          vertex.leftConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.minX, modelBounds.minX, 0.01 );
+        }
+      } );
+    } );
   }
 
   /**

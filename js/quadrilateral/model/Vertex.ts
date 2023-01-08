@@ -65,6 +65,14 @@ class Vertex {
   // model bounds
   public movementBlockedByBoundsProperty = new BooleanProperty( false );
 
+  // Properties tracking when a Vertex becomes blocked by ony of the individual sides of model bounds.
+  // So that we can trigger some feedback as a Vertex is blocked by new edges of bounds.
+  public leftConstrainedProperty = new BooleanProperty( false );
+  public rightConstrainedProperty = new BooleanProperty( false );
+  public topConstrainedProperty = new BooleanProperty( false );
+  public bottomConstrainedProperty = new BooleanProperty( false );
+  public numberOfConstrainingEdgesProperty: TReadOnlyProperty<number>;
+
   // Property indicating whether the movement of the Vertex was blocked because placement would have
   // resulted in a crossed/overlapping shape.
   public movementBlockedByShapeProperty = new BooleanProperty( false );
@@ -125,6 +133,19 @@ class Vertex {
 
     this.isPressedProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'isPressedProperty' )
+    } );
+
+    this.numberOfConstrainingEdgesProperty = new DerivedProperty( [
+      this.topConstrainedProperty,
+      this.rightConstrainedProperty,
+      this.bottomConstrainedProperty,
+      this.leftConstrainedProperty
+    ], ( topConstrained, rightConstrained, bottomConstrained, leftConstrained ) => {
+      const topVal = topConstrained ? 1 : 0;
+      const rightVal = rightConstrained ? 1 : 0;
+      const bottomVal = bottomConstrained ? 1 : 0;
+      const leftVal = leftConstrained ? 1 : 0;
+      return topVal + rightVal + bottomVal + leftVal;
     } );
 
     this.tandem = tandem;

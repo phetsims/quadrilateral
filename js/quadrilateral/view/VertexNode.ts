@@ -232,8 +232,8 @@ class VertexNode extends Voicing( Circle ) {
       initialOutputLevel: 1.0
     } );
     soundManager.addSoundGenerator( blockedByBoundsSoundClip );
-    vertex.movementBlockedByBoundsProperty.lazyLink( blocked => {
-      if ( blocked ) {
+    vertex.numberOfConstrainingEdgesProperty.link( ( constrainingEdges, oldConstrainingEdges ) => {
+      if ( oldConstrainingEdges !== null && constrainingEdges > oldConstrainingEdges ) {
         blockedByBoundsSoundClip.play();
         this.voicingSpeakResponse( {
           contextResponse: vertexDescriber.getBlockedByEdgeResponse()

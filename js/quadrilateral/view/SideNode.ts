@@ -26,7 +26,6 @@ import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
 import release_mp3 from '../../../../tambo/sounds/release_mp3.js';
-import boundaryReached_mp3 from '../../../../tambo/sounds/boundaryReached_mp3.js';
 import quadShapeCollision_mp3 from '../../../sounds/quadShapeCollision_mp3.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import SideTicksNode from './SideTicksNode.js';
@@ -347,21 +346,6 @@ class SideNode extends Voicing( Path ) {
     side.isPressedProperty.lazyLink( isPressed => {
       if ( isPressed ) {
         pressedSoundPlayer.play();
-      }
-    } );
-
-    // sound - when the Vertex becomes blocked because of an intersection with model bounds, play a unique sound
-    // TODO: Copy/paste with VertexNode, maybe a superclass for this, with the same Properties watching collision?
-    const blockedSoundPlayer = new SoundClip( boundaryReached_mp3, {
-      initialOutputLevel: 1.0
-    } );
-    soundManager.addSoundGenerator( blockedSoundPlayer );
-    side.movementBlockedByBoundsProperty.lazyLink( blocked => {
-      if ( blocked ) {
-        blockedSoundPlayer.play();
-        this.voicingSpeakResponse( {
-          contextResponse: sideDescriber.getBlockedByEdgeResponse()
-        } );
       }
     } );
 
