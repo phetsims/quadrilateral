@@ -74,8 +74,9 @@ class QuadrilateralSoundOptionsNode extends PreferencesPanelSection {
 
     // layout
     soundDesignDescriptionText.leftTop = soundDesignLabelText.leftBottom.plusXY( 0, 5 );
-    soundDesignRadioButtonGroup.leftTop = soundDesignDescriptionText.leftBottom.plusXY( 15, 5 );
-    tracksPlayForeverCheckbox.leftTop = soundDesignRadioButtonGroup.leftBottom.plusXY( 0, 8 );
+    soundDesignRadioButtonGroup.leftTop = soundDesignDescriptionText.leftBottom.plusXY( PreferencesDialog.CONTENT_INDENTATION_SPACING, 5 );
+    tracksPlayForeverCheckbox.left = soundDesignLabelText.left;
+    tracksPlayForeverCheckbox.top = soundDesignRadioButtonGroup.bottom + PreferencesDialog.CONTENT_SPACING;
 
     this.disposeQuadrilateralSoundOptionsNode = () => {
       soundDesignRadioButtonGroup.dispose();
