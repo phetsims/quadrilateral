@@ -357,6 +357,8 @@ class QuadrilateralModel {
     // the next frame for these to be set after a reset.
     this.quadrilateralShapeModel.updateOrderDependentProperties();
 
+    this.lockToMinorIntervalsProperty.reset();
+
     // reset visibility Properties
     this.markersVisibleProperty.reset();
     this.vertexLabelsVisibleProperty.reset();
