@@ -659,6 +659,20 @@ type StringsType = {
       'moveShapeDescriptionStringProperty': LinkableProperty<string>;
       'smallerStepsDescription': string;
       'smallerStepsDescriptionStringProperty': LinkableProperty<string>;
+    };
+    'preferencesDialog': {
+      'soundDesignRadioButtons': {
+        'layeredContextResponse': string;
+        'layeredContextResponseStringProperty': LinkableProperty<string>;
+        'emphasisContextResponse': string;
+        'emphasisContextResponseStringProperty': LinkableProperty<string>;
+      };
+      'tracksPlayForeverCheckbox': {
+        'checkedContextResponse': string;
+        'checkedContextResponseStringProperty': LinkableProperty<string>;
+        'uncheckedContextResponse': string;
+        'uncheckedContextResponseStringProperty': LinkableProperty<string>;
+      }
     }
   }
 };

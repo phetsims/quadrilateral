@@ -949,6 +949,24 @@
       "smallerStepsDescription": {
         "value": "To move in smaller steps add Shift key to movement keys or mouse."
       }
+    },
+    "preferencesDialog": {
+      "soundDesignRadioButtons": {
+        "layeredContextResponse": {
+          "value": "Shape sounds increase and decrease with shape changes."
+        },
+        "emphasisContextResponse": {
+          "value": "Shape sounds different for each shape."
+        }
+      },
+      "tracksPlayForeverCheckbox": {
+        "checkedContextResponse": {
+          "value": "Playing shape sounds forever."
+        },
+        "uncheckedContextResponse": {
+          "value": "Playing shape sounds during active transformations."
+        }
+      }
     }
   }
 }

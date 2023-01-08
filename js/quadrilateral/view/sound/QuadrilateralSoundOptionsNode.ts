@@ -27,6 +27,8 @@ const shapeSoundsOptionsDescriptionString = QuadrilateralStrings.preferencesDial
 const preferencesDialogLayerSoundDesignDescriptionString = QuadrilateralStrings.preferencesDialog.layerSoundDesignDescription;
 const preferencesDialogIndependentSoundDesignDescriptionString = QuadrilateralStrings.preferencesDialog.independentSoundDesignDescription;
 const preferencesDialogPlaySoundsForeverString = QuadrilateralStrings.preferencesDialog.playSoundsForever;
+const tracksPlayForeverCheckedContextResponseString = QuadrilateralStrings.a11y.preferencesDialog.tracksPlayForeverCheckbox.checkedContextResponse;
+const tracksPlayForeverUncheckedContextResponseString = QuadrilateralStrings.a11y.preferencesDialog.tracksPlayForeverCheckbox.uncheckedContextResponse;
 
 // Extending a PreferencesPanelSection will by default indent this section under the "Sounds" content in the Preferences
 // dialog
@@ -44,12 +46,18 @@ class QuadrilateralSoundOptionsNode extends PreferencesPanelSection {
       {
         value: SoundDesign.TRACKS_BUILD_UP_SIMPLE,
         createNode: () => new Text( preferencesDialogLayerSoundDesignDescriptionString, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
-        tandemName: `tracksBuildUpSimple${AquaRadioButton.TANDEM_NAME_SUFFIX}`
+        tandemName: `tracksBuildUpSimple${AquaRadioButton.TANDEM_NAME_SUFFIX}`,
+        options: {
+          voicingNameResponse: preferencesDialogLayerSoundDesignDescriptionString
+        }
       },
       {
         value: SoundDesign.TRACKS_VOLUME_EMPHASIS,
         createNode: () => new Text( preferencesDialogIndependentSoundDesignDescriptionString, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
-        tandemName: `tracksVolume${AquaRadioButton.TANDEM_NAME_SUFFIX}`
+        tandemName: `tracksVolume${AquaRadioButton.TANDEM_NAME_SUFFIX}`,
+        options: {
+          voicingNameResponse: preferencesDialogIndependentSoundDesignDescriptionString
+        }
       }
     ], {
       spacing: 4,
@@ -61,7 +69,12 @@ class QuadrilateralSoundOptionsNode extends PreferencesPanelSection {
 
     const tracksPlayForeverLabel = new Text( preferencesDialogPlaySoundsForeverString, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS );
     const tracksPlayForeverCheckbox = new Checkbox( model.tracksPlayForeverProperty, tracksPlayForeverLabel, {
-      tandem: tandem.createTandem( 'tracksPlayForeverCheckbox' )
+      tandem: tandem.createTandem( 'tracksPlayForeverCheckbox' ),
+
+      // voicing
+      voicingNameResponse: preferencesDialogPlaySoundsForeverString,
+      checkedContextResponse: tracksPlayForeverCheckedContextResponseString,
+      uncheckedContextResponse: tracksPlayForeverUncheckedContextResponseString
     } );
 
     const content = new Node( {
