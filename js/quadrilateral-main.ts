@@ -33,15 +33,15 @@ const inputPreferencesOptions = QuadrilateralQueryParameters.deviceConnection ? 
 
 const simOptions: SimOptions = {
 
-  //TODO fill in credits, all of these fields are optional, see joist.CreditsNode
   credits: {
-    leadDesign: '',
-    softwareDevelopment: '',
-    team: '',
-    qualityAssurance: '',
-    graphicArts: '',
-    soundDesign: '',
-    thanks: ''
+    softwareDevelopment: 'Jesse Greenberg',
+    team: 'Brett Fiedler, Emily B. Moore, Taliesin Smith',
+    contributors: 'Dor Abrahamson, Sofia Tancredi, and the Embodied Design Research Lab (UC Berkeley), ' +
+                  'Scott Lambert, Jenna Gorlewicz, and the CHROME Lab (St. Louis University)',
+    soundDesign: 'Ashton Morris',
+
+    //TODO fill in credits with QA team
+    qualityAssurance: ''
   },
 
   // preferences configuration with defaults from package.json
