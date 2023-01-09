@@ -651,10 +651,10 @@ type StringsType = {
       }
     };
     'keyboardHelpDialog': {
-      'checkShapeDescription': string;
-      'checkShapeDescriptionStringProperty': LinkableProperty<string>;
-      'resetShapeDescription': string;
-      'resetShapeDescriptionStringProperty': LinkableProperty<string>;
+      'checkShapeDescriptionPattern': string;
+      'checkShapeDescriptionPatternStringProperty': LinkableProperty<string>;
+      'resetShapeDescriptionPattern': string;
+      'resetShapeDescriptionPatternStringProperty': LinkableProperty<string>;
       'moveShapeDescription': string;
       'moveShapeDescriptionStringProperty': LinkableProperty<string>;
       'smallerStepsDescription': string;

@@ -7,6 +7,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import KeyboardHelpIconFactory from '../../../../scenery-phet/js/keyboard/help/KeyboardHelpIconFactory.js';
 import KeyboardHelpSection from '../../../../scenery-phet/js/keyboard/help/KeyboardHelpSection.js';
 import KeyboardHelpSectionRow from '../../../../scenery-phet/js/keyboard/help/KeyboardHelpSectionRow.js';
@@ -20,8 +21,8 @@ import QuadrilateralKeyboardHelpContent from './QuadrilateralKeyboardHelpContent
 // Voicing is NOT translatable and will never be. This content is invisible in non-english locales and when Voicing
 // is not supported.
 const checkShapeWithVoicingString = 'With Voicing enabled Check Current Shape';
-const checkShapeDescriptionString = QuadrilateralStrings.a11y.keyboardHelpDialog.checkShapeDescription;
-const resetShapeDescriptionString = QuadrilateralStrings.a11y.keyboardHelpDialog.resetShapeDescription;
+const checkShapeDescriptionString = QuadrilateralStrings.a11y.keyboardHelpDialog.checkShapeDescriptionPattern;
+const resetShapeDescriptionString = QuadrilateralStrings.a11y.keyboardHelpDialog.resetShapeDescriptionPattern;
 
 class ShapeShortcutsHelpSection extends KeyboardHelpSection {
   public constructor() {
@@ -33,7 +34,9 @@ class ShapeShortcutsHelpSection extends KeyboardHelpSection {
         labelOptions: {
           lineWrap: QuadrilateralKeyboardHelpContent.LABEL_LINE_WRAP
         },
-        labelInnerContent: checkShapeDescriptionString
+        labelInnerContent: StringUtils.fillIn( checkShapeDescriptionString, {
+          altKey: TextKeyNode.getAltKeyString()
+        } )
       }
     );
 
@@ -48,7 +51,9 @@ class ShapeShortcutsHelpSection extends KeyboardHelpSection {
         ]
       ),
       {
-        labelInnerContent: resetShapeDescriptionString
+        labelInnerContent: StringUtils.fillIn( resetShapeDescriptionString, {
+          altKey: TextKeyNode.getAltKeyString()
+        } )
       }
     );
 
