@@ -199,6 +199,7 @@ class QuadrilateralNode extends Voicing( Node ) {
 
     // TODO: A workaround for https://github.com/phetsims/quadrilateral/issues/311. When the window loses focus
     // the shift key gets "stuck" down. We need to handle this generally in scenery.
+    // See https://github.com/phetsims/scenery/issues/1516
     window.addEventListener( 'blur', event => {
 
       // no longer pressed locking until next press
