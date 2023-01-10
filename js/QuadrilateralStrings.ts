@@ -68,6 +68,8 @@ type StringsType = {
     'moveASideOrCornerStringProperty': LinkableProperty<string>;
     'moveASideOrCornerInSmallerSteps': string;
     'moveASideOrCornerInSmallerStepsStringProperty': LinkableProperty<string>;
+    'mouse': string;
+    'mouseStringProperty': LinkableProperty<string>;
     'shapeShortcuts': string;
     'shapeShortcutsStringProperty': LinkableProperty<string>;
     'resetShape': string;
