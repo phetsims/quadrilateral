@@ -20,6 +20,7 @@ import AquaRadioButtonGroup from '../../../../../sun/js/AquaRadioButtonGroup.js'
 import PreferencesPanelSection from '../../../../../joist/js/preferences/PreferencesPanelSection.js';
 import AquaRadioButton from '../../../../../sun/js/AquaRadioButton.js';
 import QuadrilateralStrings from '../../../QuadrilateralStrings.js';
+import soundManager from '../../../../../tambo/js/soundManager.js';
 
 // constants
 const shapeSoundsOptionsString = QuadrilateralStrings.preferencesDialog.shapeSoundOptions;
@@ -90,6 +91,13 @@ class QuadrilateralSoundOptionsNode extends PreferencesPanelSection {
     soundDesignRadioButtonGroup.leftTop = soundDesignDescriptionText.leftBottom.plusXY( PreferencesDialog.CONTENT_INDENTATION_SPACING, 5 );
     tracksPlayForeverCheckbox.left = soundDesignLabelText.left;
     tracksPlayForeverCheckbox.top = soundDesignRadioButtonGroup.bottom + PreferencesDialog.CONTENT_SPACING;
+
+    // The shape sound options should only be available when sounds are enabled. joist will disable all audio
+    // options when Audio Features are disabled so we toggle visibility instead of enabled so we don't get compounding
+    // transparency when both sounds and audio are disabled.
+    soundManager.enabledProperty.link( enabled => {
+      this.visible = enabled;
+    } );
 
     this.disposeQuadrilateralSoundOptionsNode = () => {
       soundDesignRadioButtonGroup.dispose();
