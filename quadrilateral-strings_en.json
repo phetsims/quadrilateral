@@ -938,10 +938,10 @@
     },
     "keyboardHelpDialog": {
       "checkShapeDescriptionPattern": {
-        "value": "With Voicing enabled Check Current Shape with {{altKey}} plus C."
+        "value": "With Voicing enabled Check Current Shape with {{altOrOption}} plus C."
       },
       "resetShapeDescriptionPattern": {
-        "value": "Reset Shape with {{altKey}} plus Shift plus R."
+        "value": "Reset Shape with {{altOrOption}} plus Shift plus R."
       },
       "moveShapeDescription": {
         "value": "Move a corner or side up, left, down, or right with Arrow keys or with letter keys W, A, S, or D."

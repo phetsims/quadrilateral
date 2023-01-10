@@ -35,7 +35,7 @@ class ShapeShortcutsHelpSection extends KeyboardHelpSection {
           lineWrap: QuadrilateralKeyboardHelpContent.LABEL_LINE_WRAP
         },
         labelInnerContent: StringUtils.fillIn( checkShapeDescriptionString, {
-          altKey: TextKeyNode.getAltKeyString()
+          altOrOption: TextKeyNode.getAltKeyString()
         } )
       }
     );
@@ -52,7 +52,7 @@ class ShapeShortcutsHelpSection extends KeyboardHelpSection {
       ),
       {
         labelInnerContent: StringUtils.fillIn( resetShapeDescriptionString, {
-          altKey: TextKeyNode.getAltKeyString()
+          altOrOption: TextKeyNode.getAltKeyString()
         } )
       }
     );
