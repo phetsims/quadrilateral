@@ -38,7 +38,8 @@ class MoveShapeHelpSection extends KeyboardHelpSection {
         KeyboardHelpIconFactory.shiftPlusIcon( KeyboardHelpIconFactory.arrowKeysRowIcon() ),
         KeyboardHelpIconFactory.shiftPlusIcon( KeyboardHelpIconFactory.wasdRowIcon() ),
         KeyboardHelpIconFactory.shiftPlusIcon( new Text( QuadrilateralStrings.keyboardHelpDialog.mouse, {
-          font: KeyboardHelpSectionRow.LABEL_FONT
+          font: KeyboardHelpSectionRow.LABEL_FONT,
+          maxWidth: 100 // by inspection
         } ) )
       ], {
         labelOptions: {
