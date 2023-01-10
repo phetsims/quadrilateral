@@ -45,7 +45,7 @@ class ShapeShortcutsHelpSection extends KeyboardHelpSection {
       QuadrilateralStrings.keyboardHelpDialog.resetShape,
       KeyboardHelpIconFactory.iconPlusIconRow(
         [
-          TextKeyNode.alt(),
+          TextKeyNode.altOrOption(),
           TextKeyNode.shift(),
           new LetterKeyNode( 'R' )
         ]
