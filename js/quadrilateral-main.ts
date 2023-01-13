@@ -55,7 +55,7 @@ const simOptions: SimOptions = {
     audioOptions: {
       customPreferences: [
         {
-          createContent: tandem => new Node()
+          createContent: () => new Node()
         },
         {
           createContent: tandem => new QuadrilateralAudioPreferencesNode( preferencesModel, tandem.createTandem( 'audioPreferences' ) )
