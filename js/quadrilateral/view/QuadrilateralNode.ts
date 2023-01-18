@@ -167,7 +167,7 @@ class QuadrilateralNode extends Voicing( Node ) {
     // listeners - When the shift key is down, Vertices snap to finer intervals
     this.addInputListener( new KeyboardListener( {
       keys: [ 'shift' ],
-      fireOnKeyUp: true,
+      listenerFireTrigger: 'both',
       callback: ( event, listener ) => {
         this.model.minorIntervalsFromGlobalKeyProperty.value = listener.keysDown;
       },
