@@ -9,6 +9,8 @@
  * design.
  *
  * TODO: This will be renamed once a name is decided in https://github.com/phetsims/quadrilateral/issues/248
+ * TODO: After https://github.com/phetsims/quadrilateral/issues/328, a single sound is played, this is no longer a layer
+ * of sound.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -79,9 +81,9 @@ class TracksVolumeEmphasisSoundView extends TracksSoundView {
 
     const shapeNameListener = ( shapeName: NamedQuadrilateral ) => {
 
-      // First, reduce all the sound clips to a background output level
+      // First, reduce all the sound clips output
       this.soundClips.forEach( soundClip => {
-        soundClip.setOutputLevel( 0.15 );
+        soundClip.setOutputLevel( 0 );
       } );
 
       const tracksToEmphasize = NAMED_QUADRILATERAL_TO_HIGH_VOLUME_TRACKS_MAP.get( shapeName );
