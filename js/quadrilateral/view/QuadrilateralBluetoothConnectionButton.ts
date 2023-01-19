@@ -16,15 +16,16 @@ import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import stepTimer from '../../../../axon/js/stepTimer.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 
-// The bluetooth options for the requestDevice call.
+// The bluetooth options for the requestDevice call. There must be at least one entry in filters for the browser
+// to make a request.
 const REQUEST_DEVICE_OPTIONS = {
-  // filters: [
-  //   { services: [ 'heart_rate' ] }, // TODO: Is this right?
-  //   { services: [ 0x1802, 0x1803 ] },
-  //   { services: [ '19b10010-e8f2-537e-4f6c-d104768a1214' ] },
-  //   { name: 'Arduino' }
-  // ],
-  // optionalServices: [ 'battery_service' ] // TODO: Is this right?
+  filters: [
+    { services: [ 'heart_rate' ] }, // TODO: Is this right?
+    { services: [ 0x1802, 0x1803 ] },
+    { services: [ '19b10010-e8f2-537e-4f6c-d104768a1214' ] },
+    { name: 'Arduino' }
+  ],
+  optionalServices: [ 'battery_service' ] // TODO: Is this right?
 };
 
 class QuadrilateralBluetoothConnectionButton extends TextPushButton {
