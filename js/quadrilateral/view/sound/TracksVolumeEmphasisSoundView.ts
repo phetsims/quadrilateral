@@ -10,7 +10,7 @@
  *
  * TODO: This will be renamed once a name is decided in https://github.com/phetsims/quadrilateral/issues/248
  * TODO: After https://github.com/phetsims/quadrilateral/issues/328, a single sound is played, this is no longer a layer
- * of sound.
+ * of sound. Rename this design if #328 changes are kept.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
