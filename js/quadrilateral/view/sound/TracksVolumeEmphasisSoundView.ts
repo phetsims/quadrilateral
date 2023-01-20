@@ -1,4 +1,4 @@
-// Copyright 2022, University of Colorado Boulder
+// Copyright 2022-2023, University of Colorado Boulder
 
 /**
  * One of the "Tracks" sound designs. In this design, each track is always playing. Depending on the named shape
