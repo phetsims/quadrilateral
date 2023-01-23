@@ -40,14 +40,14 @@ const DEFAULT_BACKGROUND_OUTPUT_LEVEL = 0.15;
 const VOLUME_EMPHASIS_TRACKS = [
   quadBeatTracksBuildingBaseRhythm_mp3,
   quadBeatTracksBuildingBuildingTracks000_mp3,
-  quadBeatTracksBuildingBuildingTracks005_mp3, // requested for KITE on 8/19/22 instead of buildingTracks001
+  quadBeatTracksBuildingBuildingTracks005_mp3,
   quadBeatTracksBuildingBuildingTracks002_mp3,
   quadBeatTracksBuildingBuildingTracks003_mp3,
   quadBeatTracksBuildingBuildingTracks004_mp3,
   quadSimpleBuildingTracks004Trapezoid_mp3,
   quadBeatTracksBuildingBuildingTracks006_mp3,
   quadBaseBeatSimplerConcaveQuadrilateralJustRhythmV2_mp3,
-  quadSimpleBuildingTracks006_mp3 // requested for DART on 8/18/22
+  quadSimpleBuildingTracks006_mp3
 ];
 
 // Each NamedQuadrilateral is assigned zero or more of the above tracks to play at a louder output level when the shape
@@ -75,12 +75,12 @@ class TracksVolumeEmphasisSoundView extends TracksSoundView {
   //https://github.com/phetsims/quadrilateral/issues/175#issuecomment-1400645437 for a list of these values.
   private readonly indexToBackgroundOutputLevelMap = new Map<number, number>( [
     [ 0, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
-    [ 1, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
+    [ 1, DEFAULT_BACKGROUND_OUTPUT_LEVEL * 2 ],
     [ 2, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
     [ 3, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
     [ 4, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
-    [ 5, DEFAULT_BACKGROUND_OUTPUT_LEVEL / 2 ],
-    [ 6, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
+    [ 5, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
+    [ 6, DEFAULT_BACKGROUND_OUTPUT_LEVEL / 2 ],
     [ 7, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
     [ 8, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
     [ 9, DEFAULT_BACKGROUND_OUTPUT_LEVEL ]
