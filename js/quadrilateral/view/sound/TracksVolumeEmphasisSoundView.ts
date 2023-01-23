@@ -24,9 +24,9 @@ import quadBeatTracksBuildingBuildingTracks003_mp3 from '../../../../sounds/quad
 import quadBeatTracksBuildingBuildingTracks004_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks004_mp3.js';
 import quadBeatTracksBuildingBuildingTracks005_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks005_mp3.js';
 import quadBeatTracksBuildingBuildingTracks006_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks006_mp3.js';
-import quadBaseBeatSimple_mp3 from '../../../../sounds/quadBaseBeatSimple_mp3.js';
-import quadMelodyTracks001_mp3 from '../../../../sounds/quadMelodyTracks001_mp3.js';
-import quadMelodyTracks004_mp3 from '../../../../sounds/quadMelodyTracks004_mp3.js';
+import quadSimpleBuildingTracks004Trapezoid_mp3 from '../../../../sounds/quadSimpleBuildingTracks004Trapezoid_mp3.js';
+import quadBaseBeatSimplerConcaveQuadrilateralJustRhythmV2_mp3 from '../../../../sounds/quadBaseBeatSimplerConcaveQuadrilateralJustRhythmV2_mp3.js';
+import quadSimpleBuildingTracks006_mp3 from '../../../../sounds/quadSimpleBuildingTracks006_mp3.js';
 import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
 import NamedQuadrilateral from '../../model/NamedQuadrilateral.js';
@@ -39,14 +39,14 @@ import QuadrilateralConstants from '../../../common/QuadrilateralConstants.js';
 const VOLUME_EMPHASIS_TRACKS = [
   quadBeatTracksBuildingBaseRhythm_mp3,
   quadBeatTracksBuildingBuildingTracks000_mp3,
-  quadMelodyTracks004_mp3, // requested for KITE on 8/19/22 instead of buildingTracks001
+  quadBeatTracksBuildingBuildingTracks005_mp3, // requested for KITE on 8/19/22 instead of buildingTracks001
   quadBeatTracksBuildingBuildingTracks002_mp3,
   quadBeatTracksBuildingBuildingTracks003_mp3,
   quadBeatTracksBuildingBuildingTracks004_mp3,
-  quadBeatTracksBuildingBuildingTracks005_mp3,
+  quadSimpleBuildingTracks004Trapezoid_mp3,
   quadBeatTracksBuildingBuildingTracks006_mp3,
-  quadBaseBeatSimple_mp3,
-  quadMelodyTracks001_mp3 // requested for DART on 8/18/22
+  quadBaseBeatSimplerConcaveQuadrilateralJustRhythmV2_mp3,
+  quadSimpleBuildingTracks006_mp3 // requested for DART on 8/18/22
 ];
 
 // Each NamedQuadrilateral is assigned zero or more of the above tracks to play at a louder output level when the shape
@@ -83,7 +83,7 @@ class TracksVolumeEmphasisSoundView extends TracksSoundView {
 
       // First, reduce all the sound clips output
       this.soundClips.forEach( soundClip => {
-        soundClip.setOutputLevel( 0 );
+        soundClip.setOutputLevel( 0.15 );
       } );
 
       const tracksToEmphasize = NAMED_QUADRILATERAL_TO_HIGH_VOLUME_TRACKS_MAP.get( shapeName );
