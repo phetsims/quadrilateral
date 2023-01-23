@@ -33,6 +33,9 @@ import NamedQuadrilateral from '../../model/NamedQuadrilateral.js';
 import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
 import Multilink from '../../../../../axon/js/Multilink.js';
 
+// default output level for sound clips that are playing in the background behind the louder emphasized sound
+const DEFAULT_BACKGROUND_OUTPUT_LEVEL = 0.15;
+
 // All the sounds played in this sound design
 const VOLUME_EMPHASIS_TRACKS = [
   quadBeatTracksBuildingBaseRhythm_mp3,
@@ -67,6 +70,22 @@ const NAMED_QUADRILATERAL_TO_HIGH_VOLUME_TRACKS_MAP = new Map( [
 class TracksVolumeEmphasisSoundView extends TracksSoundView {
   private readonly disposeTracksVolumeEmphasisSoundView: () => void;
 
+  // The requested output levels for each SoundClip as shapes are detected. All of these are playing at once at the
+  // provided output level while the "high volume tracks" play louder on top of them. See
+  //https://github.com/phetsims/quadrilateral/issues/175#issuecomment-1400645437 for a list of these values.
+  private readonly indexToBackgroundOutputLevelMap = new Map<number, number>( [
+    [ 0, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
+    [ 1, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
+    [ 2, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
+    [ 3, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
+    [ 4, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
+    [ 5, DEFAULT_BACKGROUND_OUTPUT_LEVEL / 2 ],
+    [ 6, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
+    [ 7, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
+    [ 8, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
+    [ 9, DEFAULT_BACKGROUND_OUTPUT_LEVEL ]
+  ] );
+
   public constructor( shapeModel: QuadrilateralShapeModel, shapeSoundEnabledProperty: TReadOnlyProperty<boolean>, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
     super( shapeModel, shapeSoundEnabledProperty, resetNotInProgressProperty, soundOptionsModel, VOLUME_EMPHASIS_TRACKS );
 
@@ -85,11 +104,12 @@ class TracksVolumeEmphasisSoundView extends TracksSoundView {
 
     const shapeNameListener = ( shapeName: NamedQuadrilateral ) => {
 
-      // First, reduce all the sound clips output
-      this.soundClips.forEach( soundClip => {
-        soundClip.setOutputLevel( 0.15 );
+      // First, reduce all the sound clips to their background output level
+      this.soundClips.forEach( ( soundClip, index ) => {
+        soundClip.setOutputLevel( this.indexToBackgroundOutputLevelMap.get( index )! );
       } );
 
+      // play the emphasized clips at their higher volume
       const tracksToEmphasize = NAMED_QUADRILATERAL_TO_HIGH_VOLUME_TRACKS_MAP.get( shapeName );
       assert && assert( tracksToEmphasize, 'NamedQuadrilateral does not have a TracksVolumeEmphasisSoundView design' );
       tracksToEmphasize!.forEach( index => {
