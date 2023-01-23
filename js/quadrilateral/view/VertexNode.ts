@@ -218,7 +218,7 @@ class VertexNode extends Voicing( Circle ) {
     // no behavioral relevance to the release. Uses a custom "higher pitch" sound to distinguish it from
     // sides.
     const pressedSoundPlayer = new SoundClip( grabHighPitch_mp3, {
-      initialOutputLevel: 0.8
+      initialOutputLevel: 0.6
     } );
     soundManager.addSoundGenerator( pressedSoundPlayer );
     vertex.isPressedProperty.lazyLink( isPressed => {
