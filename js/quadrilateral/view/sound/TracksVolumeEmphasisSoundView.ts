@@ -32,8 +32,6 @@ import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
 import NamedQuadrilateral from '../../model/NamedQuadrilateral.js';
 import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
 import Multilink from '../../../../../axon/js/Multilink.js';
-import NumberProperty from '../../../../../axon/js/NumberProperty.js';
-import QuadrilateralConstants from '../../../common/QuadrilateralConstants.js';
 
 // All the sounds played in this sound design
 const VOLUME_EMPHASIS_TRACKS = [
@@ -72,12 +70,18 @@ class TracksVolumeEmphasisSoundView extends TracksSoundView {
   public constructor( shapeModel: QuadrilateralShapeModel, shapeSoundEnabledProperty: TReadOnlyProperty<boolean>, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
     super( shapeModel, shapeSoundEnabledProperty, resetNotInProgressProperty, soundOptionsModel, VOLUME_EMPHASIS_TRACKS );
 
-    // For each SoundClip, set up a Property that will control its output level. To be used by the sim sound board,
-    // only for development. TODO This feature should be removed after design is complete.
-    this.soundClips.forEach( ( soundClip, i ) => {
-      const outputLevelProperty = new NumberProperty( 1, { range: QuadrilateralConstants.OUTPUT_LEVEL_RANGE } );
-      this.indexToOutputLevelPropertyMap.set( i, outputLevelProperty );
-    } );
+    // desired output levels for each sound (as requested by design, using manual edit of the gain)
+    // See https://github.com/phetsims/quadrilateral/issues/175#issuecomment-1400645437
+    this.setIndexOutputLevel( 0, 0.75 );
+    this.setIndexOutputLevel( 1, 1 );
+    this.setIndexOutputLevel( 2, 0.8 );
+    this.setIndexOutputLevel( 3, 1 );
+    this.setIndexOutputLevel( 4, 1 );
+    this.setIndexOutputLevel( 5, 1 );
+    this.setIndexOutputLevel( 6, 0.5 );
+    this.setIndexOutputLevel( 7, 1 );
+    this.setIndexOutputLevel( 8, 1 );
+    this.setIndexOutputLevel( 9, 1 );
 
     const shapeNameListener = ( shapeName: NamedQuadrilateral ) => {
 

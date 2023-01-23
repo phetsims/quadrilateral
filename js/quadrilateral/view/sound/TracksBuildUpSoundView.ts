@@ -28,8 +28,6 @@ import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
 import NamedQuadrilateral from '../../model/NamedQuadrilateral.js';
 import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
 import Multilink from '../../../../../axon/js/Multilink.js';
-import NumberProperty from '../../../../../axon/js/NumberProperty.js';
-import QuadrilateralConstants from '../../../common/QuadrilateralConstants.js';
 
 // All the sounds played in this sound design in the "simple" case.
 const BUILD_UP_TRACKS = [
@@ -101,11 +99,6 @@ class TracksBuildUpSoundView extends TracksSoundView {
       shapeModel.shapeNameProperty.unlink( shapeNameListener );
       outputLevelMultilink.dispose();
     };
-  }
-
-  private setIndexOutputLevel( index: number, outputLevel: number ): void {
-    const outputLevelProperty = new NumberProperty( outputLevel, { range: QuadrilateralConstants.OUTPUT_LEVEL_RANGE } );
-    this.indexToOutputLevelPropertyMap.set( index, outputLevelProperty );
   }
 
   public override dispose(): void {

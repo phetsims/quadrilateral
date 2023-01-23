@@ -21,6 +21,7 @@ import SoundClip from '../../../../../tambo/js/sound-generators/SoundClip.js';
 import SoundGenerator from '../../../../../tambo/js/sound-generators/SoundGenerator.js';
 import soundManager from '../../../../../tambo/js/soundManager.js';
 import WrappedAudioBuffer from '../../../../../tambo/js/WrappedAudioBuffer.js';
+import QuadrilateralConstants from '../../../common/QuadrilateralConstants.js';
 import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
@@ -222,6 +223,11 @@ class TracksSoundView extends SoundGenerator {
     } );
 
     super.dispose();
+  }
+
+  protected setIndexOutputLevel( index: number, outputLevel: number ): void {
+    const outputLevelProperty = new NumberProperty( outputLevel, { range: QuadrilateralConstants.OUTPUT_LEVEL_RANGE } );
+    this.indexToOutputLevelPropertyMap.set( index, outputLevelProperty );
   }
 }
 
