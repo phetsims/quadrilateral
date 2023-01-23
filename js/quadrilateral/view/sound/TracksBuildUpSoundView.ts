@@ -77,11 +77,6 @@ class TracksBuildUpSoundView extends TracksSoundView {
     this.setIndexOutputLevel( 6, 0.45 );
     this.setIndexOutputLevel( 7, 0.70 );
 
-    this.soundClips.forEach( ( soundClip, i ) => {
-      const outputLevelProperty = new NumberProperty( 1, { range: QuadrilateralConstants.OUTPUT_LEVEL_RANGE } );
-      this.indexToOutputLevelPropertyMap.set( i, outputLevelProperty );
-    } );
-
     const shapeNameListener = ( shapeName: NamedQuadrilateral ) => {
 
       // First set all output levels back to nothing before we start playing new sounds
