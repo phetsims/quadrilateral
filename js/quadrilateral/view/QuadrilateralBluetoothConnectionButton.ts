@@ -48,7 +48,7 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
 
     // TODO: Handle when device does not support bluetooth with bluetooth.getAvailability.
     // TODO: Handle when browser does not support bluetooth, presumablue !navigator.bluetooth
-    super( 'Search for device', {
+    super( 'Pair Bluetooth Device', {
       textNodeOptions: QuadrilateralConstants.PANEL_LABEL_TEXT_OPTIONS
     } );
 
