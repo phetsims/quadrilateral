@@ -16,7 +16,6 @@ import { Text } from '../../../../scenery/js/imports.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralNode from './QuadrilateralNode.js';
 import QuadrilateralSoundView from './sound/QuadrilateralSoundView.js';
-import VertexDragAreaNode from './VertexDragAreaNode.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 import Dialog from '../../../../sun/js/Dialog.js';
@@ -177,13 +176,6 @@ class QuadrilateralScreenView extends ScreenView {
     this.addChild( diagonalGuidesNode );
     this.addChild( this.quadrilateralNode );
     this.addChild( interactionCueNode );
-
-    if ( QuadrilateralQueryParameters.showDragAreas ) {
-      this.addChild( new VertexDragAreaNode( shapeModel.vertexA, [ shapeModel.leftSide, shapeModel.topSide ], modelViewTransform ) );
-      this.addChild( new VertexDragAreaNode( shapeModel.vertexB, [ shapeModel.topSide, shapeModel.rightSide ], modelViewTransform ) );
-      this.addChild( new VertexDragAreaNode( shapeModel.vertexC, [ shapeModel.rightSide, shapeModel.bottomSide ], modelViewTransform ) );
-      this.addChild( new VertexDragAreaNode( shapeModel.vertexD, [ shapeModel.bottomSide, shapeModel.leftSide ], modelViewTransform ) );
-    }
 
     // A panel that displays model values, useful for debugging, useful for debugging
     const debugValuesPanel = new QuadrilateralModelValuePanel( model, {

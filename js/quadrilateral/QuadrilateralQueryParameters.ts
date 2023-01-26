@@ -13,10 +13,6 @@ import { SoundDesign } from './model/QuadrilateralSoundOptionsModel.js';
 
 const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
 
-  // If provided, a graphic showing the area available for the vertex that is being dragged
-  // is drawn on screen for debugging and demonstration purposes.
-  showDragAreas: { type: 'flag' },
-
   // The tolerance interval for the angle calculations which determine when sides opposite sides are parallel.
   // This is in radians, so it is limited between 0 and 2 PI. If maximum value, the quadrilateral will always
   // be a parallelogram.
