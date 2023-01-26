@@ -20,7 +20,7 @@ import QuadrilateralKeyboardHelpContent from './QuadrilateralKeyboardHelpContent
 
 // Voicing is NOT translatable and will never be. This content is invisible in non-english locales and when Voicing
 // is not supported.
-const checkShapeWithVoicingString = 'With Voicing enabled, check shape name or properties.';
+const checkShapeWithVoicingString = 'With Voicing enabled, check shape name or properties';
 const checkShapeDescriptionString = QuadrilateralStrings.a11y.keyboardHelpDialog.checkShapeDescriptionPattern;
 const resetShapeDescriptionString = QuadrilateralStrings.a11y.keyboardHelpDialog.resetShapeDescriptionPattern;
 
