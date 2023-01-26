@@ -235,7 +235,7 @@ class QuadrilateralScreenView extends ScreenView {
         baseColor: PhetColorScheme.BUTTON_YELLOW,
 
         // position is relative to the ResetAllButton for now
-        leftBottom: this.resetAllButton.leftTop.minusXY( 0, 15 )
+        leftBottom: visibilityControls.leftTop.minusXY( 0, 45 )
       } );
 
       this.addChild( calibrationButton );
