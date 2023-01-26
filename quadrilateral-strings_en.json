@@ -941,7 +941,7 @@
     },
     "keyboardHelpDialog": {
       "checkShapeDescriptionPattern": {
-        "value": "With Voicing enabled Check Current Shape with {{altOrOption}} plus C."
+        "value": "With Voicing enabled, check shape name or properties with {{altOrOption}} plus C."
       },
       "resetShapeDescriptionPattern": {
         "value": "Reset Shape with {{altOrOption}} plus Shift plus R."
