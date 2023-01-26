@@ -15,6 +15,7 @@ import Emitter from '../../../../axon/js/Emitter.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import stepTimer from '../../../../axon/js/stepTimer.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
+import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 
 // The bluetooth options for the requestDevice call. There must be at least one entry in filters for the browser
 // to make a request.
@@ -49,7 +50,8 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
     // TODO: Handle when device does not support bluetooth with bluetooth.getAvailability.
     // TODO: Handle when browser does not support bluetooth, presumablue !navigator.bluetooth
     super( 'Pair Bluetooth Device', {
-      textNodeOptions: QuadrilateralConstants.PANEL_LABEL_TEXT_OPTIONS
+      textNodeOptions: QuadrilateralConstants.SCREEN_TEXT_OPTIONS,
+      baseColor: QuadrilateralColors.screenViewButtonColorProperty
     } );
 
     this.model = quadrilateralModel;

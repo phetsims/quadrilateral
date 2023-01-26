@@ -100,7 +100,7 @@ const QuadrilateralColors = {
     default: new Color( 'rgb(247, 151, 34)' )
   } ),
 
-  lockToSmallStepsButtonColorProperty: new ProfileColorProperty( quadrilateral, 'lockToSmallStepsButtonColor', {
+  screenViewButtonColorProperty: new ProfileColorProperty( quadrilateral, 'screenViewButtonColor', {
     default: 'lightgrey'
   } ),
 

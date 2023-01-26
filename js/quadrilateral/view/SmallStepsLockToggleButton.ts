@@ -35,7 +35,7 @@ class SmallStepsLockToggleButton extends RectangularToggleButton<boolean> {
 
     const options = optionize<SmallStepsLockToggleButtonOptions, SelfOptions, RectangularToggleButtonOptions>()( {
       content: buttonIcon,
-      baseColor: QuadrilateralColors.lockToSmallStepsButtonColorProperty,
+      baseColor: QuadrilateralColors.screenViewButtonColorProperty,
 
       // voicing
       voicingHintResponse: hintResponseString

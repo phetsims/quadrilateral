@@ -21,7 +21,6 @@ import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 import Dialog from '../../../../sun/js/Dialog.js';
 import CalibrationContentNode from './CalibrationContentNode.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
-import PhetColorScheme from '../../../../scenery-phet/js/PhetColorScheme.js';
 import QuadrilateralModelValuePanel from './QuadrilateralModelValuePanel.js';
 import QuadrilateralVisibilityControls from './QuadrilateralVisibilityControls.js';
 import QuadrilateralGridNode from './QuadrilateralGridNode.js';
@@ -39,6 +38,7 @@ import ShapeSoundCheckbox from './ShapeSoundCheckbox.js';
 import Vertex from '../model/Vertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import SmallStepsLockToggleButton from './SmallStepsLockToggleButton.js';
+import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 
 // Defines the units of model space, a 2x2 grid that quadrilateral vertices can move within. It is dilated by
 // half of the vertex width so that model space is large enough for Vertices to perfectly align with the bounds
@@ -232,9 +232,9 @@ class QuadrilateralScreenView extends ScreenView {
         },
 
         textNodeOptions: QuadrilateralConstants.SCREEN_TEXT_OPTIONS,
-        baseColor: PhetColorScheme.BUTTON_YELLOW,
+        baseColor: QuadrilateralColors.screenViewButtonColorProperty,
 
-        // position is relative to the ResetAllButton for now
+        // relative to the visibility checkboxes for now
         leftBottom: visibilityControls.leftTop.minusXY( 0, 45 )
       } );
 
