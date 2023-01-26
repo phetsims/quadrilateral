@@ -118,13 +118,6 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     isValidValue: ( value: number ) => value > 0
   },
 
-  // If present, a button to open a "sound board" dialog will be available to play sounds and example Voicing
-  // strings used in this sim. This may be helpful for interviews if we decide to fake output by playing
-  // sounds that match the user input.
-  soundBoard: {
-    type: 'flag'
-  },
-
   // Sets the initial sound design on startup. Values are the enumeration values of
   // QuadrilateralSoundOptionsModel.SoundDesign as a string. See https://github.com/phetsims/quadrilateral/blob/master/js/quadrilateral/model/QuadrilateralSoundOptionsModel.ts#L37-L53
   soundDesign: {

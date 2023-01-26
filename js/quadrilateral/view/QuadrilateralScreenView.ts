@@ -37,7 +37,6 @@ import QuadrilateralInteractionCueNode from './QuadrilateralInteractionCueNode.j
 import ResetShapeButton from './ResetShapeButton.js';
 import ShapeSoundCheckbox from './ShapeSoundCheckbox.js';
 import Vertex from '../model/Vertex.js';
-import QuadrilateralSoundBoardNode from './sound/QuadrilateralSoundBoardNode.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import SmallStepsLockToggleButton from './SmallStepsLockToggleButton.js';
 
@@ -246,26 +245,6 @@ class QuadrilateralScreenView extends ScreenView {
         connectionPanel.leftBottom = calibrationButton.leftTop.minusXY( 0, 15 );
         this.addChild( connectionPanel );
       }
-    }
-
-    if ( QuadrilateralQueryParameters.soundBoard ) {
-
-      const soundBoardDialog = new Dialog( new QuadrilateralSoundBoardNode( this.quadrilateralSoundView ), {
-        title: new Text( 'Sound Board', QuadrilateralConstants.PANEL_TITLE_TEXT_OPTIONS )
-      } );
-
-      const showSoundBoardButton = new TextPushButton( 'Sound Board', {
-        listener: () => {
-          soundBoardDialog.show();
-        },
-
-        textNodeOptions: QuadrilateralConstants.SCREEN_TEXT_OPTIONS,
-
-        // position is relative to the ResetAllButton for now
-        leftBottom: visibilityControls.leftTop.minusXY( 0, 15 )
-      } );
-
-      this.addChild( showSoundBoardButton );
     }
 
     if ( MediaPipeQueryParameters.cameraInput === 'hands' ) {
