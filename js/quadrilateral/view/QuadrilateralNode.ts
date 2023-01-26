@@ -5,7 +5,7 @@
  */
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import { FocusManager, KeyboardListener, Node, NodeOptions, TPaint, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
+import { KeyboardListener, Node, NodeOptions, TPaint, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import SideNode from './SideNode.js';
@@ -194,24 +194,13 @@ class QuadrilateralNode extends Voicing( Node ) {
           this.voicingUtterance.alert = QuadrilateralDescriber.RESET_SHAPE_RESPONSE_PACKET;
           Voicing.alertUtterance( this.voicingUtterance );
         }
-      }
-    } ) );
-
-    // TODO: A workaround for https://github.com/phetsims/quadrilateral/issues/311. When the window loses focus
-    // the shift key gets "stuck" down. I am not sure if joist should interruptSubtreeInput in this case or if
-    // it is specific to keyboard input or specific to thsi sim.
-    //
-    // See https://github.com/phetsims/scenery/issues/1516
-    FocusManager.windowHasFocusProperty.link( windowHasFocus => {
-      if ( !windowHasFocus ) {
+      },
+      cancel: listener => {
 
         // no longer pressed locking until next press
         this.model.minorIntervalsFromGlobalKeyProperty.value = false;
-
-        // importantly, interrupts the global keyboard listener so that it listens for the next shift press
-        this.interruptSubtreeInput();
       }
-    } );
+    } ) );
 
     this.vertexNodes = [ vertexNode1, vertexNode2, vertexNode3, vertexNode4 ];
     this.sideNodes = [ topSideNode, rightSideNode, bottomSideNode, leftSideNode ];
