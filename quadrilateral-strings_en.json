@@ -950,7 +950,7 @@
         "value": "Move a corner or side up, left, down, or right with Arrow keys or with letter keys W, A, S, or D."
       },
       "smallerStepsDescription": {
-        "value": "To move in smaller steps add Shift key to movement keys or mouse."
+        "value": "Move in smaller steps with Shift plus Arrow keys, or Shift plus letter keys W, A, S, or D, or Shift plus Mouse."
       }
     },
     "preferencesDialog": {
