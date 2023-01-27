@@ -12,7 +12,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import { Text } from '../../../../scenery/js/imports.js';
+import { Node, Text } from '../../../../scenery/js/imports.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralNode from './QuadrilateralNode.js';
 import QuadrilateralSoundView from './sound/QuadrilateralSoundView.js';
@@ -195,6 +195,8 @@ class QuadrilateralScreenView extends ScreenView {
       0
     );
 
+    const deviceConnectionParentNode = new Node();
+    this.addChild( deviceConnectionParentNode );
     if ( QuadrilateralQueryParameters.deviceConnection ) {
 
       // Add a Dialog that will calibrate the device to the simulation (mapping physical data to modelled data).
@@ -238,12 +240,14 @@ class QuadrilateralScreenView extends ScreenView {
         leftBottom: visibilityControls.leftTop.minusXY( 0, 45 )
       } );
 
-      this.addChild( calibrationButton );
+      deviceConnectionParentNode.addChild( calibrationButton );
 
       if ( QuadrilateralQueryParameters.bluetooth ) {
         const connectionPanel = new QuadrilateralBluetoothConnectionButton( model, tandem.createTandem( 'quadrilateralBluetoothConnectionButton' ) );
         connectionPanel.leftBottom = calibrationButton.leftTop.minusXY( 0, 15 );
-        this.addChild( connectionPanel );
+        deviceConnectionParentNode.addChild( connectionPanel );
+
+        deviceConnectionParentNode.pdomOrder = [ connectionPanel, calibrationButton ];
       }
     }
 
@@ -254,7 +258,7 @@ class QuadrilateralScreenView extends ScreenView {
 
     // pdom
     this.pdomPlayAreaNode.pdomOrder = [ this.quadrilateralNode, shapeNameDisplay, resetShapeButton, shapeSoundCheckbox ];
-    this.pdomControlAreaNode.pdomOrder = [ visibilityControls, smallStepsLockToggleButton, this.resetAllButton ];
+    this.pdomControlAreaNode.pdomOrder = [ visibilityControls, smallStepsLockToggleButton, this.resetAllButton, deviceConnectionParentNode ];
     this.setScreenSummaryContent( new QuadrilateralScreenSummaryContentNode() );
 
     // voicing
