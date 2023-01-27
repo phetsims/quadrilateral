@@ -24,7 +24,7 @@ class MoveShapeHelpSection extends KeyboardHelpSection {
 
     // basic movement
     const basicMovementRow = KeyboardHelpSectionRow.labelWithIcon(
-      QuadrilateralStrings.keyboardHelpDialog.moveASideOrCorner,
+      QuadrilateralStrings.keyboardHelpDialog.moveACornerOrSide,
       KeyboardHelpIconFactory.arrowOrWasdKeysRowIcon(),
       {
         labelInnerContent: moveShapeDescriptionString
@@ -33,7 +33,7 @@ class MoveShapeHelpSection extends KeyboardHelpSection {
 
     // fine-grained movement
     const fineMovementRow = KeyboardHelpSectionRow.labelWithIconList(
-      QuadrilateralStrings.keyboardHelpDialog.moveASideOrCornerInSmallerSteps,
+      QuadrilateralStrings.keyboardHelpDialog.moveInSmallerSteps,
       [
         KeyboardHelpIconFactory.shiftPlusIcon( KeyboardHelpIconFactory.arrowKeysRowIcon() ),
         KeyboardHelpIconFactory.shiftPlusIcon( KeyboardHelpIconFactory.wasdRowIcon() ),
@@ -49,7 +49,7 @@ class MoveShapeHelpSection extends KeyboardHelpSection {
       }
     );
 
-    super( QuadrilateralStrings.keyboardHelpDialog.moveSidesOrCorners, [ basicMovementRow, fineMovementRow ] );
+    super( QuadrilateralStrings.keyboardHelpDialog.moveCornersOrSides, [ basicMovementRow, fineMovementRow ] );
   }
 }
 

@@ -71,13 +71,13 @@
   "gotIt": {
     "value": "Got it."
   },
-  "keyboardHelpDialog.moveSidesOrCorners": {
+  "keyboardHelpDialog.moveCornersOrSides": {
     "value": "Move Corners or Sides"
   },
-  "keyboardHelpDialog.moveASideOrCorner": {
+  "keyboardHelpDialog.moveACornerOrSide": {
     "value": "Move corner or side"
   },
-  "keyboardHelpDialog.moveASideOrCornerInSmallerSteps": {
+  "keyboardHelpDialog.moveInSmallerSteps": {
     "value": "Move in smaller steps"
   },
   "keyboardHelpDialog.mouse": {

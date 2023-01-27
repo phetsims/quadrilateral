@@ -62,12 +62,12 @@ type StringsType = {
   'gotIt': string;
   'gotItStringProperty': LinkableProperty<string>;
   'keyboardHelpDialog': {
-    'moveSidesOrCorners': string;
-    'moveSidesOrCornersStringProperty': LinkableProperty<string>;
-    'moveASideOrCorner': string;
-    'moveASideOrCornerStringProperty': LinkableProperty<string>;
-    'moveASideOrCornerInSmallerSteps': string;
-    'moveASideOrCornerInSmallerStepsStringProperty': LinkableProperty<string>;
+    'moveCornersOrSides': string;
+    'moveCornersOrSidesStringProperty': LinkableProperty<string>;
+    'moveACornerOrSide': string;
+    'moveACornerOrSideStringProperty': LinkableProperty<string>;
+    'moveInSmallerSteps': string;
+    'moveInSmallerStepsStringProperty': LinkableProperty<string>;
     'mouse': string;
     'mouseStringProperty': LinkableProperty<string>;
     'shapeShortcuts': string;
