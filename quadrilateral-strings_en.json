@@ -72,13 +72,13 @@
     "value": "Got it."
   },
   "keyboardHelpDialog.moveSidesOrCorners": {
-    "value": "Move Sides or Corners"
+    "value": "Move Corners or Sides"
   },
   "keyboardHelpDialog.moveASideOrCorner": {
-    "value": "Move a side or corner"
+    "value": "Move corner or side"
   },
   "keyboardHelpDialog.moveASideOrCornerInSmallerSteps": {
-    "value": "To move in smaller steps add Shift key"
+    "value": "Move in smaller steps"
   },
   "keyboardHelpDialog.mouse": {
     "value": "Mouse"
