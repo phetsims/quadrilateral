@@ -947,7 +947,7 @@
         "value": "Reset Shape with {{altOrOption}} plus Shift plus R."
       },
       "moveShapeDescription": {
-        "value": "Move a corner or side up, left, down, or right with Arrow keys or with letter keys W, A, S, or D."
+        "value": "Move corner or side up, left, down, or right with Arrow keys or with letter keys W, A, S, or D."
       },
       "smallerStepsDescription": {
         "value": "Move in smaller steps with Shift plus Arrow keys, or Shift plus letter keys W, A, S, or D, or Shift plus Mouse."
