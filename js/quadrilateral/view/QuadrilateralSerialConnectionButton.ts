@@ -8,6 +8,10 @@ import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import QuadrilateralSerialMessageController from './QuadrilateralSerialMessageController.js';
 
 /**
+ * A button that will send values representing the model to a parent frame for the "p5 serial connection"
+ * prototype.
+ *
+ * TODO: More documentation for this prototype please.
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
