@@ -3,9 +3,19 @@
 /**
  * A collection of Properties used for prototypes that connect this simulation to tangible devices.
  * While working on this sim, we collaborated with SLU to develop methods of communication between
- * simulation and several physical/tangible devices.
+ * simulation and several physical/tangible devices. This included prototypes using a serial connection,
+ * BLE, custom OpenCV, and Mediapipe to take physical values and manipulate the model.
  *
- * TODO: List issues and references to documentation here.
+ * For more information and notes during prototyping see
+ * https://github.com/phetsims/quadrilateral/issues/52
+ * https://github.com/phetsims/quadrilateral/issues/32
+ * https://github.com/phetsims/quadrilateral/issues/341
+ * https://github.com/phetsims/quadrilateral/issues/20
+ * https://github.com/phetsims/quadrilateral/issues/301
+ *
+ * TODO: What prototypes need to be maintained in the long run? What is being shared publicly on the prototypes page?
+ * See https://github.com/phetsims/quadrilateral/issues/301
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 

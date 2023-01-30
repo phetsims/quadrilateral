@@ -1,7 +1,17 @@
 // Copyright 2023, University of Colorado Boulder
 
 /**
+ * A model with Properties that indicate when certain markers are detected. This code is related to an application
+ * of OpenCV where we detected colored squares (markers) to control the positions of vertices in this simulation.
+ *
+ * The prototype worked by creating a wrapper with the sim running in an iframe and using OpenCV (web) to detect
+ * markers. The wrapper had access to the model and set these model Properties directly. As such, there are no
+ * usages of them in simulation code. Those prototypes and more information can be found at
+ * https://github.com/phetsims/quadrilateral/issues/20
+ *
+ * It is not clear whether this code should be kept since or if those prototypes will be shared publicly.
  * TODO: Are we keeping these? Perhaps we can delete them.
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
