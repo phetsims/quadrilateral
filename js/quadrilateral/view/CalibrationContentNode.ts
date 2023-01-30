@@ -71,7 +71,7 @@ class CalibrationContentNode extends VBox {
     ];
     super( options );
 
-    model.physicalModelBoundsProperty.link( physicalModelBounds => {
+    model.tangibleConnectionModel.physicalModelBoundsProperty.link( physicalModelBounds => {
       if ( physicalModelBounds !== null ) {
         leftSideLengthText.text = Utils.toFixed( physicalModelBounds.height, 2 );
       }

@@ -153,6 +153,7 @@ class QuadrilateralScreenView extends ScreenView {
     model.modelBoundsProperty.value = availableModelBounds;
 
     const shapeModel = model.quadrilateralShapeModel;
+    const tangibleConnectionModel = model.tangibleConnectionModel;
 
     // A reference to the QuadriladteralSoundView
     this.quadrilateralSoundView = null;
@@ -164,7 +165,7 @@ class QuadrilateralScreenView extends ScreenView {
       tandem: tandem.createTandem( 'quadrilateralNode' )
     } );
 
-    const interactionCueNode = new QuadrilateralInteractionCueNode( model.quadrilateralShapeModel, model.connectedToDeviceProperty, model.resetEmitter, modelViewTransform );
+    const interactionCueNode = new QuadrilateralInteractionCueNode( model.quadrilateralShapeModel, tangibleConnectionModel.connectedToDeviceProperty, model.resetEmitter, modelViewTransform );
 
     this.quadrilateralSoundView = new QuadrilateralSoundView( model, preferencesModel.soundOptionsModel );
 
@@ -211,10 +212,10 @@ class QuadrilateralScreenView extends ScreenView {
       } );
 
       calibrationDialog.isShowingProperty.link( ( isShowing, wasShowing ) => {
-        model.isCalibratingProperty.value = isShowing;
+        tangibleConnectionModel.isCalibratingProperty.value = isShowing;
 
         if ( !isShowing && wasShowing !== null ) {
-          const physicalModelBounds = model.physicalModelBoundsProperty.value;
+          const physicalModelBounds = tangibleConnectionModel.physicalModelBoundsProperty.value;
 
           // it is possible that the Dialog was closed without getting good values for the bounds, only set
           // positions if all is well
@@ -262,7 +263,7 @@ class QuadrilateralScreenView extends ScreenView {
 
     if ( MediaPipeQueryParameters.cameraInput === 'hands' ) {
       this.mediaPipe = new QuadrilateralMediaPipe( model );
-      model.connectedToDeviceProperty.value = true;
+      tangibleConnectionModel.connectedToDeviceProperty.value = true;
     }
 
     // pdom

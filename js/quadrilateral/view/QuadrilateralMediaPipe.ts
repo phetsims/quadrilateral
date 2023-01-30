@@ -37,7 +37,7 @@ class QuadrilateralMediaPipe extends MediaPipe {
     this.quadrilateralShapeModel = model.quadrilateralShapeModel;
 
     // So that there is a mapping from tangible space to simulation model space
-    model.setPhysicalToVirtualTransform( MEDIA_PIPE_ASPECT_RATIO, 1 );
+    model.tangibleConnectionModel.setPhysicalToVirtualTransform( MEDIA_PIPE_ASPECT_RATIO, 1 );
   }
 
   public step( dt: number ): void {

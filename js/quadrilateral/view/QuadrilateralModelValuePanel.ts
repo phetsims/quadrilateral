@@ -164,8 +164,9 @@ class QuadrilateralModelValuePanel extends Node {
     QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.shapeNameProperty, shapeNameText, 'shape name', decimalPlacesProperty );
 
     // marker detection
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.rotationMarkerDetectedProperty, rotationMarkerDetectedText, 'Marker detected', decimalPlacesProperty );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.tangibleRotationProperty, tangibleRotationText, 'Tangible rotation', decimalPlacesProperty );
+    const markerDetectionModel = model.tangibleConnectionModel.markerDetectionModel;
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( markerDetectionModel.rotationMarkerDetectedProperty, rotationMarkerDetectedText, 'Marker detected', decimalPlacesProperty );
+    QuadrilateralModelValuePanel.addRedrawValueTextListener( markerDetectionModel.tangibleRotationProperty, tangibleRotationText, 'Tangible rotation', decimalPlacesProperty );
   }
 
   /**

@@ -16,9 +16,7 @@ import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
 import Vertex from './Vertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import QuadrilateralPreferencesModel from './QuadrilateralPreferencesModel.js';
@@ -27,6 +25,7 @@ import Emitter from '../../../../axon/js/Emitter.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
+import TangibleConnectionModel from './prototype/TangibleConnectionModel.js';
 
 class QuadrilateralModel {
 
@@ -34,62 +33,24 @@ class QuadrilateralModel {
   // on larger screens there is more model space to explore diferent shapes.
   public modelBoundsProperty: Property<Bounds2 | null>;
 
-  // The Bounds provided by the physical model, so we know how to map the physical model bounds to the model space
-  public physicalModelBoundsProperty: Property<Bounds2 | null>;
-
-  // A transform that goes from tangible to virtual space. Used to set simulation vertex positions from
-  // positions from position data provided by the physical device.
-  // TODO: This should likely replace the physicalModelBoundsProperty and its mapping.
-  public physicalToVirtualTransform: ModelViewTransform2 = ModelViewTransform2.createIdentity();
-
   // Whether a reset is currently in progress. Added for sound. If the model is actively resetting,
   // SoundManagers will disable so we don't play sounds for transient model states. It is a value for when
   // the reset is NOT in progress because that is most convenient to pass to SoundGenerator enableControlProperties.
   public resetNotInProgressProperty: TProperty<boolean>;
 
-  // If true, the simulation is "calibrating" to a physical device so we don't set the vertex positions in response
-  // to changes from the physical device. Instead we are updating physicalModelBounds.
-  public isCalibratingProperty: TProperty<boolean>;
-
   // If true, a panel displaying model values will be added to the view. Only for debugging.
   public showDebugValuesProperty: TProperty<boolean>;
-
-  // Whether or not a marker is detected for physical device rotation. This is used for OpenCV prototypes and
-  // historically was used for prototypes using a marker detection library.
-  // TODO: This is a candidate for removal prior to publishing the sim.
-  public rotationMarkerDetectedProperty: TProperty<boolean>;
-
-  // True when we are connected to a device in some way, either bluetooth, serial, or
-  // opencv. This is mostly for data collection.
-  public connectedToDeviceProperty: TProperty<boolean>;
 
   // Controls runtime preferences for the simulation.
   public readonly preferencesModel: QuadrilateralPreferencesModel;
 
+  // A model that manages Properties used by prototype connections with tangible devices (Serial, OpenCV, BLE).
+  public readonly tangibleConnectionModel: TangibleConnectionModel;
+
   public readonly vertexIntervalProperty: TReadOnlyProperty<number>;
 
-  // A Property that indicates that all markers are observed by the camera to control this simulation. Part of
-  // a prototype for using OpenCV as an input method for the simulation
-  public allVertexMarkersDetectedProperty: TReadOnlyProperty<boolean>;
-
-  // Properties that indicate whether the OpenCV prototype detects an individual vertex. The tool must be able
-  // to detect each vertex individually. The tool must be able to detect each marker individually for this to be
-  // relevant.
-  public vertexAMarkerDetectedProperty: TReadOnlyProperty<boolean>;
-  public vertexBMarkerDetectedProperty: TReadOnlyProperty<boolean>;
-  public vertexCMarkerDetectedProperty: TReadOnlyProperty<boolean>;
-  public vertexDMarkerDetectedProperty: TReadOnlyProperty<boolean>;
-
-  // A Property that controls whether Voicing responses will be enabled for when the OpenCV prototype changes in its
-  // ability to see various markers.
-  public readonly markerResponsesEnabledProperty: BooleanProperty;
-
-  // The amount of rotation in radians of the tangible shape. This is used in OpenCV prototypes as well as historically
-  // in old prototypes using a marker detection library.
-  // TODO: Possibly remove this before publishing, this feature is not in use at the moment.
-  public tangibleRotationProperty: NumberProperty;
-
   // Whether the angle guide graphics are visible at each vertex.
+  // TODO: Rename markers? Confusing with tangible markers.
   public readonly markersVisibleProperty: BooleanProperty;
 
   // Whether labels on each vertex are visible.
@@ -144,14 +105,12 @@ class QuadrilateralModel {
 
     this.preferencesModel = preferencesModel;
 
-    this.connectedToDeviceProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'connectedToDeviceProperty' )
-    } );
-
     this.modelBoundsProperty = new Property<Bounds2 | null>( null, {
       tandem: tandem.createTandem( 'modelBoundsProperty' ),
       phetioValueType: NullableIO( Bounds2.Bounds2IO )
     } );
+
+    this.tangibleConnectionModel = new TangibleConnectionModel( this.modelBoundsProperty, tandem.createTandem( 'tangibleConnectionModel' ) );
 
     this.vertexDragBoundsProperty = new DerivedProperty( [ this.modelBoundsProperty ], ( bounds: Bounds2 | null ) => {
       if ( bounds ) {
@@ -164,42 +123,10 @@ class QuadrilateralModel {
       }
     } );
 
-    this.physicalModelBoundsProperty = new Property<Bounds2 | null>( null, {
-      tandem: tandem.createTandem( 'physicalModelBoundsProperty' ),
-      phetioValueType: NullableIO( Bounds2.Bounds2IO )
-    } );
-
-    this.isCalibratingProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'isCalibratingProperty' )
-    } );
-
     this.showDebugValuesProperty = new BooleanProperty( QuadrilateralQueryParameters.showModelValues );
 
     this.resetNotInProgressProperty = new BooleanProperty( true, {
       tandem: tandem.createTandem( 'resetNotInProgressProperty' )
-    } );
-
-    this.rotationMarkerDetectedProperty = new BooleanProperty( false );
-
-    this.tangibleRotationProperty = new NumberProperty( 0 );
-
-    this.allVertexMarkersDetectedProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'allVertexMarkersDetectedProperty' )
-    } );
-    this.vertexAMarkerDetectedProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'vertexAMarkerDetectedProperty' )
-    } );
-    this.vertexBMarkerDetectedProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'vertexBMarkerDetectedProperty' )
-    } );
-    this.vertexCMarkerDetectedProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'vertexCMarkerDetectedProperty' )
-    } );
-    this.vertexDMarkerDetectedProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'vertexDMarkerDetectedProperty' )
-    } );
-    this.markerResponsesEnabledProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'markerResponsesEnabledProperty' )
     } );
 
     this.quadrilateralShapeModel = new QuadrilateralShapeModel( this, {
@@ -248,7 +175,7 @@ class QuadrilateralModel {
     // Vertex intervals are controlled whether we are "locked" to smaller steps, whether we are temporarily using
     // smaller steps because of a hotkey, or if running with ?reducedStepSize
     this.vertexIntervalProperty = new DerivedProperty(
-      [ this.useMinorIntervalsProperty, preferencesModel.reducedStepSizeProperty, this.connectedToDeviceProperty, preferencesModel.deviceGridSpacingProperty ],
+      [ this.useMinorIntervalsProperty, preferencesModel.reducedStepSizeProperty, this.tangibleConnectionModel.connectedToDeviceProperty, preferencesModel.deviceGridSpacingProperty ],
       ( useMinorIntervals, reducedStepSize, connectedToDevice, deviceGridSpacing ) => {
 
         let interval: number;
@@ -309,37 +236,6 @@ class QuadrilateralModel {
     this.quadrilateralTestShapeModel.setPropertiesDeferred( false );
 
     return this.quadrilateralTestShapeModel.isQuadrilateralShapeAllowed();
-  }
-
-  /**
-   * Set the physical model bounds from the device bounds. For now, we assume that the devices is like
-   * one provided by CHROME lab, where sides are created from a socket and arm such that the largest length
-   * of one side is when the arm is as far out of the socket as possible and the smallest length is when the
-   * arm is fully inserted into the socket. In this case the smallest length will be half of the largest length.
-   * When calibrating, we ask for the largest shape possible, so the minimum lengths are just half these
-   * provided values. There is also an assumption that the sides are the same and the largest possible shape is a
-   * square. We create a Bounds2 defined by these constraints
-   *
-   * TODO: The assumptions that all sides are the same length could be creating some weird cases.
-   */
-  public setPhysicalModelBounds( topLength: number, rightLength: number, bottomLength: number, leftLength: number ): void {
-
-    // assuming a square shape for extrema - we may need a mapping function for each individual side if this cannot be assumed
-    const maxLength = _.max( [ topLength, rightLength, bottomLength, leftLength ] )!;
-    this.physicalModelBoundsProperty.value = new Bounds2( 0, 0, maxLength, maxLength );
-  }
-
-  /**
-   * Create a transform that will go from tangible to virtual space. The scaling only uses one dimension because
-   * we assume scaling should be the same in both x and y. It uses height as the limiting factor for scaling
-   * because the simulation bounds are wider than they are tall.
-   */
-  public setPhysicalToVirtualTransform( width: number, height: number ): void {
-    this.physicalToVirtualTransform = ModelViewTransform2.createSinglePointScaleMapping(
-      new Vector2( width / 2, height / 2 ), // center of the physical space "model"
-      new Vector2( 0, 0 ), // origin of the simulation model
-      this.modelBoundsProperty.value!.height / ( height ) // scale from physical model to simulation space
-    );
   }
 
   /**

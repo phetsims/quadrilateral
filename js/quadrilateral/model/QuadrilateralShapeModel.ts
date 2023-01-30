@@ -1170,9 +1170,10 @@ class QuadrilateralShapeModel {
    * Currently this is being used by the OpenCV prototype and a prototype using MediaPipe.
    */
   public setPositionsFromAbsolutePositionData( proposedPositions: VertexWithProposedPosition[] ): void {
+    const tangibleConnectionModel = this.model.tangibleConnectionModel;
 
     // you must calibrate before setting positions from a physical device
-    if ( this.model.physicalToVirtualTransform !== null && !this.model.isCalibratingProperty.value && this.model.modelBoundsProperty.value ) {
+    if ( tangibleConnectionModel.physicalToVirtualTransform !== null && !tangibleConnectionModel.isCalibratingProperty.value && this.model.modelBoundsProperty.value ) {
 
       // scale the physical positions to the simulation virtual model
       const scaledProposedPositions: VertexWithProposedPosition[] = proposedPositions.map( vertexWithProposedPosition => {
@@ -1185,7 +1186,7 @@ class QuadrilateralShapeModel {
         if ( proposedPosition && proposedPosition.isFinite() ) {
 
           // transform from tangible to virtual coordinates
-          const virtualPosition = this.model.physicalToVirtualTransform.modelToViewPosition( proposedPosition );
+          const virtualPosition = tangibleConnectionModel.physicalToVirtualTransform.modelToViewPosition( proposedPosition );
 
           // apply smoothing over a number of values to reduce noise
           constrainedPosition = vertexWithProposedPosition.vertex.smoothPosition( virtualPosition );
@@ -1309,13 +1310,15 @@ class QuadrilateralShapeModel {
     assert && assert( this.vertexC.dragBoundsProperty.value );
     assert && assert( this.vertexD.dragBoundsProperty.value );
 
+    const tangibleConnectionModel = this.model.tangibleConnectionModel;
+
     // you must calibrate before setting positions from a physical device
-    if ( this.model.physicalModelBoundsProperty.value !== null && !this.model.isCalibratingProperty.value && this.model.modelBoundsProperty.value ) {
+    if ( tangibleConnectionModel.physicalModelBoundsProperty.value !== null && !tangibleConnectionModel.isCalibratingProperty.value && this.model.modelBoundsProperty.value ) {
 
       // the physical device lengths can only become half as long as the largest length, so map to the sim model
       // with that constraint as well so that the smallest shape on the physical device doesn't bring vertices
       // all the way to the center of the screen (0, 0).
-      const deviceLengthToSimLength = new LinearFunction( 0, this.model.physicalModelBoundsProperty.value.width, 0, this.model.modelBoundsProperty.value.width / 3 );
+      const deviceLengthToSimLength = new LinearFunction( 0, tangibleConnectionModel.physicalModelBoundsProperty.value.width, 0, this.model.modelBoundsProperty.value.width / 3 );
 
       const mappedTopLength = deviceLengthToSimLength.evaluate( topLength );
       const mappedRightLength = deviceLengthToSimLength.evaluate( rightLength );
@@ -1363,7 +1366,8 @@ class QuadrilateralShapeModel {
 
     // If there is some marker input, rotate positions to match the marker. Negate the rotation value to mirror the
     // rotation of the device.
-    const rotatedPositions = _.map( shiftedPositions, shiftedPosition => shiftedPosition.rotated( -this.model.tangibleRotationProperty.value ) );
+    const rotationProperty = this.model.tangibleConnectionModel.markerDetectionModel.tangibleRotationProperty;
+    const rotatedPositions = _.map( shiftedPositions, shiftedPosition => shiftedPosition.rotated( -rotationProperty.value ) );
 
     // make sure that all positions are within model bounds
     const constrainedPositions = _.map( rotatedPositions, position => this.model.modelBoundsProperty.value?.closestPointTo( position ) );

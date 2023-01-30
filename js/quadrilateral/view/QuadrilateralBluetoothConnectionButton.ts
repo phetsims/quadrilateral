@@ -16,6 +16,7 @@ import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import stepTimer from '../../../../axon/js/stepTimer.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
+import TangibleConnectionModel from '../model/prototype/TangibleConnectionModel.js';
 
 // The bluetooth options for the requestDevice call. There must be at least one entry in filters for the browser
 // to make a request.
@@ -38,6 +39,7 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
   public readonly allDataCollectedEmitter = new Emitter();
 
   private readonly model: QuadrilateralModel;
+  private readonly tangibleConnectionModel: TangibleConnectionModel;
 
   private topLength = 0;
   private rightLength = 0;
@@ -55,14 +57,15 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
     } );
 
     this.model = quadrilateralModel;
+    this.tangibleConnectionModel = this.model.tangibleConnectionModel;
 
     this.addListener( this.requestQuadDevice.bind( this ) );
 
     this.allDataCollectedEmitter.addListener( () => {
-      if ( quadrilateralModel.isCalibratingProperty.value ) {
-        quadrilateralModel.setPhysicalModelBounds( this.topLength, this.rightLength, 0, this.leftLength );
+      if ( this.tangibleConnectionModel.isCalibratingProperty.value ) {
+        this.tangibleConnectionModel.setPhysicalModelBounds( this.topLength, this.rightLength, 0, this.leftLength );
       }
-      else if ( quadrilateralModel.physicalModelBoundsProperty.value ) {
+      else if ( this.tangibleConnectionModel.physicalModelBoundsProperty.value ) {
 
         // In an attempt to filter out noise, only update the sim at this interval
         if ( this.timeSinceUpdatingSim > quadrilateralModel.preferencesModel.bluetoothUpdateIntervalProperty.value ) {
@@ -145,7 +148,7 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
         // At this time we can assume that connections are successful
         // TODO: Set to false when connection is lost?
         console.log( 'connection successful' );
-        this.model.connectedToDeviceProperty.value = true;
+        this.tangibleConnectionModel.connectedToDeviceProperty.value = true;
       }
     }
   }

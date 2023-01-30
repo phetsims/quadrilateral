@@ -274,8 +274,10 @@ class QuadrilateralAlerter extends Alerter {
       priority: Utterance.LOW_PRIORITY
     } );
 
-    model.allVertexMarkersDetectedProperty.link( allVertexMarkersDetected => {
-      if ( model.markerResponsesEnabledProperty.value ) {
+    // TODO: Can this be removed?
+    const markerDetectionModel = model.tangibleConnectionModel.markerDetectionModel;
+    markerDetectionModel.allVertexMarkersDetectedProperty.link( allVertexMarkersDetected => {
+      if ( markerDetectionModel.markerResponsesEnabledProperty.value ) {
         markerResponsePacket.contextResponse = allVertexMarkersDetected ? cornersBackString : cornersGoneString;
         this.alert( markerUtterance );
       }
@@ -283,7 +285,7 @@ class QuadrilateralAlerter extends Alerter {
 
     // Reusable listener that describes when a
     const vertexDetectionResponseListener = ( labelString: string, detected: boolean ) => {
-      if ( model.markerResponsesEnabledProperty.value ) {
+      if ( markerDetectionModel.markerResponsesEnabledProperty.value ) {
         const stateString = detected ? backString : goneString;
         markerResponsePacket.contextResponse = StringUtils.fillIn( cornerDetectedPatternString, {
           label: labelString,
@@ -293,10 +295,11 @@ class QuadrilateralAlerter extends Alerter {
       }
     };
 
-    model.vertexAMarkerDetectedProperty.link( detected => { vertexDetectionResponseListener( vertexAString, detected ); } );
-    model.vertexBMarkerDetectedProperty.link( detected => { vertexDetectionResponseListener( vertexBString, detected ); } );
-    model.vertexCMarkerDetectedProperty.link( detected => { vertexDetectionResponseListener( vertexCString, detected ); } );
-    model.vertexDMarkerDetectedProperty.link( detected => { vertexDetectionResponseListener( vertexDString, detected ); } );
+    // TODO: remove these?
+    markerDetectionModel.vertexAMarkerDetectedProperty.link( detected => { vertexDetectionResponseListener( vertexAString, detected ); } );
+    markerDetectionModel.vertexBMarkerDetectedProperty.link( detected => { vertexDetectionResponseListener( vertexBString, detected ); } );
+    markerDetectionModel.vertexCMarkerDetectedProperty.link( detected => { vertexDetectionResponseListener( vertexCString, detected ); } );
+    markerDetectionModel.vertexDMarkerDetectedProperty.link( detected => { vertexDetectionResponseListener( vertexDString, detected ); } );
 
     // So that this content respects voicingVisible.
     Voicing.registerUtteranceToNode( lowPriorityUtterance, screenView );
