@@ -1,7 +1,7 @@
 // Copyright 2023, University of Colorado Boulder
+import Utils from '../../../../dot/js/Utils.js';
 import quadrilateral from '../../quadrilateral.js';
-import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
-import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
+import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 
 /**
  *
@@ -9,33 +9,36 @@ import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
  */
 
 class QuadrilateralSerialMessageController {
+  private readonly shapeModel: QuadrilateralShapeModel;
 
-  public constructor( shapeNameProperty: EnumerationProperty<NamedQuadrilateral> ) {
-    window.setTimeout( () => {  // eslint-disable-line bad-sim-text
-      const parent = window.parent;
-      parent.postMessage( 'some message', '*' );
-    }, 2000 );
-    shapeNameProperty.link( shapeName => {
-      if ( shapeName === NamedQuadrilateral.SQUARE ) {
-        parent.postMessage( '1', '*' );
-        window.setTimeout( () => { // eslint-disable-line bad-sim-text
-          parent.postMessage( '7', '*' );
-        }, 2000 );
-      }
-      if ( shapeName === NamedQuadrilateral.PARALLELOGRAM ) {
-        parent.postMessage( '5', '*' );
-      }
-      if ( shapeName === NamedQuadrilateral.RECTANGLE ) {
-        parent.postMessage( '3', '*' );
-        window.setTimeout( () => { // eslint-disable-line bad-sim-text
-          parent.postMessage( '7', '*' );
-        }, 2000 );
-      }
-      if ( shapeName === NamedQuadrilateral.TRAPEZOID ) {
-        parent.postMessage( '4', '*' );
-      }
-    } );
+  public constructor( quadrilateralShapeModel: QuadrilateralShapeModel ) {
+    this.shapeModel = quadrilateralShapeModel;
+  }
 
+  /**
+   * Returns a string of values in this order:
+   *
+   * '(topLength,rightLength,bottomLength,leftLength,topLeftAngle,bottomRightAngle)'
+   */
+  public sendModelValuesString(): void {
+    const topLength = this.formatValue( this.shapeModel.topSide.lengthProperty.value );
+    const rightLength = this.formatValue( this.shapeModel.rightSide.lengthProperty.value );
+    const bottomLength = this.formatValue( this.shapeModel.bottomSide.lengthProperty.value );
+    const leftLength = this.formatValue( this.shapeModel.leftSide.lengthProperty.value );
+
+    const topLeftAngle = this.formatValue( this.shapeModel.vertexA.angleProperty.value! );
+    const bottomRightAngle = this.formatValue( this.shapeModel.vertexC.angleProperty.value! );
+
+    const valuesString = `(${topLength},${rightLength},${bottomLength},${leftLength},${topLeftAngle},${bottomRightAngle})`;
+
+    const parent = window.parent;
+    parent.postMessage( valuesString, '*' );
+
+    console.log( valuesString );
+  }
+
+  private formatValue( value: number ): number {
+    return Utils.toFixedNumber( value, 2 );
   }
 }
 

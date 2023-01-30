@@ -39,7 +39,7 @@ import Vertex from '../model/Vertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import SmallStepsLockToggleButton from './SmallStepsLockToggleButton.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
-import QuadrilateralSerialMessageController from './QuadrilateralSerialMessageController.js';
+import QuadrilateralSerialConnectionButton from './QuadrilateralSerialConnectionButton.js';
 
 // Defines the units of model space, a 2x2 grid that quadrilateral vertices can move within. It is dilated by
 // half of the vertex width so that model space is large enough for Vertices to perfectly align with the bounds
@@ -249,9 +249,12 @@ class QuadrilateralScreenView extends ScreenView {
         deviceConnectionParentNode.addChild( connectionPanel );
 
         deviceConnectionParentNode.pdomOrder = [ connectionPanel, calibrationButton ];
+      }
 
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const controller = new QuadrilateralSerialMessageController( model.quadrilateralShapeModel.shapeNameProperty );
+      if ( QuadrilateralQueryParameters.serial ) {
+        const sendValuesButton = new QuadrilateralSerialConnectionButton( model );
+        sendValuesButton.leftBottom = gridNode.leftTop;
+        deviceConnectionParentNode.addChild( sendValuesButton );
       }
     }
 
