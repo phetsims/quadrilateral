@@ -33,8 +33,6 @@ class QuadrilateralSerialMessageController {
 
     const parent = window.parent;
     parent.postMessage( valuesString, '*' );
-
-    console.log( valuesString );
   }
 
   private formatValue( value: number ): number {

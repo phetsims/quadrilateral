@@ -12,7 +12,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import { Node, Text } from '../../../../scenery/js/imports.js';
+import { Text, VBox } from '../../../../scenery/js/imports.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralNode from './QuadrilateralNode.js';
 import QuadrilateralSoundView from './sound/QuadrilateralSoundView.js';
@@ -196,9 +196,14 @@ class QuadrilateralScreenView extends ScreenView {
       0
     );
 
-    const deviceConnectionParentNode = new Node();
+    const deviceConnectionParentNode = new VBox( {
+      align: 'left',
+      spacing: QuadrilateralConstants.CONTROLS_SPACING
+    } );
     this.addChild( deviceConnectionParentNode );
     if ( QuadrilateralQueryParameters.deviceConnection ) {
+
+      const connectionComponents = [];
 
       // Add a Dialog that will calibrate the device to the simulation (mapping physical data to modelled data).
       const calibrationDialog = new Dialog( new CalibrationContentNode( model ), {
@@ -235,27 +240,24 @@ class QuadrilateralScreenView extends ScreenView {
         },
 
         textNodeOptions: QuadrilateralConstants.SCREEN_TEXT_OPTIONS,
-        baseColor: QuadrilateralColors.screenViewButtonColorProperty,
-
-        // relative to the visibility checkboxes for now
-        leftBottom: visibilityControls.leftTop.minusXY( 0, 45 )
+        baseColor: QuadrilateralColors.screenViewButtonColorProperty
       } );
-
-      deviceConnectionParentNode.addChild( calibrationButton );
+      connectionComponents.push( calibrationButton );
 
       if ( QuadrilateralQueryParameters.bluetooth ) {
-        const connectionPanel = new QuadrilateralBluetoothConnectionButton( model, tandem.createTandem( 'quadrilateralBluetoothConnectionButton' ) );
-        connectionPanel.leftBottom = calibrationButton.leftTop.minusXY( 0, 15 );
-        deviceConnectionParentNode.addChild( connectionPanel );
-
-        deviceConnectionParentNode.pdomOrder = [ connectionPanel, calibrationButton ];
+        const bluetoothButton = new QuadrilateralBluetoothConnectionButton( model, tandem.createTandem( 'quadrilateralBluetoothConnectionButton' ) );
+        connectionComponents.push( bluetoothButton );
       }
 
       if ( QuadrilateralQueryParameters.serial ) {
         const sendValuesButton = new QuadrilateralSerialConnectionButton( model );
         sendValuesButton.leftBottom = gridNode.leftTop;
-        deviceConnectionParentNode.addChild( sendValuesButton );
+        connectionComponents.push( sendValuesButton );
       }
+
+      deviceConnectionParentNode.children = connectionComponents;
+      deviceConnectionParentNode.top = gridNode.top;
+      deviceConnectionParentNode.left = this.resetAllButton.left;
     }
 
     if ( MediaPipeQueryParameters.cameraInput === 'hands' ) {
