@@ -238,38 +238,8 @@
         "noString": {
           "value": "no"
         },
-        "cornersPattern": {
-          "value": "Equal {{firstCorners}} are {{firstComparison}} {{thirdCorner}} and {{secondComparison}} {{fourthCorner}}."
-        },
-        "cornerPointsPattern": {
-          "value": "{{firstCorner}} points toward {{secondCorner}}."
-        },
-        "cornerConcavePattern": {
-          "value": "{{quadrilateralStatement}} {{pointingStatement}}"
-        },
-        "sidesPattern": {
-          "value": "Parallel Sides {{firstSide}} and {{secondSide}} are {{comparison}} parallel Sides {{thirdSide}} and {{fourthSide}}."
-        },
-        "kiteSidesPattern": {
-          "value": "Equal Sides {{firstSide}} and {{secondSide}} are {{comparison}} equal Sides {{thirdSide}} and {{fourthSide}}."
-        },
-        "trapezoidSidesPattern": {
-          "value": "Side {{firstSide}} is {{firstComparison}} Side {{secondSide}} and parallel. Side {{thirdSide}} is {{secondComparison}} Side {{fourthSide}}."
-        },
-        "equalSidesPattern": {
-          "value": "Sides {{firstSide}} and {{secondSide}} are equal."
-        },
-        "twoStatementPattern": {
-          "value": "{{firstStatement}} {{secondStatement}}"
-        },
-        "sideConcavePattern": {
-          "value": "Equal Sides {{firstSide}} and {{secondSide}} are {{comparison}} equal Sides {{thirdSide}} and {{fourthSide}}."
-        },
         "generalSidePattern": {
           "value": "Side {{firstSide}} is {{firstComparison}} side {{secondSide}}. Side {{thirdSide}} is {{secondComparison}} Side {{fourthSide}}"
-        },
-        "generalSideWithOneAdjacentEqualPairPattern": {
-          "value": "Equal sides {{firstSide}} and {{secondSide}} are {{firstComparison}} Side {{thirdSide}} and {{secondComparison}} {{fourthSide}}. Side {{thirdSide}} is {{thirdComparison}} {{fourthSide}}."
         },
         "generalVertexPattern": {
           "value": "{{firstCorner}} is {{firstComparison}} {{secondCorner}}, and {{thirdCorner}} is {{secondComparison}} {{fourthCorner}}."
@@ -367,9 +337,6 @@
       },
       "adjacentSidesInLinePattern": {
         "value": "Adjacent sides {{firstSide}} and {{secondSide}} in line as shape gets {{areaChange}}"
-      },
-      "doesShapeHaveThreeOrFourSidesQuestion": {
-        "value": "Wait? Does shape have 3 sides or 4?"
       },
       "allSidesTiltAwayFromParallel": {
         "value": "All sides tilt away from parallel as opposite corners change unequally."
@@ -478,12 +445,6 @@
           }
         }
       },
-      "foundAParallelogram": {
-        "value": "Found a parallelogram!"
-      },
-      "lostYourParallelogram": {
-        "value": "Lost your parallelogram!"
-      },
       "allRightAnglesAllSidesEqual": {
         "value": "All right angles, all sides equal."
       },
@@ -526,9 +487,6 @@
       "vertexObjectResponsePattern": {
         "value": "{{oppositeComparison}} opposite corner, {{adjacentVertexDescription}}."
       },
-      "rightAngleVertexObjectResponsePattern": {
-        "value": "right angle, {{oppositeComparison}} opposite corner, {{adjacentVertexDescription}}."
-      },
       "vertexObjectResponseWithWedgesPattern": {
         "value": "{{wedgeDescription}}, {{oppositeComparison}} opposite corner, {{adjacentVertexDescription}}."
       },
@@ -537,9 +495,6 @@
       },
       "angleFlat": {
         "value": "6 wedges"
-      },
-      "anglePointingInward": {
-        "value": "angle pointing inward"
       },
       "oneWedge": {
         "value": "one wedge"
@@ -574,23 +529,8 @@
       "numberOfUnitsPattern": {
         "value": "{{numberOfUnits}} units"
       },
-      "aboutHalfOneUnit": {
-        "value": "about half 1 unit"
-      },
       "numberOfUnitsAndAHalfPattern": {
         "value": "{{numberOfUnits}} and a half units"
-      },
-      "lessThanHalfOneUnit": {
-        "value": "less than half 1 unit"
-      },
-      "justOverNumberOfUnitsPattern": {
-        "value": "just over {{numberOfUnits}} units"
-      },
-      "justUnderOneUnit": {
-        "value": "just under one unit"
-      },
-      "justUnderNumberOfUnitsPattern": {
-        "value": "just under {{numberOfUnits}} units"
       },
       "oneQuarterUnit": {
         "value": "one quarter unit"
@@ -646,9 +586,6 @@
         "adjacentSidesChangePattern": {
           "value": "adjacent sides {{lengthChange}}"
         },
-        "adjacentSidesChangeUnequally": {
-          "value": "adjacent sides change unequally"
-        },
         "adjacentSidesChangeInLength": {
           "value": "adjacent sides change in length"
         },
@@ -680,9 +617,6 @@
       "farSmallerThan": {
         "value": "far smaller than"
       },
-      "muchMuchSmallerThan": {
-        "value": "much much smaller than"
-      },
       "aboutHalfAsWideAs": {
         "value": "about half as wide as"
       },
@@ -694,9 +628,6 @@
       },
       "muchSmallerThan": {
         "value": "much smaller than"
-      },
-      "somewhatSmallerThan": {
-        "value": "somewhat smaller than"
       },
       "similarButSmallerThan": {
         "value": "similar but smaller than"
@@ -710,9 +641,6 @@
       "aLittleWiderThan": {
         "value": "a little wider than"
       },
-      "somewhatWiderThan": {
-        "value": "somewhat wider than"
-      },
       "muchWiderThan": {
         "value": "much wider than"
       },
@@ -722,26 +650,8 @@
       "twiceAsWideAs": {
         "value": "twice as wide as"
       },
-      "muchMuchWiderThan": {
-        "value": "much much wider than"
-      },
       "farWiderThan": {
         "value": "far wider than"
-      },
-      "halfTheSizeOf": {
-        "value": "half the size of"
-      },
-      "twiceTheSizeOf": {
-        "value": "twice the size of"
-      },
-      "smallerAndSimilarTo": {
-        "value": "smaller and similar to"
-      },
-      "widerAndSimilarTo": {
-        "value": "wider and similar to"
-      },
-      "almostEqualTo": {
-        "value": "almost equal to"
       },
       "equalToAdjacentCorners": {
         "value": "equal to adjacent corners"
@@ -764,9 +674,6 @@
       "farShorterThan": {
         "value": "far shorter than"
       },
-      "muchMuchShorterThan": {
-        "value": "much much shorter than"
-      },
       "aboutHalfAsLongAs": {
         "value": "about half as long as"
       },
@@ -779,9 +686,6 @@
       "muchShorterThan": {
         "value": "much shorter than"
       },
-      "somewhatShorterThan": {
-        "value": "somewhat shorter than"
-      },
       "similarButShorterThan": {
         "value": "similar but shorter than"
       },
@@ -791,9 +695,6 @@
       "aLittleLongerThan": {
         "value": "a little longer than"
       },
-      "somewhatLongerThan": {
-        "value": "somewhat longer than"
-      },
       "muchLongerThan": {
         "value": "much longer than"
       },
@@ -802,9 +703,6 @@
       },
       "twiceAsLongAs": {
         "value": "twice as long as"
-      },
-      "muchMuchLongerThan": {
-        "value": "much much longer than"
       },
       "farLongerThan": {
         "value": "far longer than"
@@ -891,9 +789,6 @@
       "shapeNameShownContextResponse": {
         "value": "Listen for changing shape names."
       },
-      "resetShapeHintResponse": {
-        "value": "Keep guides visible with reset shape."
-      },
       "angleComparisonPattern": {
         "value": "{{comparison}} {{cornerLabel}}"
       },
@@ -908,9 +803,6 @@
       },
       "adjacentCornersRightAngles": {
         "value": "adjacent corners right angles"
-      },
-      "allCornersEqual": {
-        "value": "all corners equal"
       },
       "progressStatePattern": {
         "value": "{{progress}}, {{state}}"
@@ -954,14 +846,6 @@
       }
     },
     "preferencesDialog": {
-      "soundDesignRadioButtons": {
-        "layeredContextResponse": {
-          "value": "Shape sounds increase and decrease with shape changes."
-        },
-        "emphasisContextResponse": {
-          "value": "Shape sounds different for each shape."
-        }
-      },
       "tracksPlayForeverCheckbox": {
         "checkedContextResponse": {
           "value": "Playing shape sounds forever."
