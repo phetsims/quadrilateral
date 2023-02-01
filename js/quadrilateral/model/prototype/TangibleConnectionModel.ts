@@ -53,9 +53,9 @@ class TangibleConnectionModel {
 
   // The bounds of simulation model space. Used to create transforms between physical device units and simulation
   // model space.
-  private readonly modelBoundsProperty: TProperty<Bounds2 | null>;
+  private readonly modelBounds: Bounds2;
 
-  public constructor( modelBoundsProperty: TProperty<Bounds2 | null>, tandem: Tandem ) {
+  public constructor( modelBounds: Bounds2, tandem: Tandem ) {
 
     this.connectedToDeviceProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'connectedToDeviceProperty' )
@@ -72,7 +72,7 @@ class TangibleConnectionModel {
 
     this.markerDetectionModel = new MarkerDetectionModel( tandem.createTandem( 'markerDetectionModel' ) );
 
-    this.modelBoundsProperty = modelBoundsProperty;
+    this.modelBounds = modelBounds;
   }
 
   /**
@@ -104,7 +104,7 @@ class TangibleConnectionModel {
     this.physicalToVirtualTransform = ModelViewTransform2.createSinglePointScaleMapping(
       new Vector2( width / 2, height / 2 ), // center of the physical space "model"
       new Vector2( 0, 0 ), // origin of the simulation model
-      this.modelBoundsProperty.value!.height / ( height ) // scale from physical model to simulation space
+      this.modelBounds.height / ( height ) // scale from physical model to simulation space
     );
   }
 }

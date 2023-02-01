@@ -9,7 +9,6 @@
 import quadrilateral from '../../quadrilateral.js';
 import { Node, Path, Rectangle } from '../../../../scenery/js/imports.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import Property from '../../../../axon/js/Property.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
@@ -30,7 +29,7 @@ const MINOR_GRID_LINE_OPTIONS = {
 const BORDER_RECTANGLE_LINE_WIDTH = 2;
 
 class QuadrilateralGridNode extends Node {
-  public constructor( modelBoundsProperty: Property<Bounds2 | null>, visibleProperty: TReadOnlyProperty<boolean>, modelViewTransform: ModelViewTransform2 ) {
+  public constructor( modelBounds: Bounds2, visibleProperty: TReadOnlyProperty<boolean>, modelViewTransform: ModelViewTransform2 ) {
     super();
 
     // Rectangle showing available model bounds
@@ -49,26 +48,22 @@ class QuadrilateralGridNode extends Node {
     } );
     this.addChild( gridLines );
 
-    modelBoundsProperty.link( modelBounds => {
-      if ( modelBounds ) {
-        const lineShape = new Shape();
+    const lineShape = new Shape();
 
-        // dilate just enough for the quadrilateral shape to never overlap the stroke
-        const modelLineWidth = modelViewTransform.viewToModelDeltaX( BORDER_RECTANGLE_LINE_WIDTH );
-        const dilatedBounds = modelBounds.dilated( modelLineWidth );
+    // dilate just enough for the quadrilateral shape to never overlap the stroke
+    const modelLineWidth = modelViewTransform.viewToModelDeltaX( BORDER_RECTANGLE_LINE_WIDTH );
+    const dilatedBounds = modelBounds.dilated( modelLineWidth );
 
-        boundsRectangle.setRectBounds( modelViewTransform.modelToViewBounds( dilatedBounds ) );
+    boundsRectangle.setRectBounds( modelViewTransform.modelToViewBounds( dilatedBounds ) );
 
-        this.drawVerticalLines( lineShape, dilatedBounds, QuadrilateralConstants.GRID_SPACING );
-        this.drawHorizontalLines( lineShape, dilatedBounds, QuadrilateralConstants.GRID_SPACING );
-        majorGridLinePath.shape = modelViewTransform.modelToViewShape( lineShape );
+    this.drawVerticalLines( lineShape, dilatedBounds, QuadrilateralConstants.GRID_SPACING );
+    this.drawHorizontalLines( lineShape, dilatedBounds, QuadrilateralConstants.GRID_SPACING );
+    majorGridLinePath.shape = modelViewTransform.modelToViewShape( lineShape );
 
-        const minorDebugShape = new Shape();
-        this.drawVerticalLines( minorDebugShape, dilatedBounds, QuadrilateralQueryParameters.minorVertexInterval );
-        this.drawHorizontalLines( minorDebugShape, dilatedBounds, QuadrilateralQueryParameters.minorVertexInterval );
-        minorGridLinePath.shape = modelViewTransform.modelToViewShape( minorDebugShape );
-      }
-    } );
+    const minorDebugShape = new Shape();
+    this.drawVerticalLines( minorDebugShape, dilatedBounds, QuadrilateralQueryParameters.minorVertexInterval );
+    this.drawHorizontalLines( minorDebugShape, dilatedBounds, QuadrilateralQueryParameters.minorVertexInterval );
+    minorGridLinePath.shape = modelViewTransform.modelToViewShape( minorDebugShape );
 
     visibleProperty.link( visible => { gridLines.visible = visible; } );
   }

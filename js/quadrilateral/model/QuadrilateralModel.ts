@@ -9,7 +9,6 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
@@ -18,7 +17,6 @@ import Vertex from './Vertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import QuadrilateralPreferencesModel from './QuadrilateralPreferencesModel.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
@@ -29,9 +27,14 @@ import TangibleConnectionModel from './prototype/TangibleConnectionModel.js';
 
 class QuadrilateralModel {
 
-  // The bounds in model space. The bounds will change depending on available screen bounds so that
-  // on larger screens there is more model space to explore diferent shapes.
-  public modelBoundsProperty: Property<Bounds2 | null>;
+  // The bounds of the simulation in model coordinates. Origin (0,0) is at the center. The shape and
+  // vertices can be positioned within these bounds.
+  public modelBounds = new Bounds2(
+    -QuadrilateralConstants.BOUNDS_WIDTH / 2,
+    -QuadrilateralConstants.BOUNDS_HEIGHT / 2,
+    QuadrilateralConstants.BOUNDS_WIDTH / 2,
+    QuadrilateralConstants.BOUNDS_HEIGHT / 2
+  );
 
   // Whether a reset is currently in progress. Added for sound. If the model is actively resetting,
   // SoundManagers will disable so we don't play sounds for transient model states. It is a value for when
@@ -58,7 +61,7 @@ class QuadrilateralModel {
 
   // The available bounds for smooth vertex dragging (the model bounds eroded by the width of a vertex so a vertex
   // can never go ouside of the model bounds.
-  public readonly vertexDragBoundsProperty: TReadOnlyProperty<Bounds2>;
+  public readonly vertexDragBounds = this.modelBounds.eroded( Vertex.VERTEX_WIDTH / 2 );
 
   // Whether vertices are going to snap to the minor intervals of the model grid. The user can "lock" this setting
   // from the user interface. There is also a global hotkey to toggle this quickly during interaction.
@@ -105,23 +108,7 @@ class QuadrilateralModel {
 
     this.preferencesModel = preferencesModel;
 
-    this.modelBoundsProperty = new Property<Bounds2 | null>( null, {
-      tandem: tandem.createTandem( 'modelBoundsProperty' ),
-      phetioValueType: NullableIO( Bounds2.Bounds2IO )
-    } );
-
-    this.tangibleConnectionModel = new TangibleConnectionModel( this.modelBoundsProperty, tandem.createTandem( 'tangibleConnectionModel' ) );
-
-    this.vertexDragBoundsProperty = new DerivedProperty( [ this.modelBoundsProperty ], ( bounds: Bounds2 | null ) => {
-      if ( bounds ) {
-        return bounds.eroded( Vertex.VERTEX_WIDTH / 2 );
-      }
-      else {
-
-        // can drag anywhere until model bounds are initialiized
-        return Bounds2.EVERYTHING;
-      }
-    } );
+    this.tangibleConnectionModel = new TangibleConnectionModel( this.modelBounds, tandem.createTandem( 'tangibleConnectionModel' ) );
 
     this.showDebugValuesProperty = new BooleanProperty( QuadrilateralQueryParameters.showModelValues );
 

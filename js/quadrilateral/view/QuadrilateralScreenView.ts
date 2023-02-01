@@ -35,16 +35,10 @@ import MediaPipeQueryParameters from '../../../../tangible/js/mediaPipe/MediaPip
 import QuadrilateralInteractionCueNode from './QuadrilateralInteractionCueNode.js';
 import ResetShapeButton from './ResetShapeButton.js';
 import ShapeSoundCheckbox from './ShapeSoundCheckbox.js';
-import Vertex from '../model/Vertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import SmallStepsLockToggleButton from './SmallStepsLockToggleButton.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import QuadrilateralSerialConnectionButton from './QuadrilateralSerialConnectionButton.js';
-
-// Defines the units of model space, a 2x2 grid that quadrilateral vertices can move within. It is dilated by
-// half of the vertex width so that model space is large enough for Vertices to perfectly align with the bounds
-// limits, requested in https://github.com/phetsims/quadrilateral/issues/220
-const MODEL_BOUNDS = new Bounds2( -1, -1, 1, 1 ).dilated( Vertex.VERTEX_WIDTH / 2 );
 
 class QuadrilateralScreenView extends ScreenView {
   private readonly model: QuadrilateralModel;
@@ -120,37 +114,25 @@ class QuadrilateralScreenView extends ScreenView {
     // of the reducedViewBounds and centered around the reducedViewBounds. Must be square so that the deltas in x and y
     // directions are the same when moving between model and view coordinates. Produces a square in view space
     // such that -1 is at the top and 1 is at the bottom.
-    const largestDimension = reducedViewBounds.height; // layoutBounds are wider than they are tall
+    const largestViewDimension = reducedViewBounds.height; // layoutBounds are wider than they are tall
     const viewBoundsForTransform = new Bounds2(
-      reducedViewBounds.centerX - largestDimension / 2,
-      reducedViewBounds.centerY - largestDimension / 2,
-      reducedViewBounds.centerX + largestDimension / 2,
-      reducedViewBounds.centerY + largestDimension / 2
+      reducedViewBounds.centerX - largestViewDimension / 2,
+      reducedViewBounds.centerY - largestViewDimension / 2,
+      reducedViewBounds.centerX + largestViewDimension / 2,
+      reducedViewBounds.centerY + largestViewDimension / 2
+    );
+    const largestModelDimension = model.modelBounds.height;
+    const modelBoundsForTransform = new Bounds2(
+      -largestModelDimension / 2, -largestModelDimension / 2, largestModelDimension / 2, largestModelDimension / 2
     );
 
     const modelViewTransform = ModelViewTransform2.createRectangleInvertedYMapping(
-      MODEL_BOUNDS,
+      modelBoundsForTransform,
       viewBoundsForTransform
     );
 
     this.model = model;
     this.modelViewTransform = modelViewTransform;
-
-    // The available model bounds are determined by the size of the view
-    const availableModelBounds = this.modelViewTransform.viewToModelBounds( reducedViewBounds );
-
-    // Makes the grid displaying model bounds look nice by making the remaining width/height beyond GRID_SPACING equal
-    const remainingWidth = ( availableModelBounds.width / 2 ) % QuadrilateralConstants.GRID_SPACING;
-    const remainingHeight = ( availableModelBounds.height / 2 ) % QuadrilateralConstants.GRID_SPACING;
-    if ( remainingWidth > remainingHeight ) {
-      availableModelBounds.erodeX( remainingWidth - remainingHeight );
-    }
-    else if ( remainingHeight > remainingWidth ) {
-      availableModelBounds.erodeY( remainingHeight - remainingWidth );
-    }
-
-    // so that the remaining bounds of the
-    model.modelBoundsProperty.value = availableModelBounds;
 
     const shapeModel = model.quadrilateralShapeModel;
     const tangibleConnectionModel = model.tangibleConnectionModel;
@@ -159,7 +141,7 @@ class QuadrilateralScreenView extends ScreenView {
     this.quadrilateralSoundView = null;
 
     // Layered under everything else
-    const diagonalGuidesNode = new QuadrilateralDiagonalGuidesNode( model.quadrilateralShapeModel, model.modelBoundsProperty, model.diagonalGuidesVisibleProperty, this.modelViewTransform );
+    const diagonalGuidesNode = new QuadrilateralDiagonalGuidesNode( model.quadrilateralShapeModel, model.modelBounds, model.diagonalGuidesVisibleProperty, this.modelViewTransform );
 
     this.quadrilateralNode = new QuadrilateralNode( model, modelViewTransform, this.layoutBounds, this.quadrilateralDescriber, {
       tandem: tandem.createTandem( 'quadrilateralNode' )
@@ -169,7 +151,7 @@ class QuadrilateralScreenView extends ScreenView {
 
     this.quadrilateralSoundView = new QuadrilateralSoundView( model, preferencesModel.soundOptionsModel );
 
-    const gridNode = new QuadrilateralGridNode( model.modelBoundsProperty, model.gridVisibleProperty, this.modelViewTransform );
+    const gridNode = new QuadrilateralGridNode( model.modelBounds, model.gridVisibleProperty, this.modelViewTransform );
 
     // rendering order - See https://github.com/phetsims/quadrilateral/issues/178
     // this.addChild( boundsRectangle );

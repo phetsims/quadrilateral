@@ -369,12 +369,6 @@ class QuadrilateralShapeModel {
 
     this.saveSideLengths();
 
-    model.modelBoundsProperty.link( modelBounds => {
-      if ( modelBounds ) {
-        this.setVertexDragAreas();
-      }
-    } );
-
     Multilink.multilink( [
         this.vertexA.positionProperty,
         this.vertexB.positionProperty,
@@ -390,9 +384,7 @@ class QuadrilateralShapeModel {
 
         this.shapeChangedEmitter.emit();
 
-        if ( model.modelBoundsProperty.value ) {
-          this.setVertexDragAreas();
-        }
+        this.setVertexDragAreas();
       }
     );
 
@@ -400,16 +392,12 @@ class QuadrilateralShapeModel {
     this.makeAdjacentSidesNonInteractiveWhenPressed( this.topSide, this.bottomSide, this.leftSide, this.rightSide );
     this.makeAdjacentSidesNonInteractiveWhenPressed( this.leftSide, this.rightSide, this.topSide, this.bottomSide );
 
-    // TODO: If modelBounds is not observable, this could just be a link instead of a multilink
     this.vertices.forEach( vertex => {
-      Multilink.multilink( [ vertex.modelBoundsProperty, model.modelBoundsProperty ], ( vertexBounds, modelBounds ) => {
-        if ( modelBounds ) {
-
-          vertex.topConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.maxY, modelBounds.maxY, 0.01 );
-          vertex.rightConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.maxX, modelBounds.maxX, 0.01 );
-          vertex.bottomConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.minY, modelBounds.minY, 0.01 );
-          vertex.leftConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.minX, modelBounds.minX, 0.01 );
-        }
+      vertex.modelBoundsProperty.link( vertexBounds => {
+        vertex.topConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.maxY, model.modelBounds.maxY, 0.01 );
+        vertex.rightConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.maxX, model.modelBounds.maxX, 0.01 );
+        vertex.bottomConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.minY, model.modelBounds.minY, 0.01 );
+        vertex.leftConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.minX, model.modelBounds.minX, 0.01 );
       } );
     } );
   }
@@ -460,6 +448,8 @@ class QuadrilateralShapeModel {
 
   /**
    * Save the current set of vertex angles to this.savedVertexAngles.
+   *
+   * TODO: Can this be removed?
    */
   private saveVertexAngles(): void {
     this.savedVertexAngles = this.getVertexAngles();
@@ -752,8 +742,7 @@ class QuadrilateralShapeModel {
       const testVertex = this.vertices[ i ];
 
       // The vertex must be completely within model bounds
-      assert && assert( this.model.modelBoundsProperty.value, 'Model bounds must be defined.' );
-      shapeAllowed = this.model.modelBoundsProperty.value!.containsBounds( testVertex.modelBoundsProperty.value );
+      shapeAllowed = this.model.modelBounds.containsBounds( testVertex.modelBoundsProperty.value );
 
       // Make sure that no vertices overlap any other (only need to do this if  we haven't already found
       // a disallowed case.
@@ -1173,7 +1162,7 @@ class QuadrilateralShapeModel {
     const tangibleConnectionModel = this.model.tangibleConnectionModel;
 
     // you must calibrate before setting positions from a physical device
-    if ( tangibleConnectionModel.physicalToVirtualTransform !== null && !tangibleConnectionModel.isCalibratingProperty.value && this.model.modelBoundsProperty.value ) {
+    if ( tangibleConnectionModel.physicalToVirtualTransform !== null && !tangibleConnectionModel.isCalibratingProperty.value ) {
 
       // scale the physical positions to the simulation virtual model
       const scaledProposedPositions: VertexWithProposedPosition[] = proposedPositions.map( vertexWithProposedPosition => {
@@ -1192,7 +1181,7 @@ class QuadrilateralShapeModel {
           constrainedPosition = vertexWithProposedPosition.vertex.smoothPosition( virtualPosition );
 
           // constrain within model bounds
-          constrainedPosition = this.model.modelBoundsProperty.value!.closestPointTo( constrainedPosition );
+          constrainedPosition = this.model.modelBounds.closestPointTo( constrainedPosition );
         }
         else {
 
@@ -1313,12 +1302,12 @@ class QuadrilateralShapeModel {
     const tangibleConnectionModel = this.model.tangibleConnectionModel;
 
     // you must calibrate before setting positions from a physical device
-    if ( tangibleConnectionModel.physicalModelBoundsProperty.value !== null && !tangibleConnectionModel.isCalibratingProperty.value && this.model.modelBoundsProperty.value ) {
+    if ( tangibleConnectionModel.physicalModelBoundsProperty.value !== null && !tangibleConnectionModel.isCalibratingProperty.value ) {
 
       // the physical device lengths can only become half as long as the largest length, so map to the sim model
       // with that constraint as well so that the smallest shape on the physical device doesn't bring vertices
       // all the way to the center of the screen (0, 0).
-      const deviceLengthToSimLength = new LinearFunction( 0, tangibleConnectionModel.physicalModelBoundsProperty.value.width, 0, this.model.modelBoundsProperty.value.width / 3 );
+      const deviceLengthToSimLength = new LinearFunction( 0, tangibleConnectionModel.physicalModelBoundsProperty.value.width, 0, this.model.modelBounds.width / 3 );
 
       const mappedTopLength = deviceLengthToSimLength.evaluate( topLength );
       const mappedRightLength = deviceLengthToSimLength.evaluate( rightLength );
@@ -1341,9 +1330,7 @@ class QuadrilateralShapeModel {
    * @param p2Angle - the right top angle (vertexB)
    */
   public setPositionsFromLengthsAndAngles( topLength: number, rightLength: number, leftLength: number, p1Angle: number, p2Angle: number ): void {
-
-    assert && assert( this.model.modelBoundsProperty.value, 'setPositionsFromLengthsAndAngles can only be used when modelBounds are defined' );
-    const modelBounds = this.model.modelBoundsProperty.value!;
+    const modelBounds = this.model.modelBounds;
 
     // vertexA and the topLine are anchored, the rest of the shape is relative to this
     const vector1Position = new Vector2( modelBounds.minX, modelBounds.maxX );
@@ -1370,7 +1357,7 @@ class QuadrilateralShapeModel {
     const rotatedPositions = _.map( shiftedPositions, shiftedPosition => shiftedPosition.rotated( -rotationProperty.value ) );
 
     // make sure that all positions are within model bounds
-    const constrainedPositions = _.map( rotatedPositions, position => this.model.modelBoundsProperty.value?.closestPointTo( position ) );
+    const constrainedPositions = _.map( rotatedPositions, position => this.model.modelBounds.closestPointTo( position ) );
 
     // smooth positions to try to reduce noise
     // TODO: Should this go before or after constraining to the grid?
@@ -1408,7 +1395,9 @@ class QuadrilateralShapeModel {
    * Update the drag areas for all vertices.
    */
   private setVertexDragAreas(): void {
-    const dilatedBounds = this.model.modelBoundsProperty.value!.dilated( 1 );
+
+    // TODO: What is this dilation and value??
+    const dilatedBounds = this.model.modelBounds.dilated( 1 );
 
     this.vertexA.dragAreaProperty.set( this.createVertexArea( dilatedBounds, this.vertexA, this.vertexB, this.vertexC, this.vertexD ) );
     this.vertexB.dragAreaProperty.set( this.createVertexArea( dilatedBounds, this.vertexB, this.vertexC, this.vertexD, this.vertexA ) );

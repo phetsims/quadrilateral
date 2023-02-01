@@ -28,7 +28,7 @@ const LINE_NODE_OPTIONS = {
 class QuadrilateralDiagonalGuidesNode extends Node {
   public constructor(
     quadrilateralShapeModel: QuadrilateralShapeModel,
-    boundsProperty: TReadOnlyProperty<Bounds2 | null>,
+    bounds: Bounds2,
     visibleProperty: TReadOnlyProperty<boolean>,
     modelViewTransform: ModelViewTransform2
   ) {
@@ -44,18 +44,18 @@ class QuadrilateralDiagonalGuidesNode extends Node {
     visibleProperty.link( visible => { this.visible = visible; } );
 
     Multilink.multilink(
-      [ quadrilateralShapeModel.vertexA.positionProperty, quadrilateralShapeModel.vertexC.positionProperty, boundsProperty ],
-      ( vertexAPosition, vertexCPosition, bounds ) => {
-        assert && assert( vertexAPosition && vertexCPosition && bounds, 'positions need to be defined for diagonal guides' );
-        QuadrilateralDiagonalGuidesNode.drawDiagonal( vertexAPosition, vertexCPosition, bounds!, modelViewTransform, lineNode1 );
+      [ quadrilateralShapeModel.vertexA.positionProperty, quadrilateralShapeModel.vertexC.positionProperty ],
+      ( vertexAPosition, vertexCPosition ) => {
+        assert && assert( vertexAPosition && vertexCPosition, 'positions need to be defined for diagonal guides' );
+        QuadrilateralDiagonalGuidesNode.drawDiagonal( vertexAPosition, vertexCPosition, bounds, modelViewTransform, lineNode1 );
       }
     );
 
     Multilink.multilink(
-      [ quadrilateralShapeModel.vertexB.positionProperty, quadrilateralShapeModel.vertexD.positionProperty, boundsProperty ],
-      ( vertexBPosition, vertexDPosition, bounds ) => {
-        assert && assert( vertexBPosition && vertexDPosition && bounds, 'positions need to be defined for diagonal guides' );
-        QuadrilateralDiagonalGuidesNode.drawDiagonal( vertexBPosition, vertexDPosition, bounds!, modelViewTransform, lineNode2 );
+      [ quadrilateralShapeModel.vertexB.positionProperty, quadrilateralShapeModel.vertexD.positionProperty ],
+      ( vertexBPosition, vertexDPosition ) => {
+        assert && assert( vertexBPosition && vertexDPosition, 'positions need to be defined for diagonal guides' );
+        QuadrilateralDiagonalGuidesNode.drawDiagonal( vertexBPosition, vertexDPosition, bounds, modelViewTransform, lineNode2 );
       }
     );
   }

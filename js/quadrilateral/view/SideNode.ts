@@ -262,7 +262,7 @@ class SideNode extends Voicing( Path ) {
           sideBounds.addPoint( modelVertex2Position );
 
           // now shift the proposed positions by a delta that would keep the sideBounds within vertexDragBounds
-          const vertexDragBounds = quadrilateralModel.vertexDragBoundsProperty.value;
+          const vertexDragBounds = quadrilateralModel.vertexDragBounds;
           const correctingVector = new Vector2( 0, 0 );
 
           const inBounds = vertexDragBounds.containsBounds( sideBounds );
@@ -434,7 +434,7 @@ class SideNode extends Voicing( Path ) {
     const proposedVertex1Position = currentVertex1Position.plus( smallestDeltaVector );
     const proposedVertex2Position = currentVertex2Position.plus( smallestDeltaVector );
 
-    const vertexDragBounds = this.quadrilateralModel.vertexDragBoundsProperty.value;
+    const vertexDragBounds = this.quadrilateralModel.vertexDragBounds;
     const inBounds = vertexDragBounds.containsPoint( proposedVertex1Position ) && vertexDragBounds.containsPoint( proposedVertex2Position );
 
     // update the scratch model before setting proposed vertex positions

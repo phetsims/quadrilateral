@@ -111,7 +111,7 @@ class VertexNode extends Voicing( Circle ) {
         const proposedPosition = model.getClosestGridPositionInDirection( vertex.positionProperty.value, modelDelta );
 
         // constrain to model bounds
-        const inBoundsPosition = model.vertexDragBoundsProperty.value.closestPointTo( proposedPosition );
+        const inBoundsPosition = model.vertexDragBounds.closestPointTo( proposedPosition );
         const isAgainstBounds = !inBoundsPosition.equals( proposedPosition );
 
         const isPositionAllowed = model.isVertexPositionAllowed( vertex, inBoundsPosition );
@@ -167,7 +167,7 @@ class VertexNode extends Voicing( Circle ) {
         const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
 
         // constrain to model bounds
-        const inBoundsPosition = model.vertexDragBoundsProperty.value.closestPointTo( modelPoint );
+        const inBoundsPosition = model.vertexDragBounds.closestPointTo( modelPoint );
         const isAgainstBounds = !inBoundsPosition.equals( modelPoint );
 
         // constrain to the allowable positions in the model along the grid

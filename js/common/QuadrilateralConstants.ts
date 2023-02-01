@@ -21,6 +21,10 @@ const QuadrilateralConstants = {
   // Amount of spacing in model coordinates between grid lines in the visual grid
   GRID_SPACING: 0.25,
 
+  // TODO: Documentation, calculate from grid spacing? Or calculate grid spacing from these?
+  BOUNDS_WIDTH: 3.1,
+  BOUNDS_HEIGHT: 2.1,
+
   // The "major" vertex interval when using ?reducedStepSize query parameter. Value is in model coordinates.
   MAJOR_REDUCED_SIZE_VERTEX_INTERVAL: 0.0625,
 
