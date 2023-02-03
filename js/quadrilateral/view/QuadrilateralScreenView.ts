@@ -34,7 +34,7 @@ import QuadrilateralShapeNameDisplay from './QuadrilateralShapeNameDisplay.js';
 import MediaPipeQueryParameters from '../../../../tangible/js/mediaPipe/MediaPipeQueryParameters.js';
 import QuadrilateralInteractionCueNode from './QuadrilateralInteractionCueNode.js';
 import ResetShapeButton from './ResetShapeButton.js';
-import ShapeSoundCheckbox from './ShapeSoundCheckbox.js';
+import ShapeSoundsCheckbox from './ShapeSoundsCheckbox.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import SmallStepsLockToggleButton from './SmallStepsLockToggleButton.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
@@ -83,8 +83,8 @@ class QuadrilateralScreenView extends ScreenView {
     } );
     this.addChild( this.resetAllButton );
 
-    const shapeSoundCheckbox = new ShapeSoundCheckbox( model.shapeSoundEnabledProperty, tandem.createTandem( 'shapeSoundCheckbox' ) );
-    this.addChild( shapeSoundCheckbox );
+    const shapeSoundsCheckbox = new ShapeSoundsCheckbox( model.shapeSoundEnabledProperty, tandem.createTandem( 'shapeSoundsCheckbox' ) );
+    this.addChild( shapeSoundsCheckbox );
 
     const shapeNameDisplay = new QuadrilateralShapeNameDisplay( model.shapeNameVisibleProperty, model.quadrilateralShapeModel.shapeNameProperty, this.quadrilateralDescriber, tandem.createTandem( 'quadrilateralShapeNameDisplay' ) );
     this.addChild( shapeNameDisplay );
@@ -171,11 +171,11 @@ class QuadrilateralScreenView extends ScreenView {
 
     // layout for components that depend on the play area bounds being defined
     shapeNameDisplay.centerBottom = gridNode.centerTop.minusXY( 0, QuadrilateralConstants.VIEW_SPACING );
-    shapeSoundCheckbox.rightCenter = new Vector2( gridNode.right, shapeNameDisplay.centerY );
+    shapeSoundsCheckbox.rightCenter = new Vector2( gridNode.right, shapeNameDisplay.centerY );
 
     // effectively centers the resetShapeButton between the other two components
-    resetShapeButton.rightCenter = shapeSoundCheckbox.leftCenter.minusXY(
-      ( shapeSoundCheckbox.left - shapeNameDisplay.right - resetShapeButton.width ) / 2,
+    resetShapeButton.rightCenter = shapeSoundsCheckbox.leftCenter.minusXY(
+      ( shapeSoundsCheckbox.left - shapeNameDisplay.right - resetShapeButton.width ) / 2,
       0
     );
 
@@ -249,7 +249,7 @@ class QuadrilateralScreenView extends ScreenView {
     }
 
     // pdom
-    this.pdomPlayAreaNode.pdomOrder = [ this.quadrilateralNode, shapeNameDisplay, resetShapeButton, shapeSoundCheckbox ];
+    this.pdomPlayAreaNode.pdomOrder = [ this.quadrilateralNode, shapeNameDisplay, resetShapeButton, shapeSoundsCheckbox ];
     this.pdomControlAreaNode.pdomOrder = [ visibilityControls, smallStepsLockToggleButton, this.resetAllButton, deviceConnectionParentNode ];
     this.setScreenSummaryContent( new QuadrilateralScreenSummaryContentNode() );
 

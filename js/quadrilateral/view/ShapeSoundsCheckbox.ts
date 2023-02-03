@@ -22,7 +22,7 @@ const shapeSoundControlDisabledContextResponse = QuadrilateralStrings.a11y.voici
 const shapeSoundControlNameResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.nameResponse;
 const shapeSoundControlHintResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.hintResponse;
 
-class ShapeSoundCheckbox extends Checkbox {
+class ShapeSoundsCheckbox extends Checkbox {
   public constructor( shapeSoundEnabledProperty: Property<boolean>, tandem: Tandem ) {
     super( shapeSoundEnabledProperty, QuadrilateralIconFactory.createSoundIcon(), {
       voicingNameResponse: shapeSoundControlNameResponse,
@@ -39,5 +39,5 @@ class ShapeSoundCheckbox extends Checkbox {
   }
 }
 
-quadrilateral.register( 'ShapeSoundCheckbox', ShapeSoundCheckbox );
-export default ShapeSoundCheckbox;
+quadrilateral.register( 'ShapeSoundsCheckbox', ShapeSoundsCheckbox );
+export default ShapeSoundsCheckbox;

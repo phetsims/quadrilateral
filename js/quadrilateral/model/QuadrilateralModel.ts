@@ -39,18 +39,16 @@ class QuadrilateralModel {
   // Whether a reset is currently in progress. Added for sound. If the model is actively resetting,
   // SoundManagers will disable so we don't play sounds for transient model states. It is a value for when
   // the reset is NOT in progress because that is most convenient to pass to SoundGenerator enableControlProperties.
-  public resetNotInProgressProperty: TProperty<boolean>;
+  public readonly resetNotInProgressProperty: TProperty<boolean>;
 
   // If true, a panel displaying model values will be added to the view. Only for debugging.
-  public showDebugValuesProperty: TProperty<boolean>;
+  public readonly showDebugValuesProperty: TProperty<boolean>;
 
   // Controls runtime preferences for the simulation.
   public readonly preferencesModel: QuadrilateralPreferencesModel;
 
   // A model that manages Properties used by prototype connections with tangible devices (Serial, OpenCV, BLE).
   public readonly tangibleConnectionModel: TangibleConnectionModel;
-
-  public readonly vertexIntervalProperty: TReadOnlyProperty<number>;
 
   // Whether the angle guide graphics are visible at each vertex.
   public readonly markersVisibleProperty: BooleanProperty;
@@ -61,6 +59,13 @@ class QuadrilateralModel {
   // The available bounds for smooth vertex dragging (the model bounds eroded by the width of a vertex so a vertex
   // can never go ouside of the model bounds.
   public readonly vertexDragBounds = this.modelBounds.eroded( Vertex.VERTEX_WIDTH / 2 );
+
+  // The interval that Vertices are constrained to during interaction. There are many things that control the value:
+  //  - A "lock" button in the UI to lock to small intervals.
+  //  - A global hotkey that uses small intervals when pressed.
+  //  - Using ?reducedStepSize to make all intervals smaller
+  //  - Connected to a physical device 
+  public readonly vertexIntervalProperty: TReadOnlyProperty<number>;
 
   // Whether vertices are going to snap to the minor intervals of the model grid. The user can "lock" this setting
   // from the user interface. There is also a global hotkey to toggle this quickly during interaction.
