@@ -145,7 +145,7 @@ class QuadrilateralDebuggingPanel extends Node {
     QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexC.angleProperty, cornerCAngleText, 'Corner C', decimalPlacesProperty, true );
     QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexD.angleProperty, cornerDAngleText, 'Corner D', decimalPlacesProperty, true );
 
-    // parallelogram and paralle sides
+    // parallelogram and parallel sides
     QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.isParallelogramProperty, isParallelogramText, 'Is parallelogram', decimalPlacesProperty );
     QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 0 ][ 'isParallelProperty' ], sideABCDParallelText, '(AB, CD) parallel', decimalPlacesProperty );
     QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 1 ][ 'isParallelProperty' ], sideBCDAParallelText, '(BC, DA) parallel', decimalPlacesProperty );
