@@ -115,11 +115,12 @@ class QuadrilateralDebuggingPanel extends Node {
     } );
     content.leftTop = backgroundRectangle.leftTop.plusXY( CONTENT_PADDING / 2, CONTENT_PADDING / 2 );
 
-    super();
-    this.children = [ backgroundRectangle, content ];
+    super( {
+      children: [ backgroundRectangle, content ],
 
-    // panel is see-through so that the quadrilateral can move and be dragged under it
-    this.opacity = 0.7;
+      // panel is see-through so that the shape can move and be dragged under it
+      opacity: 0.7
+    } );
 
     // mutate after defaults (mostly children for bounds) have been set
     this.mutate( providedOptions );
