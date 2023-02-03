@@ -1,14 +1,14 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
- * A panel that displays model values for debugging. FOR DEBUGGING ONLY.
+ * A panel that displays model values for debugging. For debugging only.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import { Node, NodeOptions, Rectangle, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Node, NodeOptions, Rectangle, Text, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
@@ -20,71 +20,76 @@ import Multilink from '../../../../axon/js/Multilink.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import { combineOptions } from '../../../../phet-core/js/optionize.js';
 
+// constants
 const TEXT_OPTIONS = { fontSize: 16 };
-const valuePatternString = '{{label}}: {{value}}';
-const valueWithDegreesPatternString = '{{label}}: {{value}} ({{degrees}} degrees)';
-
+const VALUE_PATTERN_STRING = '{{label}}: {{value}}';
+const VALUE_WITH_DEGREES_PATTERN_STRING = '{{label}}: {{value}} ({{degrees}} degrees)';
 const CONTENT_PADDING = 10;
+const VBOX_OPTIONS: VBoxOptions = { align: 'left' };
 
 class QuadrilateralDebuggingPanel extends Node {
   public constructor( model: QuadrilateralModel, providedOptions?: NodeOptions ) {
 
+    // Length readouts
     const topSideLengthText = new Text( '', TEXT_OPTIONS );
     const rightSideLengthText = new Text( '', TEXT_OPTIONS );
     const bottomSideLengthText = new Text( '', TEXT_OPTIONS );
     const leftSideLengthText = new Text( '', TEXT_OPTIONS );
-    const lengthBox = new VBox( {
+    const lengthBox = new VBox( combineOptions<VBoxOptions>( {
       children: [
         topSideLengthText,
         rightSideLengthText,
         bottomSideLengthText,
         leftSideLengthText
       ],
-      align: 'left'
-    } );
+    }, VBOX_OPTIONS ) );
 
-    const leftTopAngleText = new Text( '', TEXT_OPTIONS );
-    const rightTopAngleText = new Text( '', TEXT_OPTIONS );
-    const rightBottomAngleText = new Text( '', TEXT_OPTIONS );
-    const leftBottomAngleText = new Text( '', TEXT_OPTIONS );
-    const angleBox = new VBox( {
+    // Angle readouts
+    const cornerAAngleText = new Text( '', TEXT_OPTIONS );
+    const cornerBAngleText = new Text( '', TEXT_OPTIONS );
+    const cornerCAngleText = new Text( '', TEXT_OPTIONS );
+    const cornerDAngleText = new Text( '', TEXT_OPTIONS );
+    const angleBox = new VBox( combineOptions<VBoxOptions>( {
       children: [
-        leftTopAngleText,
-        rightTopAngleText,
-        rightBottomAngleText,
-        leftBottomAngleText
-      ],
-      align: 'left'
-    } );
+        cornerAAngleText,
+        cornerBAngleText,
+        cornerCAngleText,
+        cornerDAngleText
+      ]
+    }, VBOX_OPTIONS ) );
 
+    // parallelogram and parallel sides readout
     const isParallelogramText = new Text( '', TEXT_OPTIONS );
     const sideABCDParallelText = new Text( '', TEXT_OPTIONS );
     const sideBCDAParallelText = new Text( '', TEXT_OPTIONS );
-    const parallelogramBox = new VBox( {
-      children: [ isParallelogramText, sideABCDParallelText, sideBCDAParallelText ],
-      align: 'left'
-    } );
+    const parallelogramBox = new VBox( combineOptions<VBoxOptions>( {
+      children: [ isParallelogramText, sideABCDParallelText, sideBCDAParallelText ]
+    }, VBOX_OPTIONS ) );
 
+    // tolerance intervals readout
     const sideABCDToleranceIntervalText = new Text( '', TEXT_OPTIONS );
     const sideBCDAToleranceIntervalText = new Text( '', TEXT_OPTIONS );
     const interAngleToleranceIntervalText = new Text( '', TEXT_OPTIONS );
     const staticAngleToleranceIntervalText = new Text( '', TEXT_OPTIONS );
     const shapeLengthToleranceIntervalText = new Text( '', TEXT_OPTIONS );
-    const toleranceIntervalBox = new VBox( {
-      children: [ sideABCDToleranceIntervalText, sideBCDAToleranceIntervalText, interAngleToleranceIntervalText, staticAngleToleranceIntervalText, shapeLengthToleranceIntervalText ],
-      align: 'left'
-    } );
+    const toleranceIntervalBox = new VBox( combineOptions<VBoxOptions>( {
+      children: [ sideABCDToleranceIntervalText, sideBCDAToleranceIntervalText, interAngleToleranceIntervalText, staticAngleToleranceIntervalText, shapeLengthToleranceIntervalText ]
+    }, VBOX_OPTIONS ) );
 
+    // shape name readout
     const shapeNameText = new Text( '', TEXT_OPTIONS );
 
+    // tangible rotation readout
+    // TODO: Can this be deleted? We don't care about rotation anymore, right?
     const rotationMarkerDetectedText = new Text( '', TEXT_OPTIONS );
     const tangibleRotationText = new Text( '', TEXT_OPTIONS );
-    const markerBox = new VBox( {
-      children: [ rotationMarkerDetectedText, tangibleRotationText ],
-      align: 'left'
-    } );
+    const markerBox = new VBox( combineOptions<VBoxOptions>( {
+      children: [ rotationMarkerDetectedText, tangibleRotationText ]
+    }, VBOX_OPTIONS ) );
 
+    // decimal places readout
     const decimalPlacesProperty = new NumberProperty( 3, { range: new Range( 2, 5 ) } );
     const decimalPlacesControl = new NumberControl( 'Decimal Places', decimalPlacesProperty, decimalPlacesProperty.range, {
       sliderOptions: {
@@ -96,7 +101,7 @@ class QuadrilateralDebuggingPanel extends Node {
       tandem: Tandem.OPT_OUT
     } );
 
-    const content = new VBox( {
+    const content = new VBox( combineOptions<VBoxOptions>( {
       children: [
         lengthBox,
         angleBox,
@@ -106,9 +111,8 @@ class QuadrilateralDebuggingPanel extends Node {
         markerBox,
         decimalPlacesControl
       ],
-      align: 'left',
       spacing: 15
-    } );
+    }, VBOX_OPTIONS );
 
     const backgroundRectangle = new Rectangle( 0, 0, 400, content.height + CONTENT_PADDING, 5, 5, {
       fill: 'white'
@@ -133,10 +137,10 @@ class QuadrilateralDebuggingPanel extends Node {
     QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.leftSide.lengthProperty, leftSideLengthText, 'Side DA', decimalPlacesProperty );
 
     // angle
-    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexA.angleProperty, leftTopAngleText, 'Corner A', decimalPlacesProperty, true );
-    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexB.angleProperty, rightTopAngleText, 'Corner B', decimalPlacesProperty, true );
-    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexC.angleProperty, rightBottomAngleText, 'Corner C', decimalPlacesProperty, true );
-    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexD.angleProperty, leftBottomAngleText, 'Corner D', decimalPlacesProperty, true );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexA.angleProperty, cornerAAngleText, 'Corner A', decimalPlacesProperty, true );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexB.angleProperty, cornerBAngleText, 'Corner B', decimalPlacesProperty, true );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexC.angleProperty, cornerCAngleText, 'Corner C', decimalPlacesProperty, true );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexD.angleProperty, cornerDAngleText, 'Corner D', decimalPlacesProperty, true );
 
     // parallelogram and paralle sides
     QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.isParallelogramProperty, isParallelogramText, 'Is parallelogram', decimalPlacesProperty );
@@ -197,14 +201,14 @@ class QuadrilateralDebuggingPanel extends Node {
         // just show two decimals instead of the number of decimals shown to avoid confusion with tolerance intervals
         // which are in radians
         const formattedDegrees = Utils.toFixedNumber( Utils.toDegrees( value ), 2 );
-        text.text = StringUtils.fillIn( valueWithDegreesPatternString, {
+        text.text = StringUtils.fillIn( VALUE_WITH_DEGREES_PATTERN_STRING, {
           value: formattedValue,
           degrees: formattedDegrees,
           label: label
         } );
       }
       else {
-        text.text = StringUtils.fillIn( valuePatternString, {
+        text.text = StringUtils.fillIn( VALUE_PATTERN_STRING, {
           value: formattedValue,
           label: label
         } );
