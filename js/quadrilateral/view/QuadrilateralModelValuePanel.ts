@@ -1,9 +1,7 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
- * A panel that displays model values for debugging and as a temporary display while
- * we do not have any graphical simulation yet. Shows things like interior angles, side lengths,
- * and whether or not the shape is a parallelogram.
+ * A panel that displays model values for debugging. FOR DEBUGGING ONLY.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
