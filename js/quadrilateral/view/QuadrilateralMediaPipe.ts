@@ -1,6 +1,19 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
+ * A prototype application of MediaPipe in quadrilateral. See https://github.com/phetsims/tangible.
+ *
+ * We might share this on the accessibility prototypes page, but this will not be a production feature.
+ *
+ * This feature uses camera input to control the quadrilateral shape by moving your fingers.
+ * - Vertex A is controlled by left index finger.
+ * - Vertex B is controlled by right index finger.
+ * - Vertex C is controlled by right thumb.
+ * - Vertex D is controlled by left thumb.
+ *
+ * Hold these fingers up in front of the camera to form a square like shape (pinching gesture), then move them around
+ * to change the quadrilateral shape in the simulation.
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
@@ -11,7 +24,9 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import MediaPipeQueryParameters from '../../../../tangible/js/mediaPipe/MediaPipeQueryParameters.js';
 
-const MEDIA_PIPE_ASPECT_RATIO = 1280 / 720;
+// aspect ratio of the video stream to map camera coordinates to sim model coordinates
+const streamDimension2 = MediaPipe.videoStreamDimension2;
+const MEDIA_PIPE_ASPECT_RATIO = streamDimension2.width / streamDimension2.height;
 
 // indicies of the thumb and index finger from HandLandmarks of mediapipe, according to
 // https:f//google.github.io/mediapipe/solutions/hands.html#hand-landmark-model
