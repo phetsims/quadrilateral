@@ -1,6 +1,8 @@
 // Copyright 2021-2023, University of Colorado Boulder
 
 /**
+ * The ScreenView for this simulation, containing all view components.
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
@@ -43,10 +45,9 @@ import QuadrilateralSerialConnectionButton from './QuadrilateralSerialConnection
 class QuadrilateralScreenView extends ScreenView {
   private readonly model: QuadrilateralModel;
   private readonly modelViewTransform: ModelViewTransform2;
-  private readonly quadrilateralNode: QuadrilateralNode | null;
-  private readonly quadrilateralSoundView: QuadrilateralSoundView | null;
+  private readonly quadrilateralNode: QuadrilateralNode;
+  private readonly quadrilateralSoundView: QuadrilateralSoundView;
   public readonly quadrilateralDescriber: QuadrilateralDescriber;
-  private readonly resetAllButton: ResetAllButton;
   private readonly mediaPipe: QuadrilateralMediaPipe | null = null;
 
   public constructor( model: QuadrilateralModel, preferencesModel: QuadrilateralPreferencesModel, tandem: Tandem ) {
@@ -70,7 +71,7 @@ class QuadrilateralScreenView extends ScreenView {
       } );
     this.addChild( visibilityControls );
 
-    this.resetAllButton = new ResetAllButton( {
+    const resetAllButton = new ResetAllButton( {
       listener: () => {
         this.interruptSubtreeInput(); // cancel interactions that may be in progress
         model.reset();
@@ -81,7 +82,7 @@ class QuadrilateralScreenView extends ScreenView {
       bottom: this.layoutBounds.maxY - QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN,
       tandem: tandem.createTandem( 'resetAllButton' )
     } );
-    this.addChild( this.resetAllButton );
+    this.addChild( resetAllButton );
 
     const shapeSoundsCheckbox = new ShapeSoundsCheckbox( model.shapeSoundEnabledProperty, tandem.createTandem( 'shapeSoundsCheckbox' ) );
     this.addChild( shapeSoundsCheckbox );
@@ -101,13 +102,13 @@ class QuadrilateralScreenView extends ScreenView {
       tandem: tandem.createTandem( 'smallStepsLockToggleButton' )
     } );
     this.addChild( smallStepsLockToggleButton );
-    smallStepsLockToggleButton.leftBottom = this.resetAllButton.leftTop.minusXY( 0, 45 );
+    smallStepsLockToggleButton.leftBottom = resetAllButton.leftTop.minusXY( 0, 45 );
 
     // the model bounds are defined by available view space. Some padding is added around the screen and we make
     // sure that the vertices cannot overlap with simulation controls. Otherwise the quadrilateral can move freely in
     // the ScreenView.
     let reducedViewBounds = this.layoutBounds.eroded( QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN );
-    reducedViewBounds = reducedViewBounds.withMaxX( this.resetAllButton.left - QuadrilateralConstants.SCREEN_VIEW_X_MARGIN );
+    reducedViewBounds = reducedViewBounds.withMaxX( resetAllButton.left - QuadrilateralConstants.SCREEN_VIEW_X_MARGIN );
     reducedViewBounds = reducedViewBounds.withMinY( shapeNameDisplay.height + 2 * QuadrilateralConstants.VIEW_SPACING );
 
     // The bounds used for the ModelViewTransform2 are a square set of bounds constrained by the limiting dimension
@@ -136,9 +137,6 @@ class QuadrilateralScreenView extends ScreenView {
 
     const shapeModel = model.quadrilateralShapeModel;
     const tangibleConnectionModel = model.tangibleConnectionModel;
-
-    // A reference to the QuadriladteralSoundView
-    this.quadrilateralSoundView = null;
 
     // Layered under everything else
     const diagonalGuidesNode = new QuadrilateralDiagonalGuidesNode( model.quadrilateralShapeModel, model.modelBounds, model.diagonalGuidesVisibleProperty, this.modelViewTransform );
@@ -240,7 +238,7 @@ class QuadrilateralScreenView extends ScreenView {
 
       deviceConnectionParentNode.children = connectionComponents;
       deviceConnectionParentNode.top = gridNode.top;
-      deviceConnectionParentNode.left = this.resetAllButton.left;
+      deviceConnectionParentNode.left = resetAllButton.left;
     }
 
     if ( MediaPipeQueryParameters.cameraInput === 'hands' ) {
@@ -250,7 +248,7 @@ class QuadrilateralScreenView extends ScreenView {
 
     // pdom
     this.pdomPlayAreaNode.pdomOrder = [ this.quadrilateralNode, shapeNameDisplay, resetShapeButton, shapeSoundsCheckbox ];
-    this.pdomControlAreaNode.pdomOrder = [ visibilityControls, smallStepsLockToggleButton, this.resetAllButton, deviceConnectionParentNode ];
+    this.pdomControlAreaNode.pdomOrder = [ visibilityControls, smallStepsLockToggleButton, resetAllButton, deviceConnectionParentNode ];
     this.setScreenSummaryContent( new QuadrilateralScreenSummaryContentNode() );
 
     // voicing
