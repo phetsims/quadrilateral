@@ -48,7 +48,7 @@ class QuadrilateralScreenView extends ScreenView {
   private readonly quadrilateralNode: QuadrilateralNode;
   private readonly quadrilateralSoundView: QuadrilateralSoundView;
   private readonly quadrilateralDescriber: QuadrilateralDescriber;
-  private readonly mediaPipe: QuadrilateralMediaPipe | null = null;
+  private readonly quadrilateralMediaPipe: QuadrilateralMediaPipe | null = null;
 
   public constructor( model: QuadrilateralModel, preferencesModel: QuadrilateralPreferencesModel, tandem: Tandem ) {
     super( {
@@ -242,7 +242,7 @@ class QuadrilateralScreenView extends ScreenView {
     }
 
     if ( MediaPipeQueryParameters.cameraInput === 'hands' ) {
-      this.mediaPipe = new QuadrilateralMediaPipe( model );
+      this.quadrilateralMediaPipe = new QuadrilateralMediaPipe( model );
       tangibleConnectionModel.connectedToDeviceProperty.value = true;
     }
 
@@ -317,7 +317,7 @@ class QuadrilateralScreenView extends ScreenView {
       this.quadrilateralSoundView.step( dt );
     }
 
-    this.mediaPipe && this.mediaPipe.step( dt );
+    this.quadrilateralMediaPipe && this.quadrilateralMediaPipe.step( dt );
 
     this.quadrilateralNode && this.quadrilateralNode.step( dt );
 
