@@ -47,7 +47,7 @@ class QuadrilateralScreenView extends ScreenView {
   private readonly modelViewTransform: ModelViewTransform2;
   private readonly quadrilateralNode: QuadrilateralNode;
   private readonly quadrilateralSoundView: QuadrilateralSoundView;
-  public readonly quadrilateralDescriber: QuadrilateralDescriber;
+  private readonly quadrilateralDescriber: QuadrilateralDescriber;
   private readonly mediaPipe: QuadrilateralMediaPipe | null = null;
 
   public constructor( model: QuadrilateralModel, preferencesModel: QuadrilateralPreferencesModel, tandem: Tandem ) {
