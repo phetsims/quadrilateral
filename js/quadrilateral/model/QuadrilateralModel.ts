@@ -53,7 +53,6 @@ class QuadrilateralModel {
   public readonly vertexIntervalProperty: TReadOnlyProperty<number>;
 
   // Whether the angle guide graphics are visible at each vertex.
-  // TODO: Rename markers? Confusing with tangible markers.
   public readonly markersVisibleProperty: BooleanProperty;
 
   // Whether labels on each vertex are visible.
