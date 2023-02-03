@@ -3,6 +3,8 @@
 /**
  * A panel that displays model values for debugging. For debugging only.
  *
+ * Note to access some otherwise private class variables this uses square bracket notation.
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
@@ -144,16 +146,12 @@ class QuadrilateralDebuggingPanel extends Node {
 
     // parallelogram and paralle sides
     QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.isParallelogramProperty, isParallelogramText, 'Is parallelogram', decimalPlacesProperty );
-    // @ts-expect-error - isParallelProperty is private, but I want to use it here as a special exception for debugging
-    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 0 ].isParallelProperty, sideABCDParallelText, '(AB, CD) parallel', decimalPlacesProperty );
-    // @ts-expect-error - isParallelProperty is private, but I want to use it here as a special exception for debugging
-    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 1 ].isParallelProperty, sideBCDAParallelText, '(BC, DA) parallel', decimalPlacesProperty );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 0 ][ 'isParallelProperty' ], sideABCDParallelText, '(AB, CD) parallel', decimalPlacesProperty );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 1 ][ 'isParallelProperty' ], sideBCDAParallelText, '(BC, DA) parallel', decimalPlacesProperty );
 
     // angleToleranceIntervals for each opposite side pair
-    // @ts-expect-error - parallelAngleToleranceInterval is private, but I want to use it here for now just for debugging
-    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 0 ].parallelAngleToleranceIntervalProperty, sideABCDToleranceIntervalText, '(AB, CD) parallelAngleToleranceInterval', decimalPlacesProperty );
-    // @ts-expect-error - parallelAngleToleranceInterval is private, but I want to use it here for now just for debugging
-    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 1 ].parallelAngleToleranceIntervalProperty, sideBCDAToleranceIntervalText, '(BC, DA) parallelAngleToleranceInterval', decimalPlacesProperty );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 0 ][ 'parallelAngleToleranceIntervalProperty' ], sideABCDToleranceIntervalText, '(AB, CD) parallelAngleToleranceInterval', decimalPlacesProperty );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 1 ][ 'parallelAngleToleranceIntervalProperty' ], sideBCDAToleranceIntervalText, '(BC, DA) parallelAngleToleranceInterval', decimalPlacesProperty );
     QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.interAngleToleranceIntervalProperty, interAngleToleranceIntervalText, 'interAngleToleranceInterval', decimalPlacesProperty );
     QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.staticAngleToleranceIntervalProperty, staticAngleToleranceIntervalText, 'staticAngleToleranceInterval', decimalPlacesProperty );
     QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.interLengthToleranceIntervalProperty, shapeLengthToleranceIntervalText, 'shapeLengthToleranceInterval', decimalPlacesProperty );
