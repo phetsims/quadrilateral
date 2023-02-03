@@ -28,13 +28,7 @@ const valueWithDegreesPatternString = '{{label}}: {{value}} ({{degrees}} degrees
 const CONTENT_PADDING = 10;
 
 class QuadrilateralDebuggingPanel extends Node {
-
   public constructor( model: QuadrilateralModel, providedOptions?: NodeOptions ) {
-
-    // Controlled by a slider at the bottom of the panel to show more or less decimal places in debugging values
-    const decimalPlacesProperty = new NumberProperty( 3, {
-      range: new Range( 2, 5 )
-    } );
 
     const topSideLengthText = new Text( '', TEXT_OPTIONS );
     const rightSideLengthText = new Text( '', TEXT_OPTIONS );
@@ -91,6 +85,7 @@ class QuadrilateralDebuggingPanel extends Node {
       align: 'left'
     } );
 
+    const decimalPlacesProperty = new NumberProperty( 3, { range: new Range( 2, 5 ) } );
     const decimalPlacesControl = new NumberControl( 'Decimal Places', decimalPlacesProperty, decimalPlacesProperty.range, {
       sliderOptions: {
         keyboardStep: 1,
