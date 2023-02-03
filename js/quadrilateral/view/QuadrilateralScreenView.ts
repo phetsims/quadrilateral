@@ -23,7 +23,7 @@ import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 import Dialog from '../../../../sun/js/Dialog.js';
 import CalibrationContentNode from './CalibrationContentNode.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
-import QuadrilateralModelValuePanel from './QuadrilateralModelValuePanel.js';
+import QuadrilateralDebuggingPanel from './QuadrilateralDebuggingPanel.js';
 import QuadrilateralVisibilityControls from './QuadrilateralVisibilityControls.js';
 import QuadrilateralGridNode from './QuadrilateralGridNode.js';
 import QuadrilateralScreenSummaryContentNode from './QuadrilateralScreenSummaryContentNode.js';
@@ -159,7 +159,7 @@ class QuadrilateralScreenView extends ScreenView {
     this.addChild( interactionCueNode );
 
     // A panel that displays model values, useful for debugging, useful for debugging
-    const debugValuesPanel = new QuadrilateralModelValuePanel( model, {
+    const debugValuesPanel = new QuadrilateralDebuggingPanel( model, {
       leftTop: gridNode.leftTop.plusXY( 5, 5 )
     } );
     model.showDebugValuesProperty.link( showValues => {

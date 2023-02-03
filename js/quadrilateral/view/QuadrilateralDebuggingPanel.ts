@@ -27,7 +27,7 @@ const valueWithDegreesPatternString = '{{label}}: {{value}} ({{degrees}} degrees
 
 const CONTENT_PADDING = 10;
 
-class QuadrilateralModelValuePanel extends Node {
+class QuadrilateralDebuggingPanel extends Node {
 
   public constructor( model: QuadrilateralModel, providedOptions?: NodeOptions ) {
 
@@ -131,40 +131,40 @@ class QuadrilateralModelValuePanel extends Node {
 
     // Link to the model to print the values
     // length
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.topSide.lengthProperty, topSideLengthText, 'Side AB', decimalPlacesProperty );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.rightSide.lengthProperty, rightSideLengthText, 'Side BC', decimalPlacesProperty );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.bottomSide.lengthProperty, bottomSideLengthText, 'Side CD', decimalPlacesProperty );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.leftSide.lengthProperty, leftSideLengthText, 'Side DA', decimalPlacesProperty );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.topSide.lengthProperty, topSideLengthText, 'Side AB', decimalPlacesProperty );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.rightSide.lengthProperty, rightSideLengthText, 'Side BC', decimalPlacesProperty );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.bottomSide.lengthProperty, bottomSideLengthText, 'Side CD', decimalPlacesProperty );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.leftSide.lengthProperty, leftSideLengthText, 'Side DA', decimalPlacesProperty );
 
     // angle
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexA.angleProperty, leftTopAngleText, 'Corner A', decimalPlacesProperty, true );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexB.angleProperty, rightTopAngleText, 'Corner B', decimalPlacesProperty, true );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexC.angleProperty, rightBottomAngleText, 'Corner C', decimalPlacesProperty, true );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexD.angleProperty, leftBottomAngleText, 'Corner D', decimalPlacesProperty, true );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexA.angleProperty, leftTopAngleText, 'Corner A', decimalPlacesProperty, true );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexB.angleProperty, rightTopAngleText, 'Corner B', decimalPlacesProperty, true );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexC.angleProperty, rightBottomAngleText, 'Corner C', decimalPlacesProperty, true );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.vertexD.angleProperty, leftBottomAngleText, 'Corner D', decimalPlacesProperty, true );
 
     // parallelogram and paralle sides
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.isParallelogramProperty, isParallelogramText, 'Is parallelogram', decimalPlacesProperty );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.isParallelogramProperty, isParallelogramText, 'Is parallelogram', decimalPlacesProperty );
     // @ts-expect-error - isParallelProperty is private, but I want to use it here as a special exception for debugging
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 0 ].isParallelProperty, sideABCDParallelText, '(AB, CD) parallel', decimalPlacesProperty );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 0 ].isParallelProperty, sideABCDParallelText, '(AB, CD) parallel', decimalPlacesProperty );
     // @ts-expect-error - isParallelProperty is private, but I want to use it here as a special exception for debugging
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 1 ].isParallelProperty, sideBCDAParallelText, '(BC, DA) parallel', decimalPlacesProperty );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 1 ].isParallelProperty, sideBCDAParallelText, '(BC, DA) parallel', decimalPlacesProperty );
 
     // angleToleranceIntervals for each opposite side pair
     // @ts-expect-error - parallelAngleToleranceInterval is private, but I want to use it here for now just for debugging
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 0 ].parallelAngleToleranceIntervalProperty, sideABCDToleranceIntervalText, '(AB, CD) parallelAngleToleranceInterval', decimalPlacesProperty );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 0 ].parallelAngleToleranceIntervalProperty, sideABCDToleranceIntervalText, '(AB, CD) parallelAngleToleranceInterval', decimalPlacesProperty );
     // @ts-expect-error - parallelAngleToleranceInterval is private, but I want to use it here for now just for debugging
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 1 ].parallelAngleToleranceIntervalProperty, sideBCDAToleranceIntervalText, '(BC, DA) parallelAngleToleranceInterval', decimalPlacesProperty );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.interAngleToleranceIntervalProperty, interAngleToleranceIntervalText, 'interAngleToleranceInterval', decimalPlacesProperty );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.staticAngleToleranceIntervalProperty, staticAngleToleranceIntervalText, 'staticAngleToleranceInterval', decimalPlacesProperty );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.interLengthToleranceIntervalProperty, shapeLengthToleranceIntervalText, 'shapeLengthToleranceInterval', decimalPlacesProperty );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 1 ].parallelAngleToleranceIntervalProperty, sideBCDAToleranceIntervalText, '(BC, DA) parallelAngleToleranceInterval', decimalPlacesProperty );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.interAngleToleranceIntervalProperty, interAngleToleranceIntervalText, 'interAngleToleranceInterval', decimalPlacesProperty );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.staticAngleToleranceIntervalProperty, staticAngleToleranceIntervalText, 'staticAngleToleranceInterval', decimalPlacesProperty );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.interLengthToleranceIntervalProperty, shapeLengthToleranceIntervalText, 'shapeLengthToleranceInterval', decimalPlacesProperty );
 
     // shape name
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( model.quadrilateralShapeModel.shapeNameProperty, shapeNameText, 'shape name', decimalPlacesProperty );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.shapeNameProperty, shapeNameText, 'shape name', decimalPlacesProperty );
 
     // marker detection
     const markerDetectionModel = model.tangibleConnectionModel.markerDetectionModel;
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( markerDetectionModel.rotationMarkerDetectedProperty, rotationMarkerDetectedText, 'Marker detected', decimalPlacesProperty );
-    QuadrilateralModelValuePanel.addRedrawValueTextListener( markerDetectionModel.tangibleRotationProperty, tangibleRotationText, 'Tangible rotation', decimalPlacesProperty );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( markerDetectionModel.rotationMarkerDetectedProperty, rotationMarkerDetectedText, 'Marker detected', decimalPlacesProperty );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( markerDetectionModel.tangibleRotationProperty, tangibleRotationText, 'Tangible rotation', decimalPlacesProperty );
   }
 
   /**
@@ -217,5 +217,5 @@ class QuadrilateralModelValuePanel extends Node {
   }
 }
 
-quadrilateral.register( 'QuadrilateralModelValuePanel', QuadrilateralModelValuePanel );
-export default QuadrilateralModelValuePanel;
+quadrilateral.register( 'QuadrilateralDebuggingPanel', QuadrilateralDebuggingPanel );
+export default QuadrilateralDebuggingPanel;
