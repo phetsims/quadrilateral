@@ -18,7 +18,7 @@
  */
 
 import quadrilateral from '../../quadrilateral.js';
-import MediaPipe from '../../../../tangible/js/mediaPipe/MediaPipe.js';
+import MediaPipe, { HandLandmarks } from '../../../../tangible/js/mediaPipe/MediaPipe.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
@@ -28,12 +28,12 @@ import MediaPipeQueryParameters from '../../../../tangible/js/mediaPipe/MediaPip
 const streamDimension2 = MediaPipe.videoStreamDimension2;
 const MEDIA_PIPE_ASPECT_RATIO = streamDimension2.width / streamDimension2.height;
 
-// indicies of the thumb and index finger from HandLandmarks of mediapipe, according to
-// https:f//google.github.io/mediapipe/solutions/hands.html#hand-landmark-model
+// Indices of the thumb and index finger from HandLandmarks of MediaPipe, according to that project
+// https://google.github.io/mediapipe/solutions/hands.html#hand-landmark-model
 const THUMB_TIP_INDEX = 4;
 const INDEX_TIP_INDEX = 8;
 
-type ThumbAndIndex = {
+type ThumbAndIndexPositions = {
   thumbPosition: Vector2;
   indexPosition: Vector2;
 };
@@ -48,47 +48,36 @@ class QuadrilateralMediaPipe extends MediaPipe {
   public constructor( model: QuadrilateralModel ) {
     assert && assert( MediaPipeQueryParameters.cameraInput === 'hands', 'MediaPipe can only be used when requested.' );
     super();
-
     this.quadrilateralShapeModel = model.quadrilateralShapeModel;
 
     // So that there is a mapping from tangible space to simulation model space
     model.tangibleConnectionModel.setPhysicalToVirtualTransform( MEDIA_PIPE_ASPECT_RATIO, 1 );
   }
 
+  /**
+   * In the animation frame, get the most recent results from camera input. Use that data to update Vertex positions
+   * in the simulation.
+   */
   public step( dt: number ): void {
     const results = MediaPipe.resultsProperty.value;
+
+    // no work if no hands detected
     if ( results ) {
       const landmarks = results.multiHandLandmarks;
 
+      // checking for two hands to form the quadrilateral with index/thumb fingers
       if ( landmarks.length === 2 ) {
-        const firstHand = landmarks[ 0 ];
-        const firstThumbHandPoint = firstHand[ THUMB_TIP_INDEX ];
-        const firstIndexHandPoint = firstHand[ INDEX_TIP_INDEX ];
 
-        const firstThumbPosition = new Vector2( ( 1 - firstThumbHandPoint.x ) * MEDIA_PIPE_ASPECT_RATIO, ( 1 - firstThumbHandPoint.y ) );
-        const firstIndexPosition = new Vector2( ( 1 - firstIndexHandPoint.x ) * MEDIA_PIPE_ASPECT_RATIO, ( 1 - firstIndexHandPoint.y ) );
+        // get the thumb and index positions from each hand
+        const firstHandPositions = this.getThumbAndIndexPositions( landmarks[ 0 ] );
+        const secondHandPositions = this.getThumbAndIndexPositions( landmarks[ 1 ] );
 
-        const secondHand = landmarks[ 1 ];
-        const secondThumbHandPoint = secondHand[ THUMB_TIP_INDEX ];
-        const secondIndexHandPoint = secondHand[ INDEX_TIP_INDEX ];
-
-        const secondThumbPosition = new Vector2( ( 1 - secondThumbHandPoint.x ) * MEDIA_PIPE_ASPECT_RATIO, ( 1 - secondThumbHandPoint.y ) );
-        const secondIndexPosition = new Vector2( ( 1 - secondIndexHandPoint.x ) * MEDIA_PIPE_ASPECT_RATIO, ( 1 - secondIndexHandPoint.y ) );
-
-        const sortedPositions = this.sortHandedness( [
-          {
-            thumbPosition: firstThumbPosition,
-            indexPosition: firstIndexPosition
-          },
-          {
-            thumbPosition: secondThumbPosition,
-            indexPosition: secondIndexPosition
-          }
-        ] );
-
+        // sort to determine which one is left/right
+        const sortedPositions = this.sortHandedness( [ firstHandPositions, secondHandPositions ] );
         const leftHandPositions = sortedPositions[ 0 ];
         const rightHandPositions = sortedPositions[ 1 ];
 
+        // package and attempt to update shape
         const firstPositionProposal = {
           vertex: this.quadrilateralShapeModel.vertexA,
           proposedPosition: leftHandPositions.indexPosition
@@ -105,13 +94,28 @@ class QuadrilateralMediaPipe extends MediaPipe {
           vertex: this.quadrilateralShapeModel.vertexD,
           proposedPosition: leftHandPositions.thumbPosition
         };
-
         this.quadrilateralShapeModel.setPositionsFromAbsolutePositionData( [ firstPositionProposal, secondPositionProposal, thirdPositionProposal, fourthPositionProposal ] );
       }
     }
   }
 
-  private sortHandedness( handPositions: ThumbAndIndex[] ): ThumbAndIndex[] {
+  /**
+   * Returns the position of the thumb and index position in the camera view, provided the data of a HandLandmarks.
+   */
+  private getThumbAndIndexPositions( handLandmarks: HandLandmarks ): ThumbAndIndexPositions {
+    const thumbHandPoint = handLandmarks[ THUMB_TIP_INDEX ];
+    const indexHandPoint = handLandmarks[ INDEX_TIP_INDEX ];
+
+    return {
+      thumbPosition: new Vector2( ( 1 - thumbHandPoint.x ) * MEDIA_PIPE_ASPECT_RATIO, ( 1 - thumbHandPoint.y ) ),
+      indexPosition: new Vector2( ( 1 - indexHandPoint.x ) * MEDIA_PIPE_ASPECT_RATIO, ( 1 - indexHandPoint.y ) )
+    };
+  }
+
+  /**
+   * Sorts the ThumbAndIndexPositions to determine which set is the right hand vs left hand.
+   */
+  private sortHandedness( handPositions: ThumbAndIndexPositions[] ): ThumbAndIndexPositions[] {
     assert && assert( handPositions.length === 2, 'must have 2 thumbs' );
     return handPositions[ 0 ].thumbPosition.x <= handPositions[ 1 ].thumbPosition.x ? handPositions : handPositions.reverse();
   }
