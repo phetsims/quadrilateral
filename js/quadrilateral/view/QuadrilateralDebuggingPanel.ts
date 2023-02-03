@@ -1,4 +1,5 @@
 // Copyright 2022-2023, University of Colorado Boulder
+/* eslint-disable @typescript-eslint/dot-notation */
 
 /**
  * A panel that displays model values for debugging. For debugging only.
@@ -45,7 +46,7 @@ class QuadrilateralDebuggingPanel extends Node {
         rightSideLengthText,
         bottomSideLengthText,
         leftSideLengthText
-      ],
+      ]
     }, VBOX_OPTIONS ) );
 
     // Angle readouts
@@ -114,7 +115,7 @@ class QuadrilateralDebuggingPanel extends Node {
         decimalPlacesControl
       ],
       spacing: 15
-    }, VBOX_OPTIONS );
+    }, VBOX_OPTIONS ) );
 
     const backgroundRectangle = new Rectangle( 0, 0, 400, content.height + CONTENT_PADDING, 5, 5, {
       fill: 'white'
