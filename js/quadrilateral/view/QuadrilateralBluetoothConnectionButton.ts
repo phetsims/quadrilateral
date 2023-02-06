@@ -49,7 +49,7 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
 
     // TODO: Handle when device does not support bluetooth with bluetooth.getAvailability.
     // TODO: Handle when browser does not support bluetooth, presumably !navigator.bluetooth
-    super( 'Pair Bluetooth Device', {
+    super( 'Pair BLE Device', {
       textNodeOptions: QuadrilateralConstants.SCREEN_TEXT_OPTIONS,
       baseColor: QuadrilateralColors.screenViewButtonColorProperty
     } );
