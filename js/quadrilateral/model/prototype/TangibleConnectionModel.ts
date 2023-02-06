@@ -28,6 +28,8 @@ import ModelViewTransform2 from '../../../../../phetcommon/js/view/ModelViewTran
 import Tandem from '../../../../../tandem/js/Tandem.js';
 import NullableIO from '../../../../../tandem/js/types/NullableIO.js';
 import quadrilateral from '../../../quadrilateral.js';
+import QuadrilateralShapeModel from '../QuadrilateralShapeModel.js';
+import QuadrilateralTangibleOptionsModel from '../QuadrilateralTangibleOptionsModel.js';
 import MarkerDetectionModel from './MarkerDetectionModel.js';
 
 class TangibleConnectionModel {
@@ -55,24 +57,27 @@ class TangibleConnectionModel {
   // model space.
   private readonly modelBounds: Bounds2;
 
-  public constructor( modelBounds: Bounds2, tandem: Tandem ) {
+  // The model with values related to options that can be set by Preferences that control behavior of tangible input.
+  public readonly tangibleOptionsModel: QuadrilateralTangibleOptionsModel;
 
+  public readonly shapeModel: QuadrilateralShapeModel;
+
+  public constructor( shapeModel: QuadrilateralShapeModel, tangibleOptionsModel: QuadrilateralTangibleOptionsModel, modelBounds: Bounds2, tandem: Tandem ) {
     this.connectedToDeviceProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'connectedToDeviceProperty' )
     } );
-
     this.physicalModelBoundsProperty = new Property<Bounds2 | null>( null, {
       tandem: tandem.createTandem( 'physicalModelBoundsProperty' ),
       phetioValueType: NullableIO( Bounds2.Bounds2IO )
     } );
-
     this.isCalibratingProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'isCalibratingProperty' )
     } );
 
     this.markerDetectionModel = new MarkerDetectionModel( tandem.createTandem( 'markerDetectionModel' ) );
-
+    this.tangibleOptionsModel = tangibleOptionsModel;
     this.modelBounds = modelBounds;
+    this.shapeModel = shapeModel;
   }
 
   /**
@@ -90,6 +95,34 @@ class TangibleConnectionModel {
     // assuming a square shape for extrema - we may need a mapping function for each individual side if this cannot be assumed
     const maxLength = _.max( [ topLength, rightLength, bottomLength, leftLength ] )!;
     this.physicalModelBoundsProperty.value = new Bounds2( 0, 0, maxLength, maxLength );
+  }
+
+  /**
+   * Sets the quadrilateral shape Vertex positions to good initial values after calibration.
+   *
+   * During calibration, we request the largest shape that can possibly be made from the device. So when
+   * calibration is finished, the tangible is as large as it can be and Vertex positions are positioned
+   * based on full width of the device.
+   */
+  public finishCalibration(): void {
+    const physicalModelBounds = this.physicalModelBoundsProperty.value!;
+    assert && assert( physicalModelBounds && physicalModelBounds.isValid(),
+      'Physical dimensions of device need to be set during calibration' );
+
+    this.setPositionsFromLengthAndAngleData(
+      physicalModelBounds.width,
+      physicalModelBounds.width,
+      physicalModelBounds.width,
+      physicalModelBounds.width,
+      Math.PI / 2,
+      Math.PI / 2,
+      Math.PI / 2,
+      Math.PI / 2
+    );
+  }
+
+  public setPositionsFromLengthAndAngleData( topLength: number, rightLength: number, bottomLength: number, leftLength: number, p1Angle: number, p2Angle: number, p3Angle: number, p4Angle: number ): void {
+    this.shapeModel.setPositionsFromLengthAndAngleData( topLength, rightLength, bottomLength, leftLength, p1Angle, p2Angle, p3Angle, p4Angle );
   }
 
   /**

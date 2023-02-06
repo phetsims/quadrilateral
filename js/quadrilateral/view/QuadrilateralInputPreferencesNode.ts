@@ -12,24 +12,24 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import PreferencesPanelSection from '../../../../joist/js/preferences/PreferencesPanelSection.js';
-import QuadrilateralPreferencesModel from '../model/QuadrilateralPreferencesModel.js';
 import { Text, VBox } from '../../../../scenery/js/imports.js';
 import PreferencesDialog from '../../../../joist/js/preferences/PreferencesDialog.js';
+import QuadrilateralTangibleOptionsModel from '../model/QuadrilateralTangibleOptionsModel.js';
 
 class QuadrilateralInputPreferencesNode extends PreferencesPanelSection {
   private readonly disposeQuadrilateralInputPreferencesNode: () => void;
 
-  public constructor( preferencesModel: QuadrilateralPreferencesModel ) {
+  public constructor( tangibleOptionsModel: QuadrilateralTangibleOptionsModel ) {
 
     // Controls specifically for tangible connection
     const tangibleControlsTitle = new Text( 'Tangible Controls', PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
-    const gridSpacingNumberControl = new TangiblePropertyNumberControl( 'Position interval', preferencesModel.deviceGridSpacingProperty, {
+    const gridSpacingNumberControl = new TangiblePropertyNumberControl( 'Position interval', tangibleOptionsModel.deviceGridSpacingProperty, {
       numberDisplayOptions: {
         decimalPlaces: 3
       }
     } );
-    const smoothingLengthNumberControl = new TangiblePropertyNumberControl( 'Smoothing length', preferencesModel.smoothingLengthProperty );
-    const updateIntervalNumberControl = new TangiblePropertyNumberControl( 'Update interval', preferencesModel.bluetoothUpdateIntervalProperty, {
+    const smoothingLengthNumberControl = new TangiblePropertyNumberControl( 'Smoothing length', tangibleOptionsModel.smoothingLengthProperty );
+    const updateIntervalNumberControl = new TangiblePropertyNumberControl( 'Update interval', tangibleOptionsModel.bluetoothUpdateIntervalProperty, {
       numberDisplayOptions: {
         decimalPlaces: 1
       },

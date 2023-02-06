@@ -12,7 +12,6 @@ import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Emitter from '../../../../axon/js/Emitter.js';
-import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import stepTimer from '../../../../axon/js/stepTimer.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
@@ -33,12 +32,11 @@ const REQUEST_DEVICE_OPTIONS = {
 class QuadrilateralBluetoothConnectionButton extends TextPushButton {
 
   // Amount of time passed in ms since updating the simulation from bluetooth input. We wait at least every
-  // quadrilateralModel.preferencesModel.bluetoothUpdateIntervalProperty.value in an attempt to filter out noise.
+  // QuadrilateralTangibleOptionsModel.bluetoothUpdateIntervalProperty.value in an attempt to filter out noise.
   private timeSinceUpdatingSim = 0;
 
   public readonly allDataCollectedEmitter = new Emitter();
 
-  private readonly model: QuadrilateralModel;
   private readonly tangibleConnectionModel: TangibleConnectionModel;
 
   private topLength = 0;
@@ -47,17 +45,16 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
   private topLeftAngle = 0;
   private topRightAngle = 0;
 
-  public constructor( quadrilateralModel: QuadrilateralModel, tandem: Tandem ) {
+  public constructor( tangibleConnectionModel: TangibleConnectionModel, tandem: Tandem ) {
 
     // TODO: Handle when device does not support bluetooth with bluetooth.getAvailability.
-    // TODO: Handle when browser does not support bluetooth, presumablue !navigator.bluetooth
+    // TODO: Handle when browser does not support bluetooth, presumably !navigator.bluetooth
     super( 'Pair Bluetooth Device', {
       textNodeOptions: QuadrilateralConstants.SCREEN_TEXT_OPTIONS,
       baseColor: QuadrilateralColors.screenViewButtonColorProperty
     } );
 
-    this.model = quadrilateralModel;
-    this.tangibleConnectionModel = this.model.tangibleConnectionModel;
+    this.tangibleConnectionModel = tangibleConnectionModel;
 
     this.addListener( this.requestQuadDevice.bind( this ) );
 
@@ -65,11 +62,12 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
       if ( this.tangibleConnectionModel.isCalibratingProperty.value ) {
         this.tangibleConnectionModel.setPhysicalModelBounds( this.topLength, this.rightLength, 0, this.leftLength );
       }
-      else if ( this.tangibleConnectionModel.physicalModelBoundsProperty.value ) {
+      else if ( tangibleConnectionModel.physicalModelBoundsProperty.value ) {
 
         // In an attempt to filter out noise, only update the sim at this interval
-        if ( this.timeSinceUpdatingSim > quadrilateralModel.preferencesModel.bluetoothUpdateIntervalProperty.value ) {
-          quadrilateralModel.quadrilateralShapeModel.setPositionsFromLengthAndAngleData(
+        const updateInterval = tangibleConnectionModel.tangibleOptionsModel.bluetoothUpdateIntervalProperty.value;
+        if ( this.timeSinceUpdatingSim > updateInterval ) {
+          tangibleConnectionModel.setPositionsFromLengthAndAngleData(
             this.topLength,
             this.rightLength,
             5, // unused in setPositionsFromLengthsAndAngles

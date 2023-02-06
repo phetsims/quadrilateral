@@ -205,10 +205,11 @@ class QuadrilateralShapeModel {
 
     this.validateShape = options.validateShape;
 
-    this.vertexA = new Vertex( new Vector2( -0.25, 0.25 ), VertexLabel.VERTEX_A, model.preferencesModel.smoothingLengthProperty, options.tandem.createTandem( 'vertexA' ) );
-    this.vertexB = new Vertex( new Vector2( 0.25, 0.25 ), VertexLabel.VERTEX_B, model.preferencesModel.smoothingLengthProperty, options.tandem.createTandem( 'vertexB' ) );
-    this.vertexC = new Vertex( new Vector2( 0.25, -0.25 ), VertexLabel.VERTEX_C, model.preferencesModel.smoothingLengthProperty, options.tandem.createTandem( 'vertexC' ) );
-    this.vertexD = new Vertex( new Vector2( -0.25, -0.25 ), VertexLabel.VERTEX_D, model.preferencesModel.smoothingLengthProperty, options.tandem.createTandem( 'vertexD' ) );
+    const smoothingLengthProperty = model.preferencesModel.tangibleOptionsModel.smoothingLengthProperty;
+    this.vertexA = new Vertex( new Vector2( -0.25, 0.25 ), VertexLabel.VERTEX_A, smoothingLengthProperty, options.tandem.createTandem( 'vertexA' ) );
+    this.vertexB = new Vertex( new Vector2( 0.25, 0.25 ), VertexLabel.VERTEX_B, smoothingLengthProperty, options.tandem.createTandem( 'vertexB' ) );
+    this.vertexC = new Vertex( new Vector2( 0.25, -0.25 ), VertexLabel.VERTEX_C, smoothingLengthProperty, options.tandem.createTandem( 'vertexC' ) );
+    this.vertexD = new Vertex( new Vector2( -0.25, -0.25 ), VertexLabel.VERTEX_D, smoothingLengthProperty, options.tandem.createTandem( 'vertexD' ) );
 
     // Collection of the vertices which should be easy to iterate over
     this.vertices = [ this.vertexA, this.vertexB, this.vertexC, this.vertexD ];

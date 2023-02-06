@@ -112,8 +112,6 @@ class QuadrilateralModel {
 
     this.preferencesModel = preferencesModel;
 
-    this.tangibleConnectionModel = new TangibleConnectionModel( this.modelBounds, tandem.createTandem( 'tangibleConnectionModel' ) );
-
     this.showDebugValuesProperty = new BooleanProperty( QuadrilateralQueryParameters.showModelValues );
 
     this.resetNotInProgressProperty = new BooleanProperty( true, {
@@ -128,6 +126,8 @@ class QuadrilateralModel {
       validateShape: false,
       tandem: tandem.createTandem( 'quadrilateralTestShapeModel' )
     } );
+
+    this.tangibleConnectionModel = new TangibleConnectionModel( this.quadrilateralShapeModel, this.preferencesModel.tangibleOptionsModel, this.modelBounds, tandem.createTandem( 'tangibleConnectionModel' ) );
 
     this.vertexLabelsVisibleProperty = new BooleanProperty( true, {
       tandem: tandem.createTandem( 'vertexLabelsVisibleProperty' )
@@ -166,7 +166,7 @@ class QuadrilateralModel {
     // Vertex intervals are controlled whether we are "locked" to smaller steps, whether we are temporarily using
     // smaller steps because of a hotkey, or if running with ?reducedStepSize
     this.vertexIntervalProperty = new DerivedProperty(
-      [ this.useMinorIntervalsProperty, preferencesModel.reducedStepSizeProperty, this.tangibleConnectionModel.connectedToDeviceProperty, preferencesModel.deviceGridSpacingProperty ],
+      [ this.useMinorIntervalsProperty, preferencesModel.reducedStepSizeProperty, this.tangibleConnectionModel.connectedToDeviceProperty, preferencesModel.tangibleOptionsModel.deviceGridSpacingProperty ],
       ( useMinorIntervals, reducedStepSize, connectedToDevice, deviceGridSpacing ) => {
 
         let interval: number;

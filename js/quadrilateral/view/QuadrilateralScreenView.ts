@@ -14,21 +14,17 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import { Text, VBox } from '../../../../scenery/js/imports.js';
+import { VBox } from '../../../../scenery/js/imports.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralNode from './QuadrilateralNode.js';
 import QuadrilateralSoundView from './sound/QuadrilateralSoundView.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
-import Dialog from '../../../../sun/js/Dialog.js';
-import CalibrationContentNode from './CalibrationContentNode.js';
-import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import QuadrilateralDebuggingPanel from './QuadrilateralDebuggingPanel.js';
 import QuadrilateralVisibilityControls from './QuadrilateralVisibilityControls.js';
 import QuadrilateralGridNode from './QuadrilateralGridNode.js';
 import QuadrilateralScreenSummaryContentNode from './QuadrilateralScreenSummaryContentNode.js';
 import QuadrilateralAlerter from './QuadrilateralAlerter.js';
-import QuadrilateralBluetoothConnectionButton from './QuadrilateralBluetoothConnectionButton.js';
 import QuadrilateralPreferencesModel from '../model/QuadrilateralPreferencesModel.js';
 import QuadrilateralMediaPipe from './QuadrilateralMediaPipe.js';
 import QuadrilateralDiagonalGuidesNode from './QuadrilateralDiagonalGuidesNode.js';
@@ -39,8 +35,7 @@ import ResetShapeButton from './ResetShapeButton.js';
 import ShapeSoundsCheckbox from './ShapeSoundsCheckbox.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import SmallStepsLockToggleButton from './SmallStepsLockToggleButton.js';
-import QuadrilateralColors from '../../common/QuadrilateralColors.js';
-import QuadrilateralSerialConnectionButton from './QuadrilateralSerialConnectionButton.js';
+import QuadrilateralTangibleControls from './QuadrilateralTangibleControls.js';
 
 class QuadrilateralScreenView extends ScreenView {
   private readonly model: QuadrilateralModel;
@@ -137,7 +132,6 @@ class QuadrilateralScreenView extends ScreenView {
     this.model = model;
     this.modelViewTransform = modelViewTransform;
 
-    const shapeModel = model.quadrilateralShapeModel;
     const tangibleConnectionModel = model.tangibleConnectionModel;
 
     // Layered under everything else
@@ -186,59 +180,9 @@ class QuadrilateralScreenView extends ScreenView {
     this.addChild( deviceConnectionParentNode );
     if ( QuadrilateralQueryParameters.deviceConnection ) {
 
-      const connectionComponents = [];
-
-      // Add a Dialog that will calibrate the device to the simulation (mapping physical data to modelled data).
-      const calibrationDialog = new Dialog( new CalibrationContentNode( model ), {
-        title: new Text( 'External Device Calibration', QuadrilateralConstants.PANEL_TITLE_TEXT_OPTIONS )
-      } );
-
-      calibrationDialog.isShowingProperty.link( ( isShowing, wasShowing ) => {
-        tangibleConnectionModel.isCalibratingProperty.value = isShowing;
-
-        if ( !isShowing && wasShowing !== null ) {
-          const physicalModelBounds = tangibleConnectionModel.physicalModelBoundsProperty.value;
-
-          // it is possible that the Dialog was closed without getting good values for the bounds, only set
-          // positions if all is well
-          if ( physicalModelBounds && physicalModelBounds.isValid() ) {
-            shapeModel.setPositionsFromLengthAndAngleData(
-              physicalModelBounds.width,
-              physicalModelBounds.width,
-              physicalModelBounds.width,
-              physicalModelBounds.width,
-              Math.PI / 2,
-              Math.PI / 2,
-              Math.PI / 2,
-              Math.PI / 2
-            );
-          }
-        }
-      } );
-
-      // this is the "sim", add a button to start calibration
-      const calibrationButton = new TextPushButton( 'Calibrate Device', {
-        listener: () => {
-          calibrationDialog.show();
-        },
-
-        textNodeOptions: QuadrilateralConstants.SCREEN_TEXT_OPTIONS,
-        baseColor: QuadrilateralColors.screenViewButtonColorProperty
-      } );
-      connectionComponents.push( calibrationButton );
-
-      if ( QuadrilateralQueryParameters.bluetooth ) {
-        const bluetoothButton = new QuadrilateralBluetoothConnectionButton( model, tandem.createTandem( 'quadrilateralBluetoothConnectionButton' ) );
-        connectionComponents.push( bluetoothButton );
-      }
-
-      if ( QuadrilateralQueryParameters.serial ) {
-        const sendValuesButton = new QuadrilateralSerialConnectionButton( model );
-        sendValuesButton.leftBottom = gridNode.leftTop;
-        connectionComponents.push( sendValuesButton );
-      }
-
-      deviceConnectionParentNode.children = connectionComponents;
+      deviceConnectionParentNode.children = [
+        new QuadrilateralTangibleControls( model.tangibleConnectionModel, tandem.createTandem( 'connectionControls' ) )
+      ];
       deviceConnectionParentNode.top = gridNode.top;
       deviceConnectionParentNode.left = resetAllButton.left;
     }

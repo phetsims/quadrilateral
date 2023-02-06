@@ -27,7 +27,7 @@ const preferencesModel = new QuadrilateralPreferencesModel();
 // while connected to some external device.
 const inputPreferencesOptions = QuadrilateralQueryParameters.deviceConnection ? {
   customPreferences: [ {
-    createContent: () => new QuadrilateralInputPreferencesNode( preferencesModel )
+    createContent: () => new QuadrilateralInputPreferencesNode( preferencesModel.tangibleOptionsModel )
   } ]
 } : undefined;
 
