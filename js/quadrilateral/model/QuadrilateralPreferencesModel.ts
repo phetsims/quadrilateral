@@ -14,11 +14,9 @@ import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralSoundOptionsModel from './QuadrilateralSoundOptionsModel.js';
 import QuadrilateralTangibleOptionsModel from './QuadrilateralTangibleOptionsModel.js';
 
+// TODO: Rename this to not look like it extends a PreferencesModel.
 class QuadrilateralPreferencesModel {
-
-  // Sound preferences
   public readonly soundOptionsModel = new QuadrilateralSoundOptionsModel();
-
   public readonly tangibleOptionsModel = new QuadrilateralTangibleOptionsModel();
 }
 
