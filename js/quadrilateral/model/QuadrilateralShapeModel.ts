@@ -83,8 +83,8 @@ class QuadrilateralShapeModel {
   public readonly sideABSideCDParallelSideChecker: ParallelSideChecker;
   public readonly sideBCSideDAParallelSideChecker: ParallelSideChecker;
 
-  // ParallelSideCheckers are responsible for determining if opposite SidePairs are parallel within their dynamic
-  // parallelAngleToleranceIntervalProperty. This is the collection of both checkers, one for each OppositeSidePair.
+  // ParallelSideCheckers are responsible for determining if opposite SidePairs are parallel within
+  // parallelAngleToleranceInterval. This is the collection of both checkers, one for each OppositeSidePair.
   public readonly parallelSideCheckers: ParallelSideChecker[];
 
   // Observables that indicate when the sides become parallel. Updated after all vertex positions have been set
@@ -814,8 +814,8 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Returns whether or not the quadrilateral shape is a parallelogram, within the tolerance defined by
-   * parallelAngleToleranceIntervalProperty. This function uses parallelSidePairsProperty and requires that Property
+   * Returns true if the quadrilateral shape is a parallelogram, within the tolerance defined by
+   * parallelAngleToleranceInterval. This function uses parallelSidePairsProperty and requires that Property
    * value to be up to date.
    */
   public getIsParallelogram(): boolean {
@@ -930,7 +930,7 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Returns true if two angles are equal within staticAngleToleranceIntervalProperty. See that value for more
+   * Returns true if two angles are equal within staticAngleToleranceInterval. See that value for more
    * information.
    */
   public isStaticAngleEqualToOther( angle: number, otherAngle: number ): boolean {
