@@ -166,14 +166,14 @@ class QuadrilateralModel {
     // Vertex intervals are controlled whether we are "locked" to smaller steps, whether we are temporarily using
     // smaller steps because of a hotkey, or if running with ?reducedStepSize
     this.vertexIntervalProperty = new DerivedProperty(
-      [ this.useMinorIntervalsProperty, preferencesModel.reducedStepSizeProperty, this.tangibleConnectionModel.connectedToDeviceProperty, preferencesModel.tangibleOptionsModel.deviceGridSpacingProperty ],
-      ( useMinorIntervals, reducedStepSize, connectedToDevice, deviceGridSpacing ) => {
+      [ this.useMinorIntervalsProperty, this.tangibleConnectionModel.connectedToDeviceProperty, preferencesModel.tangibleOptionsModel.deviceGridSpacingProperty ],
+      ( useMinorIntervals, connectedToDevice, deviceGridSpacing ) => {
 
         let interval: number;
         if ( connectedToDevice ) {
           interval = deviceGridSpacing;
         }
-        else if ( reducedStepSize ) {
+        else if ( QuadrilateralQueryParameters.reducedStepSize ) {
           interval = useMinorIntervals ? QuadrilateralConstants.MINOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralConstants.MAJOR_REDUCED_SIZE_VERTEX_INTERVAL;
         }
         else {

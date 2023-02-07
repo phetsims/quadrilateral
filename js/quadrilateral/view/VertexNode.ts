@@ -105,7 +105,17 @@ class VertexNode extends Voicing( Circle ) {
       vertexLabelText.visible = vertexLabelsVisible;
     } );
 
+    // calculate step sizes in view coordinates based on input modes from query parameters
+    const reducedStepSize = QuadrilateralQueryParameters.reducedStepSize;
+    const largeModelDelta = reducedStepSize ? QuadrilateralConstants.MAJOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralQueryParameters.majorVertexInterval;
+    const smallModelDelta = reducedStepSize ? QuadrilateralConstants.MINOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralQueryParameters.minorVertexInterval;
+    const largeViewDragDelta = modelViewTransform.modelToViewDeltaX( largeModelDelta );
+    const smallViewDragDelta = modelViewTransform.modelToViewDeltaX( smallModelDelta );
+
     const keyboardDragListener = new KeyboardDragListener( {
+      dragDelta: largeViewDragDelta,
+      shiftDragDelta: smallViewDragDelta,
+
       transform: modelViewTransform,
       drag: ( modelDelta: Vector2 ) => {
         const proposedPosition = model.getClosestGridPositionInDirection( vertex.positionProperty.value, modelDelta );
@@ -140,17 +150,17 @@ class VertexNode extends Voicing( Circle ) {
     } );
     this.addInputListener( keyboardDragListener );
 
-    // The user is able to control the interval for positioning each vertex, a "fine" control or default
-    model.preferencesModel.reducedStepSizeProperty.link( reducedStepSize => {
-      const largeModelDelta = reducedStepSize ? QuadrilateralConstants.MAJOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralQueryParameters.majorVertexInterval;
-      const smallModelDelta = reducedStepSize ? QuadrilateralConstants.MINOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralQueryParameters.minorVertexInterval;
-
-      const largeViewDragDelta = modelViewTransform.modelToViewDeltaX( largeModelDelta );
-      const smallViewDragDelta = modelViewTransform.modelToViewDeltaX( smallModelDelta );
-
-      keyboardDragListener.dragDelta = largeViewDragDelta;
-      keyboardDragListener.shiftDragDelta = smallViewDragDelta;
-    } );
+    // // The user is able to control the interval for positioning each vertex, a "fine" control or default
+    // model.preferencesModel.reducedStepSizeProperty.link( reducedStepSize => {
+    //   const largeModelDelta = reducedStepSize ? QuadrilateralConstants.MAJOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralQueryParameters.majorVertexInterval;
+    //   const smallModelDelta = reducedStepSize ? QuadrilateralConstants.MINOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralQueryParameters.minorVertexInterval;
+    //
+    //   const largeViewDragDelta = modelViewTransform.modelToViewDeltaX( largeModelDelta );
+    //   const smallViewDragDelta = modelViewTransform.modelToViewDeltaX( smallModelDelta );
+    //
+    //   keyboardDragListener.dragDelta = largeViewDragDelta;
+    //   keyboardDragListener.shiftDragDelta = smallViewDragDelta;
+    // } );
 
     // Position on drag start, in model coordinate frame.
     let startPosition: Vector2;

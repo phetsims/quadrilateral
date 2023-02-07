@@ -10,10 +10,8 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralSoundOptionsModel from './QuadrilateralSoundOptionsModel.js';
-import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralTangibleOptionsModel from './QuadrilateralTangibleOptionsModel.js';
 
 class QuadrilateralPreferencesModel {
@@ -22,12 +20,6 @@ class QuadrilateralPreferencesModel {
   public readonly soundOptionsModel = new QuadrilateralSoundOptionsModel();
 
   public readonly tangibleOptionsModel = new QuadrilateralTangibleOptionsModel();
-
-  // Controls the interval that Vertex positions are constrained to for typical simulation control. When true,
-  // Vertices will be constrained to a finer grid for more precise motion. In general that is not necessary but some
-  // users may want that amount of control.
-  // TODO: This could be removed from QuadrilateralPreferencesModel, it will never change at runtime now
-  public readonly reducedStepSizeProperty = new BooleanProperty( QuadrilateralQueryParameters.reducedStepSize );
 }
 
 quadrilateral.register( 'QuadrilateralPreferencesModel', QuadrilateralPreferencesModel );

@@ -40,9 +40,8 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     defaultValue: 0.002
   },
 
-  // When provided, vertices will snap to a much finer grid in the model. This lets you place vertices in many more
-  // locations in the model, but it will become much more difficult to find named shapes because vertex locations
-  // will be less precise (user has very fine control instead of automatically snapping to a coarse grid).
+  // When provided, user has fine control of vertex positions instead of snapping to a coarse grid. More freedom
+  // of movement but named shapes will be more difficult to find.
   reducedStepSize: {
     type: 'flag'
   },

@@ -324,7 +324,7 @@ class QuadrilateralAlerter extends Alerter {
   private getSideChangeObjectResponse( side: Side ): string {
     let response = '';
 
-    const lengthTolerance = this.model.quadrilateralShapeModel.interLengthToleranceIntervalProperty.value;
+    const lengthTolerance = this.model.quadrilateralShapeModel.interLengthToleranceInterval;
     const shapeModel = this.model.quadrilateralShapeModel;
 
     const toleranceForDescribingLengthChange = lengthTolerance / 3;
@@ -340,7 +340,7 @@ class QuadrilateralAlerter extends Alerter {
     const previousEqualToFirstAdjacent = shapeModel.isShapeLengthEqualToOther( previousLength, firstPreviousAdjacentSideLength );
     const previousEqualToSecondAdjacent = shapeModel.isShapeLengthEqualToOther( previousLength, secondPreviousAdjacentSideLength );
     const previousEqualToOneAdjacent = previousEqualToFirstAdjacent !== previousEqualToSecondAdjacent;
-    const previousNumberOfEqualSides = this.previousObjectResponseShapeSnapshot.countNumberOfEqualSides( this.quadrilateralShapeModel.interLengthToleranceIntervalProperty.value );
+    const previousNumberOfEqualSides = this.previousObjectResponseShapeSnapshot.countNumberOfEqualSides( this.quadrilateralShapeModel.interLengthToleranceInterval );
 
     const adjacentSides = currentShapeSnapshot.getAdjacentSideLengthsFromSideLabel( side.sideLabel );
     const firstAdjacentSideLength = adjacentSides[ 0 ];
@@ -351,7 +351,7 @@ class QuadrilateralAlerter extends Alerter {
     const equalToFirstAdjacent = shapeModel.isShapeLengthEqualToOther( sideLength, firstAdjacentSideLength );
     const equalToSecondAdjacent = shapeModel.isShapeLengthEqualToOther( sideLength, secondAdjacentSideLength );
     const equalToOneAdjacent = equalToFirstAdjacent !== equalToSecondAdjacent;
-    const numberOfEqualSides = currentShapeSnapshot.countNumberOfEqualSides( this.quadrilateralShapeModel.interLengthToleranceIntervalProperty.value );
+    const numberOfEqualSides = currentShapeSnapshot.countNumberOfEqualSides( this.quadrilateralShapeModel.interLengthToleranceInterval );
 
     const firstAdjacentSideLengthDifference = firstAdjacentSideLength - firstPreviousAdjacentSideLength;
     const secondAdjacentSideLengthDifference = secondAdjacentSideLength - secondPreviousAdjacentSideLength;
@@ -454,7 +454,7 @@ class QuadrilateralAlerter extends Alerter {
     // shape.
     let stateResponse: string | null = null;
 
-    const interAngleToleranceInterval = this.quadrilateralShapeModel.interAngleToleranceIntervalProperty.value;
+    const interAngleToleranceInterval = this.quadrilateralShapeModel.interAngleToleranceInterval;
 
     const currentAngle = vertex.angleProperty.value!;
     const previousAngle = this.previousObjectResponseShapeSnapshot.getAngleFromVertexLabel( vertex.vertexLabel );
@@ -469,9 +469,9 @@ class QuadrilateralAlerter extends Alerter {
     const secondAdjacentAngle = secondAdjacentVertex.angleProperty.value!;
 
     // whether the moving vertex angle becomes equal to any of the other vertices (within interAngleToleranceInterval)
-    const angleEqualToFirstAdjacent = QuadrilateralShapeModel.isInterAngleEqualToOther( currentAngle, firstAdjacentAngle, this.quadrilateralShapeModel.interAngleToleranceIntervalProperty.value );
-    const angleEqualToSecondAdjacent = QuadrilateralShapeModel.isInterAngleEqualToOther( currentAngle, secondAdjacentAngle, this.quadrilateralShapeModel.interAngleToleranceIntervalProperty.value );
-    const angleEqualToOpposite = QuadrilateralShapeModel.isInterAngleEqualToOther( currentAngle, oppositeVertexAngle, this.quadrilateralShapeModel.interAngleToleranceIntervalProperty.value );
+    const angleEqualToFirstAdjacent = QuadrilateralShapeModel.isInterAngleEqualToOther( currentAngle, firstAdjacentAngle, interAngleToleranceInterval );
+    const angleEqualToSecondAdjacent = QuadrilateralShapeModel.isInterAngleEqualToOther( currentAngle, secondAdjacentAngle, interAngleToleranceInterval );
+    const angleEqualToOpposite = QuadrilateralShapeModel.isInterAngleEqualToOther( currentAngle, oppositeVertexAngle, interAngleToleranceInterval );
 
     // Get the "progress" portion of the object response, describing how this vertex has changed or if it has
     // reached some critical angle. This portion of the description is always included.
@@ -598,7 +598,7 @@ class QuadrilateralAlerter extends Alerter {
   private shouldUseAngleComparisonDescription( changingVertexAngle: number, otherVertexAngle: number ): boolean {
     return VertexDescriber.isAngleAboutHalfOther( changingVertexAngle, otherVertexAngle ) ||
            VertexDescriber.isAngleAboutTwiceOther( changingVertexAngle, otherVertexAngle ) ||
-           QuadrilateralShapeModel.isInterAngleEqualToOther( changingVertexAngle, otherVertexAngle, this.quadrilateralShapeModel.interAngleToleranceIntervalProperty.value );
+           QuadrilateralShapeModel.isInterAngleEqualToOther( changingVertexAngle, otherVertexAngle, this.quadrilateralShapeModel.interAngleToleranceInterval );
   }
 
   /**

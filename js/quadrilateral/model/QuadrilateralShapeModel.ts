@@ -31,10 +31,7 @@ import optionize from '../../../../phet-core/js/optionize.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import VertexAngles from './VertexAngles.js';
 import ParallelSideChecker from './ParallelSideChecker.js';
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
-import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import TEmitter from '../../../../axon/js/TEmitter.js';
@@ -114,17 +111,18 @@ class QuadrilateralShapeModel {
   // from being called and new values from being set.
   private propertiesDeferred: boolean;
 
-  // The tolerance interval for angle and length comparisons when detecting shape names. This needs to be different
-  // from the parallelAToleranceInterval of the ParallelSideCheckers because those tolerance intervals can change
-  // depending on method of input to support learning goals. The shape detection comparisons need a more consistent
-  // angle tolerance interval. However, there is some unique behavior when connected to the tangible device.
-  public readonly interAngleToleranceIntervalProperty: TReadOnlyProperty<number>;
-  public readonly interLengthToleranceIntervalProperty: TReadOnlyProperty<number>;
+  // The tolerance intervals for angle and length comparisons when comparing two angle/lengths with one another.
+  // These values are generally larger than "static" angle tolerance intervals to account for compounding error
+  // when comparing angles. For example, we want a bit more flexibility when comparing angles of a trapezoid or else
+  // it would be incredibly difficult to find that shape.
+  public readonly interAngleToleranceInterval: number;
+  public readonly interLengthToleranceInterval: number;
 
-  // The tolerance interval when values comparing angles against constants. This needs to be a different value
-  // than interAngleToleranceIntervalProperty because that tolerance is used for sums of values so there may be
-  // compounding error.
-  public readonly staticAngleToleranceIntervalProperty: TReadOnlyProperty<number>;
+  // The tolerance interval for angle comparisons when comparing a vertex angle with a static value. This
+  // tolerance interval will generally be smaller than the "inter" intervals because we don't want much wiggle room
+  // when detecting critical angles. For example, the angle needs to be very close to Math.PI / 2 to be considered
+  // a "right angle" and make the "right angle indicators" appear.
+  public readonly staticAngleToleranceInterval: number;
 
   // Emits an event whenever the shape of the Quadrilateral changes
   public shapeChangedEmitter: TEmitter;
@@ -323,38 +321,19 @@ class QuadrilateralShapeModel {
       tandem: options.tandem.createTandem( 'shapeChangedEmitter' )
     } );
 
-    this.interAngleToleranceIntervalProperty = new DerivedProperty( [ model.preferencesModel.reducedStepSizeProperty ], reducedStepSize => {
-      return QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.interAngleToleranceInterval, reducedStepSize );
-    }, {
-      tandem: options.tandem.createTandem( 'interAngleToleranceIntervalProperty' ),
-      phetioValueType: NumberIO
-    } );
-
-    this.staticAngleToleranceIntervalProperty = new DerivedProperty( [ model.preferencesModel.reducedStepSizeProperty ], reducedStepSize => {
-      return QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.staticAngleToleranceInterval, reducedStepSize );
-    }, {
-      tandem: options.tandem.createTandem( 'staticAngleToleranceIntervalProperty' ),
-      phetioValueType: NumberIO
-    } );
-
-    this.interLengthToleranceIntervalProperty = new DerivedProperty( [ model.preferencesModel.reducedStepSizeProperty ], reducedStepSize => {
-      return QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.interLengthToleranceInterval, reducedStepSize );
-    }, {
-      tandem: options.tandem.createTandem( 'shapeLengthToleranceIntervalProperty' ),
-      phetioValueType: NumberIO
-    } );
+    this.interAngleToleranceInterval = QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.interAngleToleranceInterval );
+    this.staticAngleToleranceInterval = QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.staticAngleToleranceInterval );
+    this.interLengthToleranceInterval = QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.staticAngleToleranceInterval );
 
     this.sideABSideCDParallelSideChecker = new ParallelSideChecker(
       new SidePair( this.topSide, this.bottomSide ),
       this.shapeChangedEmitter,
-      model.preferencesModel.reducedStepSizeProperty,
       options.tandem.createTandem( 'sideABSideCDParallelSideChecker' )
     );
 
     this.sideBCSideDAParallelSideChecker = new ParallelSideChecker(
       new SidePair( this.rightSide, this.leftSide ),
       this.shapeChangedEmitter,
-      model.preferencesModel.reducedStepSizeProperty,
       options.tandem.createTandem( 'sideBCSideDAParallelSideChecker' )
     );
 
@@ -663,15 +642,15 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Returns the tolerance interval to use for a value. Generally, the default value will be returned. If the user
-   * has opted into "fine spacing" then the tolerance is multiplied by a scale factor configurable with query
-   * parameters. Similar case for when the sim is connected to a device.
+   * Returns the tolerance interval to use for a value. Generally, the default value will be returned. If the sim is
+   * running while connected to a device (?deviceConnection) or in a mode where all step sizes are reduced, the
+   * value will be further reduced by scale factors provided by query parameter.
    */
-  public static getWidenedToleranceInterval( defaultValue: number, useFineSpacing: boolean ): number {
+  public static getWidenedToleranceInterval( defaultValue: number ): number {
     let interval = defaultValue;
 
     // Note that both cases are possible and the scale factors compound!
-    if ( useFineSpacing ) {
+    if ( QuadrilateralQueryParameters.reducedStepSize ) {
       interval = interval * QuadrilateralQueryParameters.reducedStepSizeToleranceIntervalScaleFactor;
     }
     if ( QuadrilateralQueryParameters.deviceConnection ) {
@@ -904,7 +883,7 @@ class QuadrilateralShapeModel {
    * TODO: Replace with isInterAngleEqualToOther throughout.
    */
   public isShapeAngleEqualToOther( angle1: number, angle2: number ): boolean {
-    return Utils.equalsEpsilon( angle1, angle2, this.interAngleToleranceIntervalProperty.value );
+    return Utils.equalsEpsilon( angle1, angle2, this.interAngleToleranceInterval );
   }
 
   public static isInterAngleEqualToOther( angle1: number, angle2: number, interAngleToleranceInterval: number ): boolean {
@@ -912,7 +891,7 @@ class QuadrilateralShapeModel {
   }
 
   public isInterAngleEqualToOther( angle1: number, angle2: number ): boolean {
-    return Utils.equalsEpsilon( angle1, angle2, this.interAngleToleranceIntervalProperty.value );
+    return Utils.equalsEpsilon( angle1, angle2, this.interAngleToleranceInterval );
   }
 
   /**
@@ -922,7 +901,7 @@ class QuadrilateralShapeModel {
    * TODO: Rename to isInterLengthEqualToOTher to match interAngleToleranceInterval.
    */
   public isShapeLengthEqualToOther( length1: number, length2: number ): boolean {
-    return Utils.equalsEpsilon( length1, length2, this.interLengthToleranceIntervalProperty.value );
+    return Utils.equalsEpsilon( length1, length2, this.interLengthToleranceInterval );
   }
 
   /**
@@ -933,14 +912,14 @@ class QuadrilateralShapeModel {
   }
 
   public isRightAngle( angle: number ): boolean {
-    return Utils.equalsEpsilon( angle, Math.PI / 2, this.staticAngleToleranceIntervalProperty.value );
+    return Utils.equalsEpsilon( angle, Math.PI / 2, this.staticAngleToleranceInterval );
   }
 
   /**
    * Returns true if the angle is equal to PI within staticAngleToleranceInterval.
    */
   public isFlatAngle( angle: number ): boolean {
-    return Utils.equalsEpsilon( angle, Math.PI, this.staticAngleToleranceIntervalProperty.value );
+    return Utils.equalsEpsilon( angle, Math.PI, this.staticAngleToleranceInterval );
   }
 
   /**
@@ -955,7 +934,7 @@ class QuadrilateralShapeModel {
    * information.
    */
   public isStaticAngleEqualToOther( angle: number, otherAngle: number ): boolean {
-    return Utils.equalsEpsilon( angle, otherAngle, this.staticAngleToleranceIntervalProperty.value );
+    return Utils.equalsEpsilon( angle, otherAngle, this.staticAngleToleranceInterval );
   }
 
   /**

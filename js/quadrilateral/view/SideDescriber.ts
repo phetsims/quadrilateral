@@ -110,7 +110,7 @@ class SideDescriber {
     // other. This may not happen naturally by comparing side lengths because a rhombus and square may be detected
     // when sides are not perfectly equal due to the angle tolerance interval.
     const shapeName = this.quadrilateralShapeModel.shapeNameProperty.value;
-    const toleranceInterval = this.quadrilateralShapeModel.interLengthToleranceIntervalProperty.value;
+    const toleranceInterval = this.quadrilateralShapeModel.interLengthToleranceInterval;
     const oppositeComparison = shapeName === NamedQuadrilateral.SQUARE || shapeName === NamedQuadrilateral.RHOMBUS ?
                                equalToString : SideDescriber.getLengthComparisonDescription( oppositeSide, this.side, toleranceInterval );
 
@@ -121,7 +121,7 @@ class SideDescriber {
 
     // if 'markers' are visible describe the side length units by appending that information to the object response
     if ( this.markersVisibleProperty.value ) {
-      const unitsDescription = SideDescriber.getSideUnitsDescription( this.side.lengthProperty.value, this.quadrilateralShapeModel.interLengthToleranceIntervalProperty.value );
+      const unitsDescription = SideDescriber.getSideUnitsDescription( this.side.lengthProperty.value, this.quadrilateralShapeModel.interLengthToleranceInterval );
       response = StringUtils.fillIn( sideUnitsObjectResponsePatternString, {
         unitsDescription: unitsDescription,
         objectResponse: response
@@ -320,7 +320,7 @@ class SideDescriber {
 
       // the adjacent sides are equal in length but not equal to this side, describe the length of
       // this side relative to the other sides but we can use either side since they are equal in length
-      const toleranceInterval = this.quadrilateralShapeModel.interLengthToleranceIntervalProperty.value;
+      const toleranceInterval = this.quadrilateralShapeModel.interLengthToleranceInterval;
       description = StringUtils.fillIn( patternString, {
         comparison: SideDescriber.getLengthComparisonDescription( adjacentSides[ 0 ], this.side, toleranceInterval )
       } );

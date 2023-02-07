@@ -8,13 +8,10 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TEmitter from '../../../../axon/js/TEmitter.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import SidePair from './SidePair.js';
@@ -23,9 +20,10 @@ import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
 
 class ParallelSideChecker {
 
-  // A Property that controls the threshold for equality when determining if the opposite sides are parallel.
-  // Without a margin of error it would be extremely difficult to create parallel sides.
-  private readonly parallelAngleToleranceIntervalProperty: TReadOnlyProperty<number>;
+  // The tolerance interval used to compare angles in the calculation that determines if two opposite sides are
+  // parallel. Without a bit of tolerance it would be extremely difficult to create parallel sides. This value
+  // will be different depending on the runtime environment controlled by query parameters.
+  private readonly parallelAngleToleranceInterval: number;
 
   public readonly side1: Side;
   public readonly side2: Side;
@@ -41,13 +39,11 @@ class ParallelSideChecker {
   /**
    * @param oppositeSidePair - The SidePair with opposite sides that we want to inspect for parallelism
    * @param shapeChangedEmitter - Emitter for when the quadrilateral shape changes in some way.
-   * @param reducedStepSizeProperty
    * @param tandem
    */
   public constructor(
     oppositeSidePair: SidePair,
     shapeChangedEmitter: TEmitter,
-    reducedStepSizeProperty: TReadOnlyProperty<boolean>,
     tandem: Tandem ) {
 
     this.sidePair = oppositeSidePair;
@@ -60,14 +56,7 @@ class ParallelSideChecker {
       phetioReadOnly: true
     } );
 
-    this.parallelAngleToleranceIntervalProperty = new DerivedProperty( [
-      reducedStepSizeProperty
-    ], reducedStepSize => {
-      return QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.parallelAngleToleranceInterval, reducedStepSize );
-    }, {
-      tandem: tandem.createTandem( 'parallelAngleToleranceIntervalProperty' ),
-      phetioValueType: NumberIO
-    } );
+    this.parallelAngleToleranceInterval = QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.parallelAngleToleranceInterval );
 
     // For debugging only. This Property may become true/false as Vertex positionProperties are set one at a time. But
     // that that is a transient state. Wait until vertex positions are stable in
@@ -80,10 +69,10 @@ class ParallelSideChecker {
 
   /**
    * Returns true if two angles are close enough to each other that they should be considered equal. They are close
-   * enough if they are within the parallelAngleToleranceIntervalProperty.
+   * enough if they are within the parallelAngleToleranceInterval.
    */
   public isAngleEqualToOther( angle1: number, angle2: number ): boolean {
-    return Utils.equalsEpsilon( angle1, angle2, this.parallelAngleToleranceIntervalProperty.value );
+    return Utils.equalsEpsilon( angle1, angle2, this.parallelAngleToleranceInterval );
   }
 
   /**

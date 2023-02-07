@@ -186,7 +186,16 @@ class SideNode extends Voicing( Path ) {
       this.focusHighlight = lineNode.getStrokedShape();
     } );
 
+    const reducedStepSize = QuadrilateralQueryParameters.reducedStepSize;
+    const largeModelDelta = reducedStepSize ? QuadrilateralConstants.MAJOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralQueryParameters.majorVertexInterval;
+    const smallModelDelta = reducedStepSize ? QuadrilateralConstants.MINOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralQueryParameters.minorVertexInterval;
+
+    const largeViewDragDelta = modelViewTransform.modelToViewDeltaX( largeModelDelta );
+    const smallViewDragDelta = modelViewTransform.modelToViewDeltaX( smallModelDelta );
+
     const keyboardDragListener = new KeyboardDragListener( {
+      dragDelta: largeViewDragDelta,
+      shiftDragDelta: smallViewDragDelta,
       transform: modelViewTransform,
       drag: ( vectorDelta: Vector2 ) => {
         this.moveVerticesFromModelDelta( vectorDelta );
@@ -198,18 +207,6 @@ class SideNode extends Voicing( Path ) {
       tandem: options.tandem?.createTandem( 'keyboardDragListener' )
     } );
     this.addInputListener( keyboardDragListener );
-
-    // The user is able to control the interval for positioning each vertex, a "fine" control or default
-    quadrilateralModel.preferencesModel.reducedStepSizeProperty.link( reducedStepSize => {
-      const largeModelDelta = reducedStepSize ? QuadrilateralConstants.MAJOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralQueryParameters.majorVertexInterval;
-      const smallModelDelta = reducedStepSize ? QuadrilateralConstants.MINOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralQueryParameters.minorVertexInterval;
-
-      const largeViewDragDelta = modelViewTransform.modelToViewDeltaX( largeModelDelta );
-      const smallViewDragDelta = modelViewTransform.modelToViewDeltaX( smallModelDelta );
-
-      keyboardDragListener.dragDelta = largeViewDragDelta;
-      keyboardDragListener.shiftDragDelta = smallViewDragDelta;
-    } );
 
     // Vectors between the start position during drag and each vertex so that we can translate vertex positions
     // relative to a pointer position on a side.

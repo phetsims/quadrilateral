@@ -478,8 +478,9 @@ class QuadrilateralDescriber {
     const longestSide = _.maxBy( this.shapeModel.sides, side => side.lengthProperty.value )!;
     const shortestSide = _.minBy( this.shapeModel.sides, side => side.lengthProperty.value )!;
 
-    const longestSideDescription = SideDescriber.getSideUnitsDescription( longestSide.lengthProperty.value, this.shapeModel.interLengthToleranceIntervalProperty.value );
-    const shortestSideDescription = SideDescriber.getSideUnitsDescription( shortestSide.lengthProperty.value, this.shapeModel.interLengthToleranceIntervalProperty.value );
+    const interLengthToleranceInterval = this.shapeModel.interLengthToleranceInterval;
+    const longestSideDescription = SideDescriber.getSideUnitsDescription( longestSide.lengthProperty.value, interLengthToleranceInterval );
+    const shortestSideDescription = SideDescriber.getSideUnitsDescription( shortestSide.lengthProperty.value, interLengthToleranceInterval );
 
     if ( this.shapeModel.allLengthsEqualProperty.value ) {
 
@@ -805,7 +806,7 @@ class QuadrilateralDescriber {
     const thirdCornerString = this.getCornerAngleDescription( orderedOppositeVertexPairs[ 1 ].vertex1 );
     const fourthCornerString = this.getCornerAngleDescription( orderedOppositeVertexPairs[ 1 ].vertex2 );
 
-    const interAngleToleranceInterval = this.shapeModel.interAngleToleranceIntervalProperty.value;
+    const interAngleToleranceInterval = this.shapeModel.interAngleToleranceInterval;
     const shapeName = this.shapeModel.shapeNameProperty.value;
     const firstComparisonString = VertexDescriber.getAngleComparisonDescription( orderedOppositeVertexPairs[ 0 ].vertex2, orderedOppositeVertexPairs[ 0 ].vertex1, interAngleToleranceInterval, shapeName );
     const secondComparisonString = VertexDescriber.getAngleComparisonDescription( orderedOppositeVertexPairs[ 1 ].vertex2, orderedOppositeVertexPairs[ 1 ].vertex1, interAngleToleranceInterval, shapeName );
@@ -838,7 +839,7 @@ class QuadrilateralDescriber {
     const fourthSide = sortedOppositeSidePairs[ 1 ].side2;
 
     // comparing the lengths of each opposite side pair, relative to the first side in the pair
-    const interLengthToleranceInterval = this.shapeModel.interLengthToleranceIntervalProperty.value;
+    const interLengthToleranceInterval = this.shapeModel.interLengthToleranceInterval;
     const firstComparisonString = SideDescriber.getLengthComparisonDescription( secondSide, firstSide, interLengthToleranceInterval );
     const secondComparisonString = SideDescriber.getLengthComparisonDescription( fourthSide, thirdSide, interLengthToleranceInterval );
 
@@ -859,7 +860,7 @@ class QuadrilateralDescriber {
 
     // Compare the lengths of the first two parallel sides against the lengths of the second two parallel sides,
     // relative to the first two parallel sides.
-    const toleranceInterval = this.shapeModel.interLengthToleranceIntervalProperty.value;
+    const toleranceInterval = this.shapeModel.interLengthToleranceInterval;
     const comparisonString = SideDescriber.getLengthComparisonDescription( orderedSidePairs[ 1 ].side1, orderedSidePairs[ 0 ].side1, toleranceInterval );
 
     // const patternString = 'Equal Sides {{firstSide}} and {{secondSide}} are {{comparison}} equal Sides {{thirdSide}} and {{fourthSide}}.';
@@ -897,7 +898,7 @@ class QuadrilateralDescriber {
     const fourthCornerString = this.getCornerAngleDescription( sortedUndescribedVertices[ 1 ] );
 
     // describe the relative size of the equal angles compared to eqch unequal angle
-    const interAngleToleranceInterval = this.shapeModel.interAngleToleranceIntervalProperty.value;
+    const interAngleToleranceInterval = this.shapeModel.interAngleToleranceInterval;
     const shapeName = this.shapeModel.shapeNameProperty.value;
     const firstComparisonString = VertexDescriber.getAngleComparisonDescription( sortedUndescribedVertices[ 0 ], firstVertex, interAngleToleranceInterval, shapeName );
     const secondComparisonString = VertexDescriber.getAngleComparisonDescription( sortedUndescribedVertices[ 1 ], firstVertex, interAngleToleranceInterval, shapeName );
@@ -927,9 +928,9 @@ class QuadrilateralDescriber {
     const secondCornersString = this.getCornersAngleDescription( orderedVertexPairs[ 1 ].vertex1, orderedVertexPairs[ 1 ].vertex2 );
 
     // we are comparing the angles of the vertex pairs, relative to the first described pair
-    const interToleranceInterval = this.shapeModel.interAngleToleranceIntervalProperty.value;
+    const interAngleToleranceInterval = this.shapeModel.interAngleToleranceInterval;
     const shapeName = this.shapeModel.shapeNameProperty.value;
-    const comparisonString = VertexDescriber.getAngleComparisonDescription( orderedVertexPairs[ 1 ].vertex1, orderedVertexPairs[ 0 ].vertex1, interToleranceInterval, shapeName );
+    const comparisonString = VertexDescriber.getAngleComparisonDescription( orderedVertexPairs[ 1 ].vertex1, orderedVertexPairs[ 0 ].vertex1, interAngleToleranceInterval, shapeName );
 
     const patternString = twoPairsOfEqualVerticesPatternString;
     return StringUtils.fillIn( patternString, {

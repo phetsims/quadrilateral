@@ -126,7 +126,7 @@ class VertexDescriber {
     const oppositeVertex = this.quadrilateralShapeModel.oppositeVertexMap.get( this.vertex )!;
 
     const shapeName = this.quadrilateralShapeModel.shapeNameProperty.value;
-    const oppositeComparisonString = VertexDescriber.getAngleComparisonDescription( oppositeVertex, this.vertex, this.quadrilateralShapeModel.interAngleToleranceIntervalProperty.value, shapeName );
+    const oppositeComparisonString = VertexDescriber.getAngleComparisonDescription( oppositeVertex, this.vertex, this.quadrilateralShapeModel.interAngleToleranceInterval, shapeName );
     const adjacentVertexDescriptionString = this.getAdjacentVertexObjectDescription();
 
     // if corner guides are visible, a description of the number of wedges is included
@@ -256,7 +256,7 @@ class VertexDescriber {
       // to describe the relative description
       const shapeName = this.quadrilateralShapeModel.shapeNameProperty.value;
       description = StringUtils.fillIn( equalAdjacentCornersPatternString, {
-        comparison: VertexDescriber.getAngleComparisonDescription( adjacentCorners[ 0 ], this.vertex, this.quadrilateralShapeModel.interAngleToleranceIntervalProperty.value, shapeName )
+        comparison: VertexDescriber.getAngleComparisonDescription( adjacentCorners[ 0 ], this.vertex, this.quadrilateralShapeModel.interAngleToleranceInterval, shapeName )
       } );
     }
     else {

@@ -1,6 +1,7 @@
 // Copyright 2023, University of Colorado Boulder
 
 /**
+ * TODO: Documentation
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 

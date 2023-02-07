@@ -71,12 +71,27 @@ class QuadrilateralDebuggingPanel extends Node {
       children: [ isParallelogramText, sideABCDParallelText, sideBCDAParallelText ]
     }, VBOX_OPTIONS ) );
 
-    // tolerance intervals readout
-    const sideABCDToleranceIntervalText = new Text( '', TEXT_OPTIONS );
-    const sideBCDAToleranceIntervalText = new Text( '', TEXT_OPTIONS );
-    const interAngleToleranceIntervalText = new Text( '', TEXT_OPTIONS );
-    const staticAngleToleranceIntervalText = new Text( '', TEXT_OPTIONS );
-    const shapeLengthToleranceIntervalText = new Text( '', TEXT_OPTIONS );
+    // tolerance intervals readout - these will not change after startup
+    const sideABCDToleranceIntervalText = new Text(
+      QuadrilateralDebuggingPanel.fillInValuePattern( '(AB, CD) parallelAngleToleranceInterval', model.quadrilateralShapeModel.parallelSideCheckers[ 0 ][ 'parallelAngleToleranceInterval' ] ),
+      TEXT_OPTIONS
+    );
+    const sideBCDAToleranceIntervalText = new Text(
+      QuadrilateralDebuggingPanel.fillInValuePattern( '(BC, DA) parallelAngleToleranceInterval', model.quadrilateralShapeModel.parallelSideCheckers[ 1 ][ 'parallelAngleToleranceInterval' ] ),
+      TEXT_OPTIONS
+    );
+    const interAngleToleranceIntervalText = new Text(
+      QuadrilateralDebuggingPanel.fillInValuePattern( 'interAngleToleranceInterval', model.quadrilateralShapeModel.interAngleToleranceInterval ),
+      TEXT_OPTIONS
+    );
+    const staticAngleToleranceIntervalText = new Text(
+      QuadrilateralDebuggingPanel.fillInValuePattern( 'staticAngleToleranceInterval', model.quadrilateralShapeModel.staticAngleToleranceInterval ),
+      TEXT_OPTIONS
+    );
+    const shapeLengthToleranceIntervalText = new Text(
+      QuadrilateralDebuggingPanel.fillInValuePattern( 'interLengthToleranceInterval', model.quadrilateralShapeModel.interLengthToleranceInterval ),
+      TEXT_OPTIONS
+    );
     const toleranceIntervalBox = new VBox( combineOptions<VBoxOptions>( {
       children: [ sideABCDToleranceIntervalText, sideBCDAToleranceIntervalText, interAngleToleranceIntervalText, staticAngleToleranceIntervalText, shapeLengthToleranceIntervalText ]
     }, VBOX_OPTIONS ) );
@@ -150,13 +165,6 @@ class QuadrilateralDebuggingPanel extends Node {
     QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 0 ][ 'isParallelProperty' ], sideABCDParallelText, '(AB, CD) parallel', decimalPlacesProperty );
     QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 1 ][ 'isParallelProperty' ], sideBCDAParallelText, '(BC, DA) parallel', decimalPlacesProperty );
 
-    // angleToleranceIntervals for each opposite side pair
-    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 0 ][ 'parallelAngleToleranceIntervalProperty' ], sideABCDToleranceIntervalText, '(AB, CD) parallelAngleToleranceInterval', decimalPlacesProperty );
-    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.parallelSideCheckers[ 1 ][ 'parallelAngleToleranceIntervalProperty' ], sideBCDAToleranceIntervalText, '(BC, DA) parallelAngleToleranceInterval', decimalPlacesProperty );
-    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.interAngleToleranceIntervalProperty, interAngleToleranceIntervalText, 'interAngleToleranceInterval', decimalPlacesProperty );
-    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.staticAngleToleranceIntervalProperty, staticAngleToleranceIntervalText, 'staticAngleToleranceInterval', decimalPlacesProperty );
-    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.interLengthToleranceIntervalProperty, shapeLengthToleranceIntervalText, 'shapeLengthToleranceInterval', decimalPlacesProperty );
-
     // shape name
     QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.shapeNameProperty, shapeNameText, 'shape name', decimalPlacesProperty );
 
@@ -207,11 +215,18 @@ class QuadrilateralDebuggingPanel extends Node {
         } );
       }
       else {
-        text.text = StringUtils.fillIn( VALUE_PATTERN_STRING, {
-          value: formattedValue,
-          label: label
-        } );
+        text.text = QuadrilateralDebuggingPanel.fillInValuePattern( label, formattedValue );
       }
+    } );
+  }
+
+  /**
+   * Uses string utils to format a label and value for the debugging panel.
+   */
+  private static fillInValuePattern( label: string, value: number ): string {
+    return StringUtils.fillIn( VALUE_PATTERN_STRING, {
+      value: value,
+      label: label
     } );
   }
 }
