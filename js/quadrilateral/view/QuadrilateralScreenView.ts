@@ -43,8 +43,6 @@ class QuadrilateralScreenView extends ScreenView {
   private readonly quadrilateralNode: QuadrilateralNode;
   private readonly quadrilateralSoundView: QuadrilateralSoundView;
   private readonly quadrilateralDescriber: QuadrilateralDescriber;
-
-  // Not constructed unless requested by query parameter
   private readonly quadrilateralMediaPipe: QuadrilateralMediaPipe | null = null;
 
   public constructor( model: QuadrilateralModel, preferencesModel: QuadrilateralPreferencesModel, tandem: Tandem ) {
@@ -54,7 +52,6 @@ class QuadrilateralScreenView extends ScreenView {
       tandem: tandem
     } );
 
-    // Responsible for generating descriptions of the state of the quadrilateral for accessibility.
     this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel, model.shapeNameVisibleProperty, model.markersVisibleProperty );
 
     const visibilityControls = new QuadrilateralVisibilityControls(
@@ -70,9 +67,8 @@ class QuadrilateralScreenView extends ScreenView {
 
     const resetAllButton = new ResetAllButton( {
       listener: () => {
-        this.interruptSubtreeInput(); // cancel interactions that may be in progress
+        this.interruptSubtreeInput();
         model.reset();
-        this.reset();
       },
 
       left: visibilityControls.left,
@@ -245,13 +241,6 @@ class QuadrilateralScreenView extends ScreenView {
    */
   public override getVoicingHintContent(): string {
     return QuadrilateralStrings.a11y.voicing.hintContent;
-  }
-
-  /**
-   * Resets the view.
-   */
-  public reset(): void {
-    //TODO
   }
 
   /**
