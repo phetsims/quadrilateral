@@ -89,12 +89,6 @@ class QuadrilateralModel {
   // Emits an event when a full model reset happens (but not when a shape reset happens)
   public readonly resetEmitter = new Emitter();
 
-  // The first model step we will disable all sounds. This simulation updates certain Properties in the animation
-  // frame so we wait until after the sim has loaded to start playing any sounds (lazyLink is not sufficient when
-  // Properties are updated the following frame).
-  // TODO: I think this can be removed.
-  private firstModelStep: boolean;
-
   public constructor( optionsModel: QuadrilateralOptionsModel, tandem: Tandem ) {
 
     this.optionsModel = optionsModel;
@@ -150,8 +144,6 @@ class QuadrilateralModel {
         return interval;
       }
     );
-
-    this.firstModelStep = true;
 
     // Put a reference to the simulation model on the window so that we can access it in wrappers that facilitate
     // communication between device and simulation.
@@ -220,25 +212,6 @@ class QuadrilateralModel {
 
     // reset is not in progress anymore
     this.resetNotInProgressProperty.value = true;
-  }
-
-  /**
-   * Steps the model.
-   * @param dt - time step, in seconds
-   */
-  public step( dt: number ): void {
-
-    // First model step prevent sounds from coming through as we call updateOrderDependentProperties
-    // TODO: This may not be necessary anymore since updateOrderDependentPRoperties was moved
-    // out of the animation frame.
-    if ( this.firstModelStep ) {
-      this.resetNotInProgressProperty.value = false;
-    }
-
-    if ( this.firstModelStep ) {
-      this.firstModelStep = false;
-      this.resetNotInProgressProperty.value = true;
-    }
   }
 
   /**

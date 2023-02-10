@@ -22,7 +22,6 @@ type QuadrilateralVisibilityControlsOptions = SelfOptions & StrictOmit<VBoxOptio
 
 class QuadrilateralVisibilityControls extends VBox {
   public constructor( visibilityModel: QuadrilateralVisibilityModel, providedOptions: QuadrilateralVisibilityControlsOptions ) {
-    console.log( 'here' );
 
     const options = optionize<QuadrilateralVisibilityControlsOptions, SelfOptions, VBoxOptions>()( {
       align: 'left',
