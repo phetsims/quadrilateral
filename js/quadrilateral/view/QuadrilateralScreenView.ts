@@ -6,7 +6,6 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Bounds2 from '../../../../dot/js/Bounds2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
@@ -36,6 +35,7 @@ import ShapeSoundsCheckbox from './ShapeSoundsCheckbox.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import SmallStepsLockToggleButton from './SmallStepsLockToggleButton.js';
 import QuadrilateralTangibleControls from './QuadrilateralTangibleControls.js';
+import QuadrilateralModelViewTransform from './QuadrilateralModelViewTransform.js';
 
 class QuadrilateralScreenView extends ScreenView {
   private readonly model: QuadrilateralModel;
@@ -52,6 +52,9 @@ class QuadrilateralScreenView extends ScreenView {
       tandem: tandem
     } );
 
+    //---------------------------------------------------------------------------
+    // Create view subcomponents
+    //---------------------------------------------------------------------------
     this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel, model.shapeNameVisibleProperty, model.markersVisibleProperty );
 
     const visibilityControls = new QuadrilateralVisibilityControls(
@@ -60,28 +63,22 @@ class QuadrilateralScreenView extends ScreenView {
       model.gridVisibleProperty,
       model.diagonalGuidesVisibleProperty,
       {
-        rightCenter: this.layoutBounds.rightCenter.minusXY( QuadrilateralConstants.SCREEN_VIEW_X_MARGIN, 0 ),
         tandem: tandem.createTandem( 'visibilityControls' )
       } );
-    this.addChild( visibilityControls );
+
+    const smallStepsLockToggleButton = new SmallStepsLockToggleButton( model.lockToMinorIntervalsProperty, {
+      tandem: tandem.createTandem( 'smallStepsLockToggleButton' )
+    } );
 
     const resetAllButton = new ResetAllButton( {
       listener: () => {
         this.interruptSubtreeInput();
         model.reset();
       },
-
-      left: visibilityControls.left,
-      bottom: this.layoutBounds.maxY - QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN,
       tandem: tandem.createTandem( 'resetAllButton' )
     } );
-    this.addChild( resetAllButton );
-
-    const shapeSoundsCheckbox = new ShapeSoundsCheckbox( model.shapeSoundEnabledProperty, tandem.createTandem( 'shapeSoundsCheckbox' ) );
-    this.addChild( shapeSoundsCheckbox );
 
     const shapeNameDisplay = new QuadrilateralShapeNameDisplay( model.shapeNameVisibleProperty, model.quadrilateralShapeModel.shapeNameProperty, this.quadrilateralDescriber, tandem.createTandem( 'quadrilateralShapeNameDisplay' ) );
-    this.addChild( shapeNameDisplay );
 
     const resetShapeButton = new ResetShapeButton(
       model.quadrilateralShapeModel,
@@ -89,91 +86,38 @@ class QuadrilateralScreenView extends ScreenView {
       model.shapeNameVisibleProperty,
       tandem.createTandem( 'resetShapeButton' )
     );
-    this.addChild( resetShapeButton );
 
-    const smallStepsLockToggleButton = new SmallStepsLockToggleButton( model.lockToMinorIntervalsProperty, {
-      tandem: tandem.createTandem( 'smallStepsLockToggleButton' )
-    } );
-    this.addChild( smallStepsLockToggleButton );
-    smallStepsLockToggleButton.leftBottom = resetAllButton.leftTop.minusXY( 0, 45 );
-
-    // the model bounds are defined by available view space. Some padding is added around the screen and we make
-    // sure that the vertices cannot overlap with simulation controls. Otherwise the quadrilateral can move freely in
-    // the ScreenView.
-    let reducedViewBounds = this.layoutBounds.eroded( QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN );
-    reducedViewBounds = reducedViewBounds.withMaxX( resetAllButton.left - QuadrilateralConstants.SCREEN_VIEW_X_MARGIN );
-    reducedViewBounds = reducedViewBounds.withMinY( shapeNameDisplay.height + 2 * QuadrilateralConstants.VIEW_SPACING );
-
-    // The bounds used for the ModelViewTransform2 are a square set of bounds constrained by the limiting dimension
-    // of the reducedViewBounds and centered around the reducedViewBounds. Must be square so that the deltas in x and y
-    // directions are the same when moving between model and view coordinates. Produces a square in view space
-    // such that -1 is at the top and 1 is at the bottom.
-    const largestViewDimension = reducedViewBounds.height; // layoutBounds are wider than they are tall
-    const viewBoundsForTransform = new Bounds2(
-      reducedViewBounds.centerX - largestViewDimension / 2,
-      reducedViewBounds.centerY - largestViewDimension / 2,
-      reducedViewBounds.centerX + largestViewDimension / 2,
-      reducedViewBounds.centerY + largestViewDimension / 2
-    );
-    const largestModelDimension = model.modelBounds.height;
-    const modelBoundsForTransform = new Bounds2(
-      -largestModelDimension / 2, -largestModelDimension / 2, largestModelDimension / 2, largestModelDimension / 2
-    );
-
-    const modelViewTransform = ModelViewTransform2.createRectangleInvertedYMapping(
-      modelBoundsForTransform,
-      viewBoundsForTransform
-    );
+    const shapeSoundsCheckbox = new ShapeSoundsCheckbox( model.shapeSoundEnabledProperty, tandem.createTandem( 'shapeSoundsCheckbox' ) );
 
     this.model = model;
-    this.modelViewTransform = modelViewTransform;
+    this.modelViewTransform = new QuadrilateralModelViewTransform( model.modelBounds, this.layoutBounds );
 
     const tangibleConnectionModel = model.tangibleConnectionModel;
 
     // Layered under everything else
     const diagonalGuidesNode = new QuadrilateralDiagonalGuidesNode( model.quadrilateralShapeModel, model.modelBounds, model.diagonalGuidesVisibleProperty, this.modelViewTransform );
 
-    this.quadrilateralNode = new QuadrilateralNode( model, modelViewTransform, this.layoutBounds, this.quadrilateralDescriber, {
+    this.quadrilateralNode = new QuadrilateralNode( model, this.modelViewTransform, this.layoutBounds, this.quadrilateralDescriber, {
       tandem: tandem.createTandem( 'quadrilateralNode' )
     } );
 
-    const interactionCueNode = new QuadrilateralInteractionCueNode( model.quadrilateralShapeModel, tangibleConnectionModel.connectedToDeviceProperty, model.resetEmitter, modelViewTransform );
+    const interactionCueNode = new QuadrilateralInteractionCueNode( model.quadrilateralShapeModel, tangibleConnectionModel.connectedToDeviceProperty, model.resetEmitter, this.modelViewTransform );
 
     this.quadrilateralSoundView = new QuadrilateralSoundView( model, preferencesModel.soundOptionsModel );
 
     const gridNode = new QuadrilateralGridNode( model.modelBounds, model.gridVisibleProperty, this.modelViewTransform );
 
-    // rendering order - See https://github.com/phetsims/quadrilateral/issues/178
-    // this.addChild( boundsRectangle );
-    this.addChild( gridNode );
-    this.addChild( diagonalGuidesNode );
-    this.addChild( this.quadrilateralNode );
-    this.addChild( interactionCueNode );
-
-    // A panel that displays model values, useful for debugging, useful for debugging
-    const debugValuesPanel = new QuadrilateralDebuggingPanel( model, {
-      leftTop: gridNode.leftTop.plusXY( 5, 5 )
-    } );
+    const debugValuesPanel = new QuadrilateralDebuggingPanel( model );
     model.showDebugValuesProperty.link( showValues => {
       debugValuesPanel.visible = showValues;
     } );
-    this.addChild( debugValuesPanel );
 
-    // layout for components that depend on the play area bounds being defined
-    shapeNameDisplay.centerBottom = gridNode.centerTop.minusXY( 0, QuadrilateralConstants.VIEW_SPACING );
-    shapeSoundsCheckbox.rightCenter = new Vector2( gridNode.right, shapeNameDisplay.centerY );
-
-    // effectively centers the resetShapeButton between the other two components
-    resetShapeButton.rightCenter = shapeSoundsCheckbox.leftCenter.minusXY(
-      ( shapeSoundsCheckbox.left - shapeNameDisplay.right - resetShapeButton.width ) / 2,
-      0
-    );
-
+    // only has children if relevant query parameters are provided, but this parent is always created for easy
+    // layout and PDOM ordering
     const deviceConnectionParentNode = new VBox( {
       align: 'left',
       spacing: QuadrilateralConstants.CONTROLS_SPACING
     } );
-    this.addChild( deviceConnectionParentNode );
     if ( QuadrilateralQueryParameters.deviceConnection ) {
 
       deviceConnectionParentNode.children = [
@@ -182,6 +126,38 @@ class QuadrilateralScreenView extends ScreenView {
       deviceConnectionParentNode.top = gridNode.top;
       deviceConnectionParentNode.left = resetAllButton.left;
     }
+
+    // rendering order - See https://github.com/phetsims/quadrilateral/issues/178
+    this.children = [
+
+      // shape area
+      gridNode,
+      diagonalGuidesNode,
+      this.quadrilateralNode,
+      interactionCueNode,
+      debugValuesPanel,
+
+      // controls
+      visibilityControls,
+      smallStepsLockToggleButton,
+      resetAllButton,
+      shapeSoundsCheckbox,
+      shapeNameDisplay,
+      resetShapeButton,
+      deviceConnectionParentNode
+    ];
+
+    // relative layout
+    visibilityControls.rightCenter = this.layoutBounds.rightCenter.minusXY( QuadrilateralConstants.SCREEN_VIEW_X_MARGIN, 0 );
+    resetAllButton.leftBottom = new Vector2( visibilityControls.left, this.layoutBounds.maxY - QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN );
+    shapeNameDisplay.centerBottom = gridNode.centerTop.minusXY( 0, QuadrilateralConstants.VIEW_SPACING );
+    shapeSoundsCheckbox.rightCenter = new Vector2( gridNode.right, shapeNameDisplay.centerY );
+    debugValuesPanel.leftTop = gridNode.leftTop.plusXY( 5, 5 );
+    smallStepsLockToggleButton.leftBottom = resetAllButton.leftTop.minusXY( 0, 45 );
+    resetShapeButton.rightCenter = shapeSoundsCheckbox.leftCenter.minusXY(
+      // effectively centers this button between the other name display controls
+      ( shapeSoundsCheckbox.left - shapeNameDisplay.right - resetShapeButton.width ) / 2, 0
+    );
 
     if ( MediaPipeQueryParameters.cameraInput === 'hands' ) {
       this.quadrilateralMediaPipe = new QuadrilateralMediaPipe( model );
@@ -195,7 +171,7 @@ class QuadrilateralScreenView extends ScreenView {
 
     // voicing
     // Disabling eslint here because this variable is not used but I am sure that it will be soon.
-    const quadrilateralAlerter = new QuadrilateralAlerter( model, this, modelViewTransform, this.quadrilateralDescriber ); // eslint-disable-line @typescript-eslint/no-unused-vars
+    const quadrilateralAlerter = new QuadrilateralAlerter( model, this, this.modelViewTransform, this.quadrilateralDescriber ); // eslint-disable-line @typescript-eslint/no-unused-vars
   }
 
   /**
