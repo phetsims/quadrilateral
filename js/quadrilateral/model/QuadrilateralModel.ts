@@ -44,7 +44,7 @@ class QuadrilateralModel {
   // If true, a panel displaying model values will be added to the view. Only for debugging.
   public readonly showDebugValuesProperty: TProperty<boolean>;
 
-  // Controls runtime preferences for the simulation.
+  // Controls runtime options for the simulation.
   public readonly optionsModel: QuadrilateralOptionsModel;
 
   // A model that manages Properties used by prototype connections with tangible devices (Serial, OpenCV, BLE).
