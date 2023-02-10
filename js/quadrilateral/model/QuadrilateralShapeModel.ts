@@ -29,7 +29,6 @@ import SideLengths from './SideLengths.js';
 import VertexLabel from './VertexLabel.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import VertexAngles from './VertexAngles.js';
 import ParallelSideChecker from './ParallelSideChecker.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import TProperty from '../../../../axon/js/TProperty.js';
@@ -152,10 +151,6 @@ class QuadrilateralShapeModel {
   // quadrilateral. Allows us to monitor the change in Side lengths during interaction.
   // TODO: Delete this? Are we still using 'saved' features?
   public savedSideLengths: SideLengths;
-
-  // A collection of the vertex angles at a point in time. Updated whenever the quadrilateral changes.
-  // TODO: Delete this? Are we still using 'saved' features?
-  private savedVertexAngles: VertexAngles;
 
   // Arrays that define the relationship between vertices in the model, either opposite or adjacent once they are
   // assembled to form the quadrilateral shape.
@@ -295,7 +290,6 @@ class QuadrilateralShapeModel {
     this.topSide.connectToSide( this.leftSide );
 
     this.savedSideLengths = this.getSideLengths();
-    this.savedVertexAngles = this.getVertexAngles();
 
     this.isParallelogramProperty = new BooleanProperty( false, {
       tandem: options.tandem.createTandem( 'isParallelogramProperty' )
@@ -411,28 +405,6 @@ class QuadrilateralShapeModel {
    */
   public saveSideLengths(): void {
     this.savedSideLengths = this.getSideLengths();
-  }
-
-  private getVertexAngles(): VertexAngles {
-    if ( assert ) {
-      this.vertices.forEach( vertex => assert && assert( vertex.angleProperty, 'angle Properties need to be initialized' ) );
-    }
-
-    return new VertexAngles(
-      this.vertexA.angleProperty.value,
-      this.vertexB.angleProperty.value,
-      this.vertexC.angleProperty.value,
-      this.vertexD.angleProperty.value
-    );
-  }
-
-  /**
-   * Save the current set of vertex angles to this.savedVertexAngles.
-   *
-   * TODO: Can this be removed?
-   */
-  private saveVertexAngles(): void {
-    this.savedVertexAngles = this.getVertexAngles();
   }
 
   /**
