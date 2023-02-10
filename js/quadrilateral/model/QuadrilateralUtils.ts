@@ -4,7 +4,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import quadrilateral from '../quadrilateral.js';
+import quadrilateral from '../../quadrilateral.js';
 
 const QuadrilateralUtils = {};
 
