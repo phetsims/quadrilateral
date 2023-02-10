@@ -77,21 +77,22 @@ class ParallelSideChecker {
   }
 
   /**
-   * Returns whether the two sides are currently parallel within angleToleranceInterval.
+   * Returns whether the two sides are currently parallel within parallelAngleToleranceInterval.
    */
   public areSidesParallel(): boolean {
     assert && assert( this.side1.vertex1.angleProperty.value !== null, 'angles need to be available to determine parallel state' );
     assert && assert( this.side2.vertex2.angleProperty.value !== null, 'angles need to be available to determine parallel state' );
 
-    // Two sides are parallel if the vertices of their connecting sides add up to Math.PI. The quadrilateral is
-    // constructed such that the Side that connects these two sides vertex1 of side1 and vertex2 of side2
-    //         side1
-    // vertex1---------------vertex2
-    //    |                   |
-    //    |                   |
-    //    |                   |
-    //    |-------------------|
-    // vertex2   side2       vertex1
+    // Two sides are parallel if the vertex angles of a shared adjacent side add up to Math.PI. The quadrilateral is
+    // constructed such that the shared adjacent side is composed of vertex1 of side1 and vertex2 of side2.
+    // We use this to determine which angles to inspect in the calculation.
+    //                                  side1
+    //                        vertex1---------------vertex2
+    //                           |                   |
+    //      shared adjacent side |                   |
+    //                           |                   |
+    //                           |-------------------|
+    //                        vertex2   side2       vertex1
     return this.isAngleEqualToOther( this.side1.vertex1.angleProperty.value! + this.side2.vertex2.angleProperty.value!, Math.PI );
   }
 }
