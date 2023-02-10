@@ -36,9 +36,9 @@ class QuadrilateralModel {
     QuadrilateralConstants.BOUNDS_HEIGHT / 2
   );
 
-  // Whether a reset is currently in progress. Added for sound. If the model is actively resetting,
-  // SoundManagers will disable so we don't play sounds for transient model states. It is a value for when
-  // the reset is NOT in progress because that is most convenient to pass to SoundGenerator enableControlProperties.
+  // Whether a reset is currently in progress. Added for sound. If the model is actively resetting, SoundManagers
+  // are disabled so we don't play sounds for transient model states. Tracks when the reset is NOT in progress
+  // because that makes it most convenient to pass to SoundGenerator enableControlProperties.
   public readonly resetNotInProgressProperty: TProperty<boolean>;
 
   // If true, a panel displaying model values will be added to the view. Only for debugging.
