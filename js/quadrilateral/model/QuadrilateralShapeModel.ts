@@ -379,15 +379,6 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Shape is a kite if there is at least one set of equal opposite angles and exactly two sets of equal adjacent sides.
-   */
-  private isKite(): boolean {
-    const angleRequirement = this.oppositeEqualVertexPairsProperty.value.length > 0;
-    const lengthRequirement = this.adjacentEqualSidePairsProperty.value.length === 2;
-    return angleRequirement && lengthRequirement;
-  }
-
-  /**
    * Create the drag area for a vertex from the positions of the others. The vertex area
    *
    * @param modelBounds - The bounds containing all vertices (entire model space)
@@ -536,21 +527,6 @@ class QuadrilateralShapeModel {
     shape.close();
 
     return shape;
-  }
-
-  /**
-   * Returns true if a point is on the line. Uses the top voted answer at
-   * https://stackoverflow.com/questions/17692922/check-is-a-point-x-y-is-between-two-points-drawn-on-a-straight-line
-   * to determine this in a simple way. If the length of the line is equal to the distance between line start and
-   * point plus line end and point, the point must be on the line.
-   */
-  private static isPointOnLine( line: Line, point: Vector2 ): boolean {
-    const length = line.start.distance( line.end );
-    const lengthA = line.start.distance( point );
-    const lengthB = line.end.distance( point );
-
-    // TODO: This check is susceptible to precision errors but this seems fragile, is there another way to do this?
-    return Utils.equalsEpsilon( length, lengthA + lengthB, 0.001 );
   }
 
   /**
@@ -757,11 +733,10 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Returns true if the quadrilateral shape is a parallelogram, within the tolerance defined by
-   * parallelAngleToleranceInterval. This function uses parallelSidePairsProperty and requires that Property
-   * value to be up to date.
+   * Returns true if the quadrilateral shape is a parallelogram. This function uses parallelSidePairsProperty, and
+   * must be used after updateOrderDependentProperties().
    */
-  public getIsParallelogram(): boolean {
+  private getIsParallelogram(): boolean {
 
     // We should have a quadrilateral if the shape has two pairs of parallel sides.
     return this.parallelSidePairsProperty.value.length === 2;
@@ -788,7 +763,7 @@ class QuadrilateralShapeModel {
    * Returns the area of the quadrilateral. Uses Bretschneider's formula for the area of a general quadrilateral,
    * see https://en.wikipedia.org/wiki/Bretschneider%27s_formula.
    *
-   * Dependent on side lengths and angles, make sure those are up to date before calling this function in
+   * Dependent on side lengths and angles, must be used when
    * updateOrderDependentProperties.
    */
   private getArea(): number {
@@ -863,13 +838,6 @@ class QuadrilateralShapeModel {
    */
   public isFlatAngle( angle: number ): boolean {
     return Utils.equalsEpsilon( angle, Math.PI, this.staticAngleToleranceInterval );
-  }
-
-  /**
-   * Returns true when the angle is convex (greater than 180 degrees).
-   */
-  public isConvexAngle( angle: number ): boolean {
-    return angle > Math.PI;
   }
 
   /**
@@ -983,6 +951,8 @@ class QuadrilateralShapeModel {
   /**
    * Update Properties managing side length comparisons. Add or remove SidePairs from adjacentEqualSidePairsProperty
    * and oppositeEqualSidePairsProperty depending on length equalities.
+   *
+   * TODO: Rename and update docs to make more clear.
    */
   private updateSideLengthComparisons(): void {
     this.updateEqualLengthSidePairs( this.adjacentEqualSidePairsProperty, this.adjacentSides );
@@ -1339,21 +1309,6 @@ class QuadrilateralShapeModel {
     if ( !deferred ) {
       deferredVertexListeners.forEach( deferredListener => deferredListener && deferredListener() );
     }
-  }
-
-  /**
-   * Returns the distance in model space between two vertices.
-   */
-  public static getDistanceBetweenVertices( vertex1: Vertex, vertex2: Vertex ): number {
-    return vertex1.positionProperty.value.distance( vertex2.positionProperty.value );
-  }
-
-  /**
-   * Returns the average length between two sides. Useful when determining how parallel or adjacent
-   * pairs of side lengths change over time.
-   */
-  public static getAverageSideLength( side1: Side, side2: Side ): number {
-    return ( side1.lengthProperty.value + side2.lengthProperty.value ) / 2;
   }
 
   /**

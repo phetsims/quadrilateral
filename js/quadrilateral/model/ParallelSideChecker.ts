@@ -61,8 +61,7 @@ class ParallelSideChecker {
     this.parallelAngleToleranceInterval = QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.parallelAngleToleranceInterval );
 
     // For debugging only. This Property may become true/false as Vertex positionProperties are set one at a time. When
-    // moving sides, this can change intermittently. use QuadrilateralShapeModel.getIsParallelogram() when the
-    // shape is stable instead.
+    // moving sides, this can change intermittently. Use areSidesParallel() when the shape is stable instead.
     shapeChangedEmitter.addListener( () => {
       this.isParallelProperty.value = this.areSidesParallel();
     } );
