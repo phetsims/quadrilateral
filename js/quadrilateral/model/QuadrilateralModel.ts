@@ -90,6 +90,7 @@ class QuadrilateralModel {
   public readonly resetEmitter = new Emitter();
 
   public constructor( optionsModel: QuadrilateralOptionsModel, tandem: Tandem ) {
+    this.optionsModel = optionsModel;
 
     this.resetNotInProgressProperty = new BooleanProperty( true, {
       tandem: tandem.createTandem( 'resetNotInProgressProperty' )
@@ -103,7 +104,6 @@ class QuadrilateralModel {
       tandem: tandem.createTandem( 'quadrilateralTestShapeModel' )
     } );
 
-    this.optionsModel = optionsModel;
     this.visibilityModel = new QuadrilateralVisibilityModel( tandem.createTandem( 'visibilityModel' ) );
     this.tangibleConnectionModel = new TangibleConnectionModel( this.quadrilateralShapeModel, this.optionsModel.tangibleOptionsModel, this.modelBounds, tandem.createTandem( 'tangibleConnectionModel' ) );
 

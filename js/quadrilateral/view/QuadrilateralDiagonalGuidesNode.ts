@@ -18,6 +18,7 @@ import Ray2 from '../../../../dot/js/Ray2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import QuadrilateralUtils from '../model/QuadrilateralUtils.js';
 
 const LINE_NODE_OPTIONS = {
   lineWidth: 2,
@@ -90,7 +91,7 @@ class QuadrilateralDiagonalGuidesNode extends Node {
     // First, look for an intersection against one of the corners of the bounds shape. If there is one here,
     // Kite shape intersection will either return 0 (because it is undefined) or 2 (because it is close enough to
     // both intersecting segments at the corner point) intersections.
-    let point = QuadrilateralShapeModel.getBoundsCornerPositionAlongRay( ray, bounds )!;
+    let point = QuadrilateralUtils.getBoundsCornerPositionAlongRay( ray, bounds )!;
     if ( !point ) {
 
       // There was not an intersection with a corner, we should be safe to look for an intersection against a

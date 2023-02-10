@@ -36,16 +36,7 @@ import TEmitter from '../../../../axon/js/TEmitter.js';
 import QuadrilateralShapeDetector from './QuadrilateralShapeDetector.js';
 import SidePair from './SidePair.js';
 import VertexPair from './VertexPair.js';
-import dotRandom from '../../../../dot/js/dotRandom.js';
-
-// A useful type for calculations for the vertex Shapes which define where the Vertex can move depending on
-// the positions of the other vertices. Lines are along the bounds of model space and RayIntersections
-// are the intersections between rays formed by adjacent vertices and the Line. See createVertexAreas for
-// more information.
-type LineIntersectionPair = {
-  line: Line;
-  intersectionPoint: Vector2;
-};
+import QuadrilateralUtils, { LineIntersectionPair } from './QuadrilateralUtils.js';
 
 export type VertexWithProposedPosition = {
   vertex: Vertex;
@@ -459,7 +450,7 @@ class QuadrilateralShapeModel {
 
         // There wasn't an intersection, the ray intersected exactly with a corner of the bounds, which is not
         // a defined intersection according to Kite.
-        const intersectionPoint = QuadrilateralShapeModel.getLinePositionAlongRay( firstRay!, line );
+        const intersectionPoint = QuadrilateralUtils.getLinePositionAlongRay( firstRay!, line );
         if ( intersectionPoint ) {
           firstRayIntersectionLinePair = {
             line: line,
@@ -478,7 +469,7 @@ class QuadrilateralShapeModel {
 
         // There wasn't an intersection, the ray intersected exactly with a corner of the bounds, which is not
         // a defined intersection according to Kite.
-        const intersectionPoint = QuadrilateralShapeModel.getLinePositionAlongRay( secondRay!, line );
+        const intersectionPoint = QuadrilateralUtils.getLinePositionAlongRay( secondRay!, line );
         if ( intersectionPoint ) {
           secondRayIntersectionLinePair = {
             line: line,
@@ -500,7 +491,7 @@ class QuadrilateralShapeModel {
 
       // The rays between vertexB and vertexC and vertexD and vertexC define the shape that will prevent twisted
       // quadrilaterals, so after starting at vertexC we just walk clockwise along the boundary points
-      const intersectionAndBoundaryPoints = QuadrilateralShapeModel.getPointsAlongBoundary( directedLines, firstRayIntersectionLinePair!, secondRayIntersectionLinePair! );
+      const intersectionAndBoundaryPoints = QuadrilateralUtils.getPointsAlongBoundary( directedLines, firstRayIntersectionLinePair!, secondRayIntersectionLinePair! );
       points = points.concat( intersectionAndBoundaryPoints );
     }
     else {
@@ -510,7 +501,7 @@ class QuadrilateralShapeModel {
       points.push( vertexC.positionProperty.value ); // start at the opposite vertex
       points.push( vertexD.positionProperty.value ); // walk to the next vertex
 
-      const intersectionAndBoundaryPoints = QuadrilateralShapeModel.getPointsAlongBoundary( directedLines, firstRayIntersectionLinePair!, secondRayIntersectionLinePair! );
+      const intersectionAndBoundaryPoints = QuadrilateralUtils.getPointsAlongBoundary( directedLines, firstRayIntersectionLinePair!, secondRayIntersectionLinePair! );
       points = points.concat( intersectionAndBoundaryPoints );
 
       points.push( vertexB.positionProperty.value ); // walk back to vertexB
@@ -529,36 +520,6 @@ class QuadrilateralShapeModel {
     return shape;
   }
 
-  /**
-   * Returns one of the corner points of the Bounds2 if the provided ray goes exactly through that point. Works
-   * around a limitation of Shape.intersects( Ray2 ) where if the ray intersects with a start/end point of a shape
-   * segment, the intersection is not defined.
-   */
-  public static getBoundsCornerPositionAlongRay( ray: Ray2, bounds: Bounds2 ): Vector2 | null {
-    return QuadrilateralShapeModel.isPointOnRay( ray, bounds.leftTop ) ? bounds.leftTop :
-           QuadrilateralShapeModel.isPointOnRay( ray, bounds.rightTop ) ? bounds.rightTop :
-           QuadrilateralShapeModel.isPointOnRay( ray, bounds.rightBottom ) ? bounds.rightBottom :
-           QuadrilateralShapeModel.isPointOnRay( ray, bounds.leftBottom ) ? bounds.leftBottom :
-           null;
-  }
-
-  /**
-   * Returns the start or end point of a Line if the ray goes through it. Assists with intersection detection since
-   * Kite functions do not have a defined intersection if a ray goes through an endpoint of a line or segment.
-   */
-  public static getLinePositionAlongRay( ray: Ray2, line: Line ): Vector2 | null {
-    return QuadrilateralShapeModel.isPointOnRay( ray, line.start ) ? line.start :
-           QuadrilateralShapeModel.isPointOnRay( ray, line.end ) ? line.end :
-           null;
-  }
-
-  /**
-   * Returns true if the provided point lies on the ray.
-   */
-  private static isPointOnRay( ray: Ray2, point: Vector2 ): boolean {
-    const directionToPoint = point.minus( ray.position ).normalized();
-    return ray.direction.equalsEpsilon( directionToPoint, 1e-2 );
-  }
 
   /**
    * Returns the tolerance interval to use for a value. Generally, the default value will be returned. If the sim is
@@ -577,54 +538,6 @@ class QuadrilateralShapeModel {
     }
 
     return interval;
-  }
-
-  /**
-   * To create a bounding shape for a Vertex, walk along the boundary defined by directedLines until we traverse
-   * between two points along the boundary. The directed lines are ordered and directed in a clockwise motion around
-   * the entire model to assist in the traversal between intersection points. Graphically, what we are accomplishing
-   * is this:
-   *                        - firstLineIntersectionPair.intersection.point
-   *   -------------------A--B
-   *  |                      |
-   *  |                      |
-   *  |                      |
-   *  |                      |
-   *  |                      |
-   *  ----D------------------C
-   *       - secondLineIntersectionPair.intersection.point
-   *
-   * This function will return an array of points [A, B, C, D] to create a shape between the intersections on the lines.
-   */
-  private static getPointsAlongBoundary( directedLines: Line[], firstLineIntersectionPair: LineIntersectionPair, secondLineIntersectionPair: LineIntersectionPair ): Vector2[] {
-    const points = [];
-
-    // walk to the first ray intersection with the bounds
-    points.push( firstLineIntersectionPair.intersectionPoint );
-
-    // a safety net to make sure that we don't get stuck in this while loop
-    let iterations = 0;
-
-    // walk along the bounds, adding corner points until we reach the same line as the secondLineIntersectionPair
-    let nextLine = firstLineIntersectionPair.line;
-    while ( nextLine !== secondLineIntersectionPair.line ) {
-      points.push( nextLine.end );
-
-      let nextIndex = directedLines.indexOf( nextLine ) + 1;
-      nextIndex = nextIndex > ( directedLines.length - 1 ) ? 0 : nextIndex;
-
-      nextLine = directedLines[ nextIndex ];
-      assert && assert( nextLine );
-
-      iterations++;
-      assert && assert( iterations < 10, 'we should have closed the shape by now! Likely infinite loop' );
-    }
-
-    // we have walked to the same line as the second intersection point, finalize by including the second
-    // intersection point
-    points.push( secondLineIntersectionPair.intersectionPoint );
-
-    return points;
   }
 
   /**
@@ -678,7 +591,7 @@ class QuadrilateralShapeModel {
       // (potentially expensive) Shape work if the shape is already disallowed.
       if ( shapeAllowed ) {
         assert && assert( testVertex.dragAreaProperty.value, 'Drag area must be defined for the Vertex' );
-        shapeAllowed = this.customShapeContainsPoint( testVertex.dragAreaProperty.value!, testVertex.positionProperty.value );
+        shapeAllowed = QuadrilateralUtils.customShapeContainsPoint( testVertex.dragAreaProperty.value!, testVertex.positionProperty.value );
       }
 
       // Shape is not allowed, no need to keep testing
@@ -688,48 +601,6 @@ class QuadrilateralShapeModel {
     }
 
     return shapeAllowed;
-  }
-
-  /**
-   * A workaround for https://github.com/phetsims/kite/issues/94. Shape.containsPoint implementation does not work
-   * if both the provided point and one of the shape segment vertices lie along the test ray used in the
-   * winding intersection algorithm. This function looks for a different ray to use in the test if that is the case.
-   *
-   * This solution has been proposed in https://github.com/phetsims/kite/issues/94. If it is absorbed or fixed a
-   * different way in kite this function could be removed and replaced with shape.containsPoint.
-   */
-  private customShapeContainsPoint( shape: Shape, point: Vector2 ): boolean {
-    const rayDirectionVector = new Vector2( 1, 0 ); // unit x Vector, but we may mutate it
-    let ray = new Ray2( point, rayDirectionVector );
-
-    // Put a limit on attempts so we don't try forever
-    let count = 0;
-    while ( count < 5 ) {
-      count++;
-
-      // Look for cases where the proposed ray will intersect with one of the vertices of a shape segment - in this case
-      // the intersection in windingIntersection is not well-defined and won't be counted so we need a different to
-      // use a ray with a different direction
-      const rayIntersectsSegmentVertex = _.some( shape.subpaths, subpath => {
-        return _.some( subpath.segments, segment => {
-          return segment.start.minus( point ).normalize().equals( rayDirectionVector );
-        } );
-      } );
-
-      if ( rayIntersectsSegmentVertex ) {
-
-        // the proposed ray will not work because it intersects with a segment Vertex - try another one
-        rayDirectionVector.rotate( dotRandom.nextDouble() );
-      }
-      else {
-
-        // Should be safe to use this Ray for windingIntersection
-        ray = new Ray2( point, rayDirectionVector );
-        break;
-      }
-    }
-
-    return shape.windingIntersection( ray ) !== 0;
   }
 
   /**
