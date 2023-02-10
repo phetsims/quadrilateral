@@ -43,6 +43,7 @@ class QuadrilateralScreenView extends ScreenView {
   private readonly quadrilateralNode: QuadrilateralNode;
   private readonly quadrilateralSoundView: QuadrilateralSoundView;
   private readonly quadrilateralDescriber: QuadrilateralDescriber;
+  private readonly quadrilateralAlerter: QuadrilateralAlerter;
   private readonly quadrilateralMediaPipe: QuadrilateralMediaPipe | null = null;
 
   public constructor( model: QuadrilateralModel, preferencesModel: QuadrilateralPreferencesModel, tandem: Tandem ) {
@@ -52,11 +53,26 @@ class QuadrilateralScreenView extends ScreenView {
       tandem: tandem
     } );
 
-    //---------------------------------------------------------------------------
-    // Create view subcomponents
-    //---------------------------------------------------------------------------
-    this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel, model.shapeNameVisibleProperty, model.markersVisibleProperty );
+    this.model = model;
 
+    //---------------------------------------------------------------------------------------------------------------
+    // Create view subcomponents
+    //---------------------------------------------------------------------------------------------------------------
+    this.modelViewTransform = new QuadrilateralModelViewTransform( model.modelBounds, this.layoutBounds );
+    this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel, model.shapeNameVisibleProperty, model.markersVisibleProperty );
+    this.quadrilateralSoundView = new QuadrilateralSoundView( model, preferencesModel.soundOptionsModel );
+
+    // miscellaneous sim and visibility control components
+    const smallStepsLockToggleButton = new SmallStepsLockToggleButton( model.lockToMinorIntervalsProperty, {
+      tandem: tandem.createTandem( 'smallStepsLockToggleButton' )
+    } );
+    const resetAllButton = new ResetAllButton( {
+      listener: () => {
+        this.interruptSubtreeInput();
+        model.reset();
+      },
+      tandem: tandem.createTandem( 'resetAllButton' )
+    } );
     const visibilityControls = new QuadrilateralVisibilityControls(
       model.vertexLabelsVisibleProperty,
       model.markersVisibleProperty,
@@ -66,68 +82,60 @@ class QuadrilateralScreenView extends ScreenView {
         tandem: tandem.createTandem( 'visibilityControls' )
       } );
 
-    const smallStepsLockToggleButton = new SmallStepsLockToggleButton( model.lockToMinorIntervalsProperty, {
-      tandem: tandem.createTandem( 'smallStepsLockToggleButton' )
-    } );
-
-    const resetAllButton = new ResetAllButton( {
-      listener: () => {
-        this.interruptSubtreeInput();
-        model.reset();
-      },
-      tandem: tandem.createTandem( 'resetAllButton' )
-    } );
-
+    // shape controls components
     const shapeNameDisplay = new QuadrilateralShapeNameDisplay( model.shapeNameVisibleProperty, model.quadrilateralShapeModel.shapeNameProperty, this.quadrilateralDescriber, tandem.createTandem( 'quadrilateralShapeNameDisplay' ) );
-
     const resetShapeButton = new ResetShapeButton(
       model.quadrilateralShapeModel,
       model.resetNotInProgressProperty,
       model.shapeNameVisibleProperty,
       tandem.createTandem( 'resetShapeButton' )
     );
-
     const shapeSoundsCheckbox = new ShapeSoundsCheckbox( model.shapeSoundEnabledProperty, tandem.createTandem( 'shapeSoundsCheckbox' ) );
 
-    this.model = model;
-    this.modelViewTransform = new QuadrilateralModelViewTransform( model.modelBounds, this.layoutBounds );
-
-    const tangibleConnectionModel = model.tangibleConnectionModel;
-
-    // Layered under everything else
-    const diagonalGuidesNode = new QuadrilateralDiagonalGuidesNode( model.quadrilateralShapeModel, model.modelBounds, model.diagonalGuidesVisibleProperty, this.modelViewTransform );
-
+    // quadrilateral shape and grid components
     this.quadrilateralNode = new QuadrilateralNode( model, this.modelViewTransform, this.layoutBounds, this.quadrilateralDescriber, {
       tandem: tandem.createTandem( 'quadrilateralNode' )
     } );
-
-    const interactionCueNode = new QuadrilateralInteractionCueNode( model.quadrilateralShapeModel, tangibleConnectionModel.connectedToDeviceProperty, model.resetEmitter, this.modelViewTransform );
-
-    this.quadrilateralSoundView = new QuadrilateralSoundView( model, preferencesModel.soundOptionsModel );
-
+    const diagonalGuidesNode = new QuadrilateralDiagonalGuidesNode( model.quadrilateralShapeModel, model.modelBounds, model.diagonalGuidesVisibleProperty, this.modelViewTransform );
+    const interactionCueNode = new QuadrilateralInteractionCueNode(
+      model.quadrilateralShapeModel,
+      model.tangibleConnectionModel.connectedToDeviceProperty,
+      model.resetEmitter,
+      this.modelViewTransform
+    );
     const gridNode = new QuadrilateralGridNode( model.modelBounds, model.gridVisibleProperty, this.modelViewTransform );
 
+    // debugging components
     const debugValuesPanel = new QuadrilateralDebuggingPanel( model );
     model.showDebugValuesProperty.link( showValues => {
       debugValuesPanel.visible = showValues;
     } );
 
-    // only has children if relevant query parameters are provided, but this parent is always created for easy
-    // layout and PDOM ordering
+    // tangible components - this parent only has children if relevant query params are provided, but is always
+    // created for easy layout
     const deviceConnectionParentNode = new VBox( {
       align: 'left',
       spacing: QuadrilateralConstants.CONTROLS_SPACING
     } );
     if ( QuadrilateralQueryParameters.deviceConnection ) {
-
       deviceConnectionParentNode.children = [
         new QuadrilateralTangibleControls( model.tangibleConnectionModel, tandem.createTandem( 'connectionControls' ) )
       ];
       deviceConnectionParentNode.top = gridNode.top;
       deviceConnectionParentNode.left = resetAllButton.left;
     }
+    if ( MediaPipeQueryParameters.cameraInput === 'hands' ) {
+      this.quadrilateralMediaPipe = new QuadrilateralMediaPipe( model );
+      model.tangibleConnectionModel.connectedToDeviceProperty.value = true;
+    }
 
-    // rendering order - See https://github.com/phetsims/quadrilateral/issues/178
+    // pdom/voicing components
+    this.setScreenSummaryContent( new QuadrilateralScreenSummaryContentNode() );
+    this.quadrilateralAlerter = new QuadrilateralAlerter( model, this, this.modelViewTransform, this.quadrilateralDescriber );
+
+    //---------------------------------------------------------------------------------------------------------------
+    // rendering order - see https://github.com/phetsims/quadrilateral/issues/178
+    //---------------------------------------------------------------------------------------------------------------
     this.children = [
 
       // shape area
@@ -147,31 +155,33 @@ class QuadrilateralScreenView extends ScreenView {
       deviceConnectionParentNode
     ];
 
-    // relative layout
-    visibilityControls.rightCenter = this.layoutBounds.rightCenter.minusXY( QuadrilateralConstants.SCREEN_VIEW_X_MARGIN, 0 );
-    resetAllButton.leftBottom = new Vector2( visibilityControls.left, this.layoutBounds.maxY - QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN );
+    //---------------------------------------------------------------------------------------------------------------
+    // Layout - all relative to the grid space of the quadrilateral because its size and position is determined by
+    // the modelViewTransform
+    //---------------------------------------------------------------------------------------------------------------
+    resetAllButton.leftBottom = new Vector2(
+      gridNode.right + QuadrilateralConstants.VIEW_SPACING,
+      this.layoutBounds.maxY - QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN
+    );
+    smallStepsLockToggleButton.leftBottom = resetAllButton.leftTop.minusXY( 0, QuadrilateralConstants.VIEW_GROUP_SPACING );
+    visibilityControls.leftCenter = gridNode.rightCenter.plusXY( QuadrilateralConstants.VIEW_SPACING, 0 );
+
     shapeNameDisplay.centerBottom = gridNode.centerTop.minusXY( 0, QuadrilateralConstants.VIEW_SPACING );
     shapeSoundsCheckbox.rightCenter = new Vector2( gridNode.right, shapeNameDisplay.centerY );
-    debugValuesPanel.leftTop = gridNode.leftTop.plusXY( 5, 5 );
-    smallStepsLockToggleButton.leftBottom = resetAllButton.leftTop.minusXY( 0, 45 );
     resetShapeButton.rightCenter = shapeSoundsCheckbox.leftCenter.minusXY(
       // effectively centers this button between the other name display controls
       ( shapeSoundsCheckbox.left - shapeNameDisplay.right - resetShapeButton.width ) / 2, 0
     );
 
-    if ( MediaPipeQueryParameters.cameraInput === 'hands' ) {
-      this.quadrilateralMediaPipe = new QuadrilateralMediaPipe( model );
-      tangibleConnectionModel.connectedToDeviceProperty.value = true;
-    }
+    deviceConnectionParentNode.leftBottom = visibilityControls.leftTop.minusXY( 0, QuadrilateralConstants.VIEW_GROUP_SPACING );
 
-    // pdom
+    debugValuesPanel.leftTop = gridNode.leftTop.plusXY( 5, 5 );
+
+    //---------------------------------------------------------------------------------------------------------------
+    // Traversal order
+    //---------------------------------------------------------------------------------------------------------------
     this.pdomPlayAreaNode.pdomOrder = [ this.quadrilateralNode, shapeNameDisplay, resetShapeButton, shapeSoundsCheckbox ];
     this.pdomControlAreaNode.pdomOrder = [ visibilityControls, smallStepsLockToggleButton, resetAllButton, deviceConnectionParentNode ];
-    this.setScreenSummaryContent( new QuadrilateralScreenSummaryContentNode() );
-
-    // voicing
-    // Disabling eslint here because this variable is not used but I am sure that it will be soon.
-    const quadrilateralAlerter = new QuadrilateralAlerter( model, this, this.modelViewTransform, this.quadrilateralDescriber ); // eslint-disable-line @typescript-eslint/no-unused-vars
   }
 
   /**

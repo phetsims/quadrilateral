@@ -35,7 +35,10 @@ const QuadrilateralConstants = {
   SCREEN_VIEW_X_MARGIN: 15,
   SCREEN_VIEW_Y_MARGIN: 15,
 
-  // additional spacing in the ScreenView between components
+  // spacing between different groups of components in the ScreenView
+  VIEW_GROUP_SPACING: 45,
+
+  // additional spacing in the ScreenView between components (generally in the same group)
   VIEW_SPACING: 15,
 
   // corner radius used in many rectangles in this sim
