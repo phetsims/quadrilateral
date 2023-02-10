@@ -78,6 +78,11 @@ class TangibleConnectionModel {
     this.tangibleOptionsModel = tangibleOptionsModel;
     this.modelBounds = modelBounds;
     this.shapeModel = shapeModel;
+
+    // Put a reference to this connection model on the window so that we can access it in wrappers that facilitate
+    // communication between device and simulation.
+    // @ts-expect-error - For good reason, TypeScript doesn't allow this. But it is fine for prototype code.
+    window.tangibleConnectionModel = this;
   }
 
   /**

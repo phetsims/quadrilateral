@@ -139,11 +139,6 @@ class QuadrilateralModel {
         return interval;
       }
     );
-
-    // Put a reference to the simulation model on the window so that we can access it in wrappers that facilitate
-    // communication between device and simulation.
-    // @ts-expect-error TODO: TypeScript doesn't allow us to do such hacky things (perhaps for good reason...)
-    window.simModel = this;
   }
 
   /**
