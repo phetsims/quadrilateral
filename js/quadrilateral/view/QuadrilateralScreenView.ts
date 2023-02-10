@@ -1,7 +1,12 @@
 // Copyright 2021-2023, University of Colorado Boulder
 
 /**
- * The ScreenView for this simulation, containing all view components.
+ * The ScreenView for this simulation. For readability, implementation of this class is broken into blocks of code that
+ *
+ * - Create view subcomponents
+ * - Set rendering order
+ * - Set layout
+ * - Set traversal order
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -204,7 +209,7 @@ class QuadrilateralScreenView extends ScreenView {
 
     let contentString = firstStatement;
 
-    // NOTE: Bad for i18n but much easier for now.
+    // NOTE: This is bad for i18n but PhET decided that is OK for now.
     if ( secondStatement ) {
       contentString += ' ' + secondStatement;
     }
