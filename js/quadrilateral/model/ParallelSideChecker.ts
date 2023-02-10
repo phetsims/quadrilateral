@@ -1,8 +1,8 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
- * Responsible for keeping two opposite sides of the quadrilateral and managing a tolerance interval so that we
- * can determine if the two sides are considered parallel with each other.
+ * Responsible for keeping two opposite sides of the quadrilateral and calculating if they are parallel within
+ * tolerance intervals.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -29,10 +29,12 @@ class ParallelSideChecker {
   public readonly side2: Side;
   public readonly sidePair: SidePair;
 
-  // A Property indicating that the provided sides are parallel, ONLY FOR DEBUGGING. You should go through
-  // areSidesParallel() to find if sides are parallel. It is unfortunate that the model does not make
-  // this Property publicly observable, but we need to control the order that listeners are called in response
-  // to changing vertex positions. See QuadrilateralShapeModel.updateOrderDependentProperties() for more
+  // A Property indicating that the provided sides are parallel, ONLY FOR DEBUGGING. Use areSidesParallel() when the
+  // QuadrilateralShapeModel is stable instead.
+  //
+  // It is unfortunate that this Property is not public, but that is not possible because the value of this Property
+  // is dependent on multiple `Vertex.positionProperty`s. When moving sides, this value will have bad transient values
+  // as vertex positions change one at a time. See QuadrilateralShapeModel.updateOrderDependentProperties() for more
   // information.
   private readonly isParallelProperty: Property<boolean>;
 
@@ -58,10 +60,9 @@ class ParallelSideChecker {
 
     this.parallelAngleToleranceInterval = QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.parallelAngleToleranceInterval );
 
-    // For debugging only. This Property may become true/false as Vertex positionProperties are set one at a time. But
-    // that that is a transient state. Wait until vertex positions are stable in
-    // QuadrilateralShapeModel.updateOrderDependentProperties before looking at this Property value. Or use
-    // QuadrilateralShapeModel.getIsParallelogram()
+    // For debugging only. This Property may become true/false as Vertex positionProperties are set one at a time. When
+    // moving sides, this can change intermittently. use QuadrilateralShapeModel.getIsParallelogram() when the
+    // shape is stable instead.
     shapeChangedEmitter.addListener( () => {
       this.isParallelProperty.value = this.areSidesParallel();
     } );
