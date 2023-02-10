@@ -21,13 +21,13 @@ import MappedProperty from '../../axon/js/MappedProperty.js';
 import QuadrilateralInputPreferencesNode from './quadrilateral/view/QuadrilateralInputPreferencesNode.js';
 
 const quadrilateralTitleStringProperty = QuadrilateralStrings.quadrilateral.titleStringProperty;
-const preferencesModel = new QuadrilateralOptionsModel();
+const optionsModel = new QuadrilateralOptionsModel();
 
 // "Input" options are related to connection to a tangible device, this tab should only be shown when running
 // while connected to some external device.
 const inputPreferencesOptions = QuadrilateralQueryParameters.deviceConnection ? {
   customPreferences: [ {
-    createContent: () => new QuadrilateralInputPreferencesNode( preferencesModel.tangibleOptionsModel )
+    createContent: () => new QuadrilateralInputPreferencesNode( optionsModel.tangibleOptionsModel )
   } ]
 } : undefined;
 
@@ -58,7 +58,7 @@ const simOptions: SimOptions = {
           createContent: () => new Node()
         },
         {
-          createContent: tandem => new QuadrilateralAudioPreferencesNode( preferencesModel, tandem.createTandem( 'audioPreferences' ) )
+          createContent: tandem => new QuadrilateralAudioPreferencesNode( optionsModel, tandem.createTandem( 'audioPreferences' ) )
         }
       ]
     }
@@ -68,7 +68,7 @@ const simOptions: SimOptions = {
 // launch the sim - beware that scenery Image nodes created outside of simLauncher.launch() will have zero bounds
 // until the images are fully loaded, see https://github.com/phetsims/coulombs-law/issues/70
 simLauncher.launch( () => {
-  const quadrilateralScreen = new QuadrilateralScreen( preferencesModel, {
+  const quadrilateralScreen = new QuadrilateralScreen( optionsModel, {
 
     // You cannot pass the same Property instance as a single as the sim and screen name.
     name: new MappedProperty<string, string>( quadrilateralTitleStringProperty, {

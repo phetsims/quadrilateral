@@ -45,7 +45,7 @@ class QuadrilateralModel {
   public readonly showDebugValuesProperty: TProperty<boolean>;
 
   // Controls runtime preferences for the simulation.
-  public readonly preferencesModel: QuadrilateralOptionsModel;
+  public readonly optionsModel: QuadrilateralOptionsModel;
 
   // A model that manages Properties used by prototype connections with tangible devices (Serial, OpenCV, BLE).
   public readonly tangibleConnectionModel: TangibleConnectionModel;
@@ -108,9 +108,9 @@ class QuadrilateralModel {
   // Properties are updated the following frame).
   private firstModelStep: boolean;
 
-  public constructor( preferencesModel: QuadrilateralOptionsModel, tandem: Tandem ) {
+  public constructor( optionsModel: QuadrilateralOptionsModel, tandem: Tandem ) {
 
-    this.preferencesModel = preferencesModel;
+    this.optionsModel = optionsModel;
 
     this.showDebugValuesProperty = new BooleanProperty( QuadrilateralQueryParameters.showModelValues );
 
@@ -127,7 +127,7 @@ class QuadrilateralModel {
       tandem: tandem.createTandem( 'quadrilateralTestShapeModel' )
     } );
 
-    this.tangibleConnectionModel = new TangibleConnectionModel( this.quadrilateralShapeModel, this.preferencesModel.tangibleOptionsModel, this.modelBounds, tandem.createTandem( 'tangibleConnectionModel' ) );
+    this.tangibleConnectionModel = new TangibleConnectionModel( this.quadrilateralShapeModel, this.optionsModel.tangibleOptionsModel, this.modelBounds, tandem.createTandem( 'tangibleConnectionModel' ) );
 
     this.vertexLabelsVisibleProperty = new BooleanProperty( true, {
       tandem: tandem.createTandem( 'vertexLabelsVisibleProperty' )
@@ -166,7 +166,7 @@ class QuadrilateralModel {
     // Vertex intervals are controlled whether we are "locked" to smaller steps, whether we are temporarily using
     // smaller steps because of a hotkey, or if running with ?reducedStepSize
     this.vertexIntervalProperty = new DerivedProperty(
-      [ this.useMinorIntervalsProperty, this.tangibleConnectionModel.connectedToDeviceProperty, preferencesModel.tangibleOptionsModel.deviceGridSpacingProperty ],
+      [ this.useMinorIntervalsProperty, this.tangibleConnectionModel.connectedToDeviceProperty, optionsModel.tangibleOptionsModel.deviceGridSpacingProperty ],
       ( useMinorIntervals, connectedToDevice, deviceGridSpacing ) => {
 
         let interval: number;

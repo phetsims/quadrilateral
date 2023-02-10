@@ -18,10 +18,10 @@ class QuadrilateralAudioPreferencesNode extends Node {
   // Disposal of components and tandems necessary for phet-io state, otherwise they could exist for life of the sim.
   private readonly disposeQuadrilateralPreferencesNode: () => void;
 
-  public constructor( preferencesModel: QuadrilateralOptionsModel, tandem: Tandem ) {
+  public constructor( optionsModel: QuadrilateralOptionsModel, tandem: Tandem ) {
     super();
 
-    const soundOptionsNode = new QuadrilateralSoundOptionsNode( preferencesModel.soundOptionsModel, tandem.createTandem( 'soundOptionsNode' ) );
+    const soundOptionsNode = new QuadrilateralSoundOptionsNode( optionsModel.soundOptionsModel, tandem.createTandem( 'soundOptionsNode' ) );
     this.addChild( soundOptionsNode );
 
     this.disposeQuadrilateralPreferencesNode = () => {

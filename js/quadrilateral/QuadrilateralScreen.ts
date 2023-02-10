@@ -15,7 +15,7 @@ import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js'
 import QuadrilateralKeyboardHelpContent from './view/QuadrilateralKeyboardHelpContent.js';
 
 class QuadrilateralScreen extends Screen<QuadrilateralModel, QuadrilateralScreenView> {
-  public constructor( preferencesModel: QuadrilateralOptionsModel, providedOptions: ScreenOptions ) {
+  public constructor( optionsModel: QuadrilateralOptionsModel, providedOptions: ScreenOptions ) {
 
     const options = optionize<ScreenOptions, EmptySelfOptions, ScreenOptions>()( {
       backgroundColorProperty: QuadrilateralColors.screenBackgroundColorProperty,
@@ -23,8 +23,8 @@ class QuadrilateralScreen extends Screen<QuadrilateralModel, QuadrilateralScreen
     }, providedOptions );
 
     super(
-      () => new QuadrilateralModel( preferencesModel, options.tandem.createTandem( 'model' ) ),
-      model => new QuadrilateralScreenView( model, preferencesModel, options.tandem.createTandem( 'view' ) ),
+      () => new QuadrilateralModel( optionsModel, options.tandem.createTandem( 'model' ) ),
+      model => new QuadrilateralScreenView( model, optionsModel, options.tandem.createTandem( 'view' ) ),
       options
     );
   }

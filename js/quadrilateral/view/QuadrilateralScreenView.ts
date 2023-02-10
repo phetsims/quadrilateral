@@ -51,7 +51,7 @@ class QuadrilateralScreenView extends ScreenView {
   private readonly quadrilateralAlerter: QuadrilateralAlerter;
   private readonly quadrilateralMediaPipe: QuadrilateralMediaPipe | null = null;
 
-  public constructor( model: QuadrilateralModel, preferencesModel: QuadrilateralOptionsModel, tandem: Tandem ) {
+  public constructor( model: QuadrilateralModel, optionsModel: QuadrilateralOptionsModel, tandem: Tandem ) {
     super( {
 
       // phet-io
@@ -65,7 +65,7 @@ class QuadrilateralScreenView extends ScreenView {
     //---------------------------------------------------------------------------------------------------------------
     this.modelViewTransform = new QuadrilateralModelViewTransform( model.modelBounds, this.layoutBounds );
     this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel, model.shapeNameVisibleProperty, model.markersVisibleProperty );
-    this.quadrilateralSoundView = new QuadrilateralSoundView( model, preferencesModel.soundOptionsModel );
+    this.quadrilateralSoundView = new QuadrilateralSoundView( model, optionsModel.soundOptionsModel );
 
     // miscellaneous sim and visibility control components
     const smallStepsLockToggleButton = new SmallStepsLockToggleButton( model.lockToMinorIntervalsProperty, {

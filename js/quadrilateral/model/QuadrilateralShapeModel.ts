@@ -192,7 +192,7 @@ class QuadrilateralShapeModel {
 
     this.validateShape = options.validateShape;
 
-    const smoothingLengthProperty = model.preferencesModel.tangibleOptionsModel.smoothingLengthProperty;
+    const smoothingLengthProperty = model.optionsModel.tangibleOptionsModel.smoothingLengthProperty;
     this.vertexA = new Vertex( new Vector2( -0.25, 0.25 ), VertexLabel.VERTEX_A, smoothingLengthProperty, options.tandem.createTandem( 'vertexA' ) );
     this.vertexB = new Vertex( new Vector2( 0.25, 0.25 ), VertexLabel.VERTEX_B, smoothingLengthProperty, options.tandem.createTandem( 'vertexB' ) );
     this.vertexC = new Vertex( new Vector2( 0.25, -0.25 ), VertexLabel.VERTEX_C, smoothingLengthProperty, options.tandem.createTandem( 'vertexC' ) );
