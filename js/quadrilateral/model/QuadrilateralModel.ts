@@ -91,10 +91,6 @@ class QuadrilateralModel {
 
   public constructor( optionsModel: QuadrilateralOptionsModel, tandem: Tandem ) {
 
-    this.optionsModel = optionsModel;
-
-    this.visibilityModel = new QuadrilateralVisibilityModel( tandem.createTandem( 'visibilityModel' ) );
-
     this.resetNotInProgressProperty = new BooleanProperty( true, {
       tandem: tandem.createTandem( 'resetNotInProgressProperty' )
     } );
@@ -102,12 +98,13 @@ class QuadrilateralModel {
     this.quadrilateralShapeModel = new QuadrilateralShapeModel( this, {
       tandem: tandem.createTandem( 'quadrilateralShapeModel' )
     } );
-
     this.quadrilateralTestShapeModel = new QuadrilateralShapeModel( this, {
       validateShape: false,
       tandem: tandem.createTandem( 'quadrilateralTestShapeModel' )
     } );
 
+    this.optionsModel = optionsModel;
+    this.visibilityModel = new QuadrilateralVisibilityModel( tandem.createTandem( 'visibilityModel' ) );
     this.tangibleConnectionModel = new TangibleConnectionModel( this.quadrilateralShapeModel, this.optionsModel.tangibleOptionsModel, this.modelBounds, tandem.createTandem( 'tangibleConnectionModel' ) );
 
     this.shapeSoundEnabledProperty = new BooleanProperty( true, {
@@ -117,11 +114,9 @@ class QuadrilateralModel {
     this.minorIntervalsFromGlobalKeyProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'minorIntervalsFromGlobalKeyProperty' )
     } );
-
     this.lockToMinorIntervalsProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'lockToMinorIntervalsProperty' )
     } );
-
     this.useMinorIntervalsProperty = DerivedProperty.or( [ this.minorIntervalsFromGlobalKeyProperty, this.lockToMinorIntervalsProperty ] );
 
     // Vertex intervals are controlled whether we are "locked" to smaller steps, whether we are temporarily using
