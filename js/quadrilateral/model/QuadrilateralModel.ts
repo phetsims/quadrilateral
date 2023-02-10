@@ -37,6 +37,11 @@ class QuadrilateralModel {
   // A model that manages Properties used by prototype connections with tangible devices (Serial, OpenCV, BLE).
   public readonly tangibleConnectionModel: TangibleConnectionModel;
 
+  // Whether a reset is currently in progress. Added for sound. If the model is actively resetting, SoundManagers
+  // are disabled so we don't play sounds for transient model states. Tracks when the reset is NOT in progress
+  // because that makes it most convenient to pass to SoundGenerator enableControlProperties.
+  public readonly resetNotInProgressProperty: TProperty<boolean>;
+
   // The bounds of the simulation in model coordinates. Origin (0,0) is at the center. The shape and
   // vertices can be positioned within these bounds.
   public modelBounds = new Bounds2(
@@ -46,32 +51,27 @@ class QuadrilateralModel {
     QuadrilateralConstants.BOUNDS_HEIGHT / 2
   );
 
-  // Whether a reset is currently in progress. Added for sound. If the model is actively resetting, SoundManagers
-  // are disabled so we don't play sounds for transient model states. Tracks when the reset is NOT in progress
-  // because that makes it most convenient to pass to SoundGenerator enableControlProperties.
-  public readonly resetNotInProgressProperty: TProperty<boolean>;
-
   // The available bounds for smooth vertex dragging (the model bounds eroded by the width of a vertex so a vertex
-  // can never go ouside of the model bounds.
+  // can never go out of the model bounds.
   public readonly vertexDragBounds = this.modelBounds.eroded( Vertex.VERTEX_WIDTH / 2 );
 
   // The interval that Vertices are constrained to during interaction. There are many things that control the value:
-  //  - A "lock" button in the UI to lock to small intervals.
-  //  - A global hotkey that uses small intervals when pressed.
-  //  - Using ?reducedStepSize to make all intervals smaller
-  //  - Connected to a physical device 
+  //  - A button in the UI to lock to small intervals (see useMinorIntervalsProperty and lockToMinorIntervalsProperty)
+  //  - A global hotkey for small intervals (see useMinorIntervalsProperty and minorIntervalsFromGlobalHotkeyProperty)
+  //  - Using ?reducedStepSize to make all intervals smaller (see vertexIntervalProperty derivation)
+  //  - Connecting to a prototype tangible device (see vertexIntervalProperty derivation)
   public readonly vertexIntervalProperty: TReadOnlyProperty<number>;
 
   // Whether vertices are going to snap to the minor intervals of the model grid. The user can "lock" this setting
-  // from the user interface. There is also a global hotkey to toggle this quickly during interaction.
+  // from the user interface. There is also a global hotkey to toggle this quickly during interaction. Derived from
+  // lockToMinorIntervalsProperty and minorIntervalsFromGlobalKeyProperty.
   private readonly useMinorIntervalsProperty: TReadOnlyProperty<boolean>;
 
-  // Whether the vertices will lock to the minor grid intervals during interaction. Toggled from a UI component
-  // in the screen. When true, the global hotkey for using minor intervals does nothing.
+  // Whether the vertices will lock to the minor grid intervals during interaction. Controlled by a toggle in the UI.
+  // When true, the global hotkey for using minor intervals does nothing.
   public readonly lockToMinorIntervalsProperty: BooleanProperty;
 
-  // Whether the vertices should lock to the minor grid intervals from a specific modifier key. When "locked"
-  // to the minor grid intervals, this Property and its global modifier key have no effect. See the above Property.
+  // Whether the vertices should snap to the minor grid intervals because of pressing a hotkey.
   public readonly minorIntervalsFromGlobalKeyProperty: TProperty<boolean>;
 
   // Whether the simulation sound design is enabled to play as the shape changes. For now,
