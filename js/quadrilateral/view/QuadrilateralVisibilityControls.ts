@@ -6,7 +6,6 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import { VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
@@ -14,15 +13,16 @@ import Checkbox from '../../../../sun/js/Checkbox.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import Property from '../../../../axon/js/Property.js';
 import QuadrilateralIconFactory from './QuadrilateralIconFactory.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
+import QuadrilateralVisibilityModel from '../model/QuadrilateralVisibilityModel.js';
 
 type SelfOptions = EmptySelfOptions;
 type QuadrilateralVisibilityControlsOptions = SelfOptions & StrictOmit<VBoxOptions, 'children'> & PickRequired<VBoxOptions, 'tandem'>;
 
 class QuadrilateralVisibilityControls extends VBox {
-  public constructor( cornerLabelsVisibleProperty: Property<boolean>, markersVisibleProperty: Property<boolean>, gridVisibleProperty: BooleanProperty, diagonalGuidesVisibleProperty: BooleanProperty, providedOptions: QuadrilateralVisibilityControlsOptions ) {
+  public constructor( visibilityModel: QuadrilateralVisibilityModel, providedOptions: QuadrilateralVisibilityControlsOptions ) {
+    console.log( 'here' );
 
     const options = optionize<QuadrilateralVisibilityControlsOptions, SelfOptions, VBoxOptions>()( {
       align: 'left',
@@ -37,7 +37,7 @@ class QuadrilateralVisibilityControls extends VBox {
       QuadrilateralIconFactory.createCornerLabelsIcon(),
       QuadrilateralStrings.labels
     );
-    const cornerLabelsCheckbox = new Checkbox( cornerLabelsVisibleProperty, cornerLabelsIcon, {
+    const cornerLabelsCheckbox = new Checkbox( visibilityModel.vertexLabelsVisibleProperty, cornerLabelsIcon, {
       spacing: QuadrilateralConstants.CONTROL_LABEL_SPACING,
 
       // pdom
@@ -60,7 +60,7 @@ class QuadrilateralVisibilityControls extends VBox {
       QuadrilateralIconFactory.createMarkersIcon(),
       QuadrilateralStrings.markers
     );
-    const markersCheckbox = new Checkbox( markersVisibleProperty, markersIcon, {
+    const markersCheckbox = new Checkbox( visibilityModel.markersVisibleProperty, markersIcon, {
       spacing: QuadrilateralConstants.CONTROL_LABEL_SPACING,
 
       // pdom
@@ -83,7 +83,7 @@ class QuadrilateralVisibilityControls extends VBox {
       QuadrilateralIconFactory.createDiagonalGuidesIcon(),
       QuadrilateralStrings.diagonals
     );
-    const diagonalGuidesCheckbox = new Checkbox( diagonalGuidesVisibleProperty, diagonalGuidesIcon, {
+    const diagonalGuidesCheckbox = new Checkbox( visibilityModel.diagonalGuidesVisibleProperty, diagonalGuidesIcon, {
       spacing: QuadrilateralConstants.CONTROL_LABEL_SPACING,
 
       // pdom
@@ -106,7 +106,7 @@ class QuadrilateralVisibilityControls extends VBox {
       QuadrilateralIconFactory.createGridIcon(),
       QuadrilateralStrings.grid
     );
-    const gridCheckbox = new Checkbox( gridVisibleProperty, gridIcon, {
+    const gridCheckbox = new Checkbox( visibilityModel.gridVisibleProperty, gridIcon, {
       spacing: QuadrilateralConstants.CONTROL_LABEL_SPACING,
 
       // pdom

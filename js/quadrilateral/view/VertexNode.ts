@@ -64,7 +64,7 @@ class VertexNode extends Voicing( Circle ) {
 
     this.vertex = vertex;
 
-    const vertexDescriber = new VertexDescriber( vertex, model.quadrilateralShapeModel, model.markersVisibleProperty );
+    const vertexDescriber = new VertexDescriber( vertex, model.quadrilateralShapeModel, model.visibilityModel.markersVisibleProperty );
 
     this.model = model;
 
@@ -89,7 +89,7 @@ class VertexNode extends Voicing( Circle ) {
     this.addChild( hatchMarkPath );
 
     // hatch marks are only visible when the grid is visible since they are used to create aligned positions.
-    model.gridVisibleProperty.link( visible => {
+    model.visibilityModel.gridVisibleProperty.link( visible => {
       hatchMarkPath.visible = visible;
     } );
 
@@ -101,7 +101,7 @@ class VertexNode extends Voicing( Circle ) {
       this.center = modelViewTransform.modelToViewPosition( position );
     } );
 
-    model.vertexLabelsVisibleProperty.link( vertexLabelsVisible => {
+    model.visibilityModel.vertexLabelsVisibleProperty.link( vertexLabelsVisible => {
       vertexLabelText.visible = vertexLabelsVisible;
     } );
 
@@ -259,7 +259,7 @@ class VertexNode extends Voicing( Circle ) {
     } );
 
     // when corner guides are visible more information is also included in the object response
-    model.markersVisibleProperty.link( visible => {
+    model.visibilityModel.markersVisibleProperty.link( visible => {
       this.voicingObjectResponse = vertexDescriber.getVertexObjectResponse();
     } );
 

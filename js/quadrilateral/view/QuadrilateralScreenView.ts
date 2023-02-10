@@ -59,12 +59,13 @@ class QuadrilateralScreenView extends ScreenView {
     } );
 
     this.model = model;
+    const visibilityModel = model.visibilityModel;
 
     //---------------------------------------------------------------------------------------------------------------
     // Create view subcomponents
     //---------------------------------------------------------------------------------------------------------------
     this.modelViewTransform = new QuadrilateralModelViewTransform( model.modelBounds, this.layoutBounds );
-    this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel, model.shapeNameVisibleProperty, model.markersVisibleProperty );
+    this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel, visibilityModel.shapeNameVisibleProperty, visibilityModel.markersVisibleProperty );
     this.quadrilateralSoundView = new QuadrilateralSoundView( model, optionsModel.soundOptionsModel );
 
     // miscellaneous sim and visibility control components
@@ -79,20 +80,17 @@ class QuadrilateralScreenView extends ScreenView {
       tandem: tandem.createTandem( 'resetAllButton' )
     } );
     const visibilityControls = new QuadrilateralVisibilityControls(
-      model.vertexLabelsVisibleProperty,
-      model.markersVisibleProperty,
-      model.gridVisibleProperty,
-      model.diagonalGuidesVisibleProperty,
+      visibilityModel,
       {
         tandem: tandem.createTandem( 'visibilityControls' )
       } );
 
     // shape controls components
-    const shapeNameDisplay = new QuadrilateralShapeNameDisplay( model.shapeNameVisibleProperty, model.quadrilateralShapeModel.shapeNameProperty, this.quadrilateralDescriber, tandem.createTandem( 'quadrilateralShapeNameDisplay' ) );
+    const shapeNameDisplay = new QuadrilateralShapeNameDisplay( visibilityModel.shapeNameVisibleProperty, model.quadrilateralShapeModel.shapeNameProperty, this.quadrilateralDescriber, tandem.createTandem( 'quadrilateralShapeNameDisplay' ) );
     const resetShapeButton = new ResetShapeButton(
       model.quadrilateralShapeModel,
       model.resetNotInProgressProperty,
-      model.shapeNameVisibleProperty,
+      visibilityModel.shapeNameVisibleProperty,
       tandem.createTandem( 'resetShapeButton' )
     );
     const shapeSoundsCheckbox = new ShapeSoundsCheckbox( model.shapeSoundEnabledProperty, tandem.createTandem( 'shapeSoundsCheckbox' ) );
@@ -101,18 +99,18 @@ class QuadrilateralScreenView extends ScreenView {
     this.quadrilateralNode = new QuadrilateralNode( model, this.modelViewTransform, this.layoutBounds, this.quadrilateralDescriber, {
       tandem: tandem.createTandem( 'quadrilateralNode' )
     } );
-    const diagonalGuidesNode = new QuadrilateralDiagonalGuidesNode( model.quadrilateralShapeModel, model.modelBounds, model.diagonalGuidesVisibleProperty, this.modelViewTransform );
+    const diagonalGuidesNode = new QuadrilateralDiagonalGuidesNode( model.quadrilateralShapeModel, model.modelBounds, visibilityModel.diagonalGuidesVisibleProperty, this.modelViewTransform );
     const interactionCueNode = new QuadrilateralInteractionCueNode(
       model.quadrilateralShapeModel,
       model.tangibleConnectionModel.connectedToDeviceProperty,
       model.resetEmitter,
       this.modelViewTransform
     );
-    const gridNode = new QuadrilateralGridNode( model.modelBounds, model.gridVisibleProperty, this.modelViewTransform );
+    const gridNode = new QuadrilateralGridNode( model.modelBounds, visibilityModel.gridVisibleProperty, this.modelViewTransform );
 
     // debugging components
     const debugValuesPanel = new QuadrilateralDebuggingPanel( model );
-    model.showDebugValuesProperty.link( showValues => {
+    visibilityModel.showDebugValuesProperty.link( showValues => {
       debugValuesPanel.visible = showValues;
     } );
 

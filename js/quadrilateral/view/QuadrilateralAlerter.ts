@@ -890,7 +890,7 @@ class QuadrilateralAlerter extends Alerter {
 
     let contextResponse: string | null = null;
     if ( currentShapeName !== this.previousContextResponseShapeSnapshot.namedQuadrilateral ) {
-      if ( this.model.shapeNameVisibleProperty.value ) {
+      if ( this.model.visibilityModel.shapeNameVisibleProperty.value ) {
         contextResponse = this.getFoundShapeResponse( currentShapeName );
       }
       else {

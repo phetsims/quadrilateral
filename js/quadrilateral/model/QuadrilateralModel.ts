@@ -24,8 +24,11 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
 import TangibleConnectionModel from './prototype/TangibleConnectionModel.js';
+import QuadrilateralVisibilityModel from './QuadrilateralVisibilityModel.js';
 
 class QuadrilateralModel {
+
+  public readonly visibilityModel: QuadrilateralVisibilityModel;
 
   // The bounds of the simulation in model coordinates. Origin (0,0) is at the center. The shape and
   // vertices can be positioned within these bounds.
@@ -41,20 +44,11 @@ class QuadrilateralModel {
   // because that makes it most convenient to pass to SoundGenerator enableControlProperties.
   public readonly resetNotInProgressProperty: TProperty<boolean>;
 
-  // If true, a panel displaying model values will be added to the view. Only for debugging.
-  public readonly showDebugValuesProperty: TProperty<boolean>;
-
   // Controls runtime options for the simulation.
   public readonly optionsModel: QuadrilateralOptionsModel;
 
   // A model that manages Properties used by prototype connections with tangible devices (Serial, OpenCV, BLE).
   public readonly tangibleConnectionModel: TangibleConnectionModel;
-
-  // Whether the angle guide graphics are visible at each vertex.
-  public readonly markersVisibleProperty: BooleanProperty;
-
-  // Whether labels on each vertex are visible.
-  public readonly vertexLabelsVisibleProperty: BooleanProperty;
 
   // The available bounds for smooth vertex dragging (the model bounds eroded by the width of a vertex so a vertex
   // can never go ouside of the model bounds.
@@ -79,15 +73,6 @@ class QuadrilateralModel {
   // to the minor grid intervals, this Property and its global modifier key have no effect. See the above Property.
   public readonly minorIntervalsFromGlobalKeyProperty: TProperty<boolean>;
 
-  // Whether the grid is visible.
-  public readonly gridVisibleProperty: BooleanProperty;
-
-  // Whether the diagonal guides are visible.
-  public readonly diagonalGuidesVisibleProperty: BooleanProperty;
-
-  // Whether the shape name is displayed to the user.
-  public readonly shapeNameVisibleProperty: BooleanProperty;
-
   // Whether the simulation sound design is enabled to play as the shape changes. For now,
   // this only controls the "Tracks" sound designs in this simulation. When this is false,
   // we will still hear general and common code sounds.
@@ -106,13 +91,14 @@ class QuadrilateralModel {
   // The first model step we will disable all sounds. This simulation updates certain Properties in the animation
   // frame so we wait until after the sim has loaded to start playing any sounds (lazyLink is not sufficient when
   // Properties are updated the following frame).
+  // TODO: I think this can be removed.
   private firstModelStep: boolean;
 
   public constructor( optionsModel: QuadrilateralOptionsModel, tandem: Tandem ) {
 
     this.optionsModel = optionsModel;
 
-    this.showDebugValuesProperty = new BooleanProperty( QuadrilateralQueryParameters.showModelValues );
+    this.visibilityModel = new QuadrilateralVisibilityModel( tandem.createTandem( 'visibilityModel' ) );
 
     this.resetNotInProgressProperty = new BooleanProperty( true, {
       tandem: tandem.createTandem( 'resetNotInProgressProperty' )
@@ -128,26 +114,6 @@ class QuadrilateralModel {
     } );
 
     this.tangibleConnectionModel = new TangibleConnectionModel( this.quadrilateralShapeModel, this.optionsModel.tangibleOptionsModel, this.modelBounds, tandem.createTandem( 'tangibleConnectionModel' ) );
-
-    this.vertexLabelsVisibleProperty = new BooleanProperty( true, {
-      tandem: tandem.createTandem( 'vertexLabelsVisibleProperty' )
-    } );
-
-    this.gridVisibleProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'gridVisibleProperty' )
-    } );
-
-    this.diagonalGuidesVisibleProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'diagonalGuidesVisibleProperty' )
-    } );
-
-    this.markersVisibleProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'markersVisibleProperty' )
-    } );
-
-    this.shapeNameVisibleProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'shapeNameVisibleProperty' )
-    } );
 
     this.shapeSoundEnabledProperty = new BooleanProperty( true, {
       tandem: tandem.createTandem( 'shapeSoundEnabledProperty' )
@@ -237,22 +203,17 @@ class QuadrilateralModel {
     // reset is in progress (not not in progress)
     this.resetNotInProgressProperty.value = false;
 
+    this.visibilityModel.reset();
+    this.lockToMinorIntervalsProperty.reset();
+    this.shapeSoundEnabledProperty.reset();
+
     this.quadrilateralShapeModel.reset();
     this.quadrilateralTestShapeModel.reset();
 
-    // Eagerly update the Properties that are set asynchronously so we don't wait until
+    // Eagerly update the Properties that are set asynchronously, so we don't wait until
     // the next frame for these to be set after a reset.
     this.quadrilateralShapeModel.updateOrderDependentProperties();
-
-    this.lockToMinorIntervalsProperty.reset();
-
-    // reset visibility Properties
-    this.markersVisibleProperty.reset();
-    this.vertexLabelsVisibleProperty.reset();
-    this.gridVisibleProperty.reset();
-    this.diagonalGuidesVisibleProperty.reset();
-    this.shapeNameVisibleProperty.reset();
-    this.shapeSoundEnabledProperty.reset();
+    this.quadrilateralTestShapeModel.updateOrderDependentProperties();
 
     this.resetEmitter.emit();
 

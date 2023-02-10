@@ -88,10 +88,10 @@ class SideNode extends Voicing( Path ) {
     const ticksNode = new SideTicksNode( side, modelViewTransform );
     this.addChild( ticksNode );
 
-    const markersVisibleProperty = quadrilateralModel.markersVisibleProperty;
+    const markersVisibleProperty = quadrilateralModel.visibilityModel.markersVisibleProperty;
 
     // Generates descriptions
-    const sideDescriber = new SideDescriber( side, this.quadrilateralShapeModel, quadrilateralModel.markersVisibleProperty, modelViewTransform );
+    const sideDescriber = new SideDescriber( side, this.quadrilateralShapeModel, markersVisibleProperty, modelViewTransform );
 
     // Reusable lineNode for calculating the shape of the focus highlight
     const lineNode = new LineNode( 0, 0, 0, 0 );
@@ -369,7 +369,7 @@ class SideNode extends Voicing( Path ) {
     this.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
       this.voicingObjectResponse = sideDescriber.getSideObjectResponse();
     } );
-    this.quadrilateralModel.markersVisibleProperty.link( () => {
+    markersVisibleProperty.link( () => {
       this.voicingObjectResponse = sideDescriber.getSideObjectResponse();
     } );
 
