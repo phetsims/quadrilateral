@@ -25,7 +25,6 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Ray2 from '../../../../dot/js/Ray2.js';
-import SideLengths from './SideLengths.js';
 import VertexLabel from './VertexLabel.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -146,11 +145,6 @@ class QuadrilateralShapeModel {
   // The name of the quadrilateral (like square/rhombus/trapezoid, etc). Will be null if it is a random
   // unnamed shape.
   public readonly shapeNameProperty: EnumerationProperty<NamedQuadrilateral>;
-
-  // A collection of the Side lengths at a point in time. Updated whenever an interaction begins with the
-  // quadrilateral. Allows us to monitor the change in Side lengths during interaction.
-  // TODO: Delete this? Are we still using 'saved' features?
-  public savedSideLengths: SideLengths;
 
   // Arrays that define the relationship between vertices in the model, either opposite or adjacent once they are
   // assembled to form the quadrilateral shape.
@@ -289,8 +283,6 @@ class QuadrilateralShapeModel {
     this.leftSide.connectToSide( this.bottomSide );
     this.topSide.connectToSide( this.leftSide );
 
-    this.savedSideLengths = this.getSideLengths();
-
     this.isParallelogramProperty = new BooleanProperty( false, {
       tandem: options.tandem.createTandem( 'isParallelogramProperty' )
     } );
@@ -341,8 +333,6 @@ class QuadrilateralShapeModel {
     this.model = model;
     this.propertiesDeferred = false;
 
-    this.saveSideLengths();
-
     Multilink.multilink( [
         this.vertexA.positionProperty,
         this.vertexB.positionProperty,
@@ -386,25 +376,6 @@ class QuadrilateralShapeModel {
       firstAdjacentSide.interactiveProperty.value = interactive;
       secondAdjacentSide.interactiveProperty.value = interactive;
     } );
-  }
-
-  /**
-   * Get a SideLengths, a collection of all the side lengths at a particular point in time.
-   */
-  private getSideLengths(): SideLengths {
-    return new SideLengths(
-      this.topSide.lengthProperty.value,
-      this.rightSide.lengthProperty.value,
-      this.bottomSide.lengthProperty.value,
-      this.leftSide.lengthProperty.value
-    );
-  }
-
-  /**
-   * Save all side lengths for the model, to monitor changes in the length over time.
-   */
-  public saveSideLengths(): void {
-    this.savedSideLengths = this.getSideLengths();
   }
 
   /**
