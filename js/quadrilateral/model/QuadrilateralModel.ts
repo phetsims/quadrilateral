@@ -17,7 +17,7 @@ import Vertex from './Vertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import QuadrilateralPreferencesModel from './QuadrilateralPreferencesModel.js';
+import QuadrilateralOptionsModel from './QuadrilateralOptionsModel.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
@@ -45,7 +45,7 @@ class QuadrilateralModel {
   public readonly showDebugValuesProperty: TProperty<boolean>;
 
   // Controls runtime preferences for the simulation.
-  public readonly preferencesModel: QuadrilateralPreferencesModel;
+  public readonly preferencesModel: QuadrilateralOptionsModel;
 
   // A model that manages Properties used by prototype connections with tangible devices (Serial, OpenCV, BLE).
   public readonly tangibleConnectionModel: TangibleConnectionModel;
@@ -108,7 +108,7 @@ class QuadrilateralModel {
   // Properties are updated the following frame).
   private firstModelStep: boolean;
 
-  public constructor( preferencesModel: QuadrilateralPreferencesModel, tandem: Tandem ) {
+  public constructor( preferencesModel: QuadrilateralOptionsModel, tandem: Tandem ) {
 
     this.preferencesModel = preferencesModel;
 

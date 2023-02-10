@@ -15,13 +15,13 @@ import HapticsInfoDialog from './common/HapticsInfoDialog.js';
 import QuadrilateralQueryParameters from './quadrilateral/QuadrilateralQueryParameters.js';
 import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';
 import QuadrilateralStrings from './QuadrilateralStrings.js';
-import QuadrilateralPreferencesModel from './quadrilateral/model/QuadrilateralPreferencesModel.js';
+import QuadrilateralOptionsModel from './quadrilateral/model/QuadrilateralOptionsModel.js';
 import QuadrilateralAudioPreferencesNode from './quadrilateral/view/QuadrilateralAudioPreferencesNode.js';
 import MappedProperty from '../../axon/js/MappedProperty.js';
 import QuadrilateralInputPreferencesNode from './quadrilateral/view/QuadrilateralInputPreferencesNode.js';
 
 const quadrilateralTitleStringProperty = QuadrilateralStrings.quadrilateral.titleStringProperty;
-const preferencesModel = new QuadrilateralPreferencesModel();
+const preferencesModel = new QuadrilateralOptionsModel();
 
 // "Input" options are related to connection to a tangible device, this tab should only be shown when running
 // while connected to some external device.

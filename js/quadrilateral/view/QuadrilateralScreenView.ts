@@ -29,7 +29,7 @@ import QuadrilateralVisibilityControls from './QuadrilateralVisibilityControls.j
 import QuadrilateralGridNode from './QuadrilateralGridNode.js';
 import QuadrilateralScreenSummaryContentNode from './QuadrilateralScreenSummaryContentNode.js';
 import QuadrilateralAlerter from './QuadrilateralAlerter.js';
-import QuadrilateralPreferencesModel from '../model/QuadrilateralPreferencesModel.js';
+import QuadrilateralOptionsModel from '../model/QuadrilateralOptionsModel.js';
 import QuadrilateralMediaPipe from './QuadrilateralMediaPipe.js';
 import QuadrilateralDiagonalGuidesNode from './QuadrilateralDiagonalGuidesNode.js';
 import QuadrilateralShapeNameDisplay from './QuadrilateralShapeNameDisplay.js';
@@ -51,7 +51,7 @@ class QuadrilateralScreenView extends ScreenView {
   private readonly quadrilateralAlerter: QuadrilateralAlerter;
   private readonly quadrilateralMediaPipe: QuadrilateralMediaPipe | null = null;
 
-  public constructor( model: QuadrilateralModel, preferencesModel: QuadrilateralPreferencesModel, tandem: Tandem ) {
+  public constructor( model: QuadrilateralModel, preferencesModel: QuadrilateralOptionsModel, tandem: Tandem ) {
     super( {
 
       // phet-io

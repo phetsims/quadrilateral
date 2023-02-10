@@ -14,10 +14,10 @@ import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralSoundOptionsModel from './QuadrilateralSoundOptionsModel.js';
 import QuadrilateralTangibleOptionsModel from './QuadrilateralTangibleOptionsModel.js';
 
-class QuadrilateralPreferencesModel {
+class QuadrilateralOptionsModel {
   public readonly soundOptionsModel = new QuadrilateralSoundOptionsModel();
   public readonly tangibleOptionsModel = new QuadrilateralTangibleOptionsModel();
 }
 
-quadrilateral.register( 'QuadrilateralPreferencesModel', QuadrilateralPreferencesModel );
-export default QuadrilateralPreferencesModel;
+quadrilateral.register( 'QuadrilateralOptionsModel', QuadrilateralOptionsModel );
+export default QuadrilateralOptionsModel;

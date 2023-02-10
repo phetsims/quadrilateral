@@ -8,7 +8,7 @@
  */
 
 import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralPreferencesModel from '../model/QuadrilateralPreferencesModel.js';
+import QuadrilateralOptionsModel from '../model/QuadrilateralOptionsModel.js';
 import { Node } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralSoundOptionsNode from './sound/QuadrilateralSoundOptionsNode.js';
@@ -18,7 +18,7 @@ class QuadrilateralAudioPreferencesNode extends Node {
   // Disposal of components and tandems necessary for phet-io state, otherwise they could exist for life of the sim.
   private readonly disposeQuadrilateralPreferencesNode: () => void;
 
-  public constructor( preferencesModel: QuadrilateralPreferencesModel, tandem: Tandem ) {
+  public constructor( preferencesModel: QuadrilateralOptionsModel, tandem: Tandem ) {
     super();
 
     const soundOptionsNode = new QuadrilateralSoundOptionsNode( preferencesModel.soundOptionsModel, tandem.createTandem( 'soundOptionsNode' ) );
