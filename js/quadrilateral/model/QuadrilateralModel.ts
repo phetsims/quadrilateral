@@ -79,11 +79,11 @@ class QuadrilateralModel {
   // we will still hear general and common code sounds.
   public readonly shapeSoundEnabledProperty: BooleanProperty;
 
-  // A reference to the "main" shape model for the simulation. Controls vertex positions.
+  // Model component for the quadrilateral shape.
   public quadrilateralShapeModel: QuadrilateralShapeModel;
 
-  // A reference to a "test" model for the simulation. Used to validate and verify that vertex positions are
-  // reasonable before setting to the "main" shape model.
+  // A reference to a "test" model for the simulation. Used to validate vertex positions before setting them for
+  // the "real" quadrilateralShapeModel. See QuadrilateralShapeModel.isQuadrilateralShapeAllowed().
   public quadrilateralTestShapeModel: QuadrilateralShapeModel;
 
   // Emits an event when a full model reset happens (but not when a shape reset happens)
