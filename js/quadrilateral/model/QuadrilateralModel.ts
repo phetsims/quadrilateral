@@ -28,7 +28,14 @@ import QuadrilateralVisibilityModel from './QuadrilateralVisibilityModel.js';
 
 class QuadrilateralModel {
 
+  // Manages visibility of view components
   public readonly visibilityModel: QuadrilateralVisibilityModel;
+
+  // Controls runtime options for the simulation.
+  public readonly optionsModel: QuadrilateralOptionsModel;
+
+  // A model that manages Properties used by prototype connections with tangible devices (Serial, OpenCV, BLE).
+  public readonly tangibleConnectionModel: TangibleConnectionModel;
 
   // The bounds of the simulation in model coordinates. Origin (0,0) is at the center. The shape and
   // vertices can be positioned within these bounds.
@@ -43,12 +50,6 @@ class QuadrilateralModel {
   // are disabled so we don't play sounds for transient model states. Tracks when the reset is NOT in progress
   // because that makes it most convenient to pass to SoundGenerator enableControlProperties.
   public readonly resetNotInProgressProperty: TProperty<boolean>;
-
-  // Controls runtime options for the simulation.
-  public readonly optionsModel: QuadrilateralOptionsModel;
-
-  // A model that manages Properties used by prototype connections with tangible devices (Serial, OpenCV, BLE).
-  public readonly tangibleConnectionModel: TangibleConnectionModel;
 
   // The available bounds for smooth vertex dragging (the model bounds eroded by the width of a vertex so a vertex
   // can never go ouside of the model bounds.
