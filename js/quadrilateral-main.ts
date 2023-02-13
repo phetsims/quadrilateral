@@ -11,7 +11,6 @@ import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
 import { Node } from '../../scenery/js/imports.js';
 import Tandem from '../../tandem/js/Tandem.js';
-import HapticsInfoDialog from './common/HapticsInfoDialog.js';
 import QuadrilateralQueryParameters from './quadrilateral/QuadrilateralQueryParameters.js';
 import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';
 import QuadrilateralStrings from './QuadrilateralStrings.js';
@@ -19,6 +18,7 @@ import QuadrilateralOptionsModel from './quadrilateral/model/QuadrilateralOption
 import QuadrilateralAudioPreferencesNode from './quadrilateral/view/QuadrilateralAudioPreferencesNode.js';
 import MappedProperty from '../../axon/js/MappedProperty.js';
 import QuadrilateralInputPreferencesNode from './quadrilateral/view/QuadrilateralInputPreferencesNode.js';
+import HapticsInfoDialog from './quadrilateral/view/prototype/HapticsInfoDialog.js';
 
 const quadrilateralTitleStringProperty = QuadrilateralStrings.quadrilateral.titleStringProperty;
 const optionsModel = new QuadrilateralOptionsModel();

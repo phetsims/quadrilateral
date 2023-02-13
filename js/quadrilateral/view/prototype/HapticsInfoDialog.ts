@@ -6,14 +6,14 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import PhetColorScheme from '../../../scenery-phet/js/PhetColorScheme.js';
-import PhetFont from '../../../scenery-phet/js/PhetFont.js';
-import { RichText, VBox } from '../../../scenery/js/imports.js';
-import TextPushButton from '../../../sun/js/buttons/TextPushButton.js';
-import Dialog from '../../../sun/js/Dialog.js';
-import nullSoundPlayer from '../../../tambo/js/shared-sound-players/nullSoundPlayer.js';
-import quadrilateral from '../quadrilateral.js';
-import QuadrilateralStrings from '../QuadrilateralStrings.js';
+import PhetColorScheme from '../../../../../scenery-phet/js/PhetColorScheme.js';
+import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
+import { RichText, VBox } from '../../../../../scenery/js/imports.js';
+import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
+import Dialog from '../../../../../sun/js/Dialog.js';
+import nullSoundPlayer from '../../../../../tambo/js/shared-sound-players/nullSoundPlayer.js';
+import quadrilateral from '../../../quadrilateral.js';
+import QuadrilateralStrings from '../../../QuadrilateralStrings.js';
 
 class HapticsInfoDialog extends Dialog {
 
