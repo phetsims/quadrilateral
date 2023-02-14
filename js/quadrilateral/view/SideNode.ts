@@ -17,7 +17,7 @@ import Vertex from '../model/Vertex.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import { Line, Shape } from '../../../../kite/js/imports.js';
-import QuadrilateralColors from '../../common/QuadrilateralColors.js';
+import QuadrilateralColors from '../../QuadrilateralColors.js';
 import SideDescriber from './SideDescriber.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import optionize from '../../../../phet-core/js/optionize.js';

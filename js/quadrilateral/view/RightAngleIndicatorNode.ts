@@ -15,7 +15,7 @@ import Vertex from '../model/Vertex.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import { Line, Shape } from '../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import QuadrilateralColors from '../../common/QuadrilateralColors.js';
+import QuadrilateralColors from '../../QuadrilateralColors.js';
 import quadrilateral from '../../quadrilateral.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 

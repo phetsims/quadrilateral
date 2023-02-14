@@ -16,7 +16,7 @@ import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
-import QuadrilateralColors from '../../common/QuadrilateralColors.js';
+import QuadrilateralColors from '../../QuadrilateralColors.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';

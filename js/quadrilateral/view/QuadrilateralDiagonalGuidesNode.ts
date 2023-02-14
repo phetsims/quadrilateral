@@ -16,7 +16,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import Multilink from '../../../../axon/js/Multilink.js';
 import Ray2 from '../../../../dot/js/Ray2.js';
 import { Shape } from '../../../../kite/js/imports.js';
-import QuadrilateralColors from '../../common/QuadrilateralColors.js';
+import QuadrilateralColors from '../../QuadrilateralColors.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralUtils from '../model/QuadrilateralUtils.js';
 

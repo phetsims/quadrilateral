@@ -6,7 +6,7 @@
  */
 
 import Screen, { ScreenOptions } from '../../../joist/js/Screen.js';
-import QuadrilateralColors from '../common/QuadrilateralColors.js';
+import QuadrilateralColors from '../QuadrilateralColors.js';
 import quadrilateral from '../quadrilateral.js';
 import QuadrilateralModel from './model/QuadrilateralModel.js';
 import QuadrilateralScreenView from './view/QuadrilateralScreenView.js';

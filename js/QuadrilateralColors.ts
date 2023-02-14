@@ -14,8 +14,8 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { Color, ProfileColorProperty } from '../../../scenery/js/imports.js';
-import quadrilateral from '../quadrilateral.js';
+import { Color, ProfileColorProperty } from '../../scenery/js/imports.js';
+import quadrilateral from './quadrilateral.js';
 
 const QuadrilateralColors = {
 

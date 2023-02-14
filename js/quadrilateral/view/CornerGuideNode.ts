@@ -22,7 +22,7 @@ import Utils from '../../../../dot/js/Utils.js';
 import { Line, Shape } from '../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import QuadrilateralColors from '../../common/QuadrilateralColors.js';
+import QuadrilateralColors from '../../QuadrilateralColors.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import Multilink from '../../../../axon/js/Multilink.js';

@@ -9,7 +9,7 @@ import Utils from '../../../../dot/js/Utils.js';
 import GridIcon from '../../../../scenery-phet/js/GridIcon.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
-import QuadrilateralColors from '../../common/QuadrilateralColors.js';
+import QuadrilateralColors from '../../QuadrilateralColors.js';
 import { Line as ShapeLine, Shape } from '../../../../kite/js/imports.js';
 import musicSolidShape from '../../../../sherpa/js/fontawesome-5/musicSolidShape.js';
 import Vector2 from '../../../../dot/js/Vector2.js';

@@ -10,7 +10,7 @@ import quadrilateral from '../../quadrilateral.js';
 import { Node, Path, Rectangle } from '../../../../scenery/js/imports.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import QuadrilateralColors from '../../common/QuadrilateralColors.js';
+import QuadrilateralColors from '../../QuadrilateralColors.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';

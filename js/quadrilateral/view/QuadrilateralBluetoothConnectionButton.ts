@@ -14,7 +14,7 @@ import Utils from '../../../../dot/js/Utils.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import stepTimer from '../../../../axon/js/stepTimer.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
-import QuadrilateralColors from '../../common/QuadrilateralColors.js';
+import QuadrilateralColors from '../../QuadrilateralColors.js';
 import TangibleConnectionModel from '../model/prototype/TangibleConnectionModel.js';
 
 // The bluetooth options for the requestDevice call. There must be at least one entry in filters for the browser

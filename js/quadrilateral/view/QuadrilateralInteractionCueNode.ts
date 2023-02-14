@@ -9,7 +9,7 @@
 
 import { Path } from '../../../../scenery/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import QuadrilateralColors from '../../common/QuadrilateralColors.js';
+import QuadrilateralColors from '../../QuadrilateralColors.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import Side from '../model/Side.js';
