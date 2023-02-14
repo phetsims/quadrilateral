@@ -10,7 +10,7 @@
 
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
+import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 

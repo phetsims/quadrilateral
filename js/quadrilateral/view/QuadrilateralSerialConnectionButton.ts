@@ -2,7 +2,7 @@
 
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
-import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
+import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import quadrilateral from '../../quadrilateral.js';
 import TangibleConnectionModel from '../model/prototype/TangibleConnectionModel.js';
 import QuadrilateralSerialMessageController from './QuadrilateralSerialMessageController.js';

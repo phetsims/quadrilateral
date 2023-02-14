@@ -14,7 +14,7 @@ import QuadrilateralColors from '../../common/QuadrilateralColors.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
-import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
+import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 
 // constants
 const MAJOR_GRID_LINE_OPTIONS = {

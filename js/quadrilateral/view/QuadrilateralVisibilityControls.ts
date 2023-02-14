@@ -14,7 +14,7 @@ import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import QuadrilateralIconFactory from './QuadrilateralIconFactory.js';
-import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
+import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import QuadrilateralVisibilityModel from '../model/QuadrilateralVisibilityModel.js';
 
 type SelfOptions = EmptySelfOptions;

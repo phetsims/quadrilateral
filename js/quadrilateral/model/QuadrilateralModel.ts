@@ -22,7 +22,7 @@ import TProperty from '../../../../axon/js/TProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
+import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import TangibleConnectionModel from './prototype/TangibleConnectionModel.js';
 import QuadrilateralVisibilityModel from './QuadrilateralVisibilityModel.js';
 

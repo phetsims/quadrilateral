@@ -12,7 +12,7 @@ import LockNode from '../../../../scenery-phet/js/LockNode.js';
 import RectangularToggleButton, { RectangularToggleButtonOptions } from '../../../../sun/js/buttons/RectangularToggleButton.js';
 import { Text } from '../../../../scenery/js/imports.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';
-import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
+import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';

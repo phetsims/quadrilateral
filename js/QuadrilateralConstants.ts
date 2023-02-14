@@ -6,10 +6,10 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import PhetFont from '../../../scenery-phet/js/PhetFont.js';
-import Range from '../../../dot/js/Range.js';
-import Utterance from '../../../utterance-queue/js/Utterance.js';
-import quadrilateral from '../quadrilateral.js';
+import PhetFont from '../../scenery-phet/js/PhetFont.js';
+import Range from '../../dot/js/Range.js';
+import Utterance from '../../utterance-queue/js/Utterance.js';
+import quadrilateral from './quadrilateral.js';
 
 const QuadrilateralConstants = {
 

@@ -13,7 +13,7 @@ import { Node, Rectangle, VoicingText, VoicingTextOptions } from '../../../../sc
 import ExpandCollapseButton from '../../../../sun/js/ExpandCollapseButton.js';
 import quadrilateral from '../../quadrilateral.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
-import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
+import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralColors from '../../common/QuadrilateralColors.js';

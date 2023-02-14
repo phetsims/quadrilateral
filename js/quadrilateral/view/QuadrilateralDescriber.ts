@@ -18,7 +18,7 @@ import SideLabel from '../model/SideLabel.js';
 import SidePair from '../model/SidePair.js';
 import VertexPair from '../model/VertexPair.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
+import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import ResponsePacket from '../../../../utterance-queue/js/ResponsePacket.js';
 
 // constants

@@ -29,7 +29,7 @@ import release_mp3 from '../../../../tambo/sounds/release_mp3.js';
 import quadShapeCollision_mp3 from '../../../sounds/quadShapeCollision_mp3.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import SideTicksNode from './SideTicksNode.js';
-import QuadrilateralConstants from '../../common/QuadrilateralConstants.js';
+import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 
 // The dilation around side shapes when drawing the focus highlight.
 const FOCUS_HIGHLIGHT_DILATION = 15;
