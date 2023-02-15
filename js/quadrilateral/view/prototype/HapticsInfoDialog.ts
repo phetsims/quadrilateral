@@ -1,4 +1,4 @@
-// Copyright 2022, University of Colorado Boulder
+// Copyright 2022-2023, University of Colorado Boulder
 
 /**
  * A dialog that can be shown at sim load time to get the user to touch the screen and thus enable vibrational haptics.
