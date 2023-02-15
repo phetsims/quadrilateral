@@ -25,8 +25,9 @@ import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import TangibleConnectionModel from './prototype/TangibleConnectionModel.js';
 import QuadrilateralVisibilityModel from './QuadrilateralVisibilityModel.js';
+import TModel from '../../../../joist/js/TModel.js';
 
-class QuadrilateralModel {
+class QuadrilateralModel implements TModel {
 
   // Manages visibility of view components
   public readonly visibilityModel: QuadrilateralVisibilityModel;
