@@ -1,4 +1,4 @@
-// Copyright 2022, University of Colorado Boulder
+// Copyright 2022-2023, University of Colorado Boulder
 
 /**
  * The major and minor tick marks for the SideNode, which may make it easier to assess relative side lengths.
