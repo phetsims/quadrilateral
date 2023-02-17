@@ -37,6 +37,7 @@ import SidePair from './SidePair.js';
 import VertexPair from './VertexPair.js';
 import QuadrilateralUtils, { LineIntersectionPair } from './QuadrilateralUtils.js';
 
+// Used when verifying that Vertex positions are valid before setting to the model.
 export type VertexWithProposedPosition = {
   vertex: Vertex;
 
@@ -46,14 +47,15 @@ export type VertexWithProposedPosition = {
 
 type QuadrilateralShapeModelOptions = {
 
-  // If true, validation will be done to ensure that the quadrilateral shape is reasonable. But this may be
-  // undesirable if you want to use this QuadrilateralShapeModel to determine if the proposed shape is
-  // reasonable.
+  // If true, the shape gets tested to make sure it is valid. This means no overlapping vertices and no crossed
+  // sides.
   validateShape?: boolean;
   tandem: Tandem;
 };
 
 class QuadrilateralShapeModel {
+  // TODO: Can this be removed from the model?
+  public readonly model: QuadrilateralModel;
 
   // Vertices of the quadrilateral.
   public vertexA: Vertex;
@@ -62,10 +64,14 @@ class QuadrilateralShapeModel {
   public vertexD: Vertex;
 
   // Sides of the quadrilateral.
+  // TODO: Rename to lettered sides.
   public topSide: Side;
   public rightSide: Side;
   public bottomSide: Side;
   public leftSide: Side;
+
+  public readonly vertices: Vertex[];
+  public readonly sides: Side[];
 
   // Monitors angles of the shape to determine when pairs of opposite sides are parallel.
   public readonly sideABSideCDParallelSideChecker: ParallelSideChecker;
@@ -74,6 +80,7 @@ class QuadrilateralShapeModel {
 
   // Observables that indicate when the sides become parallel. Updated after all vertex positions have been set
   // so they are consistently up to date.
+  // TODO: This can probably be deleted now.
   public readonly sideABSideCDParallelProperty = new BooleanProperty( false );
   public readonly sideBCSideDAParallelProperty = new BooleanProperty( false );
 
@@ -81,16 +88,11 @@ class QuadrilateralShapeModel {
   // determined.
   public readonly areaProperty: TProperty<number>;
 
-  public readonly vertices: Vertex[];
-  public readonly sides: Side[];
-
+  // Uses shape Properties to detect the shape name.
   private readonly shapeDetector: QuadrilateralShapeDetector;
 
-  // See QuadrilateralShapeModelOptions
+  // If true, the shape is tested to make sure it is valid (no overlapping vertices or crossed sides).
   private readonly validateShape: boolean;
-
-  // Reference to the simulation model for other needed state.
-  public readonly model: QuadrilateralModel;
 
   // Whether or not the Properties of the shape are currently being deferred, preventing listeners
   // from being called and new values from being set.
@@ -141,6 +143,7 @@ class QuadrilateralShapeModel {
 
   // Arrays that define the relationship between Sides in the model, either opposite or adjacent once they are
   // assembled to form the Quadrilateral shape.
+  // TODO: Remove these in place of the maps below.
   public readonly adjacentSides: SidePair[];
   public readonly oppositeSides: SidePair[];
 
@@ -327,19 +330,18 @@ class QuadrilateralShapeModel {
         this.vertexD.positionProperty ],
       ( position1, position2, position3, position4 ) => {
 
-        // Update Properties after Vertex positions have changed. Please note the usage of
-        // setDeferred for Vertex position Properties in this sim because it is important
-        // that this be called after all Vertex positions have been set when moving several
-        // at once.
+        // Update Properties after Vertex positions have changed.
         this.updateOrderDependentProperties();
 
         this.shapeChangedEmitter.emit();
 
+        // After the shape has changed, update the areas of allowed motion for each Vertex.
         this.setVertexDragAreas();
       }
     );
 
     // make adjacent sides non-interactive when a Side is pressed to avoid buggy multitouch cases
+    // TODO: Move to the view?
     this.makeAdjacentSidesNonInteractiveWhenPressed( this.topSide, this.bottomSide, this.leftSide, this.rightSide );
     this.makeAdjacentSidesNonInteractiveWhenPressed( this.leftSide, this.rightSide, this.topSide, this.bottomSide );
 
@@ -538,10 +540,7 @@ class QuadrilateralShapeModel {
 
   /**
    * Returns true if the current quadrilateral shape is allowed based on the rules of this model.
-   * No vertex can overlap another.
-   * All vertices must be within their drag areas.
-   * All vertices must be within model bounds.
-   * (TODO) No vertex can overlap another side.
+   * TODO: Documentation and readability.
    */
   public isQuadrilateralShapeAllowed(): boolean {
     let shapeAllowed = true;
