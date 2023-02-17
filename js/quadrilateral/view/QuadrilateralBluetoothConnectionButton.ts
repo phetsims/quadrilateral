@@ -16,6 +16,7 @@ import stepTimer from '../../../../axon/js/stepTimer.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import QuadrilateralColors from '../../QuadrilateralColors.js';
 import TangibleConnectionModel from '../model/prototype/TangibleConnectionModel.js';
+import QuadrilateralTangibleController from './prototype/QuadrilateralTangibleController.js';
 
 // The bluetooth options for the requestDevice call. There must be at least one entry in filters for the browser
 // to make a request.
@@ -45,7 +46,7 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
   private topLeftAngle = 0;
   private topRightAngle = 0;
 
-  public constructor( tangibleConnectionModel: TangibleConnectionModel, tandem: Tandem ) {
+  public constructor( tangibleConnectionModel: TangibleConnectionModel, tangibleController: QuadrilateralTangibleController, tandem: Tandem ) {
 
     // TODO: Handle when device does not support bluetooth with bluetooth.getAvailability.
     // TODO: Handle when browser does not support bluetooth, presumably !navigator.bluetooth
@@ -67,7 +68,7 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
         // In an attempt to filter out noise, only update the sim at this interval
         const updateInterval = tangibleConnectionModel.tangibleOptionsModel.bluetoothUpdateIntervalProperty.value;
         if ( this.timeSinceUpdatingSim > updateInterval ) {
-          tangibleConnectionModel.setPositionsFromLengthAndAngleData(
+          tangibleController.setPositionsFromLengthAndAngleData(
             this.topLength,
             this.rightLength,
             5, // unused in setPositionsFromLengthsAndAngles

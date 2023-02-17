@@ -22,9 +22,10 @@ import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralBluetoothConnectionButton from './QuadrilateralBluetoothConnectionButton.js';
 import QuadrilateralSerialConnectionButton from './QuadrilateralSerialConnectionButton.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import QuadrilateralTangibleController from './prototype/QuadrilateralTangibleController.js';
 
 class QuadrilateralTangibleControls extends VBox {
-  public constructor( tangibleConnectionModel: TangibleConnectionModel, tandem: Tandem ) {
+  public constructor( tangibleConnectionModel: TangibleConnectionModel, tangibleController: QuadrilateralTangibleController, tandem: Tandem ) {
 
     // Add a Dialog that will calibrate the device to the simulation (mapping physical data to modelled data).
     const calibrationDialog = new Dialog( new CalibrationContentNode( tangibleConnectionModel ), {
@@ -42,7 +43,7 @@ class QuadrilateralTangibleControls extends VBox {
         if ( physicalModelBounds && physicalModelBounds.isValid() ) {
 
           // set reasonable initial positions of vertices
-          tangibleConnectionModel.finishCalibration();
+          tangibleController.finishCalibration();
         }
       }
     } );
@@ -64,7 +65,7 @@ class QuadrilateralTangibleControls extends VBox {
     if ( QuadrilateralQueryParameters.bluetooth ) {
 
       // request BLE devices
-      const bluetoothButton = new QuadrilateralBluetoothConnectionButton( tangibleConnectionModel, tandem.createTandem( 'quadrilateralBluetoothConnectionButton' ) );
+      const bluetoothButton = new QuadrilateralBluetoothConnectionButton( tangibleConnectionModel, tangibleController, tandem.createTandem( 'quadrilateralBluetoothConnectionButton' ) );
       children.push( bluetoothButton );
     }
 

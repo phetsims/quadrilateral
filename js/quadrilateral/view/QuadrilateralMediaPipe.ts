@@ -23,6 +23,7 @@ import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import MediaPipeQueryParameters from '../../../../tangible/js/mediaPipe/MediaPipeQueryParameters.js';
+import QuadrilateralTangibleController from './prototype/QuadrilateralTangibleController.js';
 
 // aspect ratio of the video stream to map camera coordinates to sim model coordinates
 const streamDimension2 = MediaPipe.videoStreamDimension2;
@@ -44,11 +45,13 @@ if ( MediaPipeQueryParameters.cameraInput === 'hands' ) {
 
 class QuadrilateralMediaPipe extends MediaPipe {
   private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
+  private readonly tangibleController: QuadrilateralTangibleController;
 
-  public constructor( model: QuadrilateralModel ) {
+  public constructor( model: QuadrilateralModel, tangibleController: QuadrilateralTangibleController ) {
     assert && assert( MediaPipeQueryParameters.cameraInput === 'hands', 'MediaPipe can only be used when requested.' );
     super();
     this.quadrilateralShapeModel = model.quadrilateralShapeModel;
+    this.tangibleController = tangibleController;
 
     // So that there is a mapping from tangible space to simulation model space
     model.tangibleConnectionModel.setPhysicalToVirtualTransform( MEDIA_PIPE_ASPECT_RATIO, 1 );
@@ -94,7 +97,7 @@ class QuadrilateralMediaPipe extends MediaPipe {
           vertex: this.quadrilateralShapeModel.vertexD,
           proposedPosition: leftHandPositions.thumbPosition
         };
-        this.quadrilateralShapeModel.setPositionsFromAbsolutePositionData( [ firstPositionProposal, secondPositionProposal, thirdPositionProposal, fourthPositionProposal ] );
+        this.tangibleController.setPositionsFromAbsolutePositionData( [ firstPositionProposal, secondPositionProposal, thirdPositionProposal, fourthPositionProposal ] );
       }
     }
   }

@@ -141,6 +141,16 @@ const QuadrilateralUtils = {
     points.push( secondLineIntersectionPair.intersectionPoint );
 
     return points;
+  },
+
+  /**
+   * Returns the centroid of a shape from an array of potential Vertex positions.
+   */
+  getCentroidFromPositions( positions: Vector2[] ): Vector2 {
+    const centerX = _.sumBy( positions, position => position.x ) / positions.length;
+    const centerY = _.sumBy( positions, position => position.y ) / positions.length;
+
+    return new Vector2( centerX, centerY );
   }
 };
 

@@ -24,11 +24,12 @@ import Property from '../../../../../axon/js/Property.js';
 import TProperty from '../../../../../axon/js/TProperty.js';
 import Bounds2 from '../../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../../dot/js/Vector2.js';
+import { Line } from '../../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
 import NullableIO from '../../../../../tandem/js/types/NullableIO.js';
 import quadrilateral from '../../../quadrilateral.js';
-import QuadrilateralShapeModel from '../QuadrilateralShapeModel.js';
+import QuadrilateralShapeModel, { VertexWithProposedPosition } from '../QuadrilateralShapeModel.js';
 import QuadrilateralTangibleOptionsModel from '../QuadrilateralTangibleOptionsModel.js';
 import MarkerDetectionModel from './MarkerDetectionModel.js';
 
@@ -60,8 +61,10 @@ class TangibleConnectionModel {
   // The model with values related to options that can be set by Preferences that control behavior of tangible input.
   public readonly tangibleOptionsModel: QuadrilateralTangibleOptionsModel;
 
+  // So that this connection model can directly control the shape.
   public readonly shapeModel: QuadrilateralShapeModel;
 
+  // TODO: Reorder these arguments to make more sense.
   public constructor( shapeModel: QuadrilateralShapeModel, tangibleOptionsModel: QuadrilateralTangibleOptionsModel, modelBounds: Bounds2, tandem: Tandem ) {
     this.connectedToDeviceProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'connectedToDeviceProperty' )
@@ -103,34 +106,6 @@ class TangibleConnectionModel {
   }
 
   /**
-   * Sets the quadrilateral shape Vertex positions to good initial values after calibration.
-   *
-   * During calibration, we request the largest shape that can possibly be made from the device. So when
-   * calibration is finished, the tangible is as large as it can be and Vertex positions are positioned
-   * based on full width of the device.
-   */
-  public finishCalibration(): void {
-    const physicalModelBounds = this.physicalModelBoundsProperty.value!;
-    assert && assert( physicalModelBounds && physicalModelBounds.isValid(),
-      'Physical dimensions of device need to be set during calibration' );
-
-    this.setPositionsFromLengthAndAngleData(
-      physicalModelBounds.width,
-      physicalModelBounds.width,
-      physicalModelBounds.width,
-      physicalModelBounds.width,
-      Math.PI / 2,
-      Math.PI / 2,
-      Math.PI / 2,
-      Math.PI / 2
-    );
-  }
-
-  public setPositionsFromLengthAndAngleData( topLength: number, rightLength: number, bottomLength: number, leftLength: number, p1Angle: number, p2Angle: number, p3Angle: number, p4Angle: number ): void {
-    this.shapeModel.setPositionsFromLengthAndAngleData( topLength, rightLength, bottomLength, leftLength, p1Angle, p2Angle, p3Angle, p4Angle );
-  }
-
-  /**
    * Create a transform that can be used to transform between tangible and virtual space. The scaling only uses one
    * dimension because we assume scaling should be the same in both x and y. It uses height as the limiting factor for
    * scaling because the simulation bounds are wider than they are tall.
@@ -144,6 +119,73 @@ class TangibleConnectionModel {
       new Vector2( 0, 0 ), // origin of the simulation model
       this.modelBounds.height / ( height ) // scale from physical model to simulation space
     );
+  }
+
+  /**
+   * Apply a series of checks on VertexWithProposedPositions to make sure that the requested shape does not cross
+   * and does not have overlap.
+   *
+   * TODO: Review implementation for optimization/readability.
+   */
+  public isShapeAllowedForTangible( vertexWithProposedPositions: VertexWithProposedPosition[] ): boolean {
+    let allowed = true;
+
+    let vertexAPosition: Vector2;
+    let vertexBPosition: Vector2;
+    let vertexCPosition: Vector2;
+    let vertexDPosition: Vector2;
+
+    const shapeModel = this.shapeModel;
+    vertexWithProposedPositions.forEach( vertexWithProposedPosition => {
+      if ( vertexWithProposedPosition.vertex === shapeModel.vertexA ) {
+        vertexAPosition = vertexWithProposedPosition.proposedPosition!;
+      }
+      if ( vertexWithProposedPosition.vertex === shapeModel.vertexB ) {
+        vertexBPosition = vertexWithProposedPosition.proposedPosition!;
+      }
+      if ( vertexWithProposedPosition.vertex === shapeModel.vertexC ) {
+        vertexCPosition = vertexWithProposedPosition.proposedPosition!;
+      }
+      if ( vertexWithProposedPosition.vertex === shapeModel.vertexD ) {
+        vertexDPosition = vertexWithProposedPosition.proposedPosition!;
+      }
+    } );
+
+    // all positions defined
+    allowed = !!vertexAPosition! && !!vertexBPosition! && !!vertexCPosition! && !!vertexDPosition!;
+
+    const lineAB = new Line( vertexAPosition!, vertexBPosition! );
+    const lineBC = new Line( vertexBPosition!, vertexCPosition! );
+    const lineCD = new Line( vertexCPosition!, vertexDPosition! );
+    const lineDA = new Line( vertexDPosition!, vertexAPosition! );
+    const proposedLines = [ lineAB, lineBC, lineCD, lineDA ];
+
+    // No vertices overlap (0 length)
+    if ( allowed ) {
+      allowed = _.every( proposedLines, proposedLine => proposedLine.getArcLength() > 0 );
+    }
+
+    // No lines intersect
+    if ( allowed ) {
+      for ( let i = 0; i < proposedLines.length; i++ ) {
+        const firstLine = proposedLines[ i ];
+        for ( let j = 0; j < proposedLines.length; j++ ) {
+          const secondLine = proposedLines[ j ];
+          if ( firstLine !== secondLine ) {
+            if ( Line.intersectOther( firstLine, secondLine ).length > 0 ) {
+              allowed = false;
+              break;
+            }
+          }
+        }
+
+        if ( !allowed ) {
+          break;
+        }
+      }
+    }
+
+    return allowed;
   }
 }
 

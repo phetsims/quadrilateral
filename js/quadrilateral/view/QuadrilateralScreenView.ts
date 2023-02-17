@@ -41,6 +41,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import SmallStepsLockToggleButton from './SmallStepsLockToggleButton.js';
 import QuadrilateralTangibleControls from './QuadrilateralTangibleControls.js';
 import QuadrilateralModelViewTransform from './QuadrilateralModelViewTransform.js';
+import QuadrilateralTangibleController from './prototype/QuadrilateralTangibleController.js';
 
 class QuadrilateralScreenView extends ScreenView {
   private readonly model: QuadrilateralModel;
@@ -49,6 +50,7 @@ class QuadrilateralScreenView extends ScreenView {
   private readonly quadrilateralSoundView: QuadrilateralSoundView;
   private readonly quadrilateralDescriber: QuadrilateralDescriber;
   private readonly quadrilateralAlerter: QuadrilateralAlerter;
+  private readonly quadrilateralTangibleController: QuadrilateralTangibleController;
   private readonly quadrilateralMediaPipe: QuadrilateralMediaPipe | null = null;
 
   public constructor( model: QuadrilateralModel, optionsModel: QuadrilateralOptionsModel, tandem: Tandem ) {
@@ -114,21 +116,25 @@ class QuadrilateralScreenView extends ScreenView {
       debugValuesPanel.visible = showValues;
     } );
 
-    // tangible components - this parent only has children if relevant query params are provided, but is always
-    // created for easy layout
+    // tangible components
+    this.quadrilateralTangibleController = new QuadrilateralTangibleController( model );
+
+    // this parent only has children if relevant query params are provided, but is always created for easy layout
     const deviceConnectionParentNode = new VBox( {
       align: 'left',
       spacing: QuadrilateralConstants.CONTROLS_SPACING
     } );
     if ( QuadrilateralQueryParameters.deviceConnection ) {
       deviceConnectionParentNode.children = [
-        new QuadrilateralTangibleControls( model.tangibleConnectionModel, tandem.createTandem( 'connectionControls' ) )
+        new QuadrilateralTangibleControls( model.tangibleConnectionModel, this.quadrilateralTangibleController, tandem.createTandem( 'connectionControls' ) )
       ];
       deviceConnectionParentNode.top = gridNode.top;
       deviceConnectionParentNode.left = resetAllButton.left;
     }
     if ( MediaPipeQueryParameters.cameraInput === 'hands' ) {
-      this.quadrilateralMediaPipe = new QuadrilateralMediaPipe( model );
+      this.quadrilateralMediaPipe = new QuadrilateralMediaPipe( model, this.quadrilateralTangibleController );
+
+      // TODO: Move into QuadrilateralMediaPipe
       model.tangibleConnectionModel.connectedToDeviceProperty.value = true;
     }
 
