@@ -244,9 +244,6 @@ class QuadrilateralScreenView extends ScreenView {
     this.quadrilateralMediaPipe && this.quadrilateralMediaPipe.step( dt );
 
     this.quadrilateralNode && this.quadrilateralNode.step( dt );
-
-    // Removed for now, see https://github.com/phetsims/quadrilateral/issues/104
-    // vibrationManager.step( dt );
   }
 }
 
