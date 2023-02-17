@@ -272,7 +272,7 @@ class SideDescriber {
     let description = '';
 
     const adjacentSides = this.quadrilateralShapeModel.adjacentSideMap.get( this.side )!;
-    const adjacentSidesEqual = this.quadrilateralShapeModel.isShapeLengthEqualToOther(
+    const adjacentSidesEqual = this.quadrilateralShapeModel.isInterLengthEqualToOther(
       adjacentSides[ 0 ].lengthProperty.value,
       adjacentSides[ 1 ].lengthProperty.value
     );

@@ -589,10 +589,10 @@ class QuadrilateralShapeModel {
    * Returns true when all lengths are equal.
    */
   public getAreAllLengthsEqual(): boolean {
-    return this.isShapeLengthEqualToOther( this.topSide.lengthProperty.value, this.rightSide.lengthProperty.value ) &&
-           this.isShapeLengthEqualToOther( this.rightSide.lengthProperty.value, this.bottomSide.lengthProperty.value ) &&
-           this.isShapeLengthEqualToOther( this.bottomSide.lengthProperty.value, this.leftSide.lengthProperty.value ) &&
-           this.isShapeLengthEqualToOther( this.leftSide.lengthProperty.value, this.topSide.lengthProperty.value );
+    return this.isInterLengthEqualToOther( this.topSide.lengthProperty.value, this.rightSide.lengthProperty.value ) &&
+           this.isInterLengthEqualToOther( this.rightSide.lengthProperty.value, this.bottomSide.lengthProperty.value ) &&
+           this.isInterLengthEqualToOther( this.bottomSide.lengthProperty.value, this.leftSide.lengthProperty.value ) &&
+           this.isInterLengthEqualToOther( this.leftSide.lengthProperty.value, this.topSide.lengthProperty.value );
   }
 
   /**
@@ -644,17 +644,7 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Returns true if two sides are close enough in length that they should be considered equal. Uses the
-   * shapeLengthAngleToleranceInterval.
-   *
-   * TODO: Rename to isInterLengthEqualToOTher to match interAngleToleranceInterval.
-   */
-  public isShapeLengthEqualToOther( length1: number, length2: number ): boolean {
-    return Utils.equalsEpsilon( length1, length2, this.interLengthToleranceInterval );
-  }
-
-  /**
-   * Returns true if the lengths are equal to eachother within interLengthToleranceInterval.
+   * Returns true if the lengths are equal to each other within interLengthToleranceInterval.
    */
   public isInterLengthEqualToOther( length1: number, length2: number ): boolean {
     return Utils.equalsEpsilon( length1, length2, this.interLengthToleranceInterval );
@@ -796,7 +786,7 @@ class QuadrilateralShapeModel {
       const firstLength = sidePair.side1.lengthProperty.value;
       const secondLength = sidePair.side2.lengthProperty.value;
       const currentlyIncludesSidePair = currentSidePairs.includes( sidePair );
-      const areLengthsEqual = this.isShapeLengthEqualToOther( firstLength, secondLength );
+      const areLengthsEqual = this.isInterLengthEqualToOther( firstLength, secondLength );
 
       if ( currentlyIncludesSidePair && !areLengthsEqual ) {
 

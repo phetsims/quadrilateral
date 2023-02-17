@@ -337,8 +337,8 @@ class QuadrilateralAlerter extends Alerter {
     const previousAdjacentSidesEqual = Utils.equalsEpsilon( firstPreviousAdjacentSideLength, secondPreviousAdjacentSideLength, lengthTolerance );
     const previousAdjacentSidesParallel = this.previousObjectResponseShapeSnapshot.getAdjacentSidesParallelFromSideLabel( side.sideLabel );
     const previousLength = this.previousObjectResponseShapeSnapshot.getLengthFromSideLabel( side.sideLabel );
-    const previousEqualToFirstAdjacent = shapeModel.isShapeLengthEqualToOther( previousLength, firstPreviousAdjacentSideLength );
-    const previousEqualToSecondAdjacent = shapeModel.isShapeLengthEqualToOther( previousLength, secondPreviousAdjacentSideLength );
+    const previousEqualToFirstAdjacent = shapeModel.isInterLengthEqualToOther( previousLength, firstPreviousAdjacentSideLength );
+    const previousEqualToSecondAdjacent = shapeModel.isInterLengthEqualToOther( previousLength, secondPreviousAdjacentSideLength );
     const previousEqualToOneAdjacent = previousEqualToFirstAdjacent !== previousEqualToSecondAdjacent;
     const previousNumberOfEqualSides = this.previousObjectResponseShapeSnapshot.countNumberOfEqualSides( this.quadrilateralShapeModel.interLengthToleranceInterval );
 
@@ -348,8 +348,8 @@ class QuadrilateralAlerter extends Alerter {
     const adjacentSidesEqual = Utils.equalsEpsilon( firstAdjacentSideLength, secondAdjacentSideLength, lengthTolerance );
     const adjacentSidesParallel = currentShapeSnapshot.getAdjacentSidesParallelFromSideLabel( side.sideLabel );
     const sideLength = currentShapeSnapshot.getLengthFromSideLabel( side.sideLabel );
-    const equalToFirstAdjacent = shapeModel.isShapeLengthEqualToOther( sideLength, firstAdjacentSideLength );
-    const equalToSecondAdjacent = shapeModel.isShapeLengthEqualToOther( sideLength, secondAdjacentSideLength );
+    const equalToFirstAdjacent = shapeModel.isInterLengthEqualToOther( sideLength, firstAdjacentSideLength );
+    const equalToSecondAdjacent = shapeModel.isInterLengthEqualToOther( sideLength, secondAdjacentSideLength );
     const equalToOneAdjacent = equalToFirstAdjacent !== equalToSecondAdjacent;
     const numberOfEqualSides = currentShapeSnapshot.countNumberOfEqualSides( this.quadrilateralShapeModel.interLengthToleranceInterval );
 
