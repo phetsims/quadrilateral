@@ -228,7 +228,7 @@ class VertexDescriber {
     let description = '';
 
     const adjacentCorners = this.quadrilateralShapeModel.adjacentVertexMap.get( this.vertex )!;
-    const adjacentCornersEqual = this.quadrilateralShapeModel.isShapeAngleEqualToOther(
+    const adjacentCornersEqual = this.quadrilateralShapeModel.isInterAngleEqualToOther(
       adjacentCorners[ 0 ].angleProperty.value!,
       adjacentCorners[ 1 ].angleProperty.value!
     );

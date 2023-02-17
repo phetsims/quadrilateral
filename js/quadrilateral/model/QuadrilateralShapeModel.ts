@@ -628,17 +628,8 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Returns true if two angles are close enough together that they should be considered equal. This uses the
-   * shapeAngleToleranceProperty, the most strict interval available. The angleToleranceInterval can be very dynamic
-   * during various interactions to support sim learning goals. But when detecting shapes we need to be more static so
-   * that when the tolerance is very high the shape isn't incorrectly described.
-   *
-   * TODO: Replace with isInterAngleEqualToOther throughout.
+   * Returns true if the two angles are equal withing angleToleranceInterval.
    */
-  public isShapeAngleEqualToOther( angle1: number, angle2: number ): boolean {
-    return Utils.equalsEpsilon( angle1, angle2, this.interAngleToleranceInterval );
-  }
-
   public isInterAngleEqualToOther( angle1: number, angle2: number ): boolean {
     return Utils.equalsEpsilon( angle1, angle2, this.interAngleToleranceInterval );
   }
@@ -746,7 +737,7 @@ class QuadrilateralShapeModel {
       const firstAngle = vertexPair.vertex1.angleProperty.value!;
       const secondAngle = vertexPair.vertex2.angleProperty.value!;
       const currentlyIncludesVertexPair = currentVertexPairs.includes( vertexPair );
-      const areAnglesEqual = this.isShapeAngleEqualToOther( firstAngle, secondAngle );
+      const areAnglesEqual = this.isInterAngleEqualToOther( firstAngle, secondAngle );
 
       if ( currentlyIncludesVertexPair && !areAnglesEqual ) {
 
