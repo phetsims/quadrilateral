@@ -518,26 +518,6 @@ class QuadrilateralShapeModel {
     return shape;
   }
 
-
-  /**
-   * Returns the tolerance interval to use for a value. Generally, the default value will be returned. If the sim is
-   * running while connected to a device (?deviceConnection) or in a mode where all step sizes are reduced, the
-   * value will be further reduced by scale factors provided by query parameter.
-   */
-  public static getWidenedToleranceInterval( defaultValue: number ): number {
-    let interval = defaultValue;
-
-    // Note that both cases are possible and the scale factors compound!
-    if ( QuadrilateralQueryParameters.reducedStepSize ) {
-      interval = interval * QuadrilateralQueryParameters.reducedStepSizeToleranceIntervalScaleFactor;
-    }
-    if ( QuadrilateralQueryParameters.deviceConnection ) {
-      interval = interval * QuadrilateralQueryParameters.connectedToleranceIntervalScaleFactor;
-    }
-
-    return interval;
-  }
-
   /**
    * Returns true if the current quadrilateral shape is allowed based on the rules of this model.
    * TODO: Documentation and readability.
@@ -659,10 +639,6 @@ class QuadrilateralShapeModel {
     return Utils.equalsEpsilon( angle1, angle2, this.interAngleToleranceInterval );
   }
 
-  public static isInterAngleEqualToOther( angle1: number, angle2: number, interAngleToleranceInterval: number ): boolean {
-    return Utils.equalsEpsilon( angle1, angle2, interAngleToleranceInterval );
-  }
-
   public isInterAngleEqualToOther( angle1: number, angle2: number ): boolean {
     return Utils.equalsEpsilon( angle1, angle2, this.interAngleToleranceInterval );
   }
@@ -675,13 +651,6 @@ class QuadrilateralShapeModel {
    */
   public isShapeLengthEqualToOther( length1: number, length2: number ): boolean {
     return Utils.equalsEpsilon( length1, length2, this.interLengthToleranceInterval );
-  }
-
-  /**
-   * Returns true if the lengths are equal to eachother within interLengthToleranceInterval.
-   */
-  public static isInterLengthEqualToOther( length1: number, length2: number, interLengthToleranceInterval: number ): boolean {
-    return Utils.equalsEpsilon( length1, length2, interLengthToleranceInterval );
   }
 
   public isRightAngle( angle: number ): boolean {
@@ -941,6 +910,36 @@ class QuadrilateralShapeModel {
     this.model.resetNotInProgressProperty.value = false;
     this.reset();
     this.model.resetNotInProgressProperty.value = true;
+  }
+
+  /**
+   * Returns the tolerance interval to use for a value. Generally, the default value will be returned. If the sim is
+   * running while connected to a device (?deviceConnection) or in a mode where all step sizes are reduced, the
+   * value will be further reduced by scale factors provided by query parameter.
+   */
+  public static getWidenedToleranceInterval( defaultValue: number ): number {
+    let interval = defaultValue;
+
+    // Note that both cases are possible and the scale factors compound!
+    if ( QuadrilateralQueryParameters.reducedStepSize ) {
+      interval = interval * QuadrilateralQueryParameters.reducedStepSizeToleranceIntervalScaleFactor;
+    }
+    if ( QuadrilateralQueryParameters.deviceConnection ) {
+      interval = interval * QuadrilateralQueryParameters.connectedToleranceIntervalScaleFactor;
+    }
+
+    return interval;
+  }
+
+  /**
+   * Returns true if the lengths are equal to eachother within interLengthToleranceInterval.
+   */
+  public static isInterLengthEqualToOther( length1: number, length2: number, interLengthToleranceInterval: number ): boolean {
+    return Utils.equalsEpsilon( length1, length2, interLengthToleranceInterval );
+  }
+
+  public static isInterAngleEqualToOther( angle1: number, angle2: number, interAngleToleranceInterval: number ): boolean {
+    return Utils.equalsEpsilon( angle1, angle2, interAngleToleranceInterval );
   }
 }
 
