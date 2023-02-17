@@ -599,16 +599,6 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Returns true if the quadrilateral shape is a parallelogram. This function uses parallelSidePairsProperty, and
-   * must be used after updateOrderDependentProperties().
-   */
-  private getIsParallelogram(): boolean {
-
-    // We should have a quadrilateral if the shape has two pairs of parallel sides.
-    return this.parallelSidePairsProperty.value.length === 2;
-  }
-
-  /**
    * Returns true when all angles are right.
    */
   public getAreAllAnglesRight(): boolean {
@@ -629,8 +619,7 @@ class QuadrilateralShapeModel {
    * Returns the area of the quadrilateral. Uses Bretschneider's formula for the area of a general quadrilateral,
    * see https://en.wikipedia.org/wiki/Bretschneider%27s_formula.
    *
-   * Dependent on side lengths and angles, must be used when
-   * updateOrderDependentProperties.
+   * Dependent on side lengths and angles, must be used in updateOrderDependentProperties.
    */
   private getArea(): number {
     const a = this.topSide.lengthProperty.value;
@@ -756,17 +745,11 @@ class QuadrilateralShapeModel {
       side.updateLength();
     } );
 
-    // Update pairs of parallel sides before updating whether or not we have a parallelogram, update before
-    // calling getIsParallelogram.
-    this.updateParallelSidePairs();
+    this.updateParallelSideProperties();
 
     // update pairs of vertices and sides
     this.updateVertexAngleComparisons();
     this.updateSideLengthComparisons();
-
-    this.isParallelogramProperty.set( this.getIsParallelogram() );
-    this.sideABSideCDParallelProperty.value = this.sideABSideCDParallelSideChecker.areSidesParallel();
-    this.sideBCSideDAParallelProperty.value = this.sideBCSideDAParallelSideChecker.areSidesParallel();
 
     this.areaProperty.set( this.getArea() );
 
@@ -855,31 +838,24 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Update the Property monitoring if opposite sides are parallel with eachother.
+   * Updates Properties related to opposite pairs of parallel sides and the isParallelogramProperty. To be used in updateOrderDependentProperties.
    */
-  private updateParallelSidePairs(): void {
-    const currentParallelSides = this.parallelSidePairsProperty.value;
+  private updateParallelSideProperties(): void {
+    this.sideABSideCDParallelProperty.value = this.sideABSideCDParallelSideChecker.areSidesParallel();
+    this.sideBCSideDAParallelProperty.value = this.sideBCSideDAParallelSideChecker.areSidesParallel();
+    this.isParallelogramProperty.set( this.sideABSideCDParallelProperty.value && this.sideBCSideDAParallelProperty.value );
 
-    // only opposite sides can be parallel
-    for ( let i = 0; i < this.parallelSideCheckers.length; i++ ) {
-      const checker = this.parallelSideCheckers[ i ];
-      const oppositeSidePair = checker.sidePair;
+    const previousParallelSidePairs = this.parallelSidePairsProperty.value;
+    const currentParallelSidePairs = [];
+    if ( this.sideABSideCDParallelProperty.value ) {
+      currentParallelSidePairs.push( this.sideABSideCDParallelSideChecker.sidePair );
+    }
+    if ( this.sideBCSideDAParallelProperty.value ) {
+      currentParallelSidePairs.push( this.sideBCSideDAParallelSideChecker.sidePair );
+    }
 
-      const areSidesParallel = checker.areSidesParallel();
-      const hasSidePair = currentParallelSides.includes( oppositeSidePair );
-
-      if ( hasSidePair && !areSidesParallel ) {
-
-        // the VertexPair needs to be removed because angles are no longer equal
-        currentParallelSides.splice( currentParallelSides.indexOf( oppositeSidePair ), 1 );
-        this.parallelSidePairsProperty.notifyListenersStatic();
-      }
-      else if ( !hasSidePair && areSidesParallel ) {
-
-        // the VertexPair needs to be removed because angles are no longer equal
-        currentParallelSides.push( oppositeSidePair );
-        this.parallelSidePairsProperty.notifyListenersStatic();
-      }
+    if ( !_.isEqual( previousParallelSidePairs, currentParallelSidePairs ) ) {
+      this.parallelSidePairsProperty.value = currentParallelSidePairs;
     }
   }
 
