@@ -317,7 +317,7 @@ class VertexDescriber {
       description = halfAsWideAsString;
     }
 
-    const angleRatio = angle2 / angle1;
+    const angleRatio = angle1 / angle2;
     if ( description === null ) {
       angleComparisonDescriptionMap.forEach( ( value, key ) => {
         if ( key.contains( angleRatio ) ) {
