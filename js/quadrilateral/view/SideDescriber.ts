@@ -339,8 +339,8 @@ class SideDescriber {
 
   /**
    * Returns a description of comparison between two sides, using entries of lengthComparisonDescriptionMap.
-   * Description compares side2 to side1. For example, if side2 is longer than side1 the output will be something
-   * like:
+   * Description compares this side to otherSide. For example, if this side (SideAB) is longer than (sideCD) the output
+   * will be something like:
    * "SideAB is much longer than sideCD."
    */
   private getLengthComparisonDescription( otherSide: Side ): string {
@@ -351,17 +351,17 @@ class SideDescriber {
     const length1 = this.side.lengthProperty.value;
     const length2 = otherSide.lengthProperty.value;
 
-    if ( shapeModel.isInterLengthEqualToOther( length2, length1 ) ) {
+    if ( shapeModel.isInterLengthEqualToOther( length1, length2 ) ) {
       description = equalToString;
     }
-    else if ( shapeModel.isInterLengthEqualToOther( length2, length1 * 2 ) ) {
+    else if ( shapeModel.isInterLengthEqualToOther( length1, length2 * 2 ) ) {
       description = twiceAsLongAsString;
     }
-    else if ( shapeModel.isInterLengthEqualToOther( length2, length1 / 2 ) ) {
+    else if ( shapeModel.isInterLengthEqualToOther( length1, length2 / 2 ) ) {
       description = halfAsLongAsString;
     }
 
-    const lengthRatio = length2 / length1;
+    const lengthRatio = length1 / length2;
     if ( description === null ) {
       lengthComparisonDescriptionMap.forEach( ( value, key ) => {
         if ( key.contains( lengthRatio ) ) {
