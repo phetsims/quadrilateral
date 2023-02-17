@@ -1,5 +1,5 @@
 {
-  "comment": "# quadrilateral 1.0.0-dev.74 Fri Feb 17 2023 12:42:04 GMT-0500 (Eastern Standard Time)",
+  "comment": "# quadrilateral 1.0.0-dev.74 Fri Feb 17 2023 12:49:16 GMT-0500 (Eastern Standard Time)",
   "assert": {
     "sha": "c13a8c7741d95fbd8e37619c66ebcca8686dffe7",
     "branch": "master"
@@ -57,7 +57,7 @@
     "branch": "master"
   },
   "quadrilateral": {
-    "sha": "d1c8f705f90f23ace5d9a702981549062c7dbe94",
+    "sha": "6af1e3f3ca2dce485bdbbf3fdeb634c403fa6711",
     "branch": "wip-2-17-23"
   },
   "query-string-machine": {
@@ -94,10 +94,6 @@
   },
   "tangible": {
     "sha": "a5a119ddd62d853ba412463a420b9b17c25e95ce",
-    "branch": "master"
-  },
-  "tappi": {
-    "sha": "09eb10c412a00bd523640602e75ce4f1a68b294d",
     "branch": "master"
   },
   "twixt": {

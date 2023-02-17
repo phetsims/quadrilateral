@@ -18,7 +18,6 @@
       "adapted-from-phet"
     ],
     "phetLibs": [
-      "tappi",
       "tangible"
     ],
     "preload": [
