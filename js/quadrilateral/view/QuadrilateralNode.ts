@@ -107,19 +107,19 @@ class QuadrilateralNode extends Voicing( Node ) {
       tandem: providedOptions.tandem.createTandem( 'vertexDNode' )
     } );
 
-    const topSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.topSide, this.model.quadrilateralTestShapeModel.topSide, modelViewTransform, {
+    const topSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.topSide, this.model.quadrilateralTestShapeModel.topSide, quadrilateralDescriber.sideABDescriber, modelViewTransform, {
       nameResponse: topSideString,
       tandem: providedOptions.tandem.createTandem( 'topSideNode' )
     } );
-    const rightSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.rightSide, this.model.quadrilateralTestShapeModel.rightSide, modelViewTransform, {
+    const rightSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.rightSide, this.model.quadrilateralTestShapeModel.rightSide, quadrilateralDescriber.sideBCDescriber, modelViewTransform, {
       nameResponse: rightSideString,
       tandem: providedOptions.tandem.createTandem( 'rightSideNode' )
     } );
-    const bottomSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.bottomSide, this.model.quadrilateralTestShapeModel.bottomSide, modelViewTransform, {
+    const bottomSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.bottomSide, this.model.quadrilateralTestShapeModel.bottomSide, quadrilateralDescriber.sideCDDescriber, modelViewTransform, {
       nameResponse: bottomSideString,
       tandem: providedOptions.tandem.createTandem( 'bottomSideNode' )
     } );
-    const leftSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.leftSide, this.model.quadrilateralTestShapeModel.leftSide, modelViewTransform, {
+    const leftSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.leftSide, this.model.quadrilateralTestShapeModel.leftSide, quadrilateralDescriber.sideDADescriber, modelViewTransform, {
       nameResponse: leftSideString,
       tandem: providedOptions.tandem.createTandem( 'leftSideNode' )
     } );

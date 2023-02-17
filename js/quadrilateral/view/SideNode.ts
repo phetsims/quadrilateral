@@ -57,7 +57,7 @@ class SideNode extends Voicing( Path ) {
   private scratchShapeModel: QuadrilateralShapeModel;
   private quadrilateralModel: QuadrilateralModel;
 
-  public constructor( quadrilateralModel: QuadrilateralModel, side: Side, scratchSide: Side, modelViewTransform: ModelViewTransform2, providedOptions?: SideNodeOptions ) {
+  public constructor( quadrilateralModel: QuadrilateralModel, side: Side, scratchSide: Side, sideDescriber: SideDescriber, modelViewTransform: ModelViewTransform2, providedOptions?: SideNodeOptions ) {
 
     const options = optionize<SideNodeOptions, SelfOptions, ParentOptions>()( {
       fill: QuadrilateralColors.quadrilateralShapeColorProperty,
@@ -89,9 +89,6 @@ class SideNode extends Voicing( Path ) {
     this.addChild( ticksNode );
 
     const markersVisibleProperty = quadrilateralModel.visibilityModel.markersVisibleProperty;
-
-    // Generates descriptions
-    const sideDescriber = new SideDescriber( side, this.quadrilateralShapeModel, markersVisibleProperty, modelViewTransform );
 
     // Reusable lineNode for calculating the shape of the focus highlight
     const lineNode = new LineNode( 0, 0, 0, 0 );

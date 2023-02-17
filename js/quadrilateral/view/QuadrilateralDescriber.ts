@@ -8,7 +8,6 @@ import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
-import Side from '../model/Side.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import Vertex from '../model/Vertex.js';
 import VertexLabel from '../model/VertexLabel.js';
@@ -20,6 +19,7 @@ import VertexPair from '../model/VertexPair.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import ResponsePacket from '../../../../utterance-queue/js/ResponsePacket.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 
 // constants
 const firstDetailsStatementPatternString = QuadrilateralStrings.a11y.voicing.firstDetailsStatementPattern;
@@ -39,13 +39,6 @@ const pairsOfAdjacentString = QuadrilateralStrings.a11y.voicing.details.pairsOfA
 const onePairOfAdjacentString = QuadrilateralStrings.a11y.voicing.details.onePairOfAdjacent;
 const onePairOfOppositeString = QuadrilateralStrings.a11y.voicing.details.onePairOfOpposite;
 const noString = QuadrilateralStrings.a11y.voicing.details.noString;
-const generalSidePatternString = QuadrilateralStrings.a11y.voicing.details.generalSidePattern;
-const generalVertexPatternString = QuadrilateralStrings.a11y.voicing.details.generalVertexPattern;
-const cornerAnglePatternString = QuadrilateralStrings.a11y.voicing.details.cornerAnglePattern;
-const rightAngleCornersPatternString = QuadrilateralStrings.a11y.voicing.details.rightAngleCornersPattern;
-const twoEqualVerticesAnglePatternString = QuadrilateralStrings.a11y.voicing.details.twoEqualVerticesAnglePattern;
-const twoPairsOfEqualVerticesPatternString = QuadrilateralStrings.a11y.voicing.details.twoPairsOfEqualVerticesPattern;
-const cornersAnglePatternString = QuadrilateralStrings.a11y.voicing.details.cornersAnglePattern;
 const vertexAString = QuadrilateralStrings.vertexA;
 const vertexBString = QuadrilateralStrings.vertexB;
 const vertexCString = QuadrilateralStrings.vertexC;
@@ -145,14 +138,27 @@ class QuadrilateralDescriber {
   public readonly tiltDifferenceToleranceInterval: number;
   public readonly lengthDifferenceToleranceInterval: number;
 
-  public constructor( shapeModel: QuadrilateralShapeModel, shapeNameVisibleProperty: TReadOnlyProperty<boolean>, markersVisibleProperty: TReadOnlyProperty<boolean> ) {
+  public readonly sideABDescriber: SideDescriber;
+  public readonly sideBCDescriber: SideDescriber;
+  public readonly sideCDDescriber: SideDescriber;
+  public readonly sideDADescriber: SideDescriber;
+  private readonly sideDescribers: SideDescriber[];
+
+  public constructor( shapeModel: QuadrilateralShapeModel, shapeNameVisibleProperty: TReadOnlyProperty<boolean>, markersVisibleProperty: TReadOnlyProperty<boolean>, modelViewTransform: ModelViewTransform2 ) {
     this.shapeModel = shapeModel;
     this.shapeNameVisibleProperty = shapeNameVisibleProperty;
     this.markersVisibleProperty = markersVisibleProperty;
 
     // TODO: Do we need a query parameter for this?
+    // TODO: CAn tilt be removed?
     this.tiltDifferenceToleranceInterval = 0.2;
     this.lengthDifferenceToleranceInterval = 0.05;
+
+    this.sideABDescriber = new SideDescriber( shapeModel.topSide, shapeModel, markersVisibleProperty, modelViewTransform );
+    this.sideBCDescriber = new SideDescriber( shapeModel.rightSide, shapeModel, markersVisibleProperty, modelViewTransform );
+    this.sideCDDescriber = new SideDescriber( shapeModel.bottomSide, shapeModel, markersVisibleProperty, modelViewTransform );
+    this.sideDADescriber = new SideDescriber( shapeModel.leftSide, shapeModel, markersVisibleProperty, modelViewTransform );
+    this.sideDescribers = [ this.sideABDescriber, this.sideBCDescriber, this.sideCDDescriber, this.sideDADescriber ];
   }
 
   /**
@@ -185,17 +191,6 @@ class QuadrilateralDescriber {
     const shapeNameDescription = shapeNameMap.get( shapeName );
     assert && assert( shapeNameDescription, 'There must be shape name description for the current shape state.' );
     return shapeNameDescription!;
-  }
-
-  /**
-   * Gets the label string for a side from its SideLabel. Includes the Side title. Something like
-   * "Side AB" or
-   * "Side DA"
-   */
-  public static getFullSideLabelString( sideLabel: SideLabel ): string {
-    const sideLabelString = fullSideLabelMap.get( sideLabel );
-    assert && assert( sideLabelString, 'There must be a side label description.' );
-    return sideLabelString!;
   }
 
   /**
@@ -475,12 +470,13 @@ class QuadrilateralDescriber {
       return description;
     }
 
+    const longestSideDescriber = _.maxBy( this.sideDescribers, sideDescriber => sideDescriber.side.lengthProperty.value )!;
+    const shortestSideDescriber = _.minBy( this.sideDescribers, sideDescriber => sideDescriber.side.lengthProperty.value )!;
     const longestSide = _.maxBy( this.shapeModel.sides, side => side.lengthProperty.value )!;
     const shortestSide = _.minBy( this.shapeModel.sides, side => side.lengthProperty.value )!;
 
-    const interLengthToleranceInterval = this.shapeModel.interLengthToleranceInterval;
-    const longestSideDescription = SideDescriber.getSideUnitsDescription( longestSide.lengthProperty.value, interLengthToleranceInterval );
-    const shortestSideDescription = SideDescriber.getSideUnitsDescription( shortestSide.lengthProperty.value, interLengthToleranceInterval );
+    const longestSideDescription = longestSideDescriber.getSideUnitsDescription();
+    const shortestSideDescription = shortestSideDescriber.getSideUnitsDescription();
 
     if ( this.shapeModel.allLengthsEqualProperty.value ) {
 
@@ -792,218 +788,6 @@ class QuadrilateralDescriber {
   }
 
   /**
-   * Returns a description of the relative angles at vertices for a general quadrilateral. This is often
-   * used as a fallback case when there aren't particular aspects of equal angles to describe. Will return
-   * something like
-   *
-   * "Corner C is somewhat smaller than corner A and Corner B is a little smaller than Corner D."
-   */
-  private getConvexQuadrilateralVertexDescription(): string {
-    const orderedOppositeVertexPairs = this.getVertexPairsOrderedForDescription( this.shapeModel.oppositeVertices );
-
-    const firstCornerString = this.getCornerAngleDescription( orderedOppositeVertexPairs[ 0 ].vertex1 );
-    const secondCornerString = this.getCornerAngleDescription( orderedOppositeVertexPairs[ 0 ].vertex2 );
-    const thirdCornerString = this.getCornerAngleDescription( orderedOppositeVertexPairs[ 1 ].vertex1 );
-    const fourthCornerString = this.getCornerAngleDescription( orderedOppositeVertexPairs[ 1 ].vertex2 );
-
-    const interAngleToleranceInterval = this.shapeModel.interAngleToleranceInterval;
-    const shapeName = this.shapeModel.shapeNameProperty.value;
-    const firstComparisonString = VertexDescriber.getAngleComparisonDescription( orderedOppositeVertexPairs[ 0 ].vertex2, orderedOppositeVertexPairs[ 0 ].vertex1, interAngleToleranceInterval, shapeName );
-    const secondComparisonString = VertexDescriber.getAngleComparisonDescription( orderedOppositeVertexPairs[ 1 ].vertex2, orderedOppositeVertexPairs[ 1 ].vertex1, interAngleToleranceInterval, shapeName );
-
-    return StringUtils.fillIn( generalVertexPatternString, {
-      firstCorner: firstCornerString,
-      firstComparison: firstComparisonString,
-      secondCorner: secondCornerString,
-      thirdCorner: thirdCornerString,
-      secondComparison: secondComparisonString,
-      fourthCorner: fourthCornerString
-    } );
-  }
-
-  /**
-   * Returns a "basic" description for a quadrilateral without interesting side Properties. Describes the relative
-   * lengths of opposite sides of the quadrilateral. Sides in the descriptions are ordered by the method in
-   * getSidePairsOrderedForDescription.
-   */
-  private getGeneralQuadrilateralSideDescription(): string {
-
-    // general fallback pattern for a quadrilateral without interesting properties, describing relative lengths
-    // of opposite sides
-    const patternString = generalSidePatternString;
-    const sortedOppositeSidePairs = this.getSidePairsOrderedForDescription( this.shapeModel.oppositeSides );
-
-    const firstSide = sortedOppositeSidePairs[ 0 ].side1;
-    const secondSide = sortedOppositeSidePairs[ 0 ].side2;
-    const thirdSide = sortedOppositeSidePairs[ 1 ].side1;
-    const fourthSide = sortedOppositeSidePairs[ 1 ].side2;
-
-    // comparing the lengths of each opposite side pair, relative to the first side in the pair
-    const interLengthToleranceInterval = this.shapeModel.interLengthToleranceInterval;
-    const firstComparisonString = SideDescriber.getLengthComparisonDescription( secondSide, firstSide, interLengthToleranceInterval );
-    const secondComparisonString = SideDescriber.getLengthComparisonDescription( fourthSide, thirdSide, interLengthToleranceInterval );
-
-    return StringUtils.fillIn( patternString, {
-      firstSide: this.getSideDescription( firstSide ),
-      firstComparison: firstComparisonString,
-      secondSide: this.getSideDescription( secondSide ),
-      thirdSide: this.getSideDescription( thirdSide ),
-      secondComparison: secondComparisonString,
-      fourthSide: this.getSideDescription( fourthSide )
-    } );
-  }
-
-  private getTwoSidePairsDescription( sidePairs: SidePair[], patternString: string ): string {
-    assert && assert( sidePairs.length === 2, 'getTwoSidePairsDescription assumes you are describing two pairs of sides with some interesting property' );
-
-    const orderedSidePairs = this.getSidePairsOrderedForDescription( sidePairs );
-
-    // Compare the lengths of the first two parallel sides against the lengths of the second two parallel sides,
-    // relative to the first two parallel sides.
-    const toleranceInterval = this.shapeModel.interLengthToleranceInterval;
-    const comparisonString = SideDescriber.getLengthComparisonDescription( orderedSidePairs[ 1 ].side1, orderedSidePairs[ 0 ].side1, toleranceInterval );
-
-    // const patternString = 'Equal Sides {{firstSide}} and {{secondSide}} are {{comparison}} equal Sides {{thirdSide}} and {{fourthSide}}.';
-    return StringUtils.fillIn( patternString, {
-      firstSide: this.getSideDescription( orderedSidePairs[ 0 ].side1 ),
-      secondSide: this.getSideDescription( orderedSidePairs[ 0 ].side2 ),
-      comparison: comparisonString,
-      thirdSide: this.getSideDescription( orderedSidePairs[ 1 ].side1 ),
-      fourthSide: this.getSideDescription( orderedSidePairs[ 1 ].side2 )
-    } );
-  }
-
-  /**
-   * Get a description of all four vertex angles when the two provided vertex angles are equal. Uses a string pattern
-   * that will return something like
-   *
-   * "Equal corners D and A are a little larger than Corner B and much much smaller than Corner C."
-   *
-   * The order that the vertices are described in the statement is determined by the sorting algorithm in
-   * getVerticesOrderedForDescription.
-   */
-  private getTwoEqualVerticesAngleDescription( vertex1: Vertex, vertex2: Vertex ): string {
-
-    const sortedVertices = this.getVerticesOrderedForDescription( [ vertex1, vertex2 ] );
-    const firstVertex = sortedVertices[ 0 ];
-    const secondVertex = sortedVertices[ 1 ];
-
-    const patternString = twoEqualVerticesAnglePatternString;
-    const firstCornersString = this.getCornersAngleDescription( firstVertex, secondVertex );
-
-    const undescribedVertices = this.getUndescribedVertices( [ firstVertex, secondVertex ] );
-    const sortedUndescribedVertices = this.getVerticesOrderedForDescription( undescribedVertices );
-
-    const thirdCornerString = this.getCornerAngleDescription( sortedUndescribedVertices[ 0 ] );
-    const fourthCornerString = this.getCornerAngleDescription( sortedUndescribedVertices[ 1 ] );
-
-    // describe the relative size of the equal angles compared to eqch unequal angle
-    const interAngleToleranceInterval = this.shapeModel.interAngleToleranceInterval;
-    const shapeName = this.shapeModel.shapeNameProperty.value;
-    const firstComparisonString = VertexDescriber.getAngleComparisonDescription( sortedUndescribedVertices[ 0 ], firstVertex, interAngleToleranceInterval, shapeName );
-    const secondComparisonString = VertexDescriber.getAngleComparisonDescription( sortedUndescribedVertices[ 1 ], firstVertex, interAngleToleranceInterval, shapeName );
-
-    return StringUtils.fillIn( patternString, {
-      firstCorners: firstCornersString,
-      firstComparison: firstComparisonString,
-      thirdCorner: thirdCornerString,
-      secondComparison: secondComparisonString,
-      fourthCorner: fourthCornerString
-    } );
-  }
-
-  /**
-   * Generates a description of vertex angles when there are two pairs of equal vertex angles in the quadrilateral.
-   * Uses a string pattern that will return a string like
-   *
-   * "Equal corners D and C are much smaller than equal corners A and B."
-   *
-   * The order in which VertexPairs are described are defined by the algorithm of getVertexPairsOrderedForDescription.
-   */
-  private getTwoPairsOfEqualVerticesAngleDescription( vertexPairs: VertexPair[] ): string {
-
-    const orderedVertexPairs = this.getVertexPairsOrderedForDescription( vertexPairs );
-
-    const firstCornersString = this.getCornersAngleDescription( orderedVertexPairs[ 0 ].vertex1, orderedVertexPairs[ 0 ].vertex2 );
-    const secondCornersString = this.getCornersAngleDescription( orderedVertexPairs[ 1 ].vertex1, orderedVertexPairs[ 1 ].vertex2 );
-
-    // we are comparing the angles of the vertex pairs, relative to the first described pair
-    const interAngleToleranceInterval = this.shapeModel.interAngleToleranceInterval;
-    const shapeName = this.shapeModel.shapeNameProperty.value;
-    const comparisonString = VertexDescriber.getAngleComparisonDescription( orderedVertexPairs[ 1 ].vertex1, orderedVertexPairs[ 0 ].vertex1, interAngleToleranceInterval, shapeName );
-
-    const patternString = twoPairsOfEqualVerticesPatternString;
-    return StringUtils.fillIn( patternString, {
-      firstCorners: firstCornersString,
-      comparison: comparisonString,
-      secondCorners: secondCornersString
-    } );
-  }
-
-  /**
-   * If the corner is a right angle will describe that before the vertex label. Otherwise just returns the vertex label.
-   * Returns something like
-   * "Corner A" or
-   * "right angle Corner A"
-   */
-  private getCornerAngleDescription( vertex: Vertex ): string {
-
-    const labelString = VertexDescriber.VertexCornerLabelMap.get( vertex.vertexLabel );
-    assert && assert( labelString, 'vertexLabel not in vertexLabelMap' );
-
-    let descriptionString = labelString;
-    assert && assert( vertex.angleProperty, 'Angle required for this description' );
-    if ( this.shapeModel.isRightAngle( vertex.angleProperty.value! ) ) {
-
-      // include "right angle"
-      descriptionString = StringUtils.fillIn( cornerAnglePatternString, {
-        cornerLabel: labelString
-      } );
-    }
-
-    return descriptionString!;
-  }
-
-  /**
-   * Get the described label for a Side
-   */
-  private getSideDescription( side: Side ): string {
-    const label = sideLabelMap.get( side.sideLabel )!;
-    assert && assert( label, 'label not found for side' );
-    return label;
-  }
-
-  /**
-   * Get a description about two angles at once, assuming that they are equal. Returns something like
-   * "Corners A and B" or
-   * "right angle Corners A and B"
-   *
-   * Note that two vertex angles may NOT be exactly equal due to the behavior of angleToleranceIntervalProperty,
-   * which allows for more lenient equality for parallelogram.
-   */
-  private getCornersAngleDescription( vertex1: Vertex, vertex2: Vertex ): string {
-    const firstLabelString = vertexLabelMap.get( vertex1.vertexLabel );
-    const secondLabelString = vertexLabelMap.get( vertex2.vertexLabel );
-
-    const cornersPatternString = cornersAnglePatternString;
-
-    let descriptionString = StringUtils.fillIn( cornersPatternString, {
-      firstCorner: firstLabelString,
-      secondCorner: secondLabelString
-    } );
-
-    assert && assert( vertex1.angleProperty.value !== null, 'angles need to be ready for use in getCornersAngleDescription' );
-    const angle1 = vertex1.angleProperty.value!;
-    if ( this.shapeModel.isRightAngle( angle1 ) ) {
-      descriptionString = StringUtils.fillIn( rightAngleCornersPatternString, {
-        cornersString: descriptionString
-      } );
-    }
-
-    return descriptionString;
-  }
-
-  /**
    * For some reason, it was decided that the order that vertices are mentioned in descriptions need to be ordered in a
    * unique way. This function returns the vertices in the order that they should be described in the string
    * creation functions of this Describer.
@@ -1037,98 +821,6 @@ class QuadrilateralDescriber {
     }
 
     return sortReturnValue;
-  }
-
-  private getVertexPairsOrderedForDescription( vertexPairs: VertexPair[] ): VertexPair[] {
-
-    // Order each vertexPair provided first
-    const newVertexPairs: VertexPair[] = [];
-    vertexPairs.forEach( vertexPair => {
-      const orderedVertices = this.getVerticesOrderedForDescription( [ vertexPair.vertex1, vertexPair.vertex2 ] );
-      newVertexPairs.push( new VertexPair( orderedVertices[ 0 ], orderedVertices[ 1 ] ) );
-    } );
-
-    // Now we can sort the VertexPairs based on the first vertex of each pair, since the vertices in
-    // each pair are now sorted
-    const orderedVertexPairs = newVertexPairs.sort( ( vertexPair1: VertexPair, vertexPair2: VertexPair ) => {
-      return this.compareVerticesForDescription( vertexPair1.vertex1, vertexPair2.vertex1 );
-    } );
-
-    assert && assert( vertexPairs.length === orderedVertexPairs.length, 'Did not identify an order for VertexPairs' );
-    return orderedVertexPairs;
-  }
-
-  /**
-   * Given a collection of SidePairs, order the sides so that they are in the order that they should appear in the
-   * description. For a reason I don't fully understand, vertices and sides are described bottom to top, and left to
-   * right. First, we order each side within the SidePair with that criterion. Then we order the SidePairs for the
-   * final returned array.
-   */
-  private getSidePairsOrderedForDescription( sidePairs: SidePair[] ): SidePair[] {
-
-    // First we order the sides within in each SidePair so that we can find the SidePair with the vertices
-    // that should come first
-    const orderedSidePairs: SidePair[] = [];
-    sidePairs.forEach( sidePair => {
-      const side1 = sidePair.side1;
-      const side2 = sidePair.side2;
-
-      const sideComparison = this.compareVerticesForDescription( side1.vertex1, side2.vertex1 );
-
-      let firstSide = side1;
-      let secondSide = side2;
-
-      if ( sideComparison > 0 ) {
-
-        // comparator says side2 before side1 (0 indicates no change, -1 indicates side1 before side2)
-        firstSide = side2;
-        secondSide = side1;
-      }
-
-      orderedSidePairs.push( new SidePair( firstSide, secondSide ) );
-    } );
-
-    // Now that Sides within each pair are ordered, SidePairs can be ordered relative to the first vertex
-    // of the first side
-    const order = orderedSidePairs.sort( ( sidePairA, sidePairB ) => {
-      return this.compareVerticesForDescription( sidePairA.side1.vertex1, sidePairB.side1.vertex1 );
-    } );
-
-    assert && assert( sidePairs.length === order.length, 'Order not determined for sidePairs' );
-    return order;
-  }
-
-  /**
-   * From an array of Vertices, all of which have been described, return a new array of Vertices that still
-   * need a description. Useful when you have a description for a pair of adjacent/opposite vertices but don't
-   * have a reference to the remaining vertices yet.
-   */
-  private getUndescribedVertices( vertices: Vertex[] ): Vertex[] {
-    const unusedVertices: Vertex[] = [];
-    this.shapeModel.vertices.forEach( vertex => {
-      if ( !vertices.includes( vertex ) ) {
-        unusedVertices.push( vertex );
-      }
-    } );
-
-    return unusedVertices;
-  }
-
-  /**
-   * From an array of Sides which you know have been described, return a new array of Sides that still need a
-   * description. Useful when you are describing two adjacent/opposite sides and don't have a reference yet to the
-   * remaining adjacent sides.
-   */
-  private getUndescribedSides( sides: Side[] ): Side[] {
-    const unusedSides: Side[] = [];
-
-    this.shapeModel.sides.forEach( side => {
-      if ( !sides.includes( side ) ) {
-        unusedSides.push( side );
-      }
-    } );
-
-    return unusedSides;
   }
 
   /**

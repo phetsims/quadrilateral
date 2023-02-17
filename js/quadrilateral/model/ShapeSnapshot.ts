@@ -45,6 +45,8 @@ class ShapeSnapshot {
 
   private readonly sideLengths: number[];
 
+  private readonly shapeModel: QuadrilateralShapeModel;
+
   public constructor( shapeModel: QuadrilateralShapeModel ) {
     this.topSideTilt = shapeModel.topSide.tiltProperty.value;
     this.rightSideTilt = shapeModel.rightSide.tiltProperty.value;
@@ -80,6 +82,8 @@ class ShapeSnapshot {
       this.leftSideLength,
       this.bottomSideLength
     ];
+
+    this.shapeModel = shapeModel;
   }
 
   /**
@@ -168,7 +172,7 @@ class ShapeSnapshot {
       for ( let j = 0; j < this.sideLengths.length; j++ ) {
         const nextLength = this.sideLengths[ j ];
 
-        if ( QuadrilateralShapeModel.isInterLengthEqualToOther( currentLength, nextLength, toleranceInterval ) ) {
+        if ( this.shapeModel.isInterLengthEqualToOther( currentLength, nextLength ) ) {
           numberEqualToCurrentLength++;
         }
       }

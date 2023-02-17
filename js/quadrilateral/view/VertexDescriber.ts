@@ -342,20 +342,6 @@ class VertexDescriber {
   }
 
   /**
-   * Returns true if value of angle is equal to half of value of other, within provided tolerance interval.
-   */
-  public static isAngleHalfOther( angle: number, other: number, interAngleToleranceInterval: number ): boolean {
-    return QuadrilateralShapeModel.isInterAngleEqualToOther( angle, other / 2, interAngleToleranceInterval );
-  }
-
-  /**
-   * Returns true if value of angle is equal to twice value of other, within provided tolerance interval.
-   */
-  public static isAngleTwiceOther( angle: number, other: number, interAngleToleranceInterval: number ): boolean {
-    return QuadrilateralShapeModel.isInterAngleEqualToOther( angle, other * 2, interAngleToleranceInterval );
-  }
-
-  /**
    * Returns true if value of angle is "about" half of value of other, within defined ranges.
    */
   public static isAngleAboutHalfOther( angle: number, other: number ): boolean {

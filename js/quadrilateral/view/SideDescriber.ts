@@ -58,7 +58,6 @@ const aboutNumberQuarterUnitsPatternString = QuadrilateralStrings.a11y.voicing.a
 const aboutFullNumberAndNumberQuarterUnitsPatternString = QuadrilateralStrings.a11y.voicing.aboutFullNumberAndNumberQuarterUnitsPattern;
 const oneHalfUnitsString = QuadrilateralStrings.a11y.voicing.oneHalfUnits;
 const blockedByInnerShapeString = QuadrilateralStrings.a11y.voicing.blockedByInnerShapeString;
-const blockedByEdgeString = QuadrilateralStrings.a11y.voicing.blockedByEdgeString;
 
 // A map that will provide comparison descriptions for side lengths. Range values are the ratio between lengths
 // between the sides.
@@ -75,9 +74,7 @@ lengthComparisonDescriptionMap.set( new Range( 1.8, 2.2 ), aboutTwiceAsLongAsStr
 lengthComparisonDescriptionMap.set( new Range( 2.2, Number.POSITIVE_INFINITY ), farLongerThanString );
 
 class SideDescriber {
-
-  // References to model components that will drive the descriptions.
-  private readonly side: Side;
+  public readonly side: Side;
   private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
   private readonly modelViewTransform: ModelViewTransform2;
   private readonly markersVisibleProperty: TReadOnlyProperty<boolean>;
@@ -110,9 +107,8 @@ class SideDescriber {
     // other. This may not happen naturally by comparing side lengths because a rhombus and square may be detected
     // when sides are not perfectly equal due to the angle tolerance interval.
     const shapeName = this.quadrilateralShapeModel.shapeNameProperty.value;
-    const toleranceInterval = this.quadrilateralShapeModel.interLengthToleranceInterval;
     const oppositeComparison = shapeName === NamedQuadrilateral.SQUARE || shapeName === NamedQuadrilateral.RHOMBUS ?
-                               equalToString : SideDescriber.getLengthComparisonDescription( oppositeSide, this.side, toleranceInterval );
+                               equalToString : this.getLengthComparisonDescription( oppositeSide );
 
     response = StringUtils.fillIn( patternString, {
       oppositeComparison: oppositeComparison,
@@ -121,7 +117,7 @@ class SideDescriber {
 
     // if 'markers' are visible describe the side length units by appending that information to the object response
     if ( this.markersVisibleProperty.value ) {
-      const unitsDescription = SideDescriber.getSideUnitsDescription( this.side.lengthProperty.value, this.quadrilateralShapeModel.interLengthToleranceInterval );
+      const unitsDescription = this.getSideUnitsDescription();
       response = StringUtils.fillIn( sideUnitsObjectResponsePatternString, {
         unitsDescription: unitsDescription,
         objectResponse: response
@@ -142,13 +138,16 @@ class SideDescriber {
    *
    * TODO: Look for refactoring opportunities in this function.
    */
-  public static getSideUnitsDescription( sideLength: number, interLengthToleranceInterval: number ): string {
+  public getSideUnitsDescription(): string {
     let sideDescription: string | null = null;
+
+    const shapeModel = this.quadrilateralShapeModel;
+    const sideLength = this.side.lengthProperty.value;
 
     const numberOfFullUnits = Math.floor( sideLength / Side.SIDE_SEGMENT_LENGTH );
     const remainder = sideLength % Side.SIDE_SEGMENT_LENGTH;
 
-    if ( QuadrilateralShapeModel.isInterLengthEqualToOther( remainder, 0, interLengthToleranceInterval ) ) {
+    if ( shapeModel.isInterLengthEqualToOther( remainder, 0 ) ) {
       if ( numberOfFullUnits === 1 ) {
 
         // "one unit"
@@ -162,7 +161,7 @@ class SideDescriber {
         } );
       }
     }
-    else if ( QuadrilateralShapeModel.isInterLengthEqualToOther( remainder, Side.SIDE_SEGMENT_LENGTH / 2, interLengthToleranceInterval ) ) {
+    else if ( shapeModel.isInterLengthEqualToOther( remainder, Side.SIDE_SEGMENT_LENGTH / 2 ) ) {
       if ( numberOfFullUnits === 0 ) {
         sideDescription = oneHalfUnitsString;
       }
@@ -174,7 +173,7 @@ class SideDescriber {
         } );
       }
     }
-    else if ( QuadrilateralShapeModel.isInterLengthEqualToOther( remainder, Side.SIDE_SEGMENT_LENGTH / 4, interLengthToleranceInterval ) ) {
+    else if ( shapeModel.isInterLengthEqualToOther( remainder, Side.SIDE_SEGMENT_LENGTH / 4 ) ) {
       if ( numberOfFullUnits === 0 ) {
 
         // "one quarter units"
@@ -188,7 +187,7 @@ class SideDescriber {
         } );
       }
     }
-    else if ( QuadrilateralShapeModel.isInterLengthEqualToOther( remainder, 3 * Side.SIDE_SEGMENT_LENGTH / 4, interLengthToleranceInterval ) ) {
+    else if ( shapeModel.isInterLengthEqualToOther( remainder, 3 * Side.SIDE_SEGMENT_LENGTH / 4 ) ) {
       if ( numberOfFullUnits === 0 ) {
 
         // "one quarter units"
@@ -262,13 +261,6 @@ class SideDescriber {
   }
 
   /**
-   * Returns a context response for when the Side can not move because it is blocked by a boundary edge.
-   */
-  public getBlockedByEdgeResponse(): string {
-    return blockedByEdgeString;
-  }
-
-  /**
    * Get a description of the adjacent sides and how this side compares to them in length. Also includes information
    * about them if they are parallel. Used for the Object response of this vertex. Will return something like
    *
@@ -320,9 +312,8 @@ class SideDescriber {
 
       // the adjacent sides are equal in length but not equal to this side, describe the length of
       // this side relative to the other sides but we can use either side since they are equal in length
-      const toleranceInterval = this.quadrilateralShapeModel.interLengthToleranceInterval;
       description = StringUtils.fillIn( patternString, {
-        comparison: SideDescriber.getLengthComparisonDescription( adjacentSides[ 0 ], this.side, toleranceInterval )
+        comparison: this.getLengthComparisonDescription( adjacentSides[ 0 ] )
       } );
     }
     else {
@@ -352,19 +343,21 @@ class SideDescriber {
    * like:
    * "SideAB is much longer than sideCD."
    */
-  public static getLengthComparisonDescription( side1: Side, side2: Side, interLengthToleranceInterval: number ): string {
+  private getLengthComparisonDescription( otherSide: Side ): string {
     let description: string | null = null;
 
-    const length1 = side1.lengthProperty.value;
-    const length2 = side2.lengthProperty.value;
+    const shapeModel = this.quadrilateralShapeModel;
 
-    if ( QuadrilateralShapeModel.isInterLengthEqualToOther( length2, length1, interLengthToleranceInterval ) ) {
+    const length1 = this.side.lengthProperty.value;
+    const length2 = otherSide.lengthProperty.value;
+
+    if ( shapeModel.isInterLengthEqualToOther( length2, length1 ) ) {
       description = equalToString;
     }
-    else if ( QuadrilateralShapeModel.isInterLengthEqualToOther( length2, length1 * 2, interLengthToleranceInterval ) ) {
+    else if ( shapeModel.isInterLengthEqualToOther( length2, length1 * 2 ) ) {
       description = twiceAsLongAsString;
     }
-    else if ( QuadrilateralShapeModel.isInterLengthEqualToOther( length2, length1 / 2, interLengthToleranceInterval ) ) {
+    else if ( shapeModel.isInterLengthEqualToOther( length2, length1 / 2 ) ) {
       description = halfAsLongAsString;
     }
 
