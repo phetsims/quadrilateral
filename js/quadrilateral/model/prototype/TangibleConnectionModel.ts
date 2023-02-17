@@ -2,9 +2,9 @@
 
 /**
  * A collection of Properties used for prototypes that connect this simulation to tangible devices.
- * While working on this sim, we collaborated with SLU to develop methods of communication between
- * simulation and several physical/tangible devices. This included prototypes using a serial connection,
- * BLE, custom OpenCV, and Mediapipe to take physical values and manipulate the model.
+ * While working on this sim, we collaborated with Saint Louis University to develop ways to communicate
+ * between simulation and several physical/tangible devices. This included prototypes using a serial connection,
+ * BLE, custom OpenCV, and Mediapipe.
  *
  * For more information and notes during prototyping see
  * https://github.com/phetsims/quadrilateral/issues/52
