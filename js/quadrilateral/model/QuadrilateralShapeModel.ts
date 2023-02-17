@@ -654,6 +654,13 @@ class QuadrilateralShapeModel {
   }
 
   /**
+   * Returns true if two angles are equal within the provided tolerance interval.
+   */
+  public static isAngleEqualToOther( angle1: number, angle2: number, toleranceInterval: number ): boolean {
+    return Utils.equalsEpsilon( angle1, angle2, toleranceInterval );
+  }
+
+  /**
    * Returns true if the angle is equal to PI within staticAngleToleranceInterval.
    */
   public isFlatAngle( angle: number ): boolean {
@@ -917,10 +924,6 @@ class QuadrilateralShapeModel {
     }
 
     return interval;
-  }
-
-  public static isInterAngleEqualToOther( angle1: number, angle2: number, interAngleToleranceInterval: number ): boolean {
-    return Utils.equalsEpsilon( angle1, angle2, interAngleToleranceInterval );
   }
 }
 

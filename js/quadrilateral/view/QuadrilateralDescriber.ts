@@ -144,6 +144,11 @@ class QuadrilateralDescriber {
   public readonly sideDADescriber: SideDescriber;
   private readonly sideDescribers: SideDescriber[];
 
+  public readonly vertexADescriber: VertexDescriber;
+  public readonly vertexBDescriber: VertexDescriber;
+  public readonly vertexCDescriber: VertexDescriber;
+  public readonly vertexDDescriber: VertexDescriber;
+
   public constructor( shapeModel: QuadrilateralShapeModel, shapeNameVisibleProperty: TReadOnlyProperty<boolean>, markersVisibleProperty: TReadOnlyProperty<boolean>, modelViewTransform: ModelViewTransform2 ) {
     this.shapeModel = shapeModel;
     this.shapeNameVisibleProperty = shapeNameVisibleProperty;
@@ -159,6 +164,21 @@ class QuadrilateralDescriber {
     this.sideCDDescriber = new SideDescriber( shapeModel.bottomSide, shapeModel, markersVisibleProperty, modelViewTransform );
     this.sideDADescriber = new SideDescriber( shapeModel.leftSide, shapeModel, markersVisibleProperty, modelViewTransform );
     this.sideDescribers = [ this.sideABDescriber, this.sideBCDescriber, this.sideCDDescriber, this.sideDADescriber ];
+
+    this.vertexADescriber = new VertexDescriber( shapeModel.vertexA, shapeModel, markersVisibleProperty );
+    this.vertexBDescriber = new VertexDescriber( shapeModel.vertexB, shapeModel, markersVisibleProperty );
+    this.vertexCDescriber = new VertexDescriber( shapeModel.vertexC, shapeModel, markersVisibleProperty );
+    this.vertexDDescriber = new VertexDescriber( shapeModel.vertexD, shapeModel, markersVisibleProperty );
+  }
+
+  /**
+   * Return the VertexDescriber that can be used to describe a vertex of the provided VertexLabel.
+   */
+  public getVertexDescriberForLabel( vertexLabel: VertexLabel ): VertexDescriber {
+    return vertexLabel === VertexLabel.VERTEX_A ? this.vertexADescriber :
+           vertexLabel === VertexLabel.VERTEX_B ? this.vertexBDescriber :
+           vertexLabel === VertexLabel.VERTEX_C ? this.vertexCDescriber :
+           this.vertexDDescriber;
   }
 
   /**

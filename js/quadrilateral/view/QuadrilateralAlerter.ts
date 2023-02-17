@@ -454,24 +454,25 @@ class QuadrilateralAlerter extends Alerter {
     // shape.
     let stateResponse: string | null = null;
 
-    const interAngleToleranceInterval = this.quadrilateralShapeModel.interAngleToleranceInterval;
+    const shapeModel = this.quadrilateralShapeModel;
+    const vertexDescriber = this.describer.getVertexDescriberForLabel( vertex.vertexLabel );
 
     const currentAngle = vertex.angleProperty.value!;
     const previousAngle = this.previousObjectResponseShapeSnapshot.getAngleFromVertexLabel( vertex.vertexLabel );
 
-    const oppositeVertex = this.quadrilateralShapeModel.oppositeVertexMap.get( vertex )!;
+    const oppositeVertex = shapeModel.oppositeVertexMap.get( vertex )!;
     const oppositeVertexAngle = oppositeVertex.angleProperty.value!;
 
-    const adjacentVertices = this.quadrilateralShapeModel.adjacentVertexMap.get( vertex )!;
+    const adjacentVertices = shapeModel.adjacentVertexMap.get( vertex )!;
     const firstAdjacentVertex = adjacentVertices[ 0 ];
     const firstAdjacentAngle = firstAdjacentVertex.angleProperty.value!;
     const secondAdjacentVertex = adjacentVertices[ 1 ];
     const secondAdjacentAngle = secondAdjacentVertex.angleProperty.value!;
 
     // whether the moving vertex angle becomes equal to any of the other vertices (within interAngleToleranceInterval)
-    const angleEqualToFirstAdjacent = QuadrilateralShapeModel.isInterAngleEqualToOther( currentAngle, firstAdjacentAngle, interAngleToleranceInterval );
-    const angleEqualToSecondAdjacent = QuadrilateralShapeModel.isInterAngleEqualToOther( currentAngle, secondAdjacentAngle, interAngleToleranceInterval );
-    const angleEqualToOpposite = QuadrilateralShapeModel.isInterAngleEqualToOther( currentAngle, oppositeVertexAngle, interAngleToleranceInterval );
+    const angleEqualToFirstAdjacent = shapeModel.isInterAngleEqualToOther( currentAngle, firstAdjacentAngle );
+    const angleEqualToSecondAdjacent = shapeModel.isInterAngleEqualToOther( currentAngle, secondAdjacentAngle );
+    const angleEqualToOpposite = shapeModel.isInterAngleEqualToOther( currentAngle, oppositeVertexAngle );
 
     // Get the "progress" portion of the object response, describing how this vertex has changed or if it has
     // reached some critical angle. This portion of the description is always included.
@@ -483,10 +484,10 @@ class QuadrilateralAlerter extends Alerter {
       const previousPosition = this.previousObjectResponseShapeSnapshot.getPositionFromVertexLabel( vertex.vertexLabel );
       progressResponse = QuadrilateralAlerter.getDirectionDescription( previousPosition, currentPosition, this.modelViewTransform );
     }
-    else if ( this.quadrilateralShapeModel.isRightAngle( currentAngle ) ) {
+    else if ( shapeModel.isRightAngle( currentAngle ) ) {
       progressResponse = rightAngleString;
     }
-    else if ( this.quadrilateralShapeModel.isFlatAngle( currentAngle ) ) {
+    else if ( shapeModel.isFlatAngle( currentAngle ) ) {
       progressResponse = angleFlatString;
     }
     else if ( !angleEqualToFirstAdjacent && !angleEqualToSecondAdjacent && !angleEqualToOpposite ) {
@@ -499,13 +500,13 @@ class QuadrilateralAlerter extends Alerter {
       } );
     }
 
-    const shapeName = this.quadrilateralShapeModel.shapeNameProperty.value;
+    const shapeName = shapeModel.shapeNameProperty.value;
 
     // get the "state" portion of the object response, which describes important state information about the
     // quadrilateral like when a pair of adjacent angles are equal, or when the moving angle is twice/half of another
     // angle in the shape. There may not always be important state information.
     if ( previousAngle !== currentAngle ) {
-      if ( this.quadrilateralShapeModel.getAreAllAnglesRight() ) {
+      if ( shapeModel.getAreAllAnglesRight() ) {
 
         // important state described when a square
         stateResponse = equalToOppositeCornerEqualToAdjacentCornersString;
@@ -527,7 +528,7 @@ class QuadrilateralAlerter extends Alerter {
         const otherCornerLabelString = angleEqualToOpposite ? oppositeCornerString :
                                        VertexDescriber.VertexCornerLabelMap.get( otherVertex.vertexLabel );
 
-        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( otherVertex, vertex, interAngleToleranceInterval, shapeName );
+        const comparisonDescription = vertexDescriber.getAngleComparisonDescription( otherVertex, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
           comparison: comparisonDescription,
           cornerLabel: otherCornerLabelString
@@ -536,16 +537,16 @@ class QuadrilateralAlerter extends Alerter {
       else if ( this.shouldUseAngleComparisonDescription( currentAngle, oppositeVertexAngle ) ) {
 
         // describe relative size to opposite vertex
-        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( oppositeVertex, vertex, interAngleToleranceInterval, shapeName );
+        const comparisonDescription = vertexDescriber.getAngleComparisonDescription( oppositeVertex, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
           comparison: comparisonDescription,
           cornerLabel: oppositeCornerString
         } );
       }
-      else if ( this.quadrilateralShapeModel.isInterAngleEqualToOther( firstAdjacentAngle, secondAdjacentAngle ) ) {
+      else if ( shapeModel.isInterAngleEqualToOther( firstAdjacentAngle, secondAdjacentAngle ) ) {
 
         // The adjacent angles just became equal to eachother, describe that next (after opposite in priority)
-        if ( this.quadrilateralShapeModel.isRightAngle( firstAdjacentAngle ) ) {
+        if ( shapeModel.isRightAngle( firstAdjacentAngle ) ) {
           stateResponse = adjacentCornersRightAnglesString;
         }
         else {
@@ -555,7 +556,7 @@ class QuadrilateralAlerter extends Alerter {
       else if ( this.shouldUseAngleComparisonDescription( currentAngle, firstAdjacentAngle ) ) {
 
         // decribe relative size (half or twice as large as) to the first adjacent vertex
-        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( firstAdjacentVertex, vertex, interAngleToleranceInterval, shapeName );
+        const comparisonDescription = vertexDescriber.getAngleComparisonDescription( firstAdjacentVertex, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
           comparison: comparisonDescription,
           cornerLabel: VertexDescriber.VertexCornerLabelMap.get( firstAdjacentVertex.vertexLabel )
@@ -564,7 +565,7 @@ class QuadrilateralAlerter extends Alerter {
       else if ( this.shouldUseAngleComparisonDescription( currentAngle, secondAdjacentAngle ) ) {
 
         // decribe relative size (half or twice as large as) to the second adjacent vertex
-        const comparisonDescription = VertexDescriber.getAngleComparisonDescription( secondAdjacentVertex, vertex, interAngleToleranceInterval, shapeName );
+        const comparisonDescription = vertexDescriber.getAngleComparisonDescription( secondAdjacentVertex, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
           comparison: comparisonDescription,
           cornerLabel: VertexDescriber.VertexCornerLabelMap.get( secondAdjacentVertex.vertexLabel )
@@ -598,7 +599,7 @@ class QuadrilateralAlerter extends Alerter {
   private shouldUseAngleComparisonDescription( changingVertexAngle: number, otherVertexAngle: number ): boolean {
     return VertexDescriber.isAngleAboutHalfOther( changingVertexAngle, otherVertexAngle ) ||
            VertexDescriber.isAngleAboutTwiceOther( changingVertexAngle, otherVertexAngle ) ||
-           QuadrilateralShapeModel.isInterAngleEqualToOther( changingVertexAngle, otherVertexAngle, this.quadrilateralShapeModel.interAngleToleranceInterval );
+           this.quadrilateralShapeModel.isInterAngleEqualToOther( changingVertexAngle, otherVertexAngle );
   }
 
   /**

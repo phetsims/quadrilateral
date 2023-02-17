@@ -79,28 +79,28 @@ class QuadrilateralNode extends Voicing( Node ) {
     const vertexC = this.quadrilateralShapeModel.vertexC;
     const vertexD = this.quadrilateralShapeModel.vertexD;
 
-    const vertexNode1 = new VertexNode( vertexA, vertexAString, quadrilateralModel, modelViewTransform, {
+    const vertexNode1 = new VertexNode( vertexA, vertexAString, quadrilateralModel, quadrilateralDescriber.vertexADescriber, modelViewTransform, {
       nameResponse: cornerAString,
 
       // phet-io
       tandem: providedOptions.tandem.createTandem( 'vertexANode' )
     } );
 
-    const vertexNode2 = new VertexNode( vertexB, vertexBString, quadrilateralModel, modelViewTransform, {
+    const vertexNode2 = new VertexNode( vertexB, vertexBString, quadrilateralModel, quadrilateralDescriber.vertexBDescriber, modelViewTransform, {
       nameResponse: cornerBString,
 
       // phet-io
       tandem: providedOptions.tandem.createTandem( 'vertexBNode' )
     } );
 
-    const vertexNode3 = new VertexNode( vertexC, vertexCString, quadrilateralModel, modelViewTransform, {
+    const vertexNode3 = new VertexNode( vertexC, vertexCString, quadrilateralModel, quadrilateralDescriber.vertexCDescriber, modelViewTransform, {
       nameResponse: cornerCString,
 
       // phet-io
       tandem: providedOptions.tandem.createTandem( 'vertexCNode' )
     } );
 
-    const vertexNode4 = new VertexNode( vertexD, vertexDString, quadrilateralModel, modelViewTransform, {
+    const vertexNode4 = new VertexNode( vertexD, vertexDString, quadrilateralModel, quadrilateralDescriber.vertexDDescriber, modelViewTransform, {
       nameResponse: cornerDString,
 
       // phet-io

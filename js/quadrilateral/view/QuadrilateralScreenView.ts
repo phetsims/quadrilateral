@@ -67,7 +67,7 @@ class QuadrilateralScreenView extends ScreenView {
     // Create view subcomponents
     //---------------------------------------------------------------------------------------------------------------
     this.modelViewTransform = new QuadrilateralModelViewTransform( model.modelBounds, this.layoutBounds );
-    this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel, visibilityModel.shapeNameVisibleProperty, visibilityModel.markersVisibleProperty );
+    this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel, visibilityModel.shapeNameVisibleProperty, visibilityModel.markersVisibleProperty, this.modelViewTransform );
     this.quadrilateralSoundView = new QuadrilateralSoundView( model, optionsModel.soundOptionsModel );
 
     // miscellaneous sim and visibility control components

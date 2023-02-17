@@ -45,7 +45,7 @@ class VertexNode extends Voicing( Circle ) {
   private readonly model: QuadrilateralModel;
   private readonly vertex: Vertex;
 
-  public constructor( vertex: Vertex, vertexLabel: string, model: QuadrilateralModel, modelViewTransform: ModelViewTransform2, providedOptions: VertexNodeOptions ) {
+  public constructor( vertex: Vertex, vertexLabel: string, model: QuadrilateralModel, vertexDescriber: VertexDescriber, modelViewTransform: ModelViewTransform2, providedOptions: VertexNodeOptions ) {
     const options = optionize<VertexNodeOptions, SelfOptions, ParentOptions>()( {
       cursor: 'pointer',
       fill: QuadrilateralColors.quadrilateralShapeColorProperty,
@@ -63,8 +63,6 @@ class VertexNode extends Voicing( Circle ) {
     this.innerContent = options.nameResponse;
 
     this.vertex = vertex;
-
-    const vertexDescriber = new VertexDescriber( vertex, model.quadrilateralShapeModel, model.visibilityModel.markersVisibleProperty );
 
     this.model = model;
 

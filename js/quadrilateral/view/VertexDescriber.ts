@@ -103,17 +103,6 @@ class VertexDescriber {
   }
 
   /**
-   * Get the full label for this Vertex. Will return something like
-   * "Corner A" or
-   * "Corner D"
-   */
-  public getVertexLabel(): string {
-    const label = vertexCornerLabelMap.get( this.vertex.vertexLabel )!;
-    assert && assert( label, 'Could not find label for vertex' );
-    return label;
-  }
-
-  /**
    * Returns the Object response for the vertex. Will return something like
    *
    * "right angle, equal to opposite corner, equal to adjacent corners" or
@@ -126,7 +115,7 @@ class VertexDescriber {
     const oppositeVertex = this.quadrilateralShapeModel.oppositeVertexMap.get( this.vertex )!;
 
     const shapeName = this.quadrilateralShapeModel.shapeNameProperty.value;
-    const oppositeComparisonString = VertexDescriber.getAngleComparisonDescription( oppositeVertex, this.vertex, this.quadrilateralShapeModel.interAngleToleranceInterval, shapeName );
+    const oppositeComparisonString = this.getAngleComparisonDescription( oppositeVertex, shapeName );
     const adjacentVertexDescriptionString = this.getAdjacentVertexObjectDescription();
 
     // if corner guides are visible, a description of the number of wedges is included
@@ -256,7 +245,7 @@ class VertexDescriber {
       // to describe the relative description
       const shapeName = this.quadrilateralShapeModel.shapeNameProperty.value;
       description = StringUtils.fillIn( equalAdjacentCornersPatternString, {
-        comparison: VertexDescriber.getAngleComparisonDescription( adjacentCorners[ 0 ], this.vertex, this.quadrilateralShapeModel.interAngleToleranceInterval, shapeName )
+        comparison: this.getAngleComparisonDescription( adjacentCorners[ 0 ], shapeName )
       } );
     }
     else {
@@ -296,35 +285,35 @@ class VertexDescriber {
   }
 
   /**
-   * Returns the description of comparison between two angles, using the entries of angleComparisonDescriptionMap.
-   * Description compares vertex2 to vertex1. So if vertex2 has a larger angle than vertex1 the output will be something
-   * like:
+   * Returns the description of comparison between this angle and another, using the entries of
+   * angleComparisonDescriptionMap. Description compares this vertex to otherVertex. So if this vertex has a larger
+   * angle than otherVertex the output will be something like:
    * "much much wider than" or
    * "a little wider than"
    *
-   * or if vertex2 angle is smaller than vertex1, we will return something like
+   * or if this Vertex angle is smaller than otherVertex, returns something like
    * "much much smaller than" or
    * "a little smaller than"
    */
-  public static getAngleComparisonDescription( vertex1: Vertex, vertex2: Vertex, interAngleToleranceInterval: number, shapeName: NamedQuadrilateral ): string {
-    assert && assert( vertex1.angleProperty.value !== null, 'angles need to be initialized for descriptions' );
-    assert && assert( vertex2.angleProperty.value !== null, 'angles need to be initialized for descriptions' );
+  public getAngleComparisonDescription( otherVertex: Vertex, shapeName: NamedQuadrilateral ): string {
+    assert && assert( this.vertex.angleProperty.value !== null, 'angles need to be initialized for descriptions' );
+    assert && assert( otherVertex.angleProperty.value !== null, 'angles need to be initialized for descriptions' );
 
     let description: string | null = null;
 
-    const angle1 = vertex1.angleProperty.value!;
-    const angle2 = vertex2.angleProperty.value!;
+    const angle1 = this.vertex.angleProperty.value!;
+    const angle2 = otherVertex.angleProperty.value!;
 
     // If we are a trapezoid, only describe angles as equal when they are EXACTLY equal, otherwise we may run into
     // cases where we move out of isoceles trapezoid while the angles are still described as "equal".
-    const usableToleranceInterval = shapeName === NamedQuadrilateral.TRAPEZOID ? 0 : interAngleToleranceInterval;
-    if ( QuadrilateralShapeModel.isInterAngleEqualToOther( angle2, angle1, usableToleranceInterval ) ) {
+    const usableToleranceInterval = shapeName === NamedQuadrilateral.TRAPEZOID ? 0 : this.quadrilateralShapeModel.interAngleToleranceInterval;
+    if ( QuadrilateralShapeModel.isAngleEqualToOther( angle1, angle2, usableToleranceInterval ) ) {
       description = equalToString;
     }
-    else if ( QuadrilateralShapeModel.isInterAngleEqualToOther( angle2, angle1 * 2, usableToleranceInterval ) ) {
+    else if ( QuadrilateralShapeModel.isAngleEqualToOther( angle1, angle2 * 2, usableToleranceInterval ) ) {
       description = twiceAsWideAsString;
     }
-    else if ( QuadrilateralShapeModel.isInterAngleEqualToOther( angle2, angle1 * 0.5, usableToleranceInterval ) ) {
+    else if ( QuadrilateralShapeModel.isAngleEqualToOther( angle1, angle2 * 0.5, usableToleranceInterval ) ) {
       description = halfAsWideAsString;
     }
 
