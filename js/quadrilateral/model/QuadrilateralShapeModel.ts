@@ -17,13 +17,10 @@ import Side from './Side.js';
 import Vertex from './Vertex.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Emitter from '../../../../axon/js/Emitter.js';
-import { Line, Shape } from '../../../../kite/js/imports.js';
 import QuadrilateralModel from './QuadrilateralModel.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import Ray2 from '../../../../dot/js/Ray2.js';
 import VertexLabel from './VertexLabel.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -35,7 +32,7 @@ import TEmitter from '../../../../axon/js/TEmitter.js';
 import QuadrilateralShapeDetector from './QuadrilateralShapeDetector.js';
 import SidePair from './SidePair.js';
 import VertexPair from './VertexPair.js';
-import QuadrilateralUtils, { LineIntersectionPair } from './QuadrilateralUtils.js';
+import QuadrilateralUtils from './QuadrilateralUtils.js';
 
 // Used when verifying that Vertex positions are valid before setting to the model.
 export type VertexWithProposedPosition = {
