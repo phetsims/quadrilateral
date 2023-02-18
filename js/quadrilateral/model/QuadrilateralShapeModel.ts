@@ -368,162 +368,6 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Create a constraining area for a Vertex to move in the play area that will ensure that it cannot overlap
-   * other vertices or sides or create a crossed quadrilateral shape.
-   *
-   * For a history of discussion about this algorithm, see https://github.com/phetsims/quadrilateral/issues/15. In
-   * particular, see https://github.com/phetsims/quadrilateral/issues/15#issuecomment-964534862 for final comments
-   * and examples for the shape this function should return.
-   *
-   * @param modelBounds - The bounds containing all vertices (entire model space)
-   * @param vertex1 - The vertex whose area we are determining
-   * @param vertex2 - the next vertex from vertexA, moving clockwise
-   * @param vertex3 - the next vertex from vertexB, moving clockwise
-   * @param vertex4 - the next vertex from vertexC, moving clockwise
-   */
-  private createVertexArea( modelBounds: Bounds2, vertex1: Vertex, vertex2: Vertex, vertex3: Vertex, vertex4: Vertex ): Shape {
-
-    const allVerticesInBounds = _.every( [ vertex1, vertex2, vertex3, vertex4 ], vertex => modelBounds.containsPoint( vertex.positionProperty.value ) );
-    const vertexPositionsUnique = _.uniqBy( [ vertex1, vertex2, vertex3, vertex4 ].map( vertex => vertex.positionProperty.value.toString() ), positionString => {
-      return positionString;
-    } ).length === 4;
-    if ( this.validateShape ) {
-      assert && assert( allVerticesInBounds, 'A vertex is not contained by modelBounds!' );
-      assert && assert( vertexPositionsUnique, 'There are two vertices that overlap! That would create lines of zero length and break this algorithm' );
-    }
-
-    if ( !allVerticesInBounds || !vertexPositionsUnique ) {
-
-      // The shape creation algorithm requires that all vertices are in bounds - we may need to handle this gracefully
-      // so just return an empty shape in this case
-      return new Shape();
-    }
-
-    // Lines around the bounds to detect intersections - remember that for Bounds2 top and bottom
-    // will be flipped relative to the model because Bounds2 matches scenery +y direction convention.
-    const leftLine = new Line( modelBounds.leftTop, modelBounds.leftBottom );
-    const topLine = new Line( modelBounds.leftBottom, modelBounds.rightBottom );
-    const rightLine = new Line( modelBounds.rightBottom, modelBounds.rightTop );
-    const bottomLine = new Line( modelBounds.rightTop, modelBounds.leftTop );
-
-    // the lines collected here in clockwise order, segments have start/end points in clockwise order as well.
-    // This way we can create a bounding shape with getPointsAlongBoundary, see that function for more info.
-    const directedLines: Line[] = [ leftLine, topLine, rightLine, bottomLine ];
-
-    let firstRayDirection: null | Vector2 = null;
-    let firstRay: null | Ray2 = null;
-
-    let secondRayDirection: null | Vector2 = null;
-    let secondRay: null | Ray2 = null;
-
-    if ( vertex3.angleProperty.value! > Math.PI ) {
-
-      // angle is greater than Math.PI so we have a concave shape and need to create a more constrained shape to for
-      // the Vertex to prevent crossed quadrilaterals
-      firstRayDirection = vertex3.positionProperty.value.minus( vertex2.positionProperty.value ).normalized();
-      firstRay = new Ray2( vertex2.positionProperty.value, firstRayDirection );
-
-      secondRayDirection = vertex3.positionProperty.value.minus( vertex4.positionProperty.value ).normalized();
-      secondRay = new Ray2( vertex4.positionProperty.value, secondRayDirection );
-    }
-    else {
-
-      // with an angle less than Math.PI we can walk along rays that form a bisection between vertex2 and vertex4
-      firstRayDirection = vertex4.positionProperty.value.minus( vertex2.positionProperty.value ).normalized();
-      firstRay = new Ray2( vertex4.positionProperty.value, firstRayDirection );
-
-      secondRayDirection = vertex2.positionProperty.value.minus( vertex4.positionProperty.value ).normalized();
-      secondRay = new Ray2( vertex2.positionProperty.value, secondRayDirection );
-    }
-
-    let firstRayIntersectionLinePair: null | LineIntersectionPair = null;
-    let secondRayIntersectionLinePair: null | LineIntersectionPair = null;
-
-    directedLines.forEach( line => {
-      const firstLineIntersections = line.intersection( firstRay! );
-      const secondLineIntersections = line.intersection( secondRay! );
-
-      if ( firstLineIntersections.length > 0 ) {
-        firstRayIntersectionLinePair = {
-          line: line,
-          intersectionPoint: firstLineIntersections[ 0 ].point
-        };
-      }
-      else {
-
-        // There wasn't an intersection, the ray intersected exactly with a corner of the bounds, which is not
-        // a defined intersection according to Kite.
-        const intersectionPoint = QuadrilateralUtils.getLinePositionAlongRay( firstRay!, line );
-        if ( intersectionPoint ) {
-          firstRayIntersectionLinePair = {
-            line: line,
-            intersectionPoint: intersectionPoint
-          };
-        }
-      }
-
-      if ( secondLineIntersections.length > 0 ) {
-        secondRayIntersectionLinePair = {
-          line: line,
-          intersectionPoint: secondLineIntersections[ 0 ].point
-        };
-      }
-      else {
-
-        // There wasn't an intersection, the ray intersected exactly with a corner of the bounds, which is not
-        // a defined intersection according to Kite.
-        const intersectionPoint = QuadrilateralUtils.getLinePositionAlongRay( secondRay!, line );
-        if ( intersectionPoint ) {
-          secondRayIntersectionLinePair = {
-            line: line,
-            intersectionPoint: intersectionPoint
-          };
-        }
-      }
-    } );
-    assert && assert( firstRayIntersectionLinePair && secondRayIntersectionLinePair, 'ray intersections were not found' );
-
-    // An array of points that will create the final shape
-    let points = [];
-
-    if ( vertex3.angleProperty.value! > Math.PI ) {
-
-      // angle is greater than Math.PI so we have a concave shape and need to use a more constrained shape to
-      // prevent crossed quadrilaterals
-      points.push( vertex3.positionProperty.value ); // start at the opposite vertex
-
-      // The rays between (vertex2 and vertex3) and (vertex4 and vertex3) define the shape that will prevent crossed
-      // quadrilaterals, so after starting at vertex3 we just walk clockwise along the boundary points
-      const intersectionAndBoundaryPoints = QuadrilateralUtils.getPointsAlongBoundary( directedLines, firstRayIntersectionLinePair!, secondRayIntersectionLinePair! );
-      points = points.concat( intersectionAndBoundaryPoints );
-    }
-    else {
-
-      // We have a convex shape so we can allow a larger area of movement without creating a twisted shape. This shape
-      // will walk between all other vertices and then close by walking clockwise around the bounds
-      points.push( vertex3.positionProperty.value ); // start at the opposite vertex
-      points.push( vertex4.positionProperty.value ); // walk to the next vertex
-
-      const intersectionAndBoundaryPoints = QuadrilateralUtils.getPointsAlongBoundary( directedLines, firstRayIntersectionLinePair!, secondRayIntersectionLinePair! );
-      points = points.concat( intersectionAndBoundaryPoints );
-
-      points.push( vertex2.positionProperty.value ); // walk back to vertexB
-    }
-
-    // Finally, create the shape from calculated points
-    const shape = new Shape();
-    shape.moveToPoint( points[ 0 ] );
-    for ( let i = 1; i < points.length; i++ ) {
-      shape.lineToPoint( points[ i ] );
-    }
-
-    // closing the shape after the last intersection should bring us back to vertex3
-    shape.close();
-
-    return shape;
-  }
-
-  /**
    * Returns true if the current quadrilateral shape is allowed based on the rules of this model.
    * TODO: Documentation and readability.
    */
@@ -865,10 +709,10 @@ class QuadrilateralShapeModel {
     // TODO: What is this dilation and value??
     const dilatedBounds = this.model.modelBounds.dilated( 1 );
 
-    this.vertexA.dragAreaProperty.set( this.createVertexArea( dilatedBounds, this.vertexA, this.vertexB, this.vertexC, this.vertexD ) );
-    this.vertexB.dragAreaProperty.set( this.createVertexArea( dilatedBounds, this.vertexB, this.vertexC, this.vertexD, this.vertexA ) );
-    this.vertexC.dragAreaProperty.set( this.createVertexArea( dilatedBounds, this.vertexC, this.vertexD, this.vertexA, this.vertexB ) );
-    this.vertexD.dragAreaProperty.set( this.createVertexArea( dilatedBounds, this.vertexD, this.vertexA, this.vertexB, this.vertexC ) );
+    this.vertexA.dragAreaProperty.set( QuadrilateralUtils.createVertexArea( dilatedBounds, this.vertexA, this.vertexB, this.vertexC, this.vertexD, this.validateShape ) );
+    this.vertexB.dragAreaProperty.set( QuadrilateralUtils.createVertexArea( dilatedBounds, this.vertexB, this.vertexC, this.vertexD, this.vertexA, this.validateShape ) );
+    this.vertexC.dragAreaProperty.set( QuadrilateralUtils.createVertexArea( dilatedBounds, this.vertexC, this.vertexD, this.vertexA, this.vertexB, this.validateShape ) );
+    this.vertexD.dragAreaProperty.set( QuadrilateralUtils.createVertexArea( dilatedBounds, this.vertexD, this.vertexA, this.vertexB, this.vertexC, this.validateShape ) );
   }
 
   public setPropertiesDeferred( deferred: boolean ): void {
