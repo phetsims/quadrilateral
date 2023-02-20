@@ -18,7 +18,7 @@ class ShapeSnapshot {
   public readonly sideABTilt: number;
   public readonly sideBCTilt: number;
   public readonly sideCDTilt: number;
-  public readonly leftSideTilt: number;
+  public readonly sideDATilt: number;
 
   public readonly isParallelogram: boolean;
   public readonly sideABsideCDParallel: boolean;
@@ -37,7 +37,7 @@ class ShapeSnapshot {
   // TODO: Rename to letter names
   public readonly sideABLength: number;
   public readonly sideBCLength: number;
-  public readonly leftSideLength: number;
+  public readonly :sideDALength number;
   public readonly sideCDLength: number;
   public readonly area: number;
 
@@ -51,7 +51,7 @@ class ShapeSnapshot {
     this.sideABTilt = shapeModel.sideAB.tiltProperty.value;
     this.sideBCTilt = shapeModel.sideBC.tiltProperty.value;
     this.sideCDTilt = shapeModel.sideCD.tiltProperty.value;
-    this.leftSideTilt = shapeModel.leftSide.tiltProperty.value;
+    this.sideDATilt = shapeModel.sideDA.tiltProperty.value;
 
     this.isParallelogram = shapeModel.isParallelogramProperty.value;
     this.sideABsideCDParallel = shapeModel.sideABSideCDParallelSideChecker.areSidesParallel();
@@ -70,7 +70,7 @@ class ShapeSnapshot {
     this.sideABLength = shapeModel.sideAB.lengthProperty.value;
     this.sideBCLength = shapeModel.sideBC.lengthProperty.value;
     this.sideCDLength = shapeModel.sideCD.lengthProperty.value;
-    this.leftSideLength = shapeModel.leftSide.lengthProperty.value;
+    this.sideDALength = shapeModel.sideDA.lengthProperty.value;
 
     this.area = shapeModel.areaProperty.value;
 
@@ -79,7 +79,7 @@ class ShapeSnapshot {
     this.sideLengths = [
       this.sideABLength,
       this.sideBCLength,
-      this.leftSideLength,
+      this.sideDALength,
       this.sideCDLength
     ];
 
@@ -100,7 +100,7 @@ class ShapeSnapshot {
     return label === SideLabel.SIDE_AB ? this.sideABLength :
            label === SideLabel.SIDE_BC ? this.sideBCLength :
            label === SideLabel.SIDE_CD ? this.sideCDLength :
-           this.leftSideLength; // SIDE_DA
+           this.sideDALength; // SIDE_DA
   }
 
   /**
@@ -146,9 +146,9 @@ class ShapeSnapshot {
    * @returns [adjacentSide1.lengthProperty.value, adjacentSide2.lengthProperty.value]
    */
   public getAdjacentSideLengthsFromSideLabel( label: SideLabel ): [ number, number ] {
-    return label === SideLabel.SIDE_AB ? [ this.leftSideLength, this.sideBCLength ] :
+    return label === SideLabel.SIDE_AB ? [ this.sideDALength, this.sideBCLength ] :
            label === SideLabel.SIDE_BC ? [ this.sideABLength, this.sideCDLength ] :
-           label === SideLabel.SIDE_CD ? [ this.sideBCLength, this.leftSideLength ] :
+           label === SideLabel.SIDE_CD ? [ this.sideBCLength, this.sideDALength ] :
              [ this.sideCDLength, this.sideABLength ]; // SIDE_DA
   }
 

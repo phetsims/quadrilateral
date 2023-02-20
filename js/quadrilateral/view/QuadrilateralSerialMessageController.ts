@@ -31,7 +31,7 @@ class QuadrilateralSerialMessageController {
     const topLength = this.formatValue( this.shapeModel.sideAB.lengthProperty.value );
     const rightLength = this.formatValue( this.shapeModel.sideBC.lengthProperty.value );
     const bottomLength = this.formatValue( this.shapeModel.sideCD.lengthProperty.value );
-    const leftLength = this.formatValue( this.shapeModel.leftSide.lengthProperty.value );
+    const leftLength = this.formatValue( this.shapeModel.sideDA.lengthProperty.value );
 
     const topLeftAngle = this.formatValue( this.shapeModel.vertexA.angleProperty.value! );
     const bottomRightAngle = this.formatValue( this.shapeModel.vertexC.angleProperty.value! );
