@@ -109,13 +109,9 @@ class QuadrilateralShapeModel {
   public shapeChangedEmitter: TEmitter;
 
   // True when all angles of the quadrilateral are right angles within interAngleToleranceInterval.
-  // This is set in step because we need to wait until all vertices are positioned during model
-  // updates.
   public allAnglesRightProperty: Property<boolean>;
 
   // True when all lengths of the quadrilateral are equal within the lengthToleranceInterval.
-  // Updated asychronously because we need to make sure that the positions of vertices have stabilized
-  // after model updates.
   public allLengthsEqualProperty: Property<boolean>;
 
   // The name of the quadrilateral (like square/rhombus/trapezoid, etc). Will be null if it is a random
