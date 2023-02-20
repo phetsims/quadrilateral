@@ -152,12 +152,6 @@
     "gridLinesHintResponse": {
       "value": "Create shapes with or without help of background grid."
     },
-    "myShapesCorners": {
-      "value": "My Shape's Corners"
-    },
-    "myShapesSides": {
-      "value": "My Shape's Sides"
-    },
     "cornerA": {
       "value": "Corner A"
     },

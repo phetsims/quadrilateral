@@ -120,10 +120,6 @@ type StringsType = {
     'diagonalGuidesHintResponseStringProperty': LinkableProperty<string>;
     'gridLinesHintResponse': string;
     'gridLinesHintResponseStringProperty': LinkableProperty<string>;
-    'myShapesCorners': string;
-    'myShapesCornersStringProperty': LinkableProperty<string>;
-    'myShapesSides': string;
-    'myShapesSidesStringProperty': LinkableProperty<string>;
     'cornerA': string;
     'cornerAStringProperty': LinkableProperty<string>;
     'cornerB': string;

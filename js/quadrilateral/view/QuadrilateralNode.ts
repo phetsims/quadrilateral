@@ -137,14 +137,13 @@ class QuadrilateralNode extends Voicing( Node ) {
     const vertexCRightAngleIndicator = new RightAngleIndicatorNode( vertexC, vertexD, vertexB, markersVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
     const vertexDRightAngleIndicator = new RightAngleIndicatorNode( vertexD, vertexA, vertexC, markersVisibleProperty, this.model.quadrilateralShapeModel, modelViewTransform );
 
-    // add children - parents support layering order as well as traversal order in the PDOM
-    // sides first because we want vertices to catch all input
-    const sideParentNode = new ShapeHeadingNode( QuadrilateralStrings.a11y.myShapesSides );
-    sideParentNode.addChild( sideABNode );
-    sideParentNode.addChild( sideBCNode );
-    sideParentNode.addChild( sideCDNode );
-    sideParentNode.addChild( sideDANode );
-    this.addChild( sideParentNode );
+    //---------------------------------------------------------------------------------------------------------------
+    // rendering order
+    //---------------------------------------------------------------------------------------------------------------
+    this.addChild( sideABNode );
+    this.addChild( sideBCNode );
+    this.addChild( sideCDNode );
+    this.addChild( sideDANode );
 
     // guide nodes should not be occluded by sides
     this.addChild( vertexACornerGuideNode );
@@ -158,14 +157,16 @@ class QuadrilateralNode extends Voicing( Node ) {
     this.addChild( vertexCRightAngleIndicator );
     this.addChild( vertexDRightAngleIndicator );
 
-    const vertexParentNode = new ShapeHeadingNode( QuadrilateralStrings.a11y.myShapesCorners );
-    vertexParentNode.addChild( vertexNode1 );
-    vertexParentNode.addChild( vertexNode2 );
-    vertexParentNode.addChild( vertexNode3 );
-    vertexParentNode.addChild( vertexNode4 );
-    this.addChild( vertexParentNode );
+    this.addChild( vertexNode1 );
+    this.addChild( vertexNode2 );
+    this.addChild( vertexNode3 );
+    this.addChild( vertexNode4 );
 
-    // listeners - When the shift key is down, Vertices snap to finer intervals
+    //---------------------------------------------------------------------------------------------------------------
+    // input listeners
+    //---------------------------------------------------------------------------------------------------------------
+
+    // When the shift key is down, Vertices snap to finer intervals
     this.addInputListener( new KeyboardListener( {
       keys: [ 'shift' ],
       listenerFireTrigger: 'both',
@@ -213,7 +214,9 @@ class QuadrilateralNode extends Voicing( Node ) {
       }
     } );
 
-    // Traversal order for components requested in https://github.com/phetsims/quadrilateral/issues/289.
+    //---------------------------------------------------------------------------------------------------------------
+    // traversal order - requested in https://github.com/phetsims/quadrilateral/issues/289.
+    //---------------------------------------------------------------------------------------------------------------
     this.pdomOrder = [
       vertexNode1,
       sideABNode,
@@ -245,20 +248,6 @@ class QuadrilateralNode extends Voicing( Node ) {
   private updateFills(): void {
     this.vertexNodes.forEach( vertexNode => { vertexNode.fill = this.activeFill; } );
     this.sideNodes.forEach( sideNode => { sideNode.fill = this.activeFill; } );
-  }
-}
-
-/**
- * A Node with options that define how a section of content describing the Shape should exist in the PDOM.
- * Components of the quadrilateral shape are organized under a few H3s.
- */
-class ShapeHeadingNode extends Node {
-  public constructor( labelContent: string ) {
-    super( {
-      tagName: 'div',
-      labelTagName: 'h3',
-      labelContent: labelContent
-    } );
   }
 }
 

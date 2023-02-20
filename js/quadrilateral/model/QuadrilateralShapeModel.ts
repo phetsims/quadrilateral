@@ -17,7 +17,6 @@ import Side from './Side.js';
 import Vertex from './Vertex.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Emitter from '../../../../axon/js/Emitter.js';
-import QuadrilateralModel from './QuadrilateralModel.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
