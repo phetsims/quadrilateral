@@ -61,7 +61,6 @@ class QuadrilateralShapeModel {
   public vertexD: Vertex;
 
   // Sides of the quadrilateral.
-  // TODO: Rename to lettered sides.
   public sideAB: Side;
   public sideBC: Side;
   public sideCD: Side;
