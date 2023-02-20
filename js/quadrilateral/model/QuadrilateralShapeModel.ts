@@ -75,12 +75,6 @@ class QuadrilateralShapeModel {
   public readonly sideBCSideDAParallelSideChecker: ParallelSideChecker;
   public readonly parallelSideCheckers: ParallelSideChecker[];
 
-  // Observables that indicate when the sides become parallel. Updated after all vertex positions have been set
-  // so they are consistently up to date.
-  // TODO: This can probably be deleted now.
-  public readonly sideABSideCDParallelProperty = new BooleanProperty( false );
-  public readonly sideBCSideDAParallelProperty = new BooleanProperty( false );
-
   // Whether the quadrilateral is a parallelogram. This Property is true when both ParallelSideCheckers report
   // parallel sides.
   public isParallelogramProperty: Property<boolean>;
@@ -645,19 +639,20 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Updates Properties related to opposite pairs of parallel sides and the isParallelogramProperty. To be used in updateOrderDependentProperties.
+   * Updates Properties related to opposite pairs of parallel sides and the isParallelogramProperty. To be used in
+   * updateOrderDependentProperties.
    */
   private updateParallelSideProperties(): void {
-    this.sideABSideCDParallelProperty.value = this.sideABSideCDParallelSideChecker.areSidesParallel();
-    this.sideBCSideDAParallelProperty.value = this.sideBCSideDAParallelSideChecker.areSidesParallel();
-    this.isParallelogramProperty.set( this.sideABSideCDParallelProperty.value && this.sideBCSideDAParallelProperty.value );
+    const sideABSideCDParallel = this.sideABSideCDParallelSideChecker.areSidesParallel();
+    const sideBCSideDAParallel = this.sideBCSideDAParallelSideChecker.areSidesParallel();
+    this.isParallelogramProperty.set( sideABSideCDParallel && sideBCSideDAParallel );
 
     const previousParallelSidePairs = this.parallelSidePairsProperty.value;
     const currentParallelSidePairs = [];
-    if ( this.sideABSideCDParallelProperty.value ) {
+    if ( sideABSideCDParallel ) {
       currentParallelSidePairs.push( this.sideABSideCDParallelSideChecker.sidePair );
     }
-    if ( this.sideBCSideDAParallelProperty.value ) {
+    if ( sideBCSideDAParallel ) {
       currentParallelSidePairs.push( this.sideBCSideDAParallelSideChecker.sidePair );
     }
 
