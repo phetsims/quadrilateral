@@ -27,7 +27,7 @@ const aBString = QuadrilateralStrings.a11y.aB;
 const bCString = QuadrilateralStrings.a11y.bC;
 const cDString = QuadrilateralStrings.a11y.cD;
 const dAString = QuadrilateralStrings.a11y.dA;
-const topSideString = QuadrilateralStrings.a11y.topSide;
+const sideABString = QuadrilateralStrings.a11y.sideAB;
 const rightSideString = QuadrilateralStrings.a11y.rightSide;
 const bottomSideString = QuadrilateralStrings.a11y.bottomSide;
 const leftSideString = QuadrilateralStrings.a11y.leftSide;
@@ -110,7 +110,7 @@ vertexLabelMap.set( VertexLabel.VERTEX_D, vertexDString );
 
 // A map that goes from Side -> full side label (like "Side AB")
 const fullSideLabelMap = new Map<SideLabel, string>();
-fullSideLabelMap.set( SideLabel.SIDE_AB, topSideString );
+fullSideLabelMap.set( SideLabel.SIDE_AB, sideABString );
 fullSideLabelMap.set( SideLabel.SIDE_BC, rightSideString );
 fullSideLabelMap.set( SideLabel.SIDE_CD, bottomSideString );
 fullSideLabelMap.set( SideLabel.SIDE_DA, leftSideString );
@@ -159,7 +159,7 @@ class QuadrilateralDescriber {
     this.tiltDifferenceToleranceInterval = 0.2;
     this.lengthDifferenceToleranceInterval = 0.05;
 
-    this.sideABDescriber = new SideDescriber( shapeModel.topSide, shapeModel, markersVisibleProperty, modelViewTransform );
+    this.sideABDescriber = new SideDescriber( shapeModel.sideAB, shapeModel, markersVisibleProperty, modelViewTransform );
     this.sideBCDescriber = new SideDescriber( shapeModel.rightSide, shapeModel, markersVisibleProperty, modelViewTransform );
     this.sideCDDescriber = new SideDescriber( shapeModel.bottomSide, shapeModel, markersVisibleProperty, modelViewTransform );
     this.sideDADescriber = new SideDescriber( shapeModel.leftSide, shapeModel, markersVisibleProperty, modelViewTransform );
@@ -665,7 +665,7 @@ class QuadrilateralDescriber {
     let firstSideLabel: string;
     let secondSideLabel: string;
 
-    if ( parallelSidePair.includesSide( this.shapeModel.topSide ) ) {
+    if ( parallelSidePair.includesSide( this.shapeModel.sideAB ) ) {
       firstSideLabel = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_AB );
       secondSideLabel = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_CD );
     }
@@ -690,7 +690,7 @@ class QuadrilateralDescriber {
     let parallelFirstSideString: string;
     let parallelSecondSideString: string;
 
-    if ( oppositeEqualSidePair.includesSide( this.shapeModel.topSide ) ) {
+    if ( oppositeEqualSidePair.includesSide( this.shapeModel.sideAB ) ) {
 
       // top sides and bottom side are equal in length, left and right sides are parallel
       equalFirstSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_AB );

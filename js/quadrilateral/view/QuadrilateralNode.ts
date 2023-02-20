@@ -26,7 +26,7 @@ const cornerAString = QuadrilateralStrings.a11y.cornerA;
 const cornerBString = QuadrilateralStrings.a11y.cornerB;
 const cornerCString = QuadrilateralStrings.a11y.cornerC;
 const cornerDString = QuadrilateralStrings.a11y.cornerD;
-const topSideString = QuadrilateralStrings.a11y.topSide;
+const sideABString = QuadrilateralStrings.a11y.sideAB;
 const rightSideString = QuadrilateralStrings.a11y.rightSide;
 const bottomSideString = QuadrilateralStrings.a11y.bottomSide;
 const leftSideString = QuadrilateralStrings.a11y.leftSide;
@@ -107,9 +107,9 @@ class QuadrilateralNode extends Voicing( Node ) {
       tandem: providedOptions.tandem.createTandem( 'vertexDNode' )
     } );
 
-    const topSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.topSide, this.model.quadrilateralTestShapeModel.topSide, quadrilateralDescriber.sideABDescriber, modelViewTransform, {
-      nameResponse: topSideString,
-      tandem: providedOptions.tandem.createTandem( 'topSideNode' )
+    const sideABNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.sideAB, this.model.quadrilateralTestShapeModel.sideAB, quadrilateralDescriber.sideABDescriber, modelViewTransform, {
+      nameResponse: sideABString,
+      tandem: providedOptions.tandem.createTandem( 'sideABNode' )
     } );
     const rightSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.rightSide, this.model.quadrilateralTestShapeModel.rightSide, quadrilateralDescriber.sideBCDescriber, modelViewTransform, {
       nameResponse: rightSideString,
@@ -140,7 +140,7 @@ class QuadrilateralNode extends Voicing( Node ) {
     // add children - parents support layering order as well as traversal order in the PDOM
     // sides first because we want vertices to catch all input
     const sideParentNode = new ShapeHeadingNode( QuadrilateralStrings.a11y.myShapesSides );
-    sideParentNode.addChild( topSideNode );
+    sideParentNode.addChild( sideABNode );
     sideParentNode.addChild( rightSideNode );
     sideParentNode.addChild( bottomSideNode );
     sideParentNode.addChild( leftSideNode );
@@ -204,7 +204,7 @@ class QuadrilateralNode extends Voicing( Node ) {
     } ) );
 
     this.vertexNodes = [ vertexNode1, vertexNode2, vertexNode3, vertexNode4 ];
-    this.sideNodes = [ topSideNode, rightSideNode, bottomSideNode, leftSideNode ];
+    this.sideNodes = [ sideABNode, rightSideNode, bottomSideNode, leftSideNode ];
 
     // reset the timer so that we change the color for a short period when we become a named shape
     this.quadrilateralShapeModel.shapeNameProperty.link( shapeName => {
@@ -216,7 +216,7 @@ class QuadrilateralNode extends Voicing( Node ) {
     // Traversal order for components requested in https://github.com/phetsims/quadrilateral/issues/289.
     this.pdomOrder = [
       vertexNode1,
-      topSideNode,
+      sideABNode,
       vertexNode2,
       rightSideNode,
       vertexNode3,

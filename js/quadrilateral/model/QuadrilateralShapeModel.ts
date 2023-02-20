@@ -62,10 +62,13 @@ class QuadrilateralShapeModel {
 
   // Sides of the quadrilateral.
   // TODO: Rename to lettered sides.
-  public topSide: Side;
+  public sideAB: Side;
   public rightSide: Side;
   public bottomSide: Side;
   public leftSide: Side;
+
+  // If true, the shape is tested to make sure it is valid (no overlapping vertices or crossed sides).
+  private readonly validateShape: boolean;
 
   public readonly vertices: Vertex[];
   public readonly sides: Side[];
@@ -85,9 +88,6 @@ class QuadrilateralShapeModel {
 
   // Uses shape Properties to detect the shape name.
   private readonly shapeDetector: QuadrilateralShapeDetector;
-
-  // If true, the shape is tested to make sure it is valid (no overlapping vertices or crossed sides).
-  private readonly validateShape: boolean;
 
   // Whether or not the Properties of the shape are currently being deferred, preventing listeners
   // from being called and new values from being set.
@@ -205,7 +205,7 @@ class QuadrilateralShapeModel {
       [ this.vertexD, [ this.vertexA, this.vertexC ] ]
     ] );
 
-    this.topSide = new Side( this.vertexA, this.vertexB, options.tandem.createTandem( 'sideAB' ), {
+    this.sideAB = new Side( this.vertexA, this.vertexB, options.tandem.createTandem( 'sideAB' ), {
       offsetVectorForTiltCalculation: new Vector2( 0, 1 ),
       validateShape: options.validateShape
     } );
@@ -221,31 +221,31 @@ class QuadrilateralShapeModel {
       validateShape: options.validateShape
     } );
 
-    this.sides = [ this.topSide, this.rightSide, this.bottomSide, this.leftSide ];
+    this.sides = [ this.sideAB, this.rightSide, this.bottomSide, this.leftSide ];
 
     this.oppositeSideMap = new Map( [
-      [ this.topSide, this.bottomSide ],
+      [ this.sideAB, this.bottomSide ],
       [ this.rightSide, this.leftSide ],
-      [ this.bottomSide, this.topSide ],
+      [ this.bottomSide, this.sideAB ],
       [ this.leftSide, this.rightSide ]
     ] );
 
     this.adjacentSideMap = new Map( [
-      [ this.topSide, [ this.leftSide, this.rightSide ] ],
-      [ this.rightSide, [ this.topSide, this.bottomSide ] ],
+      [ this.sideAB, [ this.leftSide, this.rightSide ] ],
+      [ this.rightSide, [ this.sideAB, this.bottomSide ] ],
       [ this.bottomSide, [ this.rightSide, this.leftSide ] ],
-      [ this.leftSide, [ this.bottomSide, this.topSide ] ]
+      [ this.leftSide, [ this.bottomSide, this.sideAB ] ]
     ] );
 
     this.adjacentSides = [
-      new SidePair( this.topSide, this.rightSide ),
+      new SidePair( this.sideAB, this.rightSide ),
       new SidePair( this.rightSide, this.bottomSide ),
       new SidePair( this.bottomSide, this.leftSide ),
-      new SidePair( this.leftSide, this.topSide )
+      new SidePair( this.leftSide, this.sideAB )
     ];
 
     this.oppositeSides = [
-      new SidePair( this.topSide, this.bottomSide ),
+      new SidePair( this.sideAB, this.bottomSide ),
       new SidePair( this.rightSide, this.leftSide )
     ];
 
@@ -256,10 +256,10 @@ class QuadrilateralShapeModel {
     this.parallelSidePairsProperty = new Property<SidePair[]>( [] );
 
     // Connect the sides, creating the shape and giving vertices the information they need to determine their angles.
-    this.rightSide.connectToSide( this.topSide );
+    this.rightSide.connectToSide( this.sideAB );
     this.bottomSide.connectToSide( this.rightSide );
     this.leftSide.connectToSide( this.bottomSide );
-    this.topSide.connectToSide( this.leftSide );
+    this.sideAB.connectToSide( this.leftSide );
 
     this.isParallelogramProperty = new BooleanProperty( false, {
       tandem: options.tandem.createTandem( 'isParallelogramProperty' )
@@ -290,7 +290,7 @@ class QuadrilateralShapeModel {
     this.interLengthToleranceInterval = QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.staticAngleToleranceInterval );
 
     this.sideABSideCDParallelSideChecker = new ParallelSideChecker(
-      new SidePair( this.topSide, this.bottomSide ),
+      new SidePair( this.sideAB, this.bottomSide ),
       this.shapeChangedEmitter,
       options.tandem.createTandem( 'sideABSideCDParallelSideChecker' )
     );
@@ -330,8 +330,8 @@ class QuadrilateralShapeModel {
 
     // make adjacent sides non-interactive when a Side is pressed to avoid buggy multitouch cases
     // TODO: Move to the view?
-    this.makeAdjacentSidesNonInteractiveWhenPressed( this.topSide, this.bottomSide, this.leftSide, this.rightSide );
-    this.makeAdjacentSidesNonInteractiveWhenPressed( this.leftSide, this.rightSide, this.topSide, this.bottomSide );
+    this.makeAdjacentSidesNonInteractiveWhenPressed( this.sideAB, this.bottomSide, this.leftSide, this.rightSide );
+    this.makeAdjacentSidesNonInteractiveWhenPressed( this.leftSide, this.rightSide, this.sideAB, this.bottomSide );
 
     this.vertices.forEach( vertex => {
       vertex.modelBoundsProperty.link( vertexBounds => {
@@ -426,10 +426,10 @@ class QuadrilateralShapeModel {
    * Returns true when all lengths are equal.
    */
   public getAreAllLengthsEqual(): boolean {
-    return this.isInterLengthEqualToOther( this.topSide.lengthProperty.value, this.rightSide.lengthProperty.value ) &&
+    return this.isInterLengthEqualToOther( this.sideAB.lengthProperty.value, this.rightSide.lengthProperty.value ) &&
            this.isInterLengthEqualToOther( this.rightSide.lengthProperty.value, this.bottomSide.lengthProperty.value ) &&
            this.isInterLengthEqualToOther( this.bottomSide.lengthProperty.value, this.leftSide.lengthProperty.value ) &&
-           this.isInterLengthEqualToOther( this.leftSide.lengthProperty.value, this.topSide.lengthProperty.value );
+           this.isInterLengthEqualToOther( this.leftSide.lengthProperty.value, this.sideAB.lengthProperty.value );
   }
 
   /**
@@ -439,7 +439,7 @@ class QuadrilateralShapeModel {
    * Dependent on side lengths and angles, must be used in updateOrderDependentProperties.
    */
   private getArea(): number {
-    const a = this.topSide.lengthProperty.value;
+    const a = this.sideAB.lengthProperty.value;
     const b = this.rightSide.lengthProperty.value;
     const c = this.bottomSide.lengthProperty.value;
     const d = this.leftSide.lengthProperty.value;

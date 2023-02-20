@@ -57,7 +57,7 @@ class QuadrilateralTangibleController {
    * of each side from the hardware. We need to convert that to vertex positions in model space.
    *
    * With angle and length data alone we do not know the orientation or position in space of the shape. So the
-   * shape is constructed with the top left vertex (vertexA) and top side (topSide) anchored  while the rest
+   * shape is constructed with the top left vertex (vertexA) and top side (sideAB) anchored  while the rest
    * of the vertices are relatively positioned from the angle and length data. Once the shape is constructed it is
    * translated so that the centroid of the shape is in the center of model space (0, 0). The final result is that only
    * the tilt of the top side remains anchored. Perhaps if a gyroscope is added in the future we may be able to rotate

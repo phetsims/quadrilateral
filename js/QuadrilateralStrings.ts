@@ -132,8 +132,8 @@ type StringsType = {
     'cornerCStringProperty': LinkableProperty<string>;
     'cornerD': string;
     'cornerDStringProperty': LinkableProperty<string>;
-    'topSide': string;
-    'topSideStringProperty': LinkableProperty<string>;
+    'sideAB': string;
+    'sideABStringProperty': LinkableProperty<string>;
     'rightSide': string;
     'rightSideStringProperty': LinkableProperty<string>;
     'bottomSide': string;
