@@ -27,7 +27,7 @@ const cornerBString = QuadrilateralStrings.a11y.cornerB;
 const cornerCString = QuadrilateralStrings.a11y.cornerC;
 const cornerDString = QuadrilateralStrings.a11y.cornerD;
 const sideABString = QuadrilateralStrings.a11y.sideAB;
-const rightSideString = QuadrilateralStrings.a11y.rightSide;
+const sideBCString = QuadrilateralStrings.a11y.sideBC;
 const bottomSideString = QuadrilateralStrings.a11y.bottomSide;
 const leftSideString = QuadrilateralStrings.a11y.leftSide;
 const vertexAString = QuadrilateralStrings.vertexA;
@@ -111,9 +111,9 @@ class QuadrilateralNode extends Voicing( Node ) {
       nameResponse: sideABString,
       tandem: providedOptions.tandem.createTandem( 'sideABNode' )
     } );
-    const rightSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.rightSide, this.model.quadrilateralTestShapeModel.rightSide, quadrilateralDescriber.sideBCDescriber, modelViewTransform, {
-      nameResponse: rightSideString,
-      tandem: providedOptions.tandem.createTandem( 'rightSideNode' )
+    const sideBCNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.sideBC, this.model.quadrilateralTestShapeModel.sideBC, quadrilateralDescriber.sideBCDescriber, modelViewTransform, {
+      nameResponse: sideBCString,
+      tandem: providedOptions.tandem.createTandem( 'sideBCNode' )
     } );
     const bottomSideNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.bottomSide, this.model.quadrilateralTestShapeModel.bottomSide, quadrilateralDescriber.sideCDDescriber, modelViewTransform, {
       nameResponse: bottomSideString,
@@ -141,7 +141,7 @@ class QuadrilateralNode extends Voicing( Node ) {
     // sides first because we want vertices to catch all input
     const sideParentNode = new ShapeHeadingNode( QuadrilateralStrings.a11y.myShapesSides );
     sideParentNode.addChild( sideABNode );
-    sideParentNode.addChild( rightSideNode );
+    sideParentNode.addChild( sideBCNode );
     sideParentNode.addChild( bottomSideNode );
     sideParentNode.addChild( leftSideNode );
     this.addChild( sideParentNode );
@@ -204,7 +204,7 @@ class QuadrilateralNode extends Voicing( Node ) {
     } ) );
 
     this.vertexNodes = [ vertexNode1, vertexNode2, vertexNode3, vertexNode4 ];
-    this.sideNodes = [ sideABNode, rightSideNode, bottomSideNode, leftSideNode ];
+    this.sideNodes = [ sideABNode, sideBCNode, bottomSideNode, leftSideNode ];
 
     // reset the timer so that we change the color for a short period when we become a named shape
     this.quadrilateralShapeModel.shapeNameProperty.link( shapeName => {
@@ -218,7 +218,7 @@ class QuadrilateralNode extends Voicing( Node ) {
       vertexNode1,
       sideABNode,
       vertexNode2,
-      rightSideNode,
+      sideBCNode,
       vertexNode3,
       bottomSideNode,
       vertexNode4,

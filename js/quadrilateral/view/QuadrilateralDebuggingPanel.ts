@@ -37,13 +37,13 @@ class QuadrilateralDebuggingPanel extends Node {
 
     // Length readouts
     const sideABLengthText = new Text( '', TEXT_OPTIONS );
-    const rightSideLengthText = new Text( '', TEXT_OPTIONS );
+    const sideBCLengthText = new Text( '', TEXT_OPTIONS );
     const bottomSideLengthText = new Text( '', TEXT_OPTIONS );
     const leftSideLengthText = new Text( '', TEXT_OPTIONS );
     const lengthBox = new VBox( combineOptions<VBoxOptions>( {
       children: [
         sideABLengthText,
-        rightSideLengthText,
+        sideBCLengthText,
         bottomSideLengthText,
         leftSideLengthText
       ]
@@ -150,7 +150,7 @@ class QuadrilateralDebuggingPanel extends Node {
     // Link to the model to print the values
     // length
     QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.sideAB.lengthProperty, sideABLengthText, 'Side AB', decimalPlacesProperty );
-    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.rightSide.lengthProperty, rightSideLengthText, 'Side BC', decimalPlacesProperty );
+    QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.sideBC.lengthProperty, sideBCLengthText, 'Side BC', decimalPlacesProperty );
     QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.bottomSide.lengthProperty, bottomSideLengthText, 'Side CD', decimalPlacesProperty );
     QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.leftSide.lengthProperty, leftSideLengthText, 'Side DA', decimalPlacesProperty );
 

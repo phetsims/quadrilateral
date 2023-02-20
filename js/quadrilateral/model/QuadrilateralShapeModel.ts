@@ -63,7 +63,7 @@ class QuadrilateralShapeModel {
   // Sides of the quadrilateral.
   // TODO: Rename to lettered sides.
   public sideAB: Side;
-  public rightSide: Side;
+  public sideBC: Side;
   public bottomSide: Side;
   public leftSide: Side;
 
@@ -209,7 +209,7 @@ class QuadrilateralShapeModel {
       offsetVectorForTiltCalculation: new Vector2( 0, 1 ),
       validateShape: options.validateShape
     } );
-    this.rightSide = new Side( this.vertexB, this.vertexC, options.tandem.createTandem( 'sideBC' ), {
+    this.sideBC = new Side( this.vertexB, this.vertexC, options.tandem.createTandem( 'sideBC' ), {
       validateShape: options.validateShape
     } );
     this.bottomSide = new Side( this.vertexC, this.vertexD, options.tandem.createTandem( 'sideCD' ), {
@@ -221,32 +221,32 @@ class QuadrilateralShapeModel {
       validateShape: options.validateShape
     } );
 
-    this.sides = [ this.sideAB, this.rightSide, this.bottomSide, this.leftSide ];
+    this.sides = [ this.sideAB, this.sideBC, this.bottomSide, this.leftSide ];
 
     this.oppositeSideMap = new Map( [
       [ this.sideAB, this.bottomSide ],
-      [ this.rightSide, this.leftSide ],
+      [ this.sideBC, this.leftSide ],
       [ this.bottomSide, this.sideAB ],
-      [ this.leftSide, this.rightSide ]
+      [ this.leftSide, this.sideBC ]
     ] );
 
     this.adjacentSideMap = new Map( [
-      [ this.sideAB, [ this.leftSide, this.rightSide ] ],
-      [ this.rightSide, [ this.sideAB, this.bottomSide ] ],
-      [ this.bottomSide, [ this.rightSide, this.leftSide ] ],
+      [ this.sideAB, [ this.leftSide, this.sideBC ] ],
+      [ this.sideBC, [ this.sideAB, this.bottomSide ] ],
+      [ this.bottomSide, [ this.sideBC, this.leftSide ] ],
       [ this.leftSide, [ this.bottomSide, this.sideAB ] ]
     ] );
 
     this.adjacentSides = [
-      new SidePair( this.sideAB, this.rightSide ),
-      new SidePair( this.rightSide, this.bottomSide ),
+      new SidePair( this.sideAB, this.sideBC ),
+      new SidePair( this.sideBC, this.bottomSide ),
       new SidePair( this.bottomSide, this.leftSide ),
       new SidePair( this.leftSide, this.sideAB )
     ];
 
     this.oppositeSides = [
       new SidePair( this.sideAB, this.bottomSide ),
-      new SidePair( this.rightSide, this.leftSide )
+      new SidePair( this.sideBC, this.leftSide )
     ];
 
     this.adjacentEqualVertexPairsProperty = new Property<VertexPair[]>( [] );
@@ -256,8 +256,8 @@ class QuadrilateralShapeModel {
     this.parallelSidePairsProperty = new Property<SidePair[]>( [] );
 
     // Connect the sides, creating the shape and giving vertices the information they need to determine their angles.
-    this.rightSide.connectToSide( this.sideAB );
-    this.bottomSide.connectToSide( this.rightSide );
+    this.sideBC.connectToSide( this.sideAB );
+    this.bottomSide.connectToSide( this.sideBC );
     this.leftSide.connectToSide( this.bottomSide );
     this.sideAB.connectToSide( this.leftSide );
 
@@ -296,7 +296,7 @@ class QuadrilateralShapeModel {
     );
 
     this.sideBCSideDAParallelSideChecker = new ParallelSideChecker(
-      new SidePair( this.rightSide, this.leftSide ),
+      new SidePair( this.sideBC, this.leftSide ),
       this.shapeChangedEmitter,
       options.tandem.createTandem( 'sideBCSideDAParallelSideChecker' )
     );
@@ -330,8 +330,8 @@ class QuadrilateralShapeModel {
 
     // make adjacent sides non-interactive when a Side is pressed to avoid buggy multitouch cases
     // TODO: Move to the view?
-    this.makeAdjacentSidesNonInteractiveWhenPressed( this.sideAB, this.bottomSide, this.leftSide, this.rightSide );
-    this.makeAdjacentSidesNonInteractiveWhenPressed( this.leftSide, this.rightSide, this.sideAB, this.bottomSide );
+    this.makeAdjacentSidesNonInteractiveWhenPressed( this.sideAB, this.bottomSide, this.leftSide, this.sideBC );
+    this.makeAdjacentSidesNonInteractiveWhenPressed( this.leftSide, this.sideBC, this.sideAB, this.bottomSide );
 
     this.vertices.forEach( vertex => {
       vertex.modelBoundsProperty.link( vertexBounds => {
@@ -426,8 +426,8 @@ class QuadrilateralShapeModel {
    * Returns true when all lengths are equal.
    */
   public getAreAllLengthsEqual(): boolean {
-    return this.isInterLengthEqualToOther( this.sideAB.lengthProperty.value, this.rightSide.lengthProperty.value ) &&
-           this.isInterLengthEqualToOther( this.rightSide.lengthProperty.value, this.bottomSide.lengthProperty.value ) &&
+    return this.isInterLengthEqualToOther( this.sideAB.lengthProperty.value, this.sideBC.lengthProperty.value ) &&
+           this.isInterLengthEqualToOther( this.sideBC.lengthProperty.value, this.bottomSide.lengthProperty.value ) &&
            this.isInterLengthEqualToOther( this.bottomSide.lengthProperty.value, this.leftSide.lengthProperty.value ) &&
            this.isInterLengthEqualToOther( this.leftSide.lengthProperty.value, this.sideAB.lengthProperty.value );
   }
@@ -440,7 +440,7 @@ class QuadrilateralShapeModel {
    */
   private getArea(): number {
     const a = this.sideAB.lengthProperty.value;
-    const b = this.rightSide.lengthProperty.value;
+    const b = this.sideBC.lengthProperty.value;
     const c = this.bottomSide.lengthProperty.value;
     const d = this.leftSide.lengthProperty.value;
 

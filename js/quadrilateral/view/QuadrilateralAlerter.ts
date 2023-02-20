@@ -188,12 +188,12 @@ class QuadrilateralAlerter extends Alerter {
         this.angleResponseReady = _.some( angleDifferences, angleDifference => Math.abs( angleDifference ) > Math.PI / 12 );
 
         const previousABLength = this.previousContextResponseShapeSnapshot.sideABLength;
-        const previousBCLength = this.previousContextResponseShapeSnapshot.rightSideLength;
+        const previousBCLength = this.previousContextResponseShapeSnapshot.sideBCLength;
         const previousCDLength = this.previousContextResponseShapeSnapshot.bottomSideLength;
         const previousDALength = this.previousContextResponseShapeSnapshot.leftSideLength;
 
         const abLengthDifference = previousABLength - this.quadrilateralShapeModel.sideAB.lengthProperty.value;
-        const bcLengthDifference = previousBCLength - this.quadrilateralShapeModel.rightSide.lengthProperty.value;
+        const bcLengthDifference = previousBCLength - this.quadrilateralShapeModel.sideBC.lengthProperty.value;
         const cdLengthDifference = previousCDLength - this.quadrilateralShapeModel.bottomSide.lengthProperty.value;
         const daLengthDifference = previousDALength - this.quadrilateralShapeModel.leftSide.lengthProperty.value;
 
