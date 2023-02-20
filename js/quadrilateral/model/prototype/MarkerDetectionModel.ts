@@ -24,7 +24,7 @@ import quadrilateral from '../../../quadrilateral.js';
 
 class MarkerDetectionModel {
 
-  // Whether or not a marker is detected for physical device rotation. This is used for OpenCV prototypes.
+  // True when a marker is detected for physical device rotation. This is used for OpenCV prototypes.
   public rotationMarkerDetectedProperty: TProperty<boolean>;
 
   // The amount of rotation in radians of the tangible shape.

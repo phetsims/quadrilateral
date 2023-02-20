@@ -88,7 +88,7 @@ class QuadrilateralShapeModel {
   // Uses shape Properties to detect the shape name.
   private readonly shapeDetector: QuadrilateralShapeDetector;
 
-  // Whether or not the Properties of the shape are currently being deferred, preventing listeners
+  // True when the Properties of the shape are currently being deferred, preventing listeners
   // from being called and new values from being set.
   private propertiesDeferred: boolean;
 
@@ -108,12 +108,12 @@ class QuadrilateralShapeModel {
   // Emits an event whenever the shape of the Quadrilateral changes
   public shapeChangedEmitter: TEmitter;
 
-  // Whether or not all angles of the quadrilateral are right angles within interAngleToleranceInterval.
+  // True when all angles of the quadrilateral are right angles within interAngleToleranceInterval.
   // This is set in step because we need to wait until all vertices are positioned during model
   // updates.
   public allAnglesRightProperty: Property<boolean>;
 
-  // Whether or not all lenghts of the quadrilateral are equal within the lengthToleranceInterval.
+  // True when all lengths of the quadrilateral are equal within the lengthToleranceInterval.
   // Updated asychronously because we need to make sure that the positions of vertices have stabilized
   // after model updates.
   public allLengthsEqualProperty: Property<boolean>;

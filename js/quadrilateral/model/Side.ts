@@ -46,7 +46,7 @@ class Side {
   public tiltProperty: TReadOnlyProperty<number>;
   public lengthProperty: NumberProperty;
 
-  // Whether or not this Side is pressed and being interacted with. For now this is useful for debugging.
+  // True when this Side is pressed and being interacted with. For now this is useful for debugging.
   public readonly isPressedProperty: BooleanProperty;
 
   // Can this side be interacted with? When not interactive, the Side cannot be moved with user input.
