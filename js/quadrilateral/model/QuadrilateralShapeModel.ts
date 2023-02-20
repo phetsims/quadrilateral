@@ -33,6 +33,8 @@ import QuadrilateralShapeDetector from './QuadrilateralShapeDetector.js';
 import SidePair from './SidePair.js';
 import VertexPair from './VertexPair.js';
 import QuadrilateralUtils from './QuadrilateralUtils.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 
 // Used when verifying that Vertex positions are valid before setting to the model.
 export type VertexWithProposedPosition = {
@@ -51,8 +53,6 @@ type QuadrilateralShapeModelOptions = {
 };
 
 class QuadrilateralShapeModel {
-  // TODO: Can this be removed from the model?
-  public readonly model: QuadrilateralModel;
 
   // Vertices of the quadrilateral.
   public vertexA: Vertex;
@@ -65,6 +65,9 @@ class QuadrilateralShapeModel {
   public sideBC: Side;
   public sideCD: Side;
   public sideDA: Side;
+
+  // Available space for the Vertices to move.
+  private readonly modelBounds: Bounds2;
 
   // If true, the shape is tested to make sure it is valid (no overlapping vertices or crossed sides).
   private readonly validateShape: boolean;
@@ -157,7 +160,10 @@ class QuadrilateralShapeModel {
   // An array of all the (opposite) SidePairs that currently parallel with each other.
   public readonly parallelSidePairsProperty: Property<SidePair[]>;
 
-  public constructor( model: QuadrilateralModel, providedOptions: QuadrilateralShapeModelOptions ) {
+  // Is the simulation *not* being reset?
+  private readonly resetNotInProgressProperty: TProperty<boolean>;
+
+  public constructor( modelBounds: Bounds2, resetNotInProgressProperty: TProperty<boolean>, smoothingLengthProperty: TReadOnlyProperty<number>, providedOptions: QuadrilateralShapeModelOptions ) {
 
     const options = optionize<QuadrilateralShapeModelOptions, QuadrilateralShapeModelOptions>()( {
       validateShape: true
@@ -165,7 +171,6 @@ class QuadrilateralShapeModel {
 
     this.validateShape = options.validateShape;
 
-    const smoothingLengthProperty = model.optionsModel.tangibleOptionsModel.smoothingLengthProperty;
     this.vertexA = new Vertex( new Vector2( -0.25, 0.25 ), VertexLabel.VERTEX_A, smoothingLengthProperty, options.tandem.createTandem( 'vertexA' ) );
     this.vertexB = new Vertex( new Vector2( 0.25, 0.25 ), VertexLabel.VERTEX_B, smoothingLengthProperty, options.tandem.createTandem( 'vertexB' ) );
     this.vertexC = new Vertex( new Vector2( 0.25, -0.25 ), VertexLabel.VERTEX_C, smoothingLengthProperty, options.tandem.createTandem( 'vertexC' ) );
@@ -301,9 +306,11 @@ class QuadrilateralShapeModel {
       this.sideBCSideDAParallelSideChecker
     ];
 
+    this.modelBounds = modelBounds;
+    this.resetNotInProgressProperty = resetNotInProgressProperty;
+
     this.shapeDetector = new QuadrilateralShapeDetector( this );
 
-    this.model = model;
     this.propertiesDeferred = false;
 
     Multilink.multilink( [
@@ -330,10 +337,10 @@ class QuadrilateralShapeModel {
 
     this.vertices.forEach( vertex => {
       vertex.modelBoundsProperty.link( vertexBounds => {
-        vertex.topConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.maxY, model.modelBounds.maxY, 0.01 );
-        vertex.rightConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.maxX, model.modelBounds.maxX, 0.01 );
-        vertex.bottomConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.minY, model.modelBounds.minY, 0.01 );
-        vertex.leftConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.minX, model.modelBounds.minX, 0.01 );
+        vertex.topConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.maxY, this.modelBounds.maxY, 0.01 );
+        vertex.rightConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.maxX, this.modelBounds.maxX, 0.01 );
+        vertex.bottomConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.minY, this.modelBounds.minY, 0.01 );
+        vertex.leftConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.minX, this.modelBounds.minX, 0.01 );
       } );
     } );
   }
@@ -361,7 +368,7 @@ class QuadrilateralShapeModel {
       const testVertex = this.vertices[ i ];
 
       // The vertex must be completely within model bounds
-      shapeAllowed = this.model.modelBounds.containsBounds( testVertex.modelBoundsProperty.value );
+      shapeAllowed = this.modelBounds.containsBounds( testVertex.modelBoundsProperty.value );
 
       // Make sure that no vertices overlap any other (only need to do this if  we haven't already found
       // a disallowed case.
@@ -691,7 +698,7 @@ class QuadrilateralShapeModel {
   private setVertexDragAreas(): void {
 
     // TODO: What is this dilation and value??
-    const dilatedBounds = this.model.modelBounds.dilated( 1 );
+    const dilatedBounds = this.modelBounds.dilated( 1 );
 
     this.vertexA.dragAreaProperty.set( QuadrilateralUtils.createVertexArea( dilatedBounds, this.vertexA, this.vertexB, this.vertexC, this.vertexD, this.validateShape ) );
     this.vertexB.dragAreaProperty.set( QuadrilateralUtils.createVertexArea( dilatedBounds, this.vertexB, this.vertexC, this.vertexD, this.vertexA, this.validateShape ) );
@@ -735,9 +742,9 @@ class QuadrilateralShapeModel {
    * aspects of the Model.
    */
   public isolatedReset(): void {
-    this.model.resetNotInProgressProperty.value = false;
+    this.resetNotInProgressProperty.value = false;
     this.reset();
-    this.model.resetNotInProgressProperty.value = true;
+    this.resetNotInProgressProperty.value = true;
   }
 
   /**

@@ -37,7 +37,7 @@ class ShapeSnapshot {
   // TODO: Rename to letter names
   public readonly sideABLength: number;
   public readonly sideBCLength: number;
-  public readonly :sideDALength number;
+  public readonly sideDALength: number;
   public readonly sideCDLength: number;
   public readonly area: number;
 

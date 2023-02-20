@@ -97,10 +97,11 @@ class QuadrilateralModel implements TModel {
       tandem: tandem.createTandem( 'resetNotInProgressProperty' )
     } );
 
-    this.quadrilateralShapeModel = new QuadrilateralShapeModel( this, {
+    const smoothingLengthProperty = optionsModel.tangibleOptionsModel.smoothingLengthProperty;
+    this.quadrilateralShapeModel = new QuadrilateralShapeModel( this.modelBounds, this.resetNotInProgressProperty, smoothingLengthProperty, {
       tandem: tandem.createTandem( 'quadrilateralShapeModel' )
     } );
-    this.quadrilateralTestShapeModel = new QuadrilateralShapeModel( this, {
+    this.quadrilateralTestShapeModel = new QuadrilateralShapeModel( this.modelBounds, this.resetNotInProgressProperty, smoothingLengthProperty, {
       validateShape: false,
       tandem: tandem.createTandem( 'quadrilateralTestShapeModel' )
     } );

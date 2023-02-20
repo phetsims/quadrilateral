@@ -138,8 +138,8 @@ type StringsType = {
     'sideBCStringProperty': LinkableProperty<string>;
     'sideCD': string;
     'sideCDStringProperty': LinkableProperty<string>;
-    'leftSide': string;
-    'leftSideStringProperty': LinkableProperty<string>;
+    'sideDA': string;
+    'sideDAStringProperty': LinkableProperty<string>;
     'aB': string;
     'aBStringProperty': LinkableProperty<string>;
     'bC': string;
