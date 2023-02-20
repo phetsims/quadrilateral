@@ -29,7 +29,7 @@ const cDString = QuadrilateralStrings.a11y.cD;
 const dAString = QuadrilateralStrings.a11y.dA;
 const sideABString = QuadrilateralStrings.a11y.sideAB;
 const sideBCString = QuadrilateralStrings.a11y.sideBC;
-const bottomSideString = QuadrilateralStrings.a11y.bottomSide;
+const sideCDString = QuadrilateralStrings.a11y.sideCD;
 const leftSideString = QuadrilateralStrings.a11y.leftSide;
 const allString = QuadrilateralStrings.a11y.voicing.details.all;
 const oppositeString = QuadrilateralStrings.a11y.voicing.details.opposite;
@@ -112,7 +112,7 @@ vertexLabelMap.set( VertexLabel.VERTEX_D, vertexDString );
 const fullSideLabelMap = new Map<SideLabel, string>();
 fullSideLabelMap.set( SideLabel.SIDE_AB, sideABString );
 fullSideLabelMap.set( SideLabel.SIDE_BC, sideBCString );
-fullSideLabelMap.set( SideLabel.SIDE_CD, bottomSideString );
+fullSideLabelMap.set( SideLabel.SIDE_CD, sideCDString );
 fullSideLabelMap.set( SideLabel.SIDE_DA, leftSideString );
 
 const sideLabelMap = new Map();
@@ -161,7 +161,7 @@ class QuadrilateralDescriber {
 
     this.sideABDescriber = new SideDescriber( shapeModel.sideAB, shapeModel, markersVisibleProperty, modelViewTransform );
     this.sideBCDescriber = new SideDescriber( shapeModel.sideBC, shapeModel, markersVisibleProperty, modelViewTransform );
-    this.sideCDDescriber = new SideDescriber( shapeModel.bottomSide, shapeModel, markersVisibleProperty, modelViewTransform );
+    this.sideCDDescriber = new SideDescriber( shapeModel.sideCD, shapeModel, markersVisibleProperty, modelViewTransform );
     this.sideDADescriber = new SideDescriber( shapeModel.leftSide, shapeModel, markersVisibleProperty, modelViewTransform );
     this.sideDescribers = [ this.sideABDescriber, this.sideBCDescriber, this.sideCDDescriber, this.sideDADescriber ];
 

@@ -17,7 +17,7 @@ import NamedQuadrilateral from './NamedQuadrilateral.js';
 class ShapeSnapshot {
   public readonly sideABTilt: number;
   public readonly sideBCTilt: number;
-  public readonly bottomSideTilt: number;
+  public readonly sideCDTilt: number;
   public readonly leftSideTilt: number;
 
   public readonly isParallelogram: boolean;
@@ -38,7 +38,7 @@ class ShapeSnapshot {
   public readonly sideABLength: number;
   public readonly sideBCLength: number;
   public readonly leftSideLength: number;
-  public readonly bottomSideLength: number;
+  public readonly sideCDLength: number;
   public readonly area: number;
 
   public readonly namedQuadrilateral: NamedQuadrilateral;
@@ -50,7 +50,7 @@ class ShapeSnapshot {
   public constructor( shapeModel: QuadrilateralShapeModel ) {
     this.sideABTilt = shapeModel.sideAB.tiltProperty.value;
     this.sideBCTilt = shapeModel.sideBC.tiltProperty.value;
-    this.bottomSideTilt = shapeModel.bottomSide.tiltProperty.value;
+    this.sideCDTilt = shapeModel.sideCD.tiltProperty.value;
     this.leftSideTilt = shapeModel.leftSide.tiltProperty.value;
 
     this.isParallelogram = shapeModel.isParallelogramProperty.value;
@@ -69,7 +69,7 @@ class ShapeSnapshot {
 
     this.sideABLength = shapeModel.sideAB.lengthProperty.value;
     this.sideBCLength = shapeModel.sideBC.lengthProperty.value;
-    this.bottomSideLength = shapeModel.bottomSide.lengthProperty.value;
+    this.sideCDLength = shapeModel.sideCD.lengthProperty.value;
     this.leftSideLength = shapeModel.leftSide.lengthProperty.value;
 
     this.area = shapeModel.areaProperty.value;
@@ -80,7 +80,7 @@ class ShapeSnapshot {
       this.sideABLength,
       this.sideBCLength,
       this.leftSideLength,
-      this.bottomSideLength
+      this.sideCDLength
     ];
 
     this.shapeModel = shapeModel;
@@ -99,7 +99,7 @@ class ShapeSnapshot {
   public getLengthFromSideLabel( label: SideLabel ): number {
     return label === SideLabel.SIDE_AB ? this.sideABLength :
            label === SideLabel.SIDE_BC ? this.sideBCLength :
-           label === SideLabel.SIDE_CD ? this.bottomSideLength :
+           label === SideLabel.SIDE_CD ? this.sideCDLength :
            this.leftSideLength; // SIDE_DA
   }
 
@@ -147,9 +147,9 @@ class ShapeSnapshot {
    */
   public getAdjacentSideLengthsFromSideLabel( label: SideLabel ): [ number, number ] {
     return label === SideLabel.SIDE_AB ? [ this.leftSideLength, this.sideBCLength ] :
-           label === SideLabel.SIDE_BC ? [ this.sideABLength, this.bottomSideLength ] :
+           label === SideLabel.SIDE_BC ? [ this.sideABLength, this.sideCDLength ] :
            label === SideLabel.SIDE_CD ? [ this.sideBCLength, this.leftSideLength ] :
-             [ this.bottomSideLength, this.sideABLength ]; // SIDE_DA
+             [ this.sideCDLength, this.sideABLength ]; // SIDE_DA
   }
 
   public getAdjacentSidesParallelFromSideLabel( label: SideLabel ): boolean {

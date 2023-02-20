@@ -189,12 +189,12 @@ class QuadrilateralAlerter extends Alerter {
 
         const previousABLength = this.previousContextResponseShapeSnapshot.sideABLength;
         const previousBCLength = this.previousContextResponseShapeSnapshot.sideBCLength;
-        const previousCDLength = this.previousContextResponseShapeSnapshot.bottomSideLength;
+        const previousCDLength = this.previousContextResponseShapeSnapshot.sideCDLength;
         const previousDALength = this.previousContextResponseShapeSnapshot.leftSideLength;
 
         const abLengthDifference = previousABLength - this.quadrilateralShapeModel.sideAB.lengthProperty.value;
         const bcLengthDifference = previousBCLength - this.quadrilateralShapeModel.sideBC.lengthProperty.value;
-        const cdLengthDifference = previousCDLength - this.quadrilateralShapeModel.bottomSide.lengthProperty.value;
+        const cdLengthDifference = previousCDLength - this.quadrilateralShapeModel.sideCD.lengthProperty.value;
         const daLengthDifference = previousDALength - this.quadrilateralShapeModel.leftSide.lengthProperty.value;
 
         const lengthDifferences = [ abLengthDifference, bcLengthDifference, cdLengthDifference, daLengthDifference ];
