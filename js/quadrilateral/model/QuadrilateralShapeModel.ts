@@ -81,11 +81,8 @@ class QuadrilateralShapeModel {
   public readonly sideABSideCDParallelProperty = new BooleanProperty( false );
   public readonly sideBCSideDAParallelProperty = new BooleanProperty( false );
 
-  // Whether the quadrilateral is a parallelogram. This Property updates async in the step function! We need to
-  // update this Property after all vertex positions and all vertex angles have been updated. When moving more than
-  // one vertex at a time, only one vertex position updates synchronously in the code and in those transient states
-  // the model may temporarily not be a parallelogram. Updating in step after all Properties and listeners are done
-  // with this work resolves the problem.
+  // Whether the quadrilateral is a parallelogram. This Property is true when both ParallelSideCheckers report
+  // parallel sides.
   public isParallelogramProperty: Property<boolean>;
 
   // The area of the quadrilateral. Updated in "deferred" Properties, only after positions of all four vertices are
