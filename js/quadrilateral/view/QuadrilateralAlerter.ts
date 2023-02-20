@@ -460,7 +460,7 @@ class QuadrilateralAlerter extends Alerter {
     const currentAngle = vertex.angleProperty.value!;
     const previousAngle = this.previousObjectResponseShapeSnapshot.getAngleFromVertexLabel( vertex.vertexLabel );
 
-    const oppositeVertex = shapeModel.oppositeVertexMap.get( vertex )!;
+    const oppositeVertex = shapeModel.oppositeVertexMap.get( vertex )![ 0 ];
     const oppositeVertexAngle = oppositeVertex.angleProperty.value!;
 
     const adjacentVertices = shapeModel.adjacentVertexMap.get( vertex )!;

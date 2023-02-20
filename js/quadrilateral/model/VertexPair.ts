@@ -19,6 +19,14 @@ class VertexPair {
     this.vertex2 = vertex2;
   }
 
+  /**
+   * Returns true if the other VertexPair is equal ot this VertexPair (order for vertex1 and vertex2 independent).
+   */
+  public equals( otherPair: VertexPair ): boolean {
+    return ( this.vertex1 === otherPair.vertex1 && this.vertex2 === otherPair.vertex2 ) ||
+           ( this.vertex2 === otherPair.vertex1 && this.vertex1 === otherPair.vertex2 );
+  }
+
   public includesVertex( side: Vertex ): boolean {
     return this.vertex1 === side || this.vertex2 === side;
   }

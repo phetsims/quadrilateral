@@ -136,7 +136,7 @@ class QuadrilateralShapeModel {
   public readonly adjacentVertexMap: Map<Vertex, Vertex[]>;
 
   // A map that provides the opposite vertex from a give vertex.
-  public readonly oppositeVertexMap: Map<Vertex, Vertex>;
+  public readonly oppositeVertexMap: Map<Vertex, Vertex[]>;
 
   // A map that provides the adjacent sides to the provided Side.
   public readonly adjacentSideMap: Map<Side, Side[]>;
@@ -191,10 +191,10 @@ class QuadrilateralShapeModel {
     ];
 
     this.oppositeVertexMap = new Map( [
-      [ this.vertexA, this.vertexC ],
-      [ this.vertexB, this.vertexD ],
-      [ this.vertexC, this.vertexA ],
-      [ this.vertexD, this.vertexB ]
+      [ this.vertexA, [ this.vertexC ] ],
+      [ this.vertexB, [ this.vertexD ] ],
+      [ this.vertexC, [ this.vertexA ] ],
+      [ this.vertexD, [ this.vertexB ] ]
     ] );
 
     this.adjacentVertexMap = new Map( [
@@ -567,36 +567,38 @@ class QuadrilateralShapeModel {
    * will be adjacent vertices or opposite vertices.
    */
   private updateVertexAngleComparisons(): void {
-    this.updateEqualVertexPairs( this.adjacentEqualVertexPairsProperty, this.adjacentVertices );
-    this.updateEqualVertexPairs( this.oppositeEqualVertexPairsProperty, this.oppositeVertices );
+    this.updateEqualVertexPairs( this.adjacentEqualVertexPairsProperty, this.adjacentVertexMap );
+    this.updateEqualVertexPairs( this.oppositeEqualVertexPairsProperty, this.oppositeVertexMap );
   }
 
   /**
-   * Update a particular Property watching for equal vertex angles.
+   * Update a Property for a list of equal adjacent or opposite angles.
    */
-  private updateEqualVertexPairs( equalVertexPairsProperty: Property<VertexPair[]>, allVertexPairs: VertexPair[] ): void {
+  private updateEqualVertexPairs( equalVertexPairsProperty: Property<VertexPair[]>, vertexMap: Map<Vertex, Vertex[]> ): void {
     const currentVertexPairs = equalVertexPairsProperty.value;
-    for ( let i = 0; i < allVertexPairs.length; i++ ) {
-      const vertexPair = allVertexPairs[ i ];
+    vertexMap.forEach( ( relatedVertices, keyVertex, map ) => {
+      relatedVertices.forEach( relatedVertex => {
+        const vertexPair = new VertexPair( keyVertex, relatedVertex );
 
-      const firstAngle = vertexPair.vertex1.angleProperty.value!;
-      const secondAngle = vertexPair.vertex2.angleProperty.value!;
-      const currentlyIncludesVertexPair = currentVertexPairs.includes( vertexPair );
-      const areAnglesEqual = this.isInterAngleEqualToOther( firstAngle, secondAngle );
+        const firstAngle = vertexPair.vertex1.angleProperty.value!;
+        const secondAngle = vertexPair.vertex2.angleProperty.value!;
+        const currentlyIncludesVertexPair = _.some( currentVertexPairs, currentVertexPair => currentVertexPair.equals( vertexPair ) );
+        const areAnglesEqual = this.isInterAngleEqualToOther( firstAngle, secondAngle );
 
-      if ( currentlyIncludesVertexPair && !areAnglesEqual ) {
+        if ( currentlyIncludesVertexPair && !areAnglesEqual ) {
 
-        // the VertexPair needs to be removed because angles are no longer equal
-        currentVertexPairs.splice( currentVertexPairs.indexOf( vertexPair ), 1 );
-        equalVertexPairsProperty.notifyListenersStatic();
-      }
-      else if ( !currentlyIncludesVertexPair && areAnglesEqual ) {
+          // the VertexPair needs to be removed because angles are no longer equal
+          currentVertexPairs.splice( currentVertexPairs.indexOf( vertexPair ), 1 );
+          equalVertexPairsProperty.notifyListenersStatic();
+        }
+        else if ( !currentlyIncludesVertexPair && areAnglesEqual ) {
 
-        // the VertexPair needs to be added because they just became equal
-        currentVertexPairs.push( vertexPair );
-        equalVertexPairsProperty.notifyListenersStatic();
-      }
-    }
+          // the VertexPair needs to be added because they just became equal
+          currentVertexPairs.push( vertexPair );
+          equalVertexPairsProperty.notifyListenersStatic();
+        }
+      } );
+    } );
   }
 
   /**

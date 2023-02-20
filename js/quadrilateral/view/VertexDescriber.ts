@@ -112,7 +112,7 @@ class VertexDescriber {
   public getVertexObjectResponse(): string {
     let response = '';
 
-    const oppositeVertex = this.quadrilateralShapeModel.oppositeVertexMap.get( this.vertex )!;
+    const oppositeVertex = this.quadrilateralShapeModel.oppositeVertexMap.get( this.vertex )![ 0 ];
 
     const shapeName = this.quadrilateralShapeModel.shapeNameProperty.value;
     const oppositeComparisonString = this.getAngleComparisonDescription( oppositeVertex, shapeName );
