@@ -81,6 +81,13 @@ class QuadrilateralShapeModel {
   public readonly sideABSideCDParallelProperty = new BooleanProperty( false );
   public readonly sideBCSideDAParallelProperty = new BooleanProperty( false );
 
+  // Whether the quadrilateral is a parallelogram. This Property updates async in the step function! We need to
+  // update this Property after all vertex positions and all vertex angles have been updated. When moving more than
+  // one vertex at a time, only one vertex position updates synchronously in the code and in those transient states
+  // the model may temporarily not be a parallelogram. Updating in step after all Properties and listeners are done
+  // with this work resolves the problem.
+  public isParallelogramProperty: Property<boolean>;
+
   // The area of the quadrilateral. Updated in "deferred" Properties, only after positions of all four vertices are
   // determined.
   public readonly areaProperty: TProperty<number>;
@@ -110,13 +117,6 @@ class QuadrilateralShapeModel {
 
   // Emits an event whenever the shape of the Quadrilateral changes
   public shapeChangedEmitter: TEmitter;
-
-  // Whether the quadrilateral is a parallelogram. This Property updates async in the step function! We need to
-  // update this Property after all vertex positions and all vertex angles have been updated. When moving more than
-  // one vertex at a time, only one vertex position updates synchronously in the code and in those transient states
-  // the model may temporarily not be a parallelogram. Updating in step after all Properties and listeners are done
-  // with this work resolves the problem.
-  public isParallelogramProperty: Property<boolean>;
 
   // Whether or not all angles of the quadrilateral are right angles within interAngleToleranceInterval.
   // This is set in step because we need to wait until all vertices are positioned during model
