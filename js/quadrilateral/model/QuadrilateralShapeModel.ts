@@ -112,12 +112,6 @@ class QuadrilateralShapeModel {
   // unnamed shape.
   public readonly shapeNameProperty: EnumerationProperty<NamedQuadrilateral>;
 
-  // Arrays that define the relationship between Sides in the model, either opposite or adjacent once they are
-  // assembled to form the Quadrilateral shape.
-  // TODO: Remove these in place of the maps below.
-  private readonly adjacentSides: SidePair[];
-  private readonly oppositeSides: SidePair[];
-
   // A map that provides the adjacent vertices to the provided Vertex.
   public readonly adjacentVertexMap: Map<Vertex, Vertex[]>;
 
@@ -216,18 +210,6 @@ class QuadrilateralShapeModel {
       [ this.sideCD, [ this.sideBC, this.sideDA ] ],
       [ this.sideDA, [ this.sideCD, this.sideAB ] ]
     ] );
-
-    this.adjacentSides = [
-      new SidePair( this.sideAB, this.sideBC ),
-      new SidePair( this.sideBC, this.sideCD ),
-      new SidePair( this.sideCD, this.sideDA ),
-      new SidePair( this.sideDA, this.sideAB )
-    ];
-
-    this.oppositeSides = [
-      new SidePair( this.sideAB, this.sideCD ),
-      new SidePair( this.sideBC, this.sideDA )
-    ];
 
     this.adjacentEqualVertexPairsProperty = new Property<VertexPair[]>( [] );
     this.oppositeEqualVertexPairsProperty = new Property<VertexPair[]>( [] );
