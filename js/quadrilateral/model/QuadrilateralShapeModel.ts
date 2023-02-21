@@ -54,25 +54,24 @@ type QuadrilateralShapeModelOptions = {
 class QuadrilateralShapeModel {
 
   // Vertices of the quadrilateral.
-  public vertexA: Vertex;
-  public vertexB: Vertex;
-  public vertexC: Vertex;
-  public vertexD: Vertex;
+  public readonly vertexA: Vertex;
+  public readonly vertexB: Vertex;
+  public readonly vertexC: Vertex;
+  public readonly vertexD: Vertex;
+  public readonly vertices: Vertex[];
 
   // Sides of the quadrilateral.
-  public sideAB: Side;
-  public sideBC: Side;
-  public sideCD: Side;
-  public sideDA: Side;
+  public readonly sideAB: Side;
+  public readonly sideBC: Side;
+  public readonly sideCD: Side;
+  public readonly sideDA: Side;
+  public readonly sides: Side[];
 
   // Available space for the Vertices to move.
   private readonly modelBounds: Bounds2;
 
   // If true, the shape is tested to make sure it is valid (no overlapping vertices or crossed sides).
   private readonly validateShape: boolean;
-
-  public readonly vertices: Vertex[];
-  public readonly sides: Side[];
 
   // Monitors angles of the shape to determine when pairs of opposite sides are parallel.
   public readonly sideABSideCDParallelSideChecker: ParallelSideChecker;
@@ -81,7 +80,7 @@ class QuadrilateralShapeModel {
 
   // Whether the quadrilateral is a parallelogram. This Property is true when both ParallelSideCheckers report
   // parallel sides.
-  public isParallelogramProperty: Property<boolean>;
+  public readonly isParallelogramProperty: Property<boolean>;
 
   // The area of the quadrilateral. Updated in "deferred" Properties, only after positions of all four vertices are
   // determined.
@@ -89,10 +88,6 @@ class QuadrilateralShapeModel {
 
   // Uses shape Properties to detect the shape name.
   private readonly shapeDetector: QuadrilateralShapeDetector;
-
-  // True when the Properties of the shape are currently being deferred, preventing listeners
-  // from being called and new values from being set.
-  private propertiesDeferred: boolean;
 
   // The tolerance intervals for angle and length comparisons when comparing two angle/lengths with one another.
   // These values are generally larger than "static" angle tolerance intervals to account for compounding error
@@ -108,13 +103,13 @@ class QuadrilateralShapeModel {
   public readonly staticAngleToleranceInterval: number;
 
   // Emits an event whenever the shape of the Quadrilateral changes
-  public shapeChangedEmitter: TEmitter;
+  public readonly shapeChangedEmitter: TEmitter;
 
   // True when all angles of the quadrilateral are right angles within interAngleToleranceInterval.
-  public allAnglesRightProperty: Property<boolean>;
+  public readonly allAnglesRightProperty: Property<boolean>;
 
   // True when all lengths of the quadrilateral are equal within the lengthToleranceInterval.
-  public allLengthsEqualProperty: Property<boolean>;
+  public readonly allLengthsEqualProperty: Property<boolean>;
 
   // The name of the quadrilateral (like square/rhombus/trapezoid, etc). Will be null if it is a random
   // unnamed shape.
@@ -123,8 +118,8 @@ class QuadrilateralShapeModel {
   // Arrays that define the relationship between Sides in the model, either opposite or adjacent once they are
   // assembled to form the Quadrilateral shape.
   // TODO: Remove these in place of the maps below.
-  public readonly adjacentSides: SidePair[];
-  public readonly oppositeSides: SidePair[];
+  private readonly adjacentSides: SidePair[];
+  private readonly oppositeSides: SidePair[];
 
   // A map that provides the adjacent vertices to the provided Vertex.
   public readonly adjacentVertexMap: Map<Vertex, Vertex[]>;
@@ -155,6 +150,10 @@ class QuadrilateralShapeModel {
 
   // Is the simulation *not* being reset?
   private readonly resetNotInProgressProperty: TProperty<boolean>;
+
+  // True when the Properties of the shape are currently being deferred, preventing listeners from being called and
+  // new values from being set.
+  private propertiesDeferred: boolean;
 
   public constructor( modelBounds: Bounds2, resetNotInProgressProperty: TProperty<boolean>, smoothingLengthProperty: TReadOnlyProperty<number>, providedOptions: QuadrilateralShapeModelOptions ) {
 
