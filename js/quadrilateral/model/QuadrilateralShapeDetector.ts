@@ -1,17 +1,20 @@
 // Copyright 2022, University of Colorado Boulder
 /**
- * An implementation of shape detection from geometric aspects of the current quadrilateral.
+ * Detects the name of the quadrilateral shape from the current geometric properties.
  *
- * This implementation uses bit masks to determine the shape. Each shape attribute is represented as a bit and
- * masks for each shape define all the attributes required for the quadrilateral to be considered that shape.
- * A bitwise value is calculated from the shape when it is time to detect the name. That value is compared against
- * each shape mask.
+ * This implementation uses bit masks. Each shape attribute is represented as a bit. A bitwise value is then calculated
+ * from the current shape properties. A mask is created for each named shape. If the bitwise value has at least
+ * the bits of a given mask it is a match for the shape.
  *
  * The implementation of shape detection comes directly from decisions in
  * https://github.com/phetsims/quadrilateral/issues/188.
  *
  * In particular, see https://github.com/phetsims/quadrilateral/issues/188#issuecomment-1226165886 and
  * https://github.com/phetsims/quadrilateral/issues/188#issuecomment-1232237994.
+ *
+ * Using bit masks for this is inspired by collision filtering in a game engine, see
+ * http://www.aurelienribon.com/post/2011-07-box2d-tutorial-collision-filtering
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
@@ -21,7 +24,7 @@ import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
 import NamedQuadrilateral from './NamedQuadrilateral.js';
 
-// Set up the bits for each shape attribute.
+// Set up the bits for each shape property.
 const CONCAVE = Math.pow( 2, 0 );
 const ONE_PARALLEL_PAIR = Math.pow( 2, 1 );
 const TWO_PARALLEL_PAIR = Math.pow( 2, 2 );
@@ -106,8 +109,8 @@ class QuadrilateralShapeDetector {
 
     // First, assemble a bitwise value representing the attributes of the current shape. Start by looking for
     // a triangle, which is a unique case. If we have a triangle we can stop looking for more properties
-    // because it will always be labelled as a triangle. All of the other shapes have attributes that accumulate
-    // to produce the final attributes of the shape.
+    // because it will always be labelled as a triangle. All other shapes have properties that accumulate
+    // to produce the final properties of the shape.
     const shapeModel = this.quadrilateralShapeModel;
     if ( _.some( shapeModel.vertices, vertex => shapeModel.isFlatAngle( vertex.angleProperty.value! ) ) ) {
       currentConditionMask = currentConditionMask | TRIANGLE_MASK;
@@ -154,7 +157,7 @@ class QuadrilateralShapeDetector {
     let quadrilateralName: NamedQuadrilateral;
 
     // First look for a triangle - it is unique in that if we have a triangle there are no more shapes "under"
-    // it that share attributes so we can return this right away.
+    // it that share attributes - so we can return this right away.
     if ( this.conditionMatchesMask( currentConditionMask, TRIANGLE_MASK ) ) {
       quadrilateralName = NamedQuadrilateral.TRIANGLE;
     }
