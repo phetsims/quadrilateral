@@ -13,9 +13,6 @@
  * https://github.com/phetsims/quadrilateral/issues/20
  * https://github.com/phetsims/quadrilateral/issues/301
  *
- * TODO: What prototypes need to be maintained in the long run? What is being shared publicly on the prototypes page?
- * See https://github.com/phetsims/quadrilateral/issues/301
- *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 

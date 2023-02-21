@@ -9,9 +9,6 @@
  * usages of them in simulation code. Those prototypes and more information can be found at
  * https://github.com/phetsims/quadrilateral/issues/20
  *
- * It is not clear whether this code should be kept since or if those prototypes will be shared publicly.
- * TODO: Are we keeping these? Perhaps we can delete them.
- *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
