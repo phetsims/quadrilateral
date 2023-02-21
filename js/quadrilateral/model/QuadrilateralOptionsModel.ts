@@ -4,9 +4,6 @@
  * A model component responsible for the Properties that can be controlled from the preferences dialog
  * in this simulation.
  *
- * NOTE: These Properties generally cannot be PhET-iO instrumented because the Property of NumberControl depends on
- * phet.joist.sim if it is instrumented and this model is constructed before the sim.
- *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
