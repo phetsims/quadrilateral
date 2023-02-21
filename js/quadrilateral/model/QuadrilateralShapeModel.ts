@@ -583,10 +583,7 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Update Properties managing side length comparisons. Add or remove SidePairs from adjacentEqualSidePairsProperty
-   * and oppositeEqualSidePairsProperty depending on length equalities.
-   *
-   * TODO: Rename and update docs to make more clear. updateEqualSidePairs
+   * Update Properties managing side length comparisons between opposite and adjacent sides.
    */
   private updateSideLengthComparisons(): void {
     this.updateEqualSidePairs( this.adjacentEqualSidePairsProperty, this.adjacentSideMap );
