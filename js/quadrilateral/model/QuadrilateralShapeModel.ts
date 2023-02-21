@@ -70,9 +70,6 @@ class QuadrilateralShapeModel {
   // Available space for the Vertices to move.
   private readonly modelBounds: Bounds2;
 
-  // If true, the shape is tested to make sure it is valid (no overlapping vertices or crossed sides).
-  private readonly validateShape: boolean;
-
   // Monitors angles of the shape to determine when pairs of opposite sides are parallel.
   public readonly sideABSideCDParallelSideChecker: ParallelSideChecker;
   public readonly sideBCSideDAParallelSideChecker: ParallelSideChecker;
@@ -154,6 +151,9 @@ class QuadrilateralShapeModel {
   // True when the Properties of the shape are currently being deferred, preventing listeners from being called and
   // new values from being set.
   private propertiesDeferred: boolean;
+
+  // If true, the shape is tested to make sure it is valid (no overlapping vertices or crossed sides).
+  private readonly validateShape: boolean;
 
   public constructor( modelBounds: Bounds2, resetNotInProgressProperty: TProperty<boolean>, smoothingLengthProperty: TReadOnlyProperty<number>, providedOptions: QuadrilateralShapeModelOptions ) {
 
