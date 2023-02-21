@@ -24,9 +24,6 @@ class MarkerDetectionModel {
   // True when a marker is detected for physical device rotation. This is used for OpenCV prototypes.
   public rotationMarkerDetectedProperty: TProperty<boolean>;
 
-  // The amount of rotation in radians of the tangible shape.
-  public tangibleRotationProperty: TProperty<number>;
-
   // A Property that indicates that all markers are observed by the camera to control this simulation. Part of
   // a prototype for using OpenCV as an input method for the simulation
   public allVertexMarkersDetectedProperty: TReadOnlyProperty<boolean>;
@@ -48,8 +45,6 @@ class MarkerDetectionModel {
     this.rotationMarkerDetectedProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'rotationMarkerDetectedProperty' )
     } );
-
-    this.tangibleRotationProperty = new NumberProperty( 0 );
 
     this.allVertexMarkersDetectedProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'allVertexMarkersDetectedProperty' )

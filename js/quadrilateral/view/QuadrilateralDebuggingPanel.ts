@@ -171,7 +171,6 @@ class QuadrilateralDebuggingPanel extends Node {
     // marker detection
     const markerDetectionModel = model.tangibleConnectionModel.markerDetectionModel;
     QuadrilateralDebuggingPanel.addRedrawValueTextListener( markerDetectionModel.rotationMarkerDetectedProperty, rotationMarkerDetectedText, 'Marker detected', decimalPlacesProperty );
-    QuadrilateralDebuggingPanel.addRedrawValueTextListener( markerDetectionModel.tangibleRotationProperty, tangibleRotationText, 'Tangible rotation', decimalPlacesProperty );
   }
 
   /**

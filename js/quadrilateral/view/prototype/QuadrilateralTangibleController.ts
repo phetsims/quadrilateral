@@ -136,13 +136,8 @@ class QuadrilateralTangibleController {
     const centroidOffset = centroidPosition.negated();
     const shiftedPositions = _.map( proposedPositions, shapePosition => shapePosition.plus( centroidOffset ) );
 
-    // If there is some marker input, rotate positions to match the marker. Negate the rotation value to mirror the
-    // rotation of the device.
-    const rotationProperty = this.tangibleConnectionModel.markerDetectionModel.tangibleRotationProperty;
-    const rotatedPositions = _.map( shiftedPositions, shiftedPosition => shiftedPosition.rotated( -rotationProperty.value ) );
-
     // make sure that all positions are within model bounds
-    const constrainedPositions = _.map( rotatedPositions, position => this.modelBounds.closestPointTo( position ) );
+    const constrainedPositions = _.map( shiftedPositions, position => this.modelBounds.closestPointTo( position ) );
 
     // smooth positions to try to reduce noise
     const smoothedPositions = [
