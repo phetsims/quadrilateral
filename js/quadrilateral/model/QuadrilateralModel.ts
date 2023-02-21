@@ -150,7 +150,7 @@ class QuadrilateralModel implements TModel {
   public isVertexPositionAllowed( vertex: Vertex, proposedPosition: Vector2 ): boolean {
 
     // set the proposed position to the scratch shape
-    this.quadrilateralTestShapeModel.set( this.quadrilateralShapeModel );
+    this.quadrilateralTestShapeModel.setFromShape( this.quadrilateralShapeModel );
     this.quadrilateralTestShapeModel.getLabelledVertex( vertex.vertexLabel ).positionProperty.set( proposedPosition );
 
     return this.quadrilateralTestShapeModel.isQuadrilateralShapeAllowed();
@@ -162,7 +162,7 @@ class QuadrilateralModel implements TModel {
   public areVertexPositionsAllowed( vertex1: Vertex, vertex1ProposedPosition: Vector2, vertex2: Vertex, vertex2ProposedPosition: Vector2 ): boolean {
 
     // Set the test shape to the current value of the actual shape before proposed positions
-    this.quadrilateralTestShapeModel.set( this.quadrilateralShapeModel );
+    this.quadrilateralTestShapeModel.setFromShape( this.quadrilateralShapeModel );
 
     // Setting multiple vertex positions at once, we need to wait to call listeners until all values are ready
     this.quadrilateralTestShapeModel.setPropertiesDeferred( true );

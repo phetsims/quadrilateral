@@ -432,7 +432,7 @@ class SideNode extends Voicing( Path ) {
     const inBounds = vertexDragBounds.containsPoint( proposedVertex1Position ) && vertexDragBounds.containsPoint( proposedVertex2Position );
 
     // update the scratch model before setting proposed vertex positions
-    this.scratchShapeModel.set( this.quadrilateralShapeModel );
+    this.scratchShapeModel.setFromShape( this.quadrilateralShapeModel );
 
     // Set the positions to the scratch model so that we can verify that this produces a valid shape. Since we are
     // moving two vertices at the same time we need to check the validity after both have moved, checking the shape

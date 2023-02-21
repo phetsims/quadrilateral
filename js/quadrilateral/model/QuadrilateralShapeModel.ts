@@ -629,10 +629,8 @@ class QuadrilateralShapeModel {
 
   /**
    * Sets this model to be the same as the provided QuadrilateralShapeModel by setting Vertex positions.
-   *
-   * TODO: Rename?
    */
-  public set( other: QuadrilateralShapeModel ): void {
+  public setFromShape( other: QuadrilateralShapeModel ): void {
 
     // since we are updating many vertices at once we need to defer callbacks while vertices could create a bad
     // shape as we set each one
