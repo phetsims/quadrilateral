@@ -589,15 +589,15 @@ class QuadrilateralShapeModel {
    * TODO: Rename and update docs to make more clear. updateEqualSidePairs
    */
   private updateSideLengthComparisons(): void {
-    this.updateEqualLengthSidePairs( this.adjacentEqualSidePairsProperty, this.adjacentSideMap );
-    this.updateEqualLengthSidePairs( this.oppositeEqualSidePairsProperty, this.oppositeSideMap );
+    this.updateEqualSidePairs( this.adjacentEqualSidePairsProperty, this.adjacentSideMap );
+    this.updateEqualSidePairs( this.oppositeEqualSidePairsProperty, this.oppositeSideMap );
   }
 
   /**
    * Update particular Property that holds collections of SidePairs that are equal in length. Uses
    * shapeLengthToleranceIntervalProperty for comparison tolerances.
    */
-  private updateEqualLengthSidePairs( equalSidePairsProperty: Property<SidePair[]>, sideMap: Map<Side, Side[]> ): void {
+  private updateEqualSidePairs( equalSidePairsProperty: Property<SidePair[]>, sideMap: Map<Side, Side[]> ): void {
     const currentSidePairs = equalSidePairsProperty.value;
 
     sideMap.forEach( ( relatedSides, keySide ) => {
