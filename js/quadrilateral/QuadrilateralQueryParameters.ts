@@ -19,7 +19,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   parallelAngleToleranceInterval: {
     type: 'number',
     isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
-    defaultValue: 0.002
+    defaultValue: 0.0005
   },
 
   // The default value for the angle tolerance that will be used for single comparisons of one angle against
@@ -28,7 +28,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   interAngleToleranceInterval: {
     type: 'number',
     isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
-    defaultValue: 0.004
+    defaultValue: 0.0001
   },
 
   // A tolerance interval when comparing an angle to a constant of some kind, such as Math.PI or Math.PI / 2 when
@@ -37,7 +37,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   staticAngleToleranceInterval: {
     type: 'number',
     isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
-    defaultValue: 0.002
+    defaultValue: 0.0005
   },
 
   // When provided, user has fine control of vertex positions instead of snapping to a coarse grid. More freedom
@@ -66,7 +66,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // A tolerance interval for comparing the lengths of two sides.
   interLengthToleranceInterval: {
     type: 'number',
-    defaultValue: 0.001
+    defaultValue: 0.00025
   },
 
   // If provided, some extra things will be done in the simulation to facilitate communication with the hardware/device.

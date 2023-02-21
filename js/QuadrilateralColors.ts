@@ -106,7 +106,7 @@ const QuadrilateralColors = {
 
   // Stroke for the interaction cues
   interactionCueColorProperty: new ProfileColorProperty( quadrilateral, 'interactionCueColor', {
-    default: new Color( 'rgb(21,255,127)' )
+    default: new Color( 'rgb(181, 255, 216)' )
   } )
 };
 
