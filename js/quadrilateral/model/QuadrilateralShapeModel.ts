@@ -128,7 +128,7 @@ class QuadrilateralShapeModel {
   public readonly adjacentSideMap: Map<Side, Side[]>;
 
   // A map that provides the opposite side from the provided Side.
-  public readonly oppositeSideMap: Map<Side, Side>;
+  public readonly oppositeSideMap: Map<Side, Side[]>;
 
   // An array of all the adjacent VertexPairs that currently have equal angles.
   public readonly adjacentEqualVertexPairsProperty: Property<VertexPair[]>;
@@ -204,10 +204,10 @@ class QuadrilateralShapeModel {
     this.sides = [ this.sideAB, this.sideBC, this.sideCD, this.sideDA ];
 
     this.oppositeSideMap = new Map( [
-      [ this.sideAB, this.sideCD ],
-      [ this.sideBC, this.sideDA ],
-      [ this.sideCD, this.sideAB ],
-      [ this.sideDA, this.sideBC ]
+      [ this.sideAB, [ this.sideCD ] ],
+      [ this.sideBC, [ this.sideDA ] ],
+      [ this.sideCD, [ this.sideAB ] ],
+      [ this.sideDA, [ this.sideBC ] ]
     ] );
 
     this.adjacentSideMap = new Map( [
@@ -586,40 +586,43 @@ class QuadrilateralShapeModel {
    * Update Properties managing side length comparisons. Add or remove SidePairs from adjacentEqualSidePairsProperty
    * and oppositeEqualSidePairsProperty depending on length equalities.
    *
-   * TODO: Rename and update docs to make more clear.
+   * TODO: Rename and update docs to make more clear. updateEqualSidePairs
    */
   private updateSideLengthComparisons(): void {
-    this.updateEqualLengthSidePairs( this.adjacentEqualSidePairsProperty, this.adjacentSides );
-    this.updateEqualLengthSidePairs( this.oppositeEqualSidePairsProperty, this.oppositeSides );
+    this.updateEqualLengthSidePairs( this.adjacentEqualSidePairsProperty, this.adjacentSideMap );
+    this.updateEqualLengthSidePairs( this.oppositeEqualSidePairsProperty, this.oppositeSideMap );
   }
 
   /**
    * Update particular Property that holds collections of SidePairs that are equal in length. Uses
    * shapeLengthToleranceIntervalProperty for comparison tolerances.
    */
-  private updateEqualLengthSidePairs( equalSidePairsProperty: Property<SidePair[]>, allSidePairs: SidePair[] ): void {
+  private updateEqualLengthSidePairs( equalSidePairsProperty: Property<SidePair[]>, sideMap: Map<Side, Side[]> ): void {
     const currentSidePairs = equalSidePairsProperty.value;
-    for ( let i = 0; i < allSidePairs.length; i++ ) {
-      const sidePair = allSidePairs[ i ];
 
-      const firstLength = sidePair.side1.lengthProperty.value;
-      const secondLength = sidePair.side2.lengthProperty.value;
-      const currentlyIncludesSidePair = currentSidePairs.includes( sidePair );
-      const areLengthsEqual = this.isInterLengthEqualToOther( firstLength, secondLength );
+    sideMap.forEach( ( relatedSides, keySide ) => {
+      relatedSides.forEach( relatedSide => {
+        const sidePair = new SidePair( keySide, relatedSide );
 
-      if ( currentlyIncludesSidePair && !areLengthsEqual ) {
+        const firstLength = sidePair.side1.lengthProperty.value;
+        const secondLength = sidePair.side2.lengthProperty.value;
+        const currentlyIncludesSidePair = _.some( currentSidePairs, currentSidePair => currentSidePair.equals( sidePair ) );
+        const areLengthsEqual = this.isInterLengthEqualToOther( firstLength, secondLength );
 
-        // the VertexPair needs to be removed because angles are no longer equal
-        currentSidePairs.splice( currentSidePairs.indexOf( sidePair ), 1 );
-        equalSidePairsProperty.notifyListenersStatic();
-      }
-      else if ( !currentlyIncludesSidePair && areLengthsEqual ) {
+        if ( currentlyIncludesSidePair && !areLengthsEqual ) {
 
-        // the VertexPair needs to be added because they just became equal
-        currentSidePairs.push( sidePair );
-        equalSidePairsProperty.notifyListenersStatic();
-      }
-    }
+          // the VertexPair needs to be removed because angles are no longer equal
+          currentSidePairs.splice( currentSidePairs.indexOf( sidePair ), 1 );
+          equalSidePairsProperty.notifyListenersStatic();
+        }
+        else if ( !currentlyIncludesSidePair && areLengthsEqual ) {
+
+          // the VertexPair needs to be added because they just became equal
+          currentSidePairs.push( sidePair );
+          equalSidePairsProperty.notifyListenersStatic();
+        }
+      } );
+    } );
   }
 
   /**

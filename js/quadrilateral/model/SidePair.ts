@@ -18,6 +18,14 @@ class SidePair {
     this.side2 = side2;
   }
 
+  /**
+   * Returns true if the other SidePair is equal to this SidePair (independent of order).
+   */
+  public equals( otherPair: SidePair ): boolean {
+    return ( this.side1 === otherPair.side1 && this.side2 === otherPair.side2 ) ||
+           ( this.side2 === otherPair.side1 && this.side1 === otherPair.side2 );
+  }
+
   public includesSide( side: Side ): boolean {
     return this.side1 === side || this.side2 === side;
   }
