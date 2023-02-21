@@ -13,16 +13,11 @@
  */
 
 import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
-import NumberProperty from '../../../../../axon/js/NumberProperty.js';
-import TProperty from '../../../../../axon/js/TProperty.js';
 import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../../quadrilateral.js';
 
 class MarkerDetectionModel {
-
-  // True when a marker is detected for physical device rotation. This is used for OpenCV prototypes.
-  public rotationMarkerDetectedProperty: TProperty<boolean>;
 
   // A Property that indicates that all markers are observed by the camera to control this simulation. Part of
   // a prototype for using OpenCV as an input method for the simulation
@@ -42,10 +37,6 @@ class MarkerDetectionModel {
   public readonly markerResponsesEnabledProperty: TReadOnlyProperty<boolean>;
 
   public constructor( tandem: Tandem ) {
-    this.rotationMarkerDetectedProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'rotationMarkerDetectedProperty' )
-    } );
-
     this.allVertexMarkersDetectedProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'allVertexMarkersDetectedProperty' )
     } );

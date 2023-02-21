@@ -99,14 +99,6 @@ class QuadrilateralDebuggingPanel extends Node {
     // shape name readout
     const shapeNameText = new Text( '', TEXT_OPTIONS );
 
-    // tangible rotation readout
-    // TODO: Can this be deleted? We don't care about rotation anymore, right?
-    const rotationMarkerDetectedText = new Text( '', TEXT_OPTIONS );
-    const tangibleRotationText = new Text( '', TEXT_OPTIONS );
-    const markerBox = new VBox( combineOptions<VBoxOptions>( {
-      children: [ rotationMarkerDetectedText, tangibleRotationText ]
-    }, VBOX_OPTIONS ) );
-
     // decimal places readout
     const decimalPlacesProperty = new NumberProperty( 3, { range: new Range( 2, 5 ) } );
     const decimalPlacesControl = new NumberControl( 'Decimal Places', decimalPlacesProperty, decimalPlacesProperty.range, {
@@ -126,7 +118,6 @@ class QuadrilateralDebuggingPanel extends Node {
         parallelogramBox,
         toleranceIntervalBox,
         shapeNameText,
-        markerBox,
         decimalPlacesControl
       ],
       spacing: 15
@@ -167,10 +158,6 @@ class QuadrilateralDebuggingPanel extends Node {
 
     // shape name
     QuadrilateralDebuggingPanel.addRedrawValueTextListener( model.quadrilateralShapeModel.shapeNameProperty, shapeNameText, 'shape name', decimalPlacesProperty );
-
-    // marker detection
-    const markerDetectionModel = model.tangibleConnectionModel.markerDetectionModel;
-    QuadrilateralDebuggingPanel.addRedrawValueTextListener( markerDetectionModel.rotationMarkerDetectedProperty, rotationMarkerDetectedText, 'Marker detected', decimalPlacesProperty );
   }
 
   /**
