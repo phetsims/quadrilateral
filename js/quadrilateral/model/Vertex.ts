@@ -77,10 +77,6 @@ class Vertex {
   // resulted in a crossed/overlapping shape.
   public readonly movementBlockedByShapeProperty = new BooleanProperty( false );
 
-  // Additional Property indicating movement was blocked for either of the above reasons.
-  // TODO: Remove?
-  public readonly movementBlockedProperty = DerivedProperty.or( [ this.movementBlockedByBoundsProperty, this.movementBlockedByShapeProperty ] );
-
   // A reference to vertices connected to this vertex for the purposes of calculating the angle at this vertex.
   // The orientation of vertex1 and vertex2 for angle calculations are as shown in the following diagram:
   //        thisVertex

@@ -67,9 +67,6 @@ class Side {
   // resulted in a crossed/overlapping shape.
   public movementBlockedByShapeProperty = new BooleanProperty( false );
 
-  // Additional Property indicating movement was blocked for either of the above reasons.
-  public movementBlockedProperty = DerivedProperty.or( [ this.movementBlockedByBoundsProperty, this.movementBlockedByShapeProperty ] );
-
   // In model coordinates, the length of a side segment in model coordinates. The full side is divided into segments of
   // this length with the final segment length being the remainder.
   public static readonly SIDE_SEGMENT_LENGTH = 0.25;
