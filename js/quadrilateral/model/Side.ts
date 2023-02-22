@@ -2,6 +2,7 @@
 
 /**
  * The model for a side of the quadrilateral, between two Vertices.
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
@@ -21,13 +22,13 @@ import VertexLabel from './VertexLabel.js';
 class Side {
 
   // Reference to the vertices that compose this Side.
-  public vertex1: Vertex;
-  public vertex2: Vertex;
+  public readonly vertex1: Vertex;
+  public readonly vertex2: Vertex;
 
   // Has this side been connected to another to form a shape?
   private isConnected: boolean;
 
-  public lengthProperty: NumberProperty;
+  public readonly lengthProperty: NumberProperty;
 
   // True when this Side is pressed and being interacted with. For now this is useful for debugging.
   public readonly isPressedProperty: BooleanProperty;
@@ -36,19 +37,21 @@ class Side {
   // various calculations.
   public readonly sideLabel: SideLabel;
 
+  // (Voicing) Indicates that the Vertex has received some input so it is time to trigger a new Voicing response
+  // the next time Properties are updated in QuadrilateralShapeModel.
   public voicingObjectResponseDirty = false;
 
   // The shape of the side, determined by the length and the model width.
-  public shapeProperty: TReadOnlyProperty<Shape>;
+  public readonly shapeProperty: TReadOnlyProperty<Shape>;
 
   // Property indicating whether the movement of the Side was blocked by being constrained in the
   // model bounds
   // TODO: Reduce duplication of these Properties with Vertex, create a superclass?
-  public movementBlockedByBoundsProperty = new BooleanProperty( false );
+  public readonly movementBlockedByBoundsProperty = new BooleanProperty( false );
 
   // Property indicating whether the movement of the Side was blocked because placement would have
   // resulted in a crossed/overlapping shape.
-  public movementBlockedByShapeProperty = new BooleanProperty( false );
+  public readonly movementBlockedByShapeProperty = new BooleanProperty( false );
 
   // In model coordinates, the length of a side segment in model coordinates. The full side is divided into segments of
   // this length with the final segment length being the remainder.
