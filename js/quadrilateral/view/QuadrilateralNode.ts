@@ -264,6 +264,9 @@ class QuadrilateralNode extends Voicing( Node ) {
     } );
   }
 
+  /**
+   * Update fills for the paintables of this Node. Colors will change momentarily when a new shape is detected.
+   */
   private updateFills(): void {
     this.vertexNodes.forEach( vertexNode => { vertexNode.fill = this.activeFill; } );
     this.sideNodes.forEach( sideNode => { sideNode.fill = this.activeFill; } );
