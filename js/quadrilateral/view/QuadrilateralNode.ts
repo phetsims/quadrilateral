@@ -234,6 +234,10 @@ class QuadrilateralNode extends Voicing( Node ) {
     ];
   }
 
+  /**
+   * Step this Node. When a new shape is detected, the color of the quadrilateral will change momentarily. Step
+   * supports changing the color for a brief period of time.
+   */
   public step( dt: number ): void {
     const previousActiveFill = this.activeFill;
     if ( this.remainingTimeForShapeChangeFill > 0 ) {
