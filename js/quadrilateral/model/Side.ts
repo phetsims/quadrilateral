@@ -8,29 +8,15 @@
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import quadrilateral from '../../quadrilateral.js';
 import Vertex from './Vertex.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { Line } from '../../../../scenery/js/imports.js';
 import { Shape } from '../../../../kite/js/imports.js';
-import optionize from '../../../../phet-core/js/optionize.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import SideLabel from './SideLabel.js';
 import VertexLabel from './VertexLabel.js';
-
-type SideOptions = {
-
-  // Offsets the initial tilt by this Vector so that the tilt values can be the same for each side even
-  // if they have different orientations.
-  offsetVectorForTiltCalculation?: Vector2;
-
-  // If true, assertions will be made about the state of the side. But you may not always want them because
-  // we may be trying to identify if a particular configuration of the quadrilateral is valid and we need to
-  // gracefully notify that state is not allowed.
-  validateShape?: boolean;
-};
 
 class Side {
 
@@ -41,9 +27,6 @@ class Side {
   // Has this side been connected to another to form a shape?
   private isConnected: boolean;
 
-  // Angle of this line against a perpendicular line that would be drawn across it when the vertices are at their
-  // initial positions, used to determine the amount of tilt of the line.
-  public tiltProperty: TReadOnlyProperty<number>;
   public lengthProperty: NumberProperty;
 
   // True when this Side is pressed and being interacted with. For now this is useful for debugging.
@@ -79,14 +62,8 @@ class Side {
    * @param vertex1 - The first vertex of this Side.
    * @param vertex2 - The second vertex of this Side.
    * @param tandem
-   * @param [providedOptions]
    */
-  public constructor( vertex1: Vertex, vertex2: Vertex, tandem: Tandem, providedOptions?: SideOptions ) {
-
-    const options = optionize<SideOptions, SideOptions>()( {
-      offsetVectorForTiltCalculation: new Vector2( 1, 0 ),
-      validateShape: true
-    }, providedOptions );
+  public constructor( vertex1: Vertex, vertex2: Vertex, tandem: Tandem ) {
 
     this.vertex1 = vertex1;
     this.vertex2 = vertex2;
@@ -97,14 +74,6 @@ class Side {
     this.isPressedProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'isPressedProperty' )
     } );
-
-    this.tiltProperty = new DerivedProperty( [ this.vertex1.positionProperty, this.vertex2.positionProperty ],
-      ( vertex1Position, vertex2Position ) => {
-        return Vertex.calculateAngle( vertex1Position, vertex2Position, vertex2Position.plus( options.offsetVectorForTiltCalculation ), options.validateShape );
-      }, {
-        tandem: tandem.createTandem( 'tiltProperty' ),
-        phetioValueType: NumberIO
-      } );
 
     // The distance between the two vertices, in model space.
     this.lengthProperty = new NumberProperty( 0, {

@@ -15,11 +15,6 @@ import VertexLabel from './VertexLabel.js';
 import NamedQuadrilateral from './NamedQuadrilateral.js';
 
 class ShapeSnapshot {
-  public readonly sideABTilt: number;
-  public readonly sideBCTilt: number;
-  public readonly sideCDTilt: number;
-  public readonly sideDATilt: number;
-
   public readonly isParallelogram: boolean;
   public readonly sideABsideCDParallel: boolean;
   public readonly sideBCsideDAParallel: boolean;
@@ -48,11 +43,6 @@ class ShapeSnapshot {
   private readonly shapeModel: QuadrilateralShapeModel;
 
   public constructor( shapeModel: QuadrilateralShapeModel ) {
-    this.sideABTilt = shapeModel.sideAB.tiltProperty.value;
-    this.sideBCTilt = shapeModel.sideBC.tiltProperty.value;
-    this.sideCDTilt = shapeModel.sideCD.tiltProperty.value;
-    this.sideDATilt = shapeModel.sideDA.tiltProperty.value;
-
     this.isParallelogram = shapeModel.isParallelogramProperty.value;
     this.sideABsideCDParallel = shapeModel.sideABSideCDParallelSideChecker.areSidesParallel();
     this.sideBCsideDAParallel = shapeModel.sideBCSideDAParallelSideChecker.areSidesParallel();

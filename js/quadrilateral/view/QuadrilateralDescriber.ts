@@ -134,10 +134,6 @@ class QuadrilateralDescriber {
   private readonly shapeNameVisibleProperty: TReadOnlyProperty<boolean>;
   private readonly markersVisibleProperty: TReadOnlyProperty<boolean>;
 
-  // The tolerance used to determine if a tilt has changed enough to describe it.
-  public readonly tiltDifferenceToleranceInterval: number;
-  public readonly lengthDifferenceToleranceInterval: number;
-
   public readonly sideABDescriber: SideDescriber;
   public readonly sideBCDescriber: SideDescriber;
   public readonly sideCDDescriber: SideDescriber;
@@ -153,11 +149,6 @@ class QuadrilateralDescriber {
     this.shapeModel = shapeModel;
     this.shapeNameVisibleProperty = shapeNameVisibleProperty;
     this.markersVisibleProperty = markersVisibleProperty;
-
-    // TODO: Do we need a query parameter for this?
-    // TODO: CAn tilt be removed?
-    this.tiltDifferenceToleranceInterval = 0.2;
-    this.lengthDifferenceToleranceInterval = 0.05;
 
     this.sideABDescriber = new SideDescriber( shapeModel.sideAB, shapeModel, markersVisibleProperty, modelViewTransform );
     this.sideBCDescriber = new SideDescriber( shapeModel.sideBC, shapeModel, markersVisibleProperty, modelViewTransform );

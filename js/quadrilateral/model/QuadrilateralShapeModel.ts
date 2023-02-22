@@ -179,21 +179,10 @@ class QuadrilateralShapeModel {
       [ this.vertexD, [ this.vertexA, this.vertexC ] ]
     ] );
 
-    this.sideAB = new Side( this.vertexA, this.vertexB, options.tandem.createTandem( 'sideAB' ), {
-      offsetVectorForTiltCalculation: new Vector2( 0, 1 ),
-      validateShape: options.validateShape
-    } );
-    this.sideBC = new Side( this.vertexB, this.vertexC, options.tandem.createTandem( 'sideBC' ), {
-      validateShape: options.validateShape
-    } );
-    this.sideCD = new Side( this.vertexC, this.vertexD, options.tandem.createTandem( 'sideCD' ), {
-      offsetVectorForTiltCalculation: new Vector2( 0, -1 ),
-      validateShape: options.validateShape
-    } );
-    this.sideDA = new Side( this.vertexD, this.vertexA, options.tandem.createTandem( 'sideDA' ), {
-      offsetVectorForTiltCalculation: new Vector2( -1, 0 ),
-      validateShape: options.validateShape
-    } );
+    this.sideAB = new Side( this.vertexA, this.vertexB, options.tandem.createTandem( 'sideAB' ) );
+    this.sideBC = new Side( this.vertexB, this.vertexC, options.tandem.createTandem( 'sideBC' ) );
+    this.sideCD = new Side( this.vertexC, this.vertexD, options.tandem.createTandem( 'sideCD' ) );
+    this.sideDA = new Side( this.vertexD, this.vertexA, options.tandem.createTandem( 'sideDA' ) );
 
     this.sides = [ this.sideAB, this.sideBC, this.sideCD, this.sideDA ];
 
