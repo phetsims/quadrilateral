@@ -37,7 +37,7 @@ class Side {
   // various calculations.
   public readonly sideLabel: SideLabel;
 
-  // (Voicing) Indicates that the Vertex has received some input so it is time to trigger a new Voicing response
+  // (Voicing) Indicates that the Side has received some input and it is time to trigger a new Voicing response
   // the next time Properties are updated in QuadrilateralShapeModel.
   public voicingObjectResponseDirty = false;
 
