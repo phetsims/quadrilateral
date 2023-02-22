@@ -1,7 +1,7 @@
 // Copyright 2021-2023, University of Colorado Boulder
 
 /**
- * A model component for a Vertex of the Quadrilateral.
+ * Models a vertex of the quadrilateral.
  *
  * @author Jesse Greenberg
  */
