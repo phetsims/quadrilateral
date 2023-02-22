@@ -142,17 +142,6 @@ class Vertex {
     this.tandem = tandem;
   }
 
-  public getBoundsFromPoint( position: Vector2 ): Bounds2 {
-    return new Bounds2( position.x - HALF_WIDTH, position.y - HALF_HEIGHT, position.x + HALF_WIDTH, position.y + HALF_HEIGHT );
-  }
-
-  /**
-   * Returns true when the provided bounds overlap the modelled bounds of this Vertex.
-   */
-  public boundsOverlapsVertex( bounds: Bounds2 ): boolean {
-    return bounds.intersectsBounds( this.modelBoundsProperty.value );
-  }
-
   /**
    * Returns true if this Vertex intersects another.
    */
