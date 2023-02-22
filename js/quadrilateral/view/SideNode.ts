@@ -45,7 +45,7 @@ type SideNodeOptions = SelfOptions & ParentOptions;
 class SideNode extends Voicing( Path ) {
 
   // A reference to the model component.
-  private side: Side;
+  public readonly side: Side;
 
   // A reference to the equivalent side with the two relevant vertices in the scratch model.
   private scratchSide: Side;
@@ -328,11 +328,6 @@ class SideNode extends Voicing( Path ) {
       blur: () => {
         side.isPressedProperty.value = false;
       }
-    } );
-
-    // Sides may become non-interactive and not movable with user input.
-    side.interactiveProperty.link( interactive => {
-      this.inputEnabled = interactive;
     } );
 
     // sound - the grab sound is played on press but there is no release sound for this component since there is

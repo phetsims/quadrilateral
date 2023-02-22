@@ -20,6 +20,7 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 
 // constants
 const cornerAString = QuadrilateralStrings.a11y.cornerA;
@@ -214,6 +215,10 @@ class QuadrilateralNode extends Voicing( Node ) {
       }
     } );
 
+    // make adjacent sides non-interactive when a Side is pressed to avoid buggy multitouch cases
+    this.makeAdjacentSidesNonInteractiveWhenPressed( sideABNode, sideCDNode, sideDANode, sideBCNode );
+    this.makeAdjacentSidesNonInteractiveWhenPressed( sideDANode, sideBCNode, sideABNode, sideCDNode );
+
     //---------------------------------------------------------------------------------------------------------------
     // traversal order - requested in https://github.com/phetsims/quadrilateral/issues/289.
     //---------------------------------------------------------------------------------------------------------------
@@ -243,6 +248,20 @@ class QuadrilateralNode extends Voicing( Node ) {
     if ( previousActiveFill !== this.activeFill ) {
       this.updateFills();
     }
+  }
+
+  /**
+   * When a side becomes pressed, its adjacent sides become non-interactive to prevent buggy multitouch interaction
+   * cases.
+   */
+  private makeAdjacentSidesNonInteractiveWhenPressed( firstOppositeSideNode: SideNode, secondOppositeSideNode: SideNode, firstAdjacentSideNode: SideNode, secondAdjacentSideNode: SideNode ): void {
+    const firstOppositeSide = firstOppositeSideNode.side;
+    const secondOppositeSide = secondOppositeSideNode.side;
+    Multilink.multilink( [ firstOppositeSide.isPressedProperty, secondOppositeSide.isPressedProperty ], ( firstOppositeSidePressed, secondOppositeSidePressed ) => {
+      const interactive = !firstOppositeSidePressed && !secondOppositeSidePressed;
+      firstAdjacentSideNode.inputEnabled = interactive;
+      secondAdjacentSideNode.inputEnabled = interactive;
+    } );
   }
 
   private updateFills(): void {

@@ -292,11 +292,6 @@ class QuadrilateralShapeModel {
       }
     );
 
-    // make adjacent sides non-interactive when a Side is pressed to avoid buggy multitouch cases
-    // TODO: Move to the view?
-    this.makeAdjacentSidesNonInteractiveWhenPressed( this.sideAB, this.sideCD, this.sideDA, this.sideBC );
-    this.makeAdjacentSidesNonInteractiveWhenPressed( this.sideDA, this.sideBC, this.sideAB, this.sideCD );
-
     this.vertices.forEach( vertex => {
       vertex.modelBoundsProperty.link( vertexBounds => {
         vertex.topConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.maxY, this.modelBounds.maxY, 0.01 );
@@ -304,18 +299,6 @@ class QuadrilateralShapeModel {
         vertex.bottomConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.minY, this.modelBounds.minY, 0.01 );
         vertex.leftConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.minX, this.modelBounds.minX, 0.01 );
       } );
-    } );
-  }
-
-  /**
-   * When a side becomes pressed, its adjacent sides become non-interactive so that input to both do not cause jitter.
-   * Prevents buggy multitouch cases.
-   */
-  private makeAdjacentSidesNonInteractiveWhenPressed( firstOppositeSide: Side, secondOppositeSide: Side, firstAdjacentSide: Side, secondAdjacentSide: Side ): void {
-    Multilink.multilink( [ firstOppositeSide.isPressedProperty, secondOppositeSide.isPressedProperty ], ( firstOppositeSidePressed, secondOppositeSidePressed ) => {
-      const interactive = !firstOppositeSidePressed && !secondOppositeSidePressed;
-      firstAdjacentSide.interactiveProperty.value = interactive;
-      secondAdjacentSide.interactiveProperty.value = interactive;
     } );
   }
 

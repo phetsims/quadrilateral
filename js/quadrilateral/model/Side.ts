@@ -49,9 +49,6 @@ class Side {
   // True when this Side is pressed and being interacted with. For now this is useful for debugging.
   public readonly isPressedProperty: BooleanProperty;
 
-  // Can this side be interacted with? When not interactive, the Side cannot be moved with user input.
-  public readonly interactiveProperty = new BooleanProperty( true );
-
   // Allows us to label this Side so we know which one we are working with when that is important for
   // various calculations.
   public readonly sideLabel: SideLabel;
