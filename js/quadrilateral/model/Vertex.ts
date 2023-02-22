@@ -38,7 +38,7 @@ class Vertex {
 
   // The Shape in model coordinates that defines where this Vertex can move. It can never
   // go outside this area. The dragAreaProperty is determined by other vertices of the quadrilateral
-  // and is calculated such that the quadrilateral can never become complex or concave. It is null until
+  // and constraints movement so the quadrilateral can never become crossed or "complex". It is null until
   // the model bounds are defined and this Vertex is connected to others to form the quadrilateral shape.
   public readonly dragAreaProperty: Property<null | Shape>;
 
@@ -50,18 +50,11 @@ class Vertex {
   public readonly modelBoundsProperty: TReadOnlyProperty<Bounds2>;
 
   // Referenced so that we can pass the tandem to Properties as they are dynamically created in the methods below.
-  private tandem: Tandem;
+  private readonly tandem: Tandem;
 
-  // Property that controls how many values to include in the "smoothing" of positions. See smoothPosition()
-  private readonly smoothingLengthProperty: TReadOnlyProperty<number>;
-
-  // Indicates that the Vertex has received some input and it is time to trigger a new Voicing Object Response
+  // (Voicing) Indicates that the Vertex has received some input so it is time to trigger a new Voicing response
   // the next time Properties are updated in QuadrilateralShapeModel.
   public voicingObjectResponseDirty = false;
-
-  // Property indicating whether the movement of the Vertex was blocked by being constrained in the
-  // model bounds
-  public readonly movementBlockedByBoundsProperty = new BooleanProperty( false );
 
   // Properties tracking when a Vertex becomes blocked by ony of the individual sides of model bounds.
   // So that we can trigger some feedback as a Vertex is blocked by new edges of bounds.
@@ -75,7 +68,11 @@ class Vertex {
   // resulted in a crossed/overlapping shape.
   public readonly movementBlockedByShapeProperty = new BooleanProperty( false );
 
-  // A reference to vertices connected to this vertex for the purposes of calculating the angle at this vertex.
+  // Property indicating whether the movement of the Vertex was blocked by being constrained in the
+  // model bounds
+  public readonly movementBlockedByBoundsProperty = new BooleanProperty( false );
+
+  // A reference to vertices connected to this vertex for so we can calculate the angle at this vertex.
   // The orientation of vertex1 and vertex2 for angle calculations are as shown in the following diagram:
   //        thisVertex
   //          /       \
@@ -85,12 +82,14 @@ class Vertex {
   private vertex1: Vertex | null;
   private vertex2: Vertex | null;
 
-  // The collection of SMOOTHING_LENGTH number of positions
+  // Property that controls how many values to include in the "smoothing" of potential positions when being
+  // controlled by a prototype tangible. See smoothPosition().
+  private readonly smoothingLengthProperty: TReadOnlyProperty<number>;
+
+  // The collection of SMOOTHING_LENGTH number of positions for prototype tangible control. See smoothPosition().
   private readonly positions: Vector2[] = [];
 
-  // in model coordinates, the bounds of the vertex - necessary because we need to calculate vertex/vertex and
-  // vertex/side collisions
-  public static readonly VERTEX_BOUNDS = VERTEX_BOUNDS;
+  // in model coordinates, the width of the Vertex
   public static readonly VERTEX_WIDTH = VERTEX_BOUNDS.width;
 
   /**
