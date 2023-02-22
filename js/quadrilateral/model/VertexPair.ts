@@ -27,8 +27,11 @@ class VertexPair {
            ( this.vertex2 === otherPair.vertex1 && this.vertex1 === otherPair.vertex2 );
   }
 
-  public includesVertex( side: Vertex ): boolean {
-    return this.vertex1 === side || this.vertex2 === side;
+  /**
+   * Returns true if this VertexPair includes the provided Vertex.
+   */
+  public includesVertex( vertex: Vertex ): boolean {
+    return this.vertex1 === vertex || this.vertex2 === vertex;
   }
 }
 
