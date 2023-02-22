@@ -167,9 +167,21 @@ class Vertex {
   }
 
   /**
-   * Update the angle at this vertex, when it is time. It is unfortunate that it is up to the client to call this,
-   * but we need to be sure that angles are up-to-date ONLY after all vertex positions have been updated. See
-   * QuadrilateralShapeModel.updateOrderDependentProperties.
+   * Update the angle at this vertex. Uses atan2 to get the angle at this vertex counter-clockwise
+   * between 0 and 2 * Math.PI. See
+   * https://math.stackexchange.com/questions/878785/how-to-find-an-angle-in-range0-360-between-2-vectors
+   *
+   * Assumes the following arrangement of vertices:
+   *
+   *        thisVertex
+   *          /       \
+   *   sideA /         \ sideB
+   *        /           \
+   * vertex1 --------- vertex2
+   *
+   * This should only be used after all vertex positions have been updated to make sure that the quadrilateral does
+   * not appear to exist in incorrect states as positions are updated in the natural listener order. See
+   * QuadrilateralShapeModel.updateOrderDependentProperties for more information.
    */
   public updateAngle(): void {
     assert && assert( this.vertex1 && this.vertex2, 'Need connected vertices to determine an angle' );
@@ -192,16 +204,6 @@ class Vertex {
 
   /**
    * Connect this vertex to two others to form an angle and sides of the quadrilateral.
-   * Uses atan2 to get the angle at this vertex counter-clockwise between 0 and 2 * Math.PI. See
-   * https://math.stackexchange.com/questions/878785/how-to-find-an-angle-in-range0-360-between-2-vectors
-   *
-   * Assumes the following arrangement of vertices:
-   *
-   *        thisVertex
-   *          /       \
-   *   sideA /         \ sideB
-   *        /           \
-   * vertex1 --------- vertex2
    */
   public connectToOthers( vertex1: Vertex, vertex2: Vertex ): void {
     this.vertex1 = vertex1;
@@ -210,7 +212,7 @@ class Vertex {
 
   /**
    * "Smooth" the provided position for the vertex by saving it in a collection of positions of max length
-   * and returning the average position.
+   * and returning the average position. Only used for prototype tangible connection.
    */
   public smoothPosition( position: Vector2 ): Vector2 {
     this.positions.push( position );
