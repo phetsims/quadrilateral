@@ -78,12 +78,6 @@ class QuadrilateralTangibleController {
 
     const shapeModel = this.shapeModel;
 
-    // this function cannot be called until the bounds of movement for each vertex has been established
-    assert && assert( shapeModel.vertexA.dragBoundsProperty.value );
-    assert && assert( shapeModel.vertexB.dragBoundsProperty.value );
-    assert && assert( shapeModel.vertexC.dragBoundsProperty.value );
-    assert && assert( shapeModel.vertexD.dragBoundsProperty.value );
-
     const tangibleConnectionModel = this.tangibleConnectionModel;
 
     // you must calibrate before setting positions from a physical device

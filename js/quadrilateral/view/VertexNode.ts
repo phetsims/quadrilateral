@@ -135,9 +135,6 @@ class VertexNode extends Voicing( Circle ) {
         this.updateBlockedState( !isPositionAllowed, isAgainstBounds );
       },
 
-      // velocity defined in view coordinates per second, assuming 60 fps
-      dragBoundsProperty: vertex.dragBoundsProperty,
-
       moveOnHoldDelay: 750,
       moveOnHoldInterval: 50,
 

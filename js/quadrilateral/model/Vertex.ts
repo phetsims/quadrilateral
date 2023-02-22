@@ -34,10 +34,6 @@ class Vertex {
   public readonly angleProperty: Property<number | null>;
   public readonly vertexLabel: VertexLabel;
 
-  // The bounds in model coordinates that define where this vertex can move.
-  // TODO: This is being replaced by dragAreaProperty, remove.
-  public readonly dragBoundsProperty: Property<null | Bounds2>;
-
   // The Shape in model coordinates that defines where this Vertex can move. It can never
   // go outside this area. The dragAreaProperty is determined by other vertices of the quadrilateral
   // and is calculated such that the quadrilateral can never become complex or concave. It is null until
@@ -119,7 +115,6 @@ class Vertex {
     this.vertex1 = null;
     this.vertex2 = null;
 
-    this.dragBoundsProperty = new Property<Bounds2 | null>( null );
     this.dragAreaProperty = new Property<Shape | null>( null );
 
     this.modelBoundsProperty = new DerivedProperty( [ this.positionProperty ], position => {
