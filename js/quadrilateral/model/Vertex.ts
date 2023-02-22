@@ -27,29 +27,29 @@ const HALF_HEIGHT = VERTEX_BOUNDS.height / 2;
 class Vertex {
 
   // The position of the vertex in model coordinates.
-  public positionProperty: Property<Vector2>;
+  public readonly positionProperty: Property<Vector2>;
 
   // The angle at this vertex of the quadrilateral, null until this vertex is connected to two others because we
   // need three points to form the angle.
-  public angleProperty: Property<number | null>;
+  public readonly angleProperty: Property<number | null>;
   public readonly vertexLabel: VertexLabel;
 
   // The bounds in model coordinates that define where this vertex can move.
   // TODO: This is being replaced by dragAreaProperty, remove.
-  public dragBoundsProperty: Property<null | Bounds2>;
+  public readonly dragBoundsProperty: Property<null | Bounds2>;
 
   // The Shape in model coordinates that defines where this Vertex can move. It can never
   // go outside this area. The dragAreaProperty is determined by other vertices of the quadrilateral
   // and is calculated such that the quadrilateral can never become complex or concave. It is null until
   // the model bounds are defined and this Vertex is connected to others to form the quadrilateral shape.
-  public dragAreaProperty: Property<null | Shape>;
+  public readonly dragAreaProperty: Property<null | Shape>;
 
   // True when this Vertex is "pressed" during user interaction.
-  public isPressedProperty: Property<boolean>;
+  public readonly isPressedProperty: Property<boolean>;
 
   // The bounds in model coordinates of this vertex, with dimensions VERTEX_BOUNDS, centered at the value of the
   // positionProperty.
-  public modelBoundsProperty: TReadOnlyProperty<Bounds2>;
+  public readonly modelBoundsProperty: TReadOnlyProperty<Bounds2>;
 
   // Referenced so that we can pass the tandem to Properties as they are dynamically created in the methods below.
   private tandem: Tandem;
@@ -63,22 +63,23 @@ class Vertex {
 
   // Property indicating whether the movement of the Vertex was blocked by being constrained in the
   // model bounds
-  public movementBlockedByBoundsProperty = new BooleanProperty( false );
+  public readonly movementBlockedByBoundsProperty = new BooleanProperty( false );
 
   // Properties tracking when a Vertex becomes blocked by ony of the individual sides of model bounds.
   // So that we can trigger some feedback as a Vertex is blocked by new edges of bounds.
-  public leftConstrainedProperty = new BooleanProperty( false );
-  public rightConstrainedProperty = new BooleanProperty( false );
-  public topConstrainedProperty = new BooleanProperty( false );
-  public bottomConstrainedProperty = new BooleanProperty( false );
-  public numberOfConstrainingEdgesProperty: TReadOnlyProperty<number>;
+  public readonly leftConstrainedProperty = new BooleanProperty( false );
+  public readonly rightConstrainedProperty = new BooleanProperty( false );
+  public readonly topConstrainedProperty = new BooleanProperty( false );
+  public readonly bottomConstrainedProperty = new BooleanProperty( false );
+  public readonly numberOfConstrainingEdgesProperty: TReadOnlyProperty<number>;
 
   // Property indicating whether the movement of the Vertex was blocked because placement would have
   // resulted in a crossed/overlapping shape.
-  public movementBlockedByShapeProperty = new BooleanProperty( false );
+  public readonly movementBlockedByShapeProperty = new BooleanProperty( false );
 
   // Additional Property indicating movement was blocked for either of the above reasons.
-  public movementBlockedProperty = DerivedProperty.or( [ this.movementBlockedByBoundsProperty, this.movementBlockedByShapeProperty ] );
+  // TODO: Remove?
+  public readonly movementBlockedProperty = DerivedProperty.or( [ this.movementBlockedByBoundsProperty, this.movementBlockedByShapeProperty ] );
 
   // A reference to vertices connected to this vertex for the purposes of calculating the angle at this vertex.
   // The orientation of vertex1 and vertex2 for angle calculations are as shown in the following diagram:
