@@ -32,6 +32,8 @@ class Vertex {
   // The angle at this vertex of the quadrilateral, null until this vertex is connected to two others because we
   // need three points to form the angle.
   public readonly angleProperty: Property<number | null>;
+
+  // Identification of this Vertex within the QuadrilateralShape.
   public readonly vertexLabel: VertexLabel;
 
   // The Shape in model coordinates that defines where this Vertex can move. It can never
@@ -95,7 +97,7 @@ class Vertex {
    * @param initialPosition - The initial position for the Vertex in model coordinates.
    * @param vertexLabel - A label tagging the vertex, so we can look up the equivalent vertex on another shape model
    * @param smoothingLengthProperty - Controlling how many values to use in the position smoothing when connected to
-   *                                  a tangible device.
+   *                                  a tangible device (prototype).
    * @param tandem
    */
   public constructor( initialPosition: Vector2, vertexLabel: VertexLabel, smoothingLengthProperty: TReadOnlyProperty<number>, tandem: Tandem ) {
