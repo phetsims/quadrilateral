@@ -1,6 +1,8 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
+ * It is useful to know the identity of a particular Vertex, so a VertexLabel can be assigned to a particular Vertex.
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
