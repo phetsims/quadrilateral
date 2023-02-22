@@ -119,8 +119,6 @@ class Vertex {
     this.dragAreaProperty = new Property<Shape | null>( null );
 
     this.modelBoundsProperty = new DerivedProperty( [ this.positionProperty ], position => {
-
-      // TODO: possibly reduce allocations?
       return new Bounds2( position.x - HALF_WIDTH, position.y - HALF_HEIGHT, position.x + HALF_WIDTH, position.y + HALF_HEIGHT );
     } );
 
