@@ -76,8 +76,6 @@ class QuadrilateralTangibleController {
       return;
     }
 
-    const shapeModel = this.shapeModel;
-
     const tangibleConnectionModel = this.tangibleConnectionModel;
 
     // you must calibrate before setting positions from a physical device
