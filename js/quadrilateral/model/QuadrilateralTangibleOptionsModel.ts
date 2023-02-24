@@ -1,7 +1,9 @@
 // Copyright 2023, University of Colorado Boulder
 
 /**
- * TODO: Documentation
+ * Model component for options related to control from the tangible. These Properties are controlled by UI components
+ * in the Preferences dialog.
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
