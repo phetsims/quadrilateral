@@ -17,7 +17,6 @@ import { Line } from '../../../../scenery/js/imports.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import SideLabel from './SideLabel.js';
-import VertexLabel from './VertexLabel.js';
 import QuadrilateralMovable from './QuadrilateralMovable.js';
 
 class Side extends QuadrilateralMovable {
@@ -27,7 +26,7 @@ class Side extends QuadrilateralMovable {
   public readonly vertex2: Vertex;
 
   // Has this side been connected to another to form a shape?
-  private isConnected: boolean;
+  private isConnected = false;
 
   public readonly lengthProperty: NumberProperty;
 
@@ -52,16 +51,15 @@ class Side extends QuadrilateralMovable {
   /**
    * @param vertex1 - The first vertex of this Side.
    * @param vertex2 - The second vertex of this Side.
+   * @param sideLabel - To identify this Side within the shape.
    * @param tandem
    */
-  public constructor( vertex1: Vertex, vertex2: Vertex, tandem: Tandem ) {
+  public constructor( vertex1: Vertex, vertex2: Vertex, sideLabel: SideLabel, tandem: Tandem ) {
     super();
 
     this.vertex1 = vertex1;
     this.vertex2 = vertex2;
-    this.isConnected = false;
-
-    this.sideLabel = this.determineSideLabel();
+    this.sideLabel = sideLabel;
 
     this.isPressedProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'isPressedProperty' )
@@ -159,17 +157,6 @@ class Side extends QuadrilateralMovable {
 
     this.isConnected = true;
     this.vertex1.connectToOthers( otherSide.vertex1, this.vertex2 );
-  }
-
-  /**
-   * From the vertices of this side, apply the correct SideLabel. The vertices have enough info to determine
-   * this, so it shouldn't be necessary or possible for the client to provide this as a constructor arg.
-   */
-  private determineSideLabel(): SideLabel {
-    return this.vertex1.vertexLabel === VertexLabel.VERTEX_A ? SideLabel.SIDE_AB :
-           this.vertex1.vertexLabel === VertexLabel.VERTEX_B ? SideLabel.SIDE_BC :
-           this.vertex1.vertexLabel === VertexLabel.VERTEX_C ? SideLabel.SIDE_CD :
-           SideLabel.SIDE_DA;
   }
 }
 

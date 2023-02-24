@@ -34,6 +34,7 @@ import VertexPair from './VertexPair.js';
 import QuadrilateralUtils from './QuadrilateralUtils.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
+import SideLabel from './SideLabel.js';
 
 // Used when verifying that Vertex positions are valid before setting to the model.
 export type VertexWithProposedPosition = {
@@ -179,11 +180,10 @@ class QuadrilateralShapeModel {
       [ this.vertexD, [ this.vertexA, this.vertexC ] ]
     ] );
 
-    this.sideAB = new Side( this.vertexA, this.vertexB, options.tandem.createTandem( 'sideAB' ) );
-    this.sideBC = new Side( this.vertexB, this.vertexC, options.tandem.createTandem( 'sideBC' ) );
-    this.sideCD = new Side( this.vertexC, this.vertexD, options.tandem.createTandem( 'sideCD' ) );
-    this.sideDA = new Side( this.vertexD, this.vertexA, options.tandem.createTandem( 'sideDA' ) );
-
+    this.sideAB = new Side( this.vertexA, this.vertexB, SideLabel.SIDE_AB, options.tandem.createTandem( 'sideAB' ) );
+    this.sideBC = new Side( this.vertexB, this.vertexC, SideLabel.SIDE_BC, options.tandem.createTandem( 'sideBC' ) );
+    this.sideCD = new Side( this.vertexC, this.vertexD, SideLabel.SIDE_CD, options.tandem.createTandem( 'sideCD' ) );
+    this.sideDA = new Side( this.vertexD, this.vertexA, SideLabel.SIDE_DA, options.tandem.createTandem( 'sideDA' ) );
     this.sides = [ this.sideAB, this.sideBC, this.sideCD, this.sideDA ];
 
     this.oppositeSideMap = new Map( [
