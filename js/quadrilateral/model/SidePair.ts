@@ -3,6 +3,7 @@
 /**
  * A pair of sides that have some relationship. For example, they could be adjacent or opposite to each other
  * when assembled in the quadrilateral shape.
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 

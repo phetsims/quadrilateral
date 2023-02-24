@@ -1,7 +1,7 @@
 // Copyright 2021-2023, University of Colorado Boulder
 
 /**
- * The model for a side of the quadrilateral, between two Vertices.
+ * The model for a side of the quadrilateral. A Side is defined by the line between two Vertices.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
