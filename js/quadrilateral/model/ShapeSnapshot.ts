@@ -29,7 +29,6 @@ class ShapeSnapshot {
   public readonly vertexCAngle: number;
   public readonly vertexDAngle: number;
 
-  // TODO: Rename to letter names
   public readonly sideABLength: number;
   public readonly sideBCLength: number;
   public readonly sideDALength: number;
