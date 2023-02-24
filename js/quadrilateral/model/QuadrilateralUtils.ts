@@ -3,7 +3,7 @@
 /**
  * Model utility functions for the quadrilateral sim. These functions assist with various shape and geometry
  * calculations.
- * 
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
@@ -24,7 +24,7 @@ export type LineIntersectionPair = {
   intersectionPoint: Vector2;
 };
 
-const QuadrilateralUtils = {
+class QuadrilateralUtils {
 
   /**
    * A workaround for https://github.com/phetsims/kite/issues/94. Shape.containsPoint implementation does not work
@@ -34,7 +34,7 @@ const QuadrilateralUtils = {
    * This solution has been proposed in https://github.com/phetsims/kite/issues/94. If it is absorbed or fixed a
    * different way in kite, this function could be removed and replaced with shape.containsPoint.
    */
-  customShapeContainsPoint( shape: Shape, point: Vector2 ): boolean {
+  public static customShapeContainsPoint( shape: Shape, point: Vector2 ): boolean {
     const rayDirectionVector = new Vector2( 1, 0 ); // unit x Vector, but we may mutate it
     let ray = new Ray2( point, rayDirectionVector );
 
@@ -66,38 +66,38 @@ const QuadrilateralUtils = {
     }
 
     return shape.windingIntersection( ray ) !== 0;
-  },
+  }
 
   /**
    * Returns true if the provided point lies on the ray.
    */
-  isPointOnRay( ray: Ray2, point: Vector2 ): boolean {
+  private static isPointOnRay( ray: Ray2, point: Vector2 ): boolean {
     const directionToPoint = point.minus( ray.position ).normalized();
     return ray.direction.equalsEpsilon( directionToPoint, 1e-2 );
-  },
+  }
 
   /**
    * Returns the start or end point of a Line if the ray goes through it. Assists with intersection detection since
-   * Kite functions do not have a defined intersection if a ray goes through an endpoint of a line or segment.
+   * Kite functions do not have a defined intersection if a ray goes exactly through an endpoint of a line or segment.
    */
-  getLinePositionAlongRay( ray: Ray2, line: Line ): Vector2 | null {
+  private static getLinePositionAlongRay( ray: Ray2, line: Line ): Vector2 | null {
     return QuadrilateralUtils.isPointOnRay( ray, line.start ) ? line.start :
            QuadrilateralUtils.isPointOnRay( ray, line.end ) ? line.end :
            null;
-  },
+  }
 
   /**
    * Returns one of the corner points of the Bounds2 if the provided ray goes exactly through that point. Works
    * around a limitation of Shape.intersects( Ray2 ) where if the ray intersects with a start/end point of a shape
    * segment, the intersection is not defined.
    */
-  getBoundsCornerPositionAlongRay( ray: Ray2, bounds: Bounds2 ): Vector2 | null {
+  public static getBoundsCornerPositionAlongRay( ray: Ray2, bounds: Bounds2 ): Vector2 | null {
     return QuadrilateralUtils.isPointOnRay( ray, bounds.leftTop ) ? bounds.leftTop :
            QuadrilateralUtils.isPointOnRay( ray, bounds.rightTop ) ? bounds.rightTop :
            QuadrilateralUtils.isPointOnRay( ray, bounds.rightBottom ) ? bounds.rightBottom :
            QuadrilateralUtils.isPointOnRay( ray, bounds.leftBottom ) ? bounds.leftBottom :
            null;
-  },
+  }
 
   /**
    * To create a bounding shape for a Vertex, walk along the boundary defined by directedLines until we traverse
@@ -116,7 +116,7 @@ const QuadrilateralUtils = {
    *
    * This function will return an array of points [A, B, C, D] to create a shape between the intersections on the lines.
    */
-  getPointsAlongBoundary( directedLines: Line[], firstLineIntersectionPair: LineIntersectionPair, secondLineIntersectionPair: LineIntersectionPair ): Vector2[] {
+  private static getPointsAlongBoundary( directedLines: Line[], firstLineIntersectionPair: LineIntersectionPair, secondLineIntersectionPair: LineIntersectionPair ): Vector2[] {
     const points = [];
 
     // walk to the first ray intersection with the bounds
@@ -145,18 +145,17 @@ const QuadrilateralUtils = {
     points.push( secondLineIntersectionPair.intersectionPoint );
 
     return points;
-  },
+  }
 
   /**
    * Returns the centroid of a shape from an array of potential Vertex positions.
    */
-  getCentroidFromPositions( positions: Vector2[] ): Vector2 {
+  public static getCentroidFromPositions( positions: Vector2[] ): Vector2 {
     const centerX = _.sumBy( positions, position => position.x ) / positions.length;
     const centerY = _.sumBy( positions, position => position.y ) / positions.length;
 
     return new Vector2( centerX, centerY );
-  },
-
+  }
 
   /**
    * Create a constraining area for a Vertex to move in the play area that will ensure that it cannot overlap
@@ -173,7 +172,7 @@ const QuadrilateralUtils = {
    * @param vertex4 - the next vertex from vertexC, moving clockwise
    * @param validateShape - Ensure that vertex positions are valid?
    */
-  createVertexArea( modelBounds: Bounds2, vertex1: Vertex, vertex2: Vertex, vertex3: Vertex, vertex4: Vertex, validateShape: boolean ): Shape {
+  public static createVertexArea( modelBounds: Bounds2, vertex1: Vertex, vertex2: Vertex, vertex3: Vertex, vertex4: Vertex, validateShape: boolean ): Shape {
 
     const allVerticesInBounds = _.every( [ vertex1, vertex2, vertex3, vertex4 ], vertex => modelBounds.containsPoint( vertex.positionProperty.value ) );
     const vertexPositionsUnique = _.uniqBy( [ vertex1, vertex2, vertex3, vertex4 ].map( vertex => vertex.positionProperty.value.toString() ), positionString => {
@@ -314,7 +313,7 @@ const QuadrilateralUtils = {
 
     return shape;
   }
-};
+}
 
 quadrilateral.register( 'QuadrilateralUtils', QuadrilateralUtils );
 export default QuadrilateralUtils;
