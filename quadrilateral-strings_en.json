@@ -702,7 +702,7 @@
         "value": "far longer than"
       },
       "parallelSideObjectResponsePattern": {
-        "value": "Parallel to and {{oppositeComparison}} opposite side, {{adjacentSideDescription}}"
+        "value": "Parallel and {{oppositeComparison}} opposite side, {{adjacentSideDescription}}"
       },
       "sideObjectResponsePattern": {
         "value": "{{oppositeComparison}} opposite side, {{adjacentSideDescription}}"
