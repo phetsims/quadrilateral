@@ -1,6 +1,9 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
+ * Model utility functions for the quadrilateral sim. These functions assist with various shape and geometry
+ * calculations.
+ * 
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
