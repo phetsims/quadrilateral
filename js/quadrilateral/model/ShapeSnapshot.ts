@@ -96,15 +96,6 @@ class ShapeSnapshot {
   }
 
   /**
-   * Get the distance between two Vertices of this saved snapshot from their VertexLabels.
-   */
-  public getDistanceBetweenVertices( vertex1Label: VertexLabel, vertex2Label: VertexLabel ): number {
-    const p1 = this.getPositionFromVertexLabel( vertex1Label );
-    const p2 = this.getPositionFromVertexLabel( vertex2Label );
-    return p1.distance( p2 );
-  }
-
-  /**
    * Returns the saved vertex positions of a side given the SideLabel. Returns an array with the
    * vertex positions in order like [ side.vertex1, side.vertex2 ].
    */
