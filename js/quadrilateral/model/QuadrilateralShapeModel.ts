@@ -480,7 +480,7 @@ class QuadrilateralShapeModel {
 
     // update lengths
     this.sides.forEach( side => {
-      side.updateLength();
+      side.updateLengthAndShape();
     } );
 
     this.updateParallelSideProperties();

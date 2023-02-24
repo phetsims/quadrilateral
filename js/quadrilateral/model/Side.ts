@@ -6,17 +6,17 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import Vertex from './Vertex.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { Line } from '../../../../scenery/js/imports.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import SideLabel from './SideLabel.js';
 import QuadrilateralMovable from './QuadrilateralMovable.js';
+import Property from '../../../../axon/js/Property.js';
+import TProperty from '../../../../axon/js/TProperty.js';
 
 class Side extends QuadrilateralMovable {
 
@@ -34,7 +34,7 @@ class Side extends QuadrilateralMovable {
   public readonly sideLabel: SideLabel;
 
   // The shape of the side - A Line determined by the distance between the vertices and model width.
-  public readonly shapeProperty: TReadOnlyProperty<Shape>;
+  public readonly shapeProperty: TProperty<Shape>;
 
   // In model coordinates, the length of a side segment in model coordinates. The full side is divided into segments of
   // this length with the final segment length being the remainder.
@@ -66,23 +66,22 @@ class Side extends QuadrilateralMovable {
       tandem: tandem.createTandem( 'lengthProperty' )
     } );
 
-    // TODO: The length doesn't update until updateDeferredProperties, shouldn't that apply to shape as well?
-    this.shapeProperty = new DerivedProperty(
-      [ this.vertex1.positionProperty, this.vertex2.positionProperty ],
-      ( position1, position2 ) => {
-
-        this.scratchLine.setLine( position1.x, position1.y, position2.x, position2.y );
-        return this.scratchLine.getStrokedShape();
-      } );
+    this.shapeProperty = new Property( new Shape() );
   }
 
   /**
-   * Update the length of this Side from vertex positions. It is unfortunate that the client has to call this
-   * to update the length, but we must only update the side after all vertex positions have been set. See
-   * updateOrderDependentProperties for more information.
+   * Update the length and model shape of this Side from vertex positions. This must be calculated in order by the
+   * model, after Vertex positions are changed and before these values are used to calculate other shape attributes.
+   * See QuadrilateralShapeModel.updateOrderDependentProperties for more information.
    */
-  public updateLength(): void {
-    this.lengthProperty.value = Vector2.getDistanceBetweenVectors( this.vertex2.positionProperty.value, this.vertex1.positionProperty.value );
+  public updateLengthAndShape(): void {
+    const vertex1Position = this.vertex1.positionProperty.value;
+    const vertex2Position = this.vertex2.positionProperty.value;
+
+    this.lengthProperty.value = Vector2.getDistanceBetweenVectors( vertex2Position, vertex1Position );
+
+    this.scratchLine.setLine( vertex1Position.x, vertex1Position.y, vertex2Position.x, vertex2Position.y );
+    this.shapeProperty.value = this.scratchLine.getStrokedShape();
   }
 
   /**
