@@ -30,7 +30,7 @@ class ShapeShortcutsHelpSection extends KeyboardHelpSection {
     // command to check current shape with Voicing
     const checkShapeRow = KeyboardHelpSectionRow.labelWithIcon(
       checkShapeWithVoicingString,
-      KeyboardHelpIconFactory.altPlusIcon( new LetterKeyNode( 'C' ) ), {
+      KeyboardHelpIconFactory.altPlusIcon( LetterKeyNode.c() ), {
         labelOptions: {
           lineWrap: QuadrilateralKeyboardHelpContent.LABEL_LINE_WRAP
         },
@@ -47,7 +47,7 @@ class ShapeShortcutsHelpSection extends KeyboardHelpSection {
         [
           TextKeyNode.altOrOption(),
           TextKeyNode.shift(),
-          new LetterKeyNode( 'R' )
+          LetterKeyNode.r()
         ]
       ),
       {
