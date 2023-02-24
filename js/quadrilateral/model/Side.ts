@@ -44,6 +44,11 @@ class Side extends QuadrilateralMovable {
   // sides can never overlap
   public static readonly SIDE_WIDTH = 0.1;
 
+  // Used to calculate the line shape - reused to avoid excessive allocations.
+  private readonly scratchLine = new Line( 0, 0, 0, 0, {
+    lineWidth: Side.SIDE_WIDTH
+  } );
+
   /**
    * @param vertex1 - The first vertex of this Side.
    * @param vertex2 - The second vertex of this Side.
@@ -66,13 +71,8 @@ class Side extends QuadrilateralMovable {
       [ this.vertex1.positionProperty, this.vertex2.positionProperty ],
       ( position1, position2 ) => {
 
-        // TODO: make reusable
-        // TODO: This should be a kite shape, right?
-        const lineShape = new Line( position1.x, position1.y, position2.x, position2.y, {
-          lineWidth: Side.SIDE_WIDTH
-        } );
-
-        return lineShape.getStrokedShape();
+        this.scratchLine.setLine( position1.x, position1.y, position2.x, position2.y );
+        return this.scratchLine.getStrokedShape();
       } );
   }
 
