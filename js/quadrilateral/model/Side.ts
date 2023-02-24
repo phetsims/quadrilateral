@@ -93,23 +93,6 @@ class Side extends QuadrilateralMovable {
   }
 
   /**
-   * Returns the number of segments used for this side. The length is broken up into SIDE_SEGMENT_LENGTH and this
-   * is used for many kinds of views.
-   */
-  public getNumberOfSegments(): number {
-    return Math.floor( this.lengthProperty.value / Side.SIDE_SEGMENT_LENGTH );
-  }
-
-
-  /**
-   * Get the length of the final segment. The length is divided into segments, this is the remainder for the final
-   * segment.
-   */
-  public getFinalSegmentLength(): number {
-    return this.lengthProperty.value % Side.SIDE_SEGMENT_LENGTH;
-  }
-
-  /**
    * Returns true if this Side includes the provided Vertex.
    */
   public includesVertex( vertex: Vertex ): boolean {
@@ -121,21 +104,6 @@ class Side extends QuadrilateralMovable {
    */
   public getMidpoint(): Vector2 {
     return this.vertex2.positionProperty.value.average( this.vertex1.positionProperty.value );
-  }
-
-
-  /**
-   * Returns the lowest vertex between the two Vertices of this side. If the vertices have the same
-   * Y value in the model vertex1 is returned.
-   */
-  public getLowestVertex(): Vertex {
-    return this.vertex1.positionProperty.value.y <= this.vertex2.positionProperty.value.y ?
-           this.vertex1 : this.vertex2;
-  }
-
-  public getHighestVertex(): Vertex {
-    return this.vertex1.positionProperty.value.y >= this.vertex2.positionProperty.value.y ?
-           this.vertex1 : this.vertex2;
   }
 
   /**
