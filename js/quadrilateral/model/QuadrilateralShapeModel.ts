@@ -467,8 +467,9 @@ class QuadrilateralShapeModel {
 
   /**
    * Update Properties that need to be updated only after other model Properties are set. This also controls the order
-   * in which Properties are set, which is very important in this sim. Positions need to update, then angles, then
-   * parallelogram state, and finally shape name.
+   * in which Properties are set, which is very important in this sim. Positions need to update, then angles and
+   * lengths, then Properties tracking pairs of equal lengths and angles, then parallelogram state, and finally shape
+   * name. If shape name or parallelogram state is calculated before shape properties, their values will be incorrect.
    */
   public updateOrderDependentProperties(): void {
 
