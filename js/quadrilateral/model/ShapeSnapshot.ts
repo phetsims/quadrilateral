@@ -125,6 +125,19 @@ class ShapeSnapshot {
              [ this.sideCDLength, this.sideABLength ]; // SIDE_DA
   }
 
+  /**
+   * Returns true if the sides adjacent to the Side labelled by provided SideLabel are parallel in this snapshot.
+   * For example, given the following:
+   *
+   *                sideLabel
+   *               ----------
+   *              |         |
+   * adjacentSide1|         |adjacentSide2
+   *              |         |
+   *              |         |
+   *
+   * Will return true if adjacentSide1 and adjacentSide2 are parallel.
+   */
   public getAdjacentSidesParallelFromSideLabel( label: SideLabel ): boolean {
     return label === SideLabel.SIDE_AB ? this.sideBCsideDAParallel :
            label === SideLabel.SIDE_BC ? this.sideABsideCDParallel :
@@ -133,8 +146,8 @@ class ShapeSnapshot {
   }
 
   /**
-   * Counts the number of sides that have the same length, returning the largest count. If all are the same,
-   * returns 4. Otherwise, three, then two, then zero.
+   * Counts the number of sides in this snapshot that have the same length, returning the largest count. If all are
+   * the same, returns 4. Otherwise, will return 3, then 2, then 0.
    */
   public countNumberOfEqualSides(): number {
     let numberOfEqualSides = 0;
