@@ -517,13 +517,14 @@ class QuadrilateralShapeModel {
 
         const firstAngle = vertexPair.vertex1.angleProperty.value!;
         const secondAngle = vertexPair.vertex2.angleProperty.value!;
-        const currentlyIncludesVertexPair = _.some( currentVertexPairs, currentVertexPair => currentVertexPair.equals( vertexPair ) );
         const areAnglesEqual = this.isInterAngleEqualToOther( firstAngle, secondAngle );
+        const indexOfVertexPair = _.findIndex( currentVertexPairs, currentVertexPair => currentVertexPair.equals( vertexPair ) );
+        const currentlyIncludesVertexPair = indexOfVertexPair > -1;
 
         if ( currentlyIncludesVertexPair && !areAnglesEqual ) {
 
           // the VertexPair needs to be removed because angles are no longer equal
-          currentVertexPairs.splice( currentVertexPairs.indexOf( vertexPair ), 1 );
+          currentVertexPairs.splice( indexOfVertexPair, 1 );
           equalVertexPairsProperty.notifyListenersStatic();
         }
         else if ( !currentlyIncludesVertexPair && areAnglesEqual ) {
@@ -557,13 +558,14 @@ class QuadrilateralShapeModel {
 
         const firstLength = sidePair.side1.lengthProperty.value;
         const secondLength = sidePair.side2.lengthProperty.value;
-        const currentlyIncludesSidePair = _.some( currentSidePairs, currentSidePair => currentSidePair.equals( sidePair ) );
         const areLengthsEqual = this.isInterLengthEqualToOther( firstLength, secondLength );
+        const indexOfSidePair = _.findIndex( currentSidePairs, currentSidePair => currentSidePair.equals( sidePair ) );
+        const currentlyIncludesSidePair = indexOfSidePair > -1;
 
         if ( currentlyIncludesSidePair && !areLengthsEqual ) {
 
           // the VertexPair needs to be removed because angles are no longer equal
-          currentSidePairs.splice( currentSidePairs.indexOf( sidePair ), 1 );
+          currentSidePairs.splice( indexOfSidePair, 1 );
           equalSidePairsProperty.notifyListenersStatic();
         }
         else if ( !currentlyIncludesSidePair && areLengthsEqual ) {
