@@ -28,16 +28,16 @@ class Side extends QuadrilateralMovable {
   // Has this side been connected to another to form a shape?
   private isConnected = false;
 
+  // Length of the side in model coordinates.
   public readonly lengthProperty: NumberProperty;
 
-  // True when this Side is pressed and being interacted with. For now this is useful for debugging.
+  // True when this Side is pressed and being interacted with.
   public readonly isPressedProperty: BooleanProperty;
 
-  // Allows us to label this Side so we know which one we are working with when that is important for
-  // various calculations.
+  // Identifies this side within the quadrilateral shape.
   public readonly sideLabel: SideLabel;
 
-  // The shape of the side, determined by the length and the model width.
+  // The shape of the side - A Line determined by the distance between the vertices and model width.
   public readonly shapeProperty: TReadOnlyProperty<Shape>;
 
   // In model coordinates, the length of a side segment in model coordinates. The full side is divided into segments of
@@ -65,16 +65,17 @@ class Side extends QuadrilateralMovable {
       tandem: tandem.createTandem( 'isPressedProperty' )
     } );
 
-    // The distance between the two vertices, in model space.
     this.lengthProperty = new NumberProperty( 0, {
       tandem: tandem.createTandem( 'lengthProperty' )
     } );
 
+    // TODO: The length doesn't update until updateDeferredProperties, shouldn't that apply to shape as well?
     this.shapeProperty = new DerivedProperty(
       [ this.vertex1.positionProperty, this.vertex2.positionProperty ],
       ( position1, position2 ) => {
 
         // TODO: make reusable
+        // TODO: This should be a kite shape, right?
         const lineShape = new Line( position1.x, position1.y, position2.x, position2.y, {
           lineWidth: Side.SIDE_WIDTH
         } );
