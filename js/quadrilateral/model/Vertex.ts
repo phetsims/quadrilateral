@@ -43,9 +43,6 @@ class Vertex extends QuadrilateralMovable {
   // the model bounds are defined and this Vertex is connected to others to form the quadrilateral shape.
   public readonly dragAreaProperty: Property<null | Shape>;
 
-  // True when this Vertex is "pressed" during user interaction.
-  public readonly isPressedProperty: Property<boolean>;
-
   // The bounds in model coordinates of this vertex, with dimensions VERTEX_BOUNDS, centered at the value of the
   // positionProperty.
   public readonly modelBoundsProperty: TReadOnlyProperty<Bounds2>;
@@ -89,7 +86,7 @@ class Vertex extends QuadrilateralMovable {
    * @param tandem
    */
   public constructor( initialPosition: Vector2, vertexLabel: VertexLabel, smoothingLengthProperty: TReadOnlyProperty<number>, tandem: Tandem ) {
-    super();
+    super( tandem );
 
     this.smoothingLengthProperty = smoothingLengthProperty;
     this.positionProperty = new Vector2Property( initialPosition, {
@@ -111,10 +108,6 @@ class Vertex extends QuadrilateralMovable {
 
     this.modelBoundsProperty = new DerivedProperty( [ this.positionProperty ], position => {
       return new Bounds2( position.x - HALF_WIDTH, position.y - HALF_HEIGHT, position.x + HALF_WIDTH, position.y + HALF_HEIGHT );
-    } );
-
-    this.isPressedProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'isPressedProperty' )
     } );
 
     this.numberOfConstrainingEdgesProperty = new DerivedProperty( [

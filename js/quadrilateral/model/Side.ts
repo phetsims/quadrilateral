@@ -31,9 +31,6 @@ class Side extends QuadrilateralMovable {
   // Length of the side in model coordinates.
   public readonly lengthProperty: NumberProperty;
 
-  // True when this Side is pressed and being interacted with.
-  public readonly isPressedProperty: BooleanProperty;
-
   // Identifies this side within the quadrilateral shape.
   public readonly sideLabel: SideLabel;
 
@@ -55,15 +52,11 @@ class Side extends QuadrilateralMovable {
    * @param tandem
    */
   public constructor( vertex1: Vertex, vertex2: Vertex, sideLabel: SideLabel, tandem: Tandem ) {
-    super();
+    super( tandem );
 
     this.vertex1 = vertex1;
     this.vertex2 = vertex2;
     this.sideLabel = sideLabel;
-
-    this.isPressedProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'isPressedProperty' )
-    } );
 
     this.lengthProperty = new NumberProperty( 0, {
       tandem: tandem.createTandem( 'lengthProperty' )

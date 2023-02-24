@@ -7,9 +7,14 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import Property from '../../../../axon/js/Property.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 
 class QuadrilateralMovable {
+
+  // Indicates that this component is "pressed" for user interaction.
+  public readonly isPressedProperty: Property<boolean>;
 
   // Indicates that movement is blocked by model bounds.
   public readonly movementBlockedByBoundsProperty = new BooleanProperty( false );
@@ -20,6 +25,12 @@ class QuadrilateralMovable {
   // (Voicing) Indicates that the Side has received some input and it is time to trigger a new Voicing response
   // the next time Properties are updated in QuadrilateralShapeModel.
   public voicingObjectResponseDirty = false;
+
+  public constructor( tandem: Tandem ) {
+    this.isPressedProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'isPressedProperty' )
+    } );
+  }
 }
 
 quadrilateral.register( 'QuadrilateralMovable', QuadrilateralMovable );
