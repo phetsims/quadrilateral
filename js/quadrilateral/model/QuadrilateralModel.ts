@@ -185,7 +185,7 @@ class QuadrilateralModel implements TModel {
    */
   public reset(): void {
 
-    // reset is in progress (not not in progress)
+    // reset is in progress (not-not in progress)
     this.resetNotInProgressProperty.value = false;
 
     this.visibilityModel.reset();
