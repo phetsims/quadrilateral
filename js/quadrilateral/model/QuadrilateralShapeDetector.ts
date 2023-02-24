@@ -12,7 +12,7 @@
  * In particular, see https://github.com/phetsims/quadrilateral/issues/188#issuecomment-1226165886 and
  * https://github.com/phetsims/quadrilateral/issues/188#issuecomment-1232237994.
  *
- * Using bit masks for this is inspired by collision filtering in a game engine, see
+ * Using bit masks for this is inspired by collision filtering in games, see
  * http://www.aurelienribon.com/post/2011-07-box2d-tutorial-collision-filtering
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
