@@ -24,7 +24,7 @@ class Side extends QuadrilateralMovable {
   public readonly vertex1: Vertex;
   public readonly vertex2: Vertex;
 
-  // Has this side been connected to another to form a shape?
+  // Indicates that this side has been connected to another to form the shape.
   private isConnected = false;
 
   // Length of the side in model coordinates.
@@ -101,7 +101,7 @@ class Side extends QuadrilateralMovable {
 
   /**
    * Connect this side to another to form a shape. Connects this.vertex1 to otherSide.vertex2, illustrated like this.
-   * Be aware of this as you use this function to build a shape because it will change how angles are calculated.
+   * This sets the relationship between sides and determines how angles are calculated.
    *
    *  otherSide.vertex1---------------otherSide.vertex2
    *                                  thisSide.vertex1
