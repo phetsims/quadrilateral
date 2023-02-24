@@ -69,24 +69,6 @@ class QuadrilateralUtils {
   }
 
   /**
-   * Returns true if the provided point lies on the ray.
-   */
-  private static isPointOnRay( ray: Ray2, point: Vector2 ): boolean {
-    const directionToPoint = point.minus( ray.position ).normalized();
-    return ray.direction.equalsEpsilon( directionToPoint, 1e-2 );
-  }
-
-  /**
-   * Returns the start or end point of a Line if the ray goes through it. Assists with intersection detection since
-   * Kite functions do not have a defined intersection if a ray goes exactly through an endpoint of a line or segment.
-   */
-  private static getLinePositionAlongRay( ray: Ray2, line: Line ): Vector2 | null {
-    return QuadrilateralUtils.isPointOnRay( ray, line.start ) ? line.start :
-           QuadrilateralUtils.isPointOnRay( ray, line.end ) ? line.end :
-           null;
-  }
-
-  /**
    * Returns one of the corner points of the Bounds2 if the provided ray goes exactly through that point. Works
    * around a limitation of Shape.intersects( Ray2 ) where if the ray intersects with a start/end point of a shape
    * segment, the intersection is not defined.
@@ -97,54 +79,6 @@ class QuadrilateralUtils {
            QuadrilateralUtils.isPointOnRay( ray, bounds.rightBottom ) ? bounds.rightBottom :
            QuadrilateralUtils.isPointOnRay( ray, bounds.leftBottom ) ? bounds.leftBottom :
            null;
-  }
-
-  /**
-   * To create a bounding shape for a Vertex, walk along the boundary defined by directedLines until we traverse
-   * between two points along the boundary. The directed lines are ordered and directed in a clockwise motion around
-   * the entire model to assist in the traversal between intersection points. Graphically, what we are accomplishing
-   * is this:
-   *                        - firstLineIntersectionPair.intersection.point (A)
-   *   -------------------A--B
-   *  |                      |
-   *  |                      |
-   *  |                      |
-   *  |                      |
-   *  |                      |
-   *  ----D------------------C
-   *       - secondLineIntersectionPair.intersection.point (D)
-   *
-   * This function will return an array of points [A, B, C, D] to create a shape between the intersections on the lines.
-   */
-  private static getPointsAlongBoundary( directedLines: Line[], firstLineIntersectionPair: LineIntersectionPair, secondLineIntersectionPair: LineIntersectionPair ): Vector2[] {
-    const points = [];
-
-    // walk to the first ray intersection with the bounds
-    points.push( firstLineIntersectionPair.intersectionPoint );
-
-    // a safety net to make sure that we don't get stuck in this while loop
-    let iterations = 0;
-
-    // walk along the bounds, adding corner points until we reach the same line as the secondLineIntersectionPair
-    let nextLine = firstLineIntersectionPair.line;
-    while ( nextLine !== secondLineIntersectionPair.line ) {
-      points.push( nextLine.end );
-
-      let nextIndex = directedLines.indexOf( nextLine ) + 1;
-      nextIndex = nextIndex > ( directedLines.length - 1 ) ? 0 : nextIndex;
-
-      nextLine = directedLines[ nextIndex ];
-      assert && assert( nextLine, 'No more lines in the traversal' );
-
-      iterations++;
-      assert && assert( iterations < 10, 'we should have closed the shape by now! Likely infinite loop' );
-    }
-
-    // we have walked to the same line as the second intersection point, finalize by including the second
-    // intersection point
-    points.push( secondLineIntersectionPair.intersectionPoint );
-
-    return points;
   }
 
   /**
@@ -312,6 +246,72 @@ class QuadrilateralUtils {
     shape.close();
 
     return shape;
+  }
+
+  /**
+   * Returns true if the provided point lies on the ray.
+   */
+  private static isPointOnRay( ray: Ray2, point: Vector2 ): boolean {
+    const directionToPoint = point.minus( ray.position ).normalized();
+    return ray.direction.equalsEpsilon( directionToPoint, 1e-2 );
+  }
+
+  /**
+   * Returns the start or end point of a Line if the ray goes through it. Assists with intersection detection since
+   * Kite functions do not have a defined intersection if a ray goes exactly through an endpoint of a line or segment.
+   */
+  private static getLinePositionAlongRay( ray: Ray2, line: Line ): Vector2 | null {
+    return QuadrilateralUtils.isPointOnRay( ray, line.start ) ? line.start :
+           QuadrilateralUtils.isPointOnRay( ray, line.end ) ? line.end :
+           null;
+  }
+
+  /**
+   * To create a bounding shape for a Vertex, walk along the boundary defined by directedLines until we traverse
+   * between two points along the boundary. The directed lines are ordered and directed in a clockwise motion around
+   * the entire model to assist in the traversal between intersection points. Graphically, what we are accomplishing
+   * is this:
+   *                        - firstLineIntersectionPair.intersection.point (A)
+   *   -------------------A--B
+   *  |                      |
+   *  |                      |
+   *  |                      |
+   *  |                      |
+   *  |                      |
+   *  ----D------------------C
+   *       - secondLineIntersectionPair.intersection.point (D)
+   *
+   * This function will return an array of points [A, B, C, D] to create a shape between the intersections on the lines.
+   */
+  private static getPointsAlongBoundary( directedLines: Line[], firstLineIntersectionPair: LineIntersectionPair, secondLineIntersectionPair: LineIntersectionPair ): Vector2[] {
+    const points = [];
+
+    // walk to the first ray intersection with the bounds
+    points.push( firstLineIntersectionPair.intersectionPoint );
+
+    // a safety net to make sure that we don't get stuck in this while loop
+    let iterations = 0;
+
+    // walk along the bounds, adding corner points until we reach the same line as the secondLineIntersectionPair
+    let nextLine = firstLineIntersectionPair.line;
+    while ( nextLine !== secondLineIntersectionPair.line ) {
+      points.push( nextLine.end );
+
+      let nextIndex = directedLines.indexOf( nextLine ) + 1;
+      nextIndex = nextIndex > ( directedLines.length - 1 ) ? 0 : nextIndex;
+
+      nextLine = directedLines[ nextIndex ];
+      assert && assert( nextLine, 'No more lines in the traversal' );
+
+      iterations++;
+      assert && assert( iterations < 10, 'we should have closed the shape by now! Likely infinite loop' );
+    }
+
+    // we have walked to the same line as the second intersection point, finalize by including the second
+    // intersection point
+    points.push( secondLineIntersectionPair.intersectionPoint );
+
+    return points;
   }
 }
 
