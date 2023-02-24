@@ -136,7 +136,7 @@ class ShapeSnapshot {
    * Counts the number of sides that have the same length, returning the largest count. If all are the same,
    * returns 4. Otherwise, three, then two, then zero.
    */
-  public countNumberOfEqualSides( toleranceInterval: number ): number {
+  public countNumberOfEqualSides(): number {
     let numberOfEqualSides = 0;
     for ( let i = 0; i < this.sideLengths.length; i++ ) {
       const currentLength = this.sideLengths[ i ];
