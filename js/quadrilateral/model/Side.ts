@@ -18,8 +18,9 @@ import { Shape } from '../../../../kite/js/imports.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import SideLabel from './SideLabel.js';
 import VertexLabel from './VertexLabel.js';
+import QuadrilateralMovable from './QuadrilateralMovable.js';
 
-class Side {
+class Side extends QuadrilateralMovable {
 
   // Reference to the vertices that compose this Side.
   public readonly vertex1: Vertex;
@@ -37,21 +38,8 @@ class Side {
   // various calculations.
   public readonly sideLabel: SideLabel;
 
-  // (Voicing) Indicates that the Side has received some input and it is time to trigger a new Voicing response
-  // the next time Properties are updated in QuadrilateralShapeModel.
-  public voicingObjectResponseDirty = false;
-
   // The shape of the side, determined by the length and the model width.
   public readonly shapeProperty: TReadOnlyProperty<Shape>;
-
-  // Property indicating whether the movement of the Side was blocked by being constrained in the
-  // model bounds
-  // TODO: Reduce duplication of these Properties with Vertex, create a superclass?
-  public readonly movementBlockedByBoundsProperty = new BooleanProperty( false );
-
-  // Property indicating whether the movement of the Side was blocked because placement would have
-  // resulted in a crossed/overlapping shape.
-  public readonly movementBlockedByShapeProperty = new BooleanProperty( false );
 
   // In model coordinates, the length of a side segment in model coordinates. The full side is divided into segments of
   // this length with the final segment length being the remainder.
@@ -67,6 +55,7 @@ class Side {
    * @param tandem
    */
   public constructor( vertex1: Vertex, vertex2: Vertex, tandem: Tandem ) {
+    super();
 
     this.vertex1 = vertex1;
     this.vertex2 = vertex2;

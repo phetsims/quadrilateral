@@ -19,12 +19,13 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import VertexLabel from './VertexLabel.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
+import QuadrilateralMovable from './QuadrilateralMovable.js';
 
 const VERTEX_BOUNDS = new Bounds2( 0, 0, 0.1, 0.1 );
 const HALF_WIDTH = VERTEX_BOUNDS.width / 2;
 const HALF_HEIGHT = VERTEX_BOUNDS.height / 2;
 
-class Vertex {
+class Vertex extends QuadrilateralMovable {
 
   // The position of the vertex in model coordinates.
   public readonly positionProperty: Property<Vector2>;
@@ -52,10 +53,6 @@ class Vertex {
   // Referenced so that we can pass the tandem to Properties as they are dynamically created in the methods below.
   private readonly tandem: Tandem;
 
-  // (Voicing) Indicates that the Vertex has received some input so it is time to trigger a new Voicing response
-  // the next time Properties are updated in QuadrilateralShapeModel.
-  public voicingObjectResponseDirty = false;
-
   // Properties tracking when a Vertex becomes blocked by ony of the individual sides of model bounds.
   // So that we can trigger some feedback as a Vertex is blocked by new edges of bounds.
   public readonly leftConstrainedProperty = new BooleanProperty( false );
@@ -63,14 +60,6 @@ class Vertex {
   public readonly topConstrainedProperty = new BooleanProperty( false );
   public readonly bottomConstrainedProperty = new BooleanProperty( false );
   public readonly numberOfConstrainingEdgesProperty: TReadOnlyProperty<number>;
-
-  // Property indicating whether the movement of the Vertex was blocked because placement would have
-  // resulted in a crossed/overlapping shape.
-  public readonly movementBlockedByShapeProperty = new BooleanProperty( false );
-
-  // Property indicating whether the movement of the Vertex was blocked by being constrained in the
-  // model bounds
-  public readonly movementBlockedByBoundsProperty = new BooleanProperty( false );
 
   // A reference to vertices connected to this vertex for so we can calculate the angle at this vertex.
   // The orientation of vertex1 and vertex2 for angle calculations are as shown in the following diagram:
@@ -100,6 +89,8 @@ class Vertex {
    * @param tandem
    */
   public constructor( initialPosition: Vector2, vertexLabel: VertexLabel, smoothingLengthProperty: TReadOnlyProperty<number>, tandem: Tandem ) {
+    super();
+
     this.smoothingLengthProperty = smoothingLengthProperty;
     this.positionProperty = new Vector2Property( initialPosition, {
       tandem: tandem.createTandem( 'positionProperty' )
