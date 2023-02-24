@@ -18,6 +18,9 @@ class ShapeSnapshot {
   public readonly isParallelogram: boolean;
   public readonly sideABsideCDParallel: boolean;
   public readonly sideBCsideDAParallel: boolean;
+  public readonly namedQuadrilateral: NamedQuadrilateral;
+  public readonly area: number;
+  private readonly shapeModel: QuadrilateralShapeModel;
 
   public readonly vertexAPosition: Vector2;
   public readonly vertexBPosition: Vector2;
@@ -33,18 +36,15 @@ class ShapeSnapshot {
   public readonly sideBCLength: number;
   public readonly sideDALength: number;
   public readonly sideCDLength: number;
-  public readonly area: number;
-
-  public readonly namedQuadrilateral: NamedQuadrilateral;
-
   private readonly sideLengths: number[];
-
-  private readonly shapeModel: QuadrilateralShapeModel;
 
   public constructor( shapeModel: QuadrilateralShapeModel ) {
     this.isParallelogram = shapeModel.isParallelogramProperty.value;
     this.sideABsideCDParallel = shapeModel.sideABSideCDParallelSideChecker.areSidesParallel();
     this.sideBCsideDAParallel = shapeModel.sideBCSideDAParallelSideChecker.areSidesParallel();
+    this.area = shapeModel.areaProperty.value;
+    this.namedQuadrilateral = shapeModel.shapeNameProperty.value;
+    this.shapeModel = shapeModel;
 
     this.vertexAPosition = shapeModel.vertexA.positionProperty.value;
     this.vertexBPosition = shapeModel.vertexB.positionProperty.value;
@@ -60,19 +60,12 @@ class ShapeSnapshot {
     this.sideBCLength = shapeModel.sideBC.lengthProperty.value;
     this.sideCDLength = shapeModel.sideCD.lengthProperty.value;
     this.sideDALength = shapeModel.sideDA.lengthProperty.value;
-
-    this.area = shapeModel.areaProperty.value;
-
-    this.namedQuadrilateral = shapeModel.shapeNameProperty.value;
-
     this.sideLengths = [
       this.sideABLength,
       this.sideBCLength,
       this.sideDALength,
       this.sideCDLength
     ];
-
-    this.shapeModel = shapeModel;
   }
 
   /**
