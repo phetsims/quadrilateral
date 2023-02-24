@@ -13,7 +13,7 @@ import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 
 class QuadrilateralVisibilityModel {
 
-  // Whether the angle guide graphics are visible at each vertex.
+  // Whether markers are visible in this sim - including ticks along the sides, interior, and exerior angle indicators.
   public readonly markersVisibleProperty: BooleanProperty;
 
   // Whether labels on each vertex are visible.
