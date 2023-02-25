@@ -6,10 +6,6 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import PhetioObject from '../../../tandem/js/PhetioObject.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import IOType from '../../../tandem/js/types/IOType.js';
-import NumberIO from '../../../tandem/js/types/NumberIO.js';
 import quadrilateral from '../quadrilateral.js';
 import { SoundDesign } from './model/QuadrilateralSoundOptionsModel.js';
 
