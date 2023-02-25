@@ -33,7 +33,6 @@ class MarkerDetectionModel {
 
   // A Property that controls whether Voicing responses will be enabled for when the OpenCV prototype changes in its
   // ability to see various markers.
-  // TODO: This in particular can probably be removed?
   public readonly markerResponsesEnabledProperty: TReadOnlyProperty<boolean>;
 
   public constructor( tandem: Tandem ) {

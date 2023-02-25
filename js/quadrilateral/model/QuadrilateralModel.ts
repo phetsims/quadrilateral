@@ -1,8 +1,8 @@
 // Copyright 2021-2023, University of Colorado Boulder
 
 /**
- * The base model class for Quadrilateral. Assembles all model components and responsible for managing Properties
- * that indicate the state of the whole Quadrilateral shape. Will probably also manage Properties that manage
+ * The base model class for the sim. Assembles all model components and responsible for managing Properties
+ * that indicate the state of the Quadrilateral shape. Will probably also manage Properties that manage
  * the state of the Sim (UI element visibility and so on).
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)

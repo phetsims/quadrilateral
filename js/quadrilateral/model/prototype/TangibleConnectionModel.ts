@@ -121,8 +121,6 @@ class TangibleConnectionModel {
   /**
    * Apply a series of checks on VertexWithProposedPositions to make sure that the requested shape does not cross
    * and does not have overlap.
-   *
-   * TODO: Review implementation for optimization/readability.
    */
   public isShapeAllowedForTangible( vertexWithProposedPositions: VertexWithProposedPosition[] ): boolean {
     let allowed = true;

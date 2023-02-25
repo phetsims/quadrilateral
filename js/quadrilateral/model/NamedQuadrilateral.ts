@@ -1,8 +1,7 @@
 // Copyright 2021-2022, University of Colorado Boulder
 
 /**
- * An enumeration for the kinds of named quadrilaterals that can be detected based on the properties
- * of the quadrilateral shape.
+ * An enumeration for the kinds of named quadrilaterals that can be detected based on the shape's geometric properties.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
