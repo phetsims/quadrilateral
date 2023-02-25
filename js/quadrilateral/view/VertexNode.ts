@@ -268,18 +268,6 @@ class VertexNode extends Voicing( Circle ) {
       }
     } );
 
-    // vibration
-    // vertex.isPressedProperty.lazyLink( isPressed => {
-    //   if ( navigator !== undefined && navigator.vibrate !== undefined ) {
-    //     if ( isPressed ) {
-    //       vibrationManager.startRepeatingVibrationPattern( [ 75, 75 ] );
-    //     }
-    //     else {
-    //       vibrationManager.stopRepeatingVibrationPattern();
-    //     }
-    //   }
-    // } );
-
     this.mutate( options );
   }
 
