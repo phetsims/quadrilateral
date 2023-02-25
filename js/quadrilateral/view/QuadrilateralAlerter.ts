@@ -340,7 +340,7 @@ class QuadrilateralAlerter extends Alerter {
     const previousEqualToFirstAdjacent = shapeModel.isInterLengthEqualToOther( previousLength, firstPreviousAdjacentSideLength );
     const previousEqualToSecondAdjacent = shapeModel.isInterLengthEqualToOther( previousLength, secondPreviousAdjacentSideLength );
     const previousEqualToOneAdjacent = previousEqualToFirstAdjacent !== previousEqualToSecondAdjacent;
-    const previousNumberOfEqualSides = this.previousObjectResponseShapeSnapshot.countNumberOfEqualSides( this.quadrilateralShapeModel.interLengthToleranceInterval );
+    const previousNumberOfEqualSides = this.previousObjectResponseShapeSnapshot.countNumberOfEqualSides();
 
     const adjacentSides = currentShapeSnapshot.getAdjacentSideLengthsFromSideLabel( side.sideLabel );
     const firstAdjacentSideLength = adjacentSides[ 0 ];
@@ -351,7 +351,7 @@ class QuadrilateralAlerter extends Alerter {
     const equalToFirstAdjacent = shapeModel.isInterLengthEqualToOther( sideLength, firstAdjacentSideLength );
     const equalToSecondAdjacent = shapeModel.isInterLengthEqualToOther( sideLength, secondAdjacentSideLength );
     const equalToOneAdjacent = equalToFirstAdjacent !== equalToSecondAdjacent;
-    const numberOfEqualSides = currentShapeSnapshot.countNumberOfEqualSides( this.quadrilateralShapeModel.interLengthToleranceInterval );
+    const numberOfEqualSides = currentShapeSnapshot.countNumberOfEqualSides();
 
     const firstAdjacentSideLengthDifference = firstAdjacentSideLength - firstPreviousAdjacentSideLength;
     const secondAdjacentSideLengthDifference = secondAdjacentSideLength - secondPreviousAdjacentSideLength;
