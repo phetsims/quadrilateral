@@ -34,8 +34,8 @@ class QuadrilateralGridNode extends Node {
 
     // Rectangle showing available model bounds
     const boundsRectangle = new Rectangle( 0, 0, 0, 0, 5, 5, {
-      stroke: QuadrilateralColors.playAreaStrokeColorProperty,
-      fill: QuadrilateralColors.playAreaFillColorProperty,
+      stroke: QuadrilateralColors.gridStrokeColorProperty,
+      fill: QuadrilateralColors.screenBackgroundColorProperty,
       lineWidth: BORDER_RECTANGLE_LINE_WIDTH
     } );
     this.addChild( boundsRectangle );

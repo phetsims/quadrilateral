@@ -34,12 +34,7 @@ const QuadrilateralColors = {
     default: new Color( 255, 217, 102 )
   } ),
 
-  // Color for vertices and sides of the quadrilateral shape when we are a parallelogram.
-  quadrilateralParallelogramShapeColorProperty: new ProfileColorProperty( quadrilateral, 'quadrilateralShapeParallelogram', {
-    default: new Color( 21, 255, 127 )
-  } ),
-
-  // The color for the quadrilateral when you hit a "named" shape but we are still not a parallelogram
+  // The color for the quadrilateral when you hit a "named" shape.
   quadrilateralNamedShapeColorProperty: new ProfileColorProperty( quadrilateral, 'quadrilateralNamedShape', {
     default: new Color( 255, 239, 189 )
   } ),
@@ -74,23 +69,19 @@ const QuadrilateralColors = {
     default: new Color( 245, 245, 245 )
   } ),
 
+  // Fill color for panels in the UI.
   panelFillColorProperty: new ProfileColorProperty( quadrilateral, 'panelFillColor', {
     default: 'white'
   } ),
-
   panelStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'panelStrokeColor', {
     default: 'black'
   } ),
 
-  playAreaStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'playAreaStrokeColor', {
+  gridStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'playAreaStrokeColor', {
     default: 'white'
   } ),
 
-  playAreaFillColorProperty: new ProfileColorProperty( quadrilateral, 'playAreaFillColor', {
-    default: new Color( 133, 133, 255 )
-  } ),
-
-  // Fill color for the "Corner Labels" checkbox icon.
+  // Color for the "Corner Labels" checkbox icon.
   visibilityIconsColorProperty: new ProfileColorProperty( quadrilateral, 'visibilityIconsColorProperty', {
     default: new Color( 'black' )
   } ),
@@ -100,11 +91,12 @@ const QuadrilateralColors = {
     default: new Color( 'rgb(247, 151, 34)' )
   } ),
 
+  // Color for general buttons in the ScreenView
   screenViewButtonColorProperty: new ProfileColorProperty( quadrilateral, 'screenViewButtonColor', {
     default: 'lightgrey'
   } ),
 
-  // Stroke for the interaction cues
+  // Stroke for the interaction cues around the quadrilateral
   interactionCueColorProperty: new ProfileColorProperty( quadrilateral, 'interactionCueColor', {
     default: new Color( 'rgb(181, 255, 216)' )
   } )
