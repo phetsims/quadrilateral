@@ -6,8 +6,7 @@
  * @author Jesse Greenberg
  */
 
-import { Circle, CircleOptions, DragListener, KeyboardDragListener, KeyboardUtils, Path, SceneryEvent, Text, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
-import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
+import { Circle, DragListener, KeyboardDragListener, Path, SceneryEvent, Text } from '../../../../scenery/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vertex from '../model/Vertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -16,8 +15,6 @@ import QuadrilateralColors from '../../QuadrilateralColors.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VertexDescriber from './VertexDescriber.js';
 import { Shape } from '../../../../kite/js/imports.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
@@ -26,45 +23,27 @@ import boundaryReached_mp3 from '../../../../tambo/sounds/boundaryReached_mp3.js
 import quadShapeCollision_mp3 from '../../../sounds/quadShapeCollision_mp3.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
 import quadrilateral from '../../quadrilateral.js';
+import QuadrilateralMovableNode, { QuadrilateralMovableNodeOptions } from './QuadrilateralMovableNode.js';
 
 // constants
 const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
 
-type SelfOptions = {
-
-  // a11y - for both PDOM and Voicing
-  nameResponse?: null | string;
-};
-
-// VertexNode sets these properties explicitly from the nameResponse option
-type VertexNodeOptions = SelfOptions & StrictOmit<ParentOptions, 'voicingNameResponse' | 'innerContent'> & PickRequired<CircleOptions, 'tandem'>;
-
-type ParentOptions = VoicingOptions & CircleOptions;
-
-class VertexNode extends Voicing( Circle ) {
-  private readonly model: QuadrilateralModel;
+class VertexNode extends QuadrilateralMovableNode {
+  private readonly quadrilateralModel: QuadrilateralModel;
   private readonly vertex: Vertex;
 
-  public constructor( vertex: Vertex, vertexLabel: string, model: QuadrilateralModel, vertexDescriber: VertexDescriber, modelViewTransform: ModelViewTransform2, providedOptions: VertexNodeOptions ) {
-    const options = optionize<VertexNodeOptions, SelfOptions, ParentOptions>()( {
-      cursor: 'pointer',
-      fill: QuadrilateralColors.quadrilateralShapeColorProperty,
-      stroke: QuadrilateralColors.quadrilateralShapeStrokeColorProperty,
-      tagName: 'div',
-      ariaRole: 'application',
-      focusable: true,
-      nameResponse: null
-    }, providedOptions );
+  public constructor( vertex: Vertex, vertexLabel: string, quadrilateralModel: QuadrilateralModel, vertexDescriber: VertexDescriber, modelViewTransform: ModelViewTransform2, providedOptions?: QuadrilateralMovableNodeOptions ) {
+    super( vertex, providedOptions );
 
     const viewRadius = modelViewTransform.modelToViewBounds( vertex.modelBoundsProperty.value ).width / 2;
-    super( viewRadius );
-
-    this.voicingNameResponse = options.nameResponse;
-    this.innerContent = options.nameResponse;
+    const circle = new Circle( viewRadius, {
+      fill: QuadrilateralColors.quadrilateralShapeColorProperty,
+      stroke: QuadrilateralColors.quadrilateralShapeStrokeColorProperty
+    } );
+    this.addChild( circle );
 
     this.vertex = vertex;
-
-    this.model = model;
+    this.quadrilateralModel = quadrilateralModel;
 
     const vertexLabelText = new Text( vertexLabel, {
       center: this.center,
@@ -87,7 +66,7 @@ class VertexNode extends Voicing( Circle ) {
     this.addChild( hatchMarkPath );
 
     // hatch marks are only visible when the grid is visible since they are used to create aligned positions.
-    model.visibilityModel.gridVisibleProperty.link( visible => {
+    quadrilateralModel.visibilityModel.gridVisibleProperty.link( visible => {
       hatchMarkPath.visible = visible;
     } );
 
@@ -99,7 +78,7 @@ class VertexNode extends Voicing( Circle ) {
       this.center = modelViewTransform.modelToViewPosition( position );
     } );
 
-    model.visibilityModel.vertexLabelsVisibleProperty.link( vertexLabelsVisible => {
+    quadrilateralModel.visibilityModel.vertexLabelsVisibleProperty.link( vertexLabelsVisible => {
       vertexLabelText.visible = vertexLabelsVisible;
     } );
 
@@ -116,13 +95,13 @@ class VertexNode extends Voicing( Circle ) {
 
       transform: modelViewTransform,
       drag: ( modelDelta: Vector2 ) => {
-        const proposedPosition = model.getClosestGridPositionInDirection( vertex.positionProperty.value, modelDelta );
+        const proposedPosition = quadrilateralModel.getClosestGridPositionInDirection( vertex.positionProperty.value, modelDelta );
 
         // constrain to model bounds
-        const inBoundsPosition = model.vertexDragBounds.closestPointTo( proposedPosition );
+        const inBoundsPosition = quadrilateralModel.vertexDragBounds.closestPointTo( proposedPosition );
         const isAgainstBounds = !inBoundsPosition.equals( proposedPosition );
 
-        const isPositionAllowed = model.isVertexPositionAllowed( vertex, inBoundsPosition );
+        const isPositionAllowed = quadrilateralModel.isVertexPositionAllowed( vertex, inBoundsPosition );
         if ( isPositionAllowed ) {
 
           // only update and trigger a new Voicing response if the position has changed.
@@ -141,7 +120,7 @@ class VertexNode extends Voicing( Circle ) {
       // It seems that press and hold doesn't always move by downDelta. Maybe it should or maybe
       // we need an option like this.
       // alwaysMoveByDownDelta: true,
-      tandem: options.tandem.createTandem( 'keyboardDragListener' )
+      tandem: providedOptions?.tandem.createTandem( 'keyboardDragListener' )
     } );
     this.addInputListener( keyboardDragListener );
 
@@ -160,13 +139,13 @@ class VertexNode extends Voicing( Circle ) {
         const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
 
         // constrain to model bounds
-        const inBoundsPosition = model.vertexDragBounds.closestPointTo( modelPoint );
+        const inBoundsPosition = quadrilateralModel.vertexDragBounds.closestPointTo( modelPoint );
         const isAgainstBounds = !inBoundsPosition.equals( modelPoint );
 
         // constrain to the allowable positions in the model along the grid
-        const constrainedPosition = model.getClosestGridPosition( inBoundsPosition );
+        const constrainedPosition = quadrilateralModel.getClosestGridPosition( inBoundsPosition );
 
-        const isPositionAllowed = model.isVertexPositionAllowed( vertex, constrainedPosition );
+        const isPositionAllowed = quadrilateralModel.isVertexPositionAllowed( vertex, constrainedPosition );
 
         if ( isPositionAllowed ) {
           vertex.positionProperty.value = constrainedPosition;
@@ -188,7 +167,7 @@ class VertexNode extends Voicing( Circle ) {
         }
       },
 
-      tandem: options.tandem.createTandem( 'dragListener' )
+      tandem: providedOptions?.tandem.createTandem( 'dragListener' )
     } );
     this.addInputListener( dragListener );
 
@@ -249,34 +228,14 @@ class VertexNode extends Voicing( Circle ) {
     } );
 
     // voicing
-    model.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
+    quadrilateralModel.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
       this.voicingObjectResponse = vertexDescriber.getVertexObjectResponse();
     } );
 
     // when corner guides are visible more information is also included in the object response
-    model.visibilityModel.markersVisibleProperty.link( visible => {
+    quadrilateralModel.visibilityModel.markersVisibleProperty.link( visible => {
       this.voicingObjectResponse = vertexDescriber.getVertexObjectResponse();
     } );
-
-    // Voicing - for debugging, speak the full response again on spacebar/enter
-    // TODO: remove this
-    this.addInputListener( {
-      keydown: event => {
-        if ( KeyboardUtils.isAnyKeyEvent( event.domEvent, [ KeyboardUtils.KEY_ENTER, KeyboardUtils.KEY_SPACE ] ) ) {
-          this.voicingSpeakFullResponse();
-        }
-      }
-    } );
-
-    this.mutate( options );
-  }
-
-  /**
-   * Update Properties in response to input indicating that the Vertex was blocked from moving for some reason.
-   */
-  public updateBlockedState( isBlockedByShape: boolean, isBlockedByBounds: boolean ): void {
-    this.vertex.movementBlockedByShapeProperty.value = isBlockedByShape;
-    this.vertex.movementBlockedByBoundsProperty.value = isBlockedByBounds;
   }
 }
 

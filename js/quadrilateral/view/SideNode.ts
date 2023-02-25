@@ -8,7 +8,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { DragListener, KeyboardDragListener, KeyboardUtils, Line as LineNode, Path, PathOptions, SceneryEvent, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
+import { DragListener, KeyboardDragListener, Line as LineNode, Path, SceneryEvent } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import Side from '../model/Side.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -17,11 +17,8 @@ import Vertex from '../model/Vertex.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import { Line, Shape } from '../../../../kite/js/imports.js';
-import QuadrilateralColors from '../../QuadrilateralColors.js';
 import SideDescriber from './SideDescriber.js';
 import Multilink from '../../../../axon/js/Multilink.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
@@ -30,19 +27,13 @@ import quadShapeCollision_mp3 from '../../../sounds/quadShapeCollision_mp3.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import SideTicksNode from './SideTicksNode.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
+import QuadrilateralMovableNode, { QuadrilateralMovableNodeOptions } from './QuadrilateralMovableNode.js';
+import QuadrilateralColors from '../../QuadrilateralColors.js';
 
 // The dilation around side shapes when drawing the focus highlight.
 const FOCUS_HIGHLIGHT_DILATION = 15;
 
-type SelfOptions = {
-
-  // The "accessible name" for both PDOM and Voicing, sets both voicingNameResponse and PDOM's innerContent.
-  nameResponse?: null | string;
-};
-type ParentOptions = StrictOmit<VoicingOptions, 'voicingNameResponse'> & StrictOmit<PathOptions, 'innerContent'>;
-type SideNodeOptions = SelfOptions & ParentOptions;
-
-class SideNode extends Voicing( Path ) {
+class SideNode extends QuadrilateralMovableNode {
 
   // A reference to the model component.
   public readonly side: Side;
@@ -57,27 +48,23 @@ class SideNode extends Voicing( Path ) {
   private scratchShapeModel: QuadrilateralShapeModel;
   private quadrilateralModel: QuadrilateralModel;
 
-  public constructor( quadrilateralModel: QuadrilateralModel, side: Side, scratchSide: Side, sideDescriber: SideDescriber, modelViewTransform: ModelViewTransform2, providedOptions?: SideNodeOptions ) {
+  private readonly sidePath: Path;
 
-    const options = optionize<SideNodeOptions, SelfOptions, ParentOptions>()( {
+  public constructor(
+    quadrilateralModel: QuadrilateralModel,
+    side: Side,
+    scratchSide: Side,
+    sideDescriber: SideDescriber,
+    modelViewTransform: ModelViewTransform2,
+    providedOptions?: QuadrilateralMovableNodeOptions ) {
+
+    super( side, providedOptions );
+
+    this.sidePath = new Path( null, {
       fill: QuadrilateralColors.quadrilateralShapeColorProperty,
-      stroke: QuadrilateralColors.quadrilateralShapeStrokeColorProperty,
-
-      // pdom and Voicing
-      nameResponse: null,
-
-      // pdom
-      tagName: 'div',
-      ariaRole: 'application',
-      focusable: true
-    }, providedOptions );
-
-    super( side.shapeProperty.value );
-
-    this.voicingNameResponse = options.nameResponse;
-    this.innerContent = options.nameResponse;
-
-    this.cursor = 'pointer';
+      stroke: QuadrilateralColors.quadrilateralShapeStrokeColorProperty
+    } );
+    this.addChild( this.sidePath );
 
     this.side = side;
     this.scratchSide = scratchSide;
@@ -173,7 +160,7 @@ class SideNode extends Voicing( Path ) {
       }
 
       // transform shape to view coordinates
-      this.shape = modelViewTransform.modelToViewShape( lineShape );
+      this.sidePath.shape = modelViewTransform.modelToViewShape( lineShape );
 
       // Draw the custom focus highlight so that the highlight surrounds the shape of the line
       const vertex1ViewPosition = modelViewTransform.modelToViewPosition( vertex1Position );
@@ -201,7 +188,7 @@ class SideNode extends Voicing( Path ) {
       moveOnHoldDelay: 750,
       moveOnHoldInterval: 50,
 
-      tandem: options.tandem?.createTandem( 'keyboardDragListener' )
+      tandem: providedOptions?.tandem?.createTandem( 'keyboardDragListener' )
     } );
     this.addInputListener( keyboardDragListener );
 
@@ -314,21 +301,8 @@ class SideNode extends Voicing( Path ) {
         }
       },
 
-      tandem: options.tandem?.createTandem( 'dragListener' )
+      tandem: providedOptions?.tandem?.createTandem( 'dragListener' )
     } ) );
-
-    this.mutate( options );
-
-    // for debugging, set this Property when we receive focus so that the debugging shapes showing vertex drag areas
-    // become visible
-    this.addInputListener( {
-      focus: () => {
-        side.isPressedProperty.value = true;
-      },
-      blur: () => {
-        side.isPressedProperty.value = false;
-      }
-    } );
 
     // sound - the grab sound is played on press but there is no release sound for this component since there is
     // no behavioral relevance to the release. The 'release' sound is used instead of 'grab' to distinguish sides
@@ -364,31 +338,6 @@ class SideNode extends Voicing( Path ) {
     markersVisibleProperty.link( () => {
       this.voicingObjectResponse = sideDescriber.getSideObjectResponse();
     } );
-
-    // Voicing - for debugging, speak the full response again on spacebar/enter
-    // TODO: remove this
-    this.addInputListener( {
-      keydown: event => {
-        if ( KeyboardUtils.isAnyKeyEvent( event.domEvent, [ KeyboardUtils.KEY_ENTER, KeyboardUtils.KEY_SPACE ] ) ) {
-          this.voicingSpeakFullResponse();
-        }
-      }
-    } );
-
-    // vibration
-    // TODO: This code for vibration is a prototype, and only vibrates for a finite time.  It will need to be improved
-    //       and finalized before publication.  See https://github.com/phetsims/quake/issues/13.
-    // side.isPressedProperty.lazyLink( isPressed => {
-    //
-    //   if ( navigator !== undefined && navigator.vibrate !== undefined ) {
-    //     if ( isPressed ) {
-    //       vibrationManager.startVibrate( [ 200, 200 ] );
-    //     }
-    //     else {
-    //       vibrationManager.stopVibrate();
-    //     }
-    //   }
-    // } );
   }
 
   private getSmallestTranslationVector( proposedVertex1Position: Vector2, proposedVertex2Position: Vector2 ): Vector2 {
@@ -451,15 +400,6 @@ class SideNode extends Voicing( Path ) {
     }
 
     this.updateBlockedState( !isShapeAllowed, !inBounds );
-  }
-
-  /**
-   * Update Properties in response to input indicating that the Side was blocked from moving for some reason.
-   * TODO: Reduce duplication with VertexNode, maybe a superclass?
-   */
-  public updateBlockedState( isBlockedByShape: boolean, isBlockedByBounds: boolean ): void {
-    this.side.movementBlockedByShapeProperty.value = isBlockedByShape;
-    this.side.movementBlockedByBoundsProperty.value = isBlockedByBounds;
   }
 
   /**
