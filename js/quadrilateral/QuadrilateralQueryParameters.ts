@@ -89,13 +89,6 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     type: 'flag'
   },
 
-  // If true, a dialog will be shown at startup that will require the user to touch the screen.  This will allow the
-  // haptics and sound to start as soon as the user begins to interact with the shape.  See
-  // https://github.com/phetsims/quadrilateral/issues/148 for more information.
-  showInitialTouchDialog: {
-    type: 'flag'
-  },
-
   // A query parameter to control the deviceGridSpacingProperty - constrains the vertex positions to intervals of this
   // value. Useful when connected to a device with noisy sensors because it requires larger changes in value to
   // update a vertex position.

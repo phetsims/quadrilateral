@@ -57,8 +57,6 @@ type StringsType = {
     'triangle': string;
     'triangleStringProperty': LinkableProperty<string>;
   };
-  'hapticsDialogMessage': string;
-  'hapticsDialogMessageStringProperty': LinkableProperty<string>;
   'gotIt': string;
   'gotItStringProperty': LinkableProperty<string>;
   'keyboardHelpDialog': {
