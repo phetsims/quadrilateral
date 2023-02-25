@@ -11,6 +11,8 @@ import Range from '../../dot/js/Range.js';
 import Utterance from '../../utterance-queue/js/Utterance.js';
 import quadrilateral from './quadrilateral.js';
 
+const SCREEN_TEXT_FONT = new PhetFont( { size: 18 } );
+
 const QuadrilateralConstants = {
 
   //----------------------------------------------------------------------------------------------------------
@@ -27,7 +29,7 @@ const QuadrilateralConstants = {
   // The "major" vertex interval when using ?reducedStepSize query parameter. Value is in model coordinates.
   MAJOR_REDUCED_SIZE_VERTEX_INTERVAL: 0.0625,
 
-  // The "minor" vertex interval when the using ?reducedStepSize from Preferences. Value is in model coordinates.
+  // The "minor" vertex interval when the using ?reducedStepSize query parameter. Value is in model coordinates.
   MINOR_REDUCED_SIZE_VERTEX_INTERVAL: 0.015625,
 
   //----------------------------------------------------------------------------------------------------------
@@ -55,20 +57,18 @@ const QuadrilateralConstants = {
   // and its label)
   CONTROL_LABEL_SPACING: 10,
 
-  SCREEN_TEXT_FONT: new PhetFont( { size: 18 } ),
-
+  // Font for text that appears on screen
+  SCREEN_TEXT_FONT: SCREEN_TEXT_FONT,
   SCREEN_TEXT_OPTIONS: {
-    font: new PhetFont( { size: 18 } )
+    font: SCREEN_TEXT_FONT
   },
 
-  PANEL_LABEL_TEXT_OPTIONS: {
-    font: new PhetFont( { size: 16 } )
-  },
-
+  // Text options for titles for panels and dialogs.
   PANEL_TITLE_TEXT_OPTIONS: {
-    font: new PhetFont( { size: 16, weight: 'bold' } )
+    font: new PhetFont( { size: 18, weight: 'bold' } )
   },
 
+  // Text options for the "Shape Name" display.
   SHAPE_NAME_TEXT_OPTIONS: {
     font: new PhetFont( { size: 22 } ),
     maxWidth: 250

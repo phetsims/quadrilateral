@@ -25,7 +25,7 @@ class CalibrationContentNode extends VBox {
       align: 'center'
     }, providedOptions );
 
-    const calibrateHintText = new Text( 'Extend your connected device to the maximum limits and then close this dialog box.', QuadrilateralConstants.PANEL_LABEL_TEXT_OPTIONS );
+    const calibrateHintText = new Text( 'Extend your connected device to the maximum limits and then close this dialog box.', QuadrilateralConstants.SCREEN_TEXT_OPTIONS );
 
     // create a square shape to display the values provided by the quadrilateral model
     const viewBounds = new Bounds2( 0, 0, 300, 300 );
@@ -53,7 +53,7 @@ class CalibrationContentNode extends VBox {
     const heightTickLine = new Line( 0, 0, 0, 300, dimensionLineOptions );
     const bottomTickLine = new Line( 0, 0, 10, 0, dimensionLineOptions );
     const topTickLine = new Line( 0, 0, 10, 0, dimensionLineOptions );
-    const leftSideLengthText = new Text( 'null', QuadrilateralConstants.PANEL_LABEL_TEXT_OPTIONS );
+    const leftSideLengthText = new Text( 'null', QuadrilateralConstants.SCREEN_TEXT_OPTIONS );
     leftSideLengthText.rotation = -Math.PI / 2;
 
     bottomTickLine.centerTop = heightTickLine.centerBottom;
