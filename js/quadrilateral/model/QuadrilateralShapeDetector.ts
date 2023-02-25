@@ -1,14 +1,15 @@
 // Copyright 2022-2023, University of Colorado Boulder
+
 /**
- * Detects the name of the quadrilateral shape from the current geometric properties.
+ * Detects the name of the quadrilateral shape from the current geometric properties. Quadrilateral shape names
+ * come from "building up" geometric properties. If the shape has at least the required geometric properties for a
+ * name, it will be a match. So the final shape name is the one that has the largest number of shape properties.
  *
- * This implementation uses bit masks. Each shape attribute is represented as a bit. A bitwise value is then calculated
- * from the current shape properties. A mask is created for each named shape. If the bitwise value has at least
- * the bits of a given mask it is a match for the shape.
+ * This implementation uses bit masks. Each shape attribute is represented as a bit and a bitwise value is calculated
+ * from the current shape properties. A pre-defined mask is created for each named shape. If the bitwise value has
+ * at least the bits of a given mask it is a match for the shape.
  *
- * The implementation of shape detection comes directly from decisions in
- * https://github.com/phetsims/quadrilateral/issues/188.
- *
+ * The implementation of shape detection comes from decisions in https://github.com/phetsims/quadrilateral/issues/188.
  * In particular, see https://github.com/phetsims/quadrilateral/issues/188#issuecomment-1226165886 and
  * https://github.com/phetsims/quadrilateral/issues/188#issuecomment-1232237994.
  *
@@ -38,7 +39,7 @@ const TWO_EQUAL_OPPOSITE_SIDE_PAIR = Math.pow( 2, 11 );
 const ALL_EQUAL_SIDE = Math.pow( 2, 12 );
 const ONE_ANGLE_PIE = Math.pow( 2, 13 );
 
-// Set up shape masks for each shape. The quadrilateral must have each of these attributes to be considered that shape.
+// Set up shape masks for each shape. The quadrilateral must at least these attributes to be considered a match.
 const CONCAVE_MASK = CONCAVE;
 
 const TRIANGLE_MASK = ONE_ANGLE_PIE;
@@ -109,7 +110,7 @@ class QuadrilateralShapeDetector {
 
     // First, assemble a bitwise value representing the attributes of the current shape. Start by looking for
     // a triangle, which is a unique case. If we have a triangle we can stop looking for more properties
-    // because it will always be labelled as a triangle. All other shapes have properties that accumulate
+    // because it will always be labelled as a triangle. All other shapes have properties that "build-up"
     // to produce the final properties of the shape.
     const shapeModel = this.quadrilateralShapeModel;
     if ( _.some( shapeModel.vertices, vertex => shapeModel.isFlatAngle( vertex.angleProperty.value! ) ) ) {
@@ -162,6 +163,8 @@ class QuadrilateralShapeDetector {
       quadrilateralName = NamedQuadrilateral.TRIANGLE;
     }
     else if ( this.conditionMatchesMask( currentConditionMask, CONCAVE_MASK ) ) {
+
+      // if concave, the only attribute that can "build-up" from here is the dart property
       quadrilateralName = NamedQuadrilateral.CONCAVE_QUADRILATERAL;
 
       if ( this.conditionMatchesMask( currentConditionMask, DART_MASK ) ) {
@@ -169,6 +172,8 @@ class QuadrilateralShapeDetector {
       }
     }
     else {
+
+      // most general case, shape properties "build-up" from a convex quadrilateral
       quadrilateralName = NamedQuadrilateral.CONVEX_QUADRILATERAL;
 
       if ( this.conditionMatchesMask( currentConditionMask, TRAPEZOID_MASK ) ) {
