@@ -24,16 +24,26 @@ import quadShapeCollision_mp3 from '../../../sounds/quadShapeCollision_mp3.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralMovableNode, { QuadrilateralMovableNodeOptions } from './QuadrilateralMovableNode.js';
+import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 
 // constants
 const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
+
+type SelfOptions = EmptySelfOptions;
+type SideNodeOptions = SelfOptions & StrictOmit<QuadrilateralMovableNodeOptions, 'grabbedSound'>;
 
 class VertexNode extends QuadrilateralMovableNode {
   private readonly quadrilateralModel: QuadrilateralModel;
   private readonly vertex: Vertex;
 
   public constructor( vertex: Vertex, vertexLabel: string, quadrilateralModel: QuadrilateralModel, vertexDescriber: VertexDescriber, modelViewTransform: ModelViewTransform2, providedOptions?: QuadrilateralMovableNodeOptions ) {
-    super( vertex, providedOptions );
+
+    const options = optionize<SideNodeOptions, SelfOptions, QuadrilateralMovableNodeOptions>()( {
+      grabbedSound: grabHighPitch_mp3
+    }, providedOptions );
+
+    super( vertex, options );
 
     const viewRadius = modelViewTransform.modelToViewBounds( vertex.modelBoundsProperty.value ).width / 2;
     const circle = new Circle( viewRadius, {
@@ -183,19 +193,6 @@ class VertexNode extends QuadrilateralMovableNode {
       },
       blur: () => {
         vertex.isPressedProperty.value = false;
-      }
-    } );
-
-    // sound - The grab sound is played on press but there is no release sound for this component since there is
-    // no behavioral relevance to the release. Uses a custom "higher pitch" sound to distinguish it from
-    // sides.
-    const pressedSoundPlayer = new SoundClip( grabHighPitch_mp3, {
-      initialOutputLevel: 0.6
-    } );
-    soundManager.addSoundGenerator( pressedSoundPlayer );
-    vertex.isPressedProperty.lazyLink( isPressed => {
-      if ( isPressed ) {
-        pressedSoundPlayer.play();
       }
     } );
 

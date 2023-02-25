@@ -29,9 +29,14 @@ import SideTicksNode from './SideTicksNode.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import QuadrilateralMovableNode, { QuadrilateralMovableNodeOptions } from './QuadrilateralMovableNode.js';
 import QuadrilateralColors from '../../QuadrilateralColors.js';
+import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 
 // The dilation around side shapes when drawing the focus highlight.
 const FOCUS_HIGHLIGHT_DILATION = 15;
+
+type SelfOptions = EmptySelfOptions;
+type SideNodeOptions = SelfOptions & StrictOmit<QuadrilateralMovableNodeOptions, 'grabbedSoundOutputLevel' | 'grabbedSound'>;
 
 class SideNode extends QuadrilateralMovableNode {
 
@@ -56,9 +61,17 @@ class SideNode extends QuadrilateralMovableNode {
     scratchSide: Side,
     sideDescriber: SideDescriber,
     modelViewTransform: ModelViewTransform2,
-    providedOptions?: QuadrilateralMovableNodeOptions ) {
+    providedOptions?: SideNodeOptions ) {
 
-    super( side, providedOptions );
+    const options = optionize<SideNodeOptions, SelfOptions, QuadrilateralMovableNodeOptions>()( {
+
+      // The 'release' sound is used instead of the 'grab' to distinguish sides from vertices, and there is no actual
+      // sound on release
+      grabbedSound: release_mp3,
+      grabbedSoundOutputLevel: 0.8
+    }, providedOptions );
+
+    super( side, options );
 
     this.sidePath = new Path( null, {
       fill: QuadrilateralColors.quadrilateralShapeColorProperty,
@@ -303,19 +316,6 @@ class SideNode extends QuadrilateralMovableNode {
 
       tandem: providedOptions?.tandem?.createTandem( 'dragListener' )
     } ) );
-
-    // sound - the grab sound is played on press but there is no release sound for this component since there is
-    // no behavioral relevance to the release. The 'release' sound is used instead of 'grab' to distinguish sides
-    // from vertices
-    const pressedSoundPlayer = new SoundClip( release_mp3, {
-      initialOutputLevel: 0.8
-    } );
-    soundManager.addSoundGenerator( pressedSoundPlayer );
-    side.isPressedProperty.lazyLink( isPressed => {
-      if ( isPressed ) {
-        pressedSoundPlayer.play();
-      }
-    } );
 
     // sound - when a vertex becomes blocked because of a collision with the shape itself, play a unique sound
     const blockedByShapeSoundClip = new SoundClip( quadShapeCollision_mp3, {
