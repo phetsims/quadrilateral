@@ -153,44 +153,5 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   }
 } );
 
-// Collection of properties that appear in ToleranceDefaults state object.
-type ToleranceDefaultsCollection = {
-  parallelAngleToleranceInterval: number;
-  interAngleToleranceInterval: number;
-  shapeLengthToleranceInterval: number;
-};
-
-// It was requested that the tolerance defaults are part of the data stream, this inner class accomplishes that. See
-// https://github.com/phetsims/quadrilateral/issues/97#issuecomment-1125088255
-class ToleranceDefaults extends PhetioObject {
-  public constructor() {
-    super( {
-      tandem: Tandem.GLOBAL_MODEL.createTandem( 'ToleranceDefaults' ),
-      phetioType: new IOType( 'ToleranceDefaultsIO', {
-        isValidValue: _.stubTrue,
-
-        toStateObject: ( object: ToleranceDefaults ) => object.toStateObject(),
-        stateSchema: {
-          parallelAngleToleranceInterval: NumberIO,
-          interAngleToleranceInterval: NumberIO,
-          shapeLengthToleranceInterval: NumberIO
-        }
-      } ),
-      phetioState: true
-    } );
-  }
-
-  public toStateObject(): ToleranceDefaultsCollection {
-    return {
-      parallelAngleToleranceInterval: QuadrilateralQueryParameters.parallelAngleToleranceInterval,
-      interAngleToleranceInterval: QuadrilateralQueryParameters.interAngleToleranceInterval,
-      shapeLengthToleranceInterval: QuadrilateralQueryParameters.interLengthToleranceInterval
-    };
-  }
-}
-
-// instantiate so it appears in PhET-iO state
-const toleranceDefaults = new ToleranceDefaults(); // eslint-disable-line @typescript-eslint/no-unused-vars
-
 quadrilateral.register( 'QuadrilateralQueryParameters', QuadrilateralQueryParameters );
 export default QuadrilateralQueryParameters;
