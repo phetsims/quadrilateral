@@ -1,6 +1,8 @@
 // Copyright 2021-2023, University of Colorado Boulder
 
 /**
+ * Query parameters for this simulation.
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
@@ -85,6 +87,8 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     type: 'flag'
   },
 
+  // If provided, include experimental serial communication, and a button to send values to a prototype tangible
+  // device.
   serial: {
     type: 'flag'
   },
