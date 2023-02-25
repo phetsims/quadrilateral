@@ -1,10 +1,9 @@
 // Copyright 2021-2023, University of Colorado Boulder
 
 /**
- * A model component for the components of the quadrilateral that define its geometry/shape. This includes components
- * such as vertices, sides, and information about whether it is or is not a parallelogram. There is only one
- * quadrilateral in the Quadrilateral sim. But it may be useful to instantiate more than one so that we can create
- * a quadrilateral shape from vertices and then validate it before setting properties on the "real" quadrilateral model.
+ * A model component for the components of the actual quadrilateral geometry/shape. This includes subcomponents
+ * for vertices and sides. It also holds state for geometric properties such as shape area, pairs of equal side
+ * lengths, vertex angles, and parallel sides.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
