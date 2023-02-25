@@ -20,10 +20,7 @@ import { Line, Shape } from '../../../../kite/js/imports.js';
 import SideDescriber from './SideDescriber.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
-import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
-import soundManager from '../../../../tambo/js/soundManager.js';
 import release_mp3 from '../../../../tambo/sounds/release_mp3.js';
-import quadShapeCollision_mp3 from '../../../sounds/quadShapeCollision_mp3.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import SideTicksNode from './SideTicksNode.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
@@ -316,20 +313,6 @@ class SideNode extends QuadrilateralMovableNode {
 
       tandem: providedOptions?.tandem?.createTandem( 'dragListener' )
     } ) );
-
-    // sound - when a vertex becomes blocked because of a collision with the shape itself, play a unique sound
-    const blockedByShapeSoundClip = new SoundClip( quadShapeCollision_mp3, {
-      initialOutputLevel: 0.5
-    } );
-    soundManager.addSoundGenerator( blockedByShapeSoundClip );
-    side.movementBlockedByShapeProperty.lazyLink( blocked => {
-      if ( blocked ) {
-        blockedByShapeSoundClip.play();
-        this.voicingSpeakResponse( {
-          contextResponse: sideDescriber.getBlockedByShapeResponse()
-        } );
-      }
-    } );
 
     // voicing - re-generate the voicing description when dependent Properties change
     this.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {

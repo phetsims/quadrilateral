@@ -20,7 +20,6 @@ import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
 import grabHighPitch_mp3 from '../../../sounds/grabHighPitch_mp3.js';
 import boundaryReached_mp3 from '../../../../tambo/sounds/boundaryReached_mp3.js';
-import quadShapeCollision_mp3 from '../../../sounds/quadShapeCollision_mp3.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralMovableNode, { QuadrilateralMovableNodeOptions } from './QuadrilateralMovableNode.js';
@@ -206,20 +205,6 @@ class VertexNode extends QuadrilateralMovableNode {
         blockedByBoundsSoundClip.play();
         this.voicingSpeakResponse( {
           contextResponse: vertexDescriber.getBlockedByEdgeResponse()
-        } );
-      }
-    } );
-
-    // sound = when the Vertex becomes blocked because of a collision with the shape itself, play a unique sound
-    const blockedByShapeSoundClip = new SoundClip( quadShapeCollision_mp3, {
-      initialOutputLevel: 0.5
-    } );
-    soundManager.addSoundGenerator( blockedByShapeSoundClip );
-    vertex.movementBlockedByShapeProperty.lazyLink( blocked => {
-      if ( blocked ) {
-        blockedByShapeSoundClip.play();
-        this.voicingSpeakResponse( {
-          contextResponse: vertexDescriber.getBlockedByShapeResponse()
         } );
       }
     } );

@@ -15,6 +15,11 @@ import QuadrilateralMovable from '../model/QuadrilateralMovable.js';
 import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
 import WrappedAudioBuffer from '../../../../tambo/js/WrappedAudioBuffer.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
+import quadShapeCollision_mp3 from '../../../sounds/quadShapeCollision_mp3.js';
+import QuadrilateralStrings from '../../QuadrilateralStrings.js';
+
+// constants
+const blockedByInnerShapeString = QuadrilateralStrings.a11y.voicing.blockedByInnerShapeString;
 
 type SelfOptions = {
 
@@ -77,6 +82,19 @@ class QuadrilateralMovableNode extends Voicing( Node ) {
     model.isPressedProperty.lazyLink( isPressed => {
       if ( isPressed ) {
         pressedSoundPlayer.play();
+      }
+    } );
+
+    const blockedByShapeSoundClip = new SoundClip( quadShapeCollision_mp3, {
+      initialOutputLevel: 0.5
+    } );
+    soundManager.addSoundGenerator( blockedByShapeSoundClip );
+    model.movementBlockedByShapeProperty.lazyLink( blocked => {
+      if ( blocked ) {
+        blockedByShapeSoundClip.play();
+        this.voicingSpeakResponse( {
+          contextResponse: blockedByInnerShapeString
+        } );
       }
     } );
   }
