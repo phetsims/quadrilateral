@@ -1,7 +1,7 @@
 // Copyright 2021-2023, University of Colorado Boulder
 
 /**
- * A model for the state of sound design options. These values can be changed by the user, and impact how sounds
+ * A model for sound design options. These values can be changed by the user from preferences, and impact how sounds
  * behave.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
