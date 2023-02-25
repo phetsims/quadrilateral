@@ -13,15 +13,17 @@ import quadrilateral from './quadrilateral.js';
 
 const QuadrilateralConstants = {
 
+  //----------------------------------------------------------------------------------------------------------
   // MODEL CONSTANTS
+  //----------------------------------------------------------------------------------------------------------
 
   // {number} - The amount of movement per key press in model coordinates for vertices and sides.
   MOVEMENT_PER_KEY_PRESS: 0.05,
 
-  // Amount of spacing in model coordinates between grid lines in the visual grid
+  // Amount of spacing in model coordinates between grid lines in the visual grid.
   GRID_SPACING: 0.25,
 
-  // TODO: Documentation, calculate from grid spacing? Or calculate grid spacing from these?
+  // Dimensions of model bounds.
   BOUNDS_WIDTH: 3.1,
   BOUNDS_HEIGHT: 2.1,
 
@@ -31,7 +33,9 @@ const QuadrilateralConstants = {
   // The "minor" vertex interval when the using ?reducedStepSize from Preferences. Value is in model coordinates.
   MINOR_REDUCED_SIZE_VERTEX_INTERVAL: 0.015625,
 
+  //----------------------------------------------------------------------------------------------------------
   // VIEW CONSTANTS
+  //----------------------------------------------------------------------------------------------------------
   SCREEN_VIEW_X_MARGIN: 15,
   SCREEN_VIEW_Y_MARGIN: 15,
 
