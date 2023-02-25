@@ -161,8 +161,6 @@ class QuadrilateralShapeModel {
     this.vertexB = new Vertex( new Vector2( 0.25, 0.25 ), VertexLabel.VERTEX_B, smoothingLengthProperty, options.tandem.createTandem( 'vertexB' ) );
     this.vertexC = new Vertex( new Vector2( 0.25, -0.25 ), VertexLabel.VERTEX_C, smoothingLengthProperty, options.tandem.createTandem( 'vertexC' ) );
     this.vertexD = new Vertex( new Vector2( -0.25, -0.25 ), VertexLabel.VERTEX_D, smoothingLengthProperty, options.tandem.createTandem( 'vertexD' ) );
-
-    // Collection of the vertices which should be easy to iterate over
     this.vertices = [ this.vertexA, this.vertexB, this.vertexC, this.vertexD ];
 
     this.oppositeVertexMap = new Map( [
@@ -205,7 +203,7 @@ class QuadrilateralShapeModel {
     this.oppositeEqualSidePairsProperty = new Property<SidePair[]>( [] );
     this.parallelSidePairsProperty = new Property<SidePair[]>( [] );
 
-    // Connect the sides, creating the shape and giving vertices the information they need to determine their angles.
+    // Connect the sides, creating the shape and giving vertices the information they need to calculate angles.
     this.sideBC.connectToSide( this.sideAB );
     this.sideCD.connectToSide( this.sideBC );
     this.sideDA.connectToSide( this.sideCD );
@@ -270,9 +268,10 @@ class QuadrilateralShapeModel {
         this.vertexD.positionProperty ],
       ( position1, position2, position3, position4 ) => {
 
-        // Update Properties after Vertex positions have changed.
+        // Update geometric attributes after Vertex positions have changed.
         this.updateOrderDependentProperties();
 
+        // notify a change in shape, after updating geometric attributes
         this.shapeChangedEmitter.emit();
 
         // After the shape has changed, update the areas of allowed motion for each Vertex.
@@ -292,7 +291,13 @@ class QuadrilateralShapeModel {
 
   /**
    * Returns true if the current quadrilateral shape is allowed based on the rules of this model.
-   * TODO: Documentation and readability.
+   *
+   * A Vertex cannot overlap any other.
+   * A Vertex cannot overlap any Side.
+   * A Vertex cannot go outside modelBounds.
+   * A Vertex cannot to outside its defined drag Shape (which prevents crossed Quadrilaterals).
+   *
+   * As soon as the quadrilateral is found to be disallowed, we break out of testing.
    */
   public isQuadrilateralShapeAllowed(): boolean {
     let shapeAllowed = true;
@@ -303,8 +308,7 @@ class QuadrilateralShapeModel {
       // The vertex must be completely within model bounds
       shapeAllowed = this.modelBounds.containsBounds( testVertex.modelBoundsProperty.value );
 
-      // Make sure that no vertices overlap any other (only need to do this if  we haven't already found
-      // a disallowed case.
+      // Make sure that no vertices overlap any other.
       if ( shapeAllowed ) {
         for ( let j = 0; j < this.vertices.length; j++ ) {
           const otherVertex = this.vertices[ j ];
@@ -312,7 +316,6 @@ class QuadrilateralShapeModel {
           if ( testVertex !== otherVertex ) {
             shapeAllowed = !testVertex.overlapsOther( otherVertex );
 
-            // Shape is not allowed, no need to keep testing
             if ( !shapeAllowed ) {
               break;
             }
@@ -320,7 +323,7 @@ class QuadrilateralShapeModel {
         }
       }
 
-      // Make sure that no vertex bounds overlap any line
+      // Make sure that no vertices overlap a side.
       if ( shapeAllowed ) {
         for ( let j = 0; j < this.sides.length; j++ ) {
           const side = this.sides[ j ];
@@ -334,14 +337,13 @@ class QuadrilateralShapeModel {
         }
       }
 
-      // If no vertices overlap, make sure that the vertex is within the drag area. No need to do this
-      // (potentially expensive) Shape work if the shape is already disallowed.
+      // Make sure the Vertex is within the drag area Shape.
       if ( shapeAllowed ) {
         assert && assert( testVertex.dragAreaProperty.value, 'Drag area must be defined for the Vertex' );
         shapeAllowed = QuadrilateralUtils.customShapeContainsPoint( testVertex.dragAreaProperty.value!, testVertex.positionProperty.value );
       }
 
-      // Shape is not allowed, no need to keep testing
+      // Quadrilateral is not allowed, no need to keep testing
       if ( !shapeAllowed ) {
         break;
       }
@@ -351,7 +353,7 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Returns true when all angles are right.
+   * Returns true when all angles are right (within staticAngleToleranceInterval).
    */
   public getAreAllAnglesRight(): boolean {
     return _.every( this.vertices, vertex => this.isRightAngle( vertex.angleProperty.value! ) );
@@ -371,7 +373,7 @@ class QuadrilateralShapeModel {
    * Returns the area of the quadrilateral. Uses Bretschneider's formula for the area of a general quadrilateral,
    * see https://en.wikipedia.org/wiki/Bretschneider%27s_formula.
    *
-   * Dependent on side lengths and angles, must be used in updateOrderDependentProperties.
+   * Requires side lengths and vertex angles to be up-to-date, must be used in updateOrderDependentProperties.
    */
   private getArea(): number {
     const a = this.sideAB.lengthProperty.value;
@@ -413,6 +415,9 @@ class QuadrilateralShapeModel {
     return Utils.equalsEpsilon( length1, length2, this.interLengthToleranceInterval );
   }
 
+  /**
+   * Returns true if the angle is a right angle, within staticAngleToleranceInterval.
+   */
   public isRightAngle( angle: number ): boolean {
     return Utils.equalsEpsilon( angle, Math.PI / 2, this.staticAngleToleranceInterval );
   }
@@ -451,7 +456,7 @@ class QuadrilateralShapeModel {
     // set all positions
     verticesWithProposedPositions.forEach( vertexWithProposedPosition => {
 
-      // this is a new Vector2 instance so even if x,y values are the same as the old value it will triggere
+      // this is a new Vector2 instance so even if x,y values are the same as the old value it will trigger
       // listeners without this check
       const proposedPosition = vertexWithProposedPosition.proposedPosition!;
       assert && assert( proposedPosition, 'proposedPosition must be defined to set positions' );
@@ -465,10 +470,10 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Update Properties that need to be updated only after other model Properties are set. This also controls the order
-   * in which Properties are set, which is very important in this sim. Positions need to update, then angles and
-   * lengths, then Properties tracking pairs of equal lengths and angles, then parallelogram state, and finally shape
-   * name. If shape name or parallelogram state is calculated before shape properties, their values will be incorrect.
+   * Update Properties that need to be calculated in sequence to have correct values. Positions need to update,
+   * then angles and lengths, then Properties tracking pairs of equal lengths and angles, then parallelogram state,
+   * and finally shape name. If shape name or parallelogram state is calculated before shape properties, their values
+   * will be incorrect.
    */
   public updateOrderDependentProperties(): void {
 
@@ -482,24 +487,24 @@ class QuadrilateralShapeModel {
       side.updateLengthAndShape();
     } );
 
+    // pairs of parallel sides
     this.updateParallelSideProperties();
 
-    // update pairs of vertices and sides
+    // pairs of equal vertex angles and side lengths
     this.updateVertexAngleComparisons();
     this.updateSideLengthComparisons();
 
+    // other shape attributes
     this.areaProperty.set( this.getArea() );
-
     this.allAnglesRightProperty.set( this.getAreAllAnglesRight() );
     this.allLengthsEqualProperty.set( this.getAreAllLengthsEqual() );
 
-    // getShapeName requires all shape Properties to be calculated, so this is done at the very end
+    // the detected shape name
     this.shapeNameProperty.set( this.shapeDetector.getShapeName() );
   }
 
   /**
-   * Update Properties managing Angle comparisons which hold VertexPairs that have equal angles. These VertexPairs
-   * will be adjacent vertices or opposite vertices.
+   * Update Properties for angle comparisons - pairs of equal opposite and equal adjacent angles.
    */
   private updateVertexAngleComparisons(): void {
     this.updateEqualVertexPairs( this.adjacentEqualVertexPairsProperty, this.adjacentVertexMap );
@@ -507,7 +512,7 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Update a Property for a list of equal adjacent or opposite angles.
+   * Update a provided Property that holds a list of equal angles (either opposite or adjacent).
    */
   private updateEqualVertexPairs( equalVertexPairsProperty: Property<VertexPair[]>, vertexMap: Map<Vertex, Vertex[]> ): void {
     const currentVertexPairs = equalVertexPairsProperty.value;
@@ -538,7 +543,7 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Update Properties managing side length comparisons between opposite and adjacent sides.
+   * Update Properties for side length comparisons - either opposite or adjacent sides.
    */
   private updateSideLengthComparisons(): void {
     this.updateEqualSidePairs( this.adjacentEqualSidePairsProperty, this.adjacentSideMap );
@@ -546,8 +551,7 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Update particular Property that holds collections of SidePairs that are equal in length. Uses
-   * shapeLengthToleranceIntervalProperty for comparison tolerances.
+   * Update a provided Property holding a list of sides that are equal in length (either opposite or adjacent).
    */
   private updateEqualSidePairs( equalSidePairsProperty: Property<SidePair[]>, sideMap: Map<Side, Side[]> ): void {
     const currentSidePairs = equalSidePairsProperty.value;
@@ -579,7 +583,7 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Updates Properties related to opposite pairs of parallel sides and the isParallelogramProperty. To be used in
+   * Updates Properties related to opposite sides that are parallel, and the isParallelogramProperty. To be used in
    * updateOrderDependentProperties.
    */
   private updateParallelSideProperties(): void {
@@ -606,8 +610,8 @@ class QuadrilateralShapeModel {
    */
   public setFromShape( other: QuadrilateralShapeModel ): void {
 
-    // since we are updating many vertices at once we need to defer callbacks while vertices could create a bad
-    // shape as we set each one
+    // Since we are updating many vertices at once, we need to defer callbacks until all positions are set. Otherwise,
+    // callbacks will be called for a potentially disallowed shape.
     this.setPropertiesDeferred( true );
 
     this.vertexA.positionProperty.set( other.vertexA.positionProperty.value );
@@ -642,11 +646,15 @@ class QuadrilateralShapeModel {
     this.vertexD.dragAreaProperty.set( QuadrilateralUtils.createVertexArea( dilatedBounds, this.vertexD, this.vertexA, this.vertexB, this.vertexC, this.validateShape ) );
   }
 
+  /**
+   * Set Properties deferred so that callbacks are not invoked while the QuadrilateralShapeModel has bad transient
+   * state while other Property values are being calculated.
+   */
   public setPropertiesDeferred( deferred: boolean ): void {
     assert && assert( deferred !== this.propertiesDeferred, 'deferred state must be changing, you may have not un-deferred Properties' );
     this.propertiesDeferred = deferred;
 
-    // set deferred for all Properties first so that their values are up to date by the time we call listeners
+    // set deferred for all Properties first so that their values are up-to-date by the time we call listeners
     const deferredVertexListeners = this.vertices.map( vertex => vertex.setPropertiesDeferred( deferred ) );
 
     // call any deferred callbacks if no longer deferred
@@ -669,13 +677,13 @@ class QuadrilateralShapeModel {
     this.vertexC.reset();
     this.vertexD.reset();
 
+    // no longer deferred, invoke callbacks and update order dependent Properties
     this.setPropertiesDeferred( false );
   }
 
   /**
-   * Reset the shape AND indicate that a reset is in progress (which will disable certain feedback while the
-   * reset is in progress). Use this when just resetting the QuadrilateralShapeModel without resetting other
-   * aspects of the Model.
+   * Reset the shape AND indicate that a reset is in progress (which will disable certain view feedback.
+   * Use this when just resetting the QuadrilateralShapeModel without resetting the full QuadrilateralShapeModel.
    */
   public isolatedReset(): void {
     this.resetNotInProgressProperty.value = false;
@@ -685,8 +693,8 @@ class QuadrilateralShapeModel {
 
   /**
    * Returns the tolerance interval to use for a value. Generally, the default value will be returned. If the sim is
-   * running while connected to a device (?deviceConnection) or in a mode where all step sizes are reduced, the
-   * value will be further reduced by scale factors provided by query parameter.
+   * running while connected to a prototype device (?deviceConnection) or in a mode where all step sizes are reduced,
+   * the value will be further reduced by scale factors provided by query parameter.
    */
   public static getWidenedToleranceInterval( defaultValue: number ): number {
     let interval = defaultValue;
