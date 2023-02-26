@@ -65,7 +65,7 @@ class QuadrilateralTangibleControls extends VBox {
     if ( QuadrilateralQueryParameters.bluetooth ) {
 
       // request BLE devices
-      const bluetoothButton = new QuadrilateralBluetoothConnectionButton( tangibleConnectionModel, tangibleController, tandem.createTandem( 'quadrilateralBluetoothConnectionButton' ) );
+      const bluetoothButton = new QuadrilateralBluetoothConnectionButton( tangibleConnectionModel, tangibleController );
       children.push( bluetoothButton );
     }
 

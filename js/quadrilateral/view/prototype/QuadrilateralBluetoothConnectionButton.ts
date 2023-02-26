@@ -119,7 +119,7 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
     const bluetooth = navigator.bluetooth;
 
     if ( bluetooth ) {
-      device = await bluetooth.requestDevice( REQUEST_DEVICE_OPTIONS ).catch( err => {
+      device = await bluetooth.requestDevice( REQUEST_DEVICE_OPTIONS ).catch( ( err: ErrorEvent ) => {
         device = null;
       } );
       if ( device ) {

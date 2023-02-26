@@ -29,26 +29,25 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
 
 type SelfOptions = EmptySelfOptions;
-type SideNodeOptions = SelfOptions & StrictOmit<QuadrilateralMovableNodeOptions, 'grabbedSound'>;
+type VertexNodeOptions = SelfOptions & StrictOmit<QuadrilateralMovableNodeOptions, 'grabbedSound'>;
 
 class VertexNode extends QuadrilateralMovableNode {
   private readonly quadrilateralModel: QuadrilateralModel;
   private readonly vertex: Vertex;
 
-  public constructor( vertex: Vertex, vertexLabel: string, quadrilateralModel: QuadrilateralModel, vertexDescriber: VertexDescriber, modelViewTransform: ModelViewTransform2, providedOptions?: QuadrilateralMovableNodeOptions ) {
+  public constructor( vertex: Vertex, vertexLabel: string, quadrilateralModel: QuadrilateralModel, vertexDescriber: VertexDescriber, modelViewTransform: ModelViewTransform2, providedOptions?: VertexNodeOptions ) {
 
-    const options = optionize<SideNodeOptions, SelfOptions, QuadrilateralMovableNodeOptions>()( {
+    const options = optionize<VertexNodeOptions, SelfOptions, QuadrilateralMovableNodeOptions>()( {
       grabbedSound: grabHighPitch_mp3
     }, providedOptions );
-
-    super( vertex, modelViewTransform, options );
 
     const viewRadius = modelViewTransform.modelToViewBounds( vertex.modelBoundsProperty.value ).width / 2;
     const circle = new Circle( viewRadius, {
       fill: QuadrilateralColors.quadrilateralShapeColorProperty,
       stroke: QuadrilateralColors.quadrilateralShapeStrokeColorProperty
     } );
-    this.addChild( circle );
+
+    super( vertex, modelViewTransform, circle, options );
 
     this.vertex = vertex;
     this.quadrilateralModel = quadrilateralModel;

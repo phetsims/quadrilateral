@@ -46,8 +46,6 @@ class SideNode extends QuadrilateralMovableNode {
   private scratchShapeModel: QuadrilateralShapeModel;
   private quadrilateralModel: QuadrilateralModel;
 
-  private readonly sidePath: Path;
-
   public constructor(
     quadrilateralModel: QuadrilateralModel,
     side: Side,
@@ -63,19 +61,18 @@ class SideNode extends QuadrilateralMovableNode {
       grabbedSoundOutputLevel: 0.8
     }, providedOptions );
 
-    super( side, modelViewTransform, options );
+    const sidePath = new Path( null, {
+      fill: QuadrilateralColors.quadrilateralShapeColorProperty,
+      stroke: QuadrilateralColors.quadrilateralShapeStrokeColorProperty
+    } );
+
+    super( side, modelViewTransform, sidePath, options );
 
     this.side = side;
     this.scratchSide = scratchSide;
     this.quadrilateralModel = quadrilateralModel;
     this.quadrilateralShapeModel = quadrilateralModel.quadrilateralShapeModel;
     this.scratchShapeModel = quadrilateralModel.quadrilateralTestShapeModel;
-
-    this.sidePath = new Path( null, {
-      fill: QuadrilateralColors.quadrilateralShapeColorProperty,
-      stroke: QuadrilateralColors.quadrilateralShapeStrokeColorProperty
-    } );
-    this.addChild( this.sidePath );
 
     const ticksNode = new SideTicksNode( side, modelViewTransform );
     this.addChild( ticksNode );
@@ -164,7 +161,7 @@ class SideNode extends QuadrilateralMovableNode {
       }
 
       // transform shape to view coordinates
-      this.sidePath.shape = modelViewTransform.modelToViewShape( lineShape );
+      sidePath.shape = modelViewTransform.modelToViewShape( lineShape );
 
       // Draw the custom focus highlight so that the highlight surrounds the shape of the line
       const vertex1ViewPosition = modelViewTransform.modelToViewPosition( vertex1Position );

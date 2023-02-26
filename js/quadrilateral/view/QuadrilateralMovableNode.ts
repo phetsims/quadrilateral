@@ -7,7 +7,7 @@
  */
 
 import quadrilateral from '../../quadrilateral.js';
-import { KeyboardListener, Node, NodeOptions, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
+import { KeyboardListener, Node, NodeOptions, PaintableNode, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import optionize from '../../../../phet-core/js/optionize.js';
@@ -45,7 +45,9 @@ class QuadrilateralMovableNode extends Voicing( Node ) {
   public readonly largeViewDragDelta: number;
   public readonly smallViewDragDelta: number;
 
-  public constructor( model: QuadrilateralMovable, modelViewTransform: ModelViewTransform2, providedOptions: QuadrilateralMovableNodeOptions ) {
+  public readonly paintableNode: PaintableNode;
+
+  public constructor( model: QuadrilateralMovable, modelViewTransform: ModelViewTransform2, paintableNode: PaintableNode, providedOptions: QuadrilateralMovableNodeOptions ) {
     const options = optionize<QuadrilateralMovableNodeOptions, SelfOptions, ParentOptions>()( {
       cursor: 'pointer',
       tagName: 'div',
@@ -60,6 +62,9 @@ class QuadrilateralMovableNode extends Voicing( Node ) {
 
     this.voicingNameResponse = options.nameResponse;
     this.innerContent = options.nameResponse;
+    this.paintableNode = paintableNode;
+
+    this.addChild( paintableNode );
 
     // calculate step sizes in view coordinates based on input modes from query parameters
     const reducedStepSize = QuadrilateralQueryParameters.reducedStepSize;
