@@ -1,11 +1,7 @@
 // Copyright 2021-2023, University of Colorado Boulder
 
 /**
- * Options for the Preferences Dialog that allow us to set the sound design and sub-options. Sounds are
- * being actively designed while we implement them and we are adding all designs at once. TThe sounds can be selected
- * and controlled by the UI that is provided by this Node.
- *
- * TODO: i18n for this file
+ * Options for the Preferences Dialog that allow us to set the sound design and sub-options.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -31,8 +27,6 @@ const preferencesDialogPlaySoundsForeverString = QuadrilateralStrings.preference
 const tracksPlayForeverCheckedContextResponseString = QuadrilateralStrings.a11y.preferencesDialog.tracksPlayForeverCheckbox.checkedContextResponse;
 const tracksPlayForeverUncheckedContextResponseString = QuadrilateralStrings.a11y.preferencesDialog.tracksPlayForeverCheckbox.uncheckedContextResponse;
 
-// Extending a PreferencesPanelSection will by default indent this section under the "Sounds" content in the Preferences
-// dialog
 class QuadrilateralSoundOptionsNode extends PreferencesPanelSection {
 
   // Necessary for PhET-iO state and disposal since these components become dynamic when they live in a phetio capsule
