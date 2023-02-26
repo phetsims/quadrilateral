@@ -1,6 +1,7 @@
 // Copyright 2021-2023, University of Colorado Boulder
 
 /**
+ * The primary class that generates
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 

@@ -1,8 +1,7 @@
 // Copyright 2023, University of Colorado Boulder
 
 /**
- * Help content for the KeyboardHelpDialog describing how to change the shape by moving
- * sides and vertices.
+ * Help content for the KeyboardHelpDialog describing how to change the shape by moving sides and vertices.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */

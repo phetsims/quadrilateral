@@ -4,7 +4,7 @@
 /**
  * A panel that displays model values for debugging. For debugging only.
  *
- * Note to access some otherwise private class variables this uses square bracket notation.
+ * Note - to access some otherwise private class variables this uses square bracket notation.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
