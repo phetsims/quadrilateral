@@ -1,6 +1,8 @@
 // Copyright 2023, University of Colorado Boulder
 
 /**
+ * A general class that updates the sim from tangible device input. In that way it "controls" the simulation model.
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
@@ -94,7 +96,7 @@ class QuadrilateralTangibleController {
   /**
    * Set positions from the length and angle data provided. Useful when working with a tangible device that is
    * providing length and angle data. When reconstructing the shape we start by making the top side parallel
-   * with the top of model bounds. The remaining vertices are positioned acordingly. Finally, if there is some
+   * with the top of model bounds. The remaining vertices are positioned accordingly. Finally, if there is some
    * rotation to apply (from the experimental marker input), that rotation is applied.
    *
    * @param topLength
