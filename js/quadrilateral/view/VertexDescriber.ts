@@ -54,7 +54,6 @@ const numberOfWedgesPatternString = QuadrilateralStrings.a11y.voicing.numberOfWe
 const numberOfWedgesAndAHalfPatternString = QuadrilateralStrings.a11y.voicing.numberOfWedgesAndAHalfPattern;
 const justOverNumberOfWedgesPatternString = QuadrilateralStrings.a11y.voicing.justOverNumberOfWedgesPattern;
 const justUnderNumberOfWedgesPatternString = QuadrilateralStrings.a11y.voicing.justUnderNumberOfWedgesPattern;
-const blockedByInnerShapeString = QuadrilateralStrings.a11y.voicing.blockedByInnerShapeString;
 const blockedByEdgeString = QuadrilateralStrings.a11y.voicing.blockedByEdgeString;
 
 // Maps a vertex to its accessible name, like "Corner A".
@@ -89,8 +88,8 @@ angleComparisonDescriptionMap.set( new Range( 2.2, Number.POSITIVE_INFINITY ), f
 class VertexDescriber {
 
   // A reference to the model components that drive description.
-  private vertex: Vertex;
-  private quadrilateralShapeModel: QuadrilateralShapeModel;
+  private readonly vertex: Vertex;
+  private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
   private markersVisibleProperty: TReadOnlyProperty<boolean>;
 
   // See above documentation.
@@ -142,7 +141,7 @@ class VertexDescriber {
    * "just over 3 wedges" or
    * "1 wedge" or
    * "right angle" or
-   * "3 and a half wedge" or
+   * "3 and a half wedges" or
    * "half one wedge"
    *
    * For the design request of this feature please see https://github.com/phetsims/quadrilateral/issues/231
@@ -208,8 +207,9 @@ class VertexDescriber {
   }
 
   /**
-   * Get a description of the angle of this vertex and how it compares to its adjacent vertices. Used
-   * for the object response of this vertex. Will return something like
+   * Get a description of the angle of this vertex and how it compares to its adjacent vertices. Will return something
+   * like:
+   *
    * "much smaller than adjacent equal corners." or
    * "equal to adjacent corners."
    */
@@ -268,13 +268,6 @@ class VertexDescriber {
     }
 
     return description;
-  }
-
-  /**
-   * Returns a context response for when a Vertex cannot move because it is blocked by the shape itself.
-   */
-  public getBlockedByShapeResponse(): string {
-    return blockedByInnerShapeString;
   }
 
   /**
