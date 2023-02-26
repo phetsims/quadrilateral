@@ -116,9 +116,10 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
     let device: null | IntentionalAny;
 
     // @ts-expect-error - navigator.bluetooth is experimental and does not exist in the typing
-    if ( navigator.bluetooth ) {
-      // @ts-expect-error - navigator.bluetooth is experimental and does not exist in the typing
-      device = await navigator.bluetooth.requestDevice( REQUEST_DEVICE_OPTIONS ).catch( err => {
+    const bluetooth = navigator.bluetooth;
+
+    if ( bluetooth ) {
+      device = await bluetooth.requestDevice( REQUEST_DEVICE_OPTIONS ).catch( err => {
         device = null;
       } );
       if ( device ) {
