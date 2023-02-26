@@ -1,8 +1,8 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
- * Base class for the sound designs. There are a collection of sound clips that will play and represent shapes and
- * geometric properties. The sound clips play in the background and loop forever, but their output level will change
+ * Base class for the sound designs. There are a collection of soundtracks that will play and represent shapes and
+ * geometric properties. The sounds play in the background and loop forever, but their output level will change
  * depending on shape state and user input. By default, sound will only play for a few seconds after input with the
  * quadrilateral.
  *

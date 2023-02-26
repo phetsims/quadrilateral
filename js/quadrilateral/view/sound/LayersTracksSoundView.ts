@@ -58,7 +58,7 @@ const NAMED_QUADRILATERAL_TO_TRACKS_MAP = new Map( [
   [ NamedQuadrilateral.SQUARE, [ 0, 2, 3, 5, 6, 7 ] ]
 ] );
 
-class TracksBuildUpSoundView extends TracksSoundView {
+class LayersTracksSoundView extends TracksSoundView {
   private readonly disposeTracksBuildUpSoundView: () => void;
 
   public constructor( shapeModel: QuadrilateralShapeModel, shapeSoundEnabledProperty: TReadOnlyProperty<boolean>, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
@@ -83,7 +83,7 @@ class TracksBuildUpSoundView extends TracksSoundView {
       } );
 
       const soundIndicesToPlay = NAMED_QUADRILATERAL_TO_TRACKS_MAP.get( shapeName );
-      assert && assert( soundIndicesToPlay, 'NamedQuadrilateral does not have a TracksBuildUpSoundView design' );
+      assert && assert( soundIndicesToPlay, 'NamedQuadrilateral does not have a LayersTracksSoundView design' );
       soundIndicesToPlay!.forEach( index => {
         this.soundClips[ index ].setOutputLevel( this.indexToOutputLevelPropertyMap.get( index )!.value );
       } );
@@ -107,5 +107,5 @@ class TracksBuildUpSoundView extends TracksSoundView {
   }
 }
 
-quadrilateral.register( 'TracksBuildUpSoundView', TracksBuildUpSoundView );
-export default TracksBuildUpSoundView;
+quadrilateral.register( 'LayersTracksSoundView', LayersTracksSoundView );
+export default LayersTracksSoundView;
