@@ -67,7 +67,7 @@ const NAMED_QUADRILATERAL_TO_HIGH_VOLUME_TRACKS_MAP = new Map( [
   [ NamedQuadrilateral.SQUARE, [ 7 ] ]
 ] );
 
-class TracksVolumeEmphasisSoundView extends TracksSoundView {
+class EmphasisTracksSoundView extends TracksSoundView {
   private readonly disposeTracksVolumeEmphasisSoundView: () => void;
 
   // The requested output levels for each SoundClip as shapes are detected. All of these are playing at once at the
@@ -111,7 +111,7 @@ class TracksVolumeEmphasisSoundView extends TracksSoundView {
 
       // play the emphasized clips at their higher volume
       const tracksToEmphasize = NAMED_QUADRILATERAL_TO_HIGH_VOLUME_TRACKS_MAP.get( shapeName );
-      assert && assert( tracksToEmphasize, 'NamedQuadrilateral does not have a TracksVolumeEmphasisSoundView design' );
+      assert && assert( tracksToEmphasize, 'NamedQuadrilateral does not have a EmphasisTracksSoundView design' );
       tracksToEmphasize!.forEach( index => {
         this.soundClips[ index ].setOutputLevel( this.indexToOutputLevelPropertyMap.get( index )!.value );
       } );
@@ -135,5 +135,5 @@ class TracksVolumeEmphasisSoundView extends TracksSoundView {
   }
 }
 
-quadrilateral.register( 'TracksVolumeEmphasisSoundView', TracksVolumeEmphasisSoundView );
-export default TracksVolumeEmphasisSoundView;
+quadrilateral.register( 'EmphasisTracksSoundView', EmphasisTracksSoundView );
+export default EmphasisTracksSoundView;

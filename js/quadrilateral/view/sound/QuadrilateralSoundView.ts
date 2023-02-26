@@ -12,7 +12,7 @@ import QuadrilateralModel from '../../model/QuadrilateralModel.js';
 import QuadrilateralSoundOptionsModel, { SoundDesign } from '../../model/QuadrilateralSoundOptionsModel.js';
 import LayersTracksSoundView from './LayersTracksSoundView.js';
 import TracksSoundView from './TracksSoundView.js';
-import TracksVolumeEmphasisSoundView from './TracksVolumeEmphasisSoundView.js';
+import EmphasisTracksSoundView from './EmphasisTracksSoundView.js';
 
 class QuadrilateralSoundView {
 
@@ -28,7 +28,7 @@ class QuadrilateralSoundView {
         this.activeSoundView = new LayersTracksSoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
       }
       else if ( soundDesign === SoundDesign.TRACKS_VOLUME_EMPHASIS ) {
-        this.activeSoundView = new TracksVolumeEmphasisSoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
+        this.activeSoundView = new EmphasisTracksSoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
       }
     } );
   }
