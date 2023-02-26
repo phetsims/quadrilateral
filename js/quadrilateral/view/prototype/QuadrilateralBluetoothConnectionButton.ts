@@ -6,6 +6,9 @@
  *
  * NOTE: this uses Promises (as the bluetooth API works with promises) which is very unusual for simulation code.
  *
+ * NOTE: IntentionalAny is used a lot in this file - the Web Bluetooth API is not available yet in native types. Since
+ * this is prototype code, it isn't worth further investigation.
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 import quadrilateral from '../../../quadrilateral.js';
