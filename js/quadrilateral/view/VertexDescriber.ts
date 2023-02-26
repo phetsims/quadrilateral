@@ -90,7 +90,7 @@ class VertexDescriber {
   // A reference to the model components that drive description.
   private readonly vertex: Vertex;
   private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
-  private markersVisibleProperty: TReadOnlyProperty<boolean>;
+  private readonly markersVisibleProperty: TReadOnlyProperty<boolean>;
 
   // See documentation at definition.
   public static readonly VERTEX_CORNER_LABEL_MAP = VERTEX_CORNER_LABEL_MAP;
