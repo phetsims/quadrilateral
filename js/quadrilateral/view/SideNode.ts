@@ -90,7 +90,7 @@ class SideNode extends QuadrilateralMovableNode {
       ticksNode.visible = markersVisible;
 
       // create a single line that will then be divided into segments
-      const fullLine = new Line( vertex1Position, vertex2Position );
+      const fullLine = this.side.modelLine;
 
       // The Shape for our Path - drawn in model coordinates until a transform at the end
       const lineShape = new Shape();
