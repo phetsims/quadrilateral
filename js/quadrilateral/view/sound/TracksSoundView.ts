@@ -12,7 +12,6 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
 import LinearFunction from '../../../../../dot/js/LinearFunction.js';
 import Enumeration from '../../../../../phet-core/js/Enumeration.js';
@@ -21,7 +20,6 @@ import SoundClip from '../../../../../tambo/js/sound-generators/SoundClip.js';
 import SoundGenerator from '../../../../../tambo/js/sound-generators/SoundGenerator.js';
 import soundManager from '../../../../../tambo/js/soundManager.js';
 import WrappedAudioBuffer from '../../../../../tambo/js/WrappedAudioBuffer.js';
-import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
 import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
@@ -59,7 +57,8 @@ class TracksSoundView extends SoundGenerator {
   // on input and state of the quadrilateral shape, their output level will change.
   public readonly soundClips: SoundClip[];
 
-  public readonly indexToOutputLevelPropertyMap = new Map<number, NumberProperty>();
+  // A map that goes from the index of the sound file to play to its desired output leve. Subclasses will populate this.
+  public readonly indexToOutputLevelMap = new Map<number, number>();
 
   // How much time sounds should continue to play after interaction with the quadrilateral. If the user has
   // selected to play sounds forever, this variable is meaningless.
@@ -216,18 +215,7 @@ class TracksSoundView extends SoundGenerator {
       generator.dispose();
     } );
 
-    // dispose all output level Properties that are externally controlling the output level of the
-    // sound clips
-    this.indexToOutputLevelPropertyMap.forEach( ( value, key ) => {
-      value.dispose();
-    } );
-
     super.dispose();
-  }
-
-  protected setIndexOutputLevel( index: number, outputLevel: number ): void {
-    const outputLevelProperty = new NumberProperty( outputLevel, { range: QuadrilateralConstants.OUTPUT_LEVEL_RANGE } );
-    this.indexToOutputLevelPropertyMap.set( index, outputLevelProperty );
   }
 }
 

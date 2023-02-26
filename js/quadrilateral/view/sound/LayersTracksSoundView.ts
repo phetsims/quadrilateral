@@ -65,14 +65,14 @@ class LayersTracksSoundView extends TracksSoundView {
 
     // desired output levels for each sound (as requested by design, after manually editing the gain)
     // See https://github.com/phetsims/quadrilateral/issues/175#issuecomment-1339626942
-    this.setIndexOutputLevel( 0, 0.5 );
-    this.setIndexOutputLevel( 1, 0.5 );
-    this.setIndexOutputLevel( 2, 1 );
-    this.setIndexOutputLevel( 3, 0.75 );
-    this.setIndexOutputLevel( 4, 0.65 );
-    this.setIndexOutputLevel( 5, 1 );
-    this.setIndexOutputLevel( 6, 0.45 );
-    this.setIndexOutputLevel( 7, 0.70 );
+    this.indexToOutputLevelMap.set( 0, 0.5 );
+    this.indexToOutputLevelMap.set( 1, 0.5 );
+    this.indexToOutputLevelMap.set( 2, 1 );
+    this.indexToOutputLevelMap.set( 3, 0.75 );
+    this.indexToOutputLevelMap.set( 4, 0.65 );
+    this.indexToOutputLevelMap.set( 5, 1 );
+    this.indexToOutputLevelMap.set( 6, 0.45 );
+    this.indexToOutputLevelMap.set( 7, 0.70 );
 
     const shapeNameListener = ( shapeName: NamedQuadrilateral ) => {
 
