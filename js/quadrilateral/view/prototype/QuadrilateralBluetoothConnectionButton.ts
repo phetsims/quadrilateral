@@ -1,8 +1,10 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
- * To test connecting to a bluetooth device using web bluetooth. Note this uses Promises (as the
- * bluetooth API works with promises) which is very unusual for simulation code.
+ * To test connecting to a bluetooth device using web bluetooth. This code was written in collaboration with Scott
+ * Lambert from SLU, who built the tangible hardware and bluetooth device.
+ *
+ * NOTE: this uses Promises (as the bluetooth API works with promises) which is very unusual for simulation code.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -25,7 +27,6 @@ const RIGHT_LENGTH_CHARACTERISTIC_ID = '19b10010-e8f2-537e-4f6c-d104768a1215';
 const LEFT_LENGTH_CHARACTERSTIC_ID = '19b10010-e8f2-537e-4f6c-d104768a1216';
 const LEFT_TOP_ANGLE_CHARACTERISTIC_ID = '19b10010-e8f2-537e-4f6c-d104768a1217';
 const RIGHT_TOP_ANGLE_CHARACTERISTIC_ID = '19b10010-e8f2-537e-4f6c-d104768a1218';
-
 
 // The bluetooth options for the requestDevice call. There must be at least one entry in filters for the browser
 // to make a request!
@@ -120,33 +121,33 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
         const gattServer = await device.gatt.connect().catch( ( err: DOMException ) => { console.error( err ); } );
         const primaryService = await gattServer.getPrimaryService( PRIMARY_SERVICE_ID ).catch( ( err: DOMException ) => { console.error( err ); } );
 
-        const characteristic = await primaryService.getCharacteristic( TOP_LENGTH_CHARACTERISTIC_ID ).catch( ( err: DOMException ) => { console.error( err ); } );
-        const notifySuccess = await characteristic.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
-        notifySuccess.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
+        const topLengthCharacteristic = await primaryService.getCharacteristic( TOP_LENGTH_CHARACTERISTIC_ID ).catch( ( err: DOMException ) => { console.error( err ); } );
+        const topLengthSuccess = await topLengthCharacteristic.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
+        topLengthSuccess.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
           this.topLength = this.getCharacteristicValue( event );
         } );
 
-        const characteristic2 = await primaryService.getCharacteristic( RIGHT_LENGTH_CHARACTERISTIC_ID ).catch( ( err: DOMException ) => { console.error( err ); } );
-        const notifySuccess2 = await characteristic2.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
-        notifySuccess2.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
+        const rightLengthCharacteristic = await primaryService.getCharacteristic( RIGHT_LENGTH_CHARACTERISTIC_ID ).catch( ( err: DOMException ) => { console.error( err ); } );
+        const rightLengthSuccess = await rightLengthCharacteristic.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
+        rightLengthSuccess.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
           this.rightLength = this.getCharacteristicValue( event );
         } );
 
-        const characteristic3 = await primaryService.getCharacteristic( LEFT_LENGTH_CHARACTERSTIC_ID ).catch( ( err: DOMException ) => { console.error( err ); } );
-        const notifySuccess3 = await characteristic3.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
-        notifySuccess3.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
+        const leftLengthCharacteristic = await primaryService.getCharacteristic( LEFT_LENGTH_CHARACTERSTIC_ID ).catch( ( err: DOMException ) => { console.error( err ); } );
+        const leftLengthSuccess = await leftLengthCharacteristic.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
+        leftLengthSuccess.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
           this.leftLength = this.getCharacteristicValue( event );
         } );
 
-        const characteristic4 = await primaryService.getCharacteristic( LEFT_TOP_ANGLE_CHARACTERISTIC_ID ).catch( ( err: DOMException ) => { console.error( err ); } );
-        const notifySuccess4 = await characteristic4.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
-        notifySuccess4.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
+        const leftTopAngleCharacteristic = await primaryService.getCharacteristic( LEFT_TOP_ANGLE_CHARACTERISTIC_ID ).catch( ( err: DOMException ) => { console.error( err ); } );
+        const leftTopAngleSuccess = await leftTopAngleCharacteristic.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
+        leftTopAngleSuccess.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
           this.leftTopAngle = this.getCharacteristicValue( event );
         } );
 
-        const characteristic5 = await primaryService.getCharacteristic( RIGHT_TOP_ANGLE_CHARACTERISTIC_ID ).catch( ( err: DOMException ) => { console.error( err ); } );
-        const notifySuccess5 = await characteristic5.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
-        notifySuccess5.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
+        const rightTopAngleCharacteristic = await primaryService.getCharacteristic( RIGHT_TOP_ANGLE_CHARACTERISTIC_ID ).catch( ( err: DOMException ) => { console.error( err ); } );
+        const rightTopAngleSuccess = await rightTopAngleCharacteristic.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
+        rightTopAngleSuccess.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
           this.rightTopAngle = this.getCharacteristicValue( event );
 
           // We should receive characteristic value updates in order as they change. If we receive this event,
