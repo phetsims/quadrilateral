@@ -83,13 +83,10 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
           tangibleController.setPositionsFromLengthAndAngleData(
             this.topLength,
             this.rightLength,
-            5, // unused in setPositionsFromLengthsAndAngles
             this.leftLength,
 
             Utils.toRadians( this.leftTopAngle ),
-            Utils.toRadians( this.rightTopAngle ),
-            Utils.toRadians( 90 ), // unused in setPositionsFromLengthsAndAngles
-            Utils.toRadians( 90 ) // unused in setPositionsFromLengthsAndAngles
+            Utils.toRadians( this.rightTopAngle )
           );
 
           // wait for the update interval before setting positions to the sim again

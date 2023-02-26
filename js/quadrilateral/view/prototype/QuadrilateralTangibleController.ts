@@ -44,9 +44,6 @@ class QuadrilateralTangibleController {
       physicalModelBounds.width,
       physicalModelBounds.width,
       physicalModelBounds.width,
-      physicalModelBounds.width,
-      Math.PI / 2,
-      Math.PI / 2,
       Math.PI / 2,
       Math.PI / 2
     );
@@ -63,12 +60,12 @@ class QuadrilateralTangibleController {
    * the tilt of the top side remains anchored. Perhaps if a gyroscope is added in the future we may be able to rotate
    * the shape correctly without anchoring the top side.
    */
-  public setPositionsFromLengthAndAngleData( topLength: number, rightLength: number, bottomLength: number, leftLength: number, p1Angle: number, p2Angle: number, p3Angle: number, p4Angle: number ): void {
+  public setPositionsFromLengthAndAngleData( topLength: number, rightLength: number, leftLength: number, leftTopAngle: number, rightTopAngle: number ): void {
 
     // only try to set to sim if values look reasonable - we want to handle this gracefully, the sim shouldn't crash
     // if data isn't right
     const allDataGood = _.every( [
-      topLength, rightLength, bottomLength, leftLength, p1Angle, p2Angle, p3Angle, p4Angle
+      topLength, rightLength, leftLength, leftTopAngle, rightTopAngle
     ], value => {
       return !isNaN( value ) && value >= 0 && value !== null;
     } );
@@ -90,7 +87,7 @@ class QuadrilateralTangibleController {
       const mappedRightLength = deviceLengthToSimLength.evaluate( rightLength );
       const mappedLeftLength = deviceLengthToSimLength.evaluate( leftLength );
 
-      this.setPositionsFromLengthsAndAngles( mappedTopLength, mappedRightLength, mappedLeftLength, p1Angle, p2Angle );
+      this.setPositionsFromLengthsAndAngles( mappedTopLength, mappedRightLength, mappedLeftLength, leftTopAngle, rightTopAngle );
     }
   }
 
