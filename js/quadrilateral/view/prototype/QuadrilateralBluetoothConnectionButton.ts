@@ -17,11 +17,21 @@ import QuadrilateralColors from '../../../QuadrilateralColors.js';
 import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
 import QuadrilateralTangibleController from './QuadrilateralTangibleController.js';
 
+// IDs to the BLE service and specific characteristics (channels providing values from sensors) of the device - these
+// were provided by Scott Lambert at SLU who built the tangible device.
+const PRIMARY_SERVICE_ID = '19b10010-e8f2-537e-4f6c-d104768a1214';
+const TOP_LENGTH_CHARACTERISTIC_ID = '19b10010-e8f2-537e-4f6c-d104768a1214'; // Why is it the same as service ID?
+const RIGHT_LENGTH_CHARACTERISTIC_ID = '19b10010-e8f2-537e-4f6c-d104768a1215';
+const LEFT_LENGTH_CHARACTERSTIC_ID = '19b10010-e8f2-537e-4f6c-d104768a1216';
+const LEFT_TOP_ANGLE_CHARACTERISTIC_ID = '19b10010-e8f2-537e-4f6c-d104768a1217';
+const RIGHT_TOP_ANGLE_CHARACTERISTIC_ID = '19b10010-e8f2-537e-4f6c-d104768a1218';
+
+
 // The bluetooth options for the requestDevice call. There must be at least one entry in filters for the browser
-// to make a request! The service ID was provided by Scott Lambert at SLU who built the prototype device.
+// to make a request!
 const REQUEST_DEVICE_OPTIONS = {
   filters: [
-    { services: [ '19b10010-e8f2-537e-4f6c-d104768a1214' ] },
+    { services: [ PRIMARY_SERVICE_ID ] },
     { name: 'Arduino' }
   ]
 };
@@ -39,13 +49,11 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
   private topLength = 0;
   private rightLength = 0;
   private leftLength = 0;
-  private topLeftAngle = 0;
-  private topRightAngle = 0;
+  private leftTopAngle = 0;
+  private rightTopAngle = 0;
 
   public constructor( tangibleConnectionModel: TangibleConnectionModel, tangibleController: QuadrilateralTangibleController ) {
 
-    // TODO: Handle when device does not support bluetooth with bluetooth.getAvailability.
-    // TODO: Handle when browser does not support bluetooth, presumably !navigator.bluetooth
     super( 'Pair BLE Device', {
       textNodeOptions: QuadrilateralConstants.SCREEN_TEXT_OPTIONS,
       baseColor: QuadrilateralColors.screenViewButtonColorProperty
@@ -61,7 +69,7 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
       }
       else if ( tangibleConnectionModel.physicalModelBoundsProperty.value ) {
 
-        // In an attempt to filter out noise, only update the sim at this interval
+        // updateInterval is an attempt to filter out noise
         const updateInterval = tangibleConnectionModel.tangibleOptionsModel.bluetoothUpdateIntervalProperty.value;
         if ( this.timeSinceUpdatingSim > updateInterval ) {
           tangibleController.setPositionsFromLengthAndAngleData(
@@ -70,8 +78,8 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
             5, // unused in setPositionsFromLengthsAndAngles
             this.leftLength,
 
-            Utils.toRadians( this.topLeftAngle ),
-            Utils.toRadians( this.topRightAngle ),
+            Utils.toRadians( this.leftTopAngle ),
+            Utils.toRadians( this.rightTopAngle ),
             Utils.toRadians( 90 ), // unused in setPositionsFromLengthsAndAngles
             Utils.toRadians( 90 ) // unused in setPositionsFromLengthsAndAngles
           );
@@ -86,8 +94,7 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
       this.timeSinceUpdatingSim += dt;
     } );
 
-    // Browser throws an error durring fuzzing that requires bluetooth connection to happen from
-    // user input.
+    // Browser throws an error durring fuzzing that requires bluetooth connection to happen from user input.
     this.enabled = !phet.chipper.isFuzzEnabled();
   }
 
@@ -109,103 +116,68 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
         device = null;
       } );
       if ( device ) {
-        console.log( device.name );
-        console.log( device.id );
-        // attempt to connect to the GATT Server.
+
         const gattServer = await device.gatt.connect().catch( ( err: DOMException ) => { console.error( err ); } );
-        const primaryService = await gattServer.getPrimaryService( '19b10010-e8f2-537e-4f6c-d104768a1214' ).catch( ( err: DOMException ) => { console.error( err ); } );
-        const characteristic = await primaryService.getCharacteristic( '19b10010-e8f2-537e-4f6c-d104768a1214' ).catch( ( err: DOMException ) => { console.error( err ); } );
+        const primaryService = await gattServer.getPrimaryService( PRIMARY_SERVICE_ID ).catch( ( err: DOMException ) => { console.error( err ); } );
+
+        const characteristic = await primaryService.getCharacteristic( TOP_LENGTH_CHARACTERISTIC_ID ).catch( ( err: DOMException ) => { console.error( err ); } );
         const notifySuccess = await characteristic.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
         notifySuccess.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
-          this.handleCharacteristicValueChanged( event );
-        } );
-        const characteristic2 = await primaryService.getCharacteristic( '19b10010-e8f2-537e-4f6c-d104768a1215' ).catch( ( err: DOMException ) => { console.error( err ); } );
-        const notifySuccess2 = await characteristic2.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
-        notifySuccess2.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
-          this.handleCharacteristicValue2Changed( event );
-        } );
-        const characteristic3 = await primaryService.getCharacteristic( '19b10010-e8f2-537e-4f6c-d104768a1216' ).catch( ( err: DOMException ) => { console.error( err ); } );
-        const notifySuccess3 = await characteristic3.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
-        notifySuccess3.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
-          this.handleCharacteristicValue3Changed( event );
-        } );
-        const characteristic4 = await primaryService.getCharacteristic( '19b10010-e8f2-537e-4f6c-d104768a1217' ).catch( ( err: DOMException ) => { console.error( err ); } );
-        const notifySuccess4 = await characteristic4.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
-        notifySuccess4.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
-          this.handleCharacteristicValue4Changed( event );
-        } );
-        const characteristic5 = await primaryService.getCharacteristic( '19b10010-e8f2-537e-4f6c-d104768a1218' ).catch( ( err: DOMException ) => { console.error( err ); } );
-        const notifySuccess5 = await characteristic5.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
-        notifySuccess5.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
-          this.handleCharacteristicValue5Changed( event );
+          this.topLength = this.getCharacteristicValue( event );
         } );
 
-        // At this time we can assume that connections are successful
-        // TODO: Set to false when connection is lost?
-        console.log( 'connection successful' );
+        const characteristic2 = await primaryService.getCharacteristic( RIGHT_LENGTH_CHARACTERISTIC_ID ).catch( ( err: DOMException ) => { console.error( err ); } );
+        const notifySuccess2 = await characteristic2.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
+        notifySuccess2.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
+          this.rightLength = this.getCharacteristicValue( event );
+        } );
+
+        const characteristic3 = await primaryService.getCharacteristic( LEFT_LENGTH_CHARACTERSTIC_ID ).catch( ( err: DOMException ) => { console.error( err ); } );
+        const notifySuccess3 = await characteristic3.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
+        notifySuccess3.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
+          this.leftLength = this.getCharacteristicValue( event );
+        } );
+
+        const characteristic4 = await primaryService.getCharacteristic( LEFT_TOP_ANGLE_CHARACTERISTIC_ID ).catch( ( err: DOMException ) => { console.error( err ); } );
+        const notifySuccess4 = await characteristic4.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
+        notifySuccess4.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
+          this.leftTopAngle = this.getCharacteristicValue( event );
+        } );
+
+        const characteristic5 = await primaryService.getCharacteristic( RIGHT_TOP_ANGLE_CHARACTERISTIC_ID ).catch( ( err: DOMException ) => { console.error( err ); } );
+        const notifySuccess5 = await characteristic5.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
+        notifySuccess5.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
+          this.rightTopAngle = this.getCharacteristicValue( event );
+
+          // We should receive characteristic value updates in order as they change. If we receive this event,
+          // we are done receiving values - notify it is time to update the sim.
+          this.allDataCollectedEmitter.emit();
+        } );
+
         this.tangibleConnectionModel.connectedToDeviceProperty.value = true;
+      }
+      else {
+
+        // failure to connect to device
+        this.tangibleConnectionModel.connectedToDeviceProperty.value = false;
       }
     }
   }
 
   /**
-   * Respond to a characteristicvaluechanged event.
-   *
-   * NOTE: ts-expect-errors are reasonable for this "experimental" web technology. event.target.value is defined for
-   * the `characteristicvaluechanged` event of the Web Bluetooth API. I believe the type of target is
-   * https://developer.mozilla.org/en-US/docs/Web/API/BluetoothRemoteGATTCharacteristic, but haven't tested in a while.
+   * From a characteristicvaluechanged event, return the associated value.
    */
-  private handleCharacteristicValueChanged( event: Event ): void {
+  private getCharacteristicValue( event: Event ): number {
+    let value = 0;
     if ( event.target ) {
-      // @ts-expect-error - See note at handleCharacteristicValueChanged() about this.
-      console.log( '1: ', event.target.value.getFloat32( 0, true ) );
 
-      // @ts-expect-error - See note at handleCharacteristicValueChanged() about this.
-      this.topLength = event.target.value.getFloat32( 0, true );
+      // @ts-expect-error - Reasonable for this "experimental" web tech. event.target.value is defined for the
+      // `characteristicvaluechanged` event of the Web Bluetooth API but lib.dom.d.ts doesn't have it yet. I believe
+      // the type of target is https://developer.mozilla.org/en-US/docs/Web/API/BluetoothRemoteGATTCharacteristic, but
+      // haven't tested in a while.
+      value = event.target.value.getFloat32( 0, true );
     }
-  }
-
-  private handleCharacteristicValue2Changed( event: Event ): void {
-    if ( event.target ) {
-      // @ts-expect-error - See note at handleCharacteristicValueChanged() about this.
-      console.log( '2: ', event.target.value.getFloat32( 0, true ) );
-
-      // @ts-expect-error - See note at handleCharacteristicValueChanged() about this.
-      this.rightLength = event.target.value.getFloat32( 0, true );
-    }
-  }
-
-  private handleCharacteristicValue3Changed( event: Event ): void {
-    if ( event.target ) {
-      // @ts-expect-error - See note at handleCharacteristicValueChanged() about this.
-      console.log( '3: ', event.target.value.getFloat32( 0, true ) );
-
-      // @ts-expect-error - See note at handleCharacteristicValueChanged() about this.
-      this.leftLength = event.target.value.getFloat32( 0, true );
-    }
-  }
-
-  private handleCharacteristicValue4Changed( event: Event ): void {
-    if ( event.target ) {
-      // @ts-expect-error - See note at handleCharacteristicValueChanged() about this.
-      console.log( '4: ', event.target.value.getFloat32( 0, true ) );
-
-      // @ts-expect-error - See note at handleCharacteristicValueChanged() about this.
-      this.topLeftAngle = event.target.value.getFloat32( 0, true );
-    }
-  }
-
-  private handleCharacteristicValue5Changed( event: Event ): void {
-    if ( event.target ) {
-      // @ts-expect-error - See note at handleCharacteristicValueChanged() about this.
-      console.log( '5: ', event.target.value.getFloat32( 0, true ) );
-
-      // @ts-expect-error - See note at handleCharacteristicValueChanged() about this.
-      this.topRightAngle = event.target.value.getFloat32( 0, true );
-
-      // signify that it is time to update the simulation
-      this.allDataCollectedEmitter.emit();
-    }
+    return value;
   }
 }
 
