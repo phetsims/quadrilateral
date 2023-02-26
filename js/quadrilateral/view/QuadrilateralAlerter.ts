@@ -526,7 +526,7 @@ class QuadrilateralAlerter extends Alerter {
 
         // if equal to the opposite corner, just say "opposite corner" instead of the corner label
         const otherCornerLabelString = angleEqualToOpposite ? oppositeCornerString :
-                                       VertexDescriber.VertexCornerLabelMap.get( otherVertex.vertexLabel );
+                                       VertexDescriber.VERTEX_CORNER_LABEL_MAP.get( otherVertex.vertexLabel );
 
         const comparisonDescription = vertexDescriber.getAngleComparisonDescription( otherVertex, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
@@ -559,7 +559,7 @@ class QuadrilateralAlerter extends Alerter {
         const comparisonDescription = vertexDescriber.getAngleComparisonDescription( firstAdjacentVertex, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
           comparison: comparisonDescription,
-          cornerLabel: VertexDescriber.VertexCornerLabelMap.get( firstAdjacentVertex.vertexLabel )
+          cornerLabel: VertexDescriber.VERTEX_CORNER_LABEL_MAP.get( firstAdjacentVertex.vertexLabel )
         } );
       }
       else if ( this.shouldUseAngleComparisonDescription( currentAngle, secondAdjacentAngle ) ) {
@@ -568,7 +568,7 @@ class QuadrilateralAlerter extends Alerter {
         const comparisonDescription = vertexDescriber.getAngleComparisonDescription( secondAdjacentVertex, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
           comparison: comparisonDescription,
-          cornerLabel: VertexDescriber.VertexCornerLabelMap.get( secondAdjacentVertex.vertexLabel )
+          cornerLabel: VertexDescriber.VERTEX_CORNER_LABEL_MAP.get( secondAdjacentVertex.vertexLabel )
         } );
       }
     }
@@ -735,7 +735,7 @@ class QuadrilateralAlerter extends Alerter {
         // We have a triangle one vertex is 180 degrees and the shape is moving such that the area
         // is not changing. Describe the "flat" vertex and how its adjacent sides get longer or shorter
         response = StringUtils.fillIn( cornerFlatAsShapeChangesPatternString, {
-          cornerLabel: VertexDescriber.VertexCornerLabelMap.get( flatVertex!.vertexLabel )
+          cornerLabel: VertexDescriber.VERTEX_CORNER_LABEL_MAP.get( flatVertex!.vertexLabel )
         } );
       }
       else {

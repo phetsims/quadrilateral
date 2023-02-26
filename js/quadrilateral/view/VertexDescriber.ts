@@ -1,7 +1,7 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
- * Manages descriptions related to the Vertex for both Interactive Descriptoin and Voicing features.
+ * Manages description strings related to the Vertex.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -57,7 +57,7 @@ const justUnderNumberOfWedgesPatternString = QuadrilateralStrings.a11y.voicing.j
 const blockedByEdgeString = QuadrilateralStrings.a11y.voicing.blockedByEdgeString;
 
 // Maps a vertex to its accessible name, like "Corner A".
-const vertexCornerLabelMap = new Map<VertexLabel, string>( [
+const VERTEX_CORNER_LABEL_MAP = new Map<VertexLabel, string>( [
   [ VertexLabel.VERTEX_A, cornerAString ],
   [ VertexLabel.VERTEX_B, cornerBString ],
   [ VertexLabel.VERTEX_C, cornerCString ],
@@ -92,8 +92,8 @@ class VertexDescriber {
   private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
   private markersVisibleProperty: TReadOnlyProperty<boolean>;
 
-  // See above documentation.
-  public static readonly VertexCornerLabelMap = vertexCornerLabelMap;
+  // See documentation at definition.
+  public static readonly VERTEX_CORNER_LABEL_MAP = VERTEX_CORNER_LABEL_MAP;
 
   public constructor( vertex: Vertex, quadrilateralShapeModel: QuadrilateralShapeModel, markersVisibleProperty: TReadOnlyProperty<boolean> ) {
     this.vertex = vertex;
