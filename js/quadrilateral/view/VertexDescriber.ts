@@ -73,17 +73,17 @@ const ABOUT_HALF_RANGE = new Range( 0.4, 0.6 );
 const ABOUT_TWICE_RANGE = new Range( 1.8, 2.2 );
 
 // Maps the difference in angles between two vertices to a description string.
-const angleComparisonDescriptionMap = new Map<Range, string>();
-angleComparisonDescriptionMap.set( new Range( 0, 0.1 ), farSmallerThanString );
-angleComparisonDescriptionMap.set( new Range( 0.1, 0.4 ), muchSmallerThanString );
-angleComparisonDescriptionMap.set( ABOUT_HALF_RANGE, aboutHalfAsWideAsString );
-angleComparisonDescriptionMap.set( new Range( 0.6, 0.8 ), aLittleSmallerThanString );
-angleComparisonDescriptionMap.set( new Range( 0.8, 1 ), similarButSmallerThanString );
-angleComparisonDescriptionMap.set( new Range( 1, 1.3 ), similarButWiderThanString );
-angleComparisonDescriptionMap.set( new Range( 1.3, 1.6 ), aLittleWiderThanString );
-angleComparisonDescriptionMap.set( new Range( 1.6, 1.8 ), muchWiderThanString );
-angleComparisonDescriptionMap.set( ABOUT_TWICE_RANGE, aboutTwiceAsWideAsString );
-angleComparisonDescriptionMap.set( new Range( 2.2, Number.POSITIVE_INFINITY ), farWiderThanString );
+const ANGLE_COMPARISON_DESCRIPTION_MAP = new Map<Range, string>();
+ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 0, 0.1 ), farSmallerThanString );
+ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 0.1, 0.4 ), muchSmallerThanString );
+ANGLE_COMPARISON_DESCRIPTION_MAP.set( ABOUT_HALF_RANGE, aboutHalfAsWideAsString );
+ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 0.6, 0.8 ), aLittleSmallerThanString );
+ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 0.8, 1 ), similarButSmallerThanString );
+ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 1, 1.3 ), similarButWiderThanString );
+ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 1.3, 1.6 ), aLittleWiderThanString );
+ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 1.6, 1.8 ), muchWiderThanString );
+ANGLE_COMPARISON_DESCRIPTION_MAP.set( ABOUT_TWICE_RANGE, aboutTwiceAsWideAsString );
+ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 2.2, Number.POSITIVE_INFINITY ), farWiderThanString );
 
 class VertexDescriber {
 
@@ -279,7 +279,7 @@ class VertexDescriber {
 
   /**
    * Returns the description of comparison between this angle and another, using the entries of
-   * angleComparisonDescriptionMap. Description compares this vertex to otherVertex. So if this vertex has a larger
+   * ANGLE_COMPARISON_DESCRIPTION_MAP. Description compares this vertex to otherVertex. So if this vertex has a larger
    * angle than otherVertex the output will be something like:
    * "much much wider than" or
    * "a little wider than"
@@ -312,7 +312,7 @@ class VertexDescriber {
 
     const angleRatio = angle1 / angle2;
     if ( description === null ) {
-      angleComparisonDescriptionMap.forEach( ( value, key ) => {
+      ANGLE_COMPARISON_DESCRIPTION_MAP.forEach( ( value, key ) => {
         if ( key.contains( angleRatio ) ) {
           description = value;
         }
