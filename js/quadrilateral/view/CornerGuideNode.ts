@@ -5,12 +5,10 @@
  * between the sides that define the angles at a vertex. The annulus is broken into alternating light and dark
  * wedges so that it is easy to see relative angle sizes by counting the number of wedges at each guide.
  *
- * The annulus always starts at the same side so that the whole Node rotates with the entire quadrilateral so that the
- * guide always looks the same regardless of quadrilateral rotation.
+ * The annulus always starts at the same side so that as the QuadrilateralNode rotates, the guides always look the same.
  *
- * It also includes a set of dashed lines that run through the vertex and along the connected sides to give a
- * visualization of the internal angle (that is displayed by the arcs of the angle guide) and the external angle
- * that is outside of the quadrilateral shape. See https://github.com/phetsims/quadrilateral/issues/73.
+ * It also includes dashed lines that cross through the vertex to give a visualization of the external angle that is
+ * outside the quadrilateral shape. Requested in https://github.com/phetsims/quadrilateral/issues/73.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -42,7 +40,6 @@ const OUTER_RADIUS = Vertex.VERTEX_WIDTH / 2 + WEDGE_RADIAL_LENGTH;
 const EXTERNAL_ANGLE_GUIDE_LENGTH = WEDGE_RADIAL_LENGTH * 8;
 
 class CornerGuideNode extends Node {
-  public static readonly WEDGE_SIZE_DEGREES = WEDGE_SIZE_DEGREES;
   public static readonly WEDGE_SIZE_RADIANS = WEDGE_SIZE_RADIANS;
 
   public constructor( vertex1: Vertex, vertex2: Vertex, visibleProperty: BooleanProperty, shapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2 ) {
@@ -151,17 +148,16 @@ class CornerGuideNode extends Node {
 
   /**
    * Returns the parametric position along a line at the position t. Modified from Line.positionAt to support
-   * positions outside of the range [0, 1] which is necessary for drawing code in this component.
+   * positions outside the range [0, 1] which is necessary for drawing code in this component.
    */
   private static customPositionAt( line: Line, t: number ): Vector2 {
     return line.start.plus( line.end.minus( line.start ).times( t ) );
   }
 
   /**
-   * Draw a single angle segment of the guide annulus. The provided shape will be manipulated by this function.
+   * Draw a single angle segment of the annulus. The provided shape will be manipulated by this function.
    */
   private static drawAngleSegment( shape: Shape, firstInnerPoint: Vector2, firstOuterPoint: Vector2, secondInnerPoint: Vector2, secondOuterPoint: Vector2 ): void {
-
     shape.moveToPoint( firstInnerPoint );
     shape.lineToPoint( firstOuterPoint );
     shape.ellipticalArcTo( OUTER_RADIUS, OUTER_RADIUS, 0, false, false, secondOuterPoint.x, secondOuterPoint.y );

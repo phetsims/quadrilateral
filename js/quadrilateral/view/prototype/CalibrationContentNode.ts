@@ -17,6 +17,9 @@ import optionize, { EmptySelfOptions } from '../../../../../phet-core/js/optioni
 import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
 import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
 
+// We are going to draw circles representing the vertex positions in the dialog, this is their shared radius.
+const VERTEX_VIEW_RADIUS = 5;
+
 class CalibrationContentNode extends VBox {
   public constructor( tangibleConnectionModel: TangibleConnectionModel, providedOptions?: VBoxOptions ) {
 
@@ -33,16 +36,16 @@ class CalibrationContentNode extends VBox {
     } );
 
     // vertices
-    const vertexACircle = new Circle( 5, {
+    const vertexACircle = new Circle( VERTEX_VIEW_RADIUS, {
       center: viewBounds.leftTop
     } );
-    const vertexBCircle = new Circle( 5, {
+    const vertexBCircle = new Circle( VERTEX_VIEW_RADIUS, {
       center: viewBounds.rightTop
     } );
-    const vertexCCircle = new Circle( 5, {
+    const vertexCCircle = new Circle( VERTEX_VIEW_RADIUS, {
       center: viewBounds.rightBottom
     } );
-    const vertexDCircle = new Circle( 5, {
+    const vertexDCircle = new Circle( VERTEX_VIEW_RADIUS, {
       center: viewBounds.leftBottom
     } );
     calibrationRectangle.children = [ vertexACircle, vertexBCircle, vertexCCircle, vertexDCircle ];
