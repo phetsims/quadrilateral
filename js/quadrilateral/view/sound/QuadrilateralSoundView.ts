@@ -7,7 +7,6 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Emitter from '../../../../../axon/js/Emitter.js';
 import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralModel from '../../model/QuadrilateralModel.js';
 import QuadrilateralSoundOptionsModel, { SoundDesign } from '../../model/QuadrilateralSoundOptionsModel.js';
