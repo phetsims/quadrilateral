@@ -86,8 +86,8 @@ class QuadrilateralSoundOptionsNode extends PreferencesPanelSection {
     tracksPlayForeverCheckbox.left = soundDesignLabelText.left;
     tracksPlayForeverCheckbox.top = soundDesignRadioButtonGroup.bottom + PreferencesDialog.CONTENT_SPACING;
 
-    // The shape sound options should only be available when sounds are enabled. joist will disable all audio
-    // options when Audio Features are disabled so we toggle visibility instead of enabled so we don't get compounding
+    // The shape sound options should only be available when sounds are enabled. joist disables all audio
+    // options when Audio Features are disabled, so we use 'visible' instead of 'enabled' to avoid compounding
     // transparency when both sounds and audio are disabled.
     soundManager.enabledProperty.link( enabled => {
       this.visible = enabled;
