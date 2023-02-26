@@ -1,7 +1,7 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
- * The major and minor tick marks for the SideNode, which may make it easier to assess relative side lengths.
+ * The major and minor tick marks for the SideNode, which make it easier to view relative side lengths.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -16,7 +16,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 
 const TICKS_PER_SEGMENT = 4;
 
-// relative to the full width of a Side
+// relative to the full width of a Side (normalized)
 const PARAMETRIC_MINOR_TICK_LENGTH = 0.25;
 const PARAMETRIC_MAJOR_TICK_LENGTH = 0.5;
 
@@ -43,11 +43,7 @@ class SideTicksNode extends Path {
   public redraw(): void {
     const shape = new Shape();
 
-    const vertex1Position = this.side.vertex1.positionProperty.value;
-    const vertex2Position = this.side.vertex2.positionProperty.value;
-
-    // TODO: This is recreated in lots of places. Refactor?
-    const fullLine = new Line( vertex1Position, vertex2Position );
+    const fullLine = this.side.modelLine;
 
     const segmentCount = this.side.lengthProperty.value / Side.SIDE_SEGMENT_LENGTH;
     const parametricTickSeparation = 1 / ( segmentCount * TICKS_PER_SEGMENT );

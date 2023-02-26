@@ -11,7 +11,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import Vertex from './Vertex.js';
 import { Line } from '../../../../scenery/js/imports.js';
-import { Shape } from '../../../../kite/js/imports.js';
+import { Line as LineShape, Shape } from '../../../../kite/js/imports.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import SideLabel from './SideLabel.js';
 import QuadrilateralMovable from './QuadrilateralMovable.js';
@@ -44,8 +44,11 @@ class Side extends QuadrilateralMovable {
   // sides can never overlap
   public static readonly SIDE_WIDTH = 0.1;
 
-  // Used to calculate the line shape - reused to avoid excessive allocations.
-  private readonly scratchLine = new Line( 0, 0, 0, 0, {
+  // A Line between Vertex1 and Vertex2, which may be useful for calculations.
+  public readonly modelLine: LineShape;
+
+  // Used to calculate the line shape (full stroked shape) - reused to avoid excessive allocations.
+  private readonly scratchLineNode = new Line( 0, 0, 0, 0, {
     lineWidth: Side.SIDE_WIDTH
   } );
 
@@ -61,6 +64,8 @@ class Side extends QuadrilateralMovable {
     this.vertex1 = vertex1;
     this.vertex2 = vertex2;
     this.sideLabel = sideLabel;
+
+    this.modelLine = new LineShape( vertex1.positionProperty.value, vertex2.positionProperty.value );
 
     this.lengthProperty = new NumberProperty( 0, {
       tandem: tandem.createTandem( 'lengthProperty' )
@@ -80,8 +85,11 @@ class Side extends QuadrilateralMovable {
 
     this.lengthProperty.value = Vector2.getDistanceBetweenVectors( vertex2Position, vertex1Position );
 
-    this.scratchLine.setLine( vertex1Position.x, vertex1Position.y, vertex2Position.x, vertex2Position.y );
-    this.shapeProperty.value = this.scratchLine.getStrokedShape();
+    this.modelLine.start = vertex1Position;
+    this.modelLine.end = vertex2Position;
+
+    this.scratchLineNode.setLine( vertex1Position.x, vertex1Position.y, vertex2Position.x, vertex2Position.y );
+    this.shapeProperty.value = this.scratchLineNode.getStrokedShape();
   }
 
   /**
