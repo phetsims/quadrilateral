@@ -39,7 +39,7 @@ import ResetShapeButton from './ResetShapeButton.js';
 import ShapeSoundsCheckbox from './ShapeSoundsCheckbox.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import SmallStepsLockToggleButton from './SmallStepsLockToggleButton.js';
-import QuadrilateralTangibleControls from './QuadrilateralTangibleControls.js';
+import QuadrilateralTangibleControls from './prototype/QuadrilateralTangibleControls.js';
 import QuadrilateralModelViewTransform from './QuadrilateralModelViewTransform.js';
 import QuadrilateralTangibleController from './prototype/QuadrilateralTangibleController.js';
 

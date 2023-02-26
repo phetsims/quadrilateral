@@ -10,19 +10,19 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { Text, VBox } from '../../../../scenery/js/imports.js';
-import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralConstants from '../../QuadrilateralConstants.js';
-import TangibleConnectionModel from '../model/prototype/TangibleConnectionModel.js';
-import CalibrationContentNode from './CalibrationContentNode.js';
-import Dialog from '../../../../sun/js/Dialog.js';
-import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
-import QuadrilateralColors from '../../QuadrilateralColors.js';
-import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
-import QuadrilateralBluetoothConnectionButton from './QuadrilateralBluetoothConnectionButton.js';
-import QuadrilateralSerialConnectionButton from './QuadrilateralSerialConnectionButton.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
-import QuadrilateralTangibleController from './prototype/QuadrilateralTangibleController.js';
+import { Text, VBox } from '../../../../../scenery/js/imports.js';
+import quadrilateral from '../../../quadrilateral.js';
+import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
+import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
+import CalibrationContentNode from '../CalibrationContentNode.js';
+import Dialog from '../../../../../sun/js/Dialog.js';
+import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
+import QuadrilateralColors from '../../../QuadrilateralColors.js';
+import QuadrilateralQueryParameters from '../../QuadrilateralQueryParameters.js';
+import QuadrilateralBluetoothConnectionButton from '../QuadrilateralBluetoothConnectionButton.js';
+import QuadrilateralSerialConnectionButton from '../QuadrilateralSerialConnectionButton.js';
+import Tandem from '../../../../../tandem/js/Tandem.js';
+import QuadrilateralTangibleController from './QuadrilateralTangibleController.js';
 
 class QuadrilateralTangibleControls extends VBox {
   public constructor( tangibleConnectionModel: TangibleConnectionModel, tangibleController: QuadrilateralTangibleController, tandem: Tandem ) {
