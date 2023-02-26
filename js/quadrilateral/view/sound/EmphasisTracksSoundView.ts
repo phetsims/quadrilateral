@@ -108,19 +108,13 @@ class EmphasisTracksSoundView extends TracksSoundView {
       const tracksToEmphasize = NAMED_QUADRILATERAL_TO_HIGH_VOLUME_TRACKS_MAP.get( shapeName );
       assert && assert( tracksToEmphasize, 'NamedQuadrilateral does not have a EmphasisTracksSoundView design' );
       tracksToEmphasize!.forEach( index => {
-        this.soundClips[ index ].setOutputLevel( this.indexToOutputLevelPropertyMap.get( index )!.value );
+        this.soundClips[ index ].setOutputLevel( this.indexToOutputLevelMap.get( index )! );
       } );
     };
     shapeModel.shapeNameProperty.link( shapeNameListener );
 
-    const outputLevelProperties = Array.from( this.indexToOutputLevelPropertyMap.values() );
-    const outputLevelMultilink = Multilink.multilinkAny( outputLevelProperties, () => {
-      shapeNameListener( shapeModel.shapeNameProperty.value );
-    } );
-
     this.disposeEmphasisTracksSoundView = () => {
       shapeModel.shapeNameProperty.unlink( shapeNameListener );
-      outputLevelMultilink.dispose();
     };
   }
 

@@ -26,7 +26,6 @@ import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
 import NamedQuadrilateral from '../../model/NamedQuadrilateral.js';
 import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
-import Multilink from '../../../../../axon/js/Multilink.js';
 
 // All the sounds played in this sound design.
 const LAYER_TRACKS = [
@@ -84,19 +83,13 @@ class LayersTracksSoundView extends TracksSoundView {
       const soundIndicesToPlay = NAMED_QUADRILATERAL_TO_TRACKS_MAP.get( shapeName );
       assert && assert( soundIndicesToPlay, 'NamedQuadrilateral does not have a LayersTracksSoundView design' );
       soundIndicesToPlay!.forEach( index => {
-        this.soundClips[ index ].setOutputLevel( this.indexToOutputLevelPropertyMap.get( index )!.value );
+        this.soundClips[ index ].setOutputLevel( this.indexToOutputLevelMap.get( index )! );
       } );
     };
     shapeModel.shapeNameProperty.link( shapeNameListener );
 
-    const outputLevelProperties = Array.from( this.indexToOutputLevelPropertyMap.values() );
-    const outputLevelMultilink = Multilink.multilinkAny( outputLevelProperties, () => {
-      shapeNameListener( shapeModel.shapeNameProperty.value );
-    } );
-
     this.disposeLayersTracksSoundView = () => {
       shapeModel.shapeNameProperty.unlink( shapeNameListener );
-      outputLevelMultilink.dispose();
     };
   }
 
