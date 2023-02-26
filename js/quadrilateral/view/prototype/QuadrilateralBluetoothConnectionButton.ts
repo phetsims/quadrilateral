@@ -6,7 +6,6 @@
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
-import Tandem from '../../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../../quadrilateral.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
@@ -19,15 +18,12 @@ import TangibleConnectionModel from '../../model/prototype/TangibleConnectionMod
 import QuadrilateralTangibleController from './QuadrilateralTangibleController.js';
 
 // The bluetooth options for the requestDevice call. There must be at least one entry in filters for the browser
-// to make a request.
+// to make a request! The service ID was provided by Scott Lambert at SLU who built the prototype device.
 const REQUEST_DEVICE_OPTIONS = {
   filters: [
-    { services: [ 'heart_rate' ] }, // TODO: Is this right?
-    { services: [ 0x1802, 0x1803 ] },
     { services: [ '19b10010-e8f2-537e-4f6c-d104768a1214' ] },
     { name: 'Arduino' }
-  ],
-  optionalServices: [ 'battery_service' ] // TODO: Is this right?
+  ]
 };
 
 class QuadrilateralBluetoothConnectionButton extends TextPushButton {
@@ -46,7 +42,7 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
   private topLeftAngle = 0;
   private topRightAngle = 0;
 
-  public constructor( tangibleConnectionModel: TangibleConnectionModel, tangibleController: QuadrilateralTangibleController, tandem: Tandem ) {
+  public constructor( tangibleConnectionModel: TangibleConnectionModel, tangibleController: QuadrilateralTangibleController ) {
 
     // TODO: Handle when device does not support bluetooth with bluetooth.getAvailability.
     // TODO: Handle when browser does not support bluetooth, presumably !navigator.bluetooth
