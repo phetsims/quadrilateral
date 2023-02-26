@@ -4,9 +4,8 @@
  * The contents of a Dialog that will support calibrating a device to the simulation. The device is feeding
  * physical values measured by sensors. Those need to be mapped to model coordinates in the sim. We calibrate
  * by asking the user to set their device as large as they can make it. From the largest lengths we can
- * create create a linear mapping to model coordinates.
+ * create a linear mapping to model coordinates.
  *
- * TODO: This is a prototype and may not be needed anymore, possibly time to remove.
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
