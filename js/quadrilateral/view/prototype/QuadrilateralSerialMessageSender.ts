@@ -5,8 +5,6 @@
  * "p5 serial connection" prototype.
  *
  * TODO: More documentation about this Prototype, how it works, and what is expected.
- *
- * TODO: Rename to QuadrilateralSerialMessageSender (not really a controller)
  */
 
 import Utils from '../../../../../dot/js/Utils.js';
@@ -14,7 +12,7 @@ import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
 
-class QuadrilateralSerialMessageController {
+class QuadrilateralSerialMessageSender {
   private readonly shapeModel: QuadrilateralShapeModel;
 
   public constructor( tangibleConnectionModel: TangibleConnectionModel ) {
@@ -51,5 +49,5 @@ class QuadrilateralSerialMessageController {
   }
 }
 
-quadrilateral.register( 'QuadrilateralSerialMessageController', QuadrilateralSerialMessageController );
-export default QuadrilateralSerialMessageController;
+quadrilateral.register( 'QuadrilateralSerialMessageSender', QuadrilateralSerialMessageSender );
+export default QuadrilateralSerialMessageSender;
