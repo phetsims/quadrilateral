@@ -39,10 +39,6 @@ class QuadrilateralVisibilityControls extends VBox {
     const cornerLabelsCheckbox = new Checkbox( visibilityModel.vertexLabelsVisibleProperty, cornerLabelsIcon, {
       spacing: QuadrilateralConstants.CONTROL_LABEL_SPACING,
 
-      // pdom
-      labelTagName: 'label',
-      labelContent: QuadrilateralStrings.labels,
-
       // voicing
       voicingNameResponse: QuadrilateralStrings.labels,
       voicingHintResponse: QuadrilateralStrings.a11y.cornerLabelsHintResponse,
@@ -61,10 +57,6 @@ class QuadrilateralVisibilityControls extends VBox {
     );
     const markersCheckbox = new Checkbox( visibilityModel.markersVisibleProperty, markersIcon, {
       spacing: QuadrilateralConstants.CONTROL_LABEL_SPACING,
-
-      // pdom
-      labelTagName: 'label',
-      labelContent: QuadrilateralStrings.markers,
 
       // voicing
       voicingNameResponse: QuadrilateralStrings.markers,
@@ -85,10 +77,6 @@ class QuadrilateralVisibilityControls extends VBox {
     const diagonalGuidesCheckbox = new Checkbox( visibilityModel.diagonalGuidesVisibleProperty, diagonalGuidesIcon, {
       spacing: QuadrilateralConstants.CONTROL_LABEL_SPACING,
 
-      // pdom
-      labelTagName: 'label',
-      labelContent: QuadrilateralStrings.diagonals,
-
       // voicing
       voicingNameResponse: QuadrilateralStrings.diagonals,
       voicingHintResponse: QuadrilateralStrings.a11y.diagonalGuidesHintResponse,
@@ -107,10 +95,6 @@ class QuadrilateralVisibilityControls extends VBox {
     );
     const gridCheckbox = new Checkbox( visibilityModel.gridVisibleProperty, gridIcon, {
       spacing: QuadrilateralConstants.CONTROL_LABEL_SPACING,
-
-      // pdom
-      labelTagName: 'label',
-      labelContent: QuadrilateralStrings.grid,
 
       // voicing
       voicingNameResponse: QuadrilateralStrings.grid,
