@@ -15,9 +15,9 @@ import QuadrilateralQueryParameters from './quadrilateral/QuadrilateralQueryPara
 import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';
 import QuadrilateralStrings from './QuadrilateralStrings.js';
 import QuadrilateralOptionsModel from './quadrilateral/model/QuadrilateralOptionsModel.js';
-import QuadrilateralAudioPreferencesNode from './quadrilateral/view/QuadrilateralAudioPreferencesNode.js';
 import MappedProperty from '../../axon/js/MappedProperty.js';
 import QuadrilateralInputPreferencesNode from './quadrilateral/view/QuadrilateralInputPreferencesNode.js';
+import QuadrilateralSoundOptionsNode from './quadrilateral/view/sound/QuadrilateralSoundOptionsNode.js';
 
 const quadrilateralTitleStringProperty = QuadrilateralStrings.quadrilateral.titleStringProperty;
 const optionsModel = new QuadrilateralOptionsModel();
@@ -57,7 +57,7 @@ const simOptions: SimOptions = {
           createContent: () => new Node()
         },
         {
-          createContent: tandem => new QuadrilateralAudioPreferencesNode( optionsModel, tandem.createTandem( 'audioPreferences' ) )
+          createContent: tandem => new QuadrilateralSoundOptionsNode( optionsModel.soundOptionsModel, tandem.createTandem( 'quadrilateralSoundOptionsNode' ) )
         }
       ]
     }
