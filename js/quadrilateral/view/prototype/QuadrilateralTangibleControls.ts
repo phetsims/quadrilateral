@@ -14,7 +14,7 @@ import { Text, VBox } from '../../../../../scenery/js/imports.js';
 import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
 import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
-import CalibrationContentNode from '../CalibrationContentNode.js';
+import CalibrationContentNode from './CalibrationContentNode.js';
 import Dialog from '../../../../../sun/js/Dialog.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import QuadrilateralColors from '../../../QuadrilateralColors.js';
