@@ -121,33 +121,28 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
         const gattServer = await device.gatt.connect().catch( ( err: DOMException ) => { console.error( err ); } );
         const primaryService = await gattServer.getPrimaryService( PRIMARY_SERVICE_ID ).catch( ( err: DOMException ) => { console.error( err ); } );
 
-        const topLengthCharacteristic = await primaryService.getCharacteristic( TOP_LENGTH_CHARACTERISTIC_ID ).catch( ( err: DOMException ) => { console.error( err ); } );
-        const topLengthSuccess = await topLengthCharacteristic.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
-        topLengthSuccess.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
+        const topLengthNotifier = await this.getCharacteristicNotifier( primaryService, TOP_LENGTH_CHARACTERISTIC_ID );
+        topLengthNotifier.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
           this.topLength = this.getCharacteristicValue( event );
         } );
 
-        const rightLengthCharacteristic = await primaryService.getCharacteristic( RIGHT_LENGTH_CHARACTERISTIC_ID ).catch( ( err: DOMException ) => { console.error( err ); } );
-        const rightLengthSuccess = await rightLengthCharacteristic.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
-        rightLengthSuccess.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
+        const rightLengthNotifier = await this.getCharacteristicNotifier( primaryService, RIGHT_LENGTH_CHARACTERISTIC_ID );
+        rightLengthNotifier.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
           this.rightLength = this.getCharacteristicValue( event );
         } );
 
-        const leftLengthCharacteristic = await primaryService.getCharacteristic( LEFT_LENGTH_CHARACTERSTIC_ID ).catch( ( err: DOMException ) => { console.error( err ); } );
-        const leftLengthSuccess = await leftLengthCharacteristic.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
-        leftLengthSuccess.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
+        const leftLengthNotifier = await this.getCharacteristicNotifier( primaryService, LEFT_LENGTH_CHARACTERSTIC_ID );
+        leftLengthNotifier.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
           this.leftLength = this.getCharacteristicValue( event );
         } );
 
-        const leftTopAngleCharacteristic = await primaryService.getCharacteristic( LEFT_TOP_ANGLE_CHARACTERISTIC_ID ).catch( ( err: DOMException ) => { console.error( err ); } );
-        const leftTopAngleSuccess = await leftTopAngleCharacteristic.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
-        leftTopAngleSuccess.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
+        const leftTopAngleNotifier = await this.getCharacteristicNotifier( primaryService, LEFT_TOP_ANGLE_CHARACTERISTIC_ID );
+        leftTopAngleNotifier.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
           this.leftTopAngle = this.getCharacteristicValue( event );
         } );
 
-        const rightTopAngleCharacteristic = await primaryService.getCharacteristic( RIGHT_TOP_ANGLE_CHARACTERISTIC_ID ).catch( ( err: DOMException ) => { console.error( err ); } );
-        const rightTopAngleSuccess = await rightTopAngleCharacteristic.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
-        rightTopAngleSuccess.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
+        const rightTopAngleNotifier = await this.getCharacteristicNotifier( primaryService, RIGHT_TOP_ANGLE_CHARACTERISTIC_ID );
+        rightTopAngleNotifier.addEventListener( 'characteristicvaluechanged', ( event: Event ) => {
           this.rightTopAngle = this.getCharacteristicValue( event );
 
           // We should receive characteristic value updates in order as they change. If we receive this event,
@@ -163,6 +158,17 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
         this.tangibleConnectionModel.connectedToDeviceProperty.value = false;
       }
     }
+  }
+
+  /**
+   * Returns a Promise to the BluetoothRemoteGATTCharacteristic instance to listen for changing values from the device.
+   *
+   * See https://developer.mozilla.org/en-US/docs/Web/API/BluetoothRemoteGATTCharacteristic/startNotifications for
+   * more information.
+   */
+  private async getCharacteristicNotifier( service: IntentionalAny, characteristicID: string ): Promise<IntentionalAny> {
+    const characteristic = await service.getCharacteristic( characteristicID ).catch( ( err: DOMException ) => { console.error( err ); } );
+    return characteristic.startNotifications().catch( ( err: DOMException ) => { console.error( err ); } );
   }
 
   /**
