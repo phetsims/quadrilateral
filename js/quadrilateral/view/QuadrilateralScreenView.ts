@@ -27,7 +27,6 @@ import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 import QuadrilateralDebuggingPanel from './QuadrilateralDebuggingPanel.js';
 import QuadrilateralVisibilityControls from './QuadrilateralVisibilityControls.js';
 import QuadrilateralGridNode from './QuadrilateralGridNode.js';
-import QuadrilateralScreenSummaryContentNode from './QuadrilateralScreenSummaryContentNode.js';
 import QuadrilateralAlerter from './QuadrilateralAlerter.js';
 import QuadrilateralOptionsModel from '../model/QuadrilateralOptionsModel.js';
 import QuadrilateralMediaPipe from './prototype/QuadrilateralMediaPipe.js';
@@ -138,8 +137,7 @@ class QuadrilateralScreenView extends ScreenView {
       model.tangibleConnectionModel.connectedToDeviceProperty.value = true;
     }
 
-    // pdom/voicing components
-    this.setScreenSummaryContent( new QuadrilateralScreenSummaryContentNode() );
+    // voicing components
     this.quadrilateralAlerter = new QuadrilateralAlerter( model, this, this.modelViewTransform, this.quadrilateralDescriber );
 
     //---------------------------------------------------------------------------------------------------------------
