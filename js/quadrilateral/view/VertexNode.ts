@@ -42,7 +42,7 @@ class VertexNode extends QuadrilateralMovableNode {
       grabbedSound: grabHighPitch_mp3
     }, providedOptions );
 
-    super( vertex, options );
+    super( vertex, modelViewTransform, options );
 
     const viewRadius = modelViewTransform.modelToViewBounds( vertex.modelBoundsProperty.value ).width / 2;
     const circle = new Circle( viewRadius, {
@@ -91,16 +91,9 @@ class VertexNode extends QuadrilateralMovableNode {
       vertexLabelText.visible = vertexLabelsVisible;
     } );
 
-    // calculate step sizes in view coordinates based on input modes from query parameters
-    const reducedStepSize = QuadrilateralQueryParameters.reducedStepSize;
-    const largeModelDelta = reducedStepSize ? QuadrilateralConstants.MAJOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralQueryParameters.majorVertexInterval;
-    const smallModelDelta = reducedStepSize ? QuadrilateralConstants.MINOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralQueryParameters.minorVertexInterval;
-    const largeViewDragDelta = modelViewTransform.modelToViewDeltaX( largeModelDelta );
-    const smallViewDragDelta = modelViewTransform.modelToViewDeltaX( smallModelDelta );
-
     const keyboardDragListener = new KeyboardDragListener( {
-      dragDelta: largeViewDragDelta,
-      shiftDragDelta: smallViewDragDelta,
+      dragDelta: this.largeViewDragDelta,
+      shiftDragDelta: this.smallViewDragDelta,
 
       transform: modelViewTransform,
       drag: ( modelDelta: Vector2 ) => {

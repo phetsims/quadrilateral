@@ -19,11 +19,9 @@ import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import { Line, Shape } from '../../../../kite/js/imports.js';
 import SideDescriber from './SideDescriber.js';
 import Multilink from '../../../../axon/js/Multilink.js';
-import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import release_mp3 from '../../../../tambo/sounds/release_mp3.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import SideTicksNode from './SideTicksNode.js';
-import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import QuadrilateralMovableNode, { QuadrilateralMovableNodeOptions } from './QuadrilateralMovableNode.js';
 import QuadrilateralColors from '../../QuadrilateralColors.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
@@ -68,7 +66,7 @@ class SideNode extends QuadrilateralMovableNode {
       grabbedSoundOutputLevel: 0.8
     }, providedOptions );
 
-    super( side, options );
+    super( side, modelViewTransform, options );
 
     this.sidePath = new Path( null, {
       fill: QuadrilateralColors.quadrilateralShapeColorProperty,
@@ -180,16 +178,9 @@ class SideNode extends QuadrilateralMovableNode {
       this.focusHighlight = lineNode.getStrokedShape();
     } );
 
-    const reducedStepSize = QuadrilateralQueryParameters.reducedStepSize;
-    const largeModelDelta = reducedStepSize ? QuadrilateralConstants.MAJOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralQueryParameters.majorVertexInterval;
-    const smallModelDelta = reducedStepSize ? QuadrilateralConstants.MINOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralQueryParameters.minorVertexInterval;
-
-    const largeViewDragDelta = modelViewTransform.modelToViewDeltaX( largeModelDelta );
-    const smallViewDragDelta = modelViewTransform.modelToViewDeltaX( smallModelDelta );
-
     const keyboardDragListener = new KeyboardDragListener( {
-      dragDelta: largeViewDragDelta,
-      shiftDragDelta: smallViewDragDelta,
+      dragDelta: this.largeViewDragDelta,
+      shiftDragDelta: this.smallViewDragDelta,
       transform: modelViewTransform,
       drag: ( vectorDelta: Vector2 ) => {
         this.moveVerticesFromModelDelta( vectorDelta );

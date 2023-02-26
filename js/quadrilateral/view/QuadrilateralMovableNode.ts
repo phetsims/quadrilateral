@@ -17,6 +17,9 @@ import WrappedAudioBuffer from '../../../../tambo/js/WrappedAudioBuffer.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
 import quadShapeCollision_mp3 from '../../../sounds/quadShapeCollision_mp3.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
+import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
+import QuadrilateralConstants from '../../QuadrilateralConstants.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 
 // constants
 const blockedByInnerShapeString = QuadrilateralStrings.a11y.voicing.blockedByInnerShapeString;
@@ -39,7 +42,10 @@ export type QuadrilateralMovableNodeOptions = SelfOptions & StrictOmit<ParentOpt
 class QuadrilateralMovableNode extends Voicing( Node ) {
   private readonly model: QuadrilateralMovable;
 
-  public constructor( model: QuadrilateralMovable, providedOptions: QuadrilateralMovableNodeOptions ) {
+  public readonly largeViewDragDelta: number;
+  public readonly smallViewDragDelta: number;
+
+  public constructor( model: QuadrilateralMovable, modelViewTransform: ModelViewTransform2, providedOptions: QuadrilateralMovableNodeOptions ) {
     const options = optionize<QuadrilateralMovableNodeOptions, SelfOptions, ParentOptions>()( {
       cursor: 'pointer',
       tagName: 'div',
@@ -54,6 +60,13 @@ class QuadrilateralMovableNode extends Voicing( Node ) {
 
     this.voicingNameResponse = options.nameResponse;
     this.innerContent = options.nameResponse;
+
+    // calculate step sizes in view coordinates based on input modes from query parameters
+    const reducedStepSize = QuadrilateralQueryParameters.reducedStepSize;
+    const largeModelDelta = reducedStepSize ? QuadrilateralConstants.MAJOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralQueryParameters.majorVertexInterval;
+    const smallModelDelta = reducedStepSize ? QuadrilateralConstants.MINOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralQueryParameters.minorVertexInterval;
+    this.largeViewDragDelta = modelViewTransform.modelToViewDeltaX( largeModelDelta );
+    this.smallViewDragDelta = modelViewTransform.modelToViewDeltaX( smallModelDelta );
 
     this.addInputListener( {
       focus: () => {
