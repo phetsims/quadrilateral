@@ -19,7 +19,7 @@ import Dialog from '../../../../../sun/js/Dialog.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import QuadrilateralColors from '../../../QuadrilateralColors.js';
 import QuadrilateralQueryParameters from '../../QuadrilateralQueryParameters.js';
-import QuadrilateralBluetoothConnectionButton from '../QuadrilateralBluetoothConnectionButton.js';
+import QuadrilateralBluetoothConnectionButton from './QuadrilateralBluetoothConnectionButton.js';
 import QuadrilateralSerialConnectionButton from '../QuadrilateralSerialConnectionButton.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
 import QuadrilateralTangibleController from './QuadrilateralTangibleController.js';

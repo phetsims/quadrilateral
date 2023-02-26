@@ -6,17 +6,17 @@
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
-import Tandem from '../../../../tandem/js/Tandem.js';
-import quadrilateral from '../../quadrilateral.js';
-import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
-import QuadrilateralConstants from '../../QuadrilateralConstants.js';
-import Utils from '../../../../dot/js/Utils.js';
-import Emitter from '../../../../axon/js/Emitter.js';
-import stepTimer from '../../../../axon/js/stepTimer.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
-import QuadrilateralColors from '../../QuadrilateralColors.js';
-import TangibleConnectionModel from '../model/prototype/TangibleConnectionModel.js';
-import QuadrilateralTangibleController from './prototype/QuadrilateralTangibleController.js';
+import Tandem from '../../../../../tandem/js/Tandem.js';
+import quadrilateral from '../../../quadrilateral.js';
+import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
+import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
+import Utils from '../../../../../dot/js/Utils.js';
+import Emitter from '../../../../../axon/js/Emitter.js';
+import stepTimer from '../../../../../axon/js/stepTimer.js';
+import IntentionalAny from '../../../../../phet-core/js/types/IntentionalAny.js';
+import QuadrilateralColors from '../../../QuadrilateralColors.js';
+import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
+import QuadrilateralTangibleController from './QuadrilateralTangibleController.js';
 
 // The bluetooth options for the requestDevice call. There must be at least one entry in filters for the browser
 // to make a request.
