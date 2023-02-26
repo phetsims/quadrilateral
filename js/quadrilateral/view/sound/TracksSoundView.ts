@@ -95,7 +95,7 @@ class TracksSoundView extends SoundGenerator {
         loop: true,
         initialOutputLevel: 0,
 
-        // All sub-sound clips need to align perfectly, do not trim any silence
+        // All sub-SoundClips need to align perfectly, do not trim any silence
         trimSilence: false
       } );
       generator.connect( this.masterGainNode );
@@ -136,8 +136,6 @@ class TracksSoundView extends SoundGenerator {
    * Stop playing all sounds immediately and reset all timing variables and state so that sound is stopped.
    */
   private stopPlayingImmediately(): void {
-
-    // shape just changed due to reset, do not transition to fading in, stop all sound immediately
     this.shapeDirty = false;
     this.playingState = PlayingState.STOPPED;
     this.remainingPlayTime = 0;

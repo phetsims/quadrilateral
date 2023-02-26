@@ -26,7 +26,6 @@ import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
 import NamedQuadrilateral from '../../model/NamedQuadrilateral.js';
 import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
-import Multilink from '../../../../../axon/js/Multilink.js';
 
 // default output level for sound clips that are playing in the background behind the louder emphasized sound
 const DEFAULT_BACKGROUND_OUTPUT_LEVEL = 0.15;
