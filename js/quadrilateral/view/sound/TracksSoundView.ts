@@ -1,10 +1,10 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
- * Base class for the "Tracks" sound designs. In this design there are a collection of sound clips that will play
- * which represent each named quadrilateral. The sound clips play in the background and loop forever, but their output
- * level will change depending on shape state and user input. By default, sound will only play for a few seconds
- * after input with the quadrilateral.
+ * Base class for the sound designs. There are a collection of sound clips that will play and represent shapes and
+ * geometric properties. The sound clips play in the background and loop forever, but their output level will change
+ * depending on shape state and user input. By default, sound will only play for a few seconds after input with the
+ * quadrilateral.
  *
  * Subclasses of this sound view will provide all the tracks to play and implement how their output level
  * should change with state of the shape.
