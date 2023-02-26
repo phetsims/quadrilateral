@@ -30,7 +30,7 @@ import QuadrilateralGridNode from './QuadrilateralGridNode.js';
 import QuadrilateralScreenSummaryContentNode from './QuadrilateralScreenSummaryContentNode.js';
 import QuadrilateralAlerter from './QuadrilateralAlerter.js';
 import QuadrilateralOptionsModel from '../model/QuadrilateralOptionsModel.js';
-import QuadrilateralMediaPipe from './QuadrilateralMediaPipe.js';
+import QuadrilateralMediaPipe from './prototype/QuadrilateralMediaPipe.js';
 import QuadrilateralDiagonalGuidesNode from './QuadrilateralDiagonalGuidesNode.js';
 import QuadrilateralShapeNameDisplay from './QuadrilateralShapeNameDisplay.js';
 import MediaPipeQueryParameters from '../../../../tangible/js/mediaPipe/MediaPipeQueryParameters.js';
