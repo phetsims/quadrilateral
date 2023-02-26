@@ -39,17 +39,17 @@ class QuadrilateralSoundOptionsNode extends PreferencesPanelSection {
 
     const soundDesignRadioButtonGroup = new AquaRadioButtonGroup( model.soundDesignProperty, [
       {
-        value: SoundDesign.TRACKS_BUILD_UP_SIMPLE,
+        value: SoundDesign.TRACKS_LAYER,
         createNode: () => new Text( preferencesDialogLayerSoundDesignDescriptionString, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
-        tandemName: `tracksBuildUpSimple${AquaRadioButton.TANDEM_NAME_SUFFIX}`,
+        tandemName: `layersTracksSoundView${AquaRadioButton.TANDEM_NAME_SUFFIX}`,
         options: {
           voicingNameResponse: preferencesDialogLayerSoundDesignDescriptionString
         }
       },
       {
-        value: SoundDesign.TRACKS_VOLUME_EMPHASIS,
+        value: SoundDesign.TRACKS_EMPHASIS,
         createNode: () => new Text( preferencesDialogIndependentSoundDesignDescriptionString, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
-        tandemName: `tracksVolume${AquaRadioButton.TANDEM_NAME_SUFFIX}`,
+        tandemName: `emphasisTracksSoundView${AquaRadioButton.TANDEM_NAME_SUFFIX}`,
         options: {
           voicingNameResponse: preferencesDialogIndependentSoundDesignDescriptionString
         }

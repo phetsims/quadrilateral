@@ -16,8 +16,8 @@ import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 
 // Enumeration for the different sound designs available to the user.
 class SoundDesign extends EnumerationValue {
-  public static readonly TRACKS_VOLUME_EMPHASIS = new SoundDesign();
-  public static readonly TRACKS_BUILD_UP_SIMPLE = new SoundDesign();
+  public static readonly TRACKS_EMPHASIS = new SoundDesign();
+  public static readonly TRACKS_LAYER = new SoundDesign();
 
   public static readonly enumeration = new Enumeration( SoundDesign );
 }

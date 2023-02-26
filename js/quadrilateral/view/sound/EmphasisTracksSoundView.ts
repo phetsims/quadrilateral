@@ -37,7 +37,7 @@ import Multilink from '../../../../../axon/js/Multilink.js';
 const DEFAULT_BACKGROUND_OUTPUT_LEVEL = 0.15;
 
 // All the sounds played in this sound design
-const VOLUME_EMPHASIS_TRACKS = [
+const EMPHASIS_TRACKS = [
   quadBeatTracksBuildingBaseRhythm_mp3,
   quadBeatTracksBuildingBuildingTracks000_mp3,
   quadBeatTracksBuildingBuildingTracks005_mp3,
@@ -68,7 +68,7 @@ const NAMED_QUADRILATERAL_TO_HIGH_VOLUME_TRACKS_MAP = new Map( [
 ] );
 
 class EmphasisTracksSoundView extends TracksSoundView {
-  private readonly disposeTracksVolumeEmphasisSoundView: () => void;
+  private readonly disposeEmphasisTracksSoundView: () => void;
 
   // The requested output levels for each SoundClip as shapes are detected. All of these are playing at once at the
   // provided output level while the "high volume tracks" play louder on top of them. See
@@ -87,7 +87,7 @@ class EmphasisTracksSoundView extends TracksSoundView {
   ] );
 
   public constructor( shapeModel: QuadrilateralShapeModel, shapeSoundEnabledProperty: TReadOnlyProperty<boolean>, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
-    super( shapeModel, shapeSoundEnabledProperty, resetNotInProgressProperty, soundOptionsModel, VOLUME_EMPHASIS_TRACKS );
+    super( shapeModel, shapeSoundEnabledProperty, resetNotInProgressProperty, soundOptionsModel, EMPHASIS_TRACKS );
 
     // desired output levels for each sound (as requested by design, using manual edit of the gain)
     // See https://github.com/phetsims/quadrilateral/issues/175#issuecomment-1400645437
@@ -123,14 +123,14 @@ class EmphasisTracksSoundView extends TracksSoundView {
       shapeNameListener( shapeModel.shapeNameProperty.value );
     } );
 
-    this.disposeTracksVolumeEmphasisSoundView = () => {
+    this.disposeEmphasisTracksSoundView = () => {
       shapeModel.shapeNameProperty.unlink( shapeNameListener );
       outputLevelMultilink.dispose();
     };
   }
 
   public override dispose(): void {
-    this.disposeTracksVolumeEmphasisSoundView();
+    this.disposeEmphasisTracksSoundView();
     super.dispose();
   }
 }

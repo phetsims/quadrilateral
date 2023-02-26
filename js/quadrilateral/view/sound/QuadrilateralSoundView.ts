@@ -24,10 +24,10 @@ class QuadrilateralSoundView {
     soundOptionsModel.soundDesignProperty.link( soundDesign => {
       this.activeSoundView && this.activeSoundView.dispose();
 
-      if ( soundDesign === SoundDesign.TRACKS_BUILD_UP_SIMPLE ) {
+      if ( soundDesign === SoundDesign.TRACKS_LAYER ) {
         this.activeSoundView = new LayersTracksSoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
       }
-      else if ( soundDesign === SoundDesign.TRACKS_VOLUME_EMPHASIS ) {
+      else if ( soundDesign === SoundDesign.TRACKS_EMPHASIS ) {
         this.activeSoundView = new EmphasisTracksSoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
       }
     } );

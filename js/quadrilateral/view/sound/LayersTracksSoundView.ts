@@ -8,8 +8,6 @@
  * See https://github.com/phetsims/quadrilateral/issues/175#issuecomment-1201643077 for more information about this
  * design.
  *
- * TODO: This will be renamed once a name is decided in https://github.com/phetsims/quadrilateral/issues/248
- *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
@@ -30,7 +28,7 @@ import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOption
 import Multilink from '../../../../../axon/js/Multilink.js';
 
 // All the sounds played in this sound design in the "simple" case.
-const BUILD_UP_TRACKS = [
+const LAYER_TRACKS = [
   quadBaseBeatSimpler_mp3,
   quadBaseBeatSimplerConcaveQuadrilateralJustRhythmV2_mp3,
   quadBeatTracksBuildingBuildingTracks000_mp3,
@@ -59,10 +57,10 @@ const NAMED_QUADRILATERAL_TO_TRACKS_MAP = new Map( [
 ] );
 
 class LayersTracksSoundView extends TracksSoundView {
-  private readonly disposeTracksBuildUpSoundView: () => void;
+  private readonly disposeLayersTracksSoundView: () => void;
 
   public constructor( shapeModel: QuadrilateralShapeModel, shapeSoundEnabledProperty: TReadOnlyProperty<boolean>, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
-    super( shapeModel, shapeSoundEnabledProperty, resetNotInProgressProperty, soundOptionsModel, BUILD_UP_TRACKS );
+    super( shapeModel, shapeSoundEnabledProperty, resetNotInProgressProperty, soundOptionsModel, LAYER_TRACKS );
 
     // desired output levels for each sound (as requested by design, using manual edit of the gain)
     // See https://github.com/phetsims/quadrilateral/issues/175#issuecomment-1339626942
@@ -95,14 +93,14 @@ class LayersTracksSoundView extends TracksSoundView {
       shapeNameListener( shapeModel.shapeNameProperty.value );
     } );
 
-    this.disposeTracksBuildUpSoundView = () => {
+    this.disposeLayersTracksSoundView = () => {
       shapeModel.shapeNameProperty.unlink( shapeNameListener );
       outputLevelMultilink.dispose();
     };
   }
 
   public override dispose(): void {
-    this.disposeTracksBuildUpSoundView();
+    this.disposeLayersTracksSoundView();
     super.dispose();
   }
 }
