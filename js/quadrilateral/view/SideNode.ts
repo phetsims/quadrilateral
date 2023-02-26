@@ -1,9 +1,7 @@
 // Copyright 2021-2023, University of Colorado Boulder
 
 /**
- * The node for a side of a quadrilateral. No graphical design has been done yet, but creating this node
- * to exercise input and manipulation of the quad shape. By dragging a side both vertices of the side will
- * extend in the direction of motion of the side.
+ * The view for a side of the quadrilateral shape.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -60,25 +58,24 @@ class SideNode extends QuadrilateralMovableNode {
 
     const options = optionize<SideNodeOptions, SelfOptions, QuadrilateralMovableNodeOptions>()( {
 
-      // The 'release' sound is used instead of the 'grab' to distinguish sides from vertices, and there is no actual
-      // sound on release
+      // The 'release' sound is used instead of the 'grab' to distinguish sides from vertices
       grabbedSound: release_mp3,
       grabbedSoundOutputLevel: 0.8
     }, providedOptions );
 
     super( side, modelViewTransform, options );
 
-    this.sidePath = new Path( null, {
-      fill: QuadrilateralColors.quadrilateralShapeColorProperty,
-      stroke: QuadrilateralColors.quadrilateralShapeStrokeColorProperty
-    } );
-    this.addChild( this.sidePath );
-
     this.side = side;
     this.scratchSide = scratchSide;
     this.quadrilateralModel = quadrilateralModel;
     this.quadrilateralShapeModel = quadrilateralModel.quadrilateralShapeModel;
     this.scratchShapeModel = quadrilateralModel.quadrilateralTestShapeModel;
+
+    this.sidePath = new Path( null, {
+      fill: QuadrilateralColors.quadrilateralShapeColorProperty,
+      stroke: QuadrilateralColors.quadrilateralShapeStrokeColorProperty
+    } );
+    this.addChild( this.sidePath );
 
     const ticksNode = new SideTicksNode( side, modelViewTransform );
     this.addChild( ticksNode );
@@ -90,7 +87,6 @@ class SideNode extends QuadrilateralMovableNode {
 
     // listeners
     Multilink.multilink( [ side.vertex1.positionProperty, side.vertex2.positionProperty, markersVisibleProperty ], ( vertex1Position, vertex2Position, markersVisible ) => {
-
       ticksNode.visible = markersVisible;
 
       // create a single line that will then be divided into segments
@@ -201,8 +197,6 @@ class SideNode extends QuadrilateralMovableNode {
     this.addInputListener( new DragListener( {
       transform: modelViewTransform,
       start: ( event, listener ) => {
-
-        // FOR DEBUGGING, when the side is pressed, show debug areas
         side.isPressedProperty.value = true;
 
         // point in the coordinate frame of the play area, then in model coordinates
@@ -213,12 +207,9 @@ class SideNode extends QuadrilateralMovableNode {
         vectorToVertex1 = ( side.vertex1.positionProperty.value ).minus( modelPoint );
         vectorToVertex2 = ( side.vertex2.positionProperty.value ).minus( modelPoint );
 
-        // TODO: See #130, I am not sure what should be spoken during interaction
         this.voicingSpeakFullResponse();
       },
       end: () => {
-
-        // FOR DEBUGGING: When the side is released, hide debug areas
         side.isPressedProperty.value = false;
       },
       drag: ( event: SceneryEvent, listener: DragListener ) => {
@@ -305,7 +296,7 @@ class SideNode extends QuadrilateralMovableNode {
       tandem: providedOptions?.tandem?.createTandem( 'dragListener' )
     } ) );
 
-    // voicing - re-generate the voicing description when dependent Properties change
+    // voicing - re-generate the voicing descriptions when Properties used for content change
     this.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
       this.voicingObjectResponse = sideDescriber.getSideObjectResponse();
     } );

@@ -15,7 +15,6 @@ import QuadrilateralColors from '../../QuadrilateralColors.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VertexDescriber from './VertexDescriber.js';
 import { Shape } from '../../../../kite/js/imports.js';
-import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
 import grabHighPitch_mp3 from '../../../sounds/grabHighPitch_mp3.js';
