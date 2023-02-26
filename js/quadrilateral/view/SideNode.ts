@@ -21,7 +21,6 @@ import release_mp3 from '../../../../tambo/sounds/release_mp3.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import SideTicksNode from './SideTicksNode.js';
 import QuadrilateralMovableNode, { QuadrilateralMovableNodeOptions } from './QuadrilateralMovableNode.js';
-import QuadrilateralColors from '../../QuadrilateralColors.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 
@@ -61,11 +60,7 @@ class SideNode extends QuadrilateralMovableNode {
       grabbedSoundOutputLevel: 0.8
     }, providedOptions );
 
-    const sidePath = new Path( null, {
-      fill: QuadrilateralColors.quadrilateralShapeColorProperty,
-      stroke: QuadrilateralColors.quadrilateralShapeStrokeColorProperty
-    } );
-
+    const sidePath = new Path( null );
     super( side, modelViewTransform, sidePath, options );
 
     this.side = side;

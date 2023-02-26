@@ -11,7 +11,6 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import Vertex from '../model/Vertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import QuadrilateralColors from '../../QuadrilateralColors.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VertexDescriber from './VertexDescriber.js';
 import { Shape } from '../../../../kite/js/imports.js';
@@ -42,11 +41,7 @@ class VertexNode extends QuadrilateralMovableNode {
     }, providedOptions );
 
     const viewRadius = modelViewTransform.modelToViewBounds( vertex.modelBoundsProperty.value ).width / 2;
-    const circle = new Circle( viewRadius, {
-      fill: QuadrilateralColors.quadrilateralShapeColorProperty,
-      stroke: QuadrilateralColors.quadrilateralShapeStrokeColorProperty
-    } );
-
+    const circle = new Circle( viewRadius );
     super( vertex, modelViewTransform, circle, options );
 
     this.vertex = vertex;

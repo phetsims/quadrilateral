@@ -20,6 +20,7 @@ import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import QuadrilateralColors from '../../QuadrilateralColors.js';
 
 // constants
 const blockedByInnerShapeString = QuadrilateralStrings.a11y.voicing.blockedByInnerShapeString;
@@ -42,9 +43,11 @@ export type QuadrilateralMovableNodeOptions = SelfOptions & StrictOmit<ParentOpt
 class QuadrilateralMovableNode extends Voicing( Node ) {
   private readonly model: QuadrilateralMovable;
 
+  // Deltas used by movables for keyboard input - amount of motion per key press in view coordinates.
   public readonly largeViewDragDelta: number;
   public readonly smallViewDragDelta: number;
 
+  //
   public readonly paintableNode: PaintableNode;
 
   public constructor( model: QuadrilateralMovable, modelViewTransform: ModelViewTransform2, paintableNode: PaintableNode, providedOptions: QuadrilateralMovableNodeOptions ) {
@@ -64,6 +67,10 @@ class QuadrilateralMovableNode extends Voicing( Node ) {
     this.innerContent = options.nameResponse;
     this.paintableNode = paintableNode;
 
+    assert && assert( this.paintableNode.fill === null && this.paintableNode.stroke === null,
+      'QuadrilateralMovableNode sets default stroke and fill for the Paintable' );
+    paintableNode.fill = QuadrilateralColors.quadrilateralShapeColorProperty;
+    paintableNode.stroke = QuadrilateralColors.quadrilateralShapeStrokeColorProperty;
     this.addChild( paintableNode );
 
     // calculate step sizes in view coordinates based on input modes from query parameters
