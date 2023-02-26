@@ -52,6 +52,8 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
 
   private readonly tangibleConnectionModel: TangibleConnectionModel;
 
+  // The values that we will receive from the device and forward to the simulation. These 5 values are sufficient to
+  // recreate the geometry of the quadrilateral.
   private topLength = 0;
   private rightLength = 0;
   private leftLength = 0;
