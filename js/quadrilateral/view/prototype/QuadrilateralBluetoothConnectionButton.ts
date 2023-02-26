@@ -4,12 +4,13 @@
  * To test connecting to a bluetooth device using web bluetooth. This code was written in collaboration with Scott
  * Lambert from SLU, who built the tangible hardware and bluetooth device.
  *
- * TODO: Add documentation about the subset of 5 values this uses and forwards to the simulation.
- *
  * NOTE: this uses Promises (as the bluetooth API works with promises) which is very unusual for simulation code.
  *
  * NOTE: IntentionalAny is used a lot in this file - the Web Bluetooth API is not available yet in native types. Since
  * this is prototype code, it isn't worth further investigation.
+ *
+ * For more information about Web Bluetooth API, please see
+ * https://developer.mozilla.org/en-US/docs/Web/API/Web_Bluetooth_API.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -99,14 +100,13 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
       this.timeSinceUpdatingSim += dt;
     } );
 
-    // Browser throws an error durring fuzzing that requires bluetooth connection to happen from user input.
+    // Browser throws an error during fuzz tests that requires bluetooth connection to happen from user input.
     this.enabled = !phet.chipper.isFuzzEnabled();
   }
 
   /**
-   * Uses web bluetooth API to connect to a particular device.
-   *
-   * 6/29/22 - JG decided to use IntentionalAny for this prototype code that will likely never see production.
+   * Uses web bluetooth API to connect to a particular device with matching service ID, and watches for changing
+   * characteristics.
    */
   private async requestQuadDevice(): Promise<IntentionalAny> {
 
