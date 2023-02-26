@@ -42,6 +42,13 @@ const EXTERNAL_ANGLE_GUIDE_LENGTH = WEDGE_RADIAL_LENGTH * 8;
 class CornerGuideNode extends Node {
   public static readonly WEDGE_SIZE_RADIANS = WEDGE_SIZE_RADIANS;
 
+  /**
+   * @param vertex1 - The vertex whose angle we are going to represent
+   * @param vertex2 - "anchoring" vertex, corner guide will be drawn relative to a line between vertex1 and vertex2
+   * @param visibleProperty
+   * @param shapeModel
+   * @param modelViewTransform
+   */
   public constructor( vertex1: Vertex, vertex2: Vertex, visibleProperty: BooleanProperty, shapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2 ) {
     super();
 
@@ -155,7 +162,7 @@ class CornerGuideNode extends Node {
   }
 
   /**
-   * Draw a single angle segment of the annulus. The provided shape will be manipulated by this function.
+   * Draw a single angle segment of the annulus. The provided shape will be mutated by this function.
    */
   private static drawAngleSegment( shape: Shape, firstInnerPoint: Vector2, firstOuterPoint: Vector2, secondInnerPoint: Vector2, secondOuterPoint: Vector2 ): void {
     shape.moveToPoint( firstInnerPoint );
