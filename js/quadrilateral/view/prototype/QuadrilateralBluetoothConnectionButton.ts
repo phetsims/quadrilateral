@@ -4,6 +4,8 @@
  * To test connecting to a bluetooth device using web bluetooth. This code was written in collaboration with Scott
  * Lambert from SLU, who built the tangible hardware and bluetooth device.
  *
+ * TODO: Add documentation about the subset of 5 values this uses and forwards to the simulation.
+ *
  * NOTE: this uses Promises (as the bluetooth API works with promises) which is very unusual for simulation code.
  *
  * NOTE: IntentionalAny is used a lot in this file - the Web Bluetooth API is not available yet in native types. Since
