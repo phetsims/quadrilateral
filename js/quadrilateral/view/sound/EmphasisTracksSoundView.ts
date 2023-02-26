@@ -1,16 +1,11 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
- * One of the "Tracks" sound designs. In this design, each track is always playing. Depending on the named shape
- * of the quadrilateral, one or more of the tracks will have a higher output level. But in this design all sounds
- * will be playing when the sound view is generating soound.
+ * In this design, all tracks play at once. Depending on the shape name, one or more of the tracks will have a higher
+ * output level to emphasise a particular geometry.
  *
  * See https://github.com/phetsims/quadrilateral/issues/175#issuecomment-1201643077 for more information about this
  * design.
- *
- * TODO: This will be renamed once a name is decided in https://github.com/phetsims/quadrilateral/issues/248
- * TODO: After https://github.com/phetsims/quadrilateral/issues/328, a single sound is played, this is no longer a layer
- * of sound. Rename this design if #328 changes are kept.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -89,7 +84,7 @@ class EmphasisTracksSoundView extends TracksSoundView {
   public constructor( shapeModel: QuadrilateralShapeModel, shapeSoundEnabledProperty: TReadOnlyProperty<boolean>, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
     super( shapeModel, shapeSoundEnabledProperty, resetNotInProgressProperty, soundOptionsModel, EMPHASIS_TRACKS );
 
-    // desired output levels for each sound (as requested by design, using manual edit of the gain)
+    // desired output levels for each sound (as requested by design after manually editing the gain)
     // See https://github.com/phetsims/quadrilateral/issues/175#issuecomment-1400645437
     this.setIndexOutputLevel( 0, 0.75 );
     this.setIndexOutputLevel( 1, 1 );
