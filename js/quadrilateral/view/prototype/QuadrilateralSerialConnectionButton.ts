@@ -1,10 +1,10 @@
 // Copyright 2023, University of Colorado Boulder
 
-import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
-import QuadrilateralColors from '../../QuadrilateralColors.js';
-import QuadrilateralConstants from '../../QuadrilateralConstants.js';
-import quadrilateral from '../../quadrilateral.js';
-import TangibleConnectionModel from '../model/prototype/TangibleConnectionModel.js';
+import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
+import QuadrilateralColors from '../../../QuadrilateralColors.js';
+import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
+import quadrilateral from '../../../quadrilateral.js';
+import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
 import QuadrilateralSerialMessageController from './QuadrilateralSerialMessageController.js';
 
 /**

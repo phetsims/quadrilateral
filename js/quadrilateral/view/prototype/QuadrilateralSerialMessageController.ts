@@ -9,10 +9,10 @@
  * TODO: Rename to QuadrilateralSerialMessageSender (not really a controller)
  */
 
-import Utils from '../../../../dot/js/Utils.js';
-import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
-import TangibleConnectionModel from '../model/prototype/TangibleConnectionModel.js';
+import Utils from '../../../../../dot/js/Utils.js';
+import quadrilateral from '../../../quadrilateral.js';
+import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
+import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
 
 class QuadrilateralSerialMessageController {
   private readonly shapeModel: QuadrilateralShapeModel;
