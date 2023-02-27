@@ -132,9 +132,6 @@ class QuadrilateralScreenView extends ScreenView {
     }
     if ( MediaPipeQueryParameters.cameraInput === 'hands' ) {
       this.quadrilateralMediaPipe = new QuadrilateralMediaPipe( model, this.quadrilateralTangibleController );
-
-      // TODO: Move into QuadrilateralMediaPipe
-      model.tangibleConnectionModel.connectedToDeviceProperty.value = true;
     }
 
     // voicing components

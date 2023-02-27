@@ -44,7 +44,6 @@ class TangibleConnectionModel {
 
   // A transform that goes from tangible to virtual space. Used to set simulation vertex positions from
   // positions from position data provided by the physical device.
-  // TODO: This should likely replace the physicalModelBoundsProperty and its mapping.
   public physicalToVirtualTransform = ModelViewTransform2.createIdentity();
 
   // If true, the simulation is currently "calibrating" to a physical device. During this phase, we are setting
@@ -61,7 +60,6 @@ class TangibleConnectionModel {
   // So that this connection model can directly control the shape.
   public readonly shapeModel: QuadrilateralShapeModel;
 
-  // TODO: Reorder these arguments to make more sense.
   public constructor( shapeModel: QuadrilateralShapeModel, tangibleOptionsModel: QuadrilateralTangibleOptionsModel, modelBounds: Bounds2, tandem: Tandem ) {
     this.connectedToDeviceProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'connectedToDeviceProperty' )

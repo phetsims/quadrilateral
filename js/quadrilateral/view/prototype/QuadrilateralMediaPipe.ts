@@ -55,6 +55,9 @@ class QuadrilateralMediaPipe extends MediaPipe {
 
     // So that there is a mapping from tangible space to simulation model space
     model.tangibleConnectionModel.setPhysicalToVirtualTransform( MEDIA_PIPE_ASPECT_RATIO, 1 );
+
+    // effectively connected to a device with this prototype
+    model.tangibleConnectionModel.connectedToDeviceProperty.value = true;
   }
 
   /**
