@@ -12,7 +12,6 @@ import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
-import Vertex from '../model/Vertex.js';
 import VertexLabel from '../model/VertexLabel.js';
 import VertexDescriber from './VertexDescriber.js';
 import SideDescriber from './SideDescriber.js';

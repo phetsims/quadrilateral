@@ -7,8 +7,6 @@
  */
 
 import PhetFont from '../../scenery-phet/js/PhetFont.js';
-import Range from '../../dot/js/Range.js';
-import Utterance from '../../utterance-queue/js/Utterance.js';
 import quadrilateral from './quadrilateral.js';
 
 const SCREEN_TEXT_FONT = new PhetFont( { size: 18 } );
