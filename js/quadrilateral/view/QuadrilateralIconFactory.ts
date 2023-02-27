@@ -1,6 +1,7 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
+ * Icons for the simulation.
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
@@ -55,8 +56,8 @@ const QuadrilateralIconFactory = {
     const outerIconRadius = sidesLength * 0.8; // radius of the outer-most arc and for the outer curve of angle wedges
 
     assert && assert( outerIconRadius > innerIconRadius, 'Arc radii do not make sense' );
-    assert && assert( tickLength < sidesHeight, 'ticks will be to tall' );
-    assert && assert( wedgeAngle < 2 * Math.PI, 'that angle does nto make sense for this icon' );
+    assert && assert( tickLength < sidesHeight, 'ticks will be too tall' );
+    assert && assert( wedgeAngle < 2 * Math.PI, 'that angle does not make sense for this icon' );
     assert && assert( sidesLength > sidesHeight, 'Sides must be longer than they are tall for this icon' );
 
     // draw the "sides"
@@ -151,6 +152,9 @@ const QuadrilateralIconFactory = {
     } );
   },
 
+  /**
+   * Icon for the diagonals control, a pair of crossed lines.
+   */
   createDiagonalGuidesIcon(): Node {
     const iconHeight = QuadrilateralIconFactory.ICON_HEIGHT;
     const lineOptions = { stroke: QuadrilateralColors.visibilityIconsColorProperty, lineWidth: QuadrilateralIconFactory.ICON_LINE_WIDTH, lineDash: [ 5, 3 ] };
@@ -162,6 +166,9 @@ const QuadrilateralIconFactory = {
     } );
   },
 
+  /**
+   * Icon for the shape music control.
+   */
   createSoundIcon(): Node {
     return new Path( musicSolidShape, {
       maxHeight: QuadrilateralIconFactory.ICON_HEIGHT,
@@ -169,6 +176,9 @@ const QuadrilateralIconFactory = {
     } );
   },
 
+  /**
+   * Icon for the grid visibility control.
+   */
   createGridIcon(): Node {
     return new GridIcon( {
       size: QuadrilateralIconFactory.ICON_HEIGHT,
@@ -178,9 +188,8 @@ const QuadrilateralIconFactory = {
   },
 
   /**
-   * Layout a label Text and icon Node, in that order for various UI controls. Returns
-   * a flowbox so that 'stretch' can be used to align text and icons in a parent layout
-   * container.
+   * Layout a label Text and icon Node, in that order for various UI controls. Returns a flowbox so that 'stretch'
+   * can be used to align text and icons in a parent layout container.
    */
   createLabelledIcon( iconNode: Node, labelString: string ): FlowBox {
     const labelText = new Text( labelString, {
