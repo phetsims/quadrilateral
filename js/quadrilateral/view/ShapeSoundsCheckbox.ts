@@ -1,7 +1,7 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
- * The checkbox that controls output of shape sounds in this sim. To avoid confusion this component
+ * The checkbox that controls output of shape sounds in this sim. To avoid confusion, this component
  * will become disabled when sim sounds are off globally. The unique and musical nature of the sound design in this
  * sim warranted an extra control in the ScreenView to turn these sounds off quickly if desired.
  *

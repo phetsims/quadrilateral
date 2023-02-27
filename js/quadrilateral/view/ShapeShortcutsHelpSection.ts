@@ -18,8 +18,8 @@ import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralKeyboardHelpContent from './QuadrilateralKeyboardHelpContent.js';
 
-// Voicing is NOT translatable and will never be. This content is invisible in non-english locales and when Voicing
-// is not supported.
+// Voicing is NOT translatable and won't be for a very long time. This content is invisible in non-english locales and
+// when Voicing is not supported.
 const checkShapeWithVoicingString = 'With Voicing enabled, check shape name or properties';
 const checkShapeDescriptionString = QuadrilateralStrings.a11y.keyboardHelpDialog.checkShapeDescriptionPattern;
 const resetShapeDescriptionString = QuadrilateralStrings.a11y.keyboardHelpDialog.resetShapeDescriptionPattern;

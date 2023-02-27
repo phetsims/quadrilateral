@@ -1,6 +1,8 @@
 // Copyright 2021-2023, University of Colorado Boulder
 
 /**
+ * The view component for the quadrilateral shape, including labels and markers.
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
@@ -200,7 +202,7 @@ class QuadrilateralNode extends Voicing( Node ) {
       },
       cancel: listener => {
 
-        // no longer pressed locking until next press
+        // not locking until next press
         this.model.minorIntervalsFromGlobalKeyProperty.value = false;
       }
     } ) );

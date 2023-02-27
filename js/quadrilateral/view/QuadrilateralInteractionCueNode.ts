@@ -1,8 +1,8 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
- * Draws a Node that intends to let the user know that the quadrilateral shape is interactive.
- * Surrounds each vertex with dashed lines and draws arrows pointing at the sides.
+ * Draws a Node that hints that the quadrilateral shape is interactive. Surrounds each vertex and side with dashed
+ * lines and draws arrows pointing at the sides.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -62,7 +62,7 @@ class QuadrilateralInteractionCueNode extends Path {
 
     super( nodeShape, PATH_OPTIONS );
 
-    // If the shape changes at all this content disappear (until reset)
+    // If the shape changes at all this content disappears (until reset)
     quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
       this.visible = false;
     } );

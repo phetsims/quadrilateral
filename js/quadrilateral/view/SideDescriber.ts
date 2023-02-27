@@ -57,21 +57,20 @@ const aboutNumberAndAHalfUnitsPatternString = QuadrilateralStrings.a11y.voicing.
 const aboutNumberQuarterUnitsPatternString = QuadrilateralStrings.a11y.voicing.aboutNumberQuarterUnitsPattern;
 const aboutFullNumberAndNumberQuarterUnitsPatternString = QuadrilateralStrings.a11y.voicing.aboutFullNumberAndNumberQuarterUnitsPattern;
 const oneHalfUnitsString = QuadrilateralStrings.a11y.voicing.oneHalfUnits;
-const blockedByInnerShapeString = QuadrilateralStrings.a11y.voicing.blockedByInnerShapeString;
 
 // A map that will provide comparison descriptions for side lengths. Range values are the ratio between lengths
-// between the sides.
-const lengthComparisonDescriptionMap = new Map<Range, string>();
-lengthComparisonDescriptionMap.set( new Range( 0, 0.1 ), farShorterThanString );
-lengthComparisonDescriptionMap.set( new Range( 0.1, 0.4 ), muchShorterThanString );
-lengthComparisonDescriptionMap.set( new Range( 0.4, 0.6 ), aboutHalfAsLongAsString );
-lengthComparisonDescriptionMap.set( new Range( 0.6, 0.8 ), aLittleShorterThanString );
-lengthComparisonDescriptionMap.set( new Range( 0.8, 1 ), similarButShorterThanString );
-lengthComparisonDescriptionMap.set( new Range( 1, 1.3 ), similarButLongerThanString );
-lengthComparisonDescriptionMap.set( new Range( 1.3, 1.6 ), aLittleLongerThanString );
-lengthComparisonDescriptionMap.set( new Range( 1.6, 1.8 ), muchLongerThanString );
-lengthComparisonDescriptionMap.set( new Range( 1.8, 2.2 ), aboutTwiceAsLongAsString );
-lengthComparisonDescriptionMap.set( new Range( 2.2, Number.POSITIVE_INFINITY ), farLongerThanString );
+// of different sides.
+const LENGTH_COMPARISON_DESCRIPTION_MAP = new Map<Range, string>();
+LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 0, 0.1 ), farShorterThanString );
+LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 0.1, 0.4 ), muchShorterThanString );
+LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 0.4, 0.6 ), aboutHalfAsLongAsString );
+LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 0.6, 0.8 ), aLittleShorterThanString );
+LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 0.8, 1 ), similarButShorterThanString );
+LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 1, 1.3 ), similarButLongerThanString );
+LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 1.3, 1.6 ), aLittleLongerThanString );
+LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 1.6, 1.8 ), muchLongerThanString );
+LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 1.8, 2.2 ), aboutTwiceAsLongAsString );
+LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 2.2, Number.POSITIVE_INFINITY ), farLongerThanString );
 
 class SideDescriber {
   public readonly side: Side;
@@ -135,8 +134,6 @@ class SideDescriber {
    * "2 and a half units" or
    * "2 and a quarter units" or
    * "2 and three-quarter units".
-   *
-   * TODO: Look for refactoring opportunities in this function.
    */
   public getSideUnitsDescription(): string {
     let sideDescription: string | null = null;
@@ -254,13 +251,6 @@ class SideDescriber {
   }
 
   /**
-   * Returns a context response for when a Side cannot move because it is blocked by the shape itself.
-   */
-  public getBlockedByShapeResponse(): string {
-    return blockedByInnerShapeString;
-  }
-
-  /**
    * Get a description of the adjacent sides and how this side compares to them in length. Also includes information
    * about them if they are parallel. Used for the Object response of this vertex. Will return something like
    *
@@ -338,7 +328,7 @@ class SideDescriber {
   }
 
   /**
-   * Returns a description of comparison between two sides, using entries of lengthComparisonDescriptionMap.
+   * Returns a description of comparison between two sides, using entries of LENGTH_COMPARISON_DESCRIPTION_MAP.
    * Description compares this side to otherSide. For example, if this side (SideAB) is longer than (sideCD) the output
    * will be something like:
    * "SideAB is much longer than sideCD."
@@ -363,7 +353,7 @@ class SideDescriber {
 
     const lengthRatio = length1 / length2;
     if ( description === null ) {
-      lengthComparisonDescriptionMap.forEach( ( value, key ) => {
+      LENGTH_COMPARISON_DESCRIPTION_MAP.forEach( ( value, key ) => {
         if ( key.contains( lengthRatio ) ) {
           description = value;
         }
