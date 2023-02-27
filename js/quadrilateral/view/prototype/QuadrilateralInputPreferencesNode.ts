@@ -6,15 +6,15 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import quadrilateral from '../../quadrilateral.js';
-import NumberControl, { NumberControlOptions } from '../../../../scenery-phet/js/NumberControl.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
-import PreferencesPanelSection from '../../../../joist/js/preferences/PreferencesPanelSection.js';
-import { Text, VBox } from '../../../../scenery/js/imports.js';
-import PreferencesDialog from '../../../../joist/js/preferences/PreferencesDialog.js';
-import QuadrilateralTangibleOptionsModel from '../model/QuadrilateralTangibleOptionsModel.js';
+import quadrilateral from '../../../quadrilateral.js';
+import NumberControl, { NumberControlOptions } from '../../../../../scenery-phet/js/NumberControl.js';
+import NumberProperty from '../../../../../axon/js/NumberProperty.js';
+import optionize, { EmptySelfOptions } from '../../../../../phet-core/js/optionize.js';
+import Tandem from '../../../../../tandem/js/Tandem.js';
+import PreferencesPanelSection from '../../../../../joist/js/preferences/PreferencesPanelSection.js';
+import { Text, VBox } from '../../../../../scenery/js/imports.js';
+import PreferencesDialog from '../../../../../joist/js/preferences/PreferencesDialog.js';
+import QuadrilateralTangibleOptionsModel from '../../model/QuadrilateralTangibleOptionsModel.js';
 
 class QuadrilateralInputPreferencesNode extends PreferencesPanelSection {
   private readonly disposeQuadrilateralInputPreferencesNode: () => void;

@@ -16,7 +16,7 @@ import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';
 import QuadrilateralStrings from './QuadrilateralStrings.js';
 import QuadrilateralOptionsModel from './quadrilateral/model/QuadrilateralOptionsModel.js';
 import MappedProperty from '../../axon/js/MappedProperty.js';
-import QuadrilateralInputPreferencesNode from './quadrilateral/view/QuadrilateralInputPreferencesNode.js';
+import QuadrilateralInputPreferencesNode from './quadrilateral/view/prototype/QuadrilateralInputPreferencesNode.js';
 import QuadrilateralSoundOptionsNode from './quadrilateral/view/sound/QuadrilateralSoundOptionsNode.js';
 
 const quadrilateralTitleStringProperty = QuadrilateralStrings.quadrilateral.titleStringProperty;
