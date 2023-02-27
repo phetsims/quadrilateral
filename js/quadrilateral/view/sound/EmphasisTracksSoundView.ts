@@ -33,14 +33,14 @@ const DEFAULT_BACKGROUND_OUTPUT_LEVEL = 0.15;
 // All the sounds played in this sound design
 const EMPHASIS_TRACKS = [
   quadBeatTracksBuildingBaseRhythm_mp3,
+  quadBaseBeatSimplerConcaveQuadrilateralJustRhythmV2_mp3,
   quadBeatTracksBuildingBuildingTracks000_mp3,
-  quadBeatTracksBuildingBuildingTracks005_mp3,
-  quadBeatTracksBuildingBuildingTracks002_mp3,
+  quadBeatTracksBuildingBuildingTracks006_mp3,
   quadBeatTracksBuildingBuildingTracks003_mp3,
   quadBeatTracksBuildingBuildingTracks004_mp3,
+  quadBeatTracksBuildingBuildingTracks005_mp3,
+  quadBeatTracksBuildingBuildingTracks002_mp3,
   quadSimpleBuildingTracks004Trapezoid_mp3,
-  quadBeatTracksBuildingBuildingTracks006_mp3,
-  quadBaseBeatSimplerConcaveQuadrilateralJustRhythmV2_mp3,
   quadSimpleBuildingTracks006_mp3
 ];
 
@@ -49,15 +49,15 @@ const EMPHASIS_TRACKS = [
 // according to the design in https://github.com/phetsims/quadrilateral/issues/175.
 const NAMED_QUADRILATERAL_TO_HIGH_VOLUME_TRACKS_MAP = new Map( [
   [ NamedQuadrilateral.CONVEX_QUADRILATERAL, [ 0 ] ],
-  [ NamedQuadrilateral.CONCAVE_QUADRILATERAL, [ 8 ] ],
+  [ NamedQuadrilateral.CONCAVE_QUADRILATERAL, [ 1 ] ],
   [ NamedQuadrilateral.TRIANGLE, [] ],
   [ NamedQuadrilateral.DART, [ 9 ] ],
   [ NamedQuadrilateral.KITE, [ 2 ] ],
-  [ NamedQuadrilateral.TRAPEZOID, [ 1 ] ],
+  [ NamedQuadrilateral.TRAPEZOID, [ 4 ] ],
   [ NamedQuadrilateral.ISOSCELES_TRAPEZOID, [ 3 ] ],
-  [ NamedQuadrilateral.PARALLELOGRAM, [ 4 ] ],
-  [ NamedQuadrilateral.RHOMBUS, [ 5 ] ],
-  [ NamedQuadrilateral.RECTANGLE, [ 6 ] ],
+  [ NamedQuadrilateral.PARALLELOGRAM, [ 5 ] ],
+  [ NamedQuadrilateral.RHOMBUS, [ 6 ] ],
+  [ NamedQuadrilateral.RECTANGLE, [ 8 ] ],
   [ NamedQuadrilateral.SQUARE, [ 7 ] ]
 ] );
 
@@ -69,13 +69,13 @@ class EmphasisTracksSoundView extends TracksSoundView {
   //https://github.com/phetsims/quadrilateral/issues/175#issuecomment-1400645437 for a list of these values.
   private readonly indexToBackgroundOutputLevelMap = new Map<number, number>( [
     [ 0, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
-    [ 1, DEFAULT_BACKGROUND_OUTPUT_LEVEL * 2 ],
+    [ 1, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
     [ 2, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
     [ 3, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
     [ 4, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
     [ 5, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
     [ 6, DEFAULT_BACKGROUND_OUTPUT_LEVEL / 2 ],
-    [ 7, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
+    [ 7, DEFAULT_BACKGROUND_OUTPUT_LEVEL * 2 ],
     [ 8, DEFAULT_BACKGROUND_OUTPUT_LEVEL ],
     [ 9, DEFAULT_BACKGROUND_OUTPUT_LEVEL ]
   ] );
@@ -86,15 +86,15 @@ class EmphasisTracksSoundView extends TracksSoundView {
     // desired output levels for each sound (as requested by design after manually editing the gain)
     // See https://github.com/phetsims/quadrilateral/issues/175#issuecomment-1400645437
     this.indexToOutputLevelMap.set( 0, 0.75 );
-    this.indexToOutputLevelMap.set( 1, 1 );
-    this.indexToOutputLevelMap.set( 2, 0.8 );
+    this.indexToOutputLevelMap.set( 1, 0.75 );
+    this.indexToOutputLevelMap.set( 2, 1 );
     this.indexToOutputLevelMap.set( 3, 1 );
     this.indexToOutputLevelMap.set( 4, 1 );
     this.indexToOutputLevelMap.set( 5, 1 );
-    this.indexToOutputLevelMap.set( 6, 0.5 );
+    this.indexToOutputLevelMap.set( 6, 0.75 );
     this.indexToOutputLevelMap.set( 7, 1 );
-    this.indexToOutputLevelMap.set( 8, 1 );
-    this.indexToOutputLevelMap.set( 9, 1 );
+    this.indexToOutputLevelMap.set( 8, 0.6 );
+    this.indexToOutputLevelMap.set( 9, 0.75 );
 
     const shapeNameListener = ( shapeName: NamedQuadrilateral ) => {
 
