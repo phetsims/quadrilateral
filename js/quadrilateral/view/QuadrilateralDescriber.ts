@@ -242,6 +242,9 @@ class QuadrilateralDescriber {
     } );
   }
 
+  /**
+   * Returns a description that is spoken when the user uses the "check shape" feature (global hotkey "ctrl + c").
+   */
   public getCheckShapeDescription(): string {
     let description: string;
     if ( this.shapeNameVisibleProperty.value ) {
@@ -254,6 +257,10 @@ class QuadrilateralDescriber {
     return description;
   }
 
+  /**
+   * Returns a description of the current shape's geometric properties (without saying the shape name). Typically
+   * this is used when the user hides the shape name in the user interface.
+   */
   public getShapePropertiesDescription(): string {
     let shapePropertiesDescription = '';
 
@@ -341,8 +348,8 @@ class QuadrilateralDescriber {
   }
 
   /**
-   * Returns the first details statement. Details are broken up into categorized statements. This first one
-   * provides the current named shape and its size.
+   * Returns the first details statement for the Voicing toolbar. Details are broken up into numbered statements.
+   * This first one provides the current named shape and its size.
    */
   public getFirstDetailsStatement(): string {
     const sizeDescriptionString = this.getSizeDescription();
@@ -360,8 +367,8 @@ class QuadrilateralDescriber {
   }
 
   /**
-   * Returns the second "details" statement. Details are broken up into three categorized statements. This one is a
-   * summary about equal corner angles and equal side lengths. Will return something like
+   * Returns the second "details" statement for the Voicing toolbar. Details are broken up into three numbered
+   * statements. This one is a summary about equal corner angles and equal side lengths. Will return something like
    * "Right now, opposite corners are equal and opposite sides are equal." or
    * "Right now, on pair of opposite corners are equal and opposite sides are equal" or
    * "Right now, no corners are equal and no sides are equal."
@@ -412,8 +419,8 @@ class QuadrilateralDescriber {
   }
 
   /**
-   * Returns the third details statement. This is a qualitative description of the current shape, whithout including
-   * the shape name.
+   * Returns the third "details" statement for the Voicing toolbar. This is a qualitative description of the current
+   * shape, that does not include shape name.
    */
   public getThirdDetailsStatement(): string | null {
     const shapeName = this.shapeModel.shapeNameProperty.value;
@@ -542,24 +549,6 @@ class QuadrilateralDescriber {
   }
 
   /**
-   * For the details button, we are going to describe 'flat' angles as the number of wedges as a special case because
-   * in english it sounds nicer when combined with other details content.
-   */
-  private getDetailsWedgesDescription( angle: number ): string {
-    let descriptionString;
-    if ( this.shapeModel.isFlatAngle( angle ) ) {
-      descriptionString = StringUtils.fillIn( numberOfWedgesPatternString, {
-        numberOfWedges: 6
-      } );
-    }
-    else {
-      descriptionString = VertexDescriber.getWedgesDescription( angle, this.shapeModel );
-    }
-
-    return descriptionString;
-  }
-
-  /**
    * The fifth statement of the "details" button in the Voicing toolbar. Returns a description of the widest and
    * smallest angles of the shape. Only returns a string if corner guides are displayed - otherwise this more
    * quantitative content is skipped.
@@ -622,6 +611,24 @@ class QuadrilateralDescriber {
 
       return description;
     }
+  }
+
+  /**
+   * For the details button, we are going to describe 'flat' angles as the number of wedges as a special case because
+   * in english it sounds nicer when combined with other details content.
+   */
+  private getDetailsWedgesDescription( angle: number ): string {
+    let descriptionString;
+    if ( this.shapeModel.isFlatAngle( angle ) ) {
+      descriptionString = StringUtils.fillIn( numberOfWedgesPatternString, {
+        numberOfWedges: 6
+      } );
+    }
+    else {
+      descriptionString = VertexDescriber.getWedgesDescription( angle, this.shapeModel );
+    }
+
+    return descriptionString;
   }
 
   /**
@@ -803,43 +810,7 @@ class QuadrilateralDescriber {
   }
 
   /**
-   * For some reason, it was decided that the order that vertices are mentioned in descriptions need to be ordered in a
-   * unique way. This function returns the vertices in the order that they should be described in the string
-   * creation functions of this Describer.
-   */
-  private getVerticesOrderedForDescription( vertices: Vertex[] ): Vertex[] {
-
-    const order = vertices.sort( ( a: Vertex, b: Vertex ) => {
-      return this.compareVerticesForDescription( a, b );
-    } );
-
-    assert && assert( order.length === vertices.length, 'An order for vertices was not identified.' );
-    return order;
-  }
-
-  private compareVerticesForDescription( vertex1: Vertex, vertex2: Vertex ): number {
-    const firstPosition = vertex1.positionProperty.value;
-    const secondPosition = vertex2.positionProperty.value;
-
-    let sortReturnValue = 0;
-
-    // if vertically equal, left most vertex is spoken first
-    if ( firstPosition.y === secondPosition.y ) {
-
-      // if first position is left of second position, a before b
-      sortReturnValue = firstPosition.x < secondPosition.x ? -1 : 1;
-    }
-    else {
-
-      // if first position is lower than second position, a before b
-      sortReturnValue = firstPosition.y < secondPosition.y ? -1 : 1;
-    }
-
-    return sortReturnValue;
-  }
-
-  /**
-   * Returns a ResponsePacket with the content for responses that should happen when the shape (and only the shape)
+   * Returns a ResponsePacket with the content for responses that should be included when the shape (and only the shape)
    * is reset.
    */
   public static readonly RESET_SHAPE_RESPONSE_PACKET = new ResponsePacket( {
