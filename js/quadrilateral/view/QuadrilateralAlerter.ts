@@ -1,7 +1,7 @@
 // Copyright 2021-2023, University of Colorado Boulder
 
 /**
- * Responsible for generating the real-time feedback alerts (mostly context responses) for the simulation.
+ * Responsible for generating the real-time feedback alerts for the simulation.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -86,77 +86,67 @@ const equalToOneAdjacentSideString = QuadrilateralStrings.a11y.voicing.sideDragO
 const twoSidesEqualString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.twoSidesEqual;
 const threeSidesEqualString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.threeSidesEqual;
 
-
-// A response may trigger because there is a large enough change in angle or length
+// A response may trigger because there is a large enough change in angle or length. The reason for the response
+// will have an impact on what information is described.
 type ResponseReason = 'angle' | 'length';
 
+// constants
+// If any angle changes this much since the last time a context response was generated, it is time to alert a
+// new context response.
+const ANGLE_RESPONSE_THRESHOLD = Math.PI / 12;
+
+// If any of the angles have changed this much since the last time a context response was generated, angles have
+// changed sufficiently to describe changes in angles over other information.
+const ANGLE_DIFFERENCES_LARGE_THRESHOLD = Math.PI / 24;
+
 class QuadrilateralAlerter extends Alerter {
-
   private readonly model: QuadrilateralModel;
+  private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
+  private readonly modelViewTransform: ModelViewTransform2;
+  private readonly describer: QuadrilateralDescriber;
 
-  // Depending on what combinations of state the shape enters/loses we use different descriptions. We need
-  // to track previous values and compare every time Properties change. We cannot use multilink for this because
-  // we can only update after all deferred Properties of the model have been set.
-  private wasParallelogram: boolean;
-  private wereAllLengthsEqual: boolean;
-  private wereAllAnglesRight: boolean;
+  // Tracks whether the side pairs were parallel since the last time a description was generated because of a change
+  // to the shape.
   private wasSideABSideCDParallel: boolean;
   private wasSideBCSideDAParallel: boolean;
-
-  private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
-
-  private readonly modelViewTransform: ModelViewTransform2;
 
   // Indicates when it is time to announce an angle/length response because that aspect of the quadrilateral shape
   // has changed enough to describe it.
   private angleResponseReady = false;
   private lengthResponseReady = false;
 
-  // A snapshot of state variables when it is time to produce a new response describing the change in angle or length.
-  // A new snapshot will be generated when it is time to announce the context response.
+  // A snapshot of state variables since the last time a response was generated. When a response is generated we need
+  // create strings that describe the change to the shape *since the last description*, instead of every Property
+  // change.
   private previousContextResponseShapeSnapshot: ShapeSnapshot;
   private previousObjectResponseShapeSnapshot: ShapeSnapshot;
-
-  private readonly describer: QuadrilateralDescriber;
 
   public constructor( model: QuadrilateralModel, screenView: QuadrilateralScreenView, modelViewTransform: ModelViewTransform2, describer: QuadrilateralDescriber ) {
     super();
 
     this.quadrilateralShapeModel = model.quadrilateralShapeModel;
-
     this.model = model;
     this.modelViewTransform = modelViewTransform;
-
     this.describer = describer;
-
     this.previousContextResponseShapeSnapshot = new ShapeSnapshot( this.quadrilateralShapeModel );
     this.previousObjectResponseShapeSnapshot = new ShapeSnapshot( this.quadrilateralShapeModel );
+    this.wasSideABSideCDParallel = model.quadrilateralShapeModel.sideABSideCDParallelSideChecker.areSidesParallel();
+    this.wasSideBCSideDAParallel = model.quadrilateralShapeModel.sideBCSideDAParallelSideChecker.areSidesParallel();
 
-    // The utterance used when the shape state changes, but in ways that are less pedagogically relevant than
-    // the important state information. This Utterance is therefore interruptable and lower priority than the
-    // importantStateUtterance in the utterance queue.
-    // const shapeResponsePacket = new ResponsePacket();
+    // The least pedagogically relevant content will alert through this Utterance and will often be interrupted.
     const lowPriorityUtterance = new Utterance( {
       priority: Utterance.LOW_PRIORITY
     } );
 
+    // Alert content that should usually be heard, but should be interrupted by critical information about the shape
     const mediumPriorityUtterance = new Utterance( {
       priority: Utterance.MEDIUM_PRIORITY
     } );
 
+    // Most important information about the shape that should interrupt all other alerts and never be interrupted.
     const highPriorityUtterance = new Utterance( {
-
-      // for important state changes of the shape, this utterance is used so that it cannot be interrupted
-      // by further interaction
       priority: Utterance.HIGH_PRIORITY
     } );
-
-    this.wasParallelogram = model.quadrilateralShapeModel.isParallelogramProperty.value;
-    this.wereAllLengthsEqual = model.quadrilateralShapeModel.allLengthsEqualProperty.value;
-    this.wereAllAnglesRight = model.quadrilateralShapeModel.allAnglesRightProperty.value;
-
-    this.wasSideABSideCDParallel = model.quadrilateralShapeModel.sideABSideCDParallelSideChecker.areSidesParallel();
-    this.wasSideBCSideDAParallel = model.quadrilateralShapeModel.sideBCSideDAParallelSideChecker.areSidesParallel();
 
     // Upon simulation reset, reset certain state for description so that next descriptions after reset are correct
     model.resetNotInProgressProperty.link( resetNotInProgress => {
@@ -164,6 +154,9 @@ class QuadrilateralAlerter extends Alerter {
       this.previousObjectResponseShapeSnapshot = new ShapeSnapshot( this.quadrilateralShapeModel );
     } );
 
+    //-----------------------------------------------------------------------------------------
+    // Potentially generate and alert new responses when the shape changes.
+    //-----------------------------------------------------------------------------------------
     model.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
 
       // Nothing about these should be heard while resetting
@@ -183,9 +176,10 @@ class QuadrilateralAlerter extends Alerter {
         const bAngleDifference = previousBAngle - this.quadrilateralShapeModel.vertexB.angleProperty.value!;
         const cAngleDifference = previousCAngle - this.quadrilateralShapeModel.vertexC.angleProperty.value!;
         const dAngleDifference = previousDAngle - this.quadrilateralShapeModel.vertexD.angleProperty.value!;
-
         const angleDifferences = [ aAngleDifference, bAngleDifference, cAngleDifference, dAngleDifference ];
-        this.angleResponseReady = _.some( angleDifferences, angleDifference => Math.abs( angleDifference ) > Math.PI / 12 );
+
+        // Have the angles changed enough to trigger a context response?
+        this.angleResponseReady = _.some( angleDifferences, angleDifference => Math.abs( angleDifference ) > ANGLE_RESPONSE_THRESHOLD );
 
         const previousABLength = this.previousContextResponseShapeSnapshot.sideABLength;
         const previousBCLength = this.previousContextResponseShapeSnapshot.sideBCLength;
@@ -196,29 +190,38 @@ class QuadrilateralAlerter extends Alerter {
         const bcLengthDifference = previousBCLength - this.quadrilateralShapeModel.sideBC.lengthProperty.value;
         const cdLengthDifference = previousCDLength - this.quadrilateralShapeModel.sideCD.lengthProperty.value;
         const daLengthDifference = previousDALength - this.quadrilateralShapeModel.sideDA.lengthProperty.value;
-
         const lengthDifferences = [ abLengthDifference, bcLengthDifference, cdLengthDifference, daLengthDifference ];
-        const angleDifferencesLarge = _.some( angleDifferences, angleDifference => angleDifference > Math.PI / 24 );
 
+        // If angles have changed enough, the response information will describe the changing angles instead
+        // of other information (like changing length).
+        const angleDifferencesLarge = _.some( angleDifferences, angleDifference => angleDifference > ANGLE_DIFFERENCES_LARGE_THRESHOLD );
+
+        // Have the lengths changed enough to trigger a context response?
         this.lengthResponseReady = _.some( lengthDifferences, lengthDifference => Math.abs( lengthDifference ) > Side.SIDE_SEGMENT_LENGTH ) && !angleDifferencesLarge;
 
         const sideABSideCDParallelAfter = this.quadrilateralShapeModel.sideABSideCDParallelSideChecker.areSidesParallel();
         const sideBCSideDAParallelAfter = this.quadrilateralShapeModel.sideBCSideDAParallelSideChecker.areSidesParallel();
 
         // If we go from zero parallel side pairs to at least one pair, trigger a new context response so that we hear
-        // when sides become parallel. This is relative to every change, so state variables are set immediateley instead
-        // of using the snapshot.
+        // when sides become parallel. These checks have to be relative to every shape change, so state variables are
+        // set immediately instead of in a ShapeSnapshot.
         const parallelSideResponseReady = ( !this.wasSideABSideCDParallel && !this.wasSideBCSideDAParallel ) && ( sideABSideCDParallelAfter || sideBCSideDAParallelAfter );
         this.wasSideABSideCDParallel = sideABSideCDParallelAfter;
         this.wasSideBCSideDAParallel = sideBCSideDAParallelAfter;
 
-        // prioritize the "important" information change, other content is not spoken if this is ready
-        const importantStateResponse = this.getShapeNameChangeResponse();
-        if ( importantStateResponse ) {
-          responsePacket.contextResponse = importantStateResponse!;
+        //-----------------------------------------------------------------------------------------
+        // First, create the context response - the description of the overall shape
+        //-----------------------------------------------------------------------------------------
+        const shapeNameChangeResponse = this.getShapeNameChangeResponse();
+        if ( shapeNameChangeResponse ) {
+
+          // Shape name changed, this is the most important information.
+          responsePacket.contextResponse = shapeNameChangeResponse!;
           utterance = highPriorityUtterance;
         }
         else if ( this.angleResponseReady || this.lengthResponseReady || parallelSideResponseReady ) {
+
+          // Shape attributes changed sufficiently to describe changes
           const thisResponseReason = angleDifferencesLarge ? 'angle' : 'length';
 
           if ( this.previousContextResponseShapeSnapshot.namedQuadrilateral === this.quadrilateralShapeModel.shapeNameProperty.value ) {
@@ -237,6 +240,10 @@ class QuadrilateralAlerter extends Alerter {
           utterance = mediumPriorityUtterance;
         }
 
+        //-----------------------------------------------------------------------------------------
+        // Next, create the object response - the description of the particular Vertex or Side as
+        // it is moved by the user.
+        //-----------------------------------------------------------------------------------------
         model.quadrilateralShapeModel.sides.forEach( side => {
           if ( side.voicingObjectResponseDirty ) {
             responsePacket.objectResponse = this.getSideChangeObjectResponse( side );
@@ -251,12 +258,14 @@ class QuadrilateralAlerter extends Alerter {
           }
         } );
 
+        //-----------------------------------------------------------------------------------------
         // Announce responses if we have generated any content.
+        //-----------------------------------------------------------------------------------------
         if ( responsePacket.contextResponse || responsePacket.objectResponse ) {
           utterance.alert = responsePacket;
           this.alert( utterance );
 
-          // save snapshots for next shape changes
+          // save snapshots for next descriptions
           if ( responsePacket.contextResponse ) {
             this.previousContextResponseShapeSnapshot = new ShapeSnapshot( this.quadrilateralShapeModel );
           }
@@ -267,14 +276,16 @@ class QuadrilateralAlerter extends Alerter {
       }
     } );
 
-    // Responses specific to the OpenCV prototype - letting the user know when markers become obscured from the camera.
+    //-----------------------------------------------------------------------------------------
+    // (Prototype) Responses specific to OpenCV - letting the user know when markers become
+    // detected or obscured from the camera.
+    //-----------------------------------------------------------------------------------------
     const markerResponsePacket = new ResponsePacket();
     const markerUtterance = new Utterance( {
       alert: markerResponsePacket,
       priority: Utterance.LOW_PRIORITY
     } );
 
-    // TODO: Can this be removed?
     const markerDetectionModel = model.tangibleConnectionModel.markerDetectionModel;
     markerDetectionModel.allVertexMarkersDetectedProperty.link( allVertexMarkersDetected => {
       if ( markerDetectionModel.markerResponsesEnabledProperty.value ) {
@@ -283,7 +294,6 @@ class QuadrilateralAlerter extends Alerter {
       }
     } );
 
-    // Reusable listener that describes when a
     const vertexDetectionResponseListener = ( labelString: string, detected: boolean ) => {
       if ( markerDetectionModel.markerResponsesEnabledProperty.value ) {
         const stateString = detected ? backString : goneString;
@@ -295,13 +305,14 @@ class QuadrilateralAlerter extends Alerter {
       }
     };
 
-    // TODO: remove these?
     markerDetectionModel.vertexAMarkerDetectedProperty.link( detected => { vertexDetectionResponseListener( vertexAString, detected ); } );
     markerDetectionModel.vertexBMarkerDetectedProperty.link( detected => { vertexDetectionResponseListener( vertexBString, detected ); } );
     markerDetectionModel.vertexCMarkerDetectedProperty.link( detected => { vertexDetectionResponseListener( vertexCString, detected ); } );
     markerDetectionModel.vertexDMarkerDetectedProperty.link( detected => { vertexDetectionResponseListener( vertexDString, detected ); } );
 
-    // So that this content respects voicingVisible.
+    //-----------------------------------------------------------------------------------------
+    // Register Utterances to the ScreenView so that they respect visible and voicingVisible
+    //-----------------------------------------------------------------------------------------
     Voicing.registerUtteranceToNode( lowPriorityUtterance, screenView );
     Voicing.registerUtteranceToNode( mediumPriorityUtterance, screenView );
     Voicing.registerUtteranceToNode( highPriorityUtterance, screenView );
@@ -320,6 +331,8 @@ class QuadrilateralAlerter extends Alerter {
    * "adjacent sides longer" or
    * "left" or
    * "up"
+   *
+   * The design for this function is outlined in https://github.com/phetsims/quadrilateral/issues/253
    */
   private getSideChangeObjectResponse( side: Side ): string {
     let response = '';
@@ -331,6 +344,7 @@ class QuadrilateralAlerter extends Alerter {
 
     const currentShapeSnapshot = new ShapeSnapshot( this.model.quadrilateralShapeModel );
 
+    // previous snapshot variables
     const previousAdjacentLengths = this.previousObjectResponseShapeSnapshot.getAdjacentSideLengthsFromSideLabel( side.sideLabel );
     const firstPreviousAdjacentSideLength = previousAdjacentLengths[ 0 ];
     const secondPreviousAdjacentSideLength = previousAdjacentLengths[ 1 ];
@@ -342,6 +356,7 @@ class QuadrilateralAlerter extends Alerter {
     const previousEqualToOneAdjacent = previousEqualToFirstAdjacent !== previousEqualToSecondAdjacent;
     const previousNumberOfEqualSides = this.previousObjectResponseShapeSnapshot.countNumberOfEqualSides();
 
+    // current shape variables
     const adjacentSides = currentShapeSnapshot.getAdjacentSideLengthsFromSideLabel( side.sideLabel );
     const firstAdjacentSideLength = adjacentSides[ 0 ];
     const secondAdjacentSideLength = adjacentSides[ 1 ];
@@ -359,6 +374,7 @@ class QuadrilateralAlerter extends Alerter {
     const firstSideAbsoluteDifference = Math.abs( firstAdjacentSideLengthDifference );
     const secondSideAbsoluteDifference = Math.abs( secondAdjacentSideLengthDifference );
 
+    // Flow of this logic and priority of the content determined by design team
     if ( adjacentSidesEqual && ( ( equalToFirstAdjacent && !previousEqualToFirstAdjacent ) || ( equalToSecondAdjacent && !previousEqualToSecondAdjacent ) ) ) {
 
       // side just became equal to both adjacent sides
@@ -708,8 +724,13 @@ class QuadrilateralAlerter extends Alerter {
 
   /**
    * Returns a description of the shape for a context response as movements occur that maintain the same
-   * name for the quadrilateral. See https://github.com/phetsims/quadrilateral/issues/198 for more information
-   * about the design for this function.
+   * named shape. For example, moving one side to make a longer rectangle. See
+   * https://github.com/phetsims/quadrilateral/issues/198 for more information about the design for this function.
+   *
+   * Will return something like:
+   * "All right angles as shape gets bigger." or
+   * "Opposite sides BC and DA equal as shape gets bigger." or
+   * "Opposite sides in parallel as opposite corners change equally."
    */
   private getShapeMaintenanceContextResponse( shapeName: NamedQuadrilateral, previousShapeSnapshot: ShapeSnapshot, thisResponseReason: ResponseReason ): string | null {
     let response: string | null = null;
@@ -833,8 +854,8 @@ class QuadrilateralAlerter extends Alerter {
   }
 
   /**
-   * Returns a description about whether the shape is tilting or straightening based on how the angles at each vertex
-   * changed from the previous snapshot.
+   * Returns a description about whether the shape is "tilting" or "straightening" based on how the angles at each
+   * vertex changed from the previous snapshot.
    */
   private getTiltOrStraightenDescription( previousShapeSnapshot: ShapeSnapshot ): string {
 
