@@ -20,7 +20,7 @@ import quadBeatTracksBuildingBuildingTracks004_mp3 from '../../../../sounds/quad
 import quadBeatTracksBuildingBuildingTracks005_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks005_mp3.js';
 import quadBaseBeatSimpler_mp3 from '../../../../sounds/quadBaseBeatSimpler_mp3.js';
 import quadBaseBeatSimplerConcaveQuadrilateralJustRhythmV2_mp3 from '../../../../sounds/quadBaseBeatSimplerConcaveQuadrilateralJustRhythmV2_mp3.js';
-import quadSimpleBuildingTracks007_mp3 from '../../../../sounds/quadSimpleBuildingTracks007_mp3.js';
+import quadBeatTracksBuildingBuildingTracks006_mp3 from '../../../../sounds/quadBeatTracksBuildingBuildingTracks006_mp3.js';
 import quadMelodyTracks004_mp3 from '../../../../sounds/quadMelodyTracks004_mp3.js';
 import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
@@ -32,7 +32,7 @@ const LAYER_TRACKS = [
   quadBaseBeatSimpler_mp3,
   quadBaseBeatSimplerConcaveQuadrilateralJustRhythmV2_mp3,
   quadBeatTracksBuildingBuildingTracks000_mp3,
-  quadSimpleBuildingTracks007_mp3,
+  quadBeatTracksBuildingBuildingTracks006_mp3,
   quadBeatTracksBuildingBuildingTracks003_mp3,
   quadBeatTracksBuildingBuildingTracks004_mp3,
   quadMelodyTracks004_mp3,
@@ -64,8 +64,8 @@ class LayersTracksSoundView extends TracksSoundView {
 
     // desired output levels for each sound (as requested by design, after manually editing the gain)
     // See https://github.com/phetsims/quadrilateral/issues/175#issuecomment-1339626942
-    this.indexToOutputLevelMap.set( 0, 0.5 );
-    this.indexToOutputLevelMap.set( 1, 0.5 );
+    this.indexToOutputLevelMap.set( 0, 0.6 );
+    this.indexToOutputLevelMap.set( 1, 0.6 );
     this.indexToOutputLevelMap.set( 2, 1 );
     this.indexToOutputLevelMap.set( 3, 0.75 );
     this.indexToOutputLevelMap.set( 4, 0.65 );
