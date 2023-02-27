@@ -2,7 +2,7 @@
 
 /**
  * Draws a diagonal line across the opposite pairs of vertex corners. Line extends across the model bounds.
- * Visibility is controlled by a checkbox in the control panel.
+ * Visibility is controlled by a checkbox in the screen.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -20,6 +20,7 @@ import QuadrilateralColors from '../../QuadrilateralColors.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralUtils from '../model/QuadrilateralUtils.js';
 
+// constants
 const LINE_NODE_OPTIONS = {
   lineWidth: 2,
   lineDash: [ 10, 2 ],
@@ -63,7 +64,7 @@ class QuadrilateralDiagonalGuidesNode extends Node {
 
   /**
    * Draws a line between the provided vertex positions. The line spans across the positions until it intersects
-   * with model bounds. This could have been done with a clip area but that seemed excessive.
+   * with model bounds. This could have been done with a clip area but I worry about clip area performance.
    */
   private static drawDiagonal( vertex1Position: Vector2, vertex2Position: Vector2, bounds: Bounds2, modelViewTransform: ModelViewTransform2, lineNode: Line ): void {
 
@@ -88,14 +89,13 @@ class QuadrilateralDiagonalGuidesNode extends Node {
     const rayDirection = vertex2Position.minus( vertex1Position ).normalized();
     const ray = new Ray2( vertex1Position, rayDirection );
 
-    // First, look for an intersection against one of the corners of the bounds shape. If there is one here,
-    // Kite shape intersection will either return 0 (because it is undefined) or 2 (because it is close enough to
-    // both intersecting segments at the corner point) intersections.
+    // First, look for an intersection against one of the corners of the bounds. If there is one, default
+    // Kite shape intersection will return 0 intersections (because it is undefined) or 2 intersections (because it is
+    // close enough to both intersecting segments at the corner point).
     let point = QuadrilateralUtils.getBoundsCornerPositionAlongRay( ray, bounds )!;
     if ( !point ) {
 
-      // There was not an intersection with a corner, we should be safe to look for an intersection against a
-      // corner
+      // There was not an intersection with a corner, we should be safe to use Kite for shape intersection
       const intersections = boundsShape.intersection( ray );
       assert && assert( intersections.length === 1, 'There should one (and only one) intersection' );
       point = intersections[ 0 ].point;
