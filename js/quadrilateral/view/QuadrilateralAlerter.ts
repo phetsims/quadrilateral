@@ -1,7 +1,12 @@
 // Copyright 2021-2023, University of Colorado Boulder
 
 /**
- * Responsible for generating the real-time feedback alerts for the simulation.
+ * Responsible for generating the real-time feedback alerts for the simulation and actually voicing them at the right
+ * time.
+ *
+ * This Alerter mostly generates strings by comparing the state of the quadrilateral to a snapshot of
+ * the geometric properties that were saved the last time the quadrilateral was described (making heavy use of
+ * ShapeSnapshot).
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */

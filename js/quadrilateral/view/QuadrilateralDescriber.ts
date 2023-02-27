@@ -1,7 +1,9 @@
 // Copyright 2021-2023, University of Colorado Boulder
 
 /**
- * The primary class that generates
+ * A class that generates many descriptions for the quadrilateral and simulation. It assembles strings that describe
+ * (in natural english) the state of the simulation and the geometric properties of the quadrilateral.
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
@@ -109,21 +111,22 @@ vertexLabelMap.set( VertexLabel.VERTEX_B, vertexBString );
 vertexLabelMap.set( VertexLabel.VERTEX_C, vertexCString );
 vertexLabelMap.set( VertexLabel.VERTEX_D, vertexDString );
 
-// A map that goes from Side -> full side label (like "Side AB")
+// A map that goes from SideLabel -> "full" side label (like "Side AB")
 const fullSideLabelMap = new Map<SideLabel, string>();
 fullSideLabelMap.set( SideLabel.SIDE_AB, sideABString );
 fullSideLabelMap.set( SideLabel.SIDE_BC, sideBCString );
 fullSideLabelMap.set( SideLabel.SIDE_CD, sideCDString );
 fullSideLabelMap.set( SideLabel.SIDE_DA, sideDAString );
 
+// A map that goes from SideLabel -> letters label (like "AB")
 const sideLabelMap = new Map();
 sideLabelMap.set( SideLabel.SIDE_AB, aBString );
 sideLabelMap.set( SideLabel.SIDE_BC, bCString );
 sideLabelMap.set( SideLabel.SIDE_CD, cDString );
 sideLabelMap.set( SideLabel.SIDE_DA, dAString );
 
-// Thresholds that are used to describe the size of the current shape. All are relative to the
-// displayed grid and the area of a grid cell.
+// Thresholds that are used to describe the size of the current shape. All are relative to the displayed grid
+// and the area of a grid cell.
 const GRID_CELL_AREA = Math.pow( QuadrilateralConstants.GRID_SPACING, 2 );
 const TINY_THRESHOLD = GRID_CELL_AREA * 4;
 const VERY_SMALL_THRESHOLD = GRID_CELL_AREA * 12;
