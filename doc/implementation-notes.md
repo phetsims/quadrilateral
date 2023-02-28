@@ -21,11 +21,14 @@ geometric properties required for a named shape, it is a match. For named quadri
 shapes such that as the quadrilateral gains more geometric properties, it will become a match for a name with
 more specific requirements. Here is a diagram that illustrates the shape families, and properties that build up to 
 more specific shapes.
-<img src="https://user-images.githubusercontent.com/47331395/183741722-056b401f-8f97-4d55-a2c5-1726c3e27eb5.png" alt="Alt text" title="Optional title">
+<img src="https://user-images.githubusercontent.com/6396244/221933377-fdc7d16e-9edb-4974-bf9a-eff72ce49af0.png" alt="Alt text" title="Optional title">
 
 See QuadrilateralShapeDetector for the implementation of shape detection which matches this graphic.
 
 #### View components
+Here is an overview of the most important view components.
+
+
 
 #### Voicing (description)
 

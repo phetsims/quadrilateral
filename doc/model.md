@@ -11,8 +11,9 @@ properties, and see how geometric properties "build-up" to define specific named
 
 #### Geometric properties and the shape name 
 The quadrilateral has geometric properties, such as the number of parallel sides, number of equal angles,
-and number of equal side lengths. The name of the quadrilateral is determined by which geometric properties it has.
-The geometric properties "build-up" to create shapes with more specific requirements. For example:
+and number of equal side lengths. The name of the quadrilateral is determined by its geometric properties.
+There are families of shapes that share overlapping geometric properties, and within those families, properties
+"build-up" to create named shapes with more specific requirements. For example:
 - "Convex Quadrilateral" has no relevant geometric properties
 - "Trapezoid" has one pair of parallel sides
 - "Isosceles Trapezoid" has the properties of "Trapezoid" plus two equal adjacent angles and one pair of equal opposite side lengths.
@@ -20,9 +21,14 @@ The geometric properties "build-up" to create shapes with more specific requirem
 
 So you can see how shape properties "build-up" from the general convex quadrilateral to the more specific "parallelogram".
 
+Here is a full diagram showing the geometric properties associated with each quadrilateral shape. Each family of shapes
+is a path through this graph. As shapes gain geometric properties, they become a more specific shape within that
+shape family.
+<img src="https://user-images.githubusercontent.com/6396244/221933377-fdc7d16e-9edb-4974-bf9a-eff72ce49af0.png" alt="Alt text" title="Optional title">
+
 #### Tolerance Intervals
-This simulation uses tolerance intervals to make it easier to create geometric properties and account for precision
-errors in the calculations for geometric properties. For example, placing Vertices at exact positions to create exact
+This simulation uses tolerance intervals to make it easier to create geometric properties and work well with precision
+errors. For example, placing Vertices at exact positions to create exact
 90 degree angles would be impossible, especially for rotated shapes. So when angles or lengths are "equal", they are
 equal enough for the purposes of this simulation but may be slightly different.
 
