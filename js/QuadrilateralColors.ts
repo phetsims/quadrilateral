@@ -21,7 +21,7 @@ const QuadrilateralColors = {
 
   // Background color for screens in this sim
   screenBackgroundColorProperty: new ProfileColorProperty( quadrilateral, 'background', {
-    default: new Color( 133, 133, 255 )
+    default: new Color( '#C4A484' )
   } ),
 
   // Color for the grid in the play area
@@ -31,7 +31,7 @@ const QuadrilateralColors = {
 
   // Color for vertices and sides of the quadrilateral shape.
   quadrilateralShapeColorProperty: new ProfileColorProperty( quadrilateral, 'quadrilateralShape', {
-    default: new Color( 255, 217, 102 )
+    default: new Color( '#FFE657' )
   } ),
 
   // The color for the quadrilateral when you hit a "named" shape.
@@ -66,7 +66,7 @@ const QuadrilateralColors = {
 
   // Color for the stroke for the diagonal guides
   diagonalGuidesStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'diagonalGuideStroke', {
-    default: new Color( 245, 245, 245 )
+    default: new Color( 240, 240, 240 )
   } ),
 
   // Fill color for panels in the UI.
@@ -98,7 +98,7 @@ const QuadrilateralColors = {
 
   // Stroke for the interaction cues around the quadrilateral
   interactionCueColorProperty: new ProfileColorProperty( quadrilateral, 'interactionCueColor', {
-    default: new Color( 'rgb(181, 255, 216)' )
+    default: new Color( '#7DF9FF' )
   } )
 };
 
