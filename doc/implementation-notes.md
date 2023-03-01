@@ -22,8 +22,8 @@ See QuadrilateralShapeDetector for the implementation of shape detection which m
 #### View components
 Here is an overview of the most important view components.
 - QuadrilateralScreenView: Entry point for the view, containing all view subcomponents.
-- QuadrilateralNode: Node for the quadrilateral shape, with VertexNode and SideNode instances.
-- SideNode: View component for a QuadrilateralSide and implements input handling specific to a side.
+- QuadrilateralNode: Node for the quadrilateral shape, with VertexNode and QuadrilateralSideNode instances.
+- QuadrilateralSideNode: View component for a QuadrilateralSide and implements input handling specific to a side.
 - VertexNode: View component for a QuadrilateralVertex and implements input handling specific to a vertex.
 - QuadrilateralGridNode: View component for the grid, showing allowable vertex positions and making it easier to create reproducible shapes. 
 - QuadrilateralModelViewTransform: The model has +x to the right and +y up with origin at the center of the grid.

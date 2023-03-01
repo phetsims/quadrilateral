@@ -30,7 +30,7 @@ const FOCUS_HIGHLIGHT_DILATION = 15;
 type SelfOptions = EmptySelfOptions;
 type SideNodeOptions = SelfOptions & StrictOmit<QuadrilateralMovableNodeOptions, 'grabbedSoundOutputLevel' | 'grabbedSound'>;
 
-class SideNode extends QuadrilateralMovableNode {
+class QuadrilateralSideNode extends QuadrilateralMovableNode {
 
   // A reference to the model component.
   public readonly side: QuadrilateralSide;
@@ -376,5 +376,5 @@ class SideNode extends QuadrilateralMovableNode {
   }
 }
 
-quadrilateral.register( 'SideNode', SideNode );
-export default SideNode;
+quadrilateral.register( 'QuadrilateralSideNode', QuadrilateralSideNode );
+export default QuadrilateralSideNode;

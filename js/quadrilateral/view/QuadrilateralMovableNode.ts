@@ -1,7 +1,7 @@
 // Copyright 2023, University of Colorado Boulder
 
 /**
- * A superclass for movable components of the QuadrilateralNode. Namely, VertexNode and SideNode.
+ * A superclass for movable components of the QuadrilateralNode. Namely, VertexNode and QuadrilateralSideNode.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */

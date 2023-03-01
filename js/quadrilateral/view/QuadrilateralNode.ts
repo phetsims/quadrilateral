@@ -10,7 +10,7 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import { KeyboardListener, Node, NodeOptions, TPaint, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
-import SideNode from './SideNode.js';
+import QuadrilateralSideNode from './QuadrilateralSideNode.js';
 import VertexNode from './VertexNode.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
@@ -52,7 +52,7 @@ class QuadrilateralNode extends Voicing( Node ) {
   private readonly modelViewTransform: ModelViewTransform2;
 
   private readonly vertexNodes: VertexNode[];
-  private readonly sideNodes: SideNode[];
+  private readonly sideNodes: QuadrilateralSideNode[];
 
   private remainingTimeForShapeChangeFill: number;
   private activeFill: TPaint | null;
@@ -62,7 +62,7 @@ class QuadrilateralNode extends Voicing( Node ) {
     const options = optionize<QuadrilateralNodeOptions, SelfOptions, ParentOptions>()( {
 
       // This Node is composed with Voicing so that we can call the voicingSpeak* functions through it. But we do not
-      // want it to use the default InteractiveHighlight, VertexNode/SideNode are independently interactive.
+      // want it to use the default InteractiveHighlight, VertexNode/QuadrilateralSideNode are independently interactive.
       interactiveHighlight: 'invisible'
     }, providedOptions );
 
@@ -110,19 +110,19 @@ class QuadrilateralNode extends Voicing( Node ) {
       tandem: providedOptions.tandem.createTandem( 'vertexDNode' )
     } );
 
-    const sideABNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.sideAB, this.model.quadrilateralTestShapeModel.sideAB, quadrilateralDescriber.sideABDescriber, modelViewTransform, {
+    const sideABNode = new QuadrilateralSideNode( quadrilateralModel, this.model.quadrilateralShapeModel.sideAB, this.model.quadrilateralTestShapeModel.sideAB, quadrilateralDescriber.sideABDescriber, modelViewTransform, {
       nameResponse: sideABString,
       tandem: providedOptions.tandem.createTandem( 'sideABNode' )
     } );
-    const sideBCNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.sideBC, this.model.quadrilateralTestShapeModel.sideBC, quadrilateralDescriber.sideBCDescriber, modelViewTransform, {
+    const sideBCNode = new QuadrilateralSideNode( quadrilateralModel, this.model.quadrilateralShapeModel.sideBC, this.model.quadrilateralTestShapeModel.sideBC, quadrilateralDescriber.sideBCDescriber, modelViewTransform, {
       nameResponse: sideBCString,
       tandem: providedOptions.tandem.createTandem( 'sideBCNode' )
     } );
-    const sideCDNode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.sideCD, this.model.quadrilateralTestShapeModel.sideCD, quadrilateralDescriber.sideCDDescriber, modelViewTransform, {
+    const sideCDNode = new QuadrilateralSideNode( quadrilateralModel, this.model.quadrilateralShapeModel.sideCD, this.model.quadrilateralTestShapeModel.sideCD, quadrilateralDescriber.sideCDDescriber, modelViewTransform, {
       nameResponse: sideCDString,
       tandem: providedOptions.tandem.createTandem( 'sideCDNode' )
     } );
-    const sideDANode = new SideNode( quadrilateralModel, this.model.quadrilateralShapeModel.sideDA, this.model.quadrilateralTestShapeModel.sideDA, quadrilateralDescriber.sideDADescriber, modelViewTransform, {
+    const sideDANode = new QuadrilateralSideNode( quadrilateralModel, this.model.quadrilateralShapeModel.sideDA, this.model.quadrilateralTestShapeModel.sideDA, quadrilateralDescriber.sideDADescriber, modelViewTransform, {
       nameResponse: sideDAString,
       tandem: providedOptions.tandem.createTandem( 'sideDANode' )
     } );
@@ -260,7 +260,7 @@ class QuadrilateralNode extends Voicing( Node ) {
    * When a side becomes pressed, its adjacent sides become non-interactive to prevent buggy multitouch interaction
    * cases.
    */
-  private makeAdjacentSidesNonInteractiveWhenPressed( firstOppositeSideNode: SideNode, secondOppositeSideNode: SideNode, firstAdjacentSideNode: SideNode, secondAdjacentSideNode: SideNode ): void {
+  private makeAdjacentSidesNonInteractiveWhenPressed( firstOppositeSideNode: QuadrilateralSideNode, secondOppositeSideNode: QuadrilateralSideNode, firstAdjacentSideNode: QuadrilateralSideNode, secondAdjacentSideNode: QuadrilateralSideNode ): void {
     const firstOppositeSide = firstOppositeSideNode.side;
     const secondOppositeSide = secondOppositeSideNode.side;
     Multilink.multilink( [ firstOppositeSide.isPressedProperty, secondOppositeSide.isPressedProperty ], ( firstOppositeSidePressed, secondOppositeSidePressed ) => {

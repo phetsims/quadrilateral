@@ -1,7 +1,7 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
- * The major and minor tick marks for the SideNode, which make it easier to view relative side lengths.
+ * The major and minor tick marks for the QuadrilateralSideNode, which make it easier to view relative side lengths.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
