@@ -1,7 +1,7 @@
 // Copyright 2021-2023, University of Colorado Boulder
 
 /**
- * The model for a side of the quadrilateral. A Side is defined by the line between two Vertices.
+ * The model for a side of the quadrilateral. A QuadrilateralSide is defined by the line between two Vertices.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -18,9 +18,9 @@ import QuadrilateralMovable from './QuadrilateralMovable.js';
 import Property from '../../../../axon/js/Property.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 
-class Side extends QuadrilateralMovable {
+class QuadrilateralSide extends QuadrilateralMovable {
 
-  // Reference to the vertices that compose this Side.
+  // Reference to the vertices that compose this QuadrilateralSide.
   public readonly vertex1: Vertex;
   public readonly vertex2: Vertex;
 
@@ -49,13 +49,13 @@ class Side extends QuadrilateralMovable {
 
   // Used to calculate the line shape (full stroked shape) - reused to avoid excessive allocations.
   private readonly scratchLineNode = new Line( 0, 0, 0, 0, {
-    lineWidth: Side.SIDE_WIDTH
+    lineWidth: QuadrilateralSide.SIDE_WIDTH
   } );
 
   /**
-   * @param vertex1 - The first vertex of this Side.
-   * @param vertex2 - The second vertex of this Side.
-   * @param sideLabel - To identify this Side within the shape.
+   * @param vertex1 - The first vertex of this QuadrilateralSide.
+   * @param vertex2 - The second vertex of this QuadrilateralSide.
+   * @param sideLabel - To identify this QuadrilateralSide within the shape.
    * @param tandem
    */
   public constructor( vertex1: Vertex, vertex2: Vertex, sideLabel: SideLabel, tandem: Tandem ) {
@@ -75,7 +75,7 @@ class Side extends QuadrilateralMovable {
   }
 
   /**
-   * Update the length and model shape of this Side from vertex positions. This must be calculated in order by the
+   * Update the length and model shape of this QuadrilateralSide from vertex positions. This must be calculated in order by the
    * model, after Vertex positions are changed and before these values are used to calculate other shape attributes.
    * See QuadrilateralShapeModel.updateOrderDependentProperties for more information.
    */
@@ -93,14 +93,14 @@ class Side extends QuadrilateralMovable {
   }
 
   /**
-   * Returns true if this Side includes the provided Vertex.
+   * Returns true if this QuadrilateralSide includes the provided Vertex.
    */
   public includesVertex( vertex: Vertex ): boolean {
     return this.vertex1 === vertex || this.vertex2 === vertex;
   }
 
   /**
-   * Returns the position in model coordinates between the two Vertices of this Side.
+   * Returns the position in model coordinates between the two Vertices of this QuadrilateralSide.
    */
   public getMidpoint(): Vector2 {
     return this.vertex2.positionProperty.value.average( this.vertex1.positionProperty.value );
@@ -119,7 +119,7 @@ class Side extends QuadrilateralMovable {
    *                                  this.vertex2
    *
    */
-  public connectToSide( otherSide: Side ): void {
+  public connectToSide( otherSide: QuadrilateralSide ): void {
     assert && assert( !this.isConnected, 'Cannot connect a side that is already connected to another.' );
     assert && assert( otherSide !== this, 'Cannot connect a side to itself.' );
 
@@ -128,5 +128,5 @@ class Side extends QuadrilateralMovable {
   }
 }
 
-quadrilateral.register( 'Side', Side );
-export default Side;
+quadrilateral.register( 'QuadrilateralSide', QuadrilateralSide );
+export default QuadrilateralSide;

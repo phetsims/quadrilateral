@@ -8,13 +8,13 @@
  */
 
 import quadrilateral from '../../quadrilateral.js';
-import Side from './Side.js';
+import QuadrilateralSide from './QuadrilateralSide.js';
 
 class SidePair {
-  public readonly side1: Side;
-  public readonly side2: Side;
+  public readonly side1: QuadrilateralSide;
+  public readonly side2: QuadrilateralSide;
 
-  public constructor( side1: Side, side2: Side ) {
+  public constructor( side1: QuadrilateralSide, side2: QuadrilateralSide ) {
     this.side1 = side1;
     this.side2 = side2;
   }
@@ -28,9 +28,9 @@ class SidePair {
   }
 
   /**
-   * Returns true if the provided Side is a member of this SidePair.
+   * Returns true if the provided QuadrilateralSide is a member of this SidePair.
    */
-  public includesSide( side: Side ): boolean {
+  public includesSide( side: QuadrilateralSide ): boolean {
     return this.side1 === side || this.side2 === side;
   }
 }

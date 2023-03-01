@@ -126,7 +126,7 @@ class ShapeSnapshot {
   }
 
   /**
-   * Returns true if the sides adjacent to the Side labelled by provided SideLabel are parallel in this snapshot.
+   * Returns true if the sides adjacent to the QuadrilateralSide labelled by provided SideLabel are parallel in this snapshot.
    * For example, given the following:
    *
    *                sideLabel

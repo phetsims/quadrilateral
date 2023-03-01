@@ -15,7 +15,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import SidePair from './SidePair.js';
-import Side from './Side.js';
+import QuadrilateralSide from './QuadrilateralSide.js';
 import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
 
 class ParallelSideChecker {
@@ -25,8 +25,8 @@ class ParallelSideChecker {
   // will be different depending on the runtime environment controlled by query parameters.
   private readonly parallelAngleToleranceInterval: number;
 
-  public readonly side1: Side;
-  public readonly side2: Side;
+  public readonly side1: QuadrilateralSide;
+  public readonly side2: QuadrilateralSide;
   public readonly sidePair: SidePair;
 
   // A Property indicating that the provided sides are parallel, ONLY FOR DEBUGGING. Use areSidesParallel() when the

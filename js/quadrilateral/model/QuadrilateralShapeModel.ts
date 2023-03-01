@@ -12,7 +12,7 @@ import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import quadrilateral from '../../quadrilateral.js';
 import NamedQuadrilateral from './NamedQuadrilateral.js';
-import Side from './Side.js';
+import QuadrilateralSide from './QuadrilateralSide.js';
 import Vertex from './Vertex.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Emitter from '../../../../axon/js/Emitter.js';
@@ -61,11 +61,11 @@ class QuadrilateralShapeModel {
   public readonly vertices: Vertex[];
 
   // Sides of the quadrilateral.
-  public readonly sideAB: Side;
-  public readonly sideBC: Side;
-  public readonly sideCD: Side;
-  public readonly sideDA: Side;
-  public readonly sides: Side[];
+  public readonly sideAB: QuadrilateralSide;
+  public readonly sideBC: QuadrilateralSide;
+  public readonly sideCD: QuadrilateralSide;
+  public readonly sideDA: QuadrilateralSide;
+  public readonly sides: QuadrilateralSide[];
 
   // Available space for the Vertices to move.
   private readonly modelBounds: Bounds2;
@@ -118,11 +118,11 @@ class QuadrilateralShapeModel {
   // A map that provides the opposite vertex from a give vertex.
   public readonly oppositeVertexMap: Map<Vertex, Vertex[]>;
 
-  // A map that provides the adjacent sides to the provided Side.
-  public readonly adjacentSideMap: Map<Side, Side[]>;
+  // A map that provides the adjacent sides to the provided QuadrilateralSide.
+  public readonly adjacentSideMap: Map<QuadrilateralSide, QuadrilateralSide[]>;
 
-  // A map that provides the opposite side from the provided Side.
-  public readonly oppositeSideMap: Map<Side, Side[]>;
+  // A map that provides the opposite side from the provided QuadrilateralSide.
+  public readonly oppositeSideMap: Map<QuadrilateralSide, QuadrilateralSide[]>;
 
   // An array of all the adjacent VertexPairs that currently have equal angles.
   public readonly adjacentEqualVertexPairsProperty: Property<VertexPair[]>;
@@ -177,10 +177,10 @@ class QuadrilateralShapeModel {
       [ this.vertexD, [ this.vertexA, this.vertexC ] ]
     ] );
 
-    this.sideAB = new Side( this.vertexA, this.vertexB, SideLabel.SIDE_AB, options.tandem.createTandem( 'sideAB' ) );
-    this.sideBC = new Side( this.vertexB, this.vertexC, SideLabel.SIDE_BC, options.tandem.createTandem( 'sideBC' ) );
-    this.sideCD = new Side( this.vertexC, this.vertexD, SideLabel.SIDE_CD, options.tandem.createTandem( 'sideCD' ) );
-    this.sideDA = new Side( this.vertexD, this.vertexA, SideLabel.SIDE_DA, options.tandem.createTandem( 'sideDA' ) );
+    this.sideAB = new QuadrilateralSide( this.vertexA, this.vertexB, SideLabel.SIDE_AB, options.tandem.createTandem( 'sideAB' ) );
+    this.sideBC = new QuadrilateralSide( this.vertexB, this.vertexC, SideLabel.SIDE_BC, options.tandem.createTandem( 'sideBC' ) );
+    this.sideCD = new QuadrilateralSide( this.vertexC, this.vertexD, SideLabel.SIDE_CD, options.tandem.createTandem( 'sideCD' ) );
+    this.sideDA = new QuadrilateralSide( this.vertexD, this.vertexA, SideLabel.SIDE_DA, options.tandem.createTandem( 'sideDA' ) );
     this.sides = [ this.sideAB, this.sideBC, this.sideCD, this.sideDA ];
 
     this.oppositeSideMap = new Map( [
@@ -293,7 +293,7 @@ class QuadrilateralShapeModel {
    * Returns true if the current quadrilateral shape is allowed based on the rules of this model.
    *
    * A Vertex cannot overlap any other.
-   * A Vertex cannot overlap any Side.
+   * A Vertex cannot overlap any QuadrilateralSide.
    * A Vertex cannot go outside modelBounds.
    * A Vertex cannot to outside its defined drag Shape (which prevents crossed Quadrilaterals).
    *
@@ -553,7 +553,7 @@ class QuadrilateralShapeModel {
   /**
    * Update a provided Property holding a list of sides that are equal in length (either opposite or adjacent).
    */
-  private updateEqualSidePairs( equalSidePairsProperty: Property<SidePair[]>, sideMap: Map<Side, Side[]> ): void {
+  private updateEqualSidePairs( equalSidePairsProperty: Property<SidePair[]>, sideMap: Map<QuadrilateralSide, QuadrilateralSide[]> ): void {
     const currentSidePairs = equalSidePairsProperty.value;
 
     sideMap.forEach( ( relatedSides, keySide ) => {

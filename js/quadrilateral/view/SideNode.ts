@@ -8,7 +8,7 @@
 
 import { DragListener, KeyboardDragListener, Line as LineNode, Path, SceneryEvent } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
-import Side from '../model/Side.js';
+import QuadrilateralSide from '../model/QuadrilateralSide.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vertex from '../model/Vertex.js';
@@ -33,10 +33,10 @@ type SideNodeOptions = SelfOptions & StrictOmit<QuadrilateralMovableNodeOptions,
 class SideNode extends QuadrilateralMovableNode {
 
   // A reference to the model component.
-  public readonly side: Side;
+  public readonly side: QuadrilateralSide;
 
   // A reference to the equivalent side with the two relevant vertices in the scratch model.
-  private scratchSide: Side;
+  private scratchSide: QuadrilateralSide;
 
   // A reference to the main model for the simulation.
   private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
@@ -47,8 +47,8 @@ class SideNode extends QuadrilateralMovableNode {
 
   public constructor(
     quadrilateralModel: QuadrilateralModel,
-    side: Side,
-    scratchSide: Side,
+    side: QuadrilateralSide,
+    scratchSide: QuadrilateralSide,
     sideDescriber: SideDescriber,
     modelViewTransform: ModelViewTransform2,
     providedOptions?: SideNodeOptions ) {
@@ -93,7 +93,7 @@ class SideNode extends QuadrilateralMovableNode {
         const lineSegments = [];
 
         // The length of a segment parametrically relative to the full line length
-        const parametricSegmentLength = Side.SIDE_SEGMENT_LENGTH / fullLine.getArcLength();
+        const parametricSegmentLength = QuadrilateralSide.SIDE_SEGMENT_LENGTH / fullLine.getArcLength();
 
         const numberOfFullSegments = Math.floor( 1 / parametricSegmentLength );
         let t = 0;
@@ -121,8 +121,8 @@ class SideNode extends QuadrilateralMovableNode {
         lineSegments.forEach( ( lineSegment, index ) => {
 
           // stroke functions divide width by two for us
-          const strokeRight = lineSegment.strokeRight( Side.SIDE_WIDTH );
-          const strokeLeft = lineSegment.strokeLeft( Side.SIDE_WIDTH );
+          const strokeRight = lineSegment.strokeRight( QuadrilateralSide.SIDE_WIDTH );
+          const strokeLeft = lineSegment.strokeLeft( QuadrilateralSide.SIDE_WIDTH );
 
           rightStrokes.push( strokeRight[ 0 ] );
           leftStrokes.push( strokeLeft[ 0 ] );
@@ -144,8 +144,8 @@ class SideNode extends QuadrilateralMovableNode {
       else {
 
         // just a rectangular path along the line with the width of SIDE_WIDTH
-        const rightStroke = fullLine.strokeRight( Side.SIDE_WIDTH );
-        const leftStroke = fullLine.strokeLeft( Side.SIDE_WIDTH );
+        const rightStroke = fullLine.strokeRight( QuadrilateralSide.SIDE_WIDTH );
+        const leftStroke = fullLine.strokeLeft( QuadrilateralSide.SIDE_WIDTH );
 
         lineShape.moveToPoint( rightStroke[ 0 ].start );
         lineShape.lineToPoint( rightStroke[ 0 ].end );
@@ -162,7 +162,7 @@ class SideNode extends QuadrilateralMovableNode {
       const vertex1ViewPosition = modelViewTransform.modelToViewPosition( vertex1Position );
       const vertex2ViewPosition = modelViewTransform.modelToViewPosition( vertex2Position );
       lineNode.setLine( vertex1ViewPosition.x, vertex1ViewPosition.y, vertex2ViewPosition.x, vertex2ViewPosition.y );
-      lineNode.lineWidth = modelViewTransform.modelToViewDeltaX( Side.SIDE_WIDTH ) + FOCUS_HIGHLIGHT_DILATION;
+      lineNode.lineWidth = modelViewTransform.modelToViewDeltaX( QuadrilateralSide.SIDE_WIDTH ) + FOCUS_HIGHLIGHT_DILATION;
       this.focusHighlight = lineNode.getStrokedShape();
     } );
 

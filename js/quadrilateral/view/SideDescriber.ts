@@ -7,7 +7,7 @@
  */
 
 import quadrilateral from '../../quadrilateral.js';
-import Side from '../model/Side.js';
+import QuadrilateralSide from '../model/QuadrilateralSide.js';
 import Range from '../../../../dot/js/Range.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
@@ -73,12 +73,12 @@ LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 1.8, 2.2 ), aboutTwiceAsLongAs
 LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 2.2, Number.POSITIVE_INFINITY ), farLongerThanString );
 
 class SideDescriber {
-  public readonly side: Side;
+  public readonly side: QuadrilateralSide;
   private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
   private readonly modelViewTransform: ModelViewTransform2;
   private readonly markersVisibleProperty: TReadOnlyProperty<boolean>;
 
-  public constructor( side: Side, quadrilateralShapeModel: QuadrilateralShapeModel, markersVisibleProperty: TReadOnlyProperty<boolean>, modelViewTransform: ModelViewTransform2 ) {
+  public constructor( side: QuadrilateralSide, quadrilateralShapeModel: QuadrilateralShapeModel, markersVisibleProperty: TReadOnlyProperty<boolean>, modelViewTransform: ModelViewTransform2 ) {
     this.side = side;
     this.quadrilateralShapeModel = quadrilateralShapeModel;
     this.modelViewTransform = modelViewTransform;
@@ -86,7 +86,7 @@ class SideDescriber {
   }
 
   /**
-   * Returns the Object response for the Side for Voicing. Returns something like
+   * Returns the Object response for the QuadrilateralSide for Voicing. Returns something like
    *
    * "equal to opposite side, equal to adjacent sides." or
    * "parallel to and a little longer than opposite, shorter than adjacent sides"
@@ -141,8 +141,8 @@ class SideDescriber {
     const shapeModel = this.quadrilateralShapeModel;
     const sideLength = this.side.lengthProperty.value;
 
-    const numberOfFullUnits = Math.floor( sideLength / Side.SIDE_SEGMENT_LENGTH );
-    const remainder = sideLength % Side.SIDE_SEGMENT_LENGTH;
+    const numberOfFullUnits = Math.floor( sideLength / QuadrilateralSide.SIDE_SEGMENT_LENGTH );
+    const remainder = sideLength % QuadrilateralSide.SIDE_SEGMENT_LENGTH;
 
     if ( shapeModel.isInterLengthEqualToOther( remainder, 0 ) ) {
       if ( numberOfFullUnits === 1 ) {
@@ -158,7 +158,7 @@ class SideDescriber {
         } );
       }
     }
-    else if ( shapeModel.isInterLengthEqualToOther( remainder, Side.SIDE_SEGMENT_LENGTH / 2 ) ) {
+    else if ( shapeModel.isInterLengthEqualToOther( remainder, QuadrilateralSide.SIDE_SEGMENT_LENGTH / 2 ) ) {
       if ( numberOfFullUnits === 0 ) {
         sideDescription = oneHalfUnitsString;
       }
@@ -170,7 +170,7 @@ class SideDescriber {
         } );
       }
     }
-    else if ( shapeModel.isInterLengthEqualToOther( remainder, Side.SIDE_SEGMENT_LENGTH / 4 ) ) {
+    else if ( shapeModel.isInterLengthEqualToOther( remainder, QuadrilateralSide.SIDE_SEGMENT_LENGTH / 4 ) ) {
       if ( numberOfFullUnits === 0 ) {
 
         // "one quarter units"
@@ -184,7 +184,7 @@ class SideDescriber {
         } );
       }
     }
-    else if ( shapeModel.isInterLengthEqualToOther( remainder, 3 * Side.SIDE_SEGMENT_LENGTH / 4 ) ) {
+    else if ( shapeModel.isInterLengthEqualToOther( remainder, 3 * QuadrilateralSide.SIDE_SEGMENT_LENGTH / 4 ) ) {
       if ( numberOfFullUnits === 0 ) {
 
         // "one quarter units"
@@ -200,7 +200,7 @@ class SideDescriber {
     }
     else {
 
-      const numberOfQuarterUnits = Math.ceil( ( sideLength / Side.SIDE_SEGMENT_LENGTH ) * 4 );
+      const numberOfQuarterUnits = Math.ceil( ( sideLength / QuadrilateralSide.SIDE_SEGMENT_LENGTH ) * 4 );
       const numberOfExtraCornerUnits = numberOfQuarterUnits % 4;
       if ( numberOfExtraCornerUnits === 0 ) {
         if ( numberOfFullUnits === 0 ) {
@@ -333,7 +333,7 @@ class SideDescriber {
    * will be something like:
    * "SideAB is much longer than sideCD."
    */
-  private getLengthComparisonDescription( otherSide: Side ): string {
+  private getLengthComparisonDescription( otherSide: QuadrilateralSide ): string {
     let description: string | null = null;
 
     const shapeModel = this.quadrilateralShapeModel;

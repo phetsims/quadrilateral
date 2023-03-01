@@ -1,7 +1,7 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
- * A SideLabel is assigned to each Side so that they can be identified.
+ * A SideLabel is assigned to each QuadrilateralSide so that they can be identified.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */

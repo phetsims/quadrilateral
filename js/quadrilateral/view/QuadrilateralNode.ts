@@ -217,7 +217,7 @@ class QuadrilateralNode extends Voicing( Node ) {
       }
     } );
 
-    // make adjacent sides non-interactive when a Side is pressed to avoid buggy multitouch cases
+    // make adjacent sides non-interactive when a QuadrilateralSide is pressed to avoid buggy multitouch cases
     this.makeAdjacentSidesNonInteractiveWhenPressed( sideABNode, sideCDNode, sideDANode, sideBCNode );
     this.makeAdjacentSidesNonInteractiveWhenPressed( sideDANode, sideBCNode, sideABNode, sideCDNode );
 

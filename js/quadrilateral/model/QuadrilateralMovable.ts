@@ -1,7 +1,7 @@
 // Copyright 2023, University of Colorado Boulder
 
 /**
- * A superclass for movable model components of the quadrilateral. Namely, a superclass for Vertex and Side.
+ * A superclass for movable model components of the quadrilateral. Namely, a superclass for Vertex and QuadrilateralSide.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -22,7 +22,7 @@ class QuadrilateralMovable {
   // Indicates that movement is blocked by the quadrilateral shape - other sides or vertices.
   public readonly movementBlockedByShapeProperty = new BooleanProperty( false );
 
-  // (Voicing) Indicates that the Side has received some input and it is time to trigger a new Voicing response
+  // (Voicing) Indicates that the QuadrilateralSide has received some input and it is time to trigger a new Voicing response
   // the next time Properties are updated in QuadrilateralShapeModel.
   public voicingObjectResponseDirty = false;
 

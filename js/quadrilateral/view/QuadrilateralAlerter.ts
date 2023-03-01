@@ -20,7 +20,7 @@ import { Voicing } from '../../../../scenery/js/imports.js';
 import ResponsePacket from '../../../../utterance-queue/js/ResponsePacket.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import ShapeSnapshot from '../model/ShapeSnapshot.js';
-import Side from '../model/Side.js';
+import QuadrilateralSide from '../model/QuadrilateralSide.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import MovementAlerter from '../../../../scenery-phet/js/accessibility/describers/MovementAlerter.js';
@@ -202,7 +202,7 @@ class QuadrilateralAlerter extends Alerter {
         const angleDifferencesLarge = _.some( angleDifferences, angleDifference => angleDifference > ANGLE_DIFFERENCES_LARGE_THRESHOLD );
 
         // Have the lengths changed enough to trigger a context response?
-        this.lengthResponseReady = _.some( lengthDifferences, lengthDifference => Math.abs( lengthDifference ) > Side.SIDE_SEGMENT_LENGTH ) && !angleDifferencesLarge;
+        this.lengthResponseReady = _.some( lengthDifferences, lengthDifference => Math.abs( lengthDifference ) > QuadrilateralSide.SIDE_SEGMENT_LENGTH ) && !angleDifferencesLarge;
 
         const sideABSideCDParallelAfter = this.quadrilateralShapeModel.sideABSideCDParallelSideChecker.areSidesParallel();
         const sideBCSideDAParallelAfter = this.quadrilateralShapeModel.sideBCSideDAParallelSideChecker.areSidesParallel();
@@ -246,7 +246,7 @@ class QuadrilateralAlerter extends Alerter {
         }
 
         //-----------------------------------------------------------------------------------------
-        // Next, create the object response - the description of the particular Vertex or Side as
+        // Next, create the object response - the description of the particular Vertex or QuadrilateralSide as
         // it is moved by the user.
         //-----------------------------------------------------------------------------------------
         model.quadrilateralShapeModel.sides.forEach( side => {
@@ -339,7 +339,7 @@ class QuadrilateralAlerter extends Alerter {
    *
    * The design for this function is outlined in https://github.com/phetsims/quadrilateral/issues/253
    */
-  private getSideChangeObjectResponse( side: Side ): string {
+  private getSideChangeObjectResponse( side: QuadrilateralSide ): string {
     let response = '';
 
     const lengthTolerance = this.model.quadrilateralShapeModel.interLengthToleranceInterval;

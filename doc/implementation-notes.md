@@ -7,9 +7,9 @@ This document is a high-level description of the implementation for PhET's Quadr
 #### Model components
 Here is an overview of the most important model components that determine simulation behavior.
 - `QuadrilateralModel`: Entry point for the simulation model. Contains model subcomponents that manage simulation state and behavior.
-- `QuadrilateralShapeModel`: Responsible for geometry and shape calculations and state. Has 4 Vertex and 4 Side instances.
+- `QuadrilateralShapeModel`: Responsible for geometry and shape calculations and state. Has 4 Vertex and 4 QuadrilateralSide instances.
 - `Vertex`: Vertex as a `positionProperty` and an `angleProperty`. Most geometric properties of the quadrilateral are calculated from these two Properties. 
-- `Side`: Side has a `lengthProperty` which is used to calculate geometric Properties. It is defined by two Vertices.
+- `QuadrilateralSide`: QuadrilateralSide has a `lengthProperty` which is used to calculate geometric Properties. It is defined by two Vertices.
 - `ParallelSideChecker`: Calculates whether a pair of opposite sides are parallel.
 - `QuadrilateralShapeDetector`: Uses shape properties to determine the name of the quadrilateral.
 
@@ -23,7 +23,7 @@ See QuadrilateralShapeDetector for the implementation of shape detection which m
 Here is an overview of the most important view components.
 - QuadrilateralScreenView: Entry point for the view, containing all view subcomponents.
 - QuadrilateralNode: Node for the quadrilateral shape, with VertexNode and SideNode instances.
-- SideNode: View component for a Side and implements input handling specific to a side.
+- SideNode: View component for a QuadrilateralSide and implements input handling specific to a side.
 - VertexNode: View component for a Vertex and implements input handling specific to a vertex.
 - QuadrilateralGridNode: View component for the grid, showing allowable vertex positions and making it easier to create reproducible shapes. 
 - QuadrilateralModelViewTransform: The model has +x to the right and +y up with origin at the center of the grid.
@@ -35,7 +35,7 @@ This simulation supports sound. Related files are in the /view/sound/ directory.
 This simulation supports Voicing. Description code is one of the most complicated parts of this sim because we generate natural language that describes every possible state of the quadrilateral and simulation. Relevant classes are:
 - QuadrilateralDescriber: Creates description strings that describe the overall state of the quadrilateral and the state of the simulation. Contains describer subcomponents.
 - QuadrilateralAlerter: Creates description strings and requests speech synthesis for real-time feedback spoken to the user during interaction.
-- SideDescriber: Creates description strings that describe the state of a Side.
+- SideDescriber: Creates description strings that describe the state of a QuadrilateralSide.
 - VertexDescriber: Creates description strings that describe the state of a Vertex.
 
 See https://github.com/phetsims/qa/blob/master/documentation/qa-book.md#voicing for an overview of the Voicing feature.

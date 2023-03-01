@@ -12,7 +12,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import QuadrilateralColors from '../../QuadrilateralColors.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
-import Side from '../model/Side.js';
+import QuadrilateralSide from '../model/QuadrilateralSide.js';
 import { Line, Shape } from '../../../../kite/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import Emitter from '../../../../axon/js/Emitter.js';
@@ -38,7 +38,7 @@ class QuadrilateralInteractionCueNode extends Path {
     } );
 
     // sides
-    const indicatorViewWidth = modelViewTransform.modelToViewDeltaX( Side.SIDE_WIDTH * 1.5 );
+    const indicatorViewWidth = modelViewTransform.modelToViewDeltaX( QuadrilateralSide.SIDE_WIDTH * 1.5 );
     quadrilateralShapeModel.sides.forEach( side => {
 
       // model coordinates
