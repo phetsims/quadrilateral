@@ -11,7 +11,7 @@ import { KeyboardListener, Node, NodeOptions, TPaint, Voicing, VoicingOptions } 
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralSideNode from './QuadrilateralSideNode.js';
-import VertexNode from './VertexNode.js';
+import QuadrilateralVertexNode from './QuadrilateralVertexNode.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
@@ -51,7 +51,7 @@ class QuadrilateralNode extends Voicing( Node ) {
   private readonly scratchShapeModel: QuadrilateralShapeModel;
   private readonly modelViewTransform: ModelViewTransform2;
 
-  private readonly vertexNodes: VertexNode[];
+  private readonly vertexNodes: QuadrilateralVertexNode[];
   private readonly sideNodes: QuadrilateralSideNode[];
 
   private remainingTimeForShapeChangeFill: number;
@@ -62,7 +62,7 @@ class QuadrilateralNode extends Voicing( Node ) {
     const options = optionize<QuadrilateralNodeOptions, SelfOptions, ParentOptions>()( {
 
       // This Node is composed with Voicing so that we can call the voicingSpeak* functions through it. But we do not
-      // want it to use the default InteractiveHighlight, VertexNode/QuadrilateralSideNode are independently interactive.
+      // want it to use the default InteractiveHighlight, QuadrilateralVertexNode/QuadrilateralSideNode are independently interactive.
       interactiveHighlight: 'invisible'
     }, providedOptions );
 
@@ -82,28 +82,28 @@ class QuadrilateralNode extends Voicing( Node ) {
     const vertexC = this.quadrilateralShapeModel.vertexC;
     const vertexD = this.quadrilateralShapeModel.vertexD;
 
-    const vertexNode1 = new VertexNode( vertexA, vertexAString, quadrilateralModel, quadrilateralDescriber.vertexADescriber, modelViewTransform, {
+    const vertexNode1 = new QuadrilateralVertexNode( vertexA, vertexAString, quadrilateralModel, quadrilateralDescriber.vertexADescriber, modelViewTransform, {
       nameResponse: cornerAString,
 
       // phet-io
       tandem: providedOptions.tandem.createTandem( 'vertexANode' )
     } );
 
-    const vertexNode2 = new VertexNode( vertexB, vertexBString, quadrilateralModel, quadrilateralDescriber.vertexBDescriber, modelViewTransform, {
+    const vertexNode2 = new QuadrilateralVertexNode( vertexB, vertexBString, quadrilateralModel, quadrilateralDescriber.vertexBDescriber, modelViewTransform, {
       nameResponse: cornerBString,
 
       // phet-io
       tandem: providedOptions.tandem.createTandem( 'vertexBNode' )
     } );
 
-    const vertexNode3 = new VertexNode( vertexC, vertexCString, quadrilateralModel, quadrilateralDescriber.vertexCDescriber, modelViewTransform, {
+    const vertexNode3 = new QuadrilateralVertexNode( vertexC, vertexCString, quadrilateralModel, quadrilateralDescriber.vertexCDescriber, modelViewTransform, {
       nameResponse: cornerCString,
 
       // phet-io
       tandem: providedOptions.tandem.createTandem( 'vertexCNode' )
     } );
 
-    const vertexNode4 = new VertexNode( vertexD, vertexDString, quadrilateralModel, quadrilateralDescriber.vertexDDescriber, modelViewTransform, {
+    const vertexNode4 = new QuadrilateralVertexNode( vertexD, vertexDString, quadrilateralModel, quadrilateralDescriber.vertexDDescriber, modelViewTransform, {
       nameResponse: cornerDString,
 
       // phet-io

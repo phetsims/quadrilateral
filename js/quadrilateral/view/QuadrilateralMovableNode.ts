@@ -1,7 +1,7 @@
 // Copyright 2023, University of Colorado Boulder
 
 /**
- * A superclass for movable components of the QuadrilateralNode. Namely, VertexNode and QuadrilateralSideNode.
+ * A superclass for movable components of the QuadrilateralNode. Namely, QuadrilateralVertexNode and QuadrilateralSideNode.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -37,7 +37,7 @@ type SelfOptions = {
 
 type ParentOptions = VoicingOptions & NodeOptions;
 
-// VertexNode sets these properties explicitly from the nameResponse option
+// QuadrilateralVertexNode sets these properties explicitly from the nameResponse option
 export type QuadrilateralMovableNodeOptions = SelfOptions & StrictOmit<ParentOptions, 'voicingNameResponse' | 'innerContent'> & PickRequired<NodeOptions, 'tandem'>;
 
 class QuadrilateralMovableNode extends Voicing( Node ) {
