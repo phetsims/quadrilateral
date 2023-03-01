@@ -22,8 +22,8 @@ import QuadrilateralUtils from '../model/QuadrilateralUtils.js';
 
 // constants
 const LINE_NODE_OPTIONS = {
-  lineWidth: 2,
-  lineDash: [ 10, 2 ],
+  lineWidth: 4,
+  lineDash: [ 10, 3 ],
   stroke: QuadrilateralColors.diagonalGuidesStrokeColorProperty
 };
 
