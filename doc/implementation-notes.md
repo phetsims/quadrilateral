@@ -33,10 +33,12 @@ This simulation supports sound. Related files are in the /view/sound/ directory.
 
 ##### Voicing (description)
 This simulation supports Voicing. Description code is one of the most complicated parts of this sim because we generate natural language that describes every possible state of the quadrilateral and simulation. Relevant classes are:
-- QuadrilateralDescriber: Creates description strings the overall state of the quadrilateral from geometric properties and state of the simulation. Contains describer subcomponents.
-- QuadrilateralAlerter: Creates description sand requests speech synthesis for real-time feedback spoken to the user during interaction.
+- QuadrilateralDescriber: Creates description strings that describe the overall state of the quadrilateral and the state of the simulation. Contains describer subcomponents.
+- QuadrilateralAlerter: Creates description strings and requests speech synthesis for real-time feedback spoken to the user during interaction.
 - SideDescriber: Creates description strings that describe the state of a Side.
 - VertexDescriber: Creates description strings that describe the state of a Vertex.
+
+See https://github.com/phetsims/qa/blob/master/documentation/qa-book.md#voicing for an overview of the Voicing feature.
 
 #### Prototypes
 This sim has several prototypes for new features. These features are not going to be published to the main website, but we may share demos or links on the accessibility prototypes page. Code related to these prototypes are in /model/prototype and /view/prototype directories. These features are:
