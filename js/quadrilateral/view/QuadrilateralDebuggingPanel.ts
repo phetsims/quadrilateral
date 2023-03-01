@@ -194,14 +194,14 @@ class QuadrilateralDebuggingPanel extends Node {
         // just show two decimals instead of the number of decimals shown to avoid confusion with tolerance intervals
         // which are in radians
         const formattedDegrees = Utils.toFixedNumber( Utils.toDegrees( value ), 2 );
-        text.text = StringUtils.fillIn( VALUE_WITH_DEGREES_PATTERN_STRING, {
+        text.string = StringUtils.fillIn( VALUE_WITH_DEGREES_PATTERN_STRING, {
           value: formattedValue,
           degrees: formattedDegrees,
           label: label
         } );
       }
       else {
-        text.text = QuadrilateralDebuggingPanel.fillInValuePattern( label, formattedValue );
+        text.string = QuadrilateralDebuggingPanel.fillInValuePattern( label, formattedValue );
       }
     } );
   }

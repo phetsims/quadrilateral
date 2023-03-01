@@ -118,7 +118,7 @@ class QuadrilateralShapeNameDisplay extends Node {
         wasVisible = shapeNameVisibleProperty.value;
       }
 
-      shapeNameText.text = textString;
+      shapeNameText.string = textString;
       shapeNameText.center = backgroundRectangle.center;
     } );
 

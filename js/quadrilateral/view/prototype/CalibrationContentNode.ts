@@ -79,7 +79,7 @@ class CalibrationContentNode extends VBox {
     // display device value as sides change
     tangibleConnectionModel.physicalModelBoundsProperty.link( physicalModelBounds => {
       if ( physicalModelBounds !== null ) {
-        leftSideLengthText.text = Utils.toFixed( physicalModelBounds.height, 2 );
+        leftSideLengthText.string = Utils.toFixed( physicalModelBounds.height, 2 );
       }
     } );
   }
