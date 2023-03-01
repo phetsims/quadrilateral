@@ -33,7 +33,7 @@ class ParallelSideChecker {
   // QuadrilateralShapeModel is stable instead.
   //
   // It is unfortunate that this Property is not public, but that is not possible because the value of this Property
-  // is dependent on multiple `Vertex.positionProperty`s. When moving sides, this value will have bad transient values
+  // is dependent on multiple `QuadrilateralVertex.positionProperty`s. When moving sides, this value will have bad transient values
   // as vertex positions change one at a time. See QuadrilateralShapeModel.updateOrderDependentProperties() for more
   // information.
   private readonly isParallelProperty: Property<boolean>;
@@ -60,7 +60,7 @@ class ParallelSideChecker {
 
     this.parallelAngleToleranceInterval = QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.parallelAngleToleranceInterval );
 
-    // For debugging only. This Property may become true/false as Vertex positionProperties are set one at a time. When
+    // For debugging only. This Property may become true/false as QuadrilateralVertex positionProperties are set one at a time. When
     // moving sides, this can change intermittently. Use areSidesParallel() when the shape is stable instead.
     shapeChangedEmitter.addListener( () => {
       this.isParallelProperty.value = this.areSidesParallel();

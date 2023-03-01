@@ -8,7 +8,7 @@
 
 import { Circle, DragListener, KeyboardDragListener, Path, SceneryEvent, Text } from '../../../../scenery/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import Vertex from '../model/Vertex.js';
+import QuadrilateralVertex from '../model/QuadrilateralVertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -32,9 +32,9 @@ type VertexNodeOptions = SelfOptions & StrictOmit<QuadrilateralMovableNodeOption
 
 class VertexNode extends QuadrilateralMovableNode {
   private readonly quadrilateralModel: QuadrilateralModel;
-  private readonly vertex: Vertex;
+  private readonly vertex: QuadrilateralVertex;
 
-  public constructor( vertex: Vertex, vertexLabel: string, quadrilateralModel: QuadrilateralModel, vertexDescriber: VertexDescriber, modelViewTransform: ModelViewTransform2, providedOptions?: VertexNodeOptions ) {
+  public constructor( vertex: QuadrilateralVertex, vertexLabel: string, quadrilateralModel: QuadrilateralModel, vertexDescriber: VertexDescriber, modelViewTransform: ModelViewTransform2, providedOptions?: VertexNodeOptions ) {
 
     const options = optionize<VertexNodeOptions, SelfOptions, QuadrilateralMovableNodeOptions>()( {
       grabbedSound: grabHighPitch_mp3
@@ -181,7 +181,7 @@ class VertexNode extends QuadrilateralMovableNode {
       }
     } );
 
-    // sound - when the Vertex becomes blocked because of collision with model bounds, play a unique sound
+    // sound - when the QuadrilateralVertex becomes blocked because of collision with model bounds, play a unique sound
     const blockedByBoundsSoundClip = new SoundClip( boundaryReached_mp3, {
       initialOutputLevel: 1.0
     } );

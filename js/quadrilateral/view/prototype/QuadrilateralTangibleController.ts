@@ -31,10 +31,10 @@ class QuadrilateralTangibleController {
   }
 
   /**
-   * Sets the quadrilateral shape Vertex positions to good initial values after calibration.
+   * Sets the quadrilateral shape QuadrilateralVertex positions to good initial values after calibration.
    *
    * During calibration, we request the largest shape that can possibly be made from the device. So when
-   * calibration is finished, the tangible is as large as it can be and Vertex positions are positioned
+   * calibration is finished, the tangible is as large as it can be and QuadrilateralVertex positions are positioned
    * based on full width of the device.
    */
   public finishCalibration(): void {

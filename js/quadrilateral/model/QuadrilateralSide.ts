@@ -9,7 +9,7 @@
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
-import Vertex from './Vertex.js';
+import QuadrilateralVertex from './QuadrilateralVertex.js';
 import { Line } from '../../../../scenery/js/imports.js';
 import { Line as LineShape, Shape } from '../../../../kite/js/imports.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
@@ -21,8 +21,8 @@ import TProperty from '../../../../axon/js/TProperty.js';
 class QuadrilateralSide extends QuadrilateralMovable {
 
   // Reference to the vertices that compose this QuadrilateralSide.
-  public readonly vertex1: Vertex;
-  public readonly vertex2: Vertex;
+  public readonly vertex1: QuadrilateralVertex;
+  public readonly vertex2: QuadrilateralVertex;
 
   // Indicates that this side has been connected to another to form the shape.
   private isConnected = false;
@@ -58,7 +58,7 @@ class QuadrilateralSide extends QuadrilateralMovable {
    * @param sideLabel - To identify this QuadrilateralSide within the shape.
    * @param tandem
    */
-  public constructor( vertex1: Vertex, vertex2: Vertex, sideLabel: SideLabel, tandem: Tandem ) {
+  public constructor( vertex1: QuadrilateralVertex, vertex2: QuadrilateralVertex, sideLabel: SideLabel, tandem: Tandem ) {
     super( tandem );
 
     this.vertex1 = vertex1;
@@ -76,7 +76,7 @@ class QuadrilateralSide extends QuadrilateralMovable {
 
   /**
    * Update the length and model shape of this QuadrilateralSide from vertex positions. This must be calculated in order by the
-   * model, after Vertex positions are changed and before these values are used to calculate other shape attributes.
+   * model, after QuadrilateralVertex positions are changed and before these values are used to calculate other shape attributes.
    * See QuadrilateralShapeModel.updateOrderDependentProperties for more information.
    */
   public updateLengthAndShape(): void {
@@ -93,9 +93,9 @@ class QuadrilateralSide extends QuadrilateralMovable {
   }
 
   /**
-   * Returns true if this QuadrilateralSide includes the provided Vertex.
+   * Returns true if this QuadrilateralSide includes the provided QuadrilateralVertex.
    */
-  public includesVertex( vertex: Vertex ): boolean {
+  public includesVertex( vertex: QuadrilateralVertex ): boolean {
     return this.vertex1 === vertex || this.vertex2 === vertex;
   }
 

@@ -6,10 +6,10 @@
  * We might share this on the accessibility prototypes page, but this will not be a production feature.
  *
  * This feature uses camera input to control the quadrilateral shape by moving your fingers.
- * - Vertex A is controlled by left index finger.
- * - Vertex B is controlled by right index finger.
- * - Vertex C is controlled by right thumb.
- * - Vertex D is controlled by left thumb.
+ * - QuadrilateralVertex A is controlled by left index finger.
+ * - QuadrilateralVertex B is controlled by right index finger.
+ * - QuadrilateralVertex C is controlled by right thumb.
+ * - QuadrilateralVertex D is controlled by left thumb.
  *
  * Hold these fingers up in front of the camera to form a square like shape (pinching gesture), then move them around
  * to change the quadrilateral shape in the simulation.
@@ -61,7 +61,7 @@ class QuadrilateralMediaPipe extends MediaPipe {
   }
 
   /**
-   * In the animation frame, get the most recent results from camera input. Use that data to update Vertex positions
+   * In the animation frame, get the most recent results from camera input. Use that data to update QuadrilateralVertex positions
    * in the simulation.
    */
   public step( dt: number ): void {

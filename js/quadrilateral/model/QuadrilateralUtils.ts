@@ -13,9 +13,9 @@ import Ray2 from '../../../../dot/js/Ray2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Line, Shape } from '../../../../kite/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
-import Vertex from './Vertex.js';
+import QuadrilateralVertex from './QuadrilateralVertex.js';
 
-// A useful type for calculations for the vertex Shapes which define where the Vertex can move depending on
+// A useful type for calculations for the vertex Shapes which define where the QuadrilateralVertex can move depending on
 // the positions of the other vertices. Lines are along the bounds of model space and RayIntersections
 // are the intersections between rays formed by adjacent vertices and the Line. See createVertexAreas for
 // more information.
@@ -54,7 +54,7 @@ class QuadrilateralUtils {
 
       if ( rayIntersectsSegmentVertex ) {
 
-        // the proposed ray will not work because it intersects with a segment Vertex - try another one
+        // the proposed ray will not work because it intersects with a segment QuadrilateralVertex - try another one
         rayDirectionVector.rotate( dotRandom.nextDouble() );
       }
       else {
@@ -82,7 +82,7 @@ class QuadrilateralUtils {
   }
 
   /**
-   * Returns the centroid of a shape from an array of potential Vertex positions.
+   * Returns the centroid of a shape from an array of potential QuadrilateralVertex positions.
    */
   public static getCentroidFromPositions( positions: Vector2[] ): Vector2 {
     const centerX = _.sumBy( positions, position => position.x ) / positions.length;
@@ -92,7 +92,7 @@ class QuadrilateralUtils {
   }
 
   /**
-   * Create a constraining area for a Vertex to move in the play area that will ensure that it cannot overlap
+   * Create a constraining area for a QuadrilateralVertex to move in the play area that will ensure that it cannot overlap
    * other vertices or sides or create a crossed quadrilateral shape.
    *
    * For discussion about this algorithm, see https://github.com/phetsims/quadrilateral/issues/15. In
@@ -106,7 +106,7 @@ class QuadrilateralUtils {
    * @param vertex4 - the next vertex from vertexC, moving clockwise
    * @param validateShape - Ensure that vertex positions are valid?
    */
-  public static createVertexArea( modelBounds: Bounds2, vertex1: Vertex, vertex2: Vertex, vertex3: Vertex, vertex4: Vertex, validateShape: boolean ): Shape {
+  public static createVertexArea( modelBounds: Bounds2, vertex1: QuadrilateralVertex, vertex2: QuadrilateralVertex, vertex3: QuadrilateralVertex, vertex4: QuadrilateralVertex, validateShape: boolean ): Shape {
 
     const allVerticesInBounds = _.every( [ vertex1, vertex2, vertex3, vertex4 ], vertex => modelBounds.containsPoint( vertex.positionProperty.value ) );
     const vertexPositionsUnique = _.uniqBy( [ vertex1, vertex2, vertex3, vertex4 ].map( vertex => vertex.positionProperty.value.toString() ), positionString => {
@@ -144,7 +144,7 @@ class QuadrilateralUtils {
     if ( vertex3.angleProperty.value! > Math.PI ) {
 
       // angle is greater than Math.PI so we have a concave shape and need to create a more constrained shape to for
-      // the Vertex to prevent crossed quadrilaterals
+      // the QuadrilateralVertex to prevent crossed quadrilaterals
       firstRayDirection = vertex3.positionProperty.value.minus( vertex2.positionProperty.value ).normalized();
       firstRay = new Ray2( vertex2.positionProperty.value, firstRayDirection );
 
@@ -267,7 +267,7 @@ class QuadrilateralUtils {
   }
 
   /**
-   * To create a bounding shape for a Vertex, walk along the boundary defined by directedLines until we traverse
+   * To create a bounding shape for a QuadrilateralVertex, walk along the boundary defined by directedLines until we traverse
    * between two points along the boundary. The directed lines are ordered and directed in a clockwise motion around
    * the entire model to assist in the traversal between intersection points. Graphically, what we are accomplishing
    * is this:

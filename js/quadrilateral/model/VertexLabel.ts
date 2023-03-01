@@ -1,7 +1,7 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
- * It is useful to know the identity of a particular Vertex, this enumeration supports that.
+ * It is useful to know the identity of a particular QuadrilateralVertex, this enumeration supports that.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */

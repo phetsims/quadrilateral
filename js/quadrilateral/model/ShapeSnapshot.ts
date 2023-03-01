@@ -69,7 +69,7 @@ class ShapeSnapshot {
   }
 
   /**
-   * Returns the saved Vertex angle of a particular Vertex given the VertexLabel.
+   * Returns the saved QuadrilateralVertex angle of a particular QuadrilateralVertex given the VertexLabel.
    */
   public getAngleFromVertexLabel( label: VertexLabel ): number {
     return label === VertexLabel.VERTEX_A ? this.vertexAAngle :
@@ -86,7 +86,7 @@ class ShapeSnapshot {
   }
 
   /**
-   * Returns the saved Vertex position of a particular Vertex given the VertexLabel.
+   * Returns the saved QuadrilateralVertex position of a particular QuadrilateralVertex given the VertexLabel.
    */
   public getPositionFromVertexLabel( label: VertexLabel ): Vector2 {
     return label === VertexLabel.VERTEX_A ? this.vertexAPosition :

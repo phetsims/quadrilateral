@@ -25,7 +25,7 @@ import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import MovementAlerter from '../../../../scenery-phet/js/accessibility/describers/MovementAlerter.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import Vertex from '../model/Vertex.js';
+import QuadrilateralVertex from '../model/QuadrilateralVertex.js';
 import Utils from '../../../../dot/js/Utils.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
@@ -246,7 +246,7 @@ class QuadrilateralAlerter extends Alerter {
         }
 
         //-----------------------------------------------------------------------------------------
-        // Next, create the object response - the description of the particular Vertex or QuadrilateralSide as
+        // Next, create the object response - the description of the particular QuadrilateralVertex or QuadrilateralSide as
         // it is moved by the user.
         //-----------------------------------------------------------------------------------------
         model.quadrilateralShapeModel.sides.forEach( side => {
@@ -464,7 +464,7 @@ class QuadrilateralAlerter extends Alerter {
    * shapeChangedEmitter emits when we know that all angle and shape Properties have been updated. See
    * QuadrilateralShapeModel.updateOrderDependentProperties for more information.
    */
-  private getVertexChangeObjectResponse( vertex: Vertex ): string {
+  private getVertexChangeObjectResponse( vertex: QuadrilateralVertex ): string {
     let response;
 
     // The phrase like the direction change, how the vertex angle changes, or whether the vertex angle is at

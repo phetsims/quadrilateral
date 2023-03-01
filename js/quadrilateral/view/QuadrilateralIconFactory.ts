@@ -21,7 +21,7 @@ import { combineOptions } from '../../../../phet-core/js/optionize.js';
 const QuadrilateralIconFactory = {
 
   /**
-   * Creates an icon for the "Corner Labels" checkbox that toggles visibility of labels on each Vertex.
+   * Creates an icon for the "Corner Labels" checkbox that toggles visibility of labels on each QuadrilateralVertex.
    */
   createCornerLabelsIcon(): Node {
     const label = new Text( 'A', QuadrilateralConstants.SCREEN_TEXT_OPTIONS );

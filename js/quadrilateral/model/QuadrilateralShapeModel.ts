@@ -13,7 +13,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import quadrilateral from '../../quadrilateral.js';
 import NamedQuadrilateral from './NamedQuadrilateral.js';
 import QuadrilateralSide from './QuadrilateralSide.js';
-import Vertex from './Vertex.js';
+import QuadrilateralVertex from './QuadrilateralVertex.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
@@ -35,9 +35,9 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import SideLabel from './SideLabel.js';
 
-// Used when verifying that Vertex positions are valid before setting to the model.
+// Used when verifying that QuadrilateralVertex positions are valid before setting to the model.
 export type VertexWithProposedPosition = {
-  vertex: Vertex;
+  vertex: QuadrilateralVertex;
 
   // This may not be available if something goes wrong with the marker detection
   proposedPosition?: Vector2;
@@ -54,11 +54,11 @@ type QuadrilateralShapeModelOptions = {
 class QuadrilateralShapeModel {
 
   // Vertices of the quadrilateral.
-  public readonly vertexA: Vertex;
-  public readonly vertexB: Vertex;
-  public readonly vertexC: Vertex;
-  public readonly vertexD: Vertex;
-  public readonly vertices: Vertex[];
+  public readonly vertexA: QuadrilateralVertex;
+  public readonly vertexB: QuadrilateralVertex;
+  public readonly vertexC: QuadrilateralVertex;
+  public readonly vertexD: QuadrilateralVertex;
+  public readonly vertices: QuadrilateralVertex[];
 
   // Sides of the quadrilateral.
   public readonly sideAB: QuadrilateralSide;
@@ -112,11 +112,11 @@ class QuadrilateralShapeModel {
   // unnamed shape.
   public readonly shapeNameProperty: EnumerationProperty<NamedQuadrilateral>;
 
-  // A map that provides the adjacent vertices to the provided Vertex.
-  public readonly adjacentVertexMap: Map<Vertex, Vertex[]>;
+  // A map that provides the adjacent vertices to the provided QuadrilateralVertex.
+  public readonly adjacentVertexMap: Map<QuadrilateralVertex, QuadrilateralVertex[]>;
 
   // A map that provides the opposite vertex from a give vertex.
-  public readonly oppositeVertexMap: Map<Vertex, Vertex[]>;
+  public readonly oppositeVertexMap: Map<QuadrilateralVertex, QuadrilateralVertex[]>;
 
   // A map that provides the adjacent sides to the provided QuadrilateralSide.
   public readonly adjacentSideMap: Map<QuadrilateralSide, QuadrilateralSide[]>;
@@ -157,10 +157,10 @@ class QuadrilateralShapeModel {
 
     this.validateShape = options.validateShape;
 
-    this.vertexA = new Vertex( new Vector2( -0.25, 0.25 ), VertexLabel.VERTEX_A, smoothingLengthProperty, options.tandem.createTandem( 'vertexA' ) );
-    this.vertexB = new Vertex( new Vector2( 0.25, 0.25 ), VertexLabel.VERTEX_B, smoothingLengthProperty, options.tandem.createTandem( 'vertexB' ) );
-    this.vertexC = new Vertex( new Vector2( 0.25, -0.25 ), VertexLabel.VERTEX_C, smoothingLengthProperty, options.tandem.createTandem( 'vertexC' ) );
-    this.vertexD = new Vertex( new Vector2( -0.25, -0.25 ), VertexLabel.VERTEX_D, smoothingLengthProperty, options.tandem.createTandem( 'vertexD' ) );
+    this.vertexA = new QuadrilateralVertex( new Vector2( -0.25, 0.25 ), VertexLabel.VERTEX_A, smoothingLengthProperty, options.tandem.createTandem( 'vertexA' ) );
+    this.vertexB = new QuadrilateralVertex( new Vector2( 0.25, 0.25 ), VertexLabel.VERTEX_B, smoothingLengthProperty, options.tandem.createTandem( 'vertexB' ) );
+    this.vertexC = new QuadrilateralVertex( new Vector2( 0.25, -0.25 ), VertexLabel.VERTEX_C, smoothingLengthProperty, options.tandem.createTandem( 'vertexC' ) );
+    this.vertexD = new QuadrilateralVertex( new Vector2( -0.25, -0.25 ), VertexLabel.VERTEX_D, smoothingLengthProperty, options.tandem.createTandem( 'vertexD' ) );
     this.vertices = [ this.vertexA, this.vertexB, this.vertexC, this.vertexD ];
 
     this.oppositeVertexMap = new Map( [
@@ -268,13 +268,13 @@ class QuadrilateralShapeModel {
         this.vertexD.positionProperty ],
       ( position1, position2, position3, position4 ) => {
 
-        // Update geometric attributes after Vertex positions have changed.
+        // Update geometric attributes after QuadrilateralVertex positions have changed.
         this.updateOrderDependentProperties();
 
         // notify a change in shape, after updating geometric attributes
         this.shapeChangedEmitter.emit();
 
-        // After the shape has changed, update the areas of allowed motion for each Vertex.
+        // After the shape has changed, update the areas of allowed motion for each QuadrilateralVertex.
         this.setVertexDragAreas();
       }
     );
@@ -292,10 +292,10 @@ class QuadrilateralShapeModel {
   /**
    * Returns true if the current quadrilateral shape is allowed based on the rules of this model.
    *
-   * A Vertex cannot overlap any other.
-   * A Vertex cannot overlap any QuadrilateralSide.
-   * A Vertex cannot go outside modelBounds.
-   * A Vertex cannot to outside its defined drag Shape (which prevents crossed Quadrilaterals).
+   * A QuadrilateralVertex cannot overlap any other.
+   * A QuadrilateralVertex cannot overlap any QuadrilateralSide.
+   * A QuadrilateralVertex cannot go outside modelBounds.
+   * A QuadrilateralVertex cannot to outside its defined drag Shape (which prevents crossed Quadrilaterals).
    *
    * As soon as the quadrilateral is found to be disallowed, we break out of testing.
    */
@@ -337,9 +337,9 @@ class QuadrilateralShapeModel {
         }
       }
 
-      // Make sure the Vertex is within the drag area Shape.
+      // Make sure the QuadrilateralVertex is within the drag area Shape.
       if ( shapeAllowed ) {
-        assert && assert( testVertex.dragAreaProperty.value, 'Drag area must be defined for the Vertex' );
+        assert && assert( testVertex.dragAreaProperty.value, 'Drag area must be defined for the QuadrilateralVertex' );
         shapeAllowed = QuadrilateralUtils.customShapeContainsPoint( testVertex.dragAreaProperty.value!, testVertex.positionProperty.value );
       }
 
@@ -393,7 +393,7 @@ class QuadrilateralShapeModel {
 
     const isAreaNaN = isNaN( area );
 
-    // A vertex might be overlapped with a side or another Vertex in the "test" shape while we are trying to find
+    // A vertex might be overlapped with a side or another QuadrilateralVertex in the "test" shape while we are trying to find
     // a good vertex position. Gracefully handle this by returning an area of zero (area is NaN/undefined otherwise).
     if ( this.validateShape ) {
       assert && assert( !isAreaNaN, 'Area is not defined for the quadrilateral shape' );
@@ -514,7 +514,7 @@ class QuadrilateralShapeModel {
   /**
    * Update a provided Property that holds a list of equal angles (either opposite or adjacent).
    */
-  private updateEqualVertexPairs( equalVertexPairsProperty: Property<VertexPair[]>, vertexMap: Map<Vertex, Vertex[]> ): void {
+  private updateEqualVertexPairs( equalVertexPairsProperty: Property<VertexPair[]>, vertexMap: Map<QuadrilateralVertex, QuadrilateralVertex[]> ): void {
     const currentVertexPairs = equalVertexPairsProperty.value;
     vertexMap.forEach( ( relatedVertices, keyVertex, map ) => {
       relatedVertices.forEach( relatedVertex => {
@@ -606,7 +606,7 @@ class QuadrilateralShapeModel {
   }
 
   /**
-   * Sets this model to be the same as the provided QuadrilateralShapeModel by setting Vertex positions.
+   * Sets this model to be the same as the provided QuadrilateralShapeModel by setting QuadrilateralVertex positions.
    */
   public setFromShape( other: QuadrilateralShapeModel ): void {
 
@@ -625,7 +625,7 @@ class QuadrilateralShapeModel {
   /**
    * Get the vertex of this shape model with the provided vertexLabel.
    */
-  public getLabelledVertex( vertexLabel: VertexLabel ): Vertex {
+  public getLabelledVertex( vertexLabel: VertexLabel ): QuadrilateralVertex {
     const labelledVertex = _.find( this.vertices, vertex => vertex.vertexLabel === vertexLabel );
 
     assert && assert( labelledVertex, 'Could not find labelled vertex' );

@@ -1,7 +1,7 @@
 // Copyright 2023, University of Colorado Boulder
 
 /**
- * A superclass for movable model components of the quadrilateral. Namely, a superclass for Vertex and QuadrilateralSide.
+ * A superclass for movable model components of the quadrilateral. Namely, a superclass for QuadrilateralVertex and QuadrilateralSide.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */

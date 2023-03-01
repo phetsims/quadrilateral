@@ -7,7 +7,7 @@
  */
 
 import { Path } from '../../../../scenery/js/imports.js';
-import Vertex from '../model/Vertex.js';
+import QuadrilateralVertex from '../model/QuadrilateralVertex.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import { Line, Shape } from '../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -24,14 +24,14 @@ class RightAngleIndicatorNode extends Path {
   private readonly cornerGuideVisibleProperty: TReadOnlyProperty<boolean>;
 
   /**
-   * @param vertex1 - The Vertex being represented, indicator will be visible when angle at this vertex is 90 degrees
-   * @param vertex2 - Vertex with a side connected to vertexA in the clockwise direction
-   * @param vertex3 - Vertex with a side connected to vertexB in the counterclockwise direction
+   * @param vertex1 - The QuadrilateralVertex being represented, indicator will be visible when angle at this vertex is 90 degrees
+   * @param vertex2 - QuadrilateralVertex with a side connected to vertexA in the clockwise direction
+   * @param vertex3 - QuadrilateralVertex with a side connected to vertexB in the counterclockwise direction
    * @param cornerGuideVisibleProperty
    * @param shapeModel
    * @param modelViewTransform
    */
-  public constructor( vertex1: Vertex, vertex2: Vertex, vertex3: Vertex, cornerGuideVisibleProperty: TReadOnlyProperty<boolean>, shapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2 ) {
+  public constructor( vertex1: QuadrilateralVertex, vertex2: QuadrilateralVertex, vertex3: QuadrilateralVertex, cornerGuideVisibleProperty: TReadOnlyProperty<boolean>, shapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2 ) {
     super( null, {
       stroke: QuadrilateralColors.rightAngleIndicatorStrokeColorProperty,
       lineWidth: 2
@@ -54,7 +54,7 @@ class RightAngleIndicatorNode extends Path {
    * Draws the "right angle indicator" shape - a right angle bracket that gets drawn between two adjacent sides
    * in the interior of the quadrilateral.
    */
-  private redrawShape( vertex1: Vertex, vertex2: Vertex, vertex3: Vertex ): void {
+  private redrawShape( vertex1: QuadrilateralVertex, vertex2: QuadrilateralVertex, vertex3: QuadrilateralVertex ): void {
 
     assert && assert( vertex1.angleProperty.value, 'Angle must be available to draw the indicator' );
     const angle = vertex1.angleProperty.value!;

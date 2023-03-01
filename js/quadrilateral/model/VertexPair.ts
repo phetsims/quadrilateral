@@ -8,13 +8,13 @@
  */
 
 import quadrilateral from '../../quadrilateral.js';
-import Vertex from './Vertex.js';
+import QuadrilateralVertex from './QuadrilateralVertex.js';
 
 class VertexPair {
-  public readonly vertex1: Vertex;
-  public readonly vertex2: Vertex;
+  public readonly vertex1: QuadrilateralVertex;
+  public readonly vertex2: QuadrilateralVertex;
 
-  public constructor( vertex1: Vertex, vertex2: Vertex ) {
+  public constructor( vertex1: QuadrilateralVertex, vertex2: QuadrilateralVertex ) {
     this.vertex1 = vertex1;
     this.vertex2 = vertex2;
   }
@@ -28,9 +28,9 @@ class VertexPair {
   }
 
   /**
-   * Returns true if this VertexPair includes the provided Vertex.
+   * Returns true if this VertexPair includes the provided QuadrilateralVertex.
    */
-  public includesVertex( vertex: Vertex ): boolean {
+  public includesVertex( vertex: QuadrilateralVertex ): boolean {
     return this.vertex1 === vertex || this.vertex2 === vertex;
   }
 }

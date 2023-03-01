@@ -1,7 +1,7 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
- * A Node that surrounds a Vertex to represent the current angle. The shape looks like a partial annulus that extends
+ * A Node that surrounds a QuadrilateralVertex to represent the current angle. The shape looks like a partial annulus that extends
  * between the sides that define the angles at a vertex. The annulus is broken into alternating light and dark
  * wedges so that it is easy to see relative angle sizes by counting the number of wedges at each guide.
  *
@@ -15,7 +15,7 @@
 
 import quadrilateral from '../../quadrilateral.js';
 import { Node, Path } from '../../../../scenery/js/imports.js';
-import Vertex from '../model/Vertex.js';
+import QuadrilateralVertex from '../model/QuadrilateralVertex.js';
 import Utils from '../../../../dot/js/Utils.js';
 import { Line, Shape } from '../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -34,8 +34,8 @@ const WEDGE_SIZE_RADIANS = Utils.toRadians( WEDGE_SIZE_DEGREES );
 const WEDGE_RADIAL_LENGTH = 0.05;
 
 // The radii of the annulus
-const INNER_RADIUS = Vertex.VERTEX_WIDTH / 2;
-const OUTER_RADIUS = Vertex.VERTEX_WIDTH / 2 + WEDGE_RADIAL_LENGTH;
+const INNER_RADIUS = QuadrilateralVertex.VERTEX_WIDTH / 2;
+const OUTER_RADIUS = QuadrilateralVertex.VERTEX_WIDTH / 2 + WEDGE_RADIAL_LENGTH;
 
 const EXTERNAL_ANGLE_GUIDE_LENGTH = WEDGE_RADIAL_LENGTH * 8;
 
@@ -49,7 +49,7 @@ class CornerGuideNode extends Node {
    * @param shapeModel
    * @param modelViewTransform
    */
-  public constructor( vertex1: Vertex, vertex2: Vertex, visibleProperty: BooleanProperty, shapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2 ) {
+  public constructor( vertex1: QuadrilateralVertex, vertex2: QuadrilateralVertex, visibleProperty: BooleanProperty, shapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2 ) {
     super();
 
     // The guide looks like alternating dark and light wedges along the annulus, we accomplish this with two paths

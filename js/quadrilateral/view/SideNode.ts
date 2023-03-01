@@ -11,7 +11,7 @@ import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralSide from '../model/QuadrilateralSide.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import Vertex from '../model/Vertex.js';
+import QuadrilateralVertex from '../model/QuadrilateralVertex.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import { Line, Shape } from '../../../../kite/js/imports.js';
@@ -255,7 +255,7 @@ class SideNode extends QuadrilateralMovableNode {
           const gridConstrainedVertex1Position = quadrilateralModel.getClosestGridPosition( boundsConstrainedVertex1Position );
           const gridConstrainedVertex2Position = quadrilateralModel.getClosestGridPosition( boundsConstrainedVertex2Position );
 
-          // deltas for each Vertex must be the same for the side to not change tilt while dragging - update
+          // deltas for each QuadrilateralVertex must be the same for the side to not change tilt while dragging - update
           // both Vertices by the smallest translation vector so they move together
           const smallestDeltaVector = this.getSmallestTranslationVector( gridConstrainedVertex1Position, gridConstrainedVertex2Position );
 
@@ -301,7 +301,7 @@ class SideNode extends QuadrilateralMovableNode {
     const currentVertex1Position = this.side.vertex1.positionProperty.value;
     const currentVertex2Position = this.side.vertex2.positionProperty.value;
 
-    // Each Vertex must move by the same amount so that the side does not tile during input. Find the smallest change
+    // Each QuadrilateralVertex must move by the same amount so that the side does not tile during input. Find the smallest change
     // after constraining vertices to the grid, and we will move both vertices by that delta.
     return _.minBy( [
       proposedVertex1Position.minus( currentVertex1Position ),
@@ -318,11 +318,11 @@ class SideNode extends QuadrilateralMovableNode {
     const currentVertex1Position = this.side.vertex1.positionProperty.value;
     const currentVertex2Position = this.side.vertex2.positionProperty.value;
 
-    // constrain each Vertex position to the closest allowable grid position
+    // constrain each QuadrilateralVertex position to the closest allowable grid position
     const closestVertex1Position = this.quadrilateralModel.getClosestGridPositionInDirection( currentVertex1Position, deltaVector );
     const closestVertex2Position = this.quadrilateralModel.getClosestGridPositionInDirection( currentVertex2Position, deltaVector );
 
-    // Each Vertex must move by the same amount so that the side does not tile during input. Find the smallest change
+    // Each QuadrilateralVertex must move by the same amount so that the side does not tile during input. Find the smallest change
     // after constraining vertices to the grid, and we will move both vertices by that delta.
     const smallestDeltaVector = this.getSmallestTranslationVector( closestVertex1Position, closestVertex2Position );
 
@@ -364,10 +364,10 @@ class SideNode extends QuadrilateralMovableNode {
    * pressed vertex locked in place.
    *
    * @param anchorVertex - Anchor vertex we are rotating around.
-   * @param armVertex - Vertex being repositioned.
+   * @param armVertex - QuadrilateralVertex being repositioned.
    * @param modelDelta - The amount of movement of the arm drag in model coordinates
    */
-  private rotateVertexAroundOther( anchorVertex: Vertex, armVertex: Vertex, modelDelta: Vector2 ): void {
+  private rotateVertexAroundOther( anchorVertex: QuadrilateralVertex, armVertex: QuadrilateralVertex, modelDelta: Vector2 ): void {
     const modelPosition = armVertex.positionProperty.get().plus( modelDelta );
     const proposedPosition = this.quadrilateralModel.getClosestGridPosition( modelPosition );
     if ( this.quadrilateralModel.isVertexPositionAllowed( armVertex, proposedPosition ) ) {

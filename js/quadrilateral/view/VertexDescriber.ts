@@ -1,7 +1,7 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
- * Manages description strings related to the Vertex.
+ * Manages description strings related to the QuadrilateralVertex.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -10,7 +10,7 @@ import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
-import Vertex from '../model/Vertex.js';
+import QuadrilateralVertex from '../model/QuadrilateralVertex.js';
 import VertexLabel from '../model/VertexLabel.js';
 import Range from '../../../../dot/js/Range.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
@@ -88,14 +88,14 @@ ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 2.2, Number.POSITIVE_INFINITY )
 class VertexDescriber {
 
   // A reference to the model components that drive description.
-  private readonly vertex: Vertex;
+  private readonly vertex: QuadrilateralVertex;
   private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
   private readonly markersVisibleProperty: TReadOnlyProperty<boolean>;
 
   // See documentation at definition.
   public static readonly VERTEX_CORNER_LABEL_MAP = VERTEX_CORNER_LABEL_MAP;
 
-  public constructor( vertex: Vertex, quadrilateralShapeModel: QuadrilateralShapeModel, markersVisibleProperty: TReadOnlyProperty<boolean> ) {
+  public constructor( vertex: QuadrilateralVertex, quadrilateralShapeModel: QuadrilateralShapeModel, markersVisibleProperty: TReadOnlyProperty<boolean> ) {
     this.vertex = vertex;
     this.quadrilateralShapeModel = quadrilateralShapeModel;
     this.markersVisibleProperty = markersVisibleProperty;
@@ -271,7 +271,7 @@ class VertexDescriber {
   }
 
   /**
-   * Returns a context response for when the Vertex can not move because it is blocked by a boundary edge.
+   * Returns a context response for when the QuadrilateralVertex can not move because it is blocked by a boundary edge.
    */
   public getBlockedByEdgeResponse(): string {
     return blockedByEdgeString;
@@ -284,11 +284,11 @@ class VertexDescriber {
    * "much much wider than" or
    * "a little wider than"
    *
-   * or if this Vertex angle is smaller than otherVertex, returns something like
+   * or if this QuadrilateralVertex angle is smaller than otherVertex, returns something like
    * "much much smaller than" or
    * "a little smaller than"
    */
-  public getAngleComparisonDescription( otherVertex: Vertex, shapeName: NamedQuadrilateral ): string {
+  public getAngleComparisonDescription( otherVertex: QuadrilateralVertex, shapeName: NamedQuadrilateral ): string {
     assert && assert( this.vertex.angleProperty.value !== null, 'angles need to be initialized for descriptions' );
     assert && assert( otherVertex.angleProperty.value !== null, 'angles need to be initialized for descriptions' );
 

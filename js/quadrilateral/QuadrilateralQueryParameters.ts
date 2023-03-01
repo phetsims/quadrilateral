@@ -123,7 +123,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   },
 
   /**
-   * Controls the interval that the Vertex will be constrained to
+   * Controls the interval that the QuadrilateralVertex will be constrained to
    */
   majorVertexInterval: {
     type: 'number',

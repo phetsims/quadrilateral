@@ -1,7 +1,7 @@
 // Copyright 2023, University of Colorado Boulder
 
 /**
- * The UI component that locks motion for the Vertex to be constrained to the minor grid.
+ * The UI component that locks motion for the QuadrilateralVertex to be constrained to the minor grid.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */

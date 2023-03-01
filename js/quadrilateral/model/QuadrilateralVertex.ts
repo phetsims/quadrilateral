@@ -25,7 +25,7 @@ const VERTEX_BOUNDS = new Bounds2( 0, 0, 0.1, 0.1 );
 const HALF_WIDTH = VERTEX_BOUNDS.width / 2;
 const HALF_HEIGHT = VERTEX_BOUNDS.height / 2;
 
-class Vertex extends QuadrilateralMovable {
+class QuadrilateralVertex extends QuadrilateralMovable {
 
   // The position of the vertex in model coordinates.
   public readonly positionProperty: Property<Vector2>;
@@ -34,13 +34,13 @@ class Vertex extends QuadrilateralMovable {
   // need three points to form the angle.
   public readonly angleProperty: Property<number | null>;
 
-  // Identification of this Vertex within the QuadrilateralShape.
+  // Identification of this QuadrilateralVertex within the QuadrilateralShape.
   public readonly vertexLabel: VertexLabel;
 
-  // The Shape in model coordinates that defines where this Vertex can move. It can never
+  // The Shape in model coordinates that defines where this QuadrilateralVertex can move. It can never
   // go outside this area. The dragAreaProperty is determined by other vertices of the quadrilateral
   // and constraints movement so the quadrilateral can never become crossed or "complex". It is null until
-  // the model bounds are defined and this Vertex is connected to others to form the quadrilateral shape.
+  // the model bounds are defined and this QuadrilateralVertex is connected to others to form the quadrilateral shape.
   public readonly dragAreaProperty: Property<null | Shape>;
 
   // The bounds in model coordinates of this vertex, with dimensions VERTEX_BOUNDS, centered at the value of the
@@ -50,8 +50,8 @@ class Vertex extends QuadrilateralMovable {
   // Referenced so that we can pass the tandem to Properties as they are dynamically created in the methods below.
   private readonly tandem: Tandem;
 
-  // Properties tracking when a Vertex becomes blocked by ony of the individual sides of model bounds.
-  // So that we can trigger some feedback as a Vertex is blocked by new edges of bounds.
+  // Properties tracking when a QuadrilateralVertex becomes blocked by ony of the individual sides of model bounds.
+  // So that we can trigger some feedback as a QuadrilateralVertex is blocked by new edges of bounds.
   public readonly leftConstrainedProperty = new BooleanProperty( false );
   public readonly rightConstrainedProperty = new BooleanProperty( false );
   public readonly topConstrainedProperty = new BooleanProperty( false );
@@ -65,8 +65,8 @@ class Vertex extends QuadrilateralMovable {
   //   sideA /         \ sideB
   //        /           \
   // vertex1 --------- vertex2
-  private vertex1: Vertex | null;
-  private vertex2: Vertex | null;
+  private vertex1: QuadrilateralVertex | null;
+  private vertex2: QuadrilateralVertex | null;
 
   // Property that controls how many values to include in the "smoothing" of potential positions when being
   // controlled by a prototype tangible. See smoothPosition().
@@ -75,11 +75,11 @@ class Vertex extends QuadrilateralMovable {
   // The collection of SMOOTHING_LENGTH number of positions for prototype tangible control. See smoothPosition().
   private readonly positions: Vector2[] = [];
 
-  // in model coordinates, the width of the Vertex
+  // in model coordinates, the width of the QuadrilateralVertex
   public static readonly VERTEX_WIDTH = VERTEX_BOUNDS.width;
 
   /**
-   * @param initialPosition - The initial position for the Vertex in model coordinates.
+   * @param initialPosition - The initial position for the QuadrilateralVertex in model coordinates.
    * @param vertexLabel - A label tagging the vertex, so we can look up the equivalent vertex on another shape model
    * @param smoothingLengthProperty - Controlling how many values to use in the position smoothing when connected to
    *                                  a tangible device (prototype).
@@ -127,9 +127,9 @@ class Vertex extends QuadrilateralMovable {
   }
 
   /**
-   * Returns true if this Vertex intersects another.
+   * Returns true if this QuadrilateralVertex intersects another.
    */
-  public overlapsOther( other: Vertex ): boolean {
+  public overlapsOther( other: QuadrilateralVertex ): boolean {
     assert && assert( other !== this, 'You are trying to see if this vertex overlaps self?' );
     return other.modelBoundsProperty.value.intersectsBounds( this.modelBoundsProperty.value );
   }
@@ -189,7 +189,7 @@ class Vertex extends QuadrilateralMovable {
   /**
    * Connect this vertex to two others to form an angle and sides of the quadrilateral.
    */
-  public connectToOthers( vertex1: Vertex, vertex2: Vertex ): void {
+  public connectToOthers( vertex1: QuadrilateralVertex, vertex2: QuadrilateralVertex ): void {
     this.vertex1 = vertex1;
     this.vertex2 = vertex2;
   }
@@ -209,5 +209,5 @@ class Vertex extends QuadrilateralMovable {
   }
 }
 
-quadrilateral.register( 'Vertex', Vertex );
-export default Vertex;
+quadrilateral.register( 'QuadrilateralVertex', QuadrilateralVertex );
+export default QuadrilateralVertex;

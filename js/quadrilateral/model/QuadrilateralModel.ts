@@ -13,7 +13,7 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
-import Vertex from './Vertex.js';
+import QuadrilateralVertex from './QuadrilateralVertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
@@ -54,7 +54,7 @@ class QuadrilateralModel implements TModel {
 
   // The available bounds for smooth vertex dragging (the model bounds eroded by the width of a vertex so a vertex
   // can never go out of the model bounds.
-  public readonly vertexDragBounds = this.modelBounds.eroded( Vertex.VERTEX_WIDTH / 2 );
+  public readonly vertexDragBounds = this.modelBounds.eroded( QuadrilateralVertex.VERTEX_WIDTH / 2 );
 
   // The interval that Vertices are constrained to during interaction. There are many things that control the value:
   //  - A button in the UI to lock to small intervals (see useMinorIntervalsProperty and lockToMinorIntervalsProperty)
@@ -121,7 +121,7 @@ class QuadrilateralModel implements TModel {
     } );
     this.useMinorIntervalsProperty = DerivedProperty.or( [ this.minorIntervalsFromGlobalKeyProperty, this.lockToMinorIntervalsProperty ] );
 
-    // Vertex intervals are controlled whether we are "locked" to smaller steps, whether we are temporarily using
+    // QuadrilateralVertex intervals are controlled whether we are "locked" to smaller steps, whether we are temporarily using
     // smaller steps because of a hotkey, or if running with ?reducedStepSize
     this.vertexIntervalProperty = new DerivedProperty(
       [ this.useMinorIntervalsProperty, this.tangibleConnectionModel.connectedToDeviceProperty, optionsModel.tangibleOptionsModel.deviceGridSpacingProperty ],
@@ -147,7 +147,7 @@ class QuadrilateralModel implements TModel {
    * Returns true if the vertex position is allowed. Sets the proposed vertex position to the test shape
    * and returns true if the scratch QuadrilateralShapeModel reports that it is in a valid position.
    */
-  public isVertexPositionAllowed( vertex: Vertex, proposedPosition: Vector2 ): boolean {
+  public isVertexPositionAllowed( vertex: QuadrilateralVertex, proposedPosition: Vector2 ): boolean {
 
     // set the proposed position to the scratch shape
     this.quadrilateralTestShapeModel.setFromShape( this.quadrilateralShapeModel );
@@ -159,7 +159,7 @@ class QuadrilateralModel implements TModel {
   /**
    * Returns true if the two vertex positions are allowed for the quadrilateral.
    */
-  public areVertexPositionsAllowed( vertex1: Vertex, vertex1ProposedPosition: Vector2, vertex2: Vertex, vertex2ProposedPosition: Vector2 ): boolean {
+  public areVertexPositionsAllowed( vertex1: QuadrilateralVertex, vertex1ProposedPosition: Vector2, vertex2: QuadrilateralVertex, vertex2ProposedPosition: Vector2 ): boolean {
 
     // Set the test shape to the current value of the actual shape before proposed positions
     this.quadrilateralTestShapeModel.setFromShape( this.quadrilateralShapeModel );

@@ -24,8 +24,8 @@ Here is a full diagram showing the geometric properties for each quadrilateral s
 This simulation uses tolerance intervals to make it easier to find named shapes and work well with precision errors. For example, placing Vertices at exact positions to create exact 90 degree angles would be impossible, especially for rotated shapes. So when angles or lengths are "equal", they are equal enough for the purposes of this simulation but may be slightly different.
 
 The tolerance intervals are defined and changeable in QuadrilateralQueryParameters. They include
-- parallelAngleToleranceInterval: Used when comparing Vertex angles to determine whether sides are parallel.
-- interAngleToleranceInterval: Used when comparing Vertex angles to determine if they are equal.
+- parallelAngleToleranceInterval: Used when comparing QuadrilateralVertex angles to determine whether sides are parallel.
+- interAngleToleranceInterval: Used when comparing QuadrilateralVertex angles to determine if they are equal.
 - staticAngleToleranceInterval: Used when comparing an angle to a static constant.
 - interLengthToleranceInterval: Used when comparing lengths of two sides to determine if they are equal
 
