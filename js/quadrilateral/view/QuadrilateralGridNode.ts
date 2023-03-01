@@ -18,15 +18,16 @@ import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 
 // constants
 const MAJOR_GRID_LINE_OPTIONS = {
-  stroke: QuadrilateralColors.gridColorProperty
+  stroke: QuadrilateralColors.gridColorProperty,
+  lineWidth: 2
 };
 
 const MINOR_GRID_LINE_OPTIONS = {
   stroke: QuadrilateralColors.gridColorProperty,
-  lineWidth: 0.3
+  lineWidth: 0.5
 };
 
-const BORDER_RECTANGLE_LINE_WIDTH = 2;
+const BORDER_RECTANGLE_LINE_WIDTH = 4;
 
 export default class QuadrilateralGridNode extends Node {
   public constructor( modelBounds: Bounds2, visibleProperty: TReadOnlyProperty<boolean>, modelViewTransform: ModelViewTransform2 ) {
