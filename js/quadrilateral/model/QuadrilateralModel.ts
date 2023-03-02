@@ -126,19 +126,9 @@ class QuadrilateralModel implements TModel {
     this.vertexIntervalProperty = new DerivedProperty(
       [ this.useMinorIntervalsProperty, this.tangibleConnectionModel.connectedToDeviceProperty, optionsModel.tangibleOptionsModel.deviceGridSpacingProperty ],
       ( useMinorIntervals, connectedToDevice, deviceGridSpacing ) => {
-
-        let interval: number;
-        if ( connectedToDevice ) {
-          interval = deviceGridSpacing;
-        }
-        else if ( QuadrilateralQueryParameters.reducedStepSize ) {
-          interval = useMinorIntervals ? QuadrilateralConstants.MINOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralConstants.MAJOR_REDUCED_SIZE_VERTEX_INTERVAL;
-        }
-        else {
-          interval = useMinorIntervals ? QuadrilateralQueryParameters.minorVertexInterval : QuadrilateralQueryParameters.majorVertexInterval;
-        }
-
-        return interval;
+        return connectedToDevice ? deviceGridSpacing :
+               QuadrilateralQueryParameters.reducedStepSize ? ( useMinorIntervals ? QuadrilateralConstants.MINOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralConstants.MAJOR_REDUCED_SIZE_VERTEX_INTERVAL ) :
+               useMinorIntervals ? QuadrilateralQueryParameters.minorVertexInterval : QuadrilateralQueryParameters.majorVertexInterval;
       }
     );
   }
