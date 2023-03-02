@@ -118,6 +118,8 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // QuadrilateralSoundOptionsModel.SoundDesign as a string. See https://github.com/phetsims/quadrilateral/blob/master/js/quadrilateral/model/QuadrilateralSoundOptionsModel.ts#L37-L53
   soundDesign: {
     type: 'string',
+
+    // REVIEW: This value doesn't seem to be cased like other query parameter values
     defaultValue: 'TRACKS_LAYER',
     validValues: SoundDesign.enumeration.keys
   },

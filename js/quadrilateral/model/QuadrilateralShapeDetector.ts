@@ -29,10 +29,10 @@ import NamedQuadrilateral from './NamedQuadrilateral.js';
 const CONCAVE = Math.pow( 2, 0 );
 const ONE_PARALLEL_PAIR = Math.pow( 2, 1 );
 const TWO_PARALLEL_PAIR = Math.pow( 2, 2 );
-const TWO_EQUAL_ADJACENT_ANGLE_PAIR = Math.pow( 2, 4 );
+const TWO_EQUAL_ADJACENT_ANGLE_PAIR = Math.pow( 2, 4 ); // REVIEW: Are we skipping 3?
 const ONE_EQUAL_OPPOSITE_ANGLE_PAIR = Math.pow( 2, 5 );
 const TWO_EQUAL_OPPOSITE_ANGLE_PAIR = Math.pow( 2, 6 );
-const ALL_EQUAL_ANGLE = Math.pow( 2, 7 );
+const ALL_EQUAL_ANGLE = Math.pow( 2, 7 );// REVIEW: Are we skipping 8?
 const TWO_EQUAL_ADJACENT_SIDE_PAIR = Math.pow( 2, 9 );
 const ONE_EQUAL_OPPOSITE_SIDE_PAIR = Math.pow( 2, 10 );
 const TWO_EQUAL_OPPOSITE_SIDE_PAIR = Math.pow( 2, 11 );
@@ -100,6 +100,8 @@ export default class QuadrilateralShapeDetector {
     this.quadrilateralShapeModel = quadrilateralShapeModel;
   }
 
+  // REVIEW: This method should be made static, and pass in the QuadrilateralShapeModel as an argument
+  // REVIEW: Add some unit tests to make sure this method and the masks are working as expected
   /**
    * Compute the name of the quadrilateral. Note this must be called AFTER all order dependent Properties are updated
    * because it relies on vertex positions to be stable and all shape attributes to be calculated. See
