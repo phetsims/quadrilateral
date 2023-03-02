@@ -680,6 +680,8 @@ export default class QuadrilateralShapeModel {
 
     // no longer deferred, invoke callbacks and update order dependent Properties
     this.setPropertiesDeferred( false );
+
+    this.updateOrderDependentProperties();
   }
 
   /**

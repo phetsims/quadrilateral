@@ -167,6 +167,7 @@ export default class QuadrilateralModel implements TModel {
     this.quadrilateralTestShapeModel.setPropertiesDeferred( false );
 
     // REVIEW: Make isQuadrilateralShapeAllowed static
+    // REVIEW: After potentially addressing the above, maybe make this method and isVertexPositionAllowed feel more similar???
     return this.quadrilateralTestShapeModel.isQuadrilateralShapeAllowed();
   }
 
@@ -184,11 +185,6 @@ export default class QuadrilateralModel implements TModel {
 
     this.quadrilateralShapeModel.reset();
     this.quadrilateralTestShapeModel.reset();
-
-    // Eagerly update the Properties that are set asynchronously, so we don't wait until
-    // the next frame for these to be set after a reset.
-    this.quadrilateralShapeModel.updateOrderDependentProperties();
-    this.quadrilateralTestShapeModel.updateOrderDependentProperties();
 
     this.resetEmitter.emit();
 
