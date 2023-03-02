@@ -55,5 +55,8 @@ This sim has several prototypes for new features. These features are not going t
 
 /model/prototype/TangibleConnectionModel.ts is also the fundamental component for modelling connections for various prototypes.
 
+#### Dispose
+Many of the model objects in the sim persist for the lifetime of the sim and do not need to be disposed. For the sound implementation, the user can switch between sound schemes in the preferences dialog, and some parts of the sound implementation do need and implement dispose.
+
 #### Debugging
 There is a debugging panel that displays quadrilateral and simulation state. Can be used with query parameter `?showModelValues`.
