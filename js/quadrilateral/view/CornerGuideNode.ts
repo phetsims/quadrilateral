@@ -146,7 +146,7 @@ class CornerGuideNode extends Node {
       this.visible = visible;
     } );
 
-    // When right angle, display the RightAngleIndicator, otherwise the arcs representing angle are shown.
+    // When at a right angle, display the RightAngleIndicator, otherwise the arcs representing angles are shown.
     vertex1.angleProperty.link( angle => {
       arcNode.visible = !shapeModel.isRightAngle( angle! );
 
