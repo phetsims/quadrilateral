@@ -48,7 +48,7 @@ type QuadrilateralShapeModelOptions = {
   // If true, the shape gets tested to make sure it is valid. This means no overlapping vertices and no crossed
   // sides.
   validateShape?: boolean;
-  tandem: Tandem;
+  tandem?: Tandem;
 };
 
 export default class QuadrilateralShapeModel {
@@ -152,7 +152,8 @@ export default class QuadrilateralShapeModel {
   public constructor( modelBounds: Bounds2, resetNotInProgressProperty: TProperty<boolean>, smoothingLengthProperty: TReadOnlyProperty<number>, providedOptions: QuadrilateralShapeModelOptions ) {
 
     const options = optionize<QuadrilateralShapeModelOptions, QuadrilateralShapeModelOptions>()( {
-      validateShape: true
+      validateShape: true,
+      tandem: Tandem.OPTIONAL
     }, providedOptions );
 
     this.validateShape = options.validateShape;

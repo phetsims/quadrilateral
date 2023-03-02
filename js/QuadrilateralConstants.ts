@@ -21,6 +21,8 @@ const QuadrilateralConstants = {
   GRID_SPACING: 0.25,
 
   // Dimensions of model bounds.
+  // REVIEW: Explain why it is 3.1.  What is the 0.1 overlap exactly?  Or recompute the dimensions based on
+  // total number of gridlines, etc.
   BOUNDS_WIDTH: 3.1,
   BOUNDS_HEIGHT: 2.1,
 

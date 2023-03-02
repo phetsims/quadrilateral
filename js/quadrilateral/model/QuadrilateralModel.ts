@@ -2,8 +2,8 @@
 
 /**
  * The base model class for the sim. Assembles all model components and responsible for managing Properties
- * that indicate the state of the Quadrilateral shape. Will probably also manage Properties that manage
- * the state of the Sim (UI element visibility and so on).
+ * that indicate the state of the Quadrilateral shape. Also includes Properties that manage the state of the Sim (UI
+ * element visibility and so on).
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -45,7 +45,7 @@ export default class QuadrilateralModel implements TModel {
 
   // The bounds of the simulation in model coordinates. Origin (0,0) is at the center. The shape and
   // vertices can be positioned within these bounds.
-  public modelBounds = new Bounds2(
+  public readonly modelBounds = new Bounds2(
     -QuadrilateralConstants.BOUNDS_WIDTH / 2,
     -QuadrilateralConstants.BOUNDS_HEIGHT / 2,
     QuadrilateralConstants.BOUNDS_WIDTH / 2,
@@ -81,11 +81,11 @@ export default class QuadrilateralModel implements TModel {
   public readonly shapeSoundEnabledProperty: BooleanProperty;
 
   // Model component for the quadrilateral shape.
-  public quadrilateralShapeModel: QuadrilateralShapeModel;
+  public readonly quadrilateralShapeModel: QuadrilateralShapeModel;
 
   // A reference to a "test" model for the simulation. Used to validate vertex positions before setting them for
   // the "real" quadrilateralShapeModel. See QuadrilateralShapeModel.isQuadrilateralShapeAllowed().
-  public quadrilateralTestShapeModel: QuadrilateralShapeModel;
+  public readonly quadrilateralTestShapeModel: QuadrilateralShapeModel;
 
   // Emits an event when a full model reset happens (but not when a shape reset happens)
   public readonly resetEmitter = new Emitter();
@@ -102,8 +102,7 @@ export default class QuadrilateralModel implements TModel {
       tandem: tandem.createTandem( 'quadrilateralShapeModel' )
     } );
     this.quadrilateralTestShapeModel = new QuadrilateralShapeModel( this.modelBounds, this.resetNotInProgressProperty, smoothingLengthProperty, {
-      validateShape: false,
-      tandem: tandem.createTandem( 'quadrilateralTestShapeModel' )
+      validateShape: false
     } );
 
     this.visibilityModel = new QuadrilateralVisibilityModel( tandem.createTandem( 'visibilityModel' ) );
@@ -167,6 +166,7 @@ export default class QuadrilateralModel implements TModel {
     // This will un-defer and call listeners for us
     this.quadrilateralTestShapeModel.setPropertiesDeferred( false );
 
+    // REVIEW: Make isQuadrilateralShapeAllowed static
     return this.quadrilateralTestShapeModel.isQuadrilateralShapeAllowed();
   }
 

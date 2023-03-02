@@ -99,7 +99,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   },
 
   // How many values to save when smoothing vertex positions when connected to a bluetooth device. Note that
-  // at this time this has no impact on the OpenCV prototype input. Only Bluetooth/Serial connections.
+  // this has no impact on the OpenCV prototype input. Only Bluetooth/Serial connections.
   smoothingLength: {
     type: 'number',
     defaultValue: 5,
