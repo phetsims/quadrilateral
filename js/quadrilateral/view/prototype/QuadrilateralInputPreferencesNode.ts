@@ -50,6 +50,7 @@ export default class QuadrilateralInputPreferencesNode extends PreferencesPanelS
     } );
 
     this.disposeQuadrilateralInputPreferencesNode = () => {
+      tangibleControlsTitle.dispose();
       gridSpacingNumberControl.dispose();
       smoothingLengthNumberControl.dispose();
       updateIntervalNumberControl.dispose();
