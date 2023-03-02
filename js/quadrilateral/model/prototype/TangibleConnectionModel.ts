@@ -33,6 +33,7 @@ import MarkerDetectionModel from './MarkerDetectionModel.js';
 class TangibleConnectionModel {
 
   // True when we are connected to a device in some way, either bluetooth, serial, or OpenCV.
+  // REVIEW: Some boolean attribute start with "is" but some do not
   public connectedToDeviceProperty: TProperty<boolean>;
 
   // Properties specifically related to marker detection from OpenCV prototypes.
@@ -44,6 +45,7 @@ class TangibleConnectionModel {
 
   // A transform that goes from tangible to virtual space. Used to set simulation vertex positions from
   // positions from position data provided by the physical device.
+  // REVIEW: What is the virtual coordinate frame?
   public physicalToVirtualTransform = ModelViewTransform2.createIdentity();
 
   // If true, the simulation is currently "calibrating" to a physical device. During this phase, we are setting
@@ -129,6 +131,9 @@ class TangibleConnectionModel {
     let vertexDPosition: Vector2;
 
     const shapeModel = this.shapeModel;
+
+    // REVIEW: Do we know each of these has only one association? If not, an earlier definition could be overwritten
+    // by null later
     vertexWithProposedPositions.forEach( vertexWithProposedPosition => {
       if ( vertexWithProposedPosition.vertex === shapeModel.vertexA ) {
         vertexAPosition = vertexWithProposedPosition.proposedPosition!;
@@ -159,6 +164,7 @@ class TangibleConnectionModel {
     }
 
     // No lines intersect
+    // REVIEW: Could this be simpler?
     if ( allowed ) {
       for ( let i = 0; i < proposedLines.length; i++ ) {
         const firstLine = proposedLines[ i ];
