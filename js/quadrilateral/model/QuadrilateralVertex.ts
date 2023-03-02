@@ -83,8 +83,8 @@ export default class QuadrilateralVertex extends QuadrilateralMovable {
   // controlled by a prototype tangible. See smoothPosition().
   private readonly smoothingLengthProperty: TReadOnlyProperty<number>;
 
-  // The collection of SMOOTHING_LENGTH number of positions for prototype tangible control. See smoothPosition().
-  private readonly positions: Vector2[] = [];
+  // The collection of n <= SMOOTHING_LENGTH number of positions for prototype tangible control. See smoothPosition().
+  private readonly smoothingPositions: Vector2[] = [];
 
   // in model coordinates, the width of the QuadrilateralVertex
   public static readonly VERTEX_WIDTH = VERTEX_BOUNDS.width;
@@ -146,6 +146,7 @@ export default class QuadrilateralVertex extends QuadrilateralMovable {
    */
   public reset(): void {
     this.positionProperty.reset();
+    this.smoothingPositions.length = 0;
   }
 
   /**
@@ -197,13 +198,13 @@ export default class QuadrilateralVertex extends QuadrilateralMovable {
    * and returning the average position. Only used for prototype tangible connection.
    */
   public smoothPosition( position: Vector2 ): Vector2 {
-    this.positions.push( position );
+    this.smoothingPositions.push( position );
 
-    while ( this.positions.length > this.smoothingLengthProperty.value ) {
-      this.positions.shift();
+    while ( this.smoothingPositions.length > this.smoothingLengthProperty.value ) {
+      this.smoothingPositions.shift();
     }
 
-    return Vector2.average( this.positions );
+    return Vector2.average( this.smoothingPositions );
   }
 }
 
