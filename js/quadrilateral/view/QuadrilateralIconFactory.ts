@@ -24,13 +24,13 @@ const QuadrilateralIconFactory = {
    * Creates an icon for the "Corner Labels" checkbox that toggles visibility of labels on each QuadrilateralVertex.
    */
   createCornerLabelsIcon(): Node {
-    const label = new Text( 'A', QuadrilateralConstants.SCREEN_TEXT_OPTIONS );
+
     const circle = new Circle( QuadrilateralIconFactory.ICON_HEIGHT / 2, {
       stroke: QuadrilateralColors.visibilityIconsColorProperty,
       lineWidth: QuadrilateralIconFactory.ICON_LINE_WIDTH
     } );
 
-    label.center = circle.center;
+    const label = new Text( 'A', { ...QuadrilateralConstants.SCREEN_TEXT_OPTIONS, center: circle.center } );
     circle.addChild( label );
 
     return circle;
