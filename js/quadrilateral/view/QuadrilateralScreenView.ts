@@ -42,7 +42,7 @@ import QuadrilateralTangibleControls from './prototype/QuadrilateralTangibleCont
 import QuadrilateralModelViewTransform from './QuadrilateralModelViewTransform.js';
 import QuadrilateralTangibleController from './prototype/QuadrilateralTangibleController.js';
 
-class QuadrilateralScreenView extends ScreenView {
+export default class QuadrilateralScreenView extends ScreenView {
   private readonly model: QuadrilateralModel;
   private readonly modelViewTransform: ModelViewTransform2;
   private readonly quadrilateralNode: QuadrilateralNode;
@@ -249,4 +249,3 @@ class QuadrilateralScreenView extends ScreenView {
 }
 
 quadrilateral.register( 'QuadrilateralScreenView', QuadrilateralScreenView );
-export default QuadrilateralScreenView;

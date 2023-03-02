@@ -43,7 +43,7 @@ if ( MediaPipeQueryParameters.cameraInput === 'hands' ) {
   MediaPipe.initialize();
 }
 
-class QuadrilateralMediaPipe extends MediaPipe {
+export default class QuadrilateralMediaPipe extends MediaPipe {
   private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
   private readonly tangibleController: QuadrilateralTangibleController;
 
@@ -128,4 +128,3 @@ class QuadrilateralMediaPipe extends MediaPipe {
 }
 
 quadrilateral.register( 'QuadrilateralMediaPipe', QuadrilateralMediaPipe );
-export default QuadrilateralMediaPipe;

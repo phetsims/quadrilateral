@@ -18,7 +18,7 @@ import QuadrilateralKeyboardHelpContent from './QuadrilateralKeyboardHelpContent
 const moveShapeDescriptionString = QuadrilateralStrings.a11y.keyboardHelpDialog.moveShapeDescription;
 const smallerStepsDescriptionString = QuadrilateralStrings.a11y.keyboardHelpDialog.smallerStepsDescription;
 
-class MoveShapeHelpSection extends KeyboardHelpSection {
+export default class MoveShapeHelpSection extends KeyboardHelpSection {
   public constructor() {
 
     // basic movement
@@ -53,4 +53,3 @@ class MoveShapeHelpSection extends KeyboardHelpSection {
 }
 
 quadrilateral.register( 'MoveShapeHelpSection', MoveShapeHelpSection );
-export default MoveShapeHelpSection;

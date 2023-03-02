@@ -12,7 +12,7 @@ import quadrilateral from '../../quadrilateral.js';
 import Range from '../../../../dot/js/Range.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 
-class QuadrilateralTangibleOptionsModel {
+export default class QuadrilateralTangibleOptionsModel {
 
   // How many values to save and use in the average for calculating new vertex positions. Higher value will reduce
   // noise but the sim will respond slower.
@@ -33,4 +33,3 @@ class QuadrilateralTangibleOptionsModel {
 }
 
 quadrilateral.register( 'QuadrilateralTangibleOptionsModel', QuadrilateralTangibleOptionsModel );
-export default QuadrilateralTangibleOptionsModel;

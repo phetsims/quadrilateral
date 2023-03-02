@@ -10,7 +10,7 @@
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralSide from './QuadrilateralSide.js';
 
-class SidePair {
+export default class SidePair {
   public readonly side1: QuadrilateralSide;
   public readonly side2: QuadrilateralSide;
 
@@ -36,4 +36,3 @@ class SidePair {
 }
 
 quadrilateral.register( 'SidePair', SidePair );
-export default SidePair;

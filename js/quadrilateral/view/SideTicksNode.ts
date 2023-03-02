@@ -24,7 +24,7 @@ const PARAMETRIC_MAJOR_TICK_LENGTH = 0.5;
 // as we draw each tick mark.
 const SCRATCH_LINE = new Line( new Vector2( 0, 0 ), new Vector2( 0, 0 ) );
 
-class SideTicksNode extends Path {
+export default class SideTicksNode extends Path {
   private readonly side: QuadrilateralSide;
   private readonly modelViewTransform: ModelViewTransform2;
 
@@ -70,4 +70,3 @@ class SideTicksNode extends Path {
 }
 
 quadrilateral.register( 'SideTicksNode', SideTicksNode );
-export default SideTicksNode;

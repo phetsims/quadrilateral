@@ -56,7 +56,7 @@ const NAMED_QUADRILATERAL_TO_TRACKS_MAP = new Map( [
   [ NamedQuadrilateral.SQUARE, [ 0, 2, 3, 5, 6, 7 ] ]
 ] );
 
-class LayersTracksSoundView extends TracksSoundView {
+export default class LayersTracksSoundView extends TracksSoundView {
   private readonly disposeLayersTracksSoundView: () => void;
 
   public constructor( shapeModel: QuadrilateralShapeModel, shapeSoundEnabledProperty: TReadOnlyProperty<boolean>, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel ) {
@@ -100,4 +100,3 @@ class LayersTracksSoundView extends TracksSoundView {
 }
 
 quadrilateral.register( 'LayersTracksSoundView', LayersTracksSoundView );
-export default LayersTracksSoundView;

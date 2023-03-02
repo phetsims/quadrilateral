@@ -132,7 +132,7 @@ const VERY_SMALL_THRESHOLD = GRID_CELL_AREA * 12;
 const SMALL_THRESHOLD = GRID_CELL_AREA * 24;
 const MEDIUM_SIZED_THRESHOLD = GRID_CELL_AREA * 48;
 
-class QuadrilateralDescriber {
+export default class QuadrilateralDescriber {
   private readonly shapeModel: QuadrilateralShapeModel;
   private readonly shapeNameVisibleProperty: TReadOnlyProperty<boolean>;
   private readonly markersVisibleProperty: TReadOnlyProperty<boolean>;
@@ -819,4 +819,3 @@ class QuadrilateralDescriber {
 }
 
 quadrilateral.register( 'QuadrilateralDescriber', QuadrilateralDescriber );
-export default QuadrilateralDescriber;

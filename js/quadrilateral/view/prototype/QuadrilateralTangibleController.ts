@@ -15,7 +15,7 @@ import QuadrilateralUtils from '../../model/QuadrilateralUtils.js';
 import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
 import LinearFunction from '../../../../../dot/js/LinearFunction.js';
 
-class QuadrilateralTangibleController {
+export default class QuadrilateralTangibleController {
   private readonly quadrilateralModel: QuadrilateralModel;
 
   private readonly shapeModel: QuadrilateralShapeModel;
@@ -208,4 +208,3 @@ class QuadrilateralTangibleController {
 
 
 quadrilateral.register( 'QuadrilateralTangibleController', QuadrilateralTangibleController );
-export default QuadrilateralTangibleController;

@@ -30,7 +30,7 @@ const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
 type SelfOptions = EmptySelfOptions;
 type VertexNodeOptions = SelfOptions & StrictOmit<QuadrilateralMovableNodeOptions, 'grabbedSound'>;
 
-class QuadrilateralVertexNode extends QuadrilateralMovableNode {
+export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
   private readonly quadrilateralModel: QuadrilateralModel;
   private readonly vertex: QuadrilateralVertex;
 
@@ -208,4 +208,3 @@ class QuadrilateralVertexNode extends QuadrilateralMovableNode {
 }
 
 quadrilateral.register( 'QuadrilateralVertexNode', QuadrilateralVertexNode );
-export default QuadrilateralVertexNode;

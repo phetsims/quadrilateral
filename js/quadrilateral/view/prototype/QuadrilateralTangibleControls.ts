@@ -24,7 +24,7 @@ import QuadrilateralSerialConnectionButton from './QuadrilateralSerialConnection
 import Tandem from '../../../../../tandem/js/Tandem.js';
 import QuadrilateralTangibleController from './QuadrilateralTangibleController.js';
 
-class QuadrilateralTangibleControls extends VBox {
+export default class QuadrilateralTangibleControls extends VBox {
   public constructor( tangibleConnectionModel: TangibleConnectionModel, tangibleController: QuadrilateralTangibleController, tandem: Tandem ) {
 
     // Add a Dialog that will calibrate the device to the simulation (mapping physical data to modelled data).
@@ -85,4 +85,3 @@ class QuadrilateralTangibleControls extends VBox {
 }
 
 quadrilateral.register( 'QuadrilateralTangibleControls', QuadrilateralTangibleControls );
-export default QuadrilateralTangibleControls;

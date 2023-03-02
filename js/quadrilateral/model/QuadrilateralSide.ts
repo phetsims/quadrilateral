@@ -18,7 +18,7 @@ import QuadrilateralMovable from './QuadrilateralMovable.js';
 import Property from '../../../../axon/js/Property.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 
-class QuadrilateralSide extends QuadrilateralMovable {
+export default class QuadrilateralSide extends QuadrilateralMovable {
 
   // Reference to the vertices that compose this QuadrilateralSide.
   public readonly vertex1: QuadrilateralVertex;
@@ -129,4 +129,3 @@ class QuadrilateralSide extends QuadrilateralMovable {
 }
 
 quadrilateral.register( 'QuadrilateralSide', QuadrilateralSide );
-export default QuadrilateralSide;

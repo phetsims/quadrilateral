@@ -11,7 +11,7 @@ import Property from '../../../../axon/js/Property.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 
-class QuadrilateralMovable {
+export default class QuadrilateralMovable {
 
   // Indicates that this component is "pressed" for user interaction.
   public readonly isPressedProperty: Property<boolean>;
@@ -34,4 +34,3 @@ class QuadrilateralMovable {
 }
 
 quadrilateral.register( 'QuadrilateralMovable', QuadrilateralMovable );
-export default QuadrilateralMovable;

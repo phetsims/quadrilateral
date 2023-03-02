@@ -55,7 +55,7 @@ const SHAPE_NAME_MAP = new Map( [
 const DISPLAY_WIDTH = 350;
 const DISPLAY_HEIGHT = 40;
 
-class QuadrilateralShapeNameDisplay extends Node {
+export default class QuadrilateralShapeNameDisplay extends Node {
   public constructor( shapeNameVisibleProperty: Property<boolean>, shapeNameProperty: TReadOnlyProperty<NamedQuadrilateral>, quadrilateralDescriber: QuadrilateralDescriber, tandem: Tandem ) {
     super();
 
@@ -129,4 +129,3 @@ class QuadrilateralShapeNameDisplay extends Node {
 }
 
 quadrilateral.register( 'QuadrilateralShapeNameDisplay', QuadrilateralShapeNameDisplay );
-export default QuadrilateralShapeNameDisplay;

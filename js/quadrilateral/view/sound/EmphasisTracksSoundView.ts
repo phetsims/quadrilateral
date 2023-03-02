@@ -61,7 +61,7 @@ const NAMED_QUADRILATERAL_TO_HIGH_VOLUME_TRACKS_MAP = new Map( [
   [ NamedQuadrilateral.SQUARE, [ 7 ] ]
 ] );
 
-class EmphasisTracksSoundView extends TracksSoundView {
+export default class EmphasisTracksSoundView extends TracksSoundView {
   private readonly disposeEmphasisTracksSoundView: () => void;
 
   // The requested output levels for each SoundClip as shapes are detected. All of these are playing at once at the
@@ -124,4 +124,3 @@ class EmphasisTracksSoundView extends TracksSoundView {
 }
 
 quadrilateral.register( 'EmphasisTracksSoundView', EmphasisTracksSoundView );
-export default EmphasisTracksSoundView;

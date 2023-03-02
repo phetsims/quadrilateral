@@ -14,7 +14,7 @@ import QuadrilateralOptionsModel from './model/QuadrilateralOptionsModel.js';
 import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
 import QuadrilateralKeyboardHelpContent from './view/QuadrilateralKeyboardHelpContent.js';
 
-class QuadrilateralScreen extends Screen<QuadrilateralModel, QuadrilateralScreenView> {
+export default class QuadrilateralScreen extends Screen<QuadrilateralModel, QuadrilateralScreenView> {
   public constructor( optionsModel: QuadrilateralOptionsModel, providedOptions: ScreenOptions ) {
 
     const options = optionize<ScreenOptions, EmptySelfOptions, ScreenOptions>()( {
@@ -31,4 +31,3 @@ class QuadrilateralScreen extends Screen<QuadrilateralModel, QuadrilateralScreen
 }
 
 quadrilateral.register( 'QuadrilateralScreen', QuadrilateralScreen );
-export default QuadrilateralScreen;

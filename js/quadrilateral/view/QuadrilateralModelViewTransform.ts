@@ -17,7 +17,7 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 // dimensions of the view space, relative to ScreenView layoutBounds
 const VIEW_DIMENSION = new Dimension2( 790, 530 );
 
-class QuadrilateralModelViewTransform2 extends ModelViewTransform2 {
+export default class QuadrilateralModelViewTransform2 extends ModelViewTransform2 {
   public constructor( modelBounds: Bounds2, layoutBounds: Bounds2 ) {
     super();
 
@@ -53,4 +53,3 @@ class QuadrilateralModelViewTransform2 extends ModelViewTransform2 {
 }
 
 quadrilateral.register( 'QuadrilateralModelViewTransform2', QuadrilateralModelViewTransform2 );
-export default QuadrilateralModelViewTransform2;

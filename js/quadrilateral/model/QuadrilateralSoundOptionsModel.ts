@@ -22,7 +22,7 @@ class SoundDesign extends EnumerationValue {
   public static readonly enumeration = new Enumeration( SoundDesign );
 }
 
-class QuadrilateralSoundOptionsModel {
+export default class QuadrilateralSoundOptionsModel {
 
   // The selected sound design
   public soundDesignProperty = new EnumerationProperty( SoundDesign.enumeration.getValue( QuadrilateralQueryParameters.soundDesign! ) );
@@ -33,4 +33,3 @@ class QuadrilateralSoundOptionsModel {
 
 quadrilateral.register( 'QuadrilateralSoundOptionsModel', QuadrilateralSoundOptionsModel );
 export { SoundDesign };
-export default QuadrilateralSoundOptionsModel;

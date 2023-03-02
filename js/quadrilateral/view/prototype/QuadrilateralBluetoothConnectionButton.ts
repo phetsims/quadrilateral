@@ -43,7 +43,7 @@ const REQUEST_DEVICE_OPTIONS = {
   ]
 };
 
-class QuadrilateralBluetoothConnectionButton extends TextPushButton {
+export default class QuadrilateralBluetoothConnectionButton extends TextPushButton {
 
   // Amount of time passed in ms since updating the simulation from bluetooth input. We wait at least every
   // QuadrilateralTangibleOptionsModel.bluetoothUpdateIntervalProperty.value in an attempt to filter out noise.
@@ -194,4 +194,3 @@ class QuadrilateralBluetoothConnectionButton extends TextPushButton {
 }
 
 quadrilateral.register( 'QuadrilateralBluetoothConnectionButton', QuadrilateralBluetoothConnectionButton );
-export default QuadrilateralBluetoothConnectionButton;

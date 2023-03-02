@@ -24,7 +24,7 @@ const checkShapeWithVoicingString = 'With Voicing enabled, check shape name or p
 const checkShapeDescriptionString = QuadrilateralStrings.a11y.keyboardHelpDialog.checkShapeDescriptionPattern;
 const resetShapeDescriptionString = QuadrilateralStrings.a11y.keyboardHelpDialog.resetShapeDescriptionPattern;
 
-class ShapeShortcutsHelpSection extends KeyboardHelpSection {
+export default class ShapeShortcutsHelpSection extends KeyboardHelpSection {
   public constructor() {
 
     // command to check current shape with Voicing
@@ -68,4 +68,3 @@ class ShapeShortcutsHelpSection extends KeyboardHelpSection {
 }
 
 quadrilateral.register( 'ShapeShortcutsHelpSection', ShapeShortcutsHelpSection );
-export default ShapeShortcutsHelpSection;

@@ -13,7 +13,7 @@ import KeyboardHelpSection from '../../../../scenery-phet/js/keyboard/help/Keybo
 import MoveShapeHelpSection from './MoveShapeHelpSection.js';
 import ShapeShortcutsHelpSection from './ShapeShortcutsHelpSection.js';
 
-class QuadrilateralKeyboardHelpContent extends TwoColumnKeyboardHelpContent {
+export default class QuadrilateralKeyboardHelpContent extends TwoColumnKeyboardHelpContent {
 
   // consistent line wrap for long text in sections of this content
   public static readonly LABEL_LINE_WRAP = 175;
@@ -33,4 +33,3 @@ class QuadrilateralKeyboardHelpContent extends TwoColumnKeyboardHelpContent {
 }
 
 quadrilateral.register( 'QuadrilateralKeyboardHelpContent', QuadrilateralKeyboardHelpContent );
-export default QuadrilateralKeyboardHelpContent;

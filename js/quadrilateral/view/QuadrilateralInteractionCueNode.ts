@@ -24,7 +24,7 @@ const PATH_OPTIONS = {
   lineWidth: 2
 };
 
-class QuadrilateralInteractionCueNode extends Path {
+export default class QuadrilateralInteractionCueNode extends Path {
   public constructor( quadrilateralShapeModel: QuadrilateralShapeModel, connectedToDeviceProperty: TReadOnlyProperty<boolean>, resetEmitter: Emitter, modelViewTransform: ModelViewTransform2 ) {
     const nodeShape = new Shape();
 
@@ -80,4 +80,3 @@ class QuadrilateralInteractionCueNode extends Path {
 }
 
 quadrilateral.register( 'QuadrilateralInteractionCueNode', QuadrilateralInteractionCueNode );
-export default QuadrilateralInteractionCueNode;

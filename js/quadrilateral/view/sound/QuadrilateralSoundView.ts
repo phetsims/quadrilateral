@@ -14,7 +14,7 @@ import LayersTracksSoundView from './LayersTracksSoundView.js';
 import TracksSoundView from './TracksSoundView.js';
 import EmphasisTracksSoundView from './EmphasisTracksSoundView.js';
 
-class QuadrilateralSoundView {
+export default class QuadrilateralSoundView {
 
   // The sound view that is currently "active" and playing sounds.
   public activeSoundView: null | TracksSoundView = null;
@@ -46,4 +46,3 @@ class QuadrilateralSoundView {
 }
 
 quadrilateral.register( 'QuadrilateralSoundView', QuadrilateralSoundView );
-export default QuadrilateralSoundView;

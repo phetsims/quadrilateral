@@ -51,7 +51,7 @@ type QuadrilateralShapeModelOptions = {
   tandem: Tandem;
 };
 
-class QuadrilateralShapeModel {
+export default class QuadrilateralShapeModel {
 
   // Vertices of the quadrilateral.
   public readonly vertexA: QuadrilateralVertex;
@@ -712,4 +712,3 @@ class QuadrilateralShapeModel {
 }
 
 quadrilateral.register( 'QuadrilateralShapeModel', QuadrilateralShapeModel );
-export default QuadrilateralShapeModel;

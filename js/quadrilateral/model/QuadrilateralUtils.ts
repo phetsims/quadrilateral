@@ -24,7 +24,7 @@ export type LineIntersectionPair = {
   intersectionPoint: Vector2;
 };
 
-class QuadrilateralUtils {
+export default class QuadrilateralUtils {
 
   /**
    * A workaround for https://github.com/phetsims/kite/issues/94. Shape.containsPoint implementation does not work
@@ -316,4 +316,3 @@ class QuadrilateralUtils {
 }
 
 quadrilateral.register( 'QuadrilateralUtils', QuadrilateralUtils );
-export default QuadrilateralUtils;

@@ -104,7 +104,7 @@ const ANGLE_RESPONSE_THRESHOLD = Math.PI / 12;
 // changed sufficiently to describe changes in angles over other information.
 const ANGLE_DIFFERENCES_LARGE_THRESHOLD = Math.PI / 24;
 
-class QuadrilateralAlerter extends Alerter {
+export default class QuadrilateralAlerter extends Alerter {
   private readonly model: QuadrilateralModel;
   private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
   private readonly modelViewTransform: ModelViewTransform2;
@@ -941,4 +941,3 @@ class QuadrilateralAlerter extends Alerter {
 }
 
 quadrilateral.register( 'QuadrilateralAlerter', QuadrilateralAlerter );
-export default QuadrilateralAlerter;

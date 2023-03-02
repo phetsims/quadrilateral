@@ -93,7 +93,7 @@ const SQUARE_MASK = ONE_PARALLEL_PAIR |
                     TWO_EQUAL_OPPOSITE_SIDE_PAIR |
                     ALL_EQUAL_SIDE;
 
-class QuadrilateralShapeDetector {
+export default class QuadrilateralShapeDetector {
   private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
 
   public constructor( quadrilateralShapeModel: QuadrilateralShapeModel ) {
@@ -220,4 +220,3 @@ class QuadrilateralShapeDetector {
 }
 
 quadrilateral.register( 'QuadrilateralShapeDetector', QuadrilateralShapeDetector );
-export default QuadrilateralShapeDetector;

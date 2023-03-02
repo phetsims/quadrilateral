@@ -18,7 +18,7 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 // in model coordinates, length of a side of the indicator from the edge of a line between two vertices
 const SIDE_LENGTH = 0.12;
 
-class RightAngleIndicatorNode extends Path {
+export default class RightAngleIndicatorNode extends Path {
   private readonly shapeModel: QuadrilateralShapeModel;
   private readonly modelViewTransform: ModelViewTransform2;
   private readonly cornerGuideVisibleProperty: TReadOnlyProperty<boolean>;
@@ -94,5 +94,3 @@ class RightAngleIndicatorNode extends Path {
 }
 
 quadrilateral.register( 'RightAngleIndicatorNode', RightAngleIndicatorNode );
-
-export default RightAngleIndicatorNode;

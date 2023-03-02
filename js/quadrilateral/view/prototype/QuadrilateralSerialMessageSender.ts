@@ -23,7 +23,7 @@ import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
 
-class QuadrilateralSerialMessageSender {
+export default class QuadrilateralSerialMessageSender {
   private readonly shapeModel: QuadrilateralShapeModel;
 
   public constructor( tangibleConnectionModel: TangibleConnectionModel ) {
@@ -63,4 +63,3 @@ class QuadrilateralSerialMessageSender {
 }
 
 quadrilateral.register( 'QuadrilateralSerialMessageSender', QuadrilateralSerialMessageSender );
-export default QuadrilateralSerialMessageSender;

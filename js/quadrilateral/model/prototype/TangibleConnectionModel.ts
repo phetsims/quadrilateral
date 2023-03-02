@@ -30,7 +30,7 @@ import QuadrilateralShapeModel, { VertexWithProposedPosition } from '../Quadrila
 import QuadrilateralTangibleOptionsModel from '../QuadrilateralTangibleOptionsModel.js';
 import MarkerDetectionModel from './MarkerDetectionModel.js';
 
-class TangibleConnectionModel {
+export default class TangibleConnectionModel {
 
   // True when we are connected to a device in some way, either bluetooth, serial, or OpenCV.
   // REVIEW: Some boolean attribute start with "is" but some do not
@@ -189,4 +189,3 @@ class TangibleConnectionModel {
 }
 
 quadrilateral.register( 'TangibleConnectionModel', TangibleConnectionModel );
-export default TangibleConnectionModel;

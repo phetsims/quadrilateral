@@ -20,7 +20,7 @@ import QuadrilateralVisibilityModel from '../model/QuadrilateralVisibilityModel.
 type SelfOptions = EmptySelfOptions;
 type QuadrilateralVisibilityControlsOptions = SelfOptions & StrictOmit<VBoxOptions, 'children'> & PickRequired<VBoxOptions, 'tandem'>;
 
-class QuadrilateralVisibilityControls extends VBox {
+export default class QuadrilateralVisibilityControls extends VBox {
   public constructor( visibilityModel: QuadrilateralVisibilityModel, providedOptions: QuadrilateralVisibilityControlsOptions ) {
 
     const options = optionize<QuadrilateralVisibilityControlsOptions, SelfOptions, VBoxOptions>()( {
@@ -116,4 +116,3 @@ class QuadrilateralVisibilityControls extends VBox {
 }
 
 quadrilateral.register( 'QuadrilateralVisibilityControls', QuadrilateralVisibilityControls );
-export default QuadrilateralVisibilityControls;

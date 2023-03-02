@@ -17,7 +17,7 @@ import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../../quadrilateral.js';
 
-class MarkerDetectionModel {
+export default class MarkerDetectionModel {
 
   // A Property that indicates that all markers are observed by the camera to control this simulation. Part of
   // a prototype for using OpenCV as an input method for the simulation
@@ -58,4 +58,3 @@ class MarkerDetectionModel {
 }
 
 quadrilateral.register( 'MarkerDetectionModel', MarkerDetectionModel );
-export default MarkerDetectionModel;

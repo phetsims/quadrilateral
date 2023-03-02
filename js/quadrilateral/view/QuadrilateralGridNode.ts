@@ -28,7 +28,7 @@ const MINOR_GRID_LINE_OPTIONS = {
 
 const BORDER_RECTANGLE_LINE_WIDTH = 2;
 
-class QuadrilateralGridNode extends Node {
+export default class QuadrilateralGridNode extends Node {
   public constructor( modelBounds: Bounds2, visibleProperty: TReadOnlyProperty<boolean>, modelViewTransform: ModelViewTransform2 ) {
     super();
 
@@ -106,4 +106,3 @@ class QuadrilateralGridNode extends Node {
 }
 
 quadrilateral.register( 'QuadrilateralGridNode', QuadrilateralGridNode );
-export default QuadrilateralGridNode;

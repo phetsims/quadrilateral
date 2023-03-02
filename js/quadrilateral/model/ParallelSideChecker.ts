@@ -18,7 +18,7 @@ import SidePair from './SidePair.js';
 import QuadrilateralSide from './QuadrilateralSide.js';
 import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
 
-class ParallelSideChecker {
+export default class ParallelSideChecker {
 
   // The tolerance interval used to compare angles in the calculation that determines if two opposite sides are
   // parallel. Without a bit of tolerance it would be extremely difficult to create parallel sides. This value
@@ -97,4 +97,3 @@ class ParallelSideChecker {
 }
 
 quadrilateral.register( 'ParallelSideChecker', ParallelSideChecker );
-export default ParallelSideChecker;

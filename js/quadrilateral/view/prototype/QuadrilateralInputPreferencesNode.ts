@@ -16,7 +16,7 @@ import { Text, VBox } from '../../../../../scenery/js/imports.js';
 import PreferencesDialog from '../../../../../joist/js/preferences/PreferencesDialog.js';
 import QuadrilateralTangibleOptionsModel from '../../model/QuadrilateralTangibleOptionsModel.js';
 
-class QuadrilateralInputPreferencesNode extends PreferencesPanelSection {
+export default class QuadrilateralInputPreferencesNode extends PreferencesPanelSection {
   private readonly disposeQuadrilateralInputPreferencesNode: () => void;
 
   public constructor( tangibleOptionsModel: QuadrilateralTangibleOptionsModel ) {
@@ -83,4 +83,3 @@ class TangiblePropertyNumberControl extends NumberControl {
 }
 
 quadrilateral.register( 'QuadrilateralInputPreferencesNode', QuadrilateralInputPreferencesNode );
-export default QuadrilateralInputPreferencesNode;

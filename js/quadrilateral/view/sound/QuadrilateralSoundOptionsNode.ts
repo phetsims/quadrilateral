@@ -27,7 +27,7 @@ const preferencesDialogPlaySoundsForeverString = QuadrilateralStrings.preference
 const tracksPlayForeverCheckedContextResponseString = QuadrilateralStrings.a11y.preferencesDialog.tracksPlayForeverCheckbox.checkedContextResponse;
 const tracksPlayForeverUncheckedContextResponseString = QuadrilateralStrings.a11y.preferencesDialog.tracksPlayForeverCheckbox.uncheckedContextResponse;
 
-class QuadrilateralSoundOptionsNode extends PreferencesPanelSection {
+export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSection {
 
   // Necessary for PhET-iO state and disposal since these components become dynamic when they live in a phetio capsule
   private readonly disposeQuadrilateralSoundOptionsNode: () => void;
@@ -105,4 +105,3 @@ class QuadrilateralSoundOptionsNode extends PreferencesPanelSection {
 }
 
 quadrilateral.register( 'QuadrilateralSoundOptionsNode', QuadrilateralSoundOptionsNode );
-export default QuadrilateralSoundOptionsNode;

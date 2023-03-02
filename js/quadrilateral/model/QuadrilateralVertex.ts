@@ -25,7 +25,7 @@ const VERTEX_BOUNDS = new Bounds2( 0, 0, 0.1, 0.1 );
 const HALF_WIDTH = VERTEX_BOUNDS.width / 2;
 const HALF_HEIGHT = VERTEX_BOUNDS.height / 2;
 
-class QuadrilateralVertex extends QuadrilateralMovable {
+export default class QuadrilateralVertex extends QuadrilateralMovable {
 
   // The position of the vertex in model coordinates.
   public readonly positionProperty: Property<Vector2>;
@@ -210,4 +210,3 @@ class QuadrilateralVertex extends QuadrilateralMovable {
 }
 
 quadrilateral.register( 'QuadrilateralVertex', QuadrilateralVertex );
-export default QuadrilateralVertex;

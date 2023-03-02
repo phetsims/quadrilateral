@@ -10,7 +10,7 @@
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralVertex from './QuadrilateralVertex.js';
 
-class VertexPair {
+export default class VertexPair {
   public readonly vertex1: QuadrilateralVertex;
   public readonly vertex2: QuadrilateralVertex;
 
@@ -36,4 +36,3 @@ class VertexPair {
 }
 
 quadrilateral.register( 'VertexPair', VertexPair );
-export default VertexPair;

@@ -11,7 +11,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 
-class QuadrilateralVisibilityModel {
+export default class QuadrilateralVisibilityModel {
 
   // Whether markers are visible in this sim - including ticks along the sides, interior, and exerior angle indicators.
   public readonly markersVisibleProperty: BooleanProperty;
@@ -67,4 +67,3 @@ class QuadrilateralVisibilityModel {
 }
 
 quadrilateral.register( 'QuadrilateralVisibilityModel', QuadrilateralVisibilityModel );
-export default QuadrilateralVisibilityModel;

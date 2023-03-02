@@ -32,7 +32,7 @@ const VALUE_WITH_DEGREES_PATTERN_STRING = '{{label}}: {{value}} ({{degrees}} deg
 const CONTENT_PADDING = 10;
 const VBOX_OPTIONS: VBoxOptions = { align: 'left' };
 
-class QuadrilateralDebuggingPanel extends Node {
+export default class QuadrilateralDebuggingPanel extends Node {
   public constructor( model: QuadrilateralModel, providedOptions?: NodeOptions ) {
 
     // Length readouts
@@ -218,4 +218,3 @@ class QuadrilateralDebuggingPanel extends Node {
 }
 
 quadrilateral.register( 'QuadrilateralDebuggingPanel', QuadrilateralDebuggingPanel );
-export default QuadrilateralDebuggingPanel;

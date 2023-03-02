@@ -17,7 +17,7 @@ import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 
-class ResetShapeButton extends TextPushButton {
+export default class ResetShapeButton extends TextPushButton {
   public constructor( quadrilateralShapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: TProperty<boolean>, shapeNameVisibleProperty: TReadOnlyProperty<boolean>, tandem: Tandem ) {
     super( QuadrilateralStrings.resetShape, {
 
@@ -48,4 +48,3 @@ class ResetShapeButton extends TextPushButton {
 }
 
 quadrilateral.register( 'ResetShapeButton', ResetShapeButton );
-export default ResetShapeButton;

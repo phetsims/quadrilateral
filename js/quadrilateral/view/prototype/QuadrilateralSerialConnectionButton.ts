@@ -16,7 +16,7 @@ import quadrilateral from '../../../quadrilateral.js';
 import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
 import QuadrilateralSerialMessageSender from './QuadrilateralSerialMessageSender.js';
 
-class QuadrilateralSerialConnectionButton extends TextPushButton {
+export default class QuadrilateralSerialConnectionButton extends TextPushButton {
   public constructor( tangibleConnectionModel: TangibleConnectionModel ) {
 
     const sender = new QuadrilateralSerialMessageSender( tangibleConnectionModel );
@@ -33,4 +33,3 @@ class QuadrilateralSerialConnectionButton extends TextPushButton {
 }
 
 quadrilateral.register( 'QuadrilateralSerialConnectionButton', QuadrilateralSerialConnectionButton );
-export default QuadrilateralSerialConnectionButton;

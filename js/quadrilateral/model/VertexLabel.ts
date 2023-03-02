@@ -10,7 +10,7 @@ import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import quadrilateral from '../../quadrilateral.js';
 
-class VertexLabel extends EnumerationValue {
+export default class VertexLabel extends EnumerationValue {
   public static readonly VERTEX_A = new VertexLabel();
   public static readonly VERTEX_B = new VertexLabel();
   public static readonly VERTEX_C = new VertexLabel();
@@ -20,4 +20,3 @@ class VertexLabel extends EnumerationValue {
 }
 
 quadrilateral.register( 'VertexLabel', VertexLabel );
-export default VertexLabel;

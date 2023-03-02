@@ -27,7 +27,7 @@ const LINE_NODE_OPTIONS = {
   stroke: QuadrilateralColors.diagonalGuidesStrokeColorProperty
 };
 
-class QuadrilateralDiagonalGuidesNode extends Node {
+export default class QuadrilateralDiagonalGuidesNode extends Node {
   public constructor(
     quadrilateralShapeModel: QuadrilateralShapeModel,
     bounds: Bounds2,
@@ -107,4 +107,3 @@ class QuadrilateralDiagonalGuidesNode extends Node {
 }
 
 quadrilateral.register( 'QuadrilateralDiagonalGuidesNode', QuadrilateralDiagonalGuidesNode );
-export default QuadrilateralDiagonalGuidesNode;

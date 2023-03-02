@@ -48,7 +48,7 @@ class PlayingState extends EnumerationValue {
   public static readonly enumeration = new Enumeration( PlayingState );
 }
 
-class TracksSoundView extends SoundGenerator {
+export default class TracksSoundView extends SoundGenerator {
 
   // Controls options for the sound design that may change from the Preferences dialog.
   private readonly soundOptionsModel: QuadrilateralSoundOptionsModel;
@@ -218,4 +218,3 @@ class TracksSoundView extends SoundGenerator {
 }
 
 quadrilateral.register( 'TracksSoundView', TracksSoundView );
-export default TracksSoundView;

@@ -40,7 +40,7 @@ type ParentOptions = VoicingOptions & NodeOptions;
 // QuadrilateralVertexNode sets these properties explicitly from the nameResponse option
 export type QuadrilateralMovableNodeOptions = SelfOptions & StrictOmit<ParentOptions, 'voicingNameResponse' | 'innerContent'> & PickRequired<NodeOptions, 'tandem'>;
 
-class QuadrilateralMovableNode extends Voicing( Node ) {
+export default class QuadrilateralMovableNode extends Voicing( Node ) {
   private readonly model: QuadrilateralMovable;
 
   // Deltas used by movables for keyboard input - amount of motion per key press in view coordinates.
@@ -134,4 +134,3 @@ class QuadrilateralMovableNode extends Voicing( Node ) {
 }
 
 quadrilateral.register( 'QuadrilateralMovableNode', QuadrilateralMovableNode );
-export default QuadrilateralMovableNode;

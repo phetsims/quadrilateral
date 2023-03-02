@@ -45,7 +45,7 @@ type SelfOptions = EmptySelfOptions;
 type ParentOptions = NodeOptions & VoicingOptions;
 type QuadrilateralNodeOptions = SelfOptions & StrictOmit<ParentOptions, 'interactiveHighlight'> & PickRequired<ParentOptions, 'tandem'>;
 
-class QuadrilateralNode extends Voicing( Node ) {
+export default class QuadrilateralNode extends Voicing( Node ) {
   private readonly model: QuadrilateralModel;
   private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
   private readonly scratchShapeModel: QuadrilateralShapeModel;
@@ -280,4 +280,3 @@ class QuadrilateralNode extends Voicing( Node ) {
 }
 
 quadrilateral.register( 'QuadrilateralNode', QuadrilateralNode );
-export default QuadrilateralNode;

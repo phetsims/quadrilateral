@@ -85,7 +85,7 @@ ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 1.6, 1.8 ), muchWiderThanString
 ANGLE_COMPARISON_DESCRIPTION_MAP.set( ABOUT_TWICE_RANGE, aboutTwiceAsWideAsString );
 ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 2.2, Number.POSITIVE_INFINITY ), farWiderThanString );
 
-class VertexDescriber {
+export default class VertexDescriber {
 
   // A reference to the model components that drive description.
   private readonly vertex: QuadrilateralVertex;
@@ -339,4 +339,3 @@ class VertexDescriber {
 }
 
 quadrilateral.register( 'VertexDescriber', VertexDescriber );
-export default VertexDescriber;

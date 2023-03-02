@@ -23,7 +23,7 @@ const calibrationHintText = 'Extend your connected device to the maximum limits 
 // We are going to draw circles representing the vertex positions in the dialog, this is their shared radius.
 const VERTEX_VIEW_RADIUS = 5;
 
-class CalibrationContentNode extends VBox {
+export default class CalibrationContentNode extends VBox {
   public constructor( tangibleConnectionModel: TangibleConnectionModel, providedOptions?: VBoxOptions ) {
 
     const options = optionize<VBoxOptions, EmptySelfOptions>()( {
@@ -86,4 +86,3 @@ class CalibrationContentNode extends VBox {
 }
 
 quadrilateral.register( 'CalibrationContentNode', CalibrationContentNode );
-export default CalibrationContentNode;

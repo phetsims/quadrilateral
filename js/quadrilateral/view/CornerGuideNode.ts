@@ -39,7 +39,7 @@ const OUTER_RADIUS = QuadrilateralVertex.VERTEX_WIDTH / 2 + WEDGE_RADIAL_LENGTH;
 
 const EXTERNAL_ANGLE_GUIDE_LENGTH = WEDGE_RADIAL_LENGTH * 8;
 
-class CornerGuideNode extends Node {
+export default class CornerGuideNode extends Node {
   public static readonly WEDGE_SIZE_RADIANS = WEDGE_SIZE_RADIANS;
 
   /**
@@ -175,4 +175,3 @@ class CornerGuideNode extends Node {
 }
 
 quadrilateral.register( 'CornerGuideNode', CornerGuideNode );
-export default CornerGuideNode;
