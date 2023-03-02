@@ -56,7 +56,18 @@ export default class QuadrilateralVertex extends QuadrilateralMovable {
   public readonly rightConstrainedProperty = new BooleanProperty( false );
   public readonly topConstrainedProperty = new BooleanProperty( false );
   public readonly bottomConstrainedProperty = new BooleanProperty( false );
-  public readonly numberOfConstrainingEdgesProperty: TReadOnlyProperty<number>;
+  public readonly numberOfConstrainingEdgesProperty = new DerivedProperty( [
+    this.topConstrainedProperty,
+    this.rightConstrainedProperty,
+    this.bottomConstrainedProperty,
+    this.leftConstrainedProperty
+  ], ( topConstrained, rightConstrained, bottomConstrained, leftConstrained ) => {
+    const topVal = topConstrained ? 1 : 0;
+    const rightVal = rightConstrained ? 1 : 0;
+    const bottomVal = bottomConstrained ? 1 : 0;
+    const leftVal = leftConstrained ? 1 : 0;
+    return topVal + rightVal + bottomVal + leftVal;
+  } );
 
   // A reference to vertices connected to this vertex for so we can calculate the angle at this vertex.
   // The orientation of vertex1 and vertex2 for angle calculations are as shown in the following diagram:
@@ -108,19 +119,6 @@ export default class QuadrilateralVertex extends QuadrilateralMovable {
 
     this.modelBoundsProperty = new DerivedProperty( [ this.positionProperty ], position => {
       return new Bounds2( position.x - HALF_WIDTH, position.y - HALF_HEIGHT, position.x + HALF_WIDTH, position.y + HALF_HEIGHT );
-    } );
-
-    this.numberOfConstrainingEdgesProperty = new DerivedProperty( [
-      this.topConstrainedProperty,
-      this.rightConstrainedProperty,
-      this.bottomConstrainedProperty,
-      this.leftConstrainedProperty
-    ], ( topConstrained, rightConstrained, bottomConstrained, leftConstrained ) => {
-      const topVal = topConstrained ? 1 : 0;
-      const rightVal = rightConstrained ? 1 : 0;
-      const bottomVal = bottomConstrained ? 1 : 0;
-      const leftVal = leftConstrained ? 1 : 0;
-      return topVal + rightVal + bottomVal + leftVal;
     } );
 
     this.tandem = tandem;
