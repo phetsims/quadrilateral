@@ -15,7 +15,6 @@ import QuadrilateralQueryParameters from './quadrilateral/QuadrilateralQueryPara
 import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';
 import QuadrilateralStrings from './QuadrilateralStrings.js';
 import QuadrilateralOptionsModel from './quadrilateral/model/QuadrilateralOptionsModel.js';
-import MappedProperty from '../../axon/js/MappedProperty.js';
 import QuadrilateralInputPreferencesNode from './quadrilateral/view/prototype/QuadrilateralInputPreferencesNode.js';
 import QuadrilateralSoundOptionsNode from './quadrilateral/view/sound/QuadrilateralSoundOptionsNode.js';
 
@@ -54,6 +53,9 @@ const simOptions: SimOptions = {
     audioOptions: {
       customPreferences: [
         {
+
+          // Due to the layout considerations in the Preferences Dialog, it has 2 columns. Our entry for the left column
+          // is blank
           createContent: () => new Node()
         },
         {
@@ -68,12 +70,6 @@ const simOptions: SimOptions = {
 // until the images are fully loaded, see https://github.com/phetsims/coulombs-law/issues/70
 simLauncher.launch( () => {
   const quadrilateralScreen = new QuadrilateralScreen( optionsModel, {
-
-    // You cannot pass the same Property instance as a single as the sim and screen name.
-    name: new MappedProperty<string, string>( quadrilateralTitleStringProperty, {
-      bidirectional: true,
-      map: _.identity, inverseMap: _.identity
-    } ),
     tandem: Tandem.ROOT.createTandem( 'quadrilateralScreen' )
   } );
 

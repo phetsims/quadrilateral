@@ -72,7 +72,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     type: 'flag'
   },
 
-  // If provided, the simulation will act as a
+  // For debugging, shows a panel with the model values
   showModelValues: {
     type: 'flag'
   },
