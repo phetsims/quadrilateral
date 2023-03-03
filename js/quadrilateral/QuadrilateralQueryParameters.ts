@@ -9,6 +9,7 @@
 import quadrilateral from '../quadrilateral.js';
 import { SoundDesign } from './model/QuadrilateralSoundOptionsModel.js';
 
+// REVIEW: Which of these should be marked as public?
 const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
 
   // The tolerance interval for the angle calculations which determine when sides opposite sides are parallel.
@@ -118,8 +119,6 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // QuadrilateralSoundOptionsModel.SoundDesign as a string. See https://github.com/phetsims/quadrilateral/blob/master/js/quadrilateral/model/QuadrilateralSoundOptionsModel.ts#L37-L53
   soundDesign: {
     type: 'string',
-
-    // REVIEW: This value doesn't seem to be cased like other query parameter values
     defaultValue: 'TRACKS_LAYER',
     validValues: SoundDesign.enumeration.keys
   },

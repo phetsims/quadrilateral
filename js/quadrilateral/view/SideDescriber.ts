@@ -93,7 +93,7 @@ export default class SideDescriber {
    */
   public getSideObjectResponse(): string {
     let response = '';
-    const oppositeSide = this.quadrilateralShapeModel.oppositeSideMap.get( this.side )![ 0 ];
+    const oppositeSide = this.quadrilateralShapeModel.oppositeSideMap.get( this.side )!;
 
     const parallelSidePairs = this.quadrilateralShapeModel.parallelSidePairsProperty.value;
     const thisSideIsParallel = _.some( parallelSidePairs, sidePair => sidePair.side1 === this.side || sidePair.side2 === this.side );

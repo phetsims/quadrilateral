@@ -113,13 +113,13 @@ export default class QuadrilateralShapeModel {
   public readonly adjacentVertexMap: Map<QuadrilateralVertex, QuadrilateralVertex[]>;
 
   // A map that provides the opposite vertex from a give vertex.
-  public readonly oppositeVertexMap: Map<QuadrilateralVertex, QuadrilateralVertex[]>;
+  public readonly oppositeVertexMap: Map<QuadrilateralVertex, QuadrilateralVertex>;
 
   // A map that provides the adjacent sides to the provided QuadrilateralSide.
   public readonly adjacentSideMap: Map<QuadrilateralSide, QuadrilateralSide[]>;
 
   // A map that provides the opposite side from the provided QuadrilateralSide.
-  public readonly oppositeSideMap: Map<QuadrilateralSide, QuadrilateralSide[]>;
+  public readonly oppositeSideMap: Map<QuadrilateralSide, QuadrilateralSide>;
 
   // An array of all the adjacent VertexPairs that currently have equal angles.
   public readonly adjacentEqualVertexPairsProperty: Property<VertexPair[]>;
@@ -162,12 +162,10 @@ export default class QuadrilateralShapeModel {
     this.vertices = [ this.vertexA, this.vertexB, this.vertexC, this.vertexD ];
 
     this.oppositeVertexMap = new Map( [
-
-      // REVIEW: Should the values be arrays?  It looks like they are always accessed with [0].
-      [ this.vertexA, [ this.vertexC ] ],
-      [ this.vertexB, [ this.vertexD ] ],
-      [ this.vertexC, [ this.vertexA ] ],
-      [ this.vertexD, [ this.vertexB ] ]
+      [ this.vertexA, this.vertexC ],
+      [ this.vertexB, this.vertexD ],
+      [ this.vertexC, this.vertexA ],
+      [ this.vertexD, this.vertexB ]
     ] );
 
     this.adjacentVertexMap = new Map( [
@@ -184,10 +182,10 @@ export default class QuadrilateralShapeModel {
     this.sides = [ this.sideAB, this.sideBC, this.sideCD, this.sideDA ];
 
     this.oppositeSideMap = new Map( [
-      [ this.sideAB, [ this.sideCD ] ],
-      [ this.sideBC, [ this.sideDA ] ],
-      [ this.sideCD, [ this.sideAB ] ],
-      [ this.sideDA, [ this.sideBC ] ]
+      [ this.sideAB, this.sideCD ],
+      [ this.sideBC, this.sideDA ],
+      [ this.sideCD, this.sideAB ],
+      [ this.sideDA, this.sideBC ]
     ] );
 
     this.adjacentSideMap = new Map( [
@@ -512,10 +510,12 @@ export default class QuadrilateralShapeModel {
   /**
    * Update a provided Property that holds a list of equal angles (either opposite or adjacent).
    */
-  private updateEqualVertexPairs( equalVertexPairsProperty: Property<VertexPair[]>, vertexMap: Map<QuadrilateralVertex, QuadrilateralVertex[]> ): void {
+  private updateEqualVertexPairs( equalVertexPairsProperty: Property<VertexPair[]>, vertexMap: Map<QuadrilateralVertex, QuadrilateralVertex[] | QuadrilateralVertex> ): void {
     const currentVertexPairs = equalVertexPairsProperty.value;
     vertexMap.forEach( ( relatedVertices, keyVertex, map ) => {
-      relatedVertices.forEach( relatedVertex => {
+
+      const relatedVerticesArray = Array.isArray( relatedVertices ) ? relatedVertices : [ relatedVertices ];
+      relatedVerticesArray.forEach( relatedVertex => {
         const vertexPair = new VertexPair( keyVertex, relatedVertex );
 
         const firstAngle = vertexPair.vertex1.angleProperty.value!;
@@ -551,11 +551,13 @@ export default class QuadrilateralShapeModel {
   /**
    * Update a provided Property holding a list of sides that are equal in length (either opposite or adjacent).
    */
-  private updateEqualSidePairs( equalSidePairsProperty: Property<SidePair[]>, sideMap: Map<QuadrilateralSide, QuadrilateralSide[]> ): void {
+  private updateEqualSidePairs( equalSidePairsProperty: Property<SidePair[]>, sideMap: Map<QuadrilateralSide, QuadrilateralSide[] | QuadrilateralSide> ): void {
     const currentSidePairs = equalSidePairsProperty.value;
 
     sideMap.forEach( ( relatedSides, keySide ) => {
-      relatedSides.forEach( relatedSide => {
+
+      const relatedSidesArray = Array.isArray( relatedSides ) ? relatedSides : [ relatedSides ];
+      relatedSidesArray.forEach( relatedSide => {
         const sidePair = new SidePair( keySide, relatedSide );
 
         const firstLength = sidePair.side1.lengthProperty.value;
