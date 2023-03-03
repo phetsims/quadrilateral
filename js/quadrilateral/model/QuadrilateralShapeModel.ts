@@ -165,6 +165,8 @@ export default class QuadrilateralShapeModel {
     this.vertices = [ this.vertexA, this.vertexB, this.vertexC, this.vertexD ];
 
     this.oppositeVertexMap = new Map( [
+
+      // REVIEW: Should the values be arrays?  It looks like they are always accessed with [0].
       [ this.vertexA, [ this.vertexC ] ],
       [ this.vertexB, [ this.vertexD ] ],
       [ this.vertexC, [ this.vertexA ] ],
@@ -590,6 +592,8 @@ export default class QuadrilateralShapeModel {
   private updateParallelSideProperties(): void {
     const sideABSideCDParallel = this.sideABSideCDParallelSideChecker.areSidesParallel();
     const sideBCSideDAParallel = this.sideBCSideDAParallelSideChecker.areSidesParallel();
+
+    // REVIEW: Can/should this use QuadrilateralShapeDetector? It already computes if we are a parallelogram
     this.isParallelogramProperty.set( sideABSideCDParallel && sideBCSideDAParallel );
 
     const previousParallelSidePairs = this.parallelSidePairsProperty.value;
