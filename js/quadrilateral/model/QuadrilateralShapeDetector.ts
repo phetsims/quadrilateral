@@ -97,7 +97,6 @@ const matches = ( shapeModel: QuadrilateralShapeModel, requirements: Array<( sha
 
 export default class QuadrilateralShapeDetector {
 
-  // REVIEW: Add some unit tests to make sure this method and the masks are working as expected
   /**
    * Compute the name of the quadrilateral. Note this must be called AFTER all order dependent Properties are updated
    * because it relies on vertex positions to be stable and all shape attributes to be calculated. See
