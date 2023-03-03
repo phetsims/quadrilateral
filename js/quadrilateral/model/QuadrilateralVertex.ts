@@ -20,8 +20,9 @@ import VertexLabel from './VertexLabel.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import QuadrilateralMovable from './QuadrilateralMovable.js';
+import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 
-const VERTEX_BOUNDS = new Bounds2( 0, 0, 0.1, 0.1 );
+const VERTEX_BOUNDS = new Bounds2( 0, 0, QuadrilateralConstants.VERTEX_WIDTH, QuadrilateralConstants.VERTEX_WIDTH );
 const HALF_WIDTH = VERTEX_BOUNDS.width / 2;
 const HALF_HEIGHT = VERTEX_BOUNDS.height / 2;
 
@@ -85,9 +86,6 @@ export default class QuadrilateralVertex extends QuadrilateralMovable {
 
   // The collection of n <= SMOOTHING_LENGTH number of positions for prototype tangible control. See smoothPosition().
   private readonly smoothingPositions: Vector2[] = [];
-
-  // in model coordinates, the width of the QuadrilateralVertex
-  public static readonly VERTEX_WIDTH = VERTEX_BOUNDS.width;
 
   /**
    * @param initialPosition - The initial position for the QuadrilateralVertex in model coordinates.

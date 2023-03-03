@@ -10,6 +10,7 @@ import PhetFont from '../../scenery-phet/js/PhetFont.js';
 import quadrilateral from './quadrilateral.js';
 
 const SCREEN_TEXT_FONT = new PhetFont( { size: 18 } );
+const VERTEX_WIDTH = 0.1;
 
 const QuadrilateralConstants = {
 
@@ -17,19 +18,19 @@ const QuadrilateralConstants = {
   // MODEL CONSTANTS
   //----------------------------------------------------------------------------------------------------------
 
-  // Amount of spacing in model coordinates between grid lines in the visual grid.
+  // Width of a square vertex in model coordinates.
+  VERTEX_WIDTH: VERTEX_WIDTH,
+
+  // Amount of spacing in model coordinates between major grid lines in the visual grid.
   GRID_SPACING: 0.25,
 
-  // Dimensions of model bounds.
-  // REVIEW: Explain why it is 3.1.  What is the 0.1 overlap exactly?  Or recompute the dimensions based on
-  // total number of gridlines, etc.
-  BOUNDS_WIDTH: 3.1,
-  BOUNDS_HEIGHT: 2.1,
+  // Dimensions of model bounds - base size extended by VERTEX_WIDTH so that the edge of a Vertex can get flush
+  // against the model bounds as the vertex center snaps to grid lines.
+  BOUNDS_WIDTH: 3 + VERTEX_WIDTH,
+  BOUNDS_HEIGHT: 2 + VERTEX_WIDTH,
 
-  // The "major" vertex interval when using ?reducedStepSize query parameter. Value is in model coordinates.
+  // ONLY FOR ?reducedStepSize.
   MAJOR_REDUCED_SIZE_VERTEX_INTERVAL: 0.0625,
-
-  // The "minor" vertex interval when the using ?reducedStepSize query parameter. Value is in model coordinates.
   MINOR_REDUCED_SIZE_VERTEX_INTERVAL: 0.015625,
 
   //----------------------------------------------------------------------------------------------------------

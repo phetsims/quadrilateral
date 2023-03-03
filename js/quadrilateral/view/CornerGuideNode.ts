@@ -24,6 +24,7 @@ import QuadrilateralColors from '../../QuadrilateralColors.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import Multilink from '../../../../axon/js/Multilink.js';
+import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 
 // constants
 // The size of each wedge of the angle guide, in radians
@@ -34,8 +35,8 @@ const WEDGE_SIZE_RADIANS = Utils.toRadians( WEDGE_SIZE_DEGREES );
 const WEDGE_RADIAL_LENGTH = 0.05;
 
 // The radii of the annulus
-const INNER_RADIUS = QuadrilateralVertex.VERTEX_WIDTH / 2;
-const OUTER_RADIUS = QuadrilateralVertex.VERTEX_WIDTH / 2 + WEDGE_RADIAL_LENGTH;
+const INNER_RADIUS = QuadrilateralConstants.VERTEX_WIDTH / 2;
+const OUTER_RADIUS = QuadrilateralConstants.VERTEX_WIDTH / 2 + WEDGE_RADIAL_LENGTH;
 
 const EXTERNAL_ANGLE_GUIDE_LENGTH = WEDGE_RADIAL_LENGTH * 8;
 

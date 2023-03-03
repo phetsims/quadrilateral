@@ -54,7 +54,7 @@ export default class QuadrilateralModel implements TModel {
 
   // The available bounds for smooth vertex dragging (the model bounds eroded by the width of a vertex so a vertex
   // can never go out of the model bounds.
-  public readonly vertexDragBounds = this.modelBounds.eroded( QuadrilateralVertex.VERTEX_WIDTH / 2 );
+  public readonly vertexDragBounds = this.modelBounds.eroded( QuadrilateralConstants.VERTEX_WIDTH / 2 );
 
   // The interval that Vertices are constrained to during interaction. There are many things that control the value:
   //  - A button in the UI to lock to small intervals (see useMinorIntervalsProperty and lockToMinorIntervalsProperty)
