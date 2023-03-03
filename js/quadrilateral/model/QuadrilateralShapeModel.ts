@@ -58,14 +58,14 @@ export default class QuadrilateralShapeModel {
   public readonly vertexB: QuadrilateralVertex;
   public readonly vertexC: QuadrilateralVertex;
   public readonly vertexD: QuadrilateralVertex;
-  public readonly vertices: QuadrilateralVertex[];
+  public readonly vertices: readonly QuadrilateralVertex[];
 
   // Sides of the quadrilateral.
   public readonly sideAB: QuadrilateralSide;
   public readonly sideBC: QuadrilateralSide;
   public readonly sideCD: QuadrilateralSide;
   public readonly sideDA: QuadrilateralSide;
-  public readonly sides: QuadrilateralSide[];
+  public readonly sides: readonly QuadrilateralSide[];
 
   // Available space for the Vertices to move.
   private readonly modelBounds: Bounds2;
@@ -73,7 +73,7 @@ export default class QuadrilateralShapeModel {
   // Monitors angles of the shape to determine when pairs of opposite sides are parallel.
   public readonly sideABSideCDParallelSideChecker: ParallelSideChecker;
   public readonly sideBCSideDAParallelSideChecker: ParallelSideChecker;
-  public readonly parallelSideCheckers: ParallelSideChecker[];
+  public readonly parallelSideCheckers: readonly ParallelSideChecker[];
 
   // Whether the quadrilateral is a parallelogram. This Property is true when both ParallelSideCheckers report
   // parallel sides.

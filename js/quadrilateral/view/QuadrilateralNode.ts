@@ -51,8 +51,8 @@ export default class QuadrilateralNode extends Voicing( Node ) {
   private readonly scratchShapeModel: QuadrilateralShapeModel;
   private readonly modelViewTransform: ModelViewTransform2;
 
-  private readonly vertexNodes: QuadrilateralVertexNode[];
-  private readonly sideNodes: QuadrilateralSideNode[];
+  private readonly vertexNodes: readonly QuadrilateralVertexNode[];
+  private readonly sideNodes: readonly QuadrilateralSideNode[];
 
   private remainingTimeForShapeChangeFill: number;
   private activeFill: TPaint | null;

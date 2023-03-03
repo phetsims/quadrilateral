@@ -55,7 +55,7 @@ export default class TracksSoundView extends SoundGenerator {
 
   // Array of all SoundGenerators from the provided tracks. They will play and loop forever in the background. Depending
   // on input and state of the quadrilateral shape, their output level will change.
-  public readonly soundClips: SoundClip[];
+  public readonly soundClips: readonly SoundClip[];
 
   // A map that goes from the index of the sound file to play to its desired output leve. Subclasses will populate this.
   public readonly indexToOutputLevelMap = new Map<number, number>();

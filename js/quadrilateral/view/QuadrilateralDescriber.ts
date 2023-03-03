@@ -141,7 +141,7 @@ export default class QuadrilateralDescriber {
   public readonly sideBCDescriber: SideDescriber;
   public readonly sideCDDescriber: SideDescriber;
   public readonly sideDADescriber: SideDescriber;
-  private readonly sideDescribers: SideDescriber[];
+  private readonly sideDescribers: readonly SideDescriber[];
 
   public readonly vertexADescriber: VertexDescriber;
   public readonly vertexBDescriber: VertexDescriber;
