@@ -84,54 +84,46 @@ const SQUARE = [
   ALL_EQUAL_ANGLE
 ];
 
+/**
+ * Returns true when the condition state matches the conditions. If the condition has at least those
+ * requirements (or more) it will still be considered a match for that shape.
+ *
+ * @param shapeModel
+ * @param requirements - requirements for a particular shape
+ */
+const matches = ( shapeModel: QuadrilateralShapeModel, requirements: Array<( shapeModel: QuadrilateralShapeModel ) => boolean> ): boolean => {
+  return requirements.every( requirement => requirement( shapeModel ) );
+};
+
 export default class QuadrilateralShapeDetector {
-  private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
 
-  public constructor( quadrilateralShapeModel: QuadrilateralShapeModel ) {
-    this.quadrilateralShapeModel = quadrilateralShapeModel;
-  }
-
-  // REVIEW: This method should be made static, and pass in the QuadrilateralShapeModel as an argument
   // REVIEW: Add some unit tests to make sure this method and the masks are working as expected
   /**
    * Compute the name of the quadrilateral. Note this must be called AFTER all order dependent Properties are updated
    * because it relies on vertex positions to be stable and all shape attributes to be calculated. See
    * QuadrilateralShapeModel.updateOrderDependentProperties for more information.
    */
-  public getShapeName(): NamedQuadrilateral {
-
-    const shapeModel = this.quadrilateralShapeModel;
+  public static getShapeName( shapeModel: QuadrilateralShapeModel ): NamedQuadrilateral {
 
     // First look for a triangle - it is unique in that if we have a triangle there are no more shapes "under"
     // it that share attributes - so we can return this right away.
-    if ( this.matches( shapeModel, TRIANGLE ) ) {
+    if ( matches( shapeModel, TRIANGLE ) ) {
       return NamedQuadrilateral.TRIANGLE;
     }
-    else if ( this.matches( shapeModel, CONCAVE ) ) {
-      return this.matches( shapeModel, DART ) ? NamedQuadrilateral.DART :
+    else if ( matches( shapeModel, CONCAVE ) ) {
+      return matches( shapeModel, DART ) ? NamedQuadrilateral.DART :
              NamedQuadrilateral.CONCAVE_QUADRILATERAL;
     }
     else {
-      return this.matches( shapeModel, SQUARE ) ? NamedQuadrilateral.SQUARE :
-             this.matches( shapeModel, RHOMBUS ) ? NamedQuadrilateral.RHOMBUS :
-             this.matches( shapeModel, RECTANGLE ) ? NamedQuadrilateral.RECTANGLE :
-             this.matches( shapeModel, PARALLELOGRAM ) ? NamedQuadrilateral.PARALLELOGRAM :
-             this.matches( shapeModel, KITE ) ? NamedQuadrilateral.KITE :
-             this.matches( shapeModel, ISOSCELES_TRAPEZOID ) ? NamedQuadrilateral.ISOSCELES_TRAPEZOID :
-             this.matches( shapeModel, TRAPEZOID ) ? NamedQuadrilateral.TRAPEZOID :
+      return matches( shapeModel, SQUARE ) ? NamedQuadrilateral.SQUARE :
+             matches( shapeModel, RHOMBUS ) ? NamedQuadrilateral.RHOMBUS :
+             matches( shapeModel, RECTANGLE ) ? NamedQuadrilateral.RECTANGLE :
+             matches( shapeModel, PARALLELOGRAM ) ? NamedQuadrilateral.PARALLELOGRAM :
+             matches( shapeModel, KITE ) ? NamedQuadrilateral.KITE :
+             matches( shapeModel, ISOSCELES_TRAPEZOID ) ? NamedQuadrilateral.ISOSCELES_TRAPEZOID :
+             matches( shapeModel, TRAPEZOID ) ? NamedQuadrilateral.TRAPEZOID :
              NamedQuadrilateral.CONVEX_QUADRILATERAL;
     }
-  }
-
-  /**
-   * Returns true when the condition state matches the conditions. If the condition has at least those
-   * requirements (or more) it will still be considered a match for that shape.
-   *
-   * @param shapeModel
-   * @param requirements - requirements for a particular shape
-   */
-  private matches( shapeModel: QuadrilateralShapeModel, requirements: Array<( shapeModel: QuadrilateralShapeModel ) => boolean> ): boolean {
-    return requirements.every( requirement => requirement( shapeModel ) );
   }
 }
 

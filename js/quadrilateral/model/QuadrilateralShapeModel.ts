@@ -83,9 +83,6 @@ export default class QuadrilateralShapeModel {
   // determined.
   public readonly areaProperty: TProperty<number>;
 
-  // Uses shape Properties to detect the shape name.
-  private readonly shapeDetector: QuadrilateralShapeDetector;
-
   // The tolerance intervals for angle and length comparisons when comparing two angle/lengths with one another.
   // These values are generally larger than "static" angle tolerance intervals to account for compounding error
   // when comparing angles. For example, we want a bit more flexibility when comparing angles of a trapezoid or else
@@ -259,8 +256,6 @@ export default class QuadrilateralShapeModel {
 
     this.modelBounds = modelBounds;
     this.resetNotInProgressProperty = resetNotInProgressProperty;
-
-    this.shapeDetector = new QuadrilateralShapeDetector( this );
 
     this.propertiesDeferred = false;
 
@@ -503,7 +498,7 @@ export default class QuadrilateralShapeModel {
     this.allLengthsEqualProperty.set( this.getAreAllLengthsEqual() );
 
     // the detected shape name
-    this.shapeNameProperty.set( this.shapeDetector.getShapeName() );
+    this.shapeNameProperty.set( QuadrilateralShapeDetector.getShapeName( this ) );
   }
 
   /**
