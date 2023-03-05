@@ -136,6 +136,8 @@ export default class SideDescriber {
    * "2 and three-quarter units".
    */
   public getSideUnitsDescription(): string {
+
+    // REVIEW: The "multiple returns" idea will help so much here
     let sideDescription: string | null = null;
 
     const shapeModel = this.quadrilateralShapeModel;

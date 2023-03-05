@@ -18,6 +18,7 @@ import Ray2 from '../../../../dot/js/Ray2.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
 
+// REVIEW: Should this be a class with static functions? Then they can be marked public/private and we can export default class
 const QuadrilateralIconFactory = {
 
   /**

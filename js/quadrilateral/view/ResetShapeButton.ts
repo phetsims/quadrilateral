@@ -18,7 +18,11 @@ import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 
 export default class ResetShapeButton extends TextPushButton {
-  public constructor( quadrilateralShapeModel: QuadrilateralShapeModel, resetNotInProgressProperty: TProperty<boolean>, shapeNameVisibleProperty: TReadOnlyProperty<boolean>, tandem: Tandem ) {
+  public constructor( quadrilateralShapeModel: QuadrilateralShapeModel,
+                      // REVIEW: Unused parameter
+                      resetNotInProgressProperty: TProperty<boolean>,
+                      // REVIEW: Unused parameter
+                      shapeNameVisibleProperty: TReadOnlyProperty<boolean>, tandem: Tandem ) {
     super( QuadrilateralStrings.resetShape, {
 
       font: QuadrilateralConstants.SCREEN_TEXT_OPTIONS.font,

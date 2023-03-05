@@ -49,6 +49,8 @@ export default class QuadrilateralDiagonalGuidesNode extends Node {
     Multilink.multilink(
       [ quadrilateralShapeModel.vertexA.positionProperty, quadrilateralShapeModel.vertexC.positionProperty ],
       ( vertexAPosition, vertexCPosition ) => {
+
+        // REVIEW: is this assertion necessary? TypeScript says vertexAPosition && vertexCPosition are both Vector2
         assert && assert( vertexAPosition && vertexCPosition, 'positions need to be defined for diagonal guides' );
         QuadrilateralDiagonalGuidesNode.drawDiagonal( vertexAPosition, vertexCPosition, bounds, modelViewTransform, lineNode1 );
       }
@@ -57,6 +59,8 @@ export default class QuadrilateralDiagonalGuidesNode extends Node {
     Multilink.multilink(
       [ quadrilateralShapeModel.vertexB.positionProperty, quadrilateralShapeModel.vertexD.positionProperty ],
       ( vertexBPosition, vertexDPosition ) => {
+
+        // REVIEW: is this assertion necessary? TypeScript says vertexAPosition && vertexCPosition are both Vector2
         assert && assert( vertexBPosition && vertexDPosition, 'positions need to be defined for diagonal guides' );
         QuadrilateralDiagonalGuidesNode.drawDiagonal( vertexBPosition, vertexDPosition, bounds, modelViewTransform, lineNode2 );
       }

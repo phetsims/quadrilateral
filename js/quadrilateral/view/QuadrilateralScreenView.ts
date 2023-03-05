@@ -100,6 +100,11 @@ export default class QuadrilateralScreenView extends ScreenView {
     this.quadrilateralNode = new QuadrilateralNode( model, this.modelViewTransform, this.layoutBounds, this.quadrilateralDescriber, {
       tandem: tandem.createTandem( 'quadrilateralNode' )
     } );
+
+    // REVIEW: In this case and others like it, we are plucking several attributes from the model, (potentially) renaming them
+    // and passing them through. This makes it difficult to trace back to the source.
+    // An alternative is to pass the entire model through, and use TypeScript to narrow what is accessible
+    // Note the visibilityModel is also part of the model.
     const diagonalGuidesNode = new QuadrilateralDiagonalGuidesNode( model.quadrilateralShapeModel, model.modelBounds, visibilityModel.diagonalGuidesVisibleProperty, this.modelViewTransform );
     const interactionCueNode = new QuadrilateralInteractionCueNode(
       model.quadrilateralShapeModel,
@@ -191,6 +196,7 @@ export default class QuadrilateralScreenView extends ScreenView {
   /**
    * Get the content that is spoken from the Voicing toolbar to describe this ScreenView.
    */
+  // REVIEW: Why are these provided as overrides instead of ()=>SpeakableResolvedResponse in the constructor?
   public override getVoicingOverviewContent(): string {
     return QuadrilateralStrings.a11y.voicing.overviewContent;
   }

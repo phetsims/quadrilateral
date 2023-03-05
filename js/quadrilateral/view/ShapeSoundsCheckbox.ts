@@ -33,6 +33,8 @@ export default class ShapeSoundsCheckbox extends Checkbox {
     } );
 
     // To avoid confusion since the checkbox will do nothing when sound or all audio is disabled
+    // REVIEW: Pass to super as enabledProperty.
+    // REVIEW: I've seen this a couple of times, check if there are more like it
     audioManager.audioAndSoundEnabledProperty.link( enabled => {
       this.enabled = enabled;
     } );

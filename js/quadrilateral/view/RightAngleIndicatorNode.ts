@@ -61,7 +61,7 @@ export default class RightAngleIndicatorNode extends Path {
 
     this.visible = this.shapeModel.isRightAngle( angle ) && this.cornerGuideVisibleProperty.value;
 
-    // if we have become visible, we need to redraw the shape
+    // if visible, we need to redraw the shape
     if ( this.visible ) {
       const vertex1Position = vertex1.positionProperty.value;
 
