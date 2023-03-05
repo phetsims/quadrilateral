@@ -52,6 +52,9 @@ export default class SmallStepsLockToggleButton extends RectangularToggleButton<
 
     // voicing - update dynamic content and request Voicing when the change is made
     lockToMinorIntervalsProperty.link( lockToMinorIntervals => {
+
+      // REVIEW: Why doesn't the IDE resolve these?  Is it because it's a mixin?
+      // REVIEW: Why do these have to get assigned to state? Why can't voicingSpeakResponse assign them?
       this.voicingNameResponse = lockToMinorIntervals ? lockedNameResponseString : unlockedNameResponseString;
       this.voicingContextResponse = lockToMinorIntervals ? lockedContextResponseString : unlockedContextResponseString;
 

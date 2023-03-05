@@ -43,6 +43,7 @@ export default class QuadrilateralDiagonalGuidesNode extends Node {
     this.addChild( lineNode2 );
 
     // Link visibility of the component to the Property controlled by the checkbox
+    // REVIEW: Pass this visibleProperty to the visibleProperty of the Node in super()
     visibleProperty.link( visible => { this.visible = visible; } );
 
     Multilink.multilink(

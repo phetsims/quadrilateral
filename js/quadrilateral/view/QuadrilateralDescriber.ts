@@ -261,6 +261,8 @@ export default class QuadrilateralDescriber {
    * this is used when the user hides the shape name in the user interface.
    */
   public getShapePropertiesDescription(): string {
+
+    // REVIEW: Recommended to use multiple return statements, please see https://stackoverflow.com/questions/36707/should-a-function-have-only-one-return-statement
     let shapePropertiesDescription = '';
 
     const currentShapeName = this.shapeModel.shapeNameProperty.value;
@@ -325,6 +327,10 @@ export default class QuadrilateralDescriber {
    * "large"
    */
   public getSizeDescription(): string {
+
+    // REVIEW: Recommended to use multiple return statements, please see https://stackoverflow.com/questions/36707/should-a-function-have-only-one-return-statement
+    // Please search the codebase for other places that this applies.
+    //
     let sizeDescriptionString: string;
     const area = this.shapeModel.areaProperty.value;
     if ( area < TINY_THRESHOLD ) {

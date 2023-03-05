@@ -147,6 +147,10 @@ export default class VertexDescriber {
    * For the design request of this feature please see https://github.com/phetsims/quadrilateral/issues/231
    */
   public static getWedgesDescription( vertexAngle: number, shapeModel: QuadrilateralShapeModel ): string {
+
+    // REVIEW: It would be clearer to have multiple return statements from this function. With a mutable variable
+    // and numerous assignments, you cannot tell at a glance if the value is mutated later on.
+    // REVIEW: Same comment in getAdjacentVertexObjectDescription
     let wedgeDescription: string | null = null;
 
     const numberOfFullWedges = Math.floor( vertexAngle / CornerGuideNode.WEDGE_SIZE_RADIANS );
@@ -310,6 +314,7 @@ export default class VertexDescriber {
       description = halfAsWideAsString;
     }
 
+    // REVIEW: This should be in an else{}
     const angleRatio = angle1 / angle2;
     if ( description === null ) {
       ANGLE_COMPARISON_DESCRIPTION_MAP.forEach( ( value, key ) => {
