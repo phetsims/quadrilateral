@@ -9,7 +9,6 @@
 import quadrilateral from '../quadrilateral.js';
 import { SoundDesign } from './model/QuadrilateralSoundOptionsModel.js';
 
-// REVIEW: Which of these should be marked as public?
 const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
 
   // The tolerance interval for the angle calculations which determine when sides opposite sides are parallel.
