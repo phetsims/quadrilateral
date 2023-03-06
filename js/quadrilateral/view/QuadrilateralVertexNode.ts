@@ -96,7 +96,7 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
         const inBoundsPosition = quadrilateralModel.vertexDragBounds.closestPointTo( proposedPosition );
         const isAgainstBounds = !inBoundsPosition.equals( proposedPosition );
 
-        const isPositionAllowed = quadrilateralModel.isVertexPositionAllowed( vertex, inBoundsPosition );
+        const isPositionAllowed = quadrilateralModel.areVertexPositionsAllowed( [ { vertex: vertex, proposedPosition: inBoundsPosition } ] );
         if ( isPositionAllowed ) {
 
           // only update and trigger a new Voicing response if the position has changed.
@@ -140,7 +140,7 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
         // constrain to the allowable positions in the model along the grid
         const constrainedPosition = quadrilateralModel.getClosestGridPosition( inBoundsPosition );
 
-        const isPositionAllowed = quadrilateralModel.isVertexPositionAllowed( vertex, constrainedPosition );
+        const isPositionAllowed = quadrilateralModel.areVertexPositionsAllowed( [ { vertex: vertex, proposedPosition: constrainedPosition } ] );
 
         if ( isPositionAllowed ) {
           vertex.positionProperty.value = constrainedPosition;

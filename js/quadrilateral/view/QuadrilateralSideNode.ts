@@ -262,13 +262,16 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
           const proposedVertex1Position = side.vertex1.positionProperty.value.plus( smallestDeltaVector );
           const proposedVertex2Position = side.vertex2.positionProperty.value.plus( smallestDeltaVector );
 
+          const verticesWithProposedPositions = [
+            { vertex: side.vertex1, proposedPosition: proposedVertex1Position },
+            { vertex: side.vertex2, proposedPosition: proposedVertex2Position }
+          ];
+
           // only update positions if both are allowed
-          const positionsAllowed = quadrilateralModel.areVertexPositionsAllowed( side.vertex1, proposedVertex1Position, side.vertex2, proposedVertex2Position );
+          // const positionsAllowed = quadrilateralModel.areVertexPositionsAllowed( side.vertex1, proposedVertex1Position, side.vertex2, proposedVertex2Position );
+          const positionsAllowed = quadrilateralModel.areVertexPositionsAllowed( verticesWithProposedPositions );
           if ( positionsAllowed ) {
-            this.quadrilateralShapeModel.setVertexPositions( [
-              { vertex: side.vertex1, proposedPosition: proposedVertex1Position },
-              { vertex: side.vertex2, proposedPosition: proposedVertex2Position }
-            ] );
+            this.quadrilateralShapeModel.setVertexPositions( verticesWithProposedPositions );
           }
 
           this.updateBlockedState( !positionsAllowed, !inBounds );
@@ -370,7 +373,7 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
   private rotateVertexAroundOther( anchorVertex: QuadrilateralVertex, armVertex: QuadrilateralVertex, modelDelta: Vector2 ): void {
     const modelPosition = armVertex.positionProperty.get().plus( modelDelta );
     const proposedPosition = this.quadrilateralModel.getClosestGridPosition( modelPosition );
-    if ( this.quadrilateralModel.isVertexPositionAllowed( armVertex, proposedPosition ) ) {
+    if ( this.quadrilateralModel.areVertexPositionsAllowed( [ { vertex: armVertex, proposedPosition: proposedPosition } ] ) ) {
       armVertex.positionProperty.value = proposedPosition;
     }
   }

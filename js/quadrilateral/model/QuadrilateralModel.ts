@@ -12,8 +12,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
-import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
-import QuadrilateralVertex from './QuadrilateralVertex.js';
+import QuadrilateralShapeModel, { VertexWithProposedPosition } from './QuadrilateralShapeModel.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
@@ -133,40 +132,13 @@ export default class QuadrilateralModel implements TModel {
   }
 
   /**
-   * Returns true if the vertex position is allowed. Sets the proposed vertex position to the test shape
-   * and returns true if the scratch QuadrilateralShapeModel reports that it is in a valid position.
-   */
-  public isVertexPositionAllowed( vertex: QuadrilateralVertex, proposedPosition: Vector2 ): boolean {
-
-    // set the proposed position to the scratch shape
-    this.quadrilateralTestShapeModel.setFromShape( this.quadrilateralShapeModel );
-    this.quadrilateralTestShapeModel.getLabelledVertex( vertex.vertexLabel ).positionProperty.set( proposedPosition );
-
-    return QuadrilateralShapeModel.isQuadrilateralShapeAllowed( this.quadrilateralTestShapeModel );
-  }
-
-  /**
    * Returns true if the two vertex positions are allowed for the quadrilateral.
    */
-  public areVertexPositionsAllowed( vertex1: QuadrilateralVertex, vertex1ProposedPosition: Vector2, vertex2: QuadrilateralVertex, vertex2ProposedPosition: Vector2 ): boolean {
+  public areVertexPositionsAllowed( verticesWithProposedPositions: VertexWithProposedPosition[] ): boolean {
 
     // Set the test shape to the current value of the actual shape before proposed positions
     this.quadrilateralTestShapeModel.setFromShape( this.quadrilateralShapeModel );
-
-    // Setting multiple vertex positions at once, we need to wait to call listeners until all values are ready
-    this.quadrilateralTestShapeModel.setPropertiesDeferred( true );
-
-    // set the proposed positions to the test quadrilateral without calling listeners
-    const testVertex1 = this.quadrilateralTestShapeModel.getLabelledVertex( vertex1.vertexLabel );
-    const testVertex2 = this.quadrilateralTestShapeModel.getLabelledVertex( vertex2.vertexLabel );
-
-    testVertex1.positionProperty.set( vertex1ProposedPosition );
-    testVertex2.positionProperty.set( vertex2ProposedPosition );
-
-    // This will un-defer and call listeners for us
-    this.quadrilateralTestShapeModel.setPropertiesDeferred( false );
-
-    // REVIEW: After potentially addressing the above, maybe make this method and isVertexPositionAllowed feel more similar???
+    this.quadrilateralTestShapeModel.setVertexPositions( verticesWithProposedPositions );
     return QuadrilateralShapeModel.isQuadrilateralShapeAllowed( this.quadrilateralTestShapeModel );
   }
 
