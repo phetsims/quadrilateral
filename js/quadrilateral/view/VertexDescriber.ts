@@ -151,6 +151,7 @@ export default class VertexDescriber {
     // REVIEW: It would be clearer to have multiple return statements from this function. With a mutable variable
     // and numerous assignments, you cannot tell at a glance if the value is mutated later on.
     // REVIEW: Same comment in getAdjacentVertexObjectDescription
+    // - Great! Lets do it.
     let wedgeDescription: string | null = null;
 
     const numberOfFullWedges = Math.floor( vertexAngle / CornerGuideNode.WEDGE_SIZE_RADIANS );
@@ -314,7 +315,7 @@ export default class VertexDescriber {
       description = halfAsWideAsString;
     }
 
-    // REVIEW: This should be in an else{}
+    // REVIEW: This should be in an else{} - You are so right!
     const angleRatio = angle1 / angle2;
     if ( description === null ) {
       ANGLE_COMPARISON_DESCRIPTION_MAP.forEach( ( value, key ) => {

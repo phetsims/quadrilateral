@@ -65,6 +65,7 @@ export default class LayersTracksSoundView extends TracksSoundView {
     // desired output levels for each sound (as requested by design, after manually editing the gain)
     // See https://github.com/phetsims/quadrilateral/issues/175#issuecomment-1339626942
     // REVIEW: Many of the Maps in this sim are initialized with [[]], want to do that for this one too?
+    // soundsd good!
     this.indexToOutputLevelMap.set( 0, 0.6 );
     this.indexToOutputLevelMap.set( 1, 0.6 );
     this.indexToOutputLevelMap.set( 2, 1 );
@@ -89,10 +90,7 @@ export default class LayersTracksSoundView extends TracksSoundView {
     };
     shapeModel.shapeNameProperty.link( shapeNameListener );
 
-    // REVIEW: Some 1-expression arrow functions are inlined in this sim. Want to do that here (and elsewhere) too?
-    this.disposeLayersTracksSoundView = () => {
-      shapeModel.shapeNameProperty.unlink( shapeNameListener );
-    };
+    this.disposeLayersTracksSoundView = () => shapeModel.shapeNameProperty.unlink( shapeNameListener );
   }
 
   public override dispose(): void {

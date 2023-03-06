@@ -33,7 +33,6 @@ import MarkerDetectionModel from './MarkerDetectionModel.js';
 export default class TangibleConnectionModel {
 
   // True when we are connected to a device in some way, either bluetooth, serial, or OpenCV.
-  // REVIEW: Some boolean attribute start with "is" but some do not
   public connectedToDeviceProperty: TProperty<boolean>;
 
   // Properties specifically related to marker detection from OpenCV prototypes.
@@ -44,8 +43,8 @@ export default class TangibleConnectionModel {
   public physicalModelBoundsProperty: TProperty<Bounds2 | null>;
 
   // A transform that goes from tangible to virtual space. Used to set simulation vertex positions from
-  // positions from position data provided by the physical device.
-  // REVIEW: What is the virtual coordinate frame?
+  // position data provided by the physical device.
+  // REVIEW: What is the virtual coordinate frame? - Rename to physicalToModelTransform.
   public physicalToVirtualTransform = ModelViewTransform2.createIdentity();
 
   // If true, the simulation is currently "calibrating" to a physical device. During this phase, we are setting
@@ -133,7 +132,7 @@ export default class TangibleConnectionModel {
     const shapeModel = this.shapeModel;
 
     // REVIEW: Do we know each of these has only one association? If not, an earlier definition could be overwritten
-    // by null later
+    // by null later - Use a Map instead of VertexWithProposedPosition[] to improve.
     vertexWithProposedPositions.forEach( vertexWithProposedPosition => {
       if ( vertexWithProposedPosition.vertex === shapeModel.vertexA ) {
         vertexAPosition = vertexWithProposedPosition.proposedPosition!;
@@ -164,7 +163,8 @@ export default class TangibleConnectionModel {
     }
 
     // No lines intersect
-    // REVIEW: Could this be simpler?
+    // REVIEW: Could this be simpler? - Why isn't this using QuadrilateralShapeModel.isShapeAllowed?
+    // If that doesn't work out, we should look into simplifying and optimizing.
     if ( allowed ) {
       for ( let i = 0; i < proposedLines.length; i++ ) {
         const firstLine = proposedLines[ i ];

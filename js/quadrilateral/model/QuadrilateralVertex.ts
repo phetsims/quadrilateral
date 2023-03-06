@@ -177,8 +177,9 @@ export default class QuadrilateralVertex extends QuadrilateralMovable {
     // if the angle is less than zero, we have wrapped around Math.PI and formed a concave shape - the actual
     // angle should be greater than PI
 
-    // REVIEW: In fuzzing, I saw this value go greating than Math.PI*2.
+    // REVIEW: In fuzzing, I saw this value go greater than Math.PI*2.
     // REVIEW: Can the angle be computed with: const a = vector1.angleBetween( vector2 );
+    // Yes, look into this!
     if ( angle < 0 ) {
       angle = angle + 2 * Math.PI;
     }

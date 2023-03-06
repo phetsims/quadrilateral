@@ -20,7 +20,6 @@ export default class QuadrilateralVisibilityModel {
   public readonly vertexLabelsVisibleProperty: BooleanProperty;
 
   // Whether the grid is visible.
-  // REVIEW: Should and other boolean options start with "is"?
   public readonly gridVisibleProperty: BooleanProperty;
 
   // Whether the diagonal guides are visible.

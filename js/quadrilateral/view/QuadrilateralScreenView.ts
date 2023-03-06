@@ -105,6 +105,7 @@ export default class QuadrilateralScreenView extends ScreenView {
     // and passing them through. This makes it difficult to trace back to the source.
     // An alternative is to pass the entire model through, and use TypeScript to narrow what is accessible
     // Note the visibilityModel is also part of the model.
+    // - Cool, Ill review and update to use pick
     const diagonalGuidesNode = new QuadrilateralDiagonalGuidesNode( model.quadrilateralShapeModel, model.modelBounds, visibilityModel.diagonalGuidesVisibleProperty, this.modelViewTransform );
     const interactionCueNode = new QuadrilateralInteractionCueNode(
       model.quadrilateralShapeModel,
@@ -196,7 +197,6 @@ export default class QuadrilateralScreenView extends ScreenView {
   /**
    * Get the content that is spoken from the Voicing toolbar to describe this ScreenView.
    */
-  // REVIEW: Why are these provided as overrides instead of ()=>SpeakableResolvedResponse in the constructor?
   public override getVoicingOverviewContent(): string {
     return QuadrilateralStrings.a11y.voicing.overviewContent;
   }

@@ -263,6 +263,7 @@ export default class QuadrilateralDescriber {
   public getShapePropertiesDescription(): string {
 
     // REVIEW: Recommended to use multiple return statements, please see https://stackoverflow.com/questions/36707/should-a-function-have-only-one-return-statement
+    // - Yes, lets do it!
     let shapePropertiesDescription = '';
 
     const currentShapeName = this.shapeModel.shapeNameProperty.value;
@@ -330,6 +331,7 @@ export default class QuadrilateralDescriber {
 
     // REVIEW: Recommended to use multiple return statements, please see https://stackoverflow.com/questions/36707/should-a-function-have-only-one-return-statement
     // Please search the codebase for other places that this applies.
+    // - Yes, lets do it!
     //
     let sizeDescriptionString: string;
     const area = this.shapeModel.areaProperty.value;

@@ -10,7 +10,7 @@
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralVertex from './QuadrilateralVertex.js';
 
-// REVIEW: Should we create UnorderedPair<T> which could be Side or Vertex?
+// REVIEW: Should we create UnorderedPair<T> which could be Side or Vertex? - Yes! Ill give it a shot.
 export default class VertexPair {
   public readonly vertex1: QuadrilateralVertex;
   public readonly vertex2: QuadrilateralVertex;

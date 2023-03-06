@@ -207,6 +207,8 @@ export default class QuadrilateralShapeModel {
     this.sideDA.connectToSide( this.sideCD );
     this.sideAB.connectToSide( this.sideDA );
 
+    // Review: The following do not need to be observable Properties. Make functions on
+    // QuadrilateralShapeModel.
     this.isParallelogramProperty = new BooleanProperty( false, {
       tandem: options.tandem.createTandem( 'isParallelogramProperty' )
     } );
@@ -590,7 +592,6 @@ export default class QuadrilateralShapeModel {
     const sideABSideCDParallel = this.sideABSideCDParallelSideChecker.areSidesParallel();
     const sideBCSideDAParallel = this.sideBCSideDAParallelSideChecker.areSidesParallel();
 
-    // REVIEW: Can/should this use QuadrilateralShapeDetector? It already computes if we are a parallelogram
     this.isParallelogramProperty.set( sideABSideCDParallel && sideBCSideDAParallel );
 
     const previousParallelSidePairs = this.parallelSidePairsProperty.value;
