@@ -39,7 +39,7 @@ export default class ShapeSnapshot {
   private readonly sideLengths: readonly number[];
 
   public constructor( shapeModel: QuadrilateralShapeModel ) {
-    this.isParallelogram = shapeModel.isParallelogramProperty.value;
+    this.isParallelogram = shapeModel.isParallelogram();
     this.sideABsideCDParallel = shapeModel.sideABSideCDParallelSideChecker.areSidesParallel();
     this.sideBCsideDAParallel = shapeModel.sideBCSideDAParallelSideChecker.areSidesParallel();
     this.area = shapeModel.areaProperty.value;

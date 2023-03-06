@@ -645,7 +645,7 @@ export default class QuadrilateralAlerter extends Alerter {
     const areaDifference = shapeModel.areaProperty.value - previousShapeSnapshot.area;
     const areaChangeString = areaDifference > 0 ? biggerString : smallerString;
 
-    if ( shapeModel.isParallelogramProperty.value && previousShapeSnapshot.isParallelogram ) {
+    if ( shapeModel.isParallelogram() && previousShapeSnapshot.isParallelogram ) {
 
       // remained a parallelogram through changes
       if ( responseReason === 'angle' ) {

@@ -75,9 +75,8 @@ export default class QuadrilateralShapeModel {
   public readonly sideBCSideDAParallelSideChecker: ParallelSideChecker;
   public readonly parallelSideCheckers: readonly ParallelSideChecker[];
 
-  // Whether the quadrilateral is a parallelogram. This Property is true when both ParallelSideCheckers report
-  // parallel sides.
-  public readonly isParallelogramProperty: Property<boolean>;
+  // Whether the quadrilateral is a parallelogram.
+  private _isParallelogram: boolean;
 
   // The area of the quadrilateral. Updated in "deferred" Properties, only after positions of all four vertices are
   // determined.
@@ -209,10 +208,7 @@ export default class QuadrilateralShapeModel {
 
     // Review: The following do not need to be observable Properties. Make functions on
     // QuadrilateralShapeModel.
-    this.isParallelogramProperty = new BooleanProperty( false, {
-      tandem: options.tandem.createTandem( 'isParallelogramProperty' )
-    } );
-
+    this._isParallelogram = false;
     this.allAnglesRightProperty = new BooleanProperty( false, {
       tandem: options.tandem.createTandem( 'allAnglesRightProperty' )
     } );
@@ -421,6 +417,13 @@ export default class QuadrilateralShapeModel {
   }
 
   /**
+   * Returns true when the shape is a parallelogram.
+   */
+  public isParallelogram(): boolean {
+    return this._isParallelogram;
+  }
+
+  /**
    * Returns true if two angles are equal within staticAngleToleranceInterval. See that value for more
    * information.
    */
@@ -585,14 +588,14 @@ export default class QuadrilateralShapeModel {
   }
 
   /**
-   * Updates Properties related to opposite sides that are parallel, and the isParallelogramProperty. To be used in
-   * updateOrderDependentProperties.
+   * Updates Properties related to opposite sides that are parallel, and whether this shape is a parallelogram. To be
+   * used in updateOrderDependentProperties.
    */
   private updateParallelSideProperties(): void {
     const sideABSideCDParallel = this.sideABSideCDParallelSideChecker.areSidesParallel();
     const sideBCSideDAParallel = this.sideBCSideDAParallelSideChecker.areSidesParallel();
 
-    this.isParallelogramProperty.set( sideABSideCDParallel && sideBCSideDAParallel );
+    this._isParallelogram = sideABSideCDParallel && sideBCSideDAParallel;
 
     const previousParallelSidePairs = this.parallelSidePairsProperty.value;
     const currentParallelSidePairs = [];

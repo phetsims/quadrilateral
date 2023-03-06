@@ -388,7 +388,7 @@ export default class QuadrilateralDescriber {
     let cornerTypeString;
     let angleEqualityString;
     let sideTypeString;
-    if ( this.shapeModel.isParallelogramProperty.value ) {
+    if ( this.shapeModel.isParallelogram() ) {
 
       // If all adjacent vertices are equal then all are right angles. Otherwise, opposite angles must be equal.
       cornerTypeString = adjacentEqualVertexPairs.length === 4 ? allString : oppositeString;
