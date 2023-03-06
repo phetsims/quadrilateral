@@ -142,7 +142,7 @@ export default class QuadrilateralModel implements TModel {
     this.quadrilateralTestShapeModel.setFromShape( this.quadrilateralShapeModel );
     this.quadrilateralTestShapeModel.getLabelledVertex( vertex.vertexLabel ).positionProperty.set( proposedPosition );
 
-    return this.quadrilateralTestShapeModel.isQuadrilateralShapeAllowed();
+    return QuadrilateralShapeModel.isQuadrilateralShapeAllowed( this.quadrilateralTestShapeModel );
   }
 
   /**
@@ -166,9 +166,8 @@ export default class QuadrilateralModel implements TModel {
     // This will un-defer and call listeners for us
     this.quadrilateralTestShapeModel.setPropertiesDeferred( false );
 
-    // REVIEW: Make isQuadrilateralShapeAllowed static
     // REVIEW: After potentially addressing the above, maybe make this method and isVertexPositionAllowed feel more similar???
-    return this.quadrilateralTestShapeModel.isQuadrilateralShapeAllowed();
+    return QuadrilateralShapeModel.isQuadrilateralShapeAllowed( this.quadrilateralTestShapeModel );
   }
 
   /**

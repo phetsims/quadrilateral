@@ -297,19 +297,19 @@ export default class QuadrilateralShapeModel {
    *
    * As soon as the quadrilateral is found to be disallowed, we break out of testing.
    */
-  public isQuadrilateralShapeAllowed(): boolean {
+  public static isQuadrilateralShapeAllowed( shapeModel: QuadrilateralShapeModel ): boolean {
     let shapeAllowed = true;
 
-    for ( let i = 0; i < this.vertices.length; i++ ) {
-      const testVertex = this.vertices[ i ];
+    for ( let i = 0; i < shapeModel.vertices.length; i++ ) {
+      const testVertex = shapeModel.vertices[ i ];
 
       // The vertex must be completely within model bounds
-      shapeAllowed = this.modelBounds.containsBounds( testVertex.modelBoundsProperty.value );
+      shapeAllowed = shapeModel.modelBounds.containsBounds( testVertex.modelBoundsProperty.value );
 
       // Make sure that no vertices overlap any other.
       if ( shapeAllowed ) {
-        for ( let j = 0; j < this.vertices.length; j++ ) {
-          const otherVertex = this.vertices[ j ];
+        for ( let j = 0; j < shapeModel.vertices.length; j++ ) {
+          const otherVertex = shapeModel.vertices[ j ];
 
           if ( testVertex !== otherVertex ) {
             shapeAllowed = !testVertex.overlapsOther( otherVertex );
@@ -323,8 +323,8 @@ export default class QuadrilateralShapeModel {
 
       // Make sure that no vertices overlap a side.
       if ( shapeAllowed ) {
-        for ( let j = 0; j < this.sides.length; j++ ) {
-          const side = this.sides[ j ];
+        for ( let j = 0; j < shapeModel.sides.length; j++ ) {
+          const side = shapeModel.sides[ j ];
           if ( !side.includesVertex( testVertex ) ) {
             shapeAllowed = !side.shapeProperty.value.intersectsBounds( testVertex.modelBoundsProperty.value );
 

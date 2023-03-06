@@ -344,7 +344,7 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
       { vertex: this.scratchSide.vertex2, proposedPosition: proposedVertex2Position }
     ] );
 
-    const isShapeAllowed = this.scratchShapeModel.isQuadrilateralShapeAllowed();
+    const isShapeAllowed = QuadrilateralShapeModel.isQuadrilateralShapeAllowed( this.scratchShapeModel );
     if ( isShapeAllowed ) {
 
       // signify to the Alerter that it will be time to generate a new object response from input
