@@ -162,7 +162,7 @@ export default class QuadrilateralTangibleController {
     const tangibleConnectionModel = this.tangibleConnectionModel;
 
     // you must calibrate before setting positions from a physical device
-    if ( tangibleConnectionModel.physicalToVirtualTransform !== null && !tangibleConnectionModel.isCalibratingProperty.value ) {
+    if ( tangibleConnectionModel.physicalToModelTransform !== null && !tangibleConnectionModel.isCalibratingProperty.value ) {
 
       // scale the physical positions to the simulation virtual model
       const scaledProposedPositions: VertexWithProposedPosition[] = proposedPositions.map( vertexWithProposedPosition => {
@@ -175,7 +175,7 @@ export default class QuadrilateralTangibleController {
         if ( proposedPosition && proposedPosition.isFinite() ) {
 
           // transform from tangible to virtual coordinates
-          const virtualPosition = tangibleConnectionModel.physicalToVirtualTransform.modelToViewPosition( proposedPosition );
+          const virtualPosition = tangibleConnectionModel.physicalToModelTransform.modelToViewPosition( proposedPosition );
 
           // apply smoothing over a number of values to reduce noise
           constrainedPosition = vertexWithProposedPosition.vertex.smoothPosition( virtualPosition );

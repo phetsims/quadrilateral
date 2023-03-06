@@ -44,11 +44,10 @@ export default class TangibleConnectionModel {
 
   // A transform that goes from tangible to virtual space. Used to set simulation vertex positions from
   // position data provided by the physical device.
-  // REVIEW: What is the virtual coordinate frame? - Rename to physicalToModelTransform.
-  public physicalToVirtualTransform = ModelViewTransform2.createIdentity();
+  public physicalToModelTransform = ModelViewTransform2.createIdentity();
 
   // If true, the simulation is currently "calibrating" to a physical device. During this phase, we are setting
-  // the physicalModelBounds or the physicalToVirtualTransform.
+  // the physicalModelBounds or the physicalToModelTransform.
   public isCalibratingProperty: TProperty<boolean>;
 
   // The bounds of simulation model space. Used to create transforms between physical device units and simulation
@@ -110,7 +109,7 @@ export default class TangibleConnectionModel {
    * assumptions.
    */
   public setPhysicalToVirtualTransform( width: number, height: number ): void {
-    this.physicalToVirtualTransform = ModelViewTransform2.createSinglePointScaleMapping(
+    this.physicalToModelTransform = ModelViewTransform2.createSinglePointScaleMapping(
       new Vector2( width / 2, height / 2 ), // center of the physical space "model"
       new Vector2( 0, 0 ), // origin of the simulation model
       this.modelBounds.height / ( height ) // scale from physical model to simulation space
