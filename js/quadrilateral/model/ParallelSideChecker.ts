@@ -53,6 +53,7 @@ export default class ParallelSideChecker {
     this.side1 = oppositeSidePair.side1;
     this.side2 = oppositeSidePair.side2;
 
+    // REVIEW: It is unclear whether clients should use isParallelProperty.value or areSidesParallel(). Why have both?
     this.isParallelProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'isParallelProperty' ),
       phetioReadOnly: true
