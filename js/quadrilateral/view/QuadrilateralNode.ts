@@ -82,6 +82,7 @@ export default class QuadrilateralNode extends Voicing( Node ) {
     const vertexC = this.quadrilateralShapeModel.vertexC;
     const vertexD = this.quadrilateralShapeModel.vertexD;
 
+    // REVIEW: rename vertexANode? So it matches naming like sideABNode?
     const vertexNode1 = new QuadrilateralVertexNode( vertexA, vertexAString, quadrilateralModel, quadrilateralDescriber.vertexADescriber, modelViewTransform, {
       nameResponse: cornerAString,
 

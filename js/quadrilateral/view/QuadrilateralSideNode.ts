@@ -66,6 +66,8 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
     this.side = side;
     this.scratchSide = scratchSide;
     this.quadrilateralModel = quadrilateralModel;
+
+    // REVIEW: How about const for these? Since they are redundant with the model.
     this.quadrilateralShapeModel = quadrilateralModel.quadrilateralShapeModel;
     this.scratchShapeModel = quadrilateralModel.quadrilateralTestShapeModel;
 

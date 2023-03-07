@@ -150,6 +150,8 @@ export default class TracksSoundView extends SoundGenerator {
    */
   public step( dt: number ): void {
 
+    // REVIEW: It is surprising that we have to do this here in sim-specific code, and not in the sound manager.
+    // REVIEW: Open a tambo issue to see if this can be handled in the sound manager?
     if ( this.playingState === PlayingState.STOPPED ) {
       if ( this.outputLevel !== 0 ) {
         this.setOutputLevel( 0 );

@@ -64,6 +64,8 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
       hatchMarkShape.lineTo( Math.cos( angle ) * viewRadius, Math.sin( angle ) * viewRadius );
       angle += Math.PI / 2;
     }
+
+    // REVIEW: Pass visibleProperty here instead of using link
     const hatchMarkPath = new Path( hatchMarkShape, { stroke: 'black' } );
     this.addChild( hatchMarkPath );
 
@@ -80,6 +82,7 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
       this.center = modelViewTransform.modelToViewPosition( position );
     } );
 
+    // REVIEW: Pass through visibleProperty
     quadrilateralModel.visibilityModel.vertexLabelsVisibleProperty.link( vertexLabelsVisible => {
       vertexLabelText.visible = vertexLabelsVisible;
     } );

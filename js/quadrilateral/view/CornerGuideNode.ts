@@ -143,6 +143,7 @@ export default class CornerGuideNode extends Node {
     this.children = [ arcNode, crosshairPath ];
 
     // This node is only visible when "Corner Guides" are enabled by the user
+    // REVIEW: pass to super({visibleProperty: visibleProperty})
     visibleProperty.link( visible => {
       this.visible = visible;
     } );
@@ -150,7 +151,6 @@ export default class CornerGuideNode extends Node {
     // When at a right angle, display the RightAngleIndicator, otherwise the arcs representing angles are shown.
     vertex1.angleProperty.link( angle => {
       arcNode.visible = !shapeModel.isRightAngle( angle! );
-
     } );
   }
 

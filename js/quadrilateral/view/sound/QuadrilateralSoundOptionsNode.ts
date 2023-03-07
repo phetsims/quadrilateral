@@ -72,6 +72,7 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
       uncheckedContextResponse: tracksPlayForeverUncheckedContextResponseString
     } );
 
+    // REVIEW: inline?
     const content = new Node( {
       children: [ soundDesignLabelText, soundDesignDescriptionText, soundDesignRadioButtonGroup, tracksPlayForeverCheckbox ]
     } );
@@ -89,6 +90,7 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
     // The shape sound options should only be available when sounds are enabled. joist disables all audio
     // options when Audio Features are disabled, so we use 'visible' instead of 'enabled' to avoid compounding
     // transparency when both sounds and audio are disabled.
+    // REVIEW Pass super({visibleProperty: soundManager.enabledProperty}) ??
     soundManager.enabledProperty.link( enabled => {
       this.visible = enabled;
     } );

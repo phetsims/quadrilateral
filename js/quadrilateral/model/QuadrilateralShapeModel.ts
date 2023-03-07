@@ -664,14 +664,10 @@ export default class QuadrilateralShapeModel {
     this.propertiesDeferred = deferred;
 
     // set deferred for all Properties first so that their values are up-to-date by the time we call listeners
-    // REVIEW: We should check on the return value deferredVertexListeners. It is a callback when deferred is true, but null on false
-    // But on false, we need to remember the value from true and then call it. I think?
     const deferredVertexListeners = this.vertices.map( vertex => vertex.setPropertiesDeferred( deferred ) );
 
     // call any deferred callbacks if no longer deferred
-    if ( !deferred ) {
-      deferredVertexListeners.forEach( deferredListener => deferredListener && deferredListener() );
-    }
+    deferredVertexListeners.forEach( deferredListener => deferredListener && deferredListener() );
   }
 
   /**

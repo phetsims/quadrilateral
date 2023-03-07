@@ -49,6 +49,8 @@ export default class QuadrilateralScreenView extends ScreenView {
   private readonly quadrilateralSoundView: QuadrilateralSoundView;
   private readonly quadrilateralDescriber: QuadrilateralDescriber;
   private readonly quadrilateralAlerter: QuadrilateralAlerter;
+
+  // REVIEW: Do we want prototype components going out in production code? Or move to a subclass? Or make nullable?
   private readonly quadrilateralTangibleController: QuadrilateralTangibleController;
   private readonly quadrilateralMediaPipe: QuadrilateralMediaPipe | null = null;
 

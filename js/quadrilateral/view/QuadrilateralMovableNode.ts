@@ -47,7 +47,7 @@ export default class QuadrilateralMovableNode extends Voicing( Node ) {
   public readonly largeViewDragDelta: number;
   public readonly smallViewDragDelta: number;
 
-  //
+  // REVIEW: describe this?
   public readonly paintableNode: PaintableNode;
 
   public constructor( model: QuadrilateralMovable, modelViewTransform: ModelViewTransform2, paintableNode: PaintableNode, providedOptions: QuadrilateralMovableNodeOptions ) {
