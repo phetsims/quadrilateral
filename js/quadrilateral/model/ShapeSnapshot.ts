@@ -4,6 +4,8 @@
  * A snapshot of the model Properties at a point in time needed to compare against other states to watch
  * how the model is changing over time.
  *
+ * REVIEW: Perhaps describe where this is used?
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 

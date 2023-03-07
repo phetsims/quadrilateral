@@ -161,6 +161,7 @@ export default class QuadrilateralUtils {
       secondRay = new Ray2( vertex2.positionProperty.value, secondRayDirection );
     }
 
+    // REVIEW: There is some duplication and complexity in the following part. Can it be simplified?
     let firstRayIntersectionLinePair: null | LineIntersectionPair = null;
     let secondRayIntersectionLinePair: null | LineIntersectionPair = null;
 

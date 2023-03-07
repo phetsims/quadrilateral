@@ -275,6 +275,8 @@ export default class QuadrilateralShapeModel {
 
     this.vertices.forEach( vertex => {
       vertex.modelBoundsProperty.link( vertexBounds => {
+
+        // REVIEW: Is this epsilon a function of the grid size? Should it be in QuadrilateralConstants?
         vertex.topConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.maxY, this.modelBounds.maxY, 0.01 );
         vertex.rightConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.maxX, this.modelBounds.maxX, 0.01 );
         vertex.bottomConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.minY, this.modelBounds.minY, 0.01 );
@@ -431,6 +433,7 @@ export default class QuadrilateralShapeModel {
     return Utils.equalsEpsilon( angle, otherAngle, this.staticAngleToleranceInterval );
   }
 
+  // REVIEW: Want to put all the static methods together?
   /**
    * Returns true if two angles are equal within the provided tolerance interval.
    */
@@ -661,6 +664,8 @@ export default class QuadrilateralShapeModel {
     this.propertiesDeferred = deferred;
 
     // set deferred for all Properties first so that their values are up-to-date by the time we call listeners
+    // REVIEW: We should check on the return value deferredVertexListeners. It is a callback when deferred is true, but null on false
+    // But on false, we need to remember the value from true and then call it. I think?
     const deferredVertexListeners = this.vertices.map( vertex => vertex.setPropertiesDeferred( deferred ) );
 
     // call any deferred callbacks if no longer deferred

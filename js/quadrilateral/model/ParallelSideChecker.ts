@@ -25,9 +25,11 @@ export default class ParallelSideChecker {
   // will be different depending on the runtime environment controlled by query parameters.
   private readonly parallelAngleToleranceInterval: number;
 
+  public readonly sidePair: SidePair;
+
+  // REVIEW: These are redundant with sidePair, can they be deleted?
   public readonly side1: QuadrilateralSide;
   public readonly side2: QuadrilateralSide;
-  public readonly sidePair: SidePair;
 
   // A Property indicating that the provided sides are parallel, ONLY FOR DEBUGGING. Use areSidesParallel() when the
   // QuadrilateralShapeModel is stable instead.
@@ -44,6 +46,8 @@ export default class ParallelSideChecker {
    * @param tandem
    */
   public constructor(
+
+    // REVIEW: Rename to sidePair
     oppositeSidePair: SidePair,
     shapeChangedEmitter: TEmitter,
     tandem: Tandem ) {
