@@ -49,7 +49,6 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
     this.quadrilateralModel = quadrilateralModel;
 
     const vertexLabelText = new Text( vertexLabel, {
-      center: this.center,
       font: LABEL_TEXT_FONT,
 
       // i18n
@@ -86,6 +85,11 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
     // REVIEW: Pass through visibleProperty
     quadrilateralModel.visibilityModel.vertexLabelsVisibleProperty.link( vertexLabelsVisible => {
       vertexLabelText.visible = vertexLabelsVisible;
+    } );
+
+    // dynamic string layout
+    vertexLabelText.boundsProperty.link( () => {
+      vertexLabelText.center = circle.center;
     } );
 
     const keyboardDragListener = new KeyboardDragListener( {

@@ -181,10 +181,14 @@ export default class QuadrilateralScreenView extends ScreenView {
 
     shapeNameDisplay.centerBottom = gridNode.centerTop.minusXY( 0, QuadrilateralConstants.VIEW_SPACING );
     shapeSoundsCheckbox.rightCenter = new Vector2( gridNode.right, shapeNameDisplay.centerY );
-    resetShapeButton.rightCenter = shapeSoundsCheckbox.leftCenter.minusXY(
-      // effectively centers this button between the other name display controls
-      ( shapeSoundsCheckbox.left - shapeNameDisplay.right - resetShapeButton.width ) / 2, 0
-    );
+
+    // dynamic string layout
+    resetShapeButton.boundsProperty.link( () => {
+      resetShapeButton.rightCenter = shapeSoundsCheckbox.leftCenter.minusXY(
+        // effectively centers this button between the other name display controls
+        ( shapeSoundsCheckbox.left - shapeNameDisplay.right - resetShapeButton.width ) / 2, 0
+      );
+    } );
 
     deviceConnectionParentNode.leftBottom = visibilityControls.leftTop.minusXY( 0, QuadrilateralConstants.VIEW_GROUP_SPACING );
 
