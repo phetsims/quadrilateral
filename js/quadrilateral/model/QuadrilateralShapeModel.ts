@@ -463,9 +463,14 @@ export default class QuadrilateralShapeModel {
       // this is a new Vector2 instance so even if x,y values are the same as the old value it will trigger
       // listeners without this check
       const proposedPosition = vertexWithProposedPosition.proposedPosition!;
+
+      // Review - should VertexWithProposedPositions use VertexLabel instead of the Vertex?
+      // We need to look-up the Vertex again here because we may have been provided a Vertex from a different
+      // QuadrilateralShapeModel instance.
+      const thisVertex = this.getLabelledVertex( vertexWithProposedPosition.vertex.vertexLabel );
       assert && assert( proposedPosition, 'proposedPosition must be defined to set positions' );
-      if ( !proposedPosition.equals( vertexWithProposedPosition.vertex.positionProperty.value ) ) {
-        vertexWithProposedPosition.vertex.positionProperty.set( proposedPosition );
+      if ( !proposedPosition.equals( thisVertex.positionProperty.value ) ) {
+        thisVertex.positionProperty.set( proposedPosition );
       }
     } );
 
