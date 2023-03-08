@@ -28,68 +28,69 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import QuadrilateralVertex from '../model/QuadrilateralVertex.js';
 import Utils from '../../../../dot/js/Utils.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
-import QuadrilateralDescriber from './QuadrilateralDescriber.js';
+import QuadrilateralDescriber, { NullableQuadrilateralStringType } from './QuadrilateralDescriber.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import VertexDescriber from './VertexDescriber.js';
 
-const foundShapePatternString = QuadrilateralStrings.a11y.voicing.foundShapePattern;
-const aBString = QuadrilateralStrings.a11y.aB;
-const bCString = QuadrilateralStrings.a11y.bC;
-const cDString = QuadrilateralStrings.a11y.cD;
-const dAString = QuadrilateralStrings.a11y.dA;
-const oppositeSidesTiltPatternString = QuadrilateralStrings.a11y.voicing.oppositeSidesTiltPattern;
-const oppositeSidesInParallelPatternString = QuadrilateralStrings.a11y.voicing.oppositeSidesInParallelPattern;
-const oppositeSidesInParallelAsCornersChangeEquallyPatternString = QuadrilateralStrings.a11y.voicing.oppositeSidesInParallelAsCornersChangeEquallyPattern;
-const oppositeSidesTiltAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.oppositeSidesTiltAsShapeChangesPattern;
-const oppositeSidesEqualAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.oppositeSidesEqualAsShapeChangesPattern;
-const maintainingAParallelogramAngleResponseString = QuadrilateralStrings.a11y.voicing.maintainingAParallelogramAngleResponse;
-const maintainingAParallelogramLengthResponsePatternString = QuadrilateralStrings.a11y.voicing.maintainingAParallelogramLengthResponsePattern;
-const maintainingATrapezoidAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.maintainingATrapezoidAsShapeChangesPattern;
-const allRightAnglesAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.allRightAnglesAsShapeChangesPattern;
-const maintainingARhombusString = QuadrilateralStrings.a11y.voicing.maintainingARhombus;
-const allSidesEqualAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.allSidesEqualAsShapeChangesPattern;
-const cornerFlatAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.cornerFlatAsShapeChangesPattern;
-const adjacentSidesChangeEquallyAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.adjacentSidesChangeEquallyAsShapeChangesPattern;
-const allSidesTiltAwayFromParallelString = QuadrilateralStrings.a11y.voicing.allSidesTiltAwayFromParallel;
-const allSidesTiltAwayFromParallelAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.allSidesTiltAwayFromParallelAsShapeChangesPattern;
-const tiltString = QuadrilateralStrings.a11y.voicing.tilt;
-const straightenString = QuadrilateralStrings.a11y.voicing.straighten;
-const biggerString = QuadrilateralStrings.a11y.voicing.bigger;
-const smallerString = QuadrilateralStrings.a11y.voicing.smaller;
-const vertexAString = QuadrilateralStrings.vertexA;
-const vertexBString = QuadrilateralStrings.vertexB;
-const vertexCString = QuadrilateralStrings.vertexC;
-const vertexDString = QuadrilateralStrings.vertexD;
-const backString = QuadrilateralStrings.a11y.voicing.back;
-const goneString = QuadrilateralStrings.a11y.voicing.gone;
-const cornersBackString = QuadrilateralStrings.a11y.voicing.cornersBack;
-const cornersGoneString = QuadrilateralStrings.a11y.voicing.cornersGone;
-const cornerDetectedPatternString = QuadrilateralStrings.a11y.voicing.cornerDetectedPattern;
-const shorterString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.shorter;
-const longerString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.longer;
-const widerString = QuadrilateralStrings.a11y.voicing.vertexDragObjectResponse.wider;
-const vertexDragSmallerString = QuadrilateralStrings.a11y.voicing.vertexDragObjectResponse.smaller;
-const vertexDragObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.vertexDragObjectResponse.vertexDragObjectResponsePattern;
-const adjacentSidesChangePatternString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesChangePattern;
-const rightAngleString = QuadrilateralStrings.a11y.voicing.rightAngle;
-const angleFlatString = QuadrilateralStrings.a11y.voicing.angleFlat;
-const angleComparisonPatternString = QuadrilateralStrings.a11y.voicing.angleComparisonPattern;
-const oppositeCornerString = QuadrilateralStrings.a11y.voicing.oppositeCorner;
-const adjacentCornersEqualString = QuadrilateralStrings.a11y.voicing.adjacentCornersEqual;
-const adjacentCornersRightAnglesString = QuadrilateralStrings.a11y.voicing.adjacentCornersRightAngles;
-const progressStatePatternString = QuadrilateralStrings.a11y.voicing.progressStatePattern;
-const equalToOppositeCornerEqualToAdjacentCornersString = QuadrilateralStrings.a11y.voicing.equalToOppositeCornerEqualToAdjacentCorners;
-const adjacentSidesInLinePatternString = QuadrilateralStrings.a11y.voicing.adjacentSidesInLinePattern;
-const equalToAdjacentCornersString = QuadrilateralStrings.a11y.voicing.equalToAdjacentCorners;
-const adjacentSidesChangeInLengthString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesChangeInLength;
-const parallelAdjacentSidesChangePatternString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.parallelAdjacentSidesChangePattern;
-const equalAdjacentSidesChangePatternString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.equalAdjacentSidesChangePattern;
-const equalToAdjacentSidesString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.equalToAdjacentSides;
-const adjacentSidesEqualString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesEqual;
-const adjacentSidesParallelString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesParallel;
-const equalToOneAdjacentSideString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.equalToOneAdjacentSide;
-const twoSidesEqualString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.twoSidesEqual;
-const threeSidesEqualString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.threeSidesEqual;
+// constants - Voicing strings are not translatable so we just use the StringProperty initial value
+const foundShapePatternString = QuadrilateralStrings.a11y.voicing.foundShapePatternStringProperty.value;
+const aBString = QuadrilateralStrings.a11y.aBStringProperty.value;
+const bCString = QuadrilateralStrings.a11y.bCStringProperty.value;
+const cDString = QuadrilateralStrings.a11y.cDStringProperty.value;
+const dAString = QuadrilateralStrings.a11y.dAStringProperty.value;
+const oppositeSidesTiltPatternString = QuadrilateralStrings.a11y.voicing.oppositeSidesTiltPatternStringProperty.value;
+const oppositeSidesInParallelPatternString = QuadrilateralStrings.a11y.voicing.oppositeSidesInParallelPatternStringProperty.value;
+const oppositeSidesInParallelAsCornersChangeEquallyPatternString = QuadrilateralStrings.a11y.voicing.oppositeSidesInParallelAsCornersChangeEquallyPatternStringProperty.value;
+const oppositeSidesTiltAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.oppositeSidesTiltAsShapeChangesPatternStringProperty.value;
+const oppositeSidesEqualAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.oppositeSidesEqualAsShapeChangesPatternStringProperty.value;
+const maintainingAParallelogramAngleResponseString = QuadrilateralStrings.a11y.voicing.maintainingAParallelogramAngleResponseStringProperty.value;
+const maintainingAParallelogramLengthResponsePatternString = QuadrilateralStrings.a11y.voicing.maintainingAParallelogramLengthResponsePatternStringProperty.value;
+const maintainingATrapezoidAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.maintainingATrapezoidAsShapeChangesPatternStringProperty.value;
+const allRightAnglesAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.allRightAnglesAsShapeChangesPatternStringProperty.value;
+const maintainingARhombusString = QuadrilateralStrings.a11y.voicing.maintainingARhombusStringProperty.value;
+const allSidesEqualAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.allSidesEqualAsShapeChangesPatternStringProperty.value;
+const cornerFlatAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.cornerFlatAsShapeChangesPatternStringProperty.value;
+const adjacentSidesChangeEquallyAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.adjacentSidesChangeEquallyAsShapeChangesPatternStringProperty.value;
+const allSidesTiltAwayFromParallelString = QuadrilateralStrings.a11y.voicing.allSidesTiltAwayFromParallelStringProperty.value;
+const allSidesTiltAwayFromParallelAsShapeChangesPatternString = QuadrilateralStrings.a11y.voicing.allSidesTiltAwayFromParallelAsShapeChangesPatternStringProperty.value;
+const tiltString = QuadrilateralStrings.a11y.voicing.tiltStringProperty.value;
+const straightenString = QuadrilateralStrings.a11y.voicing.straightenStringProperty.value;
+const biggerString = QuadrilateralStrings.a11y.voicing.biggerStringProperty.value;
+const smallerString = QuadrilateralStrings.a11y.voicing.smallerStringProperty.value;
+const vertexAString = QuadrilateralStrings.vertexAStringProperty.value;
+const vertexBString = QuadrilateralStrings.vertexBStringProperty.value;
+const vertexCString = QuadrilateralStrings.vertexCStringProperty.value;
+const vertexDString = QuadrilateralStrings.vertexDStringProperty.value;
+const backString = QuadrilateralStrings.a11y.voicing.backStringProperty.value;
+const goneString = QuadrilateralStrings.a11y.voicing.goneStringProperty.value;
+const cornersBackString = QuadrilateralStrings.a11y.voicing.cornersBackStringProperty.value;
+const cornersGoneString = QuadrilateralStrings.a11y.voicing.cornersGoneStringProperty.value;
+const cornerDetectedPatternString = QuadrilateralStrings.a11y.voicing.cornerDetectedPatternStringProperty.value;
+const shorterString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.shorterStringProperty.value;
+const longerString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.longerStringProperty.value;
+const widerString = QuadrilateralStrings.a11y.voicing.vertexDragObjectResponse.widerStringProperty.value;
+const vertexDragSmallerString = QuadrilateralStrings.a11y.voicing.vertexDragObjectResponse.smallerStringProperty.value;
+const vertexDragObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.vertexDragObjectResponse.vertexDragObjectResponsePatternStringProperty.value;
+const adjacentSidesChangePatternString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesChangePatternStringProperty.value;
+const rightAngleString = QuadrilateralStrings.a11y.voicing.rightAngleStringProperty.value;
+const angleFlatString = QuadrilateralStrings.a11y.voicing.angleFlatStringProperty.value;
+const angleComparisonPatternString = QuadrilateralStrings.a11y.voicing.angleComparisonPatternStringProperty.value;
+const oppositeCornerString = QuadrilateralStrings.a11y.voicing.oppositeCornerStringProperty.value;
+const adjacentCornersEqualString = QuadrilateralStrings.a11y.voicing.adjacentCornersEqualStringProperty.value;
+const adjacentCornersRightAnglesString = QuadrilateralStrings.a11y.voicing.adjacentCornersRightAnglesStringProperty.value;
+const progressStatePatternString = QuadrilateralStrings.a11y.voicing.progressStatePatternStringProperty.value;
+const equalToOppositeCornerEqualToAdjacentCornersString = QuadrilateralStrings.a11y.voicing.equalToOppositeCornerEqualToAdjacentCornersStringProperty.value;
+const adjacentSidesInLinePatternString = QuadrilateralStrings.a11y.voicing.adjacentSidesInLinePatternStringProperty.value;
+const equalToAdjacentCornersString = QuadrilateralStrings.a11y.voicing.equalToAdjacentCornersStringProperty.value;
+const adjacentSidesChangeInLengthString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesChangeInLengthStringProperty.value;
+const parallelAdjacentSidesChangePatternString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.parallelAdjacentSidesChangePatternStringProperty.value;
+const equalAdjacentSidesChangePatternString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.equalAdjacentSidesChangePatternStringProperty.value;
+const equalToAdjacentSidesString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.equalToAdjacentSidesStringProperty.value;
+const adjacentSidesEqualString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesEqualStringProperty.value;
+const adjacentSidesParallelString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.adjacentSidesParallelStringProperty.value;
+const equalToOneAdjacentSideString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.equalToOneAdjacentSideStringProperty.value;
+const twoSidesEqualString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.twoSidesEqualStringProperty.value;
+const threeSidesEqualString = QuadrilateralStrings.a11y.voicing.sideDragObjectResponse.threeSidesEqualStringProperty.value;
 
 // A response may trigger because there is a large enough change in angle or length. The reason for the response
 // will have an impact on what information is described.
@@ -912,10 +913,10 @@ export default class QuadrilateralAlerter extends Alerter {
    * Get a response that describes changes to the detected shape name. As decided by design/pedagogy, this is the most
    * important information to describe as things change.
    */
-  private getShapeNameChangeResponse(): string | null {
+  private getShapeNameChangeResponse(): NullableQuadrilateralStringType {
     const currentShapeName = this.model.quadrilateralShapeModel.shapeNameProperty.value;
 
-    let contextResponse: string | null = null;
+    let contextResponse: NullableQuadrilateralStringType = null;
     if ( currentShapeName !== this.previousContextResponseShapeSnapshot.namedQuadrilateral ) {
       if ( this.model.visibilityModel.shapeNameVisibleProperty.value ) {
         contextResponse = this.getFoundShapeResponse( currentShapeName );

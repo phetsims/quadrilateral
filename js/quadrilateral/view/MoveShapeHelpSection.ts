@@ -14,29 +14,33 @@ import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import { Text } from '../../../../scenery/js/imports.js';
 import QuadrilateralKeyboardHelpContent from './QuadrilateralKeyboardHelpContent.js';
 
-// constants
-const moveShapeDescriptionString = QuadrilateralStrings.a11y.keyboardHelpDialog.moveShapeDescription;
-const smallerStepsDescriptionString = QuadrilateralStrings.a11y.keyboardHelpDialog.smallerStepsDescription;
+// constants - Voicing strings not translatable
+const moveShapeDescriptionStringProperty = QuadrilateralStrings.a11y.keyboardHelpDialog.moveShapeDescriptionStringProperty;
+const smallerStepsDescriptionStringProperty = QuadrilateralStrings.a11y.keyboardHelpDialog.smallerStepsDescriptionStringProperty;
+const moveACornerOrSideStringProperty = QuadrilateralStrings.keyboardHelpDialog.moveACornerOrSideStringProperty;
+const moveInSmallerStepsStringProperty = QuadrilateralStrings.keyboardHelpDialog.moveInSmallerStepsStringProperty;
+const mouseStringProperty = QuadrilateralStrings.keyboardHelpDialog.mouseStringProperty;
+const moveCornersOrSidesStringProperty = QuadrilateralStrings.keyboardHelpDialog.moveCornersOrSidesStringProperty;
 
 export default class MoveShapeHelpSection extends KeyboardHelpSection {
   public constructor() {
 
     // basic movement
     const basicMovementRow = KeyboardHelpSectionRow.labelWithIcon(
-      QuadrilateralStrings.keyboardHelpDialog.moveACornerOrSide,
+      moveACornerOrSideStringProperty,
       KeyboardHelpIconFactory.arrowOrWasdKeysRowIcon(),
       {
-        labelInnerContent: moveShapeDescriptionString
+        labelInnerContent: moveShapeDescriptionStringProperty
       }
     );
 
     // fine-grained movement
     const fineMovementRow = KeyboardHelpSectionRow.labelWithIconList(
-      QuadrilateralStrings.keyboardHelpDialog.moveInSmallerSteps,
+      moveInSmallerStepsStringProperty,
       [
         KeyboardHelpIconFactory.shiftPlusIcon( KeyboardHelpIconFactory.arrowKeysRowIcon() ),
         KeyboardHelpIconFactory.shiftPlusIcon( KeyboardHelpIconFactory.wasdRowIcon() ),
-        KeyboardHelpIconFactory.shiftPlusIcon( new Text( QuadrilateralStrings.keyboardHelpDialog.mouse, {
+        KeyboardHelpIconFactory.shiftPlusIcon( new Text( mouseStringProperty, {
           font: KeyboardHelpSectionRow.LABEL_FONT,
           maxWidth: 100 // by inspection
         } ) )
@@ -44,11 +48,11 @@ export default class MoveShapeHelpSection extends KeyboardHelpSection {
         labelOptions: {
           lineWrap: QuadrilateralKeyboardHelpContent.LABEL_LINE_WRAP
         },
-        labelInnerContent: smallerStepsDescriptionString
+        labelInnerContent: smallerStepsDescriptionStringProperty
       }
     );
 
-    super( QuadrilateralStrings.keyboardHelpDialog.moveCornersOrSides, [ basicMovementRow, fineMovementRow ] );
+    super( moveCornersOrSidesStringProperty, [ basicMovementRow, fineMovementRow ] );
   }
 }
 

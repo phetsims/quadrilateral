@@ -34,18 +34,18 @@ export default class QuadrilateralVisibilityControls extends VBox {
 
     const cornerLabelsIcon = QuadrilateralIconFactory.createLabelledIcon(
       QuadrilateralIconFactory.createCornerLabelsIcon(),
-      QuadrilateralStrings.labels
+      QuadrilateralStrings.labelsStringProperty
     );
     const cornerLabelsCheckbox = new Checkbox( visibilityModel.vertexLabelsVisibleProperty, cornerLabelsIcon, {
       spacing: QuadrilateralConstants.CONTROL_LABEL_SPACING,
 
       // voicing
-      voicingNameResponse: QuadrilateralStrings.labels,
-      voicingHintResponse: QuadrilateralStrings.a11y.cornerLabelsHintResponse,
+      voicingNameResponse: QuadrilateralStrings.labelsStringProperty,
+      voicingHintResponse: QuadrilateralStrings.a11y.cornerLabelsHintResponseStringProperty,
 
       // a11y
-      checkedContextResponse: QuadrilateralStrings.a11y.cornerLabelsAddedResponse,
-      uncheckedContextResponse: QuadrilateralStrings.a11y.cornerLabelsRemovedResponse,
+      checkedContextResponse: QuadrilateralStrings.a11y.cornerLabelsAddedResponseStringProperty,
+      uncheckedContextResponse: QuadrilateralStrings.a11y.cornerLabelsRemovedResponseStringProperty,
 
       // phet-io
       tandem: options.tandem.createTandem( 'cornerLabelsCheckbox' )
@@ -53,18 +53,18 @@ export default class QuadrilateralVisibilityControls extends VBox {
 
     const markersIcon = QuadrilateralIconFactory.createLabelledIcon(
       QuadrilateralIconFactory.createMarkersIcon(),
-      QuadrilateralStrings.markers
+      QuadrilateralStrings.markersStringProperty
     );
     const markersCheckbox = new Checkbox( visibilityModel.markersVisibleProperty, markersIcon, {
       spacing: QuadrilateralConstants.CONTROL_LABEL_SPACING,
 
       // voicing
-      voicingNameResponse: QuadrilateralStrings.markers,
-      voicingHintResponse: QuadrilateralStrings.a11y.markersHintResponse,
+      voicingNameResponse: QuadrilateralStrings.markersStringProperty,
+      voicingHintResponse: QuadrilateralStrings.a11y.markersHintResponseStringProperty,
 
       // a11y
-      checkedContextResponse: QuadrilateralStrings.a11y.markersAddedResponse,
-      uncheckedContextResponse: QuadrilateralStrings.a11y.markersRemovedResponse,
+      checkedContextResponse: QuadrilateralStrings.a11y.markersAddedResponseStringProperty,
+      uncheckedContextResponse: QuadrilateralStrings.a11y.markersRemovedResponseStringProperty,
 
       // phet-io
       tandem: options.tandem.createTandem( 'markersCheckbox' )
@@ -72,18 +72,18 @@ export default class QuadrilateralVisibilityControls extends VBox {
 
     const diagonalGuidesIcon = QuadrilateralIconFactory.createLabelledIcon(
       QuadrilateralIconFactory.createDiagonalGuidesIcon(),
-      QuadrilateralStrings.diagonals
+      QuadrilateralStrings.diagonalsStringProperty
     );
     const diagonalGuidesCheckbox = new Checkbox( visibilityModel.diagonalGuidesVisibleProperty, diagonalGuidesIcon, {
       spacing: QuadrilateralConstants.CONTROL_LABEL_SPACING,
 
       // voicing
-      voicingNameResponse: QuadrilateralStrings.diagonals,
-      voicingHintResponse: QuadrilateralStrings.a11y.diagonalGuidesHintResponse,
+      voicingNameResponse: QuadrilateralStrings.diagonalsStringProperty,
+      voicingHintResponse: QuadrilateralStrings.a11y.diagonalGuidesHintResponseStringProperty,
 
       // a11y
-      checkedContextResponse: QuadrilateralStrings.a11y.diagonalGuidesAddedResponse,
-      uncheckedContextResponse: QuadrilateralStrings.a11y.diagonalGuidesRemovedResponse,
+      checkedContextResponse: QuadrilateralStrings.a11y.diagonalGuidesAddedResponseStringProperty,
+      uncheckedContextResponse: QuadrilateralStrings.a11y.diagonalGuidesRemovedResponseStringProperty,
 
       // phet-io
       tandem: options.tandem.createTandem( 'diagonalGuidesCheckbox' )
@@ -91,18 +91,18 @@ export default class QuadrilateralVisibilityControls extends VBox {
 
     const gridIcon = QuadrilateralIconFactory.createLabelledIcon(
       QuadrilateralIconFactory.createGridIcon(),
-      QuadrilateralStrings.grid
+      QuadrilateralStrings.gridStringProperty
     );
     const gridCheckbox = new Checkbox( visibilityModel.gridVisibleProperty, gridIcon, {
       spacing: QuadrilateralConstants.CONTROL_LABEL_SPACING,
 
       // voicing
-      voicingNameResponse: QuadrilateralStrings.grid,
-      voicingHintResponse: QuadrilateralStrings.a11y.gridLinesHintResponse,
+      voicingNameResponse: QuadrilateralStrings.gridStringProperty,
+      voicingHintResponse: QuadrilateralStrings.a11y.gridLinesHintResponseStringProperty,
 
       // a11y
-      checkedContextResponse: QuadrilateralStrings.a11y.gridLinesAddedResponse,
-      uncheckedContextResponse: QuadrilateralStrings.a11y.gridLinesRemovedResponse,
+      checkedContextResponse: QuadrilateralStrings.a11y.gridLinesAddedResponseStringProperty,
+      uncheckedContextResponse: QuadrilateralStrings.a11y.gridLinesRemovedResponseStringProperty,
 
       // phet-io
       tandem: options.tandem.createTandem( 'gridCheckbox' )

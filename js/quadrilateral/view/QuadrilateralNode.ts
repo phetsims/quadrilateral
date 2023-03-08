@@ -25,18 +25,18 @@ import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 
 // constants
-const cornerAString = QuadrilateralStrings.a11y.cornerA;
-const cornerBString = QuadrilateralStrings.a11y.cornerB;
-const cornerCString = QuadrilateralStrings.a11y.cornerC;
-const cornerDString = QuadrilateralStrings.a11y.cornerD;
-const sideABString = QuadrilateralStrings.a11y.sideAB;
-const sideBCString = QuadrilateralStrings.a11y.sideBC;
-const sideCDString = QuadrilateralStrings.a11y.sideCD;
-const sideDAString = QuadrilateralStrings.a11y.sideDA;
-const vertexAString = QuadrilateralStrings.vertexA;
-const vertexBString = QuadrilateralStrings.vertexB;
-const vertexCString = QuadrilateralStrings.vertexC;
-const vertexDString = QuadrilateralStrings.vertexD;
+const cornerAStringProperty = QuadrilateralStrings.a11y.cornerAStringProperty;
+const cornerBStringProperty = QuadrilateralStrings.a11y.cornerBStringProperty;
+const cornerCStringProperty = QuadrilateralStrings.a11y.cornerCStringProperty;
+const cornerDStringProperty = QuadrilateralStrings.a11y.cornerDStringProperty;
+const sideABStringProperty = QuadrilateralStrings.a11y.sideABStringProperty;
+const sideBCStringProperty = QuadrilateralStrings.a11y.sideBCStringProperty;
+const sideCDStringProperty = QuadrilateralStrings.a11y.sideCDStringProperty;
+const sideDAStringProperty = QuadrilateralStrings.a11y.sideDAStringProperty;
+const vertexAStringProperty = QuadrilateralStrings.vertexAStringProperty;
+const vertexBStringProperty = QuadrilateralStrings.vertexBStringProperty;
+const vertexCStringProperty = QuadrilateralStrings.vertexCStringProperty;
+const vertexDStringProperty = QuadrilateralStrings.vertexDStringProperty;
 
 // in seconds,
 const SHAPE_FILL_TIME = 0.35;
@@ -83,48 +83,48 @@ export default class QuadrilateralNode extends Voicing( Node ) {
     const vertexD = this.quadrilateralShapeModel.vertexD;
 
     // REVIEW: rename vertexANode? So it matches naming like sideABNode?
-    const vertexNode1 = new QuadrilateralVertexNode( vertexA, vertexAString, quadrilateralModel, quadrilateralDescriber.vertexADescriber, modelViewTransform, {
-      nameResponse: cornerAString,
+    const vertexNode1 = new QuadrilateralVertexNode( vertexA, vertexAStringProperty, quadrilateralModel, quadrilateralDescriber.vertexADescriber, modelViewTransform, {
+      nameResponse: cornerAStringProperty,
 
       // phet-io
       tandem: providedOptions.tandem.createTandem( 'vertexANode' )
     } );
 
-    const vertexNode2 = new QuadrilateralVertexNode( vertexB, vertexBString, quadrilateralModel, quadrilateralDescriber.vertexBDescriber, modelViewTransform, {
-      nameResponse: cornerBString,
+    const vertexNode2 = new QuadrilateralVertexNode( vertexB, vertexBStringProperty, quadrilateralModel, quadrilateralDescriber.vertexBDescriber, modelViewTransform, {
+      nameResponse: cornerBStringProperty,
 
       // phet-io
       tandem: providedOptions.tandem.createTandem( 'vertexBNode' )
     } );
 
-    const vertexNode3 = new QuadrilateralVertexNode( vertexC, vertexCString, quadrilateralModel, quadrilateralDescriber.vertexCDescriber, modelViewTransform, {
-      nameResponse: cornerCString,
+    const vertexNode3 = new QuadrilateralVertexNode( vertexC, vertexCStringProperty, quadrilateralModel, quadrilateralDescriber.vertexCDescriber, modelViewTransform, {
+      nameResponse: cornerCStringProperty,
 
       // phet-io
       tandem: providedOptions.tandem.createTandem( 'vertexCNode' )
     } );
 
-    const vertexNode4 = new QuadrilateralVertexNode( vertexD, vertexDString, quadrilateralModel, quadrilateralDescriber.vertexDDescriber, modelViewTransform, {
-      nameResponse: cornerDString,
+    const vertexNode4 = new QuadrilateralVertexNode( vertexD, vertexDStringProperty, quadrilateralModel, quadrilateralDescriber.vertexDDescriber, modelViewTransform, {
+      nameResponse: cornerDStringProperty,
 
       // phet-io
       tandem: providedOptions.tandem.createTandem( 'vertexDNode' )
     } );
 
     const sideABNode = new QuadrilateralSideNode( quadrilateralModel, this.model.quadrilateralShapeModel.sideAB, this.model.quadrilateralTestShapeModel.sideAB, quadrilateralDescriber.sideABDescriber, modelViewTransform, {
-      nameResponse: sideABString,
+      nameResponse: sideABStringProperty,
       tandem: providedOptions.tandem.createTandem( 'sideABNode' )
     } );
     const sideBCNode = new QuadrilateralSideNode( quadrilateralModel, this.model.quadrilateralShapeModel.sideBC, this.model.quadrilateralTestShapeModel.sideBC, quadrilateralDescriber.sideBCDescriber, modelViewTransform, {
-      nameResponse: sideBCString,
+      nameResponse: sideBCStringProperty,
       tandem: providedOptions.tandem.createTandem( 'sideBCNode' )
     } );
     const sideCDNode = new QuadrilateralSideNode( quadrilateralModel, this.model.quadrilateralShapeModel.sideCD, this.model.quadrilateralTestShapeModel.sideCD, quadrilateralDescriber.sideCDDescriber, modelViewTransform, {
-      nameResponse: sideCDString,
+      nameResponse: sideCDStringProperty,
       tandem: providedOptions.tandem.createTandem( 'sideCDNode' )
     } );
     const sideDANode = new QuadrilateralSideNode( quadrilateralModel, this.model.quadrilateralShapeModel.sideDA, this.model.quadrilateralTestShapeModel.sideDA, quadrilateralDescriber.sideDADescriber, modelViewTransform, {
-      nameResponse: sideDAString,
+      nameResponse: sideDAStringProperty,
       tandem: providedOptions.tandem.createTandem( 'sideDANode' )
     } );
 

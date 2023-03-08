@@ -22,107 +22,124 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import ResponsePacket from '../../../../utterance-queue/js/ResponsePacket.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import { PDOMValueType } from '../../../../scenery/js/imports.js';
+
+// Alias for string types used in this sim - to support string Properties (dynamic locales), strings, and often
+// null values for functions. Even though Voicing and Interactive Description do not support dynamic locales, code
+// still uses Properties to reduce technical debt.
+export type QuadrilateralStringType = PDOMValueType;
+export type NullableQuadrilateralStringType = QuadrilateralStringType | null;
 
 // constants
-const firstDetailsStatementPatternString = QuadrilateralStrings.a11y.voicing.firstDetailsStatementPattern;
-const aBString = QuadrilateralStrings.a11y.aB;
-const bCString = QuadrilateralStrings.a11y.bC;
-const cDString = QuadrilateralStrings.a11y.cD;
-const dAString = QuadrilateralStrings.a11y.dA;
-const sideABString = QuadrilateralStrings.a11y.sideAB;
-const sideBCString = QuadrilateralStrings.a11y.sideBC;
-const sideCDString = QuadrilateralStrings.a11y.sideCD;
-const sideDAString = QuadrilateralStrings.a11y.sideDA;
-const allString = QuadrilateralStrings.a11y.voicing.details.all;
-const oppositeString = QuadrilateralStrings.a11y.voicing.details.opposite;
-const rightAnglesString = QuadrilateralStrings.a11y.voicing.details.rightAngles;
-const equalString = QuadrilateralStrings.a11y.voicing.details.equal;
-const pairsOfAdjacentString = QuadrilateralStrings.a11y.voicing.details.pairsOfAdjacent;
-const onePairOfAdjacentString = QuadrilateralStrings.a11y.voicing.details.onePairOfAdjacent;
-const onePairOfOppositeString = QuadrilateralStrings.a11y.voicing.details.onePairOfOpposite;
-const noString = QuadrilateralStrings.a11y.voicing.details.noString;
-const vertexAString = QuadrilateralStrings.vertexA;
-const vertexBString = QuadrilateralStrings.vertexB;
-const vertexCString = QuadrilateralStrings.vertexC;
-const vertexDString = QuadrilateralStrings.vertexD;
-const youHaveASizedNamedShapePatternString = QuadrilateralStrings.a11y.voicing.youHaveASizedNamedShapePattern;
-const youHaveASizedShapePatternString = QuadrilateralStrings.a11y.voicing.youHaveASizedShapePattern;
+const firstDetailsStatementPatternStringProperty = QuadrilateralStrings.a11y.voicing.firstDetailsStatementPatternStringProperty;
+const aBStringProperty = QuadrilateralStrings.a11y.aBStringProperty;
+const bCStringProperty = QuadrilateralStrings.a11y.bCStringProperty;
+const cDStringProperty = QuadrilateralStrings.a11y.cDStringProperty;
+const dAStringProperty = QuadrilateralStrings.a11y.dAStringProperty;
+const sideABStringProperty = QuadrilateralStrings.a11y.sideABStringProperty;
+const sideBCStringProperty = QuadrilateralStrings.a11y.sideBCStringProperty;
+const sideCDStringProperty = QuadrilateralStrings.a11y.sideCDStringProperty;
+const sideDAStringProperty = QuadrilateralStrings.a11y.sideDAStringProperty;
+const allStringProperty = QuadrilateralStrings.a11y.voicing.details.allStringProperty;
+const oppositeStringProperty = QuadrilateralStrings.a11y.voicing.details.oppositeStringProperty;
+const rightAnglesStringProperty = QuadrilateralStrings.a11y.voicing.details.rightAnglesStringProperty;
+const equalStringProperty = QuadrilateralStrings.a11y.voicing.details.equalStringProperty;
+const pairsOfAdjacentStringProperty = QuadrilateralStrings.a11y.voicing.details.pairsOfAdjacentStringProperty;
+const onePairOfAdjacentStringProperty = QuadrilateralStrings.a11y.voicing.details.onePairOfAdjacentStringProperty;
+const onePairOfOppositeStringProperty = QuadrilateralStrings.a11y.voicing.details.onePairOfOppositeStringProperty;
+const noStringStringProperty = QuadrilateralStrings.a11y.voicing.details.noStringStringProperty;
+const vertexAStringProperty = QuadrilateralStrings.vertexAStringProperty;
+const vertexBStringProperty = QuadrilateralStrings.vertexBStringProperty;
+const vertexCStringProperty = QuadrilateralStrings.vertexCStringProperty;
+const vertexDStringProperty = QuadrilateralStrings.vertexDStringProperty;
+const youHaveASizedNamedShapePatternStringProperty = QuadrilateralStrings.a11y.voicing.youHaveASizedNamedShapePatternStringProperty;
+const youHaveASizedShapePatternStringProperty = QuadrilateralStrings.a11y.voicing.youHaveASizedShapePatternStringProperty;
 
-const isoscelesTrapezoidDetailsPatternString = QuadrilateralStrings.a11y.voicing.isoscelesTrapezoidDetailsPattern;
-const allRightAnglesAllSidesEqualString = QuadrilateralStrings.a11y.voicing.allRightAnglesAllSidesEqual;
-const oppositeSidesInParallelString = QuadrilateralStrings.a11y.voicing.oppositeSidesInParallel;
-const trapezoidDetailsPatternString = QuadrilateralStrings.a11y.voicing.trapezoidDetailsPattern;
-const kiteDetailsShortPatternString = QuadrilateralStrings.a11y.voicing.kiteDetailsShortPattern;
-const dartDetailsShortPatternString = QuadrilateralStrings.a11y.voicing.dartDetailsShortPattern;
-const dartDetailsPatternString = QuadrilateralStrings.a11y.voicing.dartDetailsPattern;
-const kiteDetailsPatternString = QuadrilateralStrings.a11y.voicing.kiteDetailsPattern;
-const convexQuadrilateralDetailsString = QuadrilateralStrings.a11y.voicing.convexQuadrilateralDetails;
-const concaveQuadrilateralDetailsPatternString = QuadrilateralStrings.a11y.voicing.concaveQuadrilateralDetailsPattern;
-const allSidesEqualString = QuadrilateralStrings.a11y.voicing.allSidesEqual;
-const allRightAnglesString = QuadrilateralStrings.a11y.voicing.allRightAngles;
-const triangleDetailsPatternString = QuadrilateralStrings.a11y.voicing.triangleDetailsPattern;
+const isoscelesTrapezoidDetailsPatternStringProperty = QuadrilateralStrings.a11y.voicing.isoscelesTrapezoidDetailsPatternStringProperty;
+const allRightAnglesAllSidesEqualStringProperty = QuadrilateralStrings.a11y.voicing.allRightAnglesAllSidesEqualStringProperty;
+const oppositeSidesInParallelStringProperty = QuadrilateralStrings.a11y.voicing.oppositeSidesInParallelStringProperty;
+const trapezoidDetailsPatternStringProperty = QuadrilateralStrings.a11y.voicing.trapezoidDetailsPatternStringProperty;
+const kiteDetailsShortPatternStringProperty = QuadrilateralStrings.a11y.voicing.kiteDetailsShortPatternStringProperty;
+const dartDetailsShortPatternStringProperty = QuadrilateralStrings.a11y.voicing.dartDetailsShortPatternStringProperty;
+const dartDetailsPatternStringProperty = QuadrilateralStrings.a11y.voicing.dartDetailsPatternStringProperty;
+const kiteDetailsPatternStringProperty = QuadrilateralStrings.a11y.voicing.kiteDetailsPatternStringProperty;
+const convexQuadrilateralDetailsStringProperty = QuadrilateralStrings.a11y.voicing.convexQuadrilateralDetailsStringProperty;
+const concaveQuadrilateralDetailsPatternStringProperty = QuadrilateralStrings.a11y.voicing.concaveQuadrilateralDetailsPatternStringProperty;
+const allSidesEqualStringProperty = QuadrilateralStrings.a11y.voicing.allSidesEqualStringProperty;
+const allRightAnglesStringProperty = QuadrilateralStrings.a11y.voicing.allRightAnglesStringProperty;
+const triangleDetailsPatternStringProperty = QuadrilateralStrings.a11y.voicing.triangleDetailsPatternStringProperty;
 
-const sidesDescriptionPatternString = QuadrilateralStrings.a11y.voicing.sidesDescriptionPattern;
-const longestSidesDescriptionPatternString = QuadrilateralStrings.a11y.voicing.longestSidesDescriptionPattern;
-const longestSideDescriptionPatternString = QuadrilateralStrings.a11y.voicing.longestSideDescriptionPattern;
-const shortestSidesDescriptionPatternString = QuadrilateralStrings.a11y.voicing.shortestSidesDescriptionPattern;
-const shortestSideDescriptionPatternString = QuadrilateralStrings.a11y.voicing.shortestSideDescriptionPattern;
-const sideLengthDescriptionPatternString = QuadrilateralStrings.a11y.voicing.sideLengthDescriptionPattern;
+const sidesDescriptionPatternStringProperty = QuadrilateralStrings.a11y.voicing.sidesDescriptionPatternStringProperty;
+const longestSidesDescriptionPatternStringProperty = QuadrilateralStrings.a11y.voicing.longestSidesDescriptionPatternStringProperty;
+const longestSideDescriptionPatternStringProperty = QuadrilateralStrings.a11y.voicing.longestSideDescriptionPatternStringProperty;
+const shortestSidesDescriptionPatternStringProperty = QuadrilateralStrings.a11y.voicing.shortestSidesDescriptionPatternStringProperty;
+const shortestSideDescriptionPatternStringProperty = QuadrilateralStrings.a11y.voicing.shortestSideDescriptionPatternStringProperty;
+const sideLengthDescriptionPatternStringProperty = QuadrilateralStrings.a11y.voicing.sideLengthDescriptionPatternStringProperty;
 
-const cornersRightDescriptionString = QuadrilateralStrings.a11y.voicing.cornersRightDescription;
-const widestCornersDescriptionPatternString = QuadrilateralStrings.a11y.voicing.widestCornersDescriptionPattern;
-const widestCornerDescriptionPatternString = QuadrilateralStrings.a11y.voicing.widestCornerDescriptionPattern;
-const smallestCornersDescriptionPatternString = QuadrilateralStrings.a11y.voicing.smallestCornersDescriptionPattern;
-const smallestCornerDescriptionPatternString = QuadrilateralStrings.a11y.voicing.smallestCornerDescriptionPattern;
-const cornersDescriptionPatternString = QuadrilateralStrings.a11y.voicing.cornersDescriptionPattern;
-const numberOfWedgesPatternString = QuadrilateralStrings.a11y.voicing.numberOfWedgesPattern;
+const cornersRightDescriptionStringProperty = QuadrilateralStrings.a11y.voicing.cornersRightDescriptionStringProperty;
+const widestCornersDescriptionPatternStringProperty = QuadrilateralStrings.a11y.voicing.widestCornersDescriptionPatternStringProperty;
+const widestCornerDescriptionPatternStringProperty = QuadrilateralStrings.a11y.voicing.widestCornerDescriptionPatternStringProperty;
+const smallestCornersDescriptionPatternStringProperty = QuadrilateralStrings.a11y.voicing.smallestCornersDescriptionPatternStringProperty;
+const smallestCornerDescriptionPatternStringProperty = QuadrilateralStrings.a11y.voicing.smallestCornerDescriptionPatternStringProperty;
+const cornersDescriptionPatternStringProperty = QuadrilateralStrings.a11y.voicing.cornersDescriptionPatternStringProperty;
+const numberOfWedgesPatternStringProperty = QuadrilateralStrings.a11y.voicing.numberOfWedgesPatternStringProperty;
 
-const shapeNameWithArticlesMap = new Map<NamedQuadrilateral | null, string>();
-shapeNameWithArticlesMap.set( NamedQuadrilateral.SQUARE, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.square );
-shapeNameWithArticlesMap.set( NamedQuadrilateral.RECTANGLE, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.rectangle );
-shapeNameWithArticlesMap.set( NamedQuadrilateral.RHOMBUS, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.rhombus );
-shapeNameWithArticlesMap.set( NamedQuadrilateral.KITE, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.kite );
-shapeNameWithArticlesMap.set( NamedQuadrilateral.ISOSCELES_TRAPEZOID, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.isoscelesTrapezoid );
-shapeNameWithArticlesMap.set( NamedQuadrilateral.TRAPEZOID, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.trapezoid );
-shapeNameWithArticlesMap.set( NamedQuadrilateral.CONCAVE_QUADRILATERAL, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.concaveQuadrilateral );
-shapeNameWithArticlesMap.set( NamedQuadrilateral.CONVEX_QUADRILATERAL, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.convexQuadrilateral );
-shapeNameWithArticlesMap.set( NamedQuadrilateral.PARALLELOGRAM, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.parallelogram );
-shapeNameWithArticlesMap.set( NamedQuadrilateral.DART, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.dart );
-shapeNameWithArticlesMap.set( NamedQuadrilateral.TRIANGLE, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.triangle );
+const tinyStringProperty = QuadrilateralStrings.a11y.voicing.sizes.tinyStringProperty;
+const verySmallStringProperty = QuadrilateralStrings.a11y.voicing.sizes.verySmallStringProperty;
+const smallStringProperty = QuadrilateralStrings.a11y.voicing.sizes.smallStringProperty;
+const mediumSizedStringProperty = QuadrilateralStrings.a11y.voicing.sizes.mediumSizedStringProperty;
+const largeStringProperty = QuadrilateralStrings.a11y.voicing.sizes.largeStringProperty;
 
-const shapeNameMap = new Map<NamedQuadrilateral, string>();
-shapeNameMap.set( NamedQuadrilateral.SQUARE, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.square );
-shapeNameMap.set( NamedQuadrilateral.RECTANGLE, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.rectangle );
-shapeNameMap.set( NamedQuadrilateral.RHOMBUS, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.rhombus );
-shapeNameMap.set( NamedQuadrilateral.KITE, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.kite );
-shapeNameMap.set( NamedQuadrilateral.ISOSCELES_TRAPEZOID, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.isoscelesTrapezoid );
-shapeNameMap.set( NamedQuadrilateral.TRAPEZOID, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.trapezoid );
-shapeNameMap.set( NamedQuadrilateral.CONCAVE_QUADRILATERAL, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.concaveQuadrilateral );
-shapeNameMap.set( NamedQuadrilateral.CONVEX_QUADRILATERAL, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.convexQuadrilateral );
-shapeNameMap.set( NamedQuadrilateral.PARALLELOGRAM, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.parallelogram );
-shapeNameMap.set( NamedQuadrilateral.DART, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.dart );
-shapeNameMap.set( NamedQuadrilateral.TRIANGLE, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.triangle );
+const youHaveAShapeHintPatternStringProperty = QuadrilateralStrings.a11y.voicing.youHaveAShapeHintPatternStringProperty;
+const resetShapeStringProperty = QuadrilateralStrings.resetShapeStringProperty;
+const resetShapeContextResponseStringProperty = QuadrilateralStrings.a11y.voicing.resetShape.contextResponseStringProperty;
+
+const shapeNameWithArticlesMap = new Map<NamedQuadrilateral | null, TReadOnlyProperty<string>>();
+shapeNameWithArticlesMap.set( NamedQuadrilateral.SQUARE, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.squareStringProperty );
+shapeNameWithArticlesMap.set( NamedQuadrilateral.RECTANGLE, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.rectangleStringProperty );
+shapeNameWithArticlesMap.set( NamedQuadrilateral.RHOMBUS, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.rhombusStringProperty );
+shapeNameWithArticlesMap.set( NamedQuadrilateral.KITE, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.kiteStringProperty );
+shapeNameWithArticlesMap.set( NamedQuadrilateral.ISOSCELES_TRAPEZOID, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.isoscelesTrapezoidStringProperty );
+shapeNameWithArticlesMap.set( NamedQuadrilateral.TRAPEZOID, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.trapezoidStringProperty );
+shapeNameWithArticlesMap.set( NamedQuadrilateral.CONCAVE_QUADRILATERAL, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.concaveQuadrilateralStringProperty );
+shapeNameWithArticlesMap.set( NamedQuadrilateral.CONVEX_QUADRILATERAL, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.convexQuadrilateralStringProperty );
+shapeNameWithArticlesMap.set( NamedQuadrilateral.PARALLELOGRAM, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.parallelogramStringProperty );
+shapeNameWithArticlesMap.set( NamedQuadrilateral.DART, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.dartStringProperty );
+shapeNameWithArticlesMap.set( NamedQuadrilateral.TRIANGLE, QuadrilateralStrings.a11y.voicing.shapeNames.withArticles.triangleStringProperty );
+
+const shapeNameMap = new Map<NamedQuadrilateral, TReadOnlyProperty<string>>();
+shapeNameMap.set( NamedQuadrilateral.SQUARE, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.squareStringProperty );
+shapeNameMap.set( NamedQuadrilateral.RECTANGLE, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.rectangleStringProperty );
+shapeNameMap.set( NamedQuadrilateral.RHOMBUS, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.rhombusStringProperty );
+shapeNameMap.set( NamedQuadrilateral.KITE, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.kiteStringProperty );
+shapeNameMap.set( NamedQuadrilateral.ISOSCELES_TRAPEZOID, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.isoscelesTrapezoidStringProperty );
+shapeNameMap.set( NamedQuadrilateral.TRAPEZOID, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.trapezoidStringProperty );
+shapeNameMap.set( NamedQuadrilateral.CONCAVE_QUADRILATERAL, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.concaveQuadrilateralStringProperty );
+shapeNameMap.set( NamedQuadrilateral.CONVEX_QUADRILATERAL, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.convexQuadrilateralStringProperty );
+shapeNameMap.set( NamedQuadrilateral.PARALLELOGRAM, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.parallelogramStringProperty );
+shapeNameMap.set( NamedQuadrilateral.DART, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.dartStringProperty );
+shapeNameMap.set( NamedQuadrilateral.TRIANGLE, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.triangleStringProperty );
 
 // A map that goes from VertexLabel -> letter label (like "A")
-const vertexLabelMap = new Map<VertexLabel, string>();
-vertexLabelMap.set( VertexLabel.VERTEX_A, vertexAString );
-vertexLabelMap.set( VertexLabel.VERTEX_B, vertexBString );
-vertexLabelMap.set( VertexLabel.VERTEX_C, vertexCString );
-vertexLabelMap.set( VertexLabel.VERTEX_D, vertexDString );
+const vertexLabelMap = new Map<VertexLabel, TReadOnlyProperty<string>>();
+vertexLabelMap.set( VertexLabel.VERTEX_A, vertexAStringProperty );
+vertexLabelMap.set( VertexLabel.VERTEX_B, vertexBStringProperty );
+vertexLabelMap.set( VertexLabel.VERTEX_C, vertexCStringProperty );
+vertexLabelMap.set( VertexLabel.VERTEX_D, vertexDStringProperty );
 
 // A map that goes from SideLabel -> "full" side label (like "Side AB")
-const fullSideLabelMap = new Map<SideLabel, string>();
-fullSideLabelMap.set( SideLabel.SIDE_AB, sideABString );
-fullSideLabelMap.set( SideLabel.SIDE_BC, sideBCString );
-fullSideLabelMap.set( SideLabel.SIDE_CD, sideCDString );
-fullSideLabelMap.set( SideLabel.SIDE_DA, sideDAString );
+const fullSideLabelMap = new Map<SideLabel, TReadOnlyProperty<string>>();
+fullSideLabelMap.set( SideLabel.SIDE_AB, sideABStringProperty );
+fullSideLabelMap.set( SideLabel.SIDE_BC, sideBCStringProperty );
+fullSideLabelMap.set( SideLabel.SIDE_CD, sideCDStringProperty );
+fullSideLabelMap.set( SideLabel.SIDE_DA, sideDAStringProperty );
 
 // A map that goes from SideLabel -> letters label (like "AB")
-const sideLabelMap = new Map();
-sideLabelMap.set( SideLabel.SIDE_AB, aBString );
-sideLabelMap.set( SideLabel.SIDE_BC, bCString );
-sideLabelMap.set( SideLabel.SIDE_CD, cDString );
-sideLabelMap.set( SideLabel.SIDE_DA, dAString );
+const sideLabelMap = new Map<SideLabel, TReadOnlyProperty<string>>();
+sideLabelMap.set( SideLabel.SIDE_AB, aBStringProperty );
+sideLabelMap.set( SideLabel.SIDE_BC, bCStringProperty );
+sideLabelMap.set( SideLabel.SIDE_CD, cDStringProperty );
+sideLabelMap.set( SideLabel.SIDE_DA, dAStringProperty );
 
 // Thresholds that are used to describe the size of the current shape. All are relative to the displayed grid
 // and the area of a grid cell.
@@ -181,7 +198,7 @@ export default class QuadrilateralDescriber {
    * "a trapezoid" or
    * "a concave quadrilateral"
    */
-  public getShapeDescription(): string {
+  public getShapeDescription(): QuadrilateralStringType {
 
     // of type NamedQuadrilateral enumeration
     const shapeName = this.shapeModel.shapeNameProperty.value;
@@ -192,19 +209,19 @@ export default class QuadrilateralDescriber {
    * Returns the actual name of the NamedQuadrilateral, with an article before the name for english
    * phrases.
    */
-  public static getShapeNameWithArticlesDescription( shapeName: NamedQuadrilateral | null ): string {
-    const shapeNameDescription = shapeNameWithArticlesMap.get( shapeName );
-    assert && assert( shapeNameDescription, 'There must be shape name description for the current shape state.' );
-    return shapeNameDescription!;
+  public static getShapeNameWithArticlesDescription( shapeName: NamedQuadrilateral | null ): TReadOnlyProperty<string> {
+    const shapeNameDescriptionProperty = shapeNameWithArticlesMap.get( shapeName );
+    assert && assert( shapeNameDescriptionProperty, 'There must be shape name description for the current shape state.' );
+    return shapeNameDescriptionProperty!;
   }
 
   /**
    * Get the shape name in isolation without any articles.
    */
-  public static getShapeNameDescription( shapeName: NamedQuadrilateral ): string {
-    const shapeNameDescription = shapeNameMap.get( shapeName );
-    assert && assert( shapeNameDescription, 'There must be shape name description for the current shape state.' );
-    return shapeNameDescription!;
+  public static getShapeNameDescription( shapeName: NamedQuadrilateral ): TReadOnlyProperty<string> {
+    const shapeNameDescriptionProperty = shapeNameMap.get( shapeName );
+    assert && assert( shapeNameDescriptionProperty, 'There must be shape name description for the current shape state.' );
+    return shapeNameDescriptionProperty!;
   }
 
   /**
@@ -212,10 +229,10 @@ export default class QuadrilateralDescriber {
    * "AB" or
    * "DA"
    */
-  public static getSideLabelString( sideLabel: SideLabel ): string {
-    const sideLabelString = sideLabelMap.get( sideLabel )!;
-    assert && assert( sideLabelString, 'There must be a side label description.' );
-    return sideLabelString;
+  public static getSideLabelString( sideLabel: SideLabel ): TReadOnlyProperty<string> {
+    const sideLabelStringProperty = sideLabelMap.get( sideLabel )!;
+    assert && assert( sideLabelStringProperty, 'There must be a side label description.' );
+    return sideLabelStringProperty;
   }
 
   /**
@@ -223,10 +240,10 @@ export default class QuadrilateralDescriber {
    * "A" or
    * "B"
    */
-  public static getVertexLabelString( vertexLabel: VertexLabel ): string {
-    const vertexLabelString = vertexLabelMap.get( vertexLabel )!;
-    assert && assert( vertexLabelString, 'There must be a label for the vertex.' );
-    return vertexLabelString;
+  public static getVertexLabelString( vertexLabel: VertexLabel ): TReadOnlyProperty<string> {
+    const vertexLabelStringProperty = vertexLabelMap.get( vertexLabel )!;
+    assert && assert( vertexLabelStringProperty, 'There must be a label for the vertex.' );
+    return vertexLabelStringProperty;
   }
 
   /**
@@ -236,7 +253,7 @@ export default class QuadrilateralDescriber {
    */
   public getYouHaveAShapeDescription(): string {
     const shapeDescriptionString = this.getShapeDescription();
-    return StringUtils.fillIn( QuadrilateralStrings.a11y.voicing.youHaveAShapeHintPattern, {
+    return StringUtils.fillIn( youHaveAShapeHintPatternStringProperty, {
       shapeDescription: shapeDescriptionString
     } );
   }
@@ -244,8 +261,8 @@ export default class QuadrilateralDescriber {
   /**
    * Returns a description that is spoken when the user uses the "check shape" feature (global hotkey "ctrl + c").
    */
-  public getCheckShapeDescription(): string {
-    let description: string;
+  public getCheckShapeDescription(): QuadrilateralStringType {
+    let description: QuadrilateralStringType;
     if ( this.shapeNameVisibleProperty.value ) {
       description = this.getYouHaveAShapeDescription();
     }
@@ -260,29 +277,29 @@ export default class QuadrilateralDescriber {
    * Returns a description of the current shape's geometric properties (without saying the shape name). Typically
    * this is used when the user hides the shape name in the user interface.
    */
-  public getShapePropertiesDescription(): string {
+  public getShapePropertiesDescription(): TReadOnlyProperty<string> | string {
 
     // REVIEW: Recommended to use multiple return statements, please see https://stackoverflow.com/questions/36707/should-a-function-have-only-one-return-statement
     // - Yes, lets do it!
-    let shapePropertiesDescription = '';
+    let shapePropertiesDescriptionStringProperty: TReadOnlyProperty<string> | string = '';
 
     const currentShapeName = this.shapeModel.shapeNameProperty.value;
     if ( currentShapeName === NamedQuadrilateral.SQUARE ) {
-      shapePropertiesDescription = this.getSquareDetailsString();
+      shapePropertiesDescriptionStringProperty = this.getSquareDetailsString();
     }
     else if ( currentShapeName === NamedQuadrilateral.RECTANGLE ) {
-      shapePropertiesDescription = this.getRectangleDetailsString();
+      shapePropertiesDescriptionStringProperty = this.getRectangleDetailsString();
     }
     else if ( currentShapeName === NamedQuadrilateral.RHOMBUS ) {
-      shapePropertiesDescription = this.getRhombusDetailsString();
+      shapePropertiesDescriptionStringProperty = this.getRhombusDetailsString();
     }
     else if ( currentShapeName === NamedQuadrilateral.PARALLELOGRAM ) {
-      shapePropertiesDescription = this.getParallelogramDetailsString();
+      shapePropertiesDescriptionStringProperty = this.getParallelogramDetailsString();
     }
     else if ( currentShapeName === NamedQuadrilateral.TRAPEZOID ) {
       assert && assert( this.shapeModel.parallelSidePairsProperty.value.length === 1, 'A Trapezoid should have one parallel side pair' );
       const parallelSidePair = this.shapeModel.parallelSidePairsProperty.value[ 0 ];
-      shapePropertiesDescription = this.getTrapezoidDetailsString( parallelSidePair );
+      shapePropertiesDescriptionStringProperty = this.getTrapezoidDetailsString( parallelSidePair );
     }
     else if ( currentShapeName === NamedQuadrilateral.ISOSCELES_TRAPEZOID ) {
       assert && assert( this.shapeModel.oppositeEqualSidePairsProperty.value.length === 1,
@@ -293,7 +310,7 @@ export default class QuadrilateralDescriber {
         'A Trapezoid should have one parallel side pair.' );
       const parallelSidePair = this.shapeModel.parallelSidePairsProperty.value[ 0 ];
 
-      shapePropertiesDescription = this.getIsoscelesTrapezoidDetailsString(
+      shapePropertiesDescriptionStringProperty = this.getIsoscelesTrapezoidDetailsString(
         oppositeEqualSidePair,
         parallelSidePair
       );
@@ -302,23 +319,23 @@ export default class QuadrilateralDescriber {
       assert && assert( this.shapeModel.oppositeEqualVertexPairsProperty.value.length === 1,
         'A kite should have only one pair of opposite equal vertices' );
       const oppositeEqualVertexPair = this.shapeModel.oppositeEqualVertexPairsProperty.value[ 0 ];
-      shapePropertiesDescription = this.getKiteDetailsString( oppositeEqualVertexPair, kiteDetailsPatternString );
+      shapePropertiesDescriptionStringProperty = this.getKiteDetailsString( oppositeEqualVertexPair, kiteDetailsPatternStringProperty );
     }
     else if ( currentShapeName === NamedQuadrilateral.DART ) {
-      shapePropertiesDescription = this.getDartDetailsString( dartDetailsPatternString );
+      shapePropertiesDescriptionStringProperty = this.getDartDetailsString( dartDetailsPatternStringProperty );
     }
     else if ( currentShapeName === NamedQuadrilateral.CONCAVE_QUADRILATERAL ) {
-      shapePropertiesDescription = this.getConcaveQuadrilateralDetailsString();
+      shapePropertiesDescriptionStringProperty = this.getConcaveQuadrilateralDetailsString();
     }
     else if ( currentShapeName === NamedQuadrilateral.CONVEX_QUADRILATERAL ) {
-      shapePropertiesDescription = this.getConvexQuadrilateralDetailsString();
+      shapePropertiesDescriptionStringProperty = this.getConvexQuadrilateralDetailsString();
     }
     else if ( currentShapeName === NamedQuadrilateral.TRIANGLE ) {
-      shapePropertiesDescription = this.getTriangleDetailsString();
+      shapePropertiesDescriptionStringProperty = this.getTriangleDetailsString();
     }
 
-    assert && assert( shapePropertiesDescription !== '', 'Could not find shapePropertiesDescription for shape.' );
-    return shapePropertiesDescription;
+    assert && assert( shapePropertiesDescriptionStringProperty !== '', 'Could not find shapePropertiesDescriptionProperty for shape.' );
+    return shapePropertiesDescriptionStringProperty;
   }
 
   /**
@@ -327,31 +344,31 @@ export default class QuadrilateralDescriber {
    * "small" or
    * "large"
    */
-  public getSizeDescription(): string {
+  public getSizeDescription(): TReadOnlyProperty<string> {
 
     // REVIEW: Recommended to use multiple return statements, please see https://stackoverflow.com/questions/36707/should-a-function-have-only-one-return-statement
     // Please search the codebase for other places that this applies.
     // - Yes, lets do it!
     //
-    let sizeDescriptionString: string;
+    let sizeDescriptionStringProperty: TReadOnlyProperty<string>;
     const area = this.shapeModel.areaProperty.value;
     if ( area < TINY_THRESHOLD ) {
-      sizeDescriptionString = QuadrilateralStrings.a11y.voicing.sizes.tiny;
+      sizeDescriptionStringProperty = tinyStringProperty;
     }
     else if ( area < VERY_SMALL_THRESHOLD ) {
-      sizeDescriptionString = QuadrilateralStrings.a11y.voicing.sizes.verySmall;
+      sizeDescriptionStringProperty = verySmallStringProperty;
     }
     else if ( area < SMALL_THRESHOLD ) {
-      sizeDescriptionString = QuadrilateralStrings.a11y.voicing.sizes.small;
+      sizeDescriptionStringProperty = smallStringProperty;
     }
     else if ( area < MEDIUM_SIZED_THRESHOLD ) {
-      sizeDescriptionString = QuadrilateralStrings.a11y.voicing.sizes.mediumSized;
+      sizeDescriptionStringProperty = mediumSizedStringProperty;
     }
     else {
-      sizeDescriptionString = QuadrilateralStrings.a11y.voicing.sizes.large;
+      sizeDescriptionStringProperty = largeStringProperty;
     }
 
-    return sizeDescriptionString;
+    return sizeDescriptionStringProperty;
   }
 
   /**
@@ -359,16 +376,16 @@ export default class QuadrilateralDescriber {
    * This first one provides the current named shape and its size.
    */
   public getFirstDetailsStatement(): string {
-    const sizeDescriptionString = this.getSizeDescription();
+    const sizeDescriptionStringProperty = this.getSizeDescription();
     if ( this.shapeNameVisibleProperty.value ) {
-      return StringUtils.fillIn( youHaveASizedNamedShapePatternString, {
-        size: sizeDescriptionString,
+      return StringUtils.fillIn( youHaveASizedNamedShapePatternStringProperty, {
+        size: sizeDescriptionStringProperty,
         shapeName: QuadrilateralDescriber.getShapeNameDescription( this.shapeModel.shapeNameProperty.value )
       } );
     }
     else {
-      return StringUtils.fillIn( youHaveASizedShapePatternString, {
-        size: sizeDescriptionString
+      return StringUtils.fillIn( youHaveASizedShapePatternStringProperty, {
+        size: sizeDescriptionStringProperty
       } );
     }
   }
@@ -391,34 +408,34 @@ export default class QuadrilateralDescriber {
     if ( this.shapeModel.isParallelogram() ) {
 
       // If all adjacent vertices are equal then all are right angles. Otherwise, opposite angles must be equal.
-      cornerTypeString = adjacentEqualVertexPairs.length === 4 ? allString : oppositeString;
-      angleEqualityString = adjacentEqualVertexPairs.length === 4 ? rightAnglesString : equalString;
+      cornerTypeString = adjacentEqualVertexPairs.length === 4 ? allStringProperty : oppositeStringProperty;
+      angleEqualityString = adjacentEqualVertexPairs.length === 4 ? rightAnglesStringProperty : equalStringProperty;
 
       // if all adjacent sides are equal in length, all sides are equal, otherwise only opposite sides are equal
-      sideTypeString = adjacentEqualSidePairs.length === 4 ? allString : oppositeString;
+      sideTypeString = adjacentEqualSidePairs.length === 4 ? allStringProperty : oppositeStringProperty;
     }
     else {
       const oppositeEqualVertexPairs = this.shapeModel.oppositeEqualVertexPairsProperty.value;
       const oppositeEqualSidePairs = this.shapeModel.oppositeEqualSidePairsProperty.value;
 
-      cornerTypeString = adjacentEqualVertexPairs.length === 2 ? pairsOfAdjacentString :
-                         adjacentEqualVertexPairs.length === 1 ? onePairOfAdjacentString :
-                         oppositeEqualVertexPairs.length === 1 ? onePairOfOppositeString :
-                         noString;
+      cornerTypeString = adjacentEqualVertexPairs.length === 2 ? pairsOfAdjacentStringProperty :
+                         adjacentEqualVertexPairs.length === 1 ? onePairOfAdjacentStringProperty :
+                         oppositeEqualVertexPairs.length === 1 ? onePairOfOppositeStringProperty :
+                         noStringStringProperty;
 
-      angleEqualityString = adjacentEqualVertexPairs.length === 1 && this.shapeModel.isInterAngleEqualToOther( adjacentEqualVertexPairs[ 0 ].vertex1.angleProperty.value!, Math.PI / 2 ) ? rightAnglesString :
-                            oppositeEqualVertexPairs.length === 1 && this.shapeModel.isInterAngleEqualToOther( oppositeEqualVertexPairs[ 0 ].vertex1.angleProperty.value!, Math.PI / 2 ) ? rightAnglesString :
+      angleEqualityString = adjacentEqualVertexPairs.length === 1 && this.shapeModel.isInterAngleEqualToOther( adjacentEqualVertexPairs[ 0 ].vertex1.angleProperty.value!, Math.PI / 2 ) ? rightAnglesStringProperty :
+                            oppositeEqualVertexPairs.length === 1 && this.shapeModel.isInterAngleEqualToOther( oppositeEqualVertexPairs[ 0 ].vertex1.angleProperty.value!, Math.PI / 2 ) ? rightAnglesStringProperty :
                               // if two pairs of adjacent angles exist but we are not parallelogram, all cannot be
                               // right angles. OR, no angles are equal.
-                            equalString;
+                            equalStringProperty;
 
-      sideTypeString = adjacentEqualSidePairs.length === 2 ? pairsOfAdjacentString :
-                       adjacentEqualSidePairs.length === 1 ? onePairOfAdjacentString :
-                       oppositeEqualSidePairs.length === 1 ? onePairOfOppositeString :
-                       noString;
+      sideTypeString = adjacentEqualSidePairs.length === 2 ? pairsOfAdjacentStringProperty :
+                       adjacentEqualSidePairs.length === 1 ? onePairOfAdjacentStringProperty :
+                       oppositeEqualSidePairs.length === 1 ? onePairOfOppositeStringProperty :
+                       noStringStringProperty;
     }
 
-    return StringUtils.fillIn( firstDetailsStatementPatternString, {
+    return StringUtils.fillIn( firstDetailsStatementPatternStringProperty, {
       cornerType: cornerTypeString,
       angleEquality: angleEqualityString,
       sideType: sideTypeString
@@ -429,7 +446,7 @@ export default class QuadrilateralDescriber {
    * Returns the third "details" statement for the Voicing toolbar. This is a qualitative description of the current
    * shape, that does not include shape name.
    */
-  public getThirdDetailsStatement(): string | null {
+  public getThirdDetailsStatement(): NullableQuadrilateralStringType {
     const shapeName = this.shapeModel.shapeNameProperty.value;
 
     let description = null;
@@ -510,7 +527,7 @@ export default class QuadrilateralDescriber {
     if ( this.shapeModel.allLengthsEqualProperty.value ) {
 
       // All sides the same length, combine into a shorter string
-      description = StringUtils.fillIn( sidesDescriptionPatternString, {
+      description = StringUtils.fillIn( sidesDescriptionPatternStringProperty, {
         description: longestSideDescription
       } );
     }
@@ -522,12 +539,12 @@ export default class QuadrilateralDescriber {
            _.some( this.shapeModel.adjacentEqualSidePairsProperty.value, adjacentEqualSidePair => adjacentEqualSidePair.includesSide( longestSide ) ) ) {
 
         // multiple sides of the same "longest" length, pluralize
-        longestSubString = StringUtils.fillIn( longestSidesDescriptionPatternString, {
+        longestSubString = StringUtils.fillIn( longestSidesDescriptionPatternStringProperty, {
           description: longestSideDescription
         } );
       }
       else {
-        longestSubString = StringUtils.fillIn( longestSideDescriptionPatternString, {
+        longestSubString = StringUtils.fillIn( longestSideDescriptionPatternStringProperty, {
           description: longestSideDescription
         } );
       }
@@ -536,17 +553,17 @@ export default class QuadrilateralDescriber {
            _.some( this.shapeModel.adjacentEqualSidePairsProperty.value, adjacentEqualSidePair => adjacentEqualSidePair.includesSide( shortestSide ) ) ) {
 
         // multiple sides of the same "longest" length, pluralize
-        shortestSubString = StringUtils.fillIn( shortestSidesDescriptionPatternString, {
+        shortestSubString = StringUtils.fillIn( shortestSidesDescriptionPatternStringProperty, {
           description: shortestSideDescription
         } );
       }
       else {
-        shortestSubString = StringUtils.fillIn( shortestSideDescriptionPatternString, {
+        shortestSubString = StringUtils.fillIn( shortestSideDescriptionPatternStringProperty, {
           description: shortestSideDescription
         } );
       }
 
-      description = StringUtils.fillIn( sideLengthDescriptionPatternString, {
+      description = StringUtils.fillIn( sideLengthDescriptionPatternStringProperty, {
         longest: longestSubString,
         shortest: shortestSubString
       } );
@@ -560,8 +577,8 @@ export default class QuadrilateralDescriber {
    * smallest angles of the shape. Only returns a string if corner guides are displayed - otherwise this more
    * quantitative content is skipped.
    */
-  public getFifthDetailsStatement(): string | null {
-    let description: null | string = null;
+  public getFifthDetailsStatement(): NullableQuadrilateralStringType {
+    let description: NullableQuadrilateralStringType = null;
 
     if ( !this.markersVisibleProperty.value ) {
       return description;
@@ -576,7 +593,7 @@ export default class QuadrilateralDescriber {
       if ( this.shapeModel.allAnglesRightProperty.value ) {
 
         // All corners the same angle, combine into a shorter string
-        description = cornersRightDescriptionString;
+        description = cornersRightDescriptionStringProperty;
       }
       else {
 
@@ -586,12 +603,12 @@ export default class QuadrilateralDescriber {
              _.some( this.shapeModel.adjacentEqualVertexPairsProperty.value, adjacentEqualVertexPair => adjacentEqualVertexPair.includesVertex( widestVertex ) ) ) {
 
           // multiple vertices of the same "widest" angle, pluralize
-          longestSubString = StringUtils.fillIn( widestCornersDescriptionPatternString, {
+          longestSubString = StringUtils.fillIn( widestCornersDescriptionPatternStringProperty, {
             description: widestVertexDescription
           } );
         }
         else {
-          longestSubString = StringUtils.fillIn( widestCornerDescriptionPatternString, {
+          longestSubString = StringUtils.fillIn( widestCornerDescriptionPatternStringProperty, {
             description: widestVertexDescription
           } );
         }
@@ -600,17 +617,17 @@ export default class QuadrilateralDescriber {
              _.some( this.shapeModel.adjacentEqualVertexPairsProperty.value, adjacentEqualVertexPair => adjacentEqualVertexPair.includesVertex( smallestVertex ) ) ) {
 
           // multiple sides of the same "longest" length, pluralize
-          shortestSubString = StringUtils.fillIn( smallestCornersDescriptionPatternString, {
+          shortestSubString = StringUtils.fillIn( smallestCornersDescriptionPatternStringProperty, {
             description: smallestVertexDescription
           } );
         }
         else {
-          shortestSubString = StringUtils.fillIn( smallestCornerDescriptionPatternString, {
+          shortestSubString = StringUtils.fillIn( smallestCornerDescriptionPatternStringProperty, {
             description: smallestVertexDescription
           } );
         }
 
-        description = StringUtils.fillIn( cornersDescriptionPatternString, {
+        description = StringUtils.fillIn( cornersDescriptionPatternStringProperty, {
           longest: longestSubString,
           shortest: shortestSubString
         } );
@@ -624,10 +641,10 @@ export default class QuadrilateralDescriber {
    * For the details button, we are going to describe 'flat' angles as the number of wedges as a special case because
    * in english it sounds nicer when combined with other details content.
    */
-  private getDetailsWedgesDescription( angle: number ): string {
+  private getDetailsWedgesDescription( angle: number ): NullableQuadrilateralStringType {
     let descriptionString;
     if ( this.shapeModel.isFlatAngle( angle ) ) {
-      descriptionString = StringUtils.fillIn( numberOfWedgesPatternString, {
+      descriptionString = StringUtils.fillIn( numberOfWedgesPatternStringProperty, {
         numberOfWedges: 6
       } );
     }
@@ -641,29 +658,29 @@ export default class QuadrilateralDescriber {
   /**
    * Returns a qualitative description for a square.
    */
-  public getSquareDetailsString(): string {
-    return allRightAnglesAllSidesEqualString;
+  public getSquareDetailsString(): TReadOnlyProperty<string> {
+    return allRightAnglesAllSidesEqualStringProperty;
   }
 
   /**
    * Returns a qualitative deqcription for a rectangle.
    */
-  public getRectangleDetailsString(): string {
-    return allRightAnglesString;
+  public getRectangleDetailsString(): TReadOnlyProperty<string> {
+    return allRightAnglesStringProperty;
   }
 
   /**
    * Returns a qualitative description for a rhombus.
    */
-  public getRhombusDetailsString(): string {
-    return allSidesEqualString;
+  public getRhombusDetailsString(): TReadOnlyProperty<string> {
+    return allSidesEqualStringProperty;
   }
 
   /**
    * Returns a qualitative description for a parallelogram.
    */
-  public getParallelogramDetailsString(): string {
-    return oppositeSidesInParallelString;
+  public getParallelogramDetailsString(): TReadOnlyProperty<string> {
+    return oppositeSidesInParallelStringProperty;
   }
 
   /**
@@ -671,8 +688,8 @@ export default class QuadrilateralDescriber {
    */
   public getTrapezoidDetailsString( parallelSidePair: SidePair ): string {
 
-    let firstSideLabel: string;
-    let secondSideLabel: string;
+    let firstSideLabel: QuadrilateralStringType;
+    let secondSideLabel: QuadrilateralStringType;
 
     if ( parallelSidePair.includesSide( this.shapeModel.sideAB ) ) {
       firstSideLabel = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_AB );
@@ -683,7 +700,7 @@ export default class QuadrilateralDescriber {
       secondSideLabel = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_DA );
     }
 
-    return StringUtils.fillIn( trapezoidDetailsPatternString, {
+    return StringUtils.fillIn( trapezoidDetailsPatternStringProperty, {
       firstSide: firstSideLabel,
       secondSide: secondSideLabel
     } );
@@ -694,10 +711,10 @@ export default class QuadrilateralDescriber {
    * pairs are equal.
    */
   public getIsoscelesTrapezoidDetailsString( oppositeEqualSidePair: SidePair, parallelSidePair: SidePair ): string {
-    let equalFirstSideString: string;
-    let equalSecondSideString: string;
-    let parallelFirstSideString: string;
-    let parallelSecondSideString: string;
+    let equalFirstSideString: QuadrilateralStringType;
+    let equalSecondSideString: QuadrilateralStringType;
+    let parallelFirstSideString: QuadrilateralStringType;
+    let parallelSecondSideString: QuadrilateralStringType;
 
     if ( oppositeEqualSidePair.includesSide( this.shapeModel.sideAB ) ) {
 
@@ -716,7 +733,7 @@ export default class QuadrilateralDescriber {
       parallelSecondSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_CD );
     }
 
-    return StringUtils.fillIn( isoscelesTrapezoidDetailsPatternString, {
+    return StringUtils.fillIn( isoscelesTrapezoidDetailsPatternStringProperty, {
       equalFirstSide: equalFirstSideString,
       equalSecondSide: equalSecondSideString,
       parallelFirstSide: parallelFirstSideString,
@@ -730,23 +747,23 @@ export default class QuadrilateralDescriber {
    * @param patternString - Some contexts need a more verbose description around this pattern. Must include placeholders
    *                        `firstCorner` and `secondCorner`.
    */
-  public getKiteDetailsString( oppositeEqualVertexPair: VertexPair, patternString: string = kiteDetailsShortPatternString ): string {
-    let firstCornerString: string;
-    let secondCornerString: string;
+  public getKiteDetailsString( oppositeEqualVertexPair: VertexPair, patternString: TReadOnlyProperty<string> = kiteDetailsShortPatternStringProperty ): string {
+    let firstCornerStringProperty: TReadOnlyProperty<string>;
+    let secondCornerStringProperty: TReadOnlyProperty<string>;
     if ( oppositeEqualVertexPair.includesVertex( this.shapeModel.vertexA ) ) {
 
       // opposite equal vertices for the kite are A and C
-      firstCornerString = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_A );
-      secondCornerString = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_C );
+      firstCornerStringProperty = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_A );
+      secondCornerStringProperty = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_C );
     }
     else {
-      firstCornerString = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_B );
-      secondCornerString = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_D );
+      firstCornerStringProperty = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_B );
+      secondCornerStringProperty = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_D );
     }
 
     return StringUtils.fillIn( patternString, {
-      firstCorner: firstCornerString,
-      secondCorner: secondCornerString
+      firstCorner: firstCornerStringProperty,
+      secondCorner: secondCornerStringProperty
     } );
   }
 
@@ -755,7 +772,7 @@ export default class QuadrilateralDescriber {
    * @param patternString - Some contexts need a more verbose description around this pattern. Must include placeholders
    *                        `firstCorner` and `secondCorner`.
    */
-  public getDartDetailsString( patternString: string = dartDetailsShortPatternString ): string {
+  public getDartDetailsString( patternString: TReadOnlyProperty<string> = dartDetailsShortPatternStringProperty ): string {
     const concaveVertex = this.shapeModel.vertices.find( vertex => vertex.angleProperty.value! > Math.PI )!;
     assert && assert( concaveVertex, 'A dart has one vertex with angle greater than Math.PI.' );
 
@@ -789,7 +806,7 @@ export default class QuadrilateralDescriber {
     assert && assert( concaveVertex, 'A convex quad has one vertex with angle greater than Math.PI.' );
     const inwardCornerLabel = concaveVertex.vertexLabel;
 
-    return StringUtils.fillIn( concaveQuadrilateralDetailsPatternString, {
+    return StringUtils.fillIn( concaveQuadrilateralDetailsPatternStringProperty, {
       inwardCorner: QuadrilateralDescriber.getVertexLabelString( inwardCornerLabel )
     } );
   }
@@ -797,8 +814,8 @@ export default class QuadrilateralDescriber {
   /**
    * Returns a qualitative description of the convex quadrilateral.
    */
-  public getConvexQuadrilateralDetailsString(): string {
-    return convexQuadrilateralDetailsString;
+  public getConvexQuadrilateralDetailsString(): TReadOnlyProperty<string> {
+    return convexQuadrilateralDetailsStringProperty;
   }
 
   /**
@@ -811,7 +828,7 @@ export default class QuadrilateralDescriber {
     )!;
     assert && assert( flatVertex, 'A triangle has one vertex with an angle equal to Math.PI.' );
 
-    return StringUtils.fillIn( triangleDetailsPatternString, {
+    return StringUtils.fillIn( triangleDetailsPatternStringProperty, {
       flatCorner: QuadrilateralDescriber.getVertexLabelString( flatVertex.vertexLabel )
     } );
   }
@@ -821,8 +838,8 @@ export default class QuadrilateralDescriber {
    * is reset.
    */
   public static readonly RESET_SHAPE_RESPONSE_PACKET = new ResponsePacket( {
-    nameResponse: QuadrilateralStrings.resetShape,
-    contextResponse: QuadrilateralStrings.a11y.voicing.resetShape.contextResponse
+    nameResponse: resetShapeStringProperty,
+    contextResponse: resetShapeContextResponseStringProperty
   } );
 }
 

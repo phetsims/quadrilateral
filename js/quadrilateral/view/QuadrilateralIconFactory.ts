@@ -17,6 +17,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Ray2 from '../../../../dot/js/Ray2.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 
 // REVIEW: Should this be a class with static functions? Then they can be marked public/private and we can export default class
 // Yes, lets do it!
@@ -193,7 +194,7 @@ const QuadrilateralIconFactory = {
    * Layout a label Text and icon Node, in that order for various UI controls. Returns a flowbox so that 'stretch'
    * can be used to align text and icons in a parent layout container.
    */
-  createLabelledIcon( iconNode: Node, labelString: string ): FlowBox {
+  createLabelledIcon( iconNode: Node, labelString: TReadOnlyProperty<string> ): FlowBox {
     const labelText = new Text( labelString, {
       font: QuadrilateralConstants.SCREEN_TEXT_FONT,
       maxWidth: 100

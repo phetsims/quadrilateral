@@ -19,13 +19,13 @@ import QuadrilateralStrings from '../../../QuadrilateralStrings.js';
 import soundManager from '../../../../../tambo/js/soundManager.js';
 
 // constants
-const shapeSoundsOptionsString = QuadrilateralStrings.preferencesDialog.shapeSoundOptions;
-const shapeSoundsOptionsDescriptionString = QuadrilateralStrings.preferencesDialog.shapeSoundOptionsDescription;
-const preferencesDialogLayerSoundDesignDescriptionString = QuadrilateralStrings.preferencesDialog.layerSoundDesignDescription;
-const preferencesDialogIndependentSoundDesignDescriptionString = QuadrilateralStrings.preferencesDialog.independentSoundDesignDescription;
-const preferencesDialogPlaySoundsForeverString = QuadrilateralStrings.preferencesDialog.playSoundsForever;
-const tracksPlayForeverCheckedContextResponseString = QuadrilateralStrings.a11y.preferencesDialog.tracksPlayForeverCheckbox.checkedContextResponse;
-const tracksPlayForeverUncheckedContextResponseString = QuadrilateralStrings.a11y.preferencesDialog.tracksPlayForeverCheckbox.uncheckedContextResponse;
+const shapeSoundsOptionsStringProperty = QuadrilateralStrings.preferencesDialog.shapeSoundOptionsStringProperty;
+const shapeSoundsOptionsDescriptionStringProperty = QuadrilateralStrings.preferencesDialog.shapeSoundOptionsDescriptionStringProperty;
+const preferencesDialogLayerSoundDesignDescriptionStringProperty = QuadrilateralStrings.preferencesDialog.layerSoundDesignDescriptionStringProperty;
+const preferencesDialogIndependentSoundDesignDescriptionStringProperty = QuadrilateralStrings.preferencesDialog.independentSoundDesignDescriptionStringProperty;
+const preferencesDialogPlaySoundsForeverStringProperty = QuadrilateralStrings.preferencesDialog.playSoundsForeverStringProperty;
+const tracksPlayForeverCheckedContextResponseStringProperty = QuadrilateralStrings.a11y.preferencesDialog.tracksPlayForeverCheckbox.checkedContextResponseStringProperty;
+const tracksPlayForeverUncheckedContextResponseStringProperty = QuadrilateralStrings.a11y.preferencesDialog.tracksPlayForeverCheckbox.uncheckedContextResponseStringProperty;
 
 export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSection {
 
@@ -34,24 +34,24 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
 
   public constructor( model: QuadrilateralSoundOptionsModel, tandem: Tandem ) {
 
-    const soundDesignLabelText = new VoicingText( shapeSoundsOptionsString, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
-    const soundDesignDescriptionText = new VoicingText( shapeSoundsOptionsDescriptionString, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS );
+    const soundDesignLabelText = new VoicingText( shapeSoundsOptionsStringProperty, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
+    const soundDesignDescriptionText = new VoicingText( shapeSoundsOptionsDescriptionStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS );
 
     const soundDesignRadioButtonGroup = new AquaRadioButtonGroup( model.soundDesignProperty, [
       {
         value: SoundDesign.TRACKS_LAYER,
-        createNode: () => new Text( preferencesDialogLayerSoundDesignDescriptionString, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
+        createNode: () => new Text( preferencesDialogLayerSoundDesignDescriptionStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
         tandemName: `layersTracksSoundView${AquaRadioButton.TANDEM_NAME_SUFFIX}`,
         options: {
-          voicingNameResponse: preferencesDialogLayerSoundDesignDescriptionString
+          voicingNameResponse: preferencesDialogLayerSoundDesignDescriptionStringProperty
         }
       },
       {
         value: SoundDesign.TRACKS_EMPHASIS,
-        createNode: () => new Text( preferencesDialogIndependentSoundDesignDescriptionString, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
+        createNode: () => new Text( preferencesDialogIndependentSoundDesignDescriptionStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
         tandemName: `emphasisTracksSoundView${AquaRadioButton.TANDEM_NAME_SUFFIX}`,
         options: {
-          voicingNameResponse: preferencesDialogIndependentSoundDesignDescriptionString
+          voicingNameResponse: preferencesDialogIndependentSoundDesignDescriptionStringProperty
         }
       }
     ], {
@@ -62,14 +62,14 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
       tandem: tandem.createTandem( 'soundDesignRadioButtonGroup' )
     } );
 
-    const tracksPlayForeverLabel = new Text( preferencesDialogPlaySoundsForeverString, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS );
+    const tracksPlayForeverLabel = new Text( preferencesDialogPlaySoundsForeverStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS );
     const tracksPlayForeverCheckbox = new Checkbox( model.tracksPlayForeverProperty, tracksPlayForeverLabel, {
       tandem: tandem.createTandem( 'tracksPlayForeverCheckbox' ),
 
       // voicing
-      voicingNameResponse: preferencesDialogPlaySoundsForeverString,
-      checkedContextResponse: tracksPlayForeverCheckedContextResponseString,
-      uncheckedContextResponse: tracksPlayForeverUncheckedContextResponseString
+      voicingNameResponse: preferencesDialogPlaySoundsForeverStringProperty,
+      checkedContextResponse: tracksPlayForeverCheckedContextResponseStringProperty,
+      uncheckedContextResponse: tracksPlayForeverUncheckedContextResponseStringProperty
     } );
 
     // REVIEW: inline?

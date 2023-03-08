@@ -17,18 +17,18 @@ import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralIconFactory from './QuadrilateralIconFactory.js';
 
 // constants
-const shapeSoundControlEnabledContextResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.enabledContextResponse;
-const shapeSoundControlDisabledContextResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.disabledContextResponse;
-const shapeSoundControlNameResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.nameResponse;
-const shapeSoundControlHintResponse = QuadrilateralStrings.a11y.voicing.shapeSoundControl.hintResponse;
+const shapeSoundControlEnabledContextResponseStringProperty = QuadrilateralStrings.a11y.voicing.shapeSoundControl.enabledContextResponseStringProperty;
+const shapeSoundControlDisabledContextResponseStringProperty = QuadrilateralStrings.a11y.voicing.shapeSoundControl.disabledContextResponseStringProperty;
+const shapeSoundControlNameResponseStringProperty = QuadrilateralStrings.a11y.voicing.shapeSoundControl.nameResponseStringProperty;
+const shapeSoundControlHintResponseStringProperty = QuadrilateralStrings.a11y.voicing.shapeSoundControl.hintResponseStringProperty;
 
 export default class ShapeSoundsCheckbox extends Checkbox {
   public constructor( shapeSoundEnabledProperty: Property<boolean>, tandem: Tandem ) {
     super( shapeSoundEnabledProperty, QuadrilateralIconFactory.createSoundIcon(), {
-      voicingNameResponse: shapeSoundControlNameResponse,
-      checkedContextResponse: shapeSoundControlEnabledContextResponse,
-      voicingHintResponse: shapeSoundControlHintResponse,
-      uncheckedContextResponse: shapeSoundControlDisabledContextResponse,
+      voicingNameResponse: shapeSoundControlNameResponseStringProperty,
+      checkedContextResponse: shapeSoundControlEnabledContextResponseStringProperty,
+      voicingHintResponse: shapeSoundControlHintResponseStringProperty,
+      uncheckedContextResponse: shapeSoundControlDisabledContextResponseStringProperty,
       tandem: tandem
     } );
 

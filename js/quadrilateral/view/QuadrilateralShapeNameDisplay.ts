@@ -22,33 +22,34 @@ import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
 
 // constants
-const squareString = QuadrilateralStrings.shapeNames.square;
-const rectangleString = QuadrilateralStrings.shapeNames.rectangle;
-const rhombusString = QuadrilateralStrings.shapeNames.rhombus;
-const kiteString = QuadrilateralStrings.shapeNames.kite;
-const isoscelesTrapezoidString = QuadrilateralStrings.shapeNames.isoscelesTrapezoid;
-const trapezoidString = QuadrilateralStrings.shapeNames.trapezoid;
-const concaveQuadrilateralString = QuadrilateralStrings.shapeNames.concaveQuadrilateral;
-const convexQuadrilateralString = QuadrilateralStrings.shapeNames.convexQuadrilateral;
-const parallelogramString = QuadrilateralStrings.shapeNames.parallelogram;
-const dartString = QuadrilateralStrings.shapeNames.dart;
-const triangleString = QuadrilateralStrings.shapeNames.triangle;
-const shapeNameHiddenString = QuadrilateralStrings.shapeNameHidden;
-const shapeNameHiddenContextResponseString = QuadrilateralStrings.a11y.voicing.shapeNameHiddenContextResponse;
-const shapeNameShownContextResponseString = QuadrilateralStrings.a11y.voicing.shapeNameShownContextResponse;
+const squareStringProperty = QuadrilateralStrings.shapeNames.squareStringProperty;
+const rectangleStringProperty = QuadrilateralStrings.shapeNames.rectangleStringProperty;
+const rhombusStringProperty = QuadrilateralStrings.shapeNames.rhombusStringProperty;
+const kiteStringProperty = QuadrilateralStrings.shapeNames.kiteStringProperty;
+const isoscelesTrapezoidStringProperty = QuadrilateralStrings.shapeNames.isoscelesTrapezoidStringProperty;
+const trapezoidStringProperty = QuadrilateralStrings.shapeNames.trapezoidStringProperty;
+const concaveQuadrilateralStringProperty = QuadrilateralStrings.shapeNames.concaveQuadrilateralStringProperty;
+const convexQuadrilateralStringProperty = QuadrilateralStrings.shapeNames.convexQuadrilateralStringProperty;
+const parallelogramStringProperty = QuadrilateralStrings.shapeNames.parallelogramStringProperty;
+const dartStringProperty = QuadrilateralStrings.shapeNames.dartStringProperty;
+const triangleStringProperty = QuadrilateralStrings.shapeNames.triangleStringProperty;
+const shapeNameHiddenStringProperty = QuadrilateralStrings.shapeNameHiddenStringProperty;
+const shapeNameHiddenContextResponseStringProperty = QuadrilateralStrings.a11y.voicing.shapeNameHiddenContextResponseStringProperty;
+const shapeNameShownContextResponseStringProperty = QuadrilateralStrings.a11y.voicing.shapeNameShownContextResponseStringProperty;
 
+// TODO: Need to link to shape name AND to each string Property?
 const SHAPE_NAME_MAP = new Map( [
-  [ NamedQuadrilateral.SQUARE, squareString ],
-  [ NamedQuadrilateral.RECTANGLE, rectangleString ],
-  [ NamedQuadrilateral.RHOMBUS, rhombusString ],
-  [ NamedQuadrilateral.KITE, kiteString ],
-  [ NamedQuadrilateral.ISOSCELES_TRAPEZOID, isoscelesTrapezoidString ],
-  [ NamedQuadrilateral.TRAPEZOID, trapezoidString ],
-  [ NamedQuadrilateral.CONCAVE_QUADRILATERAL, concaveQuadrilateralString ],
-  [ NamedQuadrilateral.CONVEX_QUADRILATERAL, convexQuadrilateralString ],
-  [ NamedQuadrilateral.PARALLELOGRAM, parallelogramString ],
-  [ NamedQuadrilateral.DART, dartString ],
-  [ NamedQuadrilateral.TRIANGLE, triangleString ]
+  [ NamedQuadrilateral.SQUARE, squareStringProperty ],
+  [ NamedQuadrilateral.RECTANGLE, rectangleStringProperty ],
+  [ NamedQuadrilateral.RHOMBUS, rhombusStringProperty ],
+  [ NamedQuadrilateral.KITE, kiteStringProperty ],
+  [ NamedQuadrilateral.ISOSCELES_TRAPEZOID, isoscelesTrapezoidStringProperty ],
+  [ NamedQuadrilateral.TRAPEZOID, trapezoidStringProperty ],
+  [ NamedQuadrilateral.CONCAVE_QUADRILATERAL, concaveQuadrilateralStringProperty ],
+  [ NamedQuadrilateral.CONVEX_QUADRILATERAL, convexQuadrilateralStringProperty ],
+  [ NamedQuadrilateral.PARALLELOGRAM, parallelogramStringProperty ],
+  [ NamedQuadrilateral.DART, dartStringProperty ],
+  [ NamedQuadrilateral.TRIANGLE, triangleStringProperty ]
 ] );
 
 // empirically determined
@@ -84,30 +85,32 @@ export default class QuadrilateralShapeNameDisplay extends Node {
     let wasVisible = shapeNameVisibleProperty.value;
 
     // Update display text and contents to be spoken from Voicing interactions. See
-    // https://github.com/phetsims/quadrilateral/issues/238 for the design requirements of the Voicing responses.
-    Multilink.multilink( [ shapeNameVisibleProperty, shapeNameProperty ], ( shapeNameVisible, shapeName ) => {
-      let textString;
+    // https://github.com/phetsims/quadrilateral/issues/238 for the design of the Voicing responses. Linked
+    // to the actual string Properties to support dynamic locales.
+    Multilink.multilinkAny( [ shapeNameVisibleProperty, shapeNameProperty, ...SHAPE_NAME_MAP.values(), shapeNameHiddenStringProperty ], () => {
+      let textStringProperty;
 
-      if ( shapeNameVisible ) {
+      if ( shapeNameVisibleProperty.value ) {
+        const shapeName = shapeNameProperty.value;
         assert && assert( SHAPE_NAME_MAP.has( shapeName ), 'Shape is not named in SHAPE_NAME_MAP' );
-        textString = SHAPE_NAME_MAP.get( shapeName )!;
+        textStringProperty = SHAPE_NAME_MAP.get( shapeName )!;
 
         // Text is bold when shape name is visible
         shapeNameText.fontWeight = 'bold';
 
         // voicing - when shape name is shown we should include the detected shape in the name response
         expandCollapseButton.voicingNameResponse = quadrilateralDescriber.getYouHaveAShapeDescription();
-        expandCollapseButton.voicingContextResponse = shapeNameShownContextResponseString;
-        shapeNameText.readingBlockNameResponse = textString;
+        expandCollapseButton.voicingContextResponse = shapeNameShownContextResponseStringProperty;
+        shapeNameText.readingBlockNameResponse = textStringProperty;
       }
       else {
-        textString = shapeNameHiddenString;
+        textStringProperty = shapeNameHiddenStringProperty;
         shapeNameText.fontWeight = 'normal';
 
         // voicing
-        expandCollapseButton.voicingNameResponse = shapeNameHiddenString;
-        expandCollapseButton.voicingContextResponse = shapeNameHiddenContextResponseString;
-        shapeNameText.readingBlockNameResponse = textString;
+        expandCollapseButton.voicingNameResponse = shapeNameHiddenStringProperty;
+        expandCollapseButton.voicingContextResponse = shapeNameHiddenContextResponseStringProperty;
+        shapeNameText.readingBlockNameResponse = textStringProperty;
       }
 
       // Only after updating voicing response content, speak the response. We only announce this when visibility
@@ -118,7 +121,7 @@ export default class QuadrilateralShapeNameDisplay extends Node {
         wasVisible = shapeNameVisibleProperty.value;
       }
 
-      shapeNameText.string = textString;
+      shapeNameText.string = textStringProperty.value;
       shapeNameText.center = backgroundRectangle.center;
     } );
 

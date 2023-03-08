@@ -41,6 +41,7 @@ import SmallStepsLockToggleButton from './SmallStepsLockToggleButton.js';
 import QuadrilateralTangibleControls from './prototype/QuadrilateralTangibleControls.js';
 import QuadrilateralModelViewTransform from './QuadrilateralModelViewTransform.js';
 import QuadrilateralTangibleController from './prototype/QuadrilateralTangibleController.js';
+import { SpeakableResolvedResponse } from '../../../../utterance-queue/js/ResponsePacket.js';
 
 export default class QuadrilateralScreenView extends ScreenView {
   private readonly model: QuadrilateralModel;
@@ -199,14 +200,14 @@ export default class QuadrilateralScreenView extends ScreenView {
   /**
    * Get the content that is spoken from the Voicing toolbar to describe this ScreenView.
    */
-  public override getVoicingOverviewContent(): string {
-    return QuadrilateralStrings.a11y.voicing.overviewContent;
+  public override getVoicingOverviewContent(): SpeakableResolvedResponse {
+    return QuadrilateralStrings.a11y.voicing.overviewContentStringProperty;
   }
 
   /**
    * Get the details content that is spoken from the Voicing toolbar to describe details about the simulation.
    */
-  public override getVoicingDetailsContent(): string {
+  public override getVoicingDetailsContent(): SpeakableResolvedResponse {
     const firstStatement = this.quadrilateralDescriber.getFirstDetailsStatement();
     const secondStatement = this.quadrilateralDescriber.getSecondDetailsStatement();
     const thirdStatement = this.quadrilateralDescriber.getThirdDetailsStatement();
@@ -237,8 +238,8 @@ export default class QuadrilateralScreenView extends ScreenView {
    * Get the content that is spoken from the Voicing toolbar to describe this ScreenView. In this sim we use the hint
    * button to describe the parallelogram state and shape name of the quadrilateral.
    */
-  public override getVoicingHintContent(): string {
-    return QuadrilateralStrings.a11y.voicing.hintContent;
+  public override getVoicingHintContent(): SpeakableResolvedResponse {
+    return QuadrilateralStrings.a11y.voicing.hintContentStringProperty;
   }
 
   /**

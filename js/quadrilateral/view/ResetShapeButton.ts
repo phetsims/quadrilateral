@@ -23,7 +23,7 @@ export default class ResetShapeButton extends TextPushButton {
                       resetNotInProgressProperty: TProperty<boolean>,
                       // REVIEW: Unused parameter
                       shapeNameVisibleProperty: TReadOnlyProperty<boolean>, tandem: Tandem ) {
-    super( QuadrilateralStrings.resetShape, {
+    super( QuadrilateralStrings.resetShapeStringProperty, {
 
       font: QuadrilateralConstants.SCREEN_TEXT_OPTIONS.font,
       cornerRadius: QuadrilateralConstants.CORNER_RADIUS,

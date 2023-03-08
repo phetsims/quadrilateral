@@ -798,10 +798,10 @@
       "progressStatePattern": {
         "value": "{{progress}}, {{state}}"
       },
-      "blockedByEdgeString": {
+      "blockedByEdge": {
         "value": "Blocked by Edge."
       },
-      "blockedByInnerShapeString": {
+      "blockedByInnerShape": {
         "value": "Blocked by inner shape."
       },
       "minorIntervalsToggle": {

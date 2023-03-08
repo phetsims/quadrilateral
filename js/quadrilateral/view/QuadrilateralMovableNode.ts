@@ -21,14 +21,15 @@ import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import QuadrilateralColors from '../../QuadrilateralColors.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 
 // constants
-const blockedByInnerShapeString = QuadrilateralStrings.a11y.voicing.blockedByInnerShapeString;
+const blockedByInnerShapeStringProperty = QuadrilateralStrings.a11y.voicing.blockedByInnerShapeStringProperty;
 
 type SelfOptions = {
 
   // a11y - name of this component for both PDOM and Voicing
-  nameResponse?: null | string;
+  nameResponse?: TReadOnlyProperty<string> | null;
 
   // sound - sound to play when the movable becomes grabbed
   grabbedSound: WrappedAudioBuffer;
@@ -118,7 +119,7 @@ export default class QuadrilateralMovableNode extends Voicing( Node ) {
       if ( blocked ) {
         blockedByShapeSoundClip.play();
         this.voicingSpeakResponse( {
-          contextResponse: blockedByInnerShapeString
+          contextResponse: blockedByInnerShapeStringProperty
         } );
       }
     } );

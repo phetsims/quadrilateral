@@ -15,62 +15,63 @@ import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import { NullableQuadrilateralStringType } from './QuadrilateralDescriber.js';
 
 // constants
-const farShorterThanString = QuadrilateralStrings.a11y.voicing.farShorterThan;
-const aboutHalfAsLongAsString = QuadrilateralStrings.a11y.voicing.aboutHalfAsLongAs;
-const aLittleShorterThanString = QuadrilateralStrings.a11y.voicing.aLittleShorterThan;
-const muchShorterThanString = QuadrilateralStrings.a11y.voicing.muchShorterThan;
-const similarButShorterThanString = QuadrilateralStrings.a11y.voicing.similarButShorterThan;
-const similarButLongerThanString = QuadrilateralStrings.a11y.voicing.similarButLongerThan;
-const aLittleLongerThanString = QuadrilateralStrings.a11y.voicing.aLittleLongerThan;
-const muchLongerThanString = QuadrilateralStrings.a11y.voicing.muchLongerThan;
-const aboutTwiceAsLongAsString = QuadrilateralStrings.a11y.voicing.aboutTwiceAsLongAs;
-const farLongerThanString = QuadrilateralStrings.a11y.voicing.farLongerThan;
-const equalToString = QuadrilateralStrings.a11y.voicing.equalTo;
-const twiceAsLongAsString = QuadrilateralStrings.a11y.voicing.twiceAsLongAs;
-const halfAsLongAsString = QuadrilateralStrings.a11y.voicing.halfAsLongAs;
-const parallelSideObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.parallelSideObjectResponsePattern;
-const sideObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.sideObjectResponsePattern;
-const equalToAdjacentSidesString = QuadrilateralStrings.a11y.voicing.equalToAdjacentSides;
-const equalToOneAdjacentSideString = QuadrilateralStrings.a11y.voicing.equalToOneAdjacentSide;
-const equalAdjacentSidesPatternString = QuadrilateralStrings.a11y.voicing.equalAdjacentSidesPattern;
-const equalAdjacentParallelSidesPatternString = QuadrilateralStrings.a11y.voicing.equalAdjacentParallelSidesPattern;
-const shorterThanAdjacentSidesString = QuadrilateralStrings.a11y.voicing.shorterThanAdjacentSides;
-const longerThanAdjacentSidesString = QuadrilateralStrings.a11y.voicing.longerThanAdjacentSides;
-const notEqualToAdjacentSidesString = QuadrilateralStrings.a11y.voicing.notEqualToAdjacentSides;
-const shorterThanParallelAdjacentSidesString = QuadrilateralStrings.a11y.voicing.shorterThanParallelAdjacentSides;
-const longerThanParallelAdjacentSidesString = QuadrilateralStrings.a11y.voicing.longerThanParallelAdjacentSides;
-const notEqualToParallelAdjacentSidesString = QuadrilateralStrings.a11y.voicing.notEqualToParallelAdjacentSides;
-const oneUnitString = QuadrilateralStrings.a11y.voicing.oneUnit;
-const numberOfUnitsPatternString = QuadrilateralStrings.a11y.voicing.numberOfUnitsPattern;
-const numberOfUnitsAndAHalfPatternString = QuadrilateralStrings.a11y.voicing.numberOfUnitsAndAHalfPattern;
-const sideUnitsObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.sideUnitsObjectResponsePattern;
-const oneQuarterUnitString = QuadrilateralStrings.a11y.voicing.oneQuarterUnit;
-const numberAndOneQuarterUnitsPatternString = QuadrilateralStrings.a11y.voicing.numberAndOneQuarterUnitsPattern;
-const threeQuarterUnitsString = QuadrilateralStrings.a11y.voicing.threeQuarterUnits;
-const numberAndThreeQuarterUnitsPatternString = QuadrilateralStrings.a11y.voicing.numberAndThreeQuarterUnitsPattern;
-const aboutOneUnitString = QuadrilateralStrings.a11y.voicing.aboutOneUnit;
-const aboutNumberUnitsPatternString = QuadrilateralStrings.a11y.voicing.aboutNumberUnitsPattern;
-const aboutOneHalfUnitsString = QuadrilateralStrings.a11y.voicing.aboutOneHalfUnits;
-const aboutNumberAndAHalfUnitsPatternString = QuadrilateralStrings.a11y.voicing.aboutNumberAndAHalfUnitsPattern;
-const aboutNumberQuarterUnitsPatternString = QuadrilateralStrings.a11y.voicing.aboutNumberQuarterUnitsPattern;
-const aboutFullNumberAndNumberQuarterUnitsPatternString = QuadrilateralStrings.a11y.voicing.aboutFullNumberAndNumberQuarterUnitsPattern;
-const oneHalfUnitsString = QuadrilateralStrings.a11y.voicing.oneHalfUnits;
+const farShorterThanStringProperty = QuadrilateralStrings.a11y.voicing.farShorterThanStringProperty;
+const aboutHalfAsLongAsStringProperty = QuadrilateralStrings.a11y.voicing.aboutHalfAsLongAsStringProperty;
+const aLittleShorterThanStringProperty = QuadrilateralStrings.a11y.voicing.aLittleShorterThanStringProperty;
+const muchShorterThanStringProperty = QuadrilateralStrings.a11y.voicing.muchShorterThanStringProperty;
+const similarButShorterThanStringProperty = QuadrilateralStrings.a11y.voicing.similarButShorterThanStringProperty;
+const similarButLongerThanStringProperty = QuadrilateralStrings.a11y.voicing.similarButLongerThanStringProperty;
+const aLittleLongerThanStringProperty = QuadrilateralStrings.a11y.voicing.aLittleLongerThanStringProperty;
+const muchLongerThanStringProperty = QuadrilateralStrings.a11y.voicing.muchLongerThanStringProperty;
+const aboutTwiceAsLongAsStringProperty = QuadrilateralStrings.a11y.voicing.aboutTwiceAsLongAsStringProperty;
+const farLongerThanStringProperty = QuadrilateralStrings.a11y.voicing.farLongerThanStringProperty;
+const equalToStringProperty = QuadrilateralStrings.a11y.voicing.equalToStringProperty;
+const twiceAsLongAsStringProperty = QuadrilateralStrings.a11y.voicing.twiceAsLongAsStringProperty;
+const halfAsLongAsStringProperty = QuadrilateralStrings.a11y.voicing.halfAsLongAsStringProperty;
+const parallelSideObjectResponsePatternStringProperty = QuadrilateralStrings.a11y.voicing.parallelSideObjectResponsePatternStringProperty;
+const sideObjectResponsePatternStringProperty = QuadrilateralStrings.a11y.voicing.sideObjectResponsePatternStringProperty;
+const equalToAdjacentSidesStringProperty = QuadrilateralStrings.a11y.voicing.equalToAdjacentSidesStringProperty;
+const equalToOneAdjacentSideStringProperty = QuadrilateralStrings.a11y.voicing.equalToOneAdjacentSideStringProperty;
+const equalAdjacentSidesPatternStringProperty = QuadrilateralStrings.a11y.voicing.equalAdjacentSidesPatternStringProperty;
+const equalAdjacentParallelSidesPatternStringProperty = QuadrilateralStrings.a11y.voicing.equalAdjacentParallelSidesPatternStringProperty;
+const shorterThanAdjacentSidesStringProperty = QuadrilateralStrings.a11y.voicing.shorterThanAdjacentSidesStringProperty;
+const longerThanAdjacentSidesStringProperty = QuadrilateralStrings.a11y.voicing.longerThanAdjacentSidesStringProperty;
+const notEqualToAdjacentSidesStringProperty = QuadrilateralStrings.a11y.voicing.notEqualToAdjacentSidesStringProperty;
+const shorterThanParallelAdjacentSidesStringProperty = QuadrilateralStrings.a11y.voicing.shorterThanParallelAdjacentSidesStringProperty;
+const longerThanParallelAdjacentSidesStringProperty = QuadrilateralStrings.a11y.voicing.longerThanParallelAdjacentSidesStringProperty;
+const notEqualToParallelAdjacentSidesStringProperty = QuadrilateralStrings.a11y.voicing.notEqualToParallelAdjacentSidesStringProperty;
+const oneUnitStringProperty = QuadrilateralStrings.a11y.voicing.oneUnitStringProperty;
+const numberOfUnitsPatternStringProperty = QuadrilateralStrings.a11y.voicing.numberOfUnitsPatternStringProperty;
+const numberOfUnitsAndAHalfPatternStringProperty = QuadrilateralStrings.a11y.voicing.numberOfUnitsAndAHalfPatternStringProperty;
+const sideUnitsObjectResponsePatternStringProperty = QuadrilateralStrings.a11y.voicing.sideUnitsObjectResponsePatternStringProperty;
+const oneQuarterUnitStringProperty = QuadrilateralStrings.a11y.voicing.oneQuarterUnitStringProperty;
+const numberAndOneQuarterUnitsPatternStringProperty = QuadrilateralStrings.a11y.voicing.numberAndOneQuarterUnitsPatternStringProperty;
+const threeQuarterUnitsStringProperty = QuadrilateralStrings.a11y.voicing.threeQuarterUnitsStringProperty;
+const numberAndThreeQuarterUnitsPatternStringProperty = QuadrilateralStrings.a11y.voicing.numberAndThreeQuarterUnitsPatternStringProperty;
+const aboutOneUnitStringProperty = QuadrilateralStrings.a11y.voicing.aboutOneUnitStringProperty;
+const aboutNumberUnitsPatternStringProperty = QuadrilateralStrings.a11y.voicing.aboutNumberUnitsPatternStringProperty;
+const aboutOneHalfUnitsStringProperty = QuadrilateralStrings.a11y.voicing.aboutOneHalfUnitsStringProperty;
+const aboutNumberAndAHalfUnitsPatternStringProperty = QuadrilateralStrings.a11y.voicing.aboutNumberAndAHalfUnitsPatternStringProperty;
+const aboutNumberQuarterUnitsPatternStringProperty = QuadrilateralStrings.a11y.voicing.aboutNumberQuarterUnitsPatternStringProperty;
+const aboutFullNumberAndNumberQuarterUnitsPatternStringProperty = QuadrilateralStrings.a11y.voicing.aboutFullNumberAndNumberQuarterUnitsPatternStringProperty;
+const oneHalfUnitsStringProperty = QuadrilateralStrings.a11y.voicing.oneHalfUnitsStringProperty;
 
 // A map that will provide comparison descriptions for side lengths. Range values are the ratio between lengths
 // of different sides.
-const LENGTH_COMPARISON_DESCRIPTION_MAP = new Map<Range, string>();
-LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 0, 0.1 ), farShorterThanString );
-LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 0.1, 0.4 ), muchShorterThanString );
-LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 0.4, 0.6 ), aboutHalfAsLongAsString );
-LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 0.6, 0.8 ), aLittleShorterThanString );
-LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 0.8, 1 ), similarButShorterThanString );
-LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 1, 1.3 ), similarButLongerThanString );
-LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 1.3, 1.6 ), aLittleLongerThanString );
-LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 1.6, 1.8 ), muchLongerThanString );
-LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 1.8, 2.2 ), aboutTwiceAsLongAsString );
-LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 2.2, Number.POSITIVE_INFINITY ), farLongerThanString );
+const LENGTH_COMPARISON_DESCRIPTION_MAP = new Map<Range, TReadOnlyProperty<string>>();
+LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 0, 0.1 ), farShorterThanStringProperty );
+LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 0.1, 0.4 ), muchShorterThanStringProperty );
+LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 0.4, 0.6 ), aboutHalfAsLongAsStringProperty );
+LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 0.6, 0.8 ), aLittleShorterThanStringProperty );
+LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 0.8, 1 ), similarButShorterThanStringProperty );
+LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 1, 1.3 ), similarButLongerThanStringProperty );
+LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 1.3, 1.6 ), aLittleLongerThanStringProperty );
+LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 1.6, 1.8 ), muchLongerThanStringProperty );
+LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 1.8, 2.2 ), aboutTwiceAsLongAsStringProperty );
+LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 2.2, Number.POSITIVE_INFINITY ), farLongerThanStringProperty );
 
 export default class SideDescriber {
   public readonly side: QuadrilateralSide;
@@ -98,18 +99,18 @@ export default class SideDescriber {
     const parallelSidePairs = this.quadrilateralShapeModel.parallelSidePairsProperty.value;
     const thisSideIsParallel = _.some( parallelSidePairs, sidePair => sidePair.side1 === this.side || sidePair.side2 === this.side );
 
-    const patternString = thisSideIsParallel ?
-                          parallelSideObjectResponsePatternString :
-                          sideObjectResponsePatternString;
+    const patternStringProperty = thisSideIsParallel ?
+                                  parallelSideObjectResponsePatternStringProperty :
+                                  sideObjectResponsePatternStringProperty;
 
     // If the quadrilateral is a rhombus or a square, always describe that the opposite side is equal in length to the
     // other. This may not happen naturally by comparing side lengths because a rhombus and square may be detected
     // when sides are not perfectly equal due to the angle tolerance interval.
     const shapeName = this.quadrilateralShapeModel.shapeNameProperty.value;
     const oppositeComparison = shapeName === NamedQuadrilateral.SQUARE || shapeName === NamedQuadrilateral.RHOMBUS ?
-                               equalToString : this.getLengthComparisonDescription( oppositeSide );
+                               equalToStringProperty : this.getLengthComparisonDescription( oppositeSide );
 
-    response = StringUtils.fillIn( patternString, {
+    response = StringUtils.fillIn( patternStringProperty, {
       oppositeComparison: oppositeComparison,
       adjacentSideDescription: this.getAdjacentSideDescription()
     } );
@@ -117,7 +118,7 @@ export default class SideDescriber {
     // if 'markers' are visible describe the side length units by appending that information to the object response
     if ( this.markersVisibleProperty.value ) {
       const unitsDescription = this.getSideUnitsDescription();
-      response = StringUtils.fillIn( sideUnitsObjectResponsePatternString, {
+      response = StringUtils.fillIn( sideUnitsObjectResponsePatternStringProperty, {
         unitsDescription: unitsDescription,
         objectResponse: response
       } );
@@ -135,10 +136,10 @@ export default class SideDescriber {
    * "2 and a quarter units" or
    * "2 and three-quarter units".
    */
-  public getSideUnitsDescription(): string {
+  public getSideUnitsDescription(): NullableQuadrilateralStringType {
 
     // REVIEW: The "multiple returns" idea will help so much here - Great!
-    let sideDescription: string | null = null;
+    let sideDescription: NullableQuadrilateralStringType = null;
 
     const shapeModel = this.quadrilateralShapeModel;
     const sideLength = this.side.lengthProperty.value;
@@ -150,24 +151,24 @@ export default class SideDescriber {
       if ( numberOfFullUnits === 1 ) {
 
         // "one unit"
-        sideDescription = oneUnitString;
+        sideDescription = oneUnitStringProperty;
       }
       else {
 
         // "3 units"
-        sideDescription = StringUtils.fillIn( numberOfUnitsPatternString, {
+        sideDescription = StringUtils.fillIn( numberOfUnitsPatternStringProperty, {
           numberOfUnits: numberOfFullUnits
         } );
       }
     }
     else if ( shapeModel.isInterLengthEqualToOther( remainder, QuadrilateralSide.SIDE_SEGMENT_LENGTH / 2 ) ) {
       if ( numberOfFullUnits === 0 ) {
-        sideDescription = oneHalfUnitsString;
+        sideDescription = oneHalfUnitsStringProperty;
       }
       else {
 
         // three and a half units
-        sideDescription = StringUtils.fillIn( numberOfUnitsAndAHalfPatternString, {
+        sideDescription = StringUtils.fillIn( numberOfUnitsAndAHalfPatternStringProperty, {
           numberOfUnits: numberOfFullUnits
         } );
       }
@@ -176,12 +177,12 @@ export default class SideDescriber {
       if ( numberOfFullUnits === 0 ) {
 
         // "one quarter units"
-        sideDescription = oneQuarterUnitString;
+        sideDescription = oneQuarterUnitStringProperty;
       }
       else {
 
         // 2 and three-quarter units
-        sideDescription = StringUtils.fillIn( numberAndOneQuarterUnitsPatternString, {
+        sideDescription = StringUtils.fillIn( numberAndOneQuarterUnitsPatternStringProperty, {
           fullNumber: numberOfFullUnits
         } );
       }
@@ -190,12 +191,12 @@ export default class SideDescriber {
       if ( numberOfFullUnits === 0 ) {
 
         // "one quarter units"
-        sideDescription = threeQuarterUnitsString;
+        sideDescription = threeQuarterUnitsStringProperty;
       }
       else {
 
         // 2 and three-quarter units
-        sideDescription = StringUtils.fillIn( numberAndThreeQuarterUnitsPatternString, {
+        sideDescription = StringUtils.fillIn( numberAndThreeQuarterUnitsPatternStringProperty, {
           fullNumber: numberOfFullUnits
         } );
       }
@@ -206,11 +207,11 @@ export default class SideDescriber {
       const numberOfExtraCornerUnits = numberOfQuarterUnits % 4;
       if ( numberOfExtraCornerUnits === 0 ) {
         if ( numberOfFullUnits === 0 ) {
-          sideDescription = aboutOneUnitString;
+          sideDescription = aboutOneUnitStringProperty;
         }
         else {
           // about 3 units (just under, currently)
-          sideDescription = StringUtils.fillIn( aboutNumberUnitsPatternString, {
+          sideDescription = StringUtils.fillIn( aboutNumberUnitsPatternStringProperty, {
             number: numberOfFullUnits + 1
           } );
         }
@@ -218,11 +219,11 @@ export default class SideDescriber {
       else if ( numberOfExtraCornerUnits === 2 ) {
         if ( numberOfFullUnits === 0 ) {
           // about one-half units
-          sideDescription = aboutOneHalfUnitsString;
+          sideDescription = aboutOneHalfUnitsStringProperty;
         }
         else {
           // about 1 and a half units
-          sideDescription = StringUtils.fillIn( aboutNumberAndAHalfUnitsPatternString, {
+          sideDescription = StringUtils.fillIn( aboutNumberAndAHalfUnitsPatternStringProperty, {
             number: numberOfFullUnits
           } );
         }
@@ -233,7 +234,7 @@ export default class SideDescriber {
 
           // about three-quarter units
           // about one-quarter units
-          sideDescription = StringUtils.fillIn( aboutNumberQuarterUnitsPatternString, {
+          sideDescription = StringUtils.fillIn( aboutNumberQuarterUnitsPatternStringProperty, {
             number: numberOfExtraCornerUnits
           } );
         }
@@ -241,7 +242,7 @@ export default class SideDescriber {
 
           // about 2 and one quarter units
           // about 3 and three-quarter units
-          sideDescription = StringUtils.fillIn( aboutFullNumberAndNumberQuarterUnitsPatternString, {
+          sideDescription = StringUtils.fillIn( aboutFullNumberAndNumberQuarterUnitsPatternStringProperty, {
             fullNumber: numberOfFullUnits,
             number: numberOfExtraCornerUnits
           } );
@@ -260,8 +261,8 @@ export default class SideDescriber {
    * "equal to adjacent sides" or
    * "not equal to parallel adjacent sides"
    */
-  private getAdjacentSideDescription(): string {
-    let description = '';
+  private getAdjacentSideDescription(): NullableQuadrilateralStringType {
+    let description: NullableQuadrilateralStringType = null;
 
     const adjacentSides = this.quadrilateralShapeModel.adjacentSideMap.get( this.side )!;
     const adjacentSidesEqual = this.quadrilateralShapeModel.isInterLengthEqualToOther(
@@ -290,21 +291,21 @@ export default class SideDescriber {
         description = 'equal to parallel adjacent sides';
       }
       else {
-        description = equalToAdjacentSidesString;
+        description = equalToAdjacentSidesStringProperty;
       }
     }
     else if ( numberOfEqualAdjacentSidePairs === 1 ) {
 
       // Just one 'equal' side, that is all we need to describe
-      description = equalToOneAdjacentSideString;
+      description = equalToOneAdjacentSideStringProperty;
     }
     else if ( adjacentSidesEqual ) {
 
-      const patternString = adjacentSidesParallel ? equalAdjacentParallelSidesPatternString : equalAdjacentSidesPatternString;
+      const patternStringProperty = adjacentSidesParallel ? equalAdjacentParallelSidesPatternStringProperty : equalAdjacentSidesPatternStringProperty;
 
       // the adjacent sides are equal in length but not equal to this side, describe the length of
       // this side relative to the other sides but we can use either side since they are equal in length
-      description = StringUtils.fillIn( patternString, {
+      description = StringUtils.fillIn( patternStringProperty, {
         comparison: this.getLengthComparisonDescription( adjacentSides[ 0 ] )
       } );
     }
@@ -316,13 +317,13 @@ export default class SideDescriber {
       const firstAdjacentLength = adjacentSides[ 0 ].lengthProperty.value;
       const secondAdjacentLength = adjacentSides[ 1 ].lengthProperty.value;
       if ( firstAdjacentLength > sideLength && secondAdjacentLength > sideLength ) {
-        description = adjacentSidesParallel ? shorterThanParallelAdjacentSidesString : shorterThanAdjacentSidesString;
+        description = adjacentSidesParallel ? shorterThanParallelAdjacentSidesStringProperty : shorterThanAdjacentSidesStringProperty;
       }
       else if ( firstAdjacentLength < sideLength && secondAdjacentLength < sideLength ) {
-        description = adjacentSidesParallel ? longerThanParallelAdjacentSidesString : longerThanAdjacentSidesString;
+        description = adjacentSidesParallel ? longerThanParallelAdjacentSidesStringProperty : longerThanAdjacentSidesStringProperty;
       }
       else {
-        description = adjacentSidesParallel ? notEqualToParallelAdjacentSidesString : notEqualToAdjacentSidesString;
+        description = adjacentSidesParallel ? notEqualToParallelAdjacentSidesStringProperty : notEqualToAdjacentSidesStringProperty;
       }
     }
 
@@ -335,8 +336,8 @@ export default class SideDescriber {
    * will be something like:
    * "SideAB is much longer than sideCD."
    */
-  private getLengthComparisonDescription( otherSide: QuadrilateralSide ): string {
-    let description: string | null = null;
+  private getLengthComparisonDescription( otherSide: QuadrilateralSide ): NullableQuadrilateralStringType {
+    let description: NullableQuadrilateralStringType = null;
 
     const shapeModel = this.quadrilateralShapeModel;
 
@@ -344,15 +345,16 @@ export default class SideDescriber {
     const length2 = otherSide.lengthProperty.value;
 
     if ( shapeModel.isInterLengthEqualToOther( length1, length2 ) ) {
-      description = equalToString;
+      description = equalToStringProperty;
     }
     else if ( shapeModel.isInterLengthEqualToOther( length1, length2 * 2 ) ) {
-      description = twiceAsLongAsString;
+      description = twiceAsLongAsStringProperty;
     }
     else if ( shapeModel.isInterLengthEqualToOther( length1, length2 / 2 ) ) {
-      description = halfAsLongAsString;
+      description = halfAsLongAsStringProperty;
     }
 
+    // REVIEW - use else if here and multiple return lines as suggested
     const lengthRatio = length1 / length2;
     if ( description === null ) {
       LENGTH_COMPARISON_DESCRIPTION_MAP.forEach( ( value, key ) => {
@@ -361,9 +363,7 @@ export default class SideDescriber {
         }
       } );
     }
-
-    assert && assert( description, `Length comparison description not found for length ratio: ${lengthRatio}` );
-    return description!;
+    return description;
   }
 }
 

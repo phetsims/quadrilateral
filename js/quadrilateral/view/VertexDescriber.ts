@@ -16,52 +16,53 @@ import Range from '../../../../dot/js/Range.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import CornerGuideNode from './CornerGuideNode.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
+import { PDOMValueType } from '../../../../scenery/js/imports.js';
 
 // constants
-const cornerAString = QuadrilateralStrings.a11y.cornerA;
-const cornerBString = QuadrilateralStrings.a11y.cornerB;
-const cornerCString = QuadrilateralStrings.a11y.cornerC;
-const cornerDString = QuadrilateralStrings.a11y.cornerD;
-const vertexObjectResponsePatternString = QuadrilateralStrings.a11y.voicing.vertexObjectResponsePattern;
-const farSmallerThanString = QuadrilateralStrings.a11y.voicing.farSmallerThan;
-const aboutHalfAsWideAsString = QuadrilateralStrings.a11y.voicing.aboutHalfAsWideAs;
-const halfAsWideAsString = QuadrilateralStrings.a11y.voicing.halfAsWideAs;
-const aLittleSmallerThanString = QuadrilateralStrings.a11y.voicing.aLittleSmallerThan;
-const muchSmallerThanString = QuadrilateralStrings.a11y.voicing.muchSmallerThan;
-const similarButSmallerThanString = QuadrilateralStrings.a11y.voicing.similarButSmallerThan;
-const equalToString = QuadrilateralStrings.a11y.voicing.equalTo;
-const similarButWiderThanString = QuadrilateralStrings.a11y.voicing.similarButWiderThan;
-const muchWiderThanString = QuadrilateralStrings.a11y.voicing.muchWiderThan;
-const aboutTwiceAsWideAsString = QuadrilateralStrings.a11y.voicing.aboutTwiceAsWideAs;
-const twiceAsWideAsString = QuadrilateralStrings.a11y.voicing.twiceAsWideAs;
-const aLittleWiderThanString = QuadrilateralStrings.a11y.voicing.aLittleWiderThan;
-const farWiderThanString = QuadrilateralStrings.a11y.voicing.farWiderThan;
-const equalToAdjacentCornersString = QuadrilateralStrings.a11y.voicing.equalToAdjacentCorners;
-const equalToOneAdjacentCornerString = QuadrilateralStrings.a11y.voicing.equalToOneAdjacentCorner;
-const equalAdjacentCornersPatternString = QuadrilateralStrings.a11y.voicing.equalAdjacentCornersPattern;
-const smallerThanAdjacentCornersString = QuadrilateralStrings.a11y.voicing.smallerThanAdjacentCorners;
-const widerThanAdjacentCornersString = QuadrilateralStrings.a11y.voicing.widerThanAdjacentCorners;
-const notEqualToAdjacentCornersString = QuadrilateralStrings.a11y.voicing.notEqualToAdjacentCorners;
-const vertexObjectResponseWithWedgesPatternString = QuadrilateralStrings.a11y.voicing.vertexObjectResponseWithWedgesPattern;
-const rightAngleString = QuadrilateralStrings.a11y.voicing.rightAngle;
-const angleFlatString = QuadrilateralStrings.a11y.voicing.angleFlat;
-const oneWedgeString = QuadrilateralStrings.a11y.voicing.oneWedge;
-const halfOneWedgeString = QuadrilateralStrings.a11y.voicing.halfOneWedge;
-const lessThanHalfOneWedgeString = QuadrilateralStrings.a11y.voicing.lessThanHalfOneWedge;
-const justOverOneWedgeString = QuadrilateralStrings.a11y.voicing.justOverOneWedge;
-const justUnderOneWedgeString = QuadrilateralStrings.a11y.voicing.justUnderOneWedge;
-const numberOfWedgesPatternString = QuadrilateralStrings.a11y.voicing.numberOfWedgesPattern;
-const numberOfWedgesAndAHalfPatternString = QuadrilateralStrings.a11y.voicing.numberOfWedgesAndAHalfPattern;
-const justOverNumberOfWedgesPatternString = QuadrilateralStrings.a11y.voicing.justOverNumberOfWedgesPattern;
-const justUnderNumberOfWedgesPatternString = QuadrilateralStrings.a11y.voicing.justUnderNumberOfWedgesPattern;
-const blockedByEdgeString = QuadrilateralStrings.a11y.voicing.blockedByEdgeString;
+const cornerAStringProperty = QuadrilateralStrings.a11y.cornerAStringProperty;
+const cornerBStringProperty = QuadrilateralStrings.a11y.cornerBStringProperty;
+const cornerCStringProperty = QuadrilateralStrings.a11y.cornerCStringProperty;
+const cornerDStringProperty = QuadrilateralStrings.a11y.cornerDStringProperty;
+const vertexObjectResponsePatternStringProperty = QuadrilateralStrings.a11y.voicing.vertexObjectResponsePatternStringProperty;
+const farSmallerThanStringProperty = QuadrilateralStrings.a11y.voicing.farSmallerThanStringProperty;
+const aboutHalfAsWideAsStringProperty = QuadrilateralStrings.a11y.voicing.aboutHalfAsWideAsStringProperty;
+const halfAsWideAsStringProperty = QuadrilateralStrings.a11y.voicing.halfAsWideAsStringProperty;
+const aLittleSmallerThanStringProperty = QuadrilateralStrings.a11y.voicing.aLittleSmallerThanStringProperty;
+const muchSmallerThanStringProperty = QuadrilateralStrings.a11y.voicing.muchSmallerThanStringProperty;
+const similarButSmallerThanStringProperty = QuadrilateralStrings.a11y.voicing.similarButSmallerThanStringProperty;
+const equalToStringProperty = QuadrilateralStrings.a11y.voicing.equalToStringProperty;
+const similarButWiderThanStringProperty = QuadrilateralStrings.a11y.voicing.similarButWiderThanStringProperty;
+const muchWiderThanStringProperty = QuadrilateralStrings.a11y.voicing.muchWiderThanStringProperty;
+const aboutTwiceAsWideAsStringProperty = QuadrilateralStrings.a11y.voicing.aboutTwiceAsWideAsStringProperty;
+const twiceAsWideAsStringProperty = QuadrilateralStrings.a11y.voicing.twiceAsWideAsStringProperty;
+const aLittleWiderThanStringProperty = QuadrilateralStrings.a11y.voicing.aLittleWiderThanStringProperty;
+const farWiderThanStringProperty = QuadrilateralStrings.a11y.voicing.farWiderThanStringProperty;
+const equalToAdjacentCornersStringProperty = QuadrilateralStrings.a11y.voicing.equalToAdjacentCornersStringProperty;
+const equalToOneAdjacentCornerStringProperty = QuadrilateralStrings.a11y.voicing.equalToOneAdjacentCornerStringProperty;
+const equalAdjacentCornersPatternStringProperty = QuadrilateralStrings.a11y.voicing.equalAdjacentCornersPatternStringProperty;
+const smallerThanAdjacentCornersStringProperty = QuadrilateralStrings.a11y.voicing.smallerThanAdjacentCornersStringProperty;
+const widerThanAdjacentCornersStringProperty = QuadrilateralStrings.a11y.voicing.widerThanAdjacentCornersStringProperty;
+const notEqualToAdjacentCornersStringProperty = QuadrilateralStrings.a11y.voicing.notEqualToAdjacentCornersStringProperty;
+const vertexObjectResponseWithWedgesPatternStringProperty = QuadrilateralStrings.a11y.voicing.vertexObjectResponseWithWedgesPatternStringProperty;
+const rightAngleStringProperty = QuadrilateralStrings.a11y.voicing.rightAngleStringProperty;
+const angleFlatStringProperty = QuadrilateralStrings.a11y.voicing.angleFlatStringProperty;
+const oneWedgeStringProperty = QuadrilateralStrings.a11y.voicing.oneWedgeStringProperty;
+const halfOneWedgeStringProperty = QuadrilateralStrings.a11y.voicing.halfOneWedgeStringProperty;
+const lessThanHalfOneWedgeStringProperty = QuadrilateralStrings.a11y.voicing.lessThanHalfOneWedgeStringProperty;
+const justOverOneWedgeStringProperty = QuadrilateralStrings.a11y.voicing.justOverOneWedgeStringProperty;
+const justUnderOneWedgeStringProperty = QuadrilateralStrings.a11y.voicing.justUnderOneWedgeStringProperty;
+const numberOfWedgesPatternStringProperty = QuadrilateralStrings.a11y.voicing.numberOfWedgesPatternStringProperty;
+const numberOfWedgesAndAHalfPatternStringProperty = QuadrilateralStrings.a11y.voicing.numberOfWedgesAndAHalfPatternStringProperty;
+const justOverNumberOfWedgesPatternStringProperty = QuadrilateralStrings.a11y.voicing.justOverNumberOfWedgesPatternStringProperty;
+const justUnderNumberOfWedgesPatternStringProperty = QuadrilateralStrings.a11y.voicing.justUnderNumberOfWedgesPatternStringProperty;
+const blockedByEdgeStringProperty = QuadrilateralStrings.a11y.voicing.blockedByEdgeStringProperty;
 
 // Maps a vertex to its accessible name, like "Corner A".
-const VERTEX_CORNER_LABEL_MAP = new Map<VertexLabel, string>( [
-  [ VertexLabel.VERTEX_A, cornerAString ],
-  [ VertexLabel.VERTEX_B, cornerBString ],
-  [ VertexLabel.VERTEX_C, cornerCString ],
-  [ VertexLabel.VERTEX_D, cornerDString ]
+const VERTEX_CORNER_LABEL_MAP = new Map<VertexLabel, TReadOnlyProperty<string>>( [
+  [ VertexLabel.VERTEX_A, cornerAStringProperty ],
+  [ VertexLabel.VERTEX_B, cornerBStringProperty ],
+  [ VertexLabel.VERTEX_C, cornerCStringProperty ],
+  [ VertexLabel.VERTEX_D, cornerDStringProperty ]
 ] );
 
 // If ratio of an angle to another is within this range it is 'about half as large as the other'.
@@ -73,17 +74,17 @@ const ABOUT_HALF_RANGE = new Range( 0.4, 0.6 );
 const ABOUT_TWICE_RANGE = new Range( 1.8, 2.2 );
 
 // Maps the difference in angles between two vertices to a description string.
-const ANGLE_COMPARISON_DESCRIPTION_MAP = new Map<Range, string>();
-ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 0, 0.1 ), farSmallerThanString );
-ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 0.1, 0.4 ), muchSmallerThanString );
-ANGLE_COMPARISON_DESCRIPTION_MAP.set( ABOUT_HALF_RANGE, aboutHalfAsWideAsString );
-ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 0.6, 0.8 ), aLittleSmallerThanString );
-ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 0.8, 1 ), similarButSmallerThanString );
-ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 1, 1.3 ), similarButWiderThanString );
-ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 1.3, 1.6 ), aLittleWiderThanString );
-ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 1.6, 1.8 ), muchWiderThanString );
-ANGLE_COMPARISON_DESCRIPTION_MAP.set( ABOUT_TWICE_RANGE, aboutTwiceAsWideAsString );
-ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 2.2, Number.POSITIVE_INFINITY ), farWiderThanString );
+const ANGLE_COMPARISON_DESCRIPTION_MAP = new Map<Range, TReadOnlyProperty<string>>();
+ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 0, 0.1 ), farSmallerThanStringProperty );
+ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 0.1, 0.4 ), muchSmallerThanStringProperty );
+ANGLE_COMPARISON_DESCRIPTION_MAP.set( ABOUT_HALF_RANGE, aboutHalfAsWideAsStringProperty );
+ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 0.6, 0.8 ), aLittleSmallerThanStringProperty );
+ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 0.8, 1 ), similarButSmallerThanStringProperty );
+ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 1, 1.3 ), similarButWiderThanStringProperty );
+ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 1.3, 1.6 ), aLittleWiderThanStringProperty );
+ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 1.6, 1.8 ), muchWiderThanStringProperty );
+ANGLE_COMPARISON_DESCRIPTION_MAP.set( ABOUT_TWICE_RANGE, aboutTwiceAsWideAsStringProperty );
+ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 2.2, Number.POSITIVE_INFINITY ), farWiderThanStringProperty );
 
 export default class VertexDescriber {
 
@@ -119,14 +120,14 @@ export default class VertexDescriber {
 
     // if corner guides are visible, a description of the number of wedges is included
     if ( this.markersVisibleProperty.value ) {
-      response = StringUtils.fillIn( vertexObjectResponseWithWedgesPatternString, {
+      response = StringUtils.fillIn( vertexObjectResponseWithWedgesPatternStringProperty, {
         wedgeDescription: VertexDescriber.getWedgesDescription( this.vertex.angleProperty.value!, this.quadrilateralShapeModel ),
         oppositeComparison: oppositeComparisonString,
         adjacentVertexDescription: adjacentVertexDescriptionString
       } );
     }
     else {
-      response = StringUtils.fillIn( vertexObjectResponsePatternString, {
+      response = StringUtils.fillIn( vertexObjectResponsePatternStringProperty, {
         oppositeComparison: oppositeComparisonString,
         adjacentVertexDescription: adjacentVertexDescriptionString
       } );
@@ -146,69 +147,69 @@ export default class VertexDescriber {
    *
    * For the design request of this feature please see https://github.com/phetsims/quadrilateral/issues/231
    */
-  public static getWedgesDescription( vertexAngle: number, shapeModel: QuadrilateralShapeModel ): string {
+  public static getWedgesDescription( vertexAngle: number, shapeModel: QuadrilateralShapeModel ): PDOMValueType | null {
 
     // REVIEW: It would be clearer to have multiple return statements from this function. With a mutable variable
     // and numerous assignments, you cannot tell at a glance if the value is mutated later on.
     // REVIEW: Same comment in getAdjacentVertexObjectDescription
     // - Great! Lets do it.
-    let wedgeDescription: string | null = null;
+    let wedgeDescription = null;
 
     const numberOfFullWedges = Math.floor( vertexAngle / CornerGuideNode.WEDGE_SIZE_RADIANS );
     const remainder = vertexAngle % CornerGuideNode.WEDGE_SIZE_RADIANS;
 
     if ( shapeModel.isRightAngle( vertexAngle ) ) {
-      wedgeDescription = rightAngleString;
+      wedgeDescription = rightAngleStringProperty;
     }
     else if ( shapeModel.isFlatAngle( vertexAngle ) ) {
-      wedgeDescription = angleFlatString;
+      wedgeDescription = angleFlatStringProperty;
     }
     else if ( shapeModel.isStaticAngleEqualToOther( remainder, 0 ) ) {
       if ( numberOfFullWedges === 1 ) {
-        wedgeDescription = oneWedgeString;
+        wedgeDescription = oneWedgeStringProperty;
       }
       else {
-        wedgeDescription = StringUtils.fillIn( numberOfWedgesPatternString, {
+        wedgeDescription = StringUtils.fillIn( numberOfWedgesPatternStringProperty, {
           numberOfWedges: numberOfFullWedges
         } );
       }
     }
     else if ( shapeModel.isStaticAngleEqualToOther( remainder, CornerGuideNode.WEDGE_SIZE_RADIANS / 2 ) ) {
       if ( numberOfFullWedges === 0 ) {
-        wedgeDescription = halfOneWedgeString;
+        wedgeDescription = halfOneWedgeStringProperty;
       }
       else {
-        wedgeDescription = StringUtils.fillIn( numberOfWedgesAndAHalfPatternString, {
+        wedgeDescription = StringUtils.fillIn( numberOfWedgesAndAHalfPatternStringProperty, {
           numberOfWedges: numberOfFullWedges
         } );
       }
     }
     else if ( remainder < CornerGuideNode.WEDGE_SIZE_RADIANS / 2 ) {
       if ( numberOfFullWedges === 0 ) {
-        wedgeDescription = lessThanHalfOneWedgeString;
+        wedgeDescription = lessThanHalfOneWedgeStringProperty;
       }
       else if ( numberOfFullWedges === 1 ) {
-        wedgeDescription = justOverOneWedgeString;
+        wedgeDescription = justOverOneWedgeStringProperty;
       }
       else {
-        wedgeDescription = StringUtils.fillIn( justOverNumberOfWedgesPatternString, {
+        wedgeDescription = StringUtils.fillIn( justOverNumberOfWedgesPatternStringProperty, {
           numberOfWedges: numberOfFullWedges
         } );
       }
     }
     else if ( remainder > CornerGuideNode.WEDGE_SIZE_RADIANS / 2 ) {
       if ( numberOfFullWedges === 0 ) {
-        wedgeDescription = justUnderOneWedgeString;
+        wedgeDescription = justUnderOneWedgeStringProperty;
       }
       else {
-        wedgeDescription = StringUtils.fillIn( justUnderNumberOfWedgesPatternString, {
+        wedgeDescription = StringUtils.fillIn( justUnderNumberOfWedgesPatternStringProperty, {
           numberOfWedges: numberOfFullWedges + 1
         } );
       }
     }
 
-    assert && assert( wedgeDescription, `did not find a wedge description for the provided angle: ${vertexAngle}` );
-    return wedgeDescription!;
+    assert && assert( wedgeDescription !== null, `did not find a wedge description for the provided angle: ${vertexAngle}` );
+    return wedgeDescription;
   }
 
   /**
@@ -218,8 +219,8 @@ export default class VertexDescriber {
    * "much smaller than adjacent equal corners." or
    * "equal to adjacent corners."
    */
-  public getAdjacentVertexObjectDescription(): string {
-    let description = '';
+  public getAdjacentVertexObjectDescription(): PDOMValueType {
+    let description: PDOMValueType = '';
 
     const adjacentCorners = this.quadrilateralShapeModel.adjacentVertexMap.get( this.vertex )!;
     const adjacentCornersEqual = this.quadrilateralShapeModel.isInterAngleEqualToOther(
@@ -237,19 +238,19 @@ export default class VertexDescriber {
     if ( numberOfEqualAdjacentVertexPairs === 2 ) {
 
       // This vertex and both adjacent angles are all equal
-      description = equalToAdjacentCornersString;
+      description = equalToAdjacentCornersStringProperty;
     }
     else if ( numberOfEqualAdjacentVertexPairs === 1 ) {
 
       // just say "equal to one adjacent corner
-      description = equalToOneAdjacentCornerString;
+      description = equalToOneAdjacentCornerStringProperty;
     }
     else if ( adjacentCornersEqual ) {
 
       // the adjacent corners are equal but not equal to provided vertex, combine their description and use either
       // to describe the relative description
       const shapeName = this.quadrilateralShapeModel.shapeNameProperty.value;
-      description = StringUtils.fillIn( equalAdjacentCornersPatternString, {
+      description = StringUtils.fillIn( equalAdjacentCornersPatternStringProperty, {
         comparison: this.getAngleComparisonDescription( adjacentCorners[ 0 ], shapeName )
       } );
     }
@@ -262,13 +263,13 @@ export default class VertexDescriber {
       const secondAdjacentAngle = adjacentCorners[ 1 ].angleProperty.value!;
 
       if ( firstAdjacentAngle > vertexAngle && secondAdjacentAngle > vertexAngle ) {
-        description = smallerThanAdjacentCornersString;
+        description = smallerThanAdjacentCornersStringProperty;
       }
       else if ( firstAdjacentAngle < vertexAngle && secondAdjacentAngle < vertexAngle ) {
-        description = widerThanAdjacentCornersString;
+        description = widerThanAdjacentCornersStringProperty;
       }
       else {
-        description = notEqualToAdjacentCornersString;
+        description = notEqualToAdjacentCornersStringProperty;
       }
     }
 
@@ -278,8 +279,8 @@ export default class VertexDescriber {
   /**
    * Returns a context response for when the QuadrilateralVertex can not move because it is blocked by a boundary edge.
    */
-  public getBlockedByEdgeResponse(): string {
-    return blockedByEdgeString;
+  public getBlockedByEdgeResponse(): TReadOnlyProperty<string> {
+    return blockedByEdgeStringProperty;
   }
 
   /**
@@ -293,11 +294,11 @@ export default class VertexDescriber {
    * "much much smaller than" or
    * "a little smaller than"
    */
-  public getAngleComparisonDescription( otherVertex: QuadrilateralVertex, shapeName: NamedQuadrilateral ): string {
+  public getAngleComparisonDescription( otherVertex: QuadrilateralVertex, shapeName: NamedQuadrilateral ): TReadOnlyProperty<string> | null {
     assert && assert( this.vertex.angleProperty.value !== null, 'angles need to be initialized for descriptions' );
     assert && assert( otherVertex.angleProperty.value !== null, 'angles need to be initialized for descriptions' );
 
-    let description: string | null = null;
+    let description: TReadOnlyProperty<string> | null = null;
 
     const angle1 = this.vertex.angleProperty.value!;
     const angle2 = otherVertex.angleProperty.value!;
@@ -306,13 +307,13 @@ export default class VertexDescriber {
     // cases where we move out of isoceles trapezoid while the angles are still described as "equal".
     const usableToleranceInterval = shapeName === NamedQuadrilateral.TRAPEZOID ? 0 : this.quadrilateralShapeModel.interAngleToleranceInterval;
     if ( QuadrilateralShapeModel.isAngleEqualToOther( angle1, angle2, usableToleranceInterval ) ) {
-      description = equalToString;
+      description = equalToStringProperty;
     }
     else if ( QuadrilateralShapeModel.isAngleEqualToOther( angle1, angle2 * 2, usableToleranceInterval ) ) {
-      description = twiceAsWideAsString;
+      description = twiceAsWideAsStringProperty;
     }
     else if ( QuadrilateralShapeModel.isAngleEqualToOther( angle1, angle2 * 0.5, usableToleranceInterval ) ) {
-      description = halfAsWideAsString;
+      description = halfAsWideAsStringProperty;
     }
 
     // REVIEW: This should be in an else{} - You are so right!

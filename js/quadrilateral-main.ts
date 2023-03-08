@@ -45,11 +45,6 @@ const simOptions: SimOptions = {
   // preferences configuration with defaults from package.json
   preferencesModel: new PreferencesModel( {
     inputOptions: inputPreferencesOptions,
-    localizationOptions: {
-
-      // Dynamic locales are not supported for initial publication of this sim.
-      supportsDynamicLocales: false
-    },
     audioOptions: {
       customPreferences: [
         {

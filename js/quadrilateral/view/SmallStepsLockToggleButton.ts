@@ -18,12 +18,12 @@ import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 
 // constants
-const smallStepsString = QuadrilateralStrings.smallSteps;
-const hintResponseString = QuadrilateralStrings.a11y.voicing.minorIntervalsToggle.hintResponse;
-const lockedNameResponseString = QuadrilateralStrings.a11y.voicing.minorIntervalsToggle.lockedNameResponse;
-const unlockedNameResponseString = QuadrilateralStrings.a11y.voicing.minorIntervalsToggle.unlockedNameResponse;
-const lockedContextResponseString = QuadrilateralStrings.a11y.voicing.minorIntervalsToggle.lockedContextResponse;
-const unlockedContextResponseString = QuadrilateralStrings.a11y.voicing.minorIntervalsToggle.unlockedContextResponse;
+const smallStepsStringProperty = QuadrilateralStrings.smallStepsStringProperty;
+const hintResponseStringProperty = QuadrilateralStrings.a11y.voicing.minorIntervalsToggle.hintResponseStringProperty;
+const lockedNameResponseStringProperty = QuadrilateralStrings.a11y.voicing.minorIntervalsToggle.lockedNameResponseStringProperty;
+const unlockedNameResponseStringProperty = QuadrilateralStrings.a11y.voicing.minorIntervalsToggle.unlockedNameResponseStringProperty;
+const lockedContextResponseStringProperty = QuadrilateralStrings.a11y.voicing.minorIntervalsToggle.lockedContextResponseStringProperty;
+const unlockedContextResponseStringProperty = QuadrilateralStrings.a11y.voicing.minorIntervalsToggle.unlockedContextResponseStringProperty;
 
 type SelfOptions = EmptySelfOptions;
 type SmallStepsLockToggleButtonOptions = SelfOptions & StrictOmit<RectangularToggleButtonOptions, 'content'>;
@@ -38,12 +38,12 @@ export default class SmallStepsLockToggleButton extends RectangularToggleButton<
       baseColor: QuadrilateralColors.screenViewButtonColorProperty,
 
       // voicing
-      voicingHintResponse: hintResponseString
+      voicingHintResponse: hintResponseStringProperty
     }, providedOptions );
 
     super( lockToMinorIntervalsProperty, false, true, options );
 
-    const labelNode = new Text( smallStepsString, {
+    const labelNode = new Text( smallStepsStringProperty, {
       font: QuadrilateralConstants.SCREEN_TEXT_FONT,
       maxWidth: 100,
       leftCenter: this.rightCenter.plusXY( QuadrilateralConstants.CONTROL_LABEL_SPACING, 0 )
@@ -53,8 +53,8 @@ export default class SmallStepsLockToggleButton extends RectangularToggleButton<
     // voicing - update dynamic content and request Voicing when the change is made
     lockToMinorIntervalsProperty.link( lockToMinorIntervals => {
 
-      this.voicingNameResponse = lockToMinorIntervals ? lockedNameResponseString : unlockedNameResponseString;
-      this.voicingContextResponse = lockToMinorIntervals ? lockedContextResponseString : unlockedContextResponseString;
+      this.voicingNameResponse = lockToMinorIntervals ? lockedNameResponseStringProperty : unlockedNameResponseStringProperty;
+      this.voicingContextResponse = lockToMinorIntervals ? lockedContextResponseStringProperty : unlockedContextResponseStringProperty;
 
       this.voicingSpeakResponse( {
         nameResponse: this.voicingNameResponse,

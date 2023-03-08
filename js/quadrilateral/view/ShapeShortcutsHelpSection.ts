@@ -21,8 +21,8 @@ import QuadrilateralKeyboardHelpContent from './QuadrilateralKeyboardHelpContent
 // Voicing is NOT translatable and won't be for a very long time. This content is invisible in non-english locales and
 // when Voicing is not supported.
 const checkShapeWithVoicingString = 'With Voicing enabled, check shape name or properties';
-const checkShapeDescriptionString = QuadrilateralStrings.a11y.keyboardHelpDialog.checkShapeDescriptionPattern;
-const resetShapeDescriptionString = QuadrilateralStrings.a11y.keyboardHelpDialog.resetShapeDescriptionPattern;
+const checkShapeDescriptionStringProperty = QuadrilateralStrings.a11y.keyboardHelpDialog.checkShapeDescriptionPatternStringProperty;
+const resetShapeDescriptionStringProperty = QuadrilateralStrings.a11y.keyboardHelpDialog.resetShapeDescriptionPatternStringProperty;
 
 export default class ShapeShortcutsHelpSection extends KeyboardHelpSection {
   public constructor() {
@@ -34,7 +34,7 @@ export default class ShapeShortcutsHelpSection extends KeyboardHelpSection {
         labelOptions: {
           lineWrap: QuadrilateralKeyboardHelpContent.LABEL_LINE_WRAP
         },
-        labelInnerContent: StringUtils.fillIn( checkShapeDescriptionString, {
+        labelInnerContent: StringUtils.fillIn( checkShapeDescriptionStringProperty, {
           altOrOption: TextKeyNode.getAltKeyString()
         } )
       }
@@ -42,7 +42,7 @@ export default class ShapeShortcutsHelpSection extends KeyboardHelpSection {
 
     // command to reset the shape
     const resetShapeRow = KeyboardHelpSectionRow.labelWithIcon(
-      QuadrilateralStrings.keyboardHelpDialog.resetShape,
+      QuadrilateralStrings.keyboardHelpDialog.resetShapeStringProperty,
       KeyboardHelpIconFactory.iconPlusIconRow(
         [
           TextKeyNode.altOrOption(),
@@ -51,7 +51,7 @@ export default class ShapeShortcutsHelpSection extends KeyboardHelpSection {
         ]
       ),
       {
-        labelInnerContent: StringUtils.fillIn( resetShapeDescriptionString, {
+        labelInnerContent: StringUtils.fillIn( resetShapeDescriptionStringProperty, {
           altOrOption: TextKeyNode.getAltKeyString()
         } )
       }
@@ -63,7 +63,7 @@ export default class ShapeShortcutsHelpSection extends KeyboardHelpSection {
     }
     contents.push( resetShapeRow );
 
-    super( QuadrilateralStrings.keyboardHelpDialog.shapeShortcuts, contents );
+    super( QuadrilateralStrings.keyboardHelpDialog.shapeShortcutsStringProperty, contents );
   }
 }
 
