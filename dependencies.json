@@ -1,11 +1,11 @@
 {
-  "comment": "# quadrilateral 1.0.0-dev.74 Fri Feb 17 2023 12:49:16 GMT-0500 (Eastern Standard Time)",
+  "comment": "# quadrilateral 1.0.0-dev.75 Thu Mar 09 2023 09:55:23 GMT-0500 (Eastern Standard Time)",
   "assert": {
     "sha": "c13a8c7741d95fbd8e37619c66ebcca8686dffe7",
     "branch": "master"
   },
   "axon": {
-    "sha": "ecf09b3e5fca83283346330540d62836fd796b46",
+    "sha": "33fc6a74a6f8018d762f10ac580cf211d352809a",
     "branch": "master"
   },
   "brand": {
@@ -13,83 +13,83 @@
     "branch": "master"
   },
   "chipper": {
-    "sha": "48ddb99c58c35806d2d156a5f99abb3a6dc23107",
+    "sha": "fd67663ce0105fdd4f306ec838ddc890422350af",
     "branch": "master"
   },
   "dot": {
-    "sha": "8e08c4b55fb8bd9ee6901f9e53fa76fcdfd67182",
+    "sha": "dde23c6fe5a5c59d3f12dbccb8af386b05e8a000",
     "branch": "master"
   },
   "joist": {
-    "sha": "2eb0988aea1ac0250bd6bcf2ef9ed76f05a52a60",
+    "sha": "224519468e51a5366e52ccee6237fce6b2bf215d",
     "branch": "master"
   },
   "kite": {
-    "sha": "17d6e6833d417b6786ec117fa132b6aef62f6c3a",
+    "sha": "0e5a1bd7d7ececb49591f34810164b420c5305bb",
     "branch": "master"
   },
   "perennial-alias": {
-    "sha": "60d6c6ea150cde378e6937c3372c9dc8f0dea235",
+    "sha": "fda07b40432e8be157cbaef80e0019863ee100db",
     "branch": "master"
   },
   "phet-core": {
-    "sha": "cfb3c684bb0751f4c6badd191a592623300f00d0",
+    "sha": "d3b0bce076779932385ce1c5b931451bdf274b3a",
     "branch": "master"
   },
   "phet-io": {
-    "sha": "a9ddeffa2a60da5097d70673610402dd5cef4f28",
+    "sha": "3e64a751610d9c4d6839cfa2cec137dcb7c5d365",
     "branch": "master"
   },
   "phet-io-sim-specific": {
-    "sha": "018c03533ad1307d2547b6263ea53d76505ad3b9",
+    "sha": "c8104548ac83391aa42ede06e0451f9aa863e812",
     "branch": "master"
   },
   "phet-io-wrappers": {
-    "sha": "8eb004b1c478f59619ca84d8a334446df468645d",
+    "sha": "ba0e20023fb0e8a6745994ec80d98eb78775cc79",
     "branch": "master"
   },
   "phetcommon": {
-    "sha": "0a43ef2129660fb903bd4decf83ced9e884c2bc6",
+    "sha": "1017d4f9b97256302f796146da155742e4eb5c3c",
     "branch": "master"
   },
   "phetmarks": {
-    "sha": "5b3084a2ea029dec575e5dd00752b4013056c13b",
+    "sha": "ba2e64d5154e672afe114b60858a54ef84e94e12",
     "branch": "master"
   },
   "quadrilateral": {
-    "sha": "6af1e3f3ca2dce485bdbbf3fdeb634c403fa6711",
-    "branch": "wip-2-17-23"
+    "sha": "817b77d33cbd327220ea4d457c34576afcbe6573",
+    "branch": "master"
   },
   "query-string-machine": {
     "sha": "ff7b4489cd1ab78b08f1e3a38e89c6d89abcd56a",
     "branch": "master"
   },
   "scenery": {
-    "sha": "772149d66d6ad30f80ece0ade67b0b277b956421",
+    "sha": "8a84557d0df29f1cff1cec54a50410d3819e33b6",
     "branch": "master"
   },
   "scenery-phet": {
-    "sha": "fc2549f3a9a472a347f39330a95e43a045d66080",
+    "sha": "bb87aa46e2862cf6a3ec011a7ef0543510f2d9a4",
     "branch": "master"
   },
   "sherpa": {
-    "sha": "d34dc331e3ace80c63d478e8d3e1dad091560324",
+    "sha": "b88884b0ef20995fb5bcc6ef4e6abbe015d53e96",
     "branch": "master"
   },
   "studio": {
-    "sha": "5d5d356c7003a7628b0a3cd6810fd4b09e68d511",
+    "sha": "db22ca6af981b4a7f0221552d63e889c00b57eeb",
     "branch": "master"
   },
   "sun": {
-    "sha": "8e2df9fe9fbd4a483a4fc4941a90c2124f5fca53",
+    "sha": "8d9bec3cdc0ee6e5a0ccb04b2c6fe606daff80a3",
     "branch": "master"
   },
   "tambo": {
-    "sha": "add06638766eec1ac07cb7bc35351af402305dc1",
+    "sha": "dbc32ef4010421a71a46b1fb6f3d33c5bcdfe068",
     "branch": "master"
   },
   "tandem": {
-    "sha": "d735eab635e4d72a6db67f02ae69a6389e6f3c45",
+    "sha": "cba9a2792976fb7c6d44f3af71af56ae62129d52",
     "branch": "master"
   },
   "tangible": {
@@ -97,11 +97,11 @@
     "branch": "master"
   },
   "twixt": {
-    "sha": "5752086d1b09bad23beb77c8505f7073b993d1a6",
+    "sha": "519f3904bdc8dbed4b67b24543abc0f26769e611",
     "branch": "master"
   },
   "utterance-queue": {
-    "sha": "b0fd80f4ae826251c09d4464f4976141f37a51c5",
+    "sha": "ebee07a99785dd1cf10fc4c98c96b657a333fbb6",
     "branch": "master"
   }
 }
