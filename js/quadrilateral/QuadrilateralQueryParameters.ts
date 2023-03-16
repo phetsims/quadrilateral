@@ -37,6 +37,12 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
     defaultValue: 0.0005
   },
+  
+  // A tolerance interval for comparing the lengths of two sides.
+  interLengthToleranceInterval: {
+    type: 'number',
+    defaultValue: 0.00095
+  },
 
   // When provided, user has fine control of vertex positions instead of snapping to a coarse grid. More freedom
   // of movement but named shapes will be more difficult to find.
@@ -59,12 +65,6 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   connectedToleranceIntervalScaleFactor: {
     type: 'number',
     defaultValue: 5
-  },
-
-  // A tolerance interval for comparing the lengths of two sides.
-  interLengthToleranceInterval: {
-    type: 'number',
-    defaultValue: 0.00025
   },
 
   // If provided, some extra things will be done in the simulation to facilitate communication with the hardware/device.
