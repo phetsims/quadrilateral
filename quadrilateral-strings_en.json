@@ -204,6 +204,12 @@
       "firstDetailsStatementPattern": {
         "value": "Right now, {{cornerType}} corners are {{angleEquality}}, and {{sideType}} sides are equal."
       },
+      "vertexHintResponse": {
+        "value": "Move side and change its two connected sides and up to 4 corners."
+      },
+      "sideHintResponse": {
+        "value": "Move side and change its two connected sides and up to 4 corners."
+      },
       "details": {
         "all": {
           "value": "all"

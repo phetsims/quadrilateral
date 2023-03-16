@@ -188,6 +188,9 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
     let vectorToVertex1: null | Vector2 = null;
     let vectorToVertex2: null | Vector2 = null;
 
+    let vertex1StartPosition = side.vertex1.positionProperty.value;
+    let vertex2StartPosition = side.vertex2.positionProperty.value;
+
     this.addInputListener( new DragListener( {
       transform: modelViewTransform,
       start: ( event, listener ) => {
@@ -201,10 +204,19 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
         vectorToVertex1 = ( side.vertex1.positionProperty.value ).minus( modelPoint );
         vectorToVertex2 = ( side.vertex2.positionProperty.value ).minus( modelPoint );
 
-        this.voicingSpeakFullResponse();
+        vertex1StartPosition = side.vertex1.positionProperty.value;
+        vertex2StartPosition = side.vertex2.positionProperty.value;
       },
       end: () => {
         side.isPressedProperty.value = false;
+
+        // If there is no motion speak information about this side. If there is movement during drag other
+        // responses describing the change will be used.
+        const vertex1Position = side.vertex1.positionProperty.value;
+        const vertex2Position = side.vertex2.positionProperty.value;
+        if ( vertex1StartPosition === vertex1Position && vertex2StartPosition === vertex2Position ) {
+          this.voicingSpeakFullResponse();
+        }
       },
       drag: ( event: SceneryEvent, listener: DragListener ) => {
 

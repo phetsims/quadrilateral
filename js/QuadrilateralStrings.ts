@@ -88,6 +88,8 @@ type StringsType = {
       'youHaveASizedNamedShapePatternStringProperty': LinkableProperty<string>;
       'youHaveASizedShapePatternStringProperty': LinkableProperty<string>;
       'firstDetailsStatementPatternStringProperty': LinkableProperty<string>;
+      'vertexHintResponseStringProperty': LinkableProperty<string>;
+      'sideHintResponseStringProperty': LinkableProperty<string>;
       'details': {
         'allStringProperty': LinkableProperty<string>;
         'oppositeStringProperty': LinkableProperty<string>;

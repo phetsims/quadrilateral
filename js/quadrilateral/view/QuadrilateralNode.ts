@@ -85,6 +85,9 @@ export default class QuadrilateralNode extends Voicing( Node ) {
     const vertexANode = new QuadrilateralVertexNode( vertexA, vertexAStringProperty, quadrilateralModel, quadrilateralDescriber.vertexADescriber, modelViewTransform, {
       nameResponse: cornerAStringProperty,
 
+      // Other vertices do not have a name response to reduce verbosity.
+      voicingHintResponse: QuadrilateralStrings.a11y.voicing.vertexHintResponseStringProperty,
+
       // phet-io
       tandem: providedOptions.tandem.createTandem( 'vertexANode' )
     } );
@@ -112,6 +115,9 @@ export default class QuadrilateralNode extends Voicing( Node ) {
 
     const sideABNode = new QuadrilateralSideNode( quadrilateralModel, this.model.quadrilateralShapeModel.sideAB, this.model.quadrilateralTestShapeModel.sideAB, quadrilateralDescriber.sideABDescriber, modelViewTransform, {
       nameResponse: sideABStringProperty,
+
+      // Other sides do not have a hint response to reduce verbosity
+      voicingHintResponse: QuadrilateralStrings.a11y.voicing.sideHintResponseStringProperty,
       tandem: providedOptions.tandem.createTandem( 'sideABNode' )
     } );
     const sideBCNode = new QuadrilateralSideNode( quadrilateralModel, this.model.quadrilateralShapeModel.sideBC, this.model.quadrilateralTestShapeModel.sideBC, quadrilateralDescriber.sideBCDescriber, modelViewTransform, {
