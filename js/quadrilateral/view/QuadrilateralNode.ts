@@ -82,29 +82,28 @@ export default class QuadrilateralNode extends Voicing( Node ) {
     const vertexC = this.quadrilateralShapeModel.vertexC;
     const vertexD = this.quadrilateralShapeModel.vertexD;
 
-    // REVIEW: rename vertexANode? So it matches naming like sideABNode?
-    const vertexNode1 = new QuadrilateralVertexNode( vertexA, vertexAStringProperty, quadrilateralModel, quadrilateralDescriber.vertexADescriber, modelViewTransform, {
+    const vertexANode = new QuadrilateralVertexNode( vertexA, vertexAStringProperty, quadrilateralModel, quadrilateralDescriber.vertexADescriber, modelViewTransform, {
       nameResponse: cornerAStringProperty,
 
       // phet-io
       tandem: providedOptions.tandem.createTandem( 'vertexANode' )
     } );
 
-    const vertexNode2 = new QuadrilateralVertexNode( vertexB, vertexBStringProperty, quadrilateralModel, quadrilateralDescriber.vertexBDescriber, modelViewTransform, {
+    const vertexBNode = new QuadrilateralVertexNode( vertexB, vertexBStringProperty, quadrilateralModel, quadrilateralDescriber.vertexBDescriber, modelViewTransform, {
       nameResponse: cornerBStringProperty,
 
       // phet-io
       tandem: providedOptions.tandem.createTandem( 'vertexBNode' )
     } );
 
-    const vertexNode3 = new QuadrilateralVertexNode( vertexC, vertexCStringProperty, quadrilateralModel, quadrilateralDescriber.vertexCDescriber, modelViewTransform, {
+    const vertexCNode = new QuadrilateralVertexNode( vertexC, vertexCStringProperty, quadrilateralModel, quadrilateralDescriber.vertexCDescriber, modelViewTransform, {
       nameResponse: cornerCStringProperty,
 
       // phet-io
       tandem: providedOptions.tandem.createTandem( 'vertexCNode' )
     } );
 
-    const vertexNode4 = new QuadrilateralVertexNode( vertexD, vertexDStringProperty, quadrilateralModel, quadrilateralDescriber.vertexDDescriber, modelViewTransform, {
+    const vertexDNode = new QuadrilateralVertexNode( vertexD, vertexDStringProperty, quadrilateralModel, quadrilateralDescriber.vertexDDescriber, modelViewTransform, {
       nameResponse: cornerDStringProperty,
 
       // phet-io
@@ -161,10 +160,10 @@ export default class QuadrilateralNode extends Voicing( Node ) {
     this.addChild( vertexCRightAngleIndicator );
     this.addChild( vertexDRightAngleIndicator );
 
-    this.addChild( vertexNode1 );
-    this.addChild( vertexNode2 );
-    this.addChild( vertexNode3 );
-    this.addChild( vertexNode4 );
+    this.addChild( vertexANode );
+    this.addChild( vertexBNode );
+    this.addChild( vertexCNode );
+    this.addChild( vertexDNode );
 
     //---------------------------------------------------------------------------------------------------------------
     // input listeners
@@ -208,7 +207,7 @@ export default class QuadrilateralNode extends Voicing( Node ) {
       }
     } ) );
 
-    this.vertexNodes = [ vertexNode1, vertexNode2, vertexNode3, vertexNode4 ];
+    this.vertexNodes = [ vertexANode, vertexBNode, vertexCNode, vertexDNode ];
     this.sideNodes = [ sideABNode, sideBCNode, sideCDNode, sideDANode ];
 
     // reset the timer so that we change the color for a short period when we become a named shape
@@ -226,13 +225,13 @@ export default class QuadrilateralNode extends Voicing( Node ) {
     // traversal order - requested in https://github.com/phetsims/quadrilateral/issues/289.
     //---------------------------------------------------------------------------------------------------------------
     this.pdomOrder = [
-      vertexNode1,
+      vertexANode,
       sideABNode,
-      vertexNode2,
+      vertexBNode,
       sideBCNode,
-      vertexNode3,
+      vertexCNode,
       sideCDNode,
-      vertexNode4,
+      vertexDNode,
       sideDANode
     ];
   }
