@@ -28,7 +28,7 @@ import NullableIO from '../../../../../tandem/js/types/NullableIO.js';
 import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
 import QuadrilateralShapeModel, { VertexWithProposedPosition } from '../QuadrilateralShapeModel.js';
-import QuadrilateralTangibleOptionsModel from '../QuadrilateralTangibleOptionsModel.js';
+import QuadrilateralTangibleOptionsModel from './QuadrilateralTangibleOptionsModel.js';
 import MarkerDetectionModel from './MarkerDetectionModel.js';
 
 export default class TangibleConnectionModel {

@@ -7,10 +7,10 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import quadrilateral from '../../quadrilateral.js';
-import Range from '../../../../dot/js/Range.js';
-import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
+import NumberProperty from '../../../../../axon/js/NumberProperty.js';
+import quadrilateral from '../../../quadrilateral.js';
+import Range from '../../../../../dot/js/Range.js';
+import QuadrilateralQueryParameters from '../../QuadrilateralQueryParameters.js';
 
 // REVIEW: Should this be in prototype? - Yes!
 export default class QuadrilateralTangibleOptionsModel {

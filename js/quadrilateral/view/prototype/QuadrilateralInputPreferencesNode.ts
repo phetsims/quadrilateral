@@ -14,7 +14,7 @@ import Tandem from '../../../../../tandem/js/Tandem.js';
 import PreferencesPanelSection from '../../../../../joist/js/preferences/PreferencesPanelSection.js';
 import { Text, VBox } from '../../../../../scenery/js/imports.js';
 import PreferencesDialog from '../../../../../joist/js/preferences/PreferencesDialog.js';
-import QuadrilateralTangibleOptionsModel from '../../model/QuadrilateralTangibleOptionsModel.js';
+import QuadrilateralTangibleOptionsModel from '../../model/prototype/QuadrilateralTangibleOptionsModel.js';
 
 export default class QuadrilateralInputPreferencesNode extends PreferencesPanelSection {
   private readonly disposeQuadrilateralInputPreferencesNode: () => void;
