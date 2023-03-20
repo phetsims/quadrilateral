@@ -276,69 +276,6 @@ export default class QuadrilateralShapeModel {
   }
 
   /**
-   * Returns true if the current quadrilateral shape is allowed based on the rules of this model.
-   *
-   * A QuadrilateralVertex cannot overlap any other.
-   * A QuadrilateralVertex cannot overlap any QuadrilateralSide.
-   * A QuadrilateralVertex cannot go outside model bounds.
-   * A QuadrilateralVertex cannot to outside its defined drag Shape (which prevents crossed Quadrilaterals).
-   *
-   * As soon as the quadrilateral is found to be disallowed, we break out of testing.
-   */
-  public static isQuadrilateralShapeAllowed( shapeModel: QuadrilateralShapeModel ): boolean {
-    let shapeAllowed = true;
-
-    for ( let i = 0; i < shapeModel.vertices.length; i++ ) {
-      const testVertex = shapeModel.vertices[ i ];
-
-      // The vertex must be completely within model bounds
-      shapeAllowed = QuadrilateralConstants.MODEL_BOUNDS.containsBounds( testVertex.modelBoundsProperty.value );
-
-      // Make sure that no vertices overlap any other.
-      if ( shapeAllowed ) {
-        for ( let j = 0; j < shapeModel.vertices.length; j++ ) {
-          const otherVertex = shapeModel.vertices[ j ];
-
-          if ( testVertex !== otherVertex ) {
-            shapeAllowed = !testVertex.overlapsOther( otherVertex );
-
-            if ( !shapeAllowed ) {
-              break;
-            }
-          }
-        }
-      }
-
-      // Make sure that no vertices overlap a side.
-      if ( shapeAllowed ) {
-        for ( let j = 0; j < shapeModel.sides.length; j++ ) {
-          const side = shapeModel.sides[ j ];
-          if ( !side.includesVertex( testVertex ) ) {
-            shapeAllowed = !side.shapeProperty.value.intersectsBounds( testVertex.modelBoundsProperty.value );
-
-            if ( !shapeAllowed ) {
-              break;
-            }
-          }
-        }
-      }
-
-      // Make sure the QuadrilateralVertex is within the drag area Shape.
-      if ( shapeAllowed ) {
-        assert && assert( testVertex.dragAreaProperty.value, 'Drag area must be defined for the QuadrilateralVertex' );
-        shapeAllowed = QuadrilateralUtils.customShapeContainsPoint( testVertex.dragAreaProperty.value!, testVertex.positionProperty.value );
-      }
-
-      // Quadrilateral is not allowed, no need to keep testing
-      if ( !shapeAllowed ) {
-        break;
-      }
-    }
-
-    return shapeAllowed;
-  }
-
-  /**
    * Returns true when all angles are right (within staticAngleToleranceInterval).
    */
   public getAreAllAnglesRight(): boolean {
@@ -435,14 +372,6 @@ export default class QuadrilateralShapeModel {
    */
   public isStaticAngleEqualToOther( angle: number, otherAngle: number ): boolean {
     return Utils.equalsEpsilon( angle, otherAngle, this.staticAngleToleranceInterval );
-  }
-
-  // REVIEW: Want to put all the static methods together?
-  /**
-   * Returns true if two angles are equal within the provided tolerance interval.
-   */
-  public static isAngleEqualToOther( angle1: number, angle2: number, toleranceInterval: number ): boolean {
-    return Utils.equalsEpsilon( angle1, angle2, toleranceInterval );
   }
 
   /**
@@ -709,6 +638,70 @@ export default class QuadrilateralShapeModel {
     this.resetNotInProgressProperty.value = true;
   }
 
+
+  /**
+   * Returns true if the current quadrilateral shape is allowed based on the rules of this model.
+   *
+   * A QuadrilateralVertex cannot overlap any other.
+   * A QuadrilateralVertex cannot overlap any QuadrilateralSide.
+   * A QuadrilateralVertex cannot go outside model bounds.
+   * A QuadrilateralVertex cannot to outside its defined drag Shape (which prevents crossed Quadrilaterals).
+   *
+   * As soon as the quadrilateral is found to be disallowed, we break out of testing.
+   */
+  public static isQuadrilateralShapeAllowed( shapeModel: QuadrilateralShapeModel ): boolean {
+    let shapeAllowed = true;
+
+    for ( let i = 0; i < shapeModel.vertices.length; i++ ) {
+      const testVertex = shapeModel.vertices[ i ];
+
+      // The vertex must be completely within model bounds
+      shapeAllowed = QuadrilateralConstants.MODEL_BOUNDS.containsBounds( testVertex.modelBoundsProperty.value );
+
+      // Make sure that no vertices overlap any other.
+      if ( shapeAllowed ) {
+        for ( let j = 0; j < shapeModel.vertices.length; j++ ) {
+          const otherVertex = shapeModel.vertices[ j ];
+
+          if ( testVertex !== otherVertex ) {
+            shapeAllowed = !testVertex.overlapsOther( otherVertex );
+
+            if ( !shapeAllowed ) {
+              break;
+            }
+          }
+        }
+      }
+
+      // Make sure that no vertices overlap a side.
+      if ( shapeAllowed ) {
+        for ( let j = 0; j < shapeModel.sides.length; j++ ) {
+          const side = shapeModel.sides[ j ];
+          if ( !side.includesVertex( testVertex ) ) {
+            shapeAllowed = !side.shapeProperty.value.intersectsBounds( testVertex.modelBoundsProperty.value );
+
+            if ( !shapeAllowed ) {
+              break;
+            }
+          }
+        }
+      }
+
+      // Make sure the QuadrilateralVertex is within the drag area Shape.
+      if ( shapeAllowed ) {
+        assert && assert( testVertex.dragAreaProperty.value, 'Drag area must be defined for the QuadrilateralVertex' );
+        shapeAllowed = QuadrilateralUtils.customShapeContainsPoint( testVertex.dragAreaProperty.value!, testVertex.positionProperty.value );
+      }
+
+      // Quadrilateral is not allowed, no need to keep testing
+      if ( !shapeAllowed ) {
+        break;
+      }
+    }
+
+    return shapeAllowed;
+  }
+
   /**
    * Returns the tolerance interval to use for a value. Generally, the default value will be returned. If the sim is
    * running while connected to a prototype device (?deviceConnection) or in a mode where all step sizes are reduced,
@@ -726,6 +719,13 @@ export default class QuadrilateralShapeModel {
     }
 
     return interval;
+  }
+
+  /**
+   * Returns true if two angles are equal within the provided tolerance interval.
+   */
+  public static isAngleEqualToOther( angle1: number, angle2: number, toleranceInterval: number ): boolean {
+    return Utils.equalsEpsilon( angle1, angle2, toleranceInterval );
   }
 }
 
