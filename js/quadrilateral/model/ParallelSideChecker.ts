@@ -15,7 +15,6 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import SidePair from './SidePair.js';
-import QuadrilateralSide from './QuadrilateralSide.js';
 import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
 
 export default class ParallelSideChecker {
@@ -27,10 +26,6 @@ export default class ParallelSideChecker {
 
   public readonly sidePair: SidePair;
 
-  // REVIEW: These are redundant with sidePair, can they be deleted?
-  public readonly side1: QuadrilateralSide;
-  public readonly side2: QuadrilateralSide;
-
   // A Property indicating that the provided sides are parallel, ONLY FOR DEBUGGING. Use areSidesParallel() when the
   // QuadrilateralShapeModel is stable instead.
   //
@@ -41,21 +36,13 @@ export default class ParallelSideChecker {
   private readonly isParallelProperty: Property<boolean>;
 
   /**
-   * @param oppositeSidePair - The SidePair with opposite sides that we want to inspect for parallelism
+   * @param sidePair - The SidePair with opposite sides that we want to inspect for parallelism
    * @param shapeChangedEmitter - Emitter for when the quadrilateral shape changes in some way.
    * @param tandem
    */
-  public constructor(
+  public constructor( sidePair: SidePair, shapeChangedEmitter: TEmitter, tandem: Tandem ) {
 
-    // REVIEW: Rename to sidePair
-    oppositeSidePair: SidePair,
-    shapeChangedEmitter: TEmitter,
-    tandem: Tandem ) {
-
-    this.sidePair = oppositeSidePair;
-
-    this.side1 = oppositeSidePair.side1;
-    this.side2 = oppositeSidePair.side2;
+    this.sidePair = sidePair;
 
     this.isParallelProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'isParallelProperty' ),
@@ -83,8 +70,10 @@ export default class ParallelSideChecker {
    * Returns whether the two sides are currently parallel within parallelAngleToleranceInterval.
    */
   public areSidesParallel(): boolean {
-    assert && assert( this.side1.vertex1.angleProperty.value !== null, 'angles need to be available to determine parallel state' );
-    assert && assert( this.side2.vertex2.angleProperty.value !== null, 'angles need to be available to determine parallel state' );
+    const side1 = this.sidePair.side1;
+    const side2 = this.sidePair.side2;
+    assert && assert( side1.vertex1.angleProperty.value !== null, 'angles need to be available to determine parallel state' );
+    assert && assert( side2.vertex2.angleProperty.value !== null, 'angles need to be available to determine parallel state' );
 
     // Two sides are parallel if the vertex angles of a shared adjacent side add up to Math.PI. The quadrilateral is
     // constructed such that the shared adjacent side is composed of vertex1 of side1 and vertex2 of side2.
@@ -96,7 +85,7 @@ export default class ParallelSideChecker {
     //                           |                   |
     //                           |-------------------|
     //                        vertex2   side2       vertex1
-    return this.isAngleEqualToOther( this.side1.vertex1.angleProperty.value! + this.side2.vertex2.angleProperty.value!, Math.PI );
+    return this.isAngleEqualToOther( side1.vertex1.angleProperty.value! + side2.vertex2.angleProperty.value!, Math.PI );
   }
 }
 

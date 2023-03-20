@@ -279,7 +279,7 @@ export default class SideDescriber {
     } );
 
     const parallelSideChecker = _.find( this.quadrilateralShapeModel.parallelSideCheckers, checker => {
-      return checker.side1 === adjacentSides[ 0 ] || checker.side1 === adjacentSides[ 1 ];
+      return checker.sidePair.side1 === adjacentSides[ 0 ] || checker.sidePair.side1 === adjacentSides[ 1 ];
     } );
     assert && assert( parallelSideChecker, 'did not find ParallelSideChecker' );
     const adjacentSidesParallel = parallelSideChecker!.areSidesParallel();
