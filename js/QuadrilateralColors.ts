@@ -21,11 +21,16 @@ const QuadrilateralColors = {
 
   // Background color for screens in this sim
   screenBackgroundColorProperty: new ProfileColorProperty( quadrilateral, 'background', {
-    default: new Color( '#C4A484' )
+    default: new Color( '#F3FCFE' )
   } ),
 
-  // Color for the grid in the play area
-  gridColorProperty: new ProfileColorProperty( quadrilateral, 'grid', {
+  // Color for the grid lines in the play area
+  gridLinesColorProperty: new ProfileColorProperty( quadrilateral, 'gridLines', {
+    default: 'black'
+  } ),
+
+  // Interior grid color in the play area
+  gridFillColorProperty: new ProfileColorProperty( quadrilateral, 'gridFill', {
     default: 'white'
   } ),
 
@@ -66,7 +71,7 @@ const QuadrilateralColors = {
 
   // Color for the stroke for the diagonal guides
   diagonalGuidesStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'diagonalGuideStroke', {
-    default: new Color( 240, 240, 240 )
+    default: 'black'
   } ),
 
   // Fill color for panels in the UI.
@@ -78,7 +83,7 @@ const QuadrilateralColors = {
   } ),
 
   gridStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'playAreaStrokeColor', {
-    default: 'white'
+    default: 'black'
   } ),
 
   // Color for the "Corner Labels" checkbox icon.
@@ -98,7 +103,7 @@ const QuadrilateralColors = {
 
   // Stroke for the interaction cues around the quadrilateral
   interactionCueColorProperty: new ProfileColorProperty( quadrilateral, 'interactionCueColor', {
-    default: new Color( '#7DF9FF' )
+    default: new Color( 'blue' )
   } )
 };
 
