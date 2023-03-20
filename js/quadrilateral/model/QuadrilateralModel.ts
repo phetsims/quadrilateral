@@ -126,7 +126,9 @@ export default class QuadrilateralModel implements TModel {
       // @ts-expect-error - assigning to the window is bad, but its fine for this debugging tool
       window.printVertexPositions = () => {
         this.quadrilateralShapeModel.vertices.forEach( vertex => {
-          console.log( vertex.vertexLabel.name, vertex.positionProperty.value );
+          // console.log( vertex.vertexLabel.name, vertex.positionProperty.value );
+          const position = vertex.positionProperty.value;
+          console.log( `shapeModel.${vertex.vertexLabel.name}.positionProperty.value = new Vector2(${position.x}, ${position.y});` );
         } );
       };
     }
