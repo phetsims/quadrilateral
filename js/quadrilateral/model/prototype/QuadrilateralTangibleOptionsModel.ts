@@ -12,7 +12,6 @@ import quadrilateral from '../../../quadrilateral.js';
 import Range from '../../../../../dot/js/Range.js';
 import QuadrilateralQueryParameters from '../../QuadrilateralQueryParameters.js';
 
-// REVIEW: Should this be in prototype? - Yes!
 export default class QuadrilateralTangibleOptionsModel {
 
   // How many values to save and use in the average for calculating new vertex positions. Higher value will reduce
