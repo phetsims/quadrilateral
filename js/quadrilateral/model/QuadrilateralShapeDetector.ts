@@ -21,11 +21,11 @@ const TWO_PARALLEL_PAIR = ( shapeModel: QuadrilateralShapeModel ) => shapeModel.
 const TWO_EQUAL_ADJACENT_ANGLE_PAIR = ( shapeModel: QuadrilateralShapeModel ) => shapeModel.adjacentEqualVertexPairsProperty.value.length > 1;
 const ONE_EQUAL_OPPOSITE_ANGLE_PAIR = ( shapeModel: QuadrilateralShapeModel ) => shapeModel.oppositeEqualVertexPairsProperty.value.length > 0;
 const TWO_EQUAL_OPPOSITE_ANGLE_PAIR = ( shapeModel: QuadrilateralShapeModel ) => shapeModel.oppositeEqualVertexPairsProperty.value.length > 1;
-const ALL_EQUAL_ANGLE = ( shapeModel: QuadrilateralShapeModel ) => shapeModel.allAnglesRightProperty.value;
+const ALL_EQUAL_ANGLE = ( shapeModel: QuadrilateralShapeModel ) => shapeModel.getAreAllAnglesRight();
 const TWO_EQUAL_ADJACENT_SIDE_PAIR = ( shapeModel: QuadrilateralShapeModel ) => shapeModel.adjacentEqualSidePairsProperty.value.length > 1;
 const ONE_EQUAL_OPPOSITE_SIDE_PAIR = ( shapeModel: QuadrilateralShapeModel ) => shapeModel.oppositeEqualSidePairsProperty.value.length > 0;
 const TWO_EQUAL_OPPOSITE_SIDE_PAIR = ( shapeModel: QuadrilateralShapeModel ) => shapeModel.oppositeEqualSidePairsProperty.value.length > 1;
-const ALL_EQUAL_SIDE = ( shapeModel: QuadrilateralShapeModel ) => shapeModel.allLengthsEqualProperty.value;
+const ALL_EQUAL_SIDE = ( shapeModel: QuadrilateralShapeModel ) => shapeModel.getAreAllLengthsEqual();
 const ONE_ANGLE_PIE = ( shapeModel: QuadrilateralShapeModel ) => _.some( shapeModel.vertices, vertex => shapeModel.isFlatAngle( vertex.angleProperty.value! ) );
 
 // Set up conditions for each shape. The quadrilateral must at least these attributes to be considered a match.

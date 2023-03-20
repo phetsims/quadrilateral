@@ -524,7 +524,7 @@ export default class QuadrilateralDescriber {
     const longestSideDescription = longestSideDescriber.getSideUnitsDescription();
     const shortestSideDescription = shortestSideDescriber.getSideUnitsDescription();
 
-    if ( this.shapeModel.allLengthsEqualProperty.value ) {
+    if ( this.shapeModel.getAreAllLengthsEqual() ) {
 
       // All sides the same length, combine into a shorter string
       description = StringUtils.fillIn( sidesDescriptionPatternStringProperty, {
@@ -590,7 +590,7 @@ export default class QuadrilateralDescriber {
       const widestVertexDescription = this.getDetailsWedgesDescription( widestVertex.angleProperty.value! );
       const smallestVertexDescription = this.getDetailsWedgesDescription( smallestVertex.angleProperty.value! );
 
-      if ( this.shapeModel.allAnglesRightProperty.value ) {
+      if ( this.shapeModel.getAreAllAnglesRight() ) {
 
         // All corners the same angle, combine into a shorter string
         description = cornersRightDescriptionStringProperty;

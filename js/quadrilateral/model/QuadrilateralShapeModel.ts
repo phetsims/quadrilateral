@@ -18,7 +18,6 @@ import Utils from '../../../../dot/js/Utils.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import VertexLabel from './VertexLabel.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -75,6 +74,12 @@ export default class QuadrilateralShapeModel {
   // Whether the quadrilateral is a parallelogram.
   private _isParallelogram: boolean;
 
+  // True when all angles of the quadrilateral are right angles within interAngleToleranceInterval.
+  private _areAllAnglesRight: boolean;
+
+  // True when all lengths of the quadrilateral are equal within the lengthToleranceInterval.
+  private _areAllLengthsEqual: boolean;
+
   // The area of the quadrilateral. Updated in "deferred" Properties, only after positions of all four vertices are
   // determined.
   public readonly areaProperty: TProperty<number>;
@@ -94,12 +99,6 @@ export default class QuadrilateralShapeModel {
 
   // Emits an event whenever the shape of the Quadrilateral changes
   public readonly shapeChangedEmitter: TEmitter;
-
-  // True when all angles of the quadrilateral are right angles within interAngleToleranceInterval.
-  public readonly allAnglesRightProperty: Property<boolean>;
-
-  // True when all lengths of the quadrilateral are equal within the lengthToleranceInterval.
-  public readonly allLengthsEqualProperty: Property<boolean>;
 
   // The name of the quadrilateral (like square/rhombus/trapezoid, etc). Will be null if it is a random
   // unnamed shape.
@@ -150,6 +149,10 @@ export default class QuadrilateralShapeModel {
     }, providedOptions );
 
     this.validateShape = options.validateShape;
+
+    this._isParallelogram = false;
+    this._areAllAnglesRight = false;
+    this._areAllLengthsEqual = false;
 
     this.vertexA = new QuadrilateralVertex( new Vector2( -0.25, 0.25 ), VertexLabel.VERTEX_A, smoothingLengthProperty, options.tandem.createTandem( 'vertexA' ) );
     this.vertexB = new QuadrilateralVertex( new Vector2( 0.25, 0.25 ), VertexLabel.VERTEX_B, smoothingLengthProperty, options.tandem.createTandem( 'vertexB' ) );
@@ -202,17 +205,6 @@ export default class QuadrilateralShapeModel {
     this.sideCD.connectToSide( this.sideBC );
     this.sideDA.connectToSide( this.sideCD );
     this.sideAB.connectToSide( this.sideDA );
-
-    // Review: The following do not need to be observable Properties. Make functions on
-    // QuadrilateralShapeModel.
-    this._isParallelogram = false;
-    this.allAnglesRightProperty = new BooleanProperty( false, {
-      tandem: options.tandem.createTandem( 'allAnglesRightProperty' )
-    } );
-
-    this.allLengthsEqualProperty = new BooleanProperty( false, {
-      tandem: options.tandem.createTandem( 'allLengthsEqualProperty' )
-    } );
 
     this.shapeNameProperty = new EnumerationProperty( NamedQuadrilateral.CONVEX_QUADRILATERAL, {
       tandem: options.tandem.createTandem( 'shapeNameProperty' )
@@ -348,17 +340,31 @@ export default class QuadrilateralShapeModel {
    * Returns true when all angles are right (within staticAngleToleranceInterval).
    */
   public getAreAllAnglesRight(): boolean {
-    return _.every( this.vertices, vertex => this.isRightAngle( vertex.angleProperty.value! ) );
+    return this._areAllAnglesRight;
+  }
+
+  /**
+   * Update value tracking when all angles are equal. To be called in updateOrderDependentProperties.
+   */
+  private updateAreAllAnglesRight(): void {
+    this._areAllAnglesRight = _.every( this.vertices, vertex => this.isRightAngle( vertex.angleProperty.value! ) );
   }
 
   /**
    * Returns true when all lengths are equal.
    */
   public getAreAllLengthsEqual(): boolean {
-    return this.isInterLengthEqualToOther( this.sideAB.lengthProperty.value, this.sideBC.lengthProperty.value ) &&
-           this.isInterLengthEqualToOther( this.sideBC.lengthProperty.value, this.sideCD.lengthProperty.value ) &&
-           this.isInterLengthEqualToOther( this.sideCD.lengthProperty.value, this.sideDA.lengthProperty.value ) &&
-           this.isInterLengthEqualToOther( this.sideDA.lengthProperty.value, this.sideAB.lengthProperty.value );
+    return this._areAllLengthsEqual;
+  }
+
+  /**
+   * Update value tracking all equal side lengths. To be called in updateOrderDependentProperties.
+   */
+  private updateAreAllLengthsEqual(): void {
+    this._areAllLengthsEqual = this.isInterLengthEqualToOther( this.sideAB.lengthProperty.value, this.sideBC.lengthProperty.value ) &&
+                               this.isInterLengthEqualToOther( this.sideBC.lengthProperty.value, this.sideCD.lengthProperty.value ) &&
+                               this.isInterLengthEqualToOther( this.sideCD.lengthProperty.value, this.sideDA.lengthProperty.value ) &&
+                               this.isInterLengthEqualToOther( this.sideDA.lengthProperty.value, this.sideAB.lengthProperty.value );
   }
 
   /**
@@ -501,8 +507,8 @@ export default class QuadrilateralShapeModel {
 
     // other shape attributes
     this.areaProperty.set( this.getArea() );
-    this.allAnglesRightProperty.set( this.getAreAllAnglesRight() );
-    this.allLengthsEqualProperty.set( this.getAreAllLengthsEqual() );
+    this.updateAreAllAnglesRight();
+    this.updateAreAllLengthsEqual();
 
     // the detected shape name
     this.shapeNameProperty.set( QuadrilateralShapeDetector.getShapeName( this ) );
