@@ -33,7 +33,7 @@ export default class QuadrilateralModel implements TModel {
   // Controls runtime options for the simulation.
   public readonly optionsModel: QuadrilateralOptionsModel;
 
-  // A model that manages Properties used by prototype connections with tangible devices (Serial, OpenCV, BLE).
+  // A model that manages Properties used by prototype connections with tangible devdevices (Serial, OpenCV, BLE).
   public readonly tangibleConnectionModel: TangibleConnectionModel;
 
   // Whether a reset is currently in progress. Added for sound. If the model is actively resetting, SoundManagers
@@ -119,6 +119,17 @@ export default class QuadrilateralModel implements TModel {
                useMinorIntervals ? QuadrilateralQueryParameters.minorVertexInterval : QuadrilateralQueryParameters.majorVertexInterval;
       }
     );
+
+    // Adds a function to the window that prints the current vertex positions (only for development)
+    if ( phet.chipper.queryParameters.dev ) {
+
+      // @ts-expect-error - assigning to the window is bad, but its fine for this debugging tool
+      window.printVertexPositions = () => {
+        this.quadrilateralShapeModel.vertices.forEach( vertex => {
+          console.log( vertex.vertexLabel.name, vertex.positionProperty.value );
+        } );
+      };
+    }
   }
 
   /**

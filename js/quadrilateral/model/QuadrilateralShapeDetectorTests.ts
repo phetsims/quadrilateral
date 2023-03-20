@@ -19,5 +19,7 @@ QUnit.test( 'QuadrilateralShapeDetector', assert => {
   const shapeModel = new QuadrilateralShapeModel( new BooleanProperty( true ), new NumberProperty( 1 ) );
   const shapeName = QuadrilateralShapeDetector.getShapeName( shapeModel );
 
+  //
+
   assert.ok( shapeName === NamedQuadrilateral.SQUARE, 'should be a square' );
 } );
