@@ -68,7 +68,7 @@ export default class QuadrilateralScreenView extends ScreenView {
     //---------------------------------------------------------------------------------------------------------------
     // Create view subcomponents
     //---------------------------------------------------------------------------------------------------------------
-    this.modelViewTransform = new QuadrilateralModelViewTransform( model.modelBounds, this.layoutBounds );
+    this.modelViewTransform = new QuadrilateralModelViewTransform( QuadrilateralConstants.MODEL_BOUNDS, this.layoutBounds );
     this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel, visibilityModel.shapeNameVisibleProperty, visibilityModel.markersVisibleProperty, this.modelViewTransform );
     this.quadrilateralSoundView = new QuadrilateralSoundView( model, optionsModel.soundOptionsModel );
 
@@ -109,14 +109,14 @@ export default class QuadrilateralScreenView extends ScreenView {
     // An alternative is to pass the entire model through, and use TypeScript to narrow what is accessible
     // Note the visibilityModel is also part of the model.
     // - Cool, Ill review and update to use pick
-    const diagonalGuidesNode = new QuadrilateralDiagonalGuidesNode( model.quadrilateralShapeModel, model.modelBounds, visibilityModel.diagonalGuidesVisibleProperty, this.modelViewTransform );
+    const diagonalGuidesNode = new QuadrilateralDiagonalGuidesNode( model.quadrilateralShapeModel, visibilityModel.diagonalGuidesVisibleProperty, this.modelViewTransform );
     const interactionCueNode = new QuadrilateralInteractionCueNode(
       model.quadrilateralShapeModel,
       model.tangibleConnectionModel.connectedToDeviceProperty,
       model.resetEmitter,
       this.modelViewTransform
     );
-    const gridNode = new QuadrilateralGridNode( model.modelBounds, visibilityModel.gridVisibleProperty, this.modelViewTransform );
+    const gridNode = new QuadrilateralGridNode( visibilityModel.gridVisibleProperty, this.modelViewTransform );
 
     // debugging components
     const debugValuesPanel = new QuadrilateralDebuggingPanel( model );

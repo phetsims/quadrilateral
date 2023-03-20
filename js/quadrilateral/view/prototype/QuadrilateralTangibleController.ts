@@ -6,7 +6,6 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Bounds2 from '../../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../../dot/js/Vector2.js';
 import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralModel from '../../model/QuadrilateralModel.js';
@@ -14,12 +13,12 @@ import QuadrilateralShapeModel, { VertexWithProposedPosition } from '../../model
 import QuadrilateralUtils from '../../model/QuadrilateralUtils.js';
 import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
 import LinearFunction from '../../../../../dot/js/LinearFunction.js';
+import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
 
 export default class QuadrilateralTangibleController {
   private readonly quadrilateralModel: QuadrilateralModel;
 
   private readonly shapeModel: QuadrilateralShapeModel;
-  private readonly modelBounds: Bounds2;
   private readonly tangibleConnectionModel: TangibleConnectionModel;
 
   public constructor( quadrilateralModel: QuadrilateralModel ) {
@@ -27,7 +26,6 @@ export default class QuadrilateralTangibleController {
 
     this.shapeModel = this.quadrilateralModel.quadrilateralShapeModel;
     this.tangibleConnectionModel = this.quadrilateralModel.tangibleConnectionModel;
-    this.modelBounds = this.quadrilateralModel.modelBounds;
   }
 
   /**
@@ -83,7 +81,7 @@ export default class QuadrilateralTangibleController {
       // the physical device lengths can only become half as long as the largest length, so map to the sim model
       // with that constraint as well so that the smallest shape on the physical device doesn't bring vertices
       // all the way to the center of the screen (0, 0).
-      const deviceLengthToSimLength = new LinearFunction( 0, tangibleConnectionModel.physicalModelBoundsProperty.value.width, 0, this.modelBounds.width / 3 );
+      const deviceLengthToSimLength = new LinearFunction( 0, tangibleConnectionModel.physicalModelBoundsProperty.value.width, 0, QuadrilateralConstants.BOUNDS_WIDTH / 3 );
 
       const mappedTopLength = deviceLengthToSimLength.evaluate( topLength );
       const mappedRightLength = deviceLengthToSimLength.evaluate( rightLength );
@@ -109,7 +107,7 @@ export default class QuadrilateralTangibleController {
     const shapeModel = this.shapeModel;
 
     // vertexA and the topLine are anchored, the rest of the shape is relative to this
-    const vector1Position = new Vector2( this.modelBounds.minX, this.modelBounds.maxX );
+    const vector1Position = new Vector2( QuadrilateralConstants.MODEL_BOUNDS.minX, QuadrilateralConstants.MODEL_BOUNDS.maxX );
     const vector2Position = new Vector2( vector1Position.x + topLength, vector1Position.y );
 
     const vector4Offset = new Vector2( Math.cos( -p1Angle ), Math.sin( -p1Angle ) ).timesScalar( leftLength );
@@ -128,7 +126,7 @@ export default class QuadrilateralTangibleController {
     const shiftedPositions = _.map( proposedPositions, shapePosition => shapePosition.plus( centroidOffset ) );
 
     // make sure that all positions are within model bounds
-    const constrainedPositions = _.map( shiftedPositions, position => this.modelBounds.closestPointTo( position ) );
+    const constrainedPositions = _.map( shiftedPositions, position => QuadrilateralConstants.MODEL_BOUNDS.closestPointTo( position ) );
 
     // smooth positions to try to reduce noise
     const smoothedPositions = [
@@ -181,7 +179,7 @@ export default class QuadrilateralTangibleController {
           constrainedPosition = vertexWithProposedPosition.vertex.smoothPosition( virtualPosition );
 
           // constrain within model bounds
-          constrainedPosition = this.modelBounds.closestPointTo( constrainedPosition );
+          constrainedPosition = QuadrilateralConstants.MODEL_BOUNDS.closestPointTo( constrainedPosition );
         }
         else {
 

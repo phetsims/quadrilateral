@@ -32,8 +32,8 @@ import SidePair from './SidePair.js';
 import VertexPair from './VertexPair.js';
 import QuadrilateralUtils from './QuadrilateralUtils.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
 import SideLabel from './SideLabel.js';
+import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 
 // Used when verifying that QuadrilateralVertex positions are valid before setting to the model.
 export type VertexWithProposedPosition = {
@@ -66,9 +66,6 @@ export default class QuadrilateralShapeModel {
   public readonly sideCD: QuadrilateralSide;
   public readonly sideDA: QuadrilateralSide;
   public readonly sides: readonly QuadrilateralSide[];
-
-  // Available space for the Vertices to move.
-  private readonly modelBounds: Bounds2;
 
   // Monitors angles of the shape to determine when pairs of opposite sides are parallel.
   public readonly sideABSideCDParallelSideChecker: ParallelSideChecker;
@@ -145,7 +142,7 @@ export default class QuadrilateralShapeModel {
   // If true, the shape is tested to make sure it is valid (no overlapping vertices or crossed sides).
   private readonly validateShape: boolean;
 
-  public constructor( modelBounds: Bounds2, resetNotInProgressProperty: TProperty<boolean>, smoothingLengthProperty: TReadOnlyProperty<number>, providedOptions: QuadrilateralShapeModelOptions ) {
+  public constructor( resetNotInProgressProperty: TProperty<boolean>, smoothingLengthProperty: TReadOnlyProperty<number>, providedOptions?: QuadrilateralShapeModelOptions ) {
 
     const options = optionize<QuadrilateralShapeModelOptions, QuadrilateralShapeModelOptions>()( {
       validateShape: true,
@@ -250,7 +247,6 @@ export default class QuadrilateralShapeModel {
       this.sideBCSideDAParallelSideChecker
     ];
 
-    this.modelBounds = modelBounds;
     this.resetNotInProgressProperty = resetNotInProgressProperty;
 
     this.propertiesDeferred = false;
@@ -277,10 +273,10 @@ export default class QuadrilateralShapeModel {
       vertex.modelBoundsProperty.link( vertexBounds => {
 
         // REVIEW: Is this epsilon a function of the grid size? Should it be in QuadrilateralConstants?
-        vertex.topConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.maxY, this.modelBounds.maxY, 0.01 );
-        vertex.rightConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.maxX, this.modelBounds.maxX, 0.01 );
-        vertex.bottomConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.minY, this.modelBounds.minY, 0.01 );
-        vertex.leftConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.minX, this.modelBounds.minX, 0.01 );
+        vertex.topConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.maxY, QuadrilateralConstants.MODEL_BOUNDS.maxY, 0.01 );
+        vertex.rightConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.maxX, QuadrilateralConstants.MODEL_BOUNDS.maxX, 0.01 );
+        vertex.bottomConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.minY, QuadrilateralConstants.MODEL_BOUNDS.minY, 0.01 );
+        vertex.leftConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.minX, QuadrilateralConstants.MODEL_BOUNDS.minX, 0.01 );
       } );
     } );
   }
@@ -290,7 +286,7 @@ export default class QuadrilateralShapeModel {
    *
    * A QuadrilateralVertex cannot overlap any other.
    * A QuadrilateralVertex cannot overlap any QuadrilateralSide.
-   * A QuadrilateralVertex cannot go outside modelBounds.
+   * A QuadrilateralVertex cannot go outside model bounds.
    * A QuadrilateralVertex cannot to outside its defined drag Shape (which prevents crossed Quadrilaterals).
    *
    * As soon as the quadrilateral is found to be disallowed, we break out of testing.
@@ -302,7 +298,7 @@ export default class QuadrilateralShapeModel {
       const testVertex = shapeModel.vertices[ i ];
 
       // The vertex must be completely within model bounds
-      shapeAllowed = shapeModel.modelBounds.containsBounds( testVertex.modelBoundsProperty.value );
+      shapeAllowed = QuadrilateralConstants.MODEL_BOUNDS.containsBounds( testVertex.modelBoundsProperty.value );
 
       // Make sure that no vertices overlap any other.
       if ( shapeAllowed ) {
@@ -652,7 +648,7 @@ export default class QuadrilateralShapeModel {
   private setVertexDragAreas(): void {
 
     // TODO: What is this dilation and value??
-    const dilatedBounds = this.modelBounds.dilated( 1 );
+    const dilatedBounds = QuadrilateralConstants.MODEL_BOUNDS.dilated( 1 );
 
     this.vertexA.dragAreaProperty.set( QuadrilateralUtils.createVertexArea( dilatedBounds, this.vertexA, this.vertexB, this.vertexC, this.vertexD, this.validateShape ) );
     this.vertexB.dragAreaProperty.set( QuadrilateralUtils.createVertexArea( dilatedBounds, this.vertexB, this.vertexC, this.vertexD, this.vertexA, this.validateShape ) );

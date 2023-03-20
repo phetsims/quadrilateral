@@ -19,6 +19,7 @@ import { Shape } from '../../../../kite/js/imports.js';
 import QuadrilateralColors from '../../QuadrilateralColors.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralUtils from '../model/QuadrilateralUtils.js';
+import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 
 // constants
 const LINE_NODE_OPTIONS = {
@@ -30,7 +31,6 @@ const LINE_NODE_OPTIONS = {
 export default class QuadrilateralDiagonalGuidesNode extends Node {
   public constructor(
     quadrilateralShapeModel: QuadrilateralShapeModel,
-    bounds: Bounds2,
     visibleProperty: TReadOnlyProperty<boolean>,
     modelViewTransform: ModelViewTransform2
   ) {
@@ -49,14 +49,14 @@ export default class QuadrilateralDiagonalGuidesNode extends Node {
     Multilink.multilink(
       [ quadrilateralShapeModel.vertexA.positionProperty, quadrilateralShapeModel.vertexC.positionProperty ],
       ( vertexAPosition, vertexCPosition ) => {
-        QuadrilateralDiagonalGuidesNode.drawDiagonal( vertexAPosition, vertexCPosition, bounds, modelViewTransform, lineNode1 );
+        QuadrilateralDiagonalGuidesNode.drawDiagonal( vertexAPosition, vertexCPosition, QuadrilateralConstants.MODEL_BOUNDS, modelViewTransform, lineNode1 );
       }
     );
 
     Multilink.multilink(
       [ quadrilateralShapeModel.vertexB.positionProperty, quadrilateralShapeModel.vertexD.positionProperty ],
       ( vertexBPosition, vertexDPosition ) => {
-        QuadrilateralDiagonalGuidesNode.drawDiagonal( vertexBPosition, vertexDPosition, bounds, modelViewTransform, lineNode2 );
+        QuadrilateralDiagonalGuidesNode.drawDiagonal( vertexBPosition, vertexDPosition, QuadrilateralConstants.MODEL_BOUNDS, modelViewTransform, lineNode2 );
       }
     );
   }

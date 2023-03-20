@@ -26,6 +26,7 @@ import ModelViewTransform2 from '../../../../../phetcommon/js/view/ModelViewTran
 import Tandem from '../../../../../tandem/js/Tandem.js';
 import NullableIO from '../../../../../tandem/js/types/NullableIO.js';
 import quadrilateral from '../../../quadrilateral.js';
+import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
 import QuadrilateralShapeModel, { VertexWithProposedPosition } from '../QuadrilateralShapeModel.js';
 import QuadrilateralTangibleOptionsModel from '../QuadrilateralTangibleOptionsModel.js';
 import MarkerDetectionModel from './MarkerDetectionModel.js';
@@ -50,17 +51,13 @@ export default class TangibleConnectionModel {
   // the physicalModelBounds or the physicalToModelTransform.
   public isCalibratingProperty: TProperty<boolean>;
 
-  // The bounds of simulation model space. Used to create transforms between physical device units and simulation
-  // model space.
-  private readonly modelBounds: Bounds2;
-
   // The model with values related to options that can be set by Preferences that control behavior of tangible input.
   public readonly tangibleOptionsModel: QuadrilateralTangibleOptionsModel;
 
   // So that this connection model can directly control the shape.
   public readonly shapeModel: QuadrilateralShapeModel;
 
-  public constructor( shapeModel: QuadrilateralShapeModel, tangibleOptionsModel: QuadrilateralTangibleOptionsModel, modelBounds: Bounds2, tandem: Tandem ) {
+  public constructor( shapeModel: QuadrilateralShapeModel, tangibleOptionsModel: QuadrilateralTangibleOptionsModel, tandem: Tandem ) {
     this.connectedToDeviceProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'connectedToDeviceProperty' )
     } );
@@ -74,7 +71,6 @@ export default class TangibleConnectionModel {
 
     this.markerDetectionModel = new MarkerDetectionModel( tandem.createTandem( 'markerDetectionModel' ) );
     this.tangibleOptionsModel = tangibleOptionsModel;
-    this.modelBounds = modelBounds;
     this.shapeModel = shapeModel;
 
     // Put a reference to this connection model on the window so that we can access it in wrappers that facilitate
@@ -112,7 +108,7 @@ export default class TangibleConnectionModel {
     this.physicalToModelTransform = ModelViewTransform2.createSinglePointScaleMapping(
       new Vector2( width / 2, height / 2 ), // center of the physical space "model"
       new Vector2( 0, 0 ), // origin of the simulation model
-      this.modelBounds.height / ( height ) // scale from physical model to simulation space
+      QuadrilateralConstants.MODEL_BOUNDS.height / ( height ) // scale from physical model to simulation space
     );
   }
 

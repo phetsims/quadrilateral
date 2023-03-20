@@ -9,7 +9,6 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import QuadrilateralShapeModel, { VertexWithProposedPosition } from './QuadrilateralShapeModel.js';
@@ -42,18 +41,9 @@ export default class QuadrilateralModel implements TModel {
   // because that makes it most convenient to pass to SoundGenerator enableControlProperties.
   public readonly resetNotInProgressProperty: TProperty<boolean>;
 
-  // The bounds of the simulation in model coordinates. Origin (0,0) is at the center. The shape and
-  // vertices can be positioned within these bounds.
-  public readonly modelBounds = new Bounds2(
-    -QuadrilateralConstants.BOUNDS_WIDTH / 2,
-    -QuadrilateralConstants.BOUNDS_HEIGHT / 2,
-    QuadrilateralConstants.BOUNDS_WIDTH / 2,
-    QuadrilateralConstants.BOUNDS_HEIGHT / 2
-  );
-
   // The available bounds for smooth vertex dragging (the model bounds eroded by the width of a vertex so a vertex
   // can never go out of the model bounds.
-  public readonly vertexDragBounds = this.modelBounds.eroded( QuadrilateralConstants.VERTEX_WIDTH / 2 );
+  public readonly vertexDragBounds = QuadrilateralConstants.MODEL_BOUNDS.eroded( QuadrilateralConstants.VERTEX_WIDTH / 2 );
 
   // The interval that Vertices are constrained to during interaction. There are many things that control the value:
   //  - A button in the UI to lock to small intervals (see useMinorIntervalsProperty and lockToMinorIntervalsProperty)
@@ -97,15 +87,15 @@ export default class QuadrilateralModel implements TModel {
     } );
 
     const smoothingLengthProperty = optionsModel.tangibleOptionsModel.smoothingLengthProperty;
-    this.quadrilateralShapeModel = new QuadrilateralShapeModel( this.modelBounds, this.resetNotInProgressProperty, smoothingLengthProperty, {
+    this.quadrilateralShapeModel = new QuadrilateralShapeModel( this.resetNotInProgressProperty, smoothingLengthProperty, {
       tandem: tandem.createTandem( 'quadrilateralShapeModel' )
     } );
-    this.quadrilateralTestShapeModel = new QuadrilateralShapeModel( this.modelBounds, this.resetNotInProgressProperty, smoothingLengthProperty, {
+    this.quadrilateralTestShapeModel = new QuadrilateralShapeModel( this.resetNotInProgressProperty, smoothingLengthProperty, {
       validateShape: false
     } );
 
     this.visibilityModel = new QuadrilateralVisibilityModel( tandem.createTandem( 'visibilityModel' ) );
-    this.tangibleConnectionModel = new TangibleConnectionModel( this.quadrilateralShapeModel, this.optionsModel.tangibleOptionsModel, this.modelBounds, tandem.createTandem( 'tangibleConnectionModel' ) );
+    this.tangibleConnectionModel = new TangibleConnectionModel( this.quadrilateralShapeModel, this.optionsModel.tangibleOptionsModel, tandem.createTandem( 'tangibleConnectionModel' ) );
 
     this.shapeSoundEnabledProperty = new BooleanProperty( true, {
       tandem: tandem.createTandem( 'shapeSoundEnabledProperty' )

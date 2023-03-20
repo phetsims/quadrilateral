@@ -30,7 +30,7 @@ const MINOR_GRID_LINE_OPTIONS = {
 const BORDER_RECTANGLE_LINE_WIDTH = 4;
 
 export default class QuadrilateralGridNode extends Node {
-  public constructor( modelBounds: Bounds2, visibleProperty: TReadOnlyProperty<boolean>, modelViewTransform: ModelViewTransform2 ) {
+  public constructor( visibleProperty: TReadOnlyProperty<boolean>, modelViewTransform: ModelViewTransform2 ) {
     super();
 
     // Rectangle showing available model bounds
@@ -53,7 +53,7 @@ export default class QuadrilateralGridNode extends Node {
 
     // dilate just enough for the quadrilateral shape to never overlap the stroke
     const modelLineWidth = modelViewTransform.viewToModelDeltaX( BORDER_RECTANGLE_LINE_WIDTH );
-    const dilatedBounds = modelBounds.dilated( modelLineWidth );
+    const dilatedBounds = QuadrilateralConstants.MODEL_BOUNDS.dilated( modelLineWidth );
 
     boundsRectangle.setRectBounds( modelViewTransform.modelToViewBounds( dilatedBounds ) );
 

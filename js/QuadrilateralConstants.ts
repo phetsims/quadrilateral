@@ -6,11 +6,16 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import Bounds2 from '../../dot/js/Bounds2.js';
 import PhetFont from '../../scenery-phet/js/PhetFont.js';
 import quadrilateral from './quadrilateral.js';
 
 const SCREEN_TEXT_FONT = new PhetFont( { size: 18 } );
 const VERTEX_WIDTH = 0.1;
+
+const BOUNDS_WIDTH = 3 + VERTEX_WIDTH;
+const BOUNDS_HEIGHT = 2 + VERTEX_WIDTH;
+
 
 const QuadrilateralConstants = {
 
@@ -26,8 +31,17 @@ const QuadrilateralConstants = {
 
   // Dimensions of model bounds - base size extended by VERTEX_WIDTH so that the edge of a Vertex can get flush
   // against the model bounds as the vertex center snaps to grid lines.
-  BOUNDS_WIDTH: 3 + VERTEX_WIDTH,
-  BOUNDS_HEIGHT: 2 + VERTEX_WIDTH,
+  BOUNDS_WIDTH: BOUNDS_WIDTH,
+  BOUNDS_HEIGHT: BOUNDS_HEIGHT,
+
+  // The bounds of the simulation in model coordinates. Origin (0,0) is at the center. The shape and
+  // vertices can be positioned within these bounds.
+  MODEL_BOUNDS: new Bounds2(
+    -BOUNDS_WIDTH / 2,
+    -BOUNDS_HEIGHT / 2,
+    BOUNDS_WIDTH / 2,
+    BOUNDS_HEIGHT / 2
+  ),
 
   // ONLY FOR ?reducedStepSize.
   MAJOR_REDUCED_SIZE_VERTEX_INTERVAL: 0.0625,

@@ -13,6 +13,7 @@
     "requirejsNamespace": "QUADRILATERAL",
     "simulation": true,
     "runnable": true,
+    "generatedUnitTests": true,
     "supportedBrands": [
       "phet",
       "adapted-from-phet"
