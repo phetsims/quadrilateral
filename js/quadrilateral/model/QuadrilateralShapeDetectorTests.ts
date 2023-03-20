@@ -17,7 +17,7 @@ QUnit.module( 'BooleanProperty' );
 QUnit.test( 'QuadrilateralShapeDetector', assert => {
 
   // Our test shape, with dummy Properties for the constructor (parts that we don't care about for testing)
-  const shapeModel = new QuadrilateralShapeModel( new BooleanProperty( true ), new NumberProperty( 1 ) );
+  const shapeModel = new QuadrilateralShapeModel( new NumberProperty( 0.25 ), new BooleanProperty( true ), new NumberProperty( 1 ) );
 
   // Create one of each shape to verify basic detection. Position values found with dev
   // tool window.printVertexPositions() - only available when running with ?dev

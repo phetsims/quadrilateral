@@ -264,11 +264,13 @@ export default class QuadrilateralShapeModel {
     this.vertices.forEach( vertex => {
       vertex.modelBoundsProperty.link( vertexBounds => {
 
-        // REVIEW: Is this epsilon a function of the grid size? Should it be in QuadrilateralConstants?
-        vertex.topConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.maxY, QuadrilateralConstants.MODEL_BOUNDS.maxY, 0.01 );
-        vertex.rightConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.maxX, QuadrilateralConstants.MODEL_BOUNDS.maxX, 0.01 );
-        vertex.bottomConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.minY, QuadrilateralConstants.MODEL_BOUNDS.minY, 0.01 );
-        vertex.leftConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.minX, QuadrilateralConstants.MODEL_BOUNDS.minX, 0.01 );
+        // smallest possible interval for controlling the vertex positions, over two so that we know when the vertex
+        // touches model bounds.
+        const halfSmallestInterval = QuadrilateralConstants.MINOR_REDUCED_SIZE_VERTEX_INTERVAL / 2;
+        vertex.topConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.maxY, QuadrilateralConstants.MODEL_BOUNDS.maxY, halfSmallestInterval );
+        vertex.rightConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.maxX, QuadrilateralConstants.MODEL_BOUNDS.maxX, halfSmallestInterval );
+        vertex.bottomConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.minY, QuadrilateralConstants.MODEL_BOUNDS.minY, halfSmallestInterval );
+        vertex.leftConstrainedProperty.value = Utils.equalsEpsilon( vertexBounds.minX, QuadrilateralConstants.MODEL_BOUNDS.minX, halfSmallestInterval );
       } );
     } );
   }
