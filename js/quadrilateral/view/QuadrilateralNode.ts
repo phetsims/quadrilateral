@@ -177,10 +177,24 @@ export default class QuadrilateralNode extends Voicing( Node ) {
 
     // When the shift key is down, Vertices snap to finer intervals
     this.addInputListener( new KeyboardListener( {
-      keys: [ 'shift' ],
+
+      // TODO: Should only have to supply 'shift' instead of both - See https://github.com/phetsims/scenery/issues/1520
+      keys: [ 'shiftLeft', 'shiftRight' ],
+
+      // Need to allow other keys to be down to fire this listener or else it does not release on shift + tab
+      // when shift is released before the tab key. Would be ideal if KeyboardListener supported this better.
+      // See https://github.com/phetsims/quadrilateral/issues/388
+      allowOtherKeys: true,
+
       listenerFireTrigger: 'both',
       callback: ( event, listener ) => {
+        console.log( listener.keysDown );
         this.model.minorIntervalsFromGlobalKeyProperty.value = listener.keysDown;
+      },
+      cancel: listener => {
+
+        // not locking until next press
+        this.model.minorIntervalsFromGlobalKeyProperty.value = false;
       },
       global: true
     } ) );
@@ -205,11 +219,6 @@ export default class QuadrilateralNode extends Voicing( Node ) {
           this.voicingUtterance.alert = QuadrilateralDescriber.RESET_SHAPE_RESPONSE_PACKET;
           Voicing.alertUtterance( this.voicingUtterance );
         }
-      },
-      cancel: listener => {
-
-        // not locking until next press
-        this.model.minorIntervalsFromGlobalKeyProperty.value = false;
       }
     } ) );
 
