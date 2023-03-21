@@ -30,7 +30,7 @@ import { VertexLabelToProposedPositionMap } from '../model/QuadrilateralShapeMod
 const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
 
 type SelfOptions = EmptySelfOptions;
-type VertexNodeOptions = SelfOptions & StrictOmit<QuadrilateralMovableNodeOptions, 'grabbedSound' | 'visibleProperty'>;
+type VertexNodeOptions = SelfOptions & StrictOmit<QuadrilateralMovableNodeOptions, 'grabbedSound'>;
 
 // Reusable map that saves proposed vertex positions, to avoid excessive garbage.
 const scratchLabelToPositionMap: VertexLabelToProposedPositionMap = new Map();
@@ -42,8 +42,7 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
   public constructor( vertex: QuadrilateralVertex, vertexLabel: TReadOnlyProperty<string>, quadrilateralModel: QuadrilateralModel, vertexDescriber: VertexDescriber, modelViewTransform: ModelViewTransform2, providedOptions?: VertexNodeOptions ) {
 
     const options = optionize<VertexNodeOptions, SelfOptions, QuadrilateralMovableNodeOptions>()( {
-      grabbedSound: grabHighPitch_mp3,
-      visibleProperty: quadrilateralModel.visibilityModel.vertexLabelsVisibleProperty
+      grabbedSound: grabHighPitch_mp3
     }, providedOptions );
 
     const viewRadius = modelViewTransform.modelToViewBounds( vertex.modelBoundsProperty.value ).width / 2;
@@ -55,6 +54,7 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
 
     const vertexLabelText = new Text( vertexLabel, {
       font: LABEL_TEXT_FONT,
+      visibleProperty: quadrilateralModel.visibilityModel.vertexLabelsVisibleProperty,
 
       // i18n
       maxWidth: 12 // by inspection
