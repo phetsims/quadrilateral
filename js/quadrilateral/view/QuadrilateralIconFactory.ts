@@ -19,14 +19,16 @@ import Matrix3 from '../../../../dot/js/Matrix3.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 
-// REVIEW: Should this be a class with static functions? Then they can be marked public/private and we can export default class
-// Yes, lets do it!
-const QuadrilateralIconFactory = {
+class QuadrilateralIconFactory {
+
+  // layout constants for all icons
+  public static readonly ICON_HEIGHT = 30;
+  public static readonly ICON_LINE_WIDTH = 1.5;
 
   /**
    * Creates an icon for the "Corner Labels" checkbox that toggles visibility of labels on each QuadrilateralVertex.
    */
-  createCornerLabelsIcon(): Node {
+  public static createCornerLabelsIcon(): Node {
 
     const circle = new Circle( QuadrilateralIconFactory.ICON_HEIGHT / 2, {
       stroke: QuadrilateralColors.visibilityIconsColorProperty,
@@ -37,12 +39,12 @@ const QuadrilateralIconFactory = {
     circle.addChild( label );
 
     return circle;
-  },
+  }
 
   /**
    * Create an icon for the "Markers" checkbox that toggles visual indicators of the angle at each vertex.
    */
-  createMarkersIcon(): Node {
+  public static createMarkersIcon(): Node {
 
     const pathOptions = {
       stroke: QuadrilateralColors.visibilityIconsColorProperty,
@@ -153,12 +155,12 @@ const QuadrilateralIconFactory = {
       // drawing relative to the origin means that the icon is wider than it should be
       maxWidth: QuadrilateralIconFactory.ICON_HEIGHT
     } );
-  },
+  }
 
   /**
    * Icon for the diagonals control, a pair of crossed lines.
    */
-  createDiagonalGuidesIcon(): Node {
+  public static createDiagonalGuidesIcon(): Node {
     const iconHeight = QuadrilateralIconFactory.ICON_HEIGHT;
     const lineOptions = { stroke: QuadrilateralColors.visibilityIconsColorProperty, lineWidth: QuadrilateralIconFactory.ICON_LINE_WIDTH, lineDash: [ 5, 3 ] };
     const firstDiagonal = new Line( -iconHeight / 2, -iconHeight / 2, iconHeight / 2, iconHeight / 2, lineOptions );
@@ -167,34 +169,34 @@ const QuadrilateralIconFactory = {
     return new Node( {
       children: [ firstDiagonal, secondDiagonal ]
     } );
-  },
+  }
 
   /**
    * Icon for the shape music control.
    */
-  createSoundIcon(): Node {
+  public static createSoundIcon(): Node {
     return new Path( musicSolidShape, {
       maxHeight: QuadrilateralIconFactory.ICON_HEIGHT,
       fill: QuadrilateralColors.visibilityIconsColorProperty
     } );
-  },
+  }
 
   /**
    * Icon for the grid visibility control.
    */
-  createGridIcon(): Node {
+  public static createGridIcon(): Node {
     return new GridIcon( {
       size: QuadrilateralIconFactory.ICON_HEIGHT,
       stroke: QuadrilateralColors.visibilityIconsColorProperty,
       lineWidth: QuadrilateralIconFactory.ICON_LINE_WIDTH
     } );
-  },
+  }
 
   /**
    * Layout a label Text and icon Node, in that order for various UI controls. Returns a flowbox so that 'stretch'
    * can be used to align text and icons in a parent layout container.
    */
-  createLabelledIcon( iconNode: Node, labelString: TReadOnlyProperty<string> ): FlowBox {
+  public static createLabelledIcon( iconNode: Node, labelString: TReadOnlyProperty<string> ): FlowBox {
     const labelText = new Text( labelString, {
       font: QuadrilateralConstants.SCREEN_TEXT_FONT,
       maxWidth: 100
@@ -204,12 +206,8 @@ const QuadrilateralIconFactory = {
       children: [ labelText, iconNode ],
       spacing: 15
     } );
-  },
-
-  // @readonly
-  ICON_HEIGHT: 30,
-  ICON_LINE_WIDTH: 1.5
-};
+  }
+}
 
 quadrilateral.register( 'QuadrilateralIconFactory', QuadrilateralIconFactory );
 export default QuadrilateralIconFactory;
