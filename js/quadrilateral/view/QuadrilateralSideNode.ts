@@ -34,19 +34,11 @@ type SideNodeOptions = SelfOptions & StrictOmit<QuadrilateralMovableNodeOptions,
 const scratchLabelToPositionMap: VertexLabelToProposedPositionMap = new Map();
 
 class QuadrilateralSideNode extends QuadrilateralMovableNode {
-
-  // A reference to the model component.
+  private readonly quadrilateralModel: QuadrilateralModel;
   public readonly side: QuadrilateralSide;
 
   // A reference to the equivalent side with the two relevant vertices in the scratch model.
   private scratchSide: QuadrilateralSide;
-
-  // A reference to the main model for the simulation.
-  private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
-
-  // A scratch model so we can test vertex positions before setting them with input
-  private scratchShapeModel: QuadrilateralShapeModel;
-  private quadrilateralModel: QuadrilateralModel;
 
   public constructor(
     quadrilateralModel: QuadrilateralModel,
@@ -69,10 +61,6 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
     this.side = side;
     this.scratchSide = scratchSide;
     this.quadrilateralModel = quadrilateralModel;
-
-    // REVIEW: How about const for these? Since they are redundant with the model.
-    this.quadrilateralShapeModel = quadrilateralModel.quadrilateralShapeModel;
-    this.scratchShapeModel = quadrilateralModel.quadrilateralTestShapeModel;
 
     const ticksNode = new SideTicksNode( side, modelViewTransform );
     this.addChild( ticksNode );
@@ -286,7 +274,7 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
           // only update positions if both are allowed
           const positionsAllowed = quadrilateralModel.areVertexPositionsAllowed( scratchLabelToPositionMap );
           if ( positionsAllowed ) {
-            this.quadrilateralShapeModel.setVertexPositions( scratchLabelToPositionMap );
+            this.quadrilateralModel.quadrilateralShapeModel.setVertexPositions( scratchLabelToPositionMap );
           }
 
           this.updateBlockedState( !positionsAllowed, !inBounds );
@@ -307,7 +295,7 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
     } ) );
 
     // voicing - re-generate the voicing descriptions when Properties used for content change
-    this.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
+    this.quadrilateralModel.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {
       this.voicingObjectResponse = sideDescriber.getSideObjectResponse();
     } );
     markersVisibleProperty.link( () => {
@@ -333,6 +321,9 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
    * @param deltaVector - change of position in model coordinates
    */
   private moveVerticesFromModelDelta( deltaVector: Vector2 ): void {
+    const shapeModel = this.quadrilateralModel.quadrilateralShapeModel;
+    const scratchShapeModel = this.quadrilateralModel.quadrilateralTestShapeModel;
+
     const currentVertex1Position = this.side.vertex1.positionProperty.value;
     const currentVertex2Position = this.side.vertex2.positionProperty.value;
 
@@ -351,7 +342,7 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
     const inBounds = vertexDragBounds.containsPoint( proposedVertex1Position ) && vertexDragBounds.containsPoint( proposedVertex2Position );
 
     // update the scratch model before setting proposed vertex positions
-    this.scratchShapeModel.setFromShape( this.quadrilateralShapeModel );
+    scratchShapeModel.setFromShape( shapeModel );
 
     // Set the positions to the scratch model so that we can verify that this produces a valid shape. Since we are
     // moving two vertices at the same time we need to check the validity after both have moved, checking the shape
@@ -360,15 +351,14 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
     scratchLabelToPositionMap.clear();
     scratchLabelToPositionMap.set( this.scratchSide.vertex1.vertexLabel, proposedVertex1Position );
     scratchLabelToPositionMap.set( this.scratchSide.vertex2.vertexLabel, proposedVertex2Position );
-    this.scratchShapeModel.setVertexPositions( scratchLabelToPositionMap );
+    scratchShapeModel.setVertexPositions( scratchLabelToPositionMap );
 
-    const isShapeAllowed = QuadrilateralShapeModel.isQuadrilateralShapeAllowed( this.scratchShapeModel );
+    const isShapeAllowed = QuadrilateralShapeModel.isQuadrilateralShapeAllowed( scratchShapeModel );
     if ( isShapeAllowed ) {
 
       // signify to the Alerter that it will be time to generate a new object response from input
       this.side.voicingObjectResponseDirty = true;
-
-      this.quadrilateralShapeModel.setVertexPositions( scratchLabelToPositionMap );
+      shapeModel.setVertexPositions( scratchLabelToPositionMap );
     }
 
     this.updateBlockedState( !isShapeAllowed, !inBounds );
