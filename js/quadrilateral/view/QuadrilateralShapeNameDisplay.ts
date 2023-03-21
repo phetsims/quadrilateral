@@ -37,7 +37,6 @@ const shapeNameHiddenStringProperty = QuadrilateralStrings.shapeNameHiddenString
 const shapeNameHiddenContextResponseStringProperty = QuadrilateralStrings.a11y.voicing.shapeNameHiddenContextResponseStringProperty;
 const shapeNameShownContextResponseStringProperty = QuadrilateralStrings.a11y.voicing.shapeNameShownContextResponseStringProperty;
 
-// TODO: Need to link to shape name AND to each string Property?
 const SHAPE_NAME_MAP = new Map( [
   [ NamedQuadrilateral.SQUARE, squareStringProperty ],
   [ NamedQuadrilateral.RECTANGLE, rectangleStringProperty ],
