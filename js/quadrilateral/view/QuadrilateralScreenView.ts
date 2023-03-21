@@ -118,12 +118,7 @@ export default class QuadrilateralScreenView extends ScreenView {
       this.quadrilateralDescriber, {
         tandem: tandem.createTandem( 'quadrilateralNode' )
       } );
-
-    // REVIEW: In this case and others like it, we are plucking several attributes from the model, (potentially) renaming them
-    // and passing them through. This makes it difficult to trace back to the source.
-    // An alternative is to pass the entire model through, and use TypeScript to narrow what is accessible
-    // Note the visibilityModel is also part of the model.
-    // - Cool, Ill review and update to use pick
+    
     const diagonalGuidesNode = new QuadrilateralDiagonalGuidesNode(
       model.quadrilateralShapeModel,
       visibilityModel.diagonalGuidesVisibleProperty,
