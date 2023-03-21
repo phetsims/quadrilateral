@@ -30,7 +30,7 @@ import { VertexLabelToProposedPositionMap } from '../model/QuadrilateralShapeMod
 const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
 
 type SelfOptions = EmptySelfOptions;
-type VertexNodeOptions = SelfOptions & StrictOmit<QuadrilateralMovableNodeOptions, 'grabbedSound'>;
+type VertexNodeOptions = SelfOptions & StrictOmit<QuadrilateralMovableNodeOptions, 'grabbedSound' | 'visibleProperty'>;
 
 // Reusable map that saves proposed vertex positions, to avoid excessive garbage.
 const scratchLabelToPositionMap: VertexLabelToProposedPositionMap = new Map();
@@ -42,7 +42,8 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
   public constructor( vertex: QuadrilateralVertex, vertexLabel: TReadOnlyProperty<string>, quadrilateralModel: QuadrilateralModel, vertexDescriber: VertexDescriber, modelViewTransform: ModelViewTransform2, providedOptions?: VertexNodeOptions ) {
 
     const options = optionize<VertexNodeOptions, SelfOptions, QuadrilateralMovableNodeOptions>()( {
-      grabbedSound: grabHighPitch_mp3
+      grabbedSound: grabHighPitch_mp3,
+      visibleProperty: quadrilateralModel.visibilityModel.vertexLabelsVisibleProperty
     }, providedOptions );
 
     const viewRadius = modelViewTransform.modelToViewBounds( vertex.modelBoundsProperty.value ).width / 2;
@@ -69,11 +70,14 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
       angle += Math.PI / 2;
     }
 
-    // REVIEW: Pass visibleProperty here instead of using link
-    const hatchMarkPath = new Path( hatchMarkShape, { stroke: 'black' } );
+    const hatchMarkPath = new Path( hatchMarkShape, {
+      stroke: 'black',
+
+      // hatch marks are used to align with grid, so they are only visible when grid is visible
+      visibleProperty: quadrilateralModel.visibilityModel.gridVisibleProperty
+    } );
     this.addChild( hatchMarkPath );
 
-    // hatch marks are only visible when the grid is visible since they are used to create aligned positions.
     quadrilateralModel.visibilityModel.gridVisibleProperty.link( visible => {
       hatchMarkPath.visible = visible;
     } );
@@ -84,11 +88,6 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
 
     vertex.positionProperty.link( position => {
       this.center = modelViewTransform.modelToViewPosition( position );
-    } );
-
-    // REVIEW: Pass through visibleProperty
-    quadrilateralModel.visibilityModel.vertexLabelsVisibleProperty.link( vertexLabelsVisible => {
-      vertexLabelText.visible = vertexLabelsVisible;
     } );
 
     // dynamic string layout
