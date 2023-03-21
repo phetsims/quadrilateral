@@ -331,33 +331,32 @@ export default class SideDescriber {
    * "SideAB is much longer than sideCD."
    */
   private getLengthComparisonDescription( otherSide: QuadrilateralSide ): NullableQuadrilateralStringType {
-    let description: NullableQuadrilateralStringType = null;
 
     const shapeModel = this.quadrilateralShapeModel;
-
     const length1 = this.side.lengthProperty.value;
     const length2 = otherSide.lengthProperty.value;
 
     if ( shapeModel.isInterLengthEqualToOther( length1, length2 ) ) {
-      description = equalToStringProperty;
+      return equalToStringProperty;
     }
     else if ( shapeModel.isInterLengthEqualToOther( length1, length2 * 2 ) ) {
-      description = twiceAsLongAsStringProperty;
+      return twiceAsLongAsStringProperty;
     }
     else if ( shapeModel.isInterLengthEqualToOther( length1, length2 / 2 ) ) {
-      description = halfAsLongAsStringProperty;
+      return halfAsLongAsStringProperty;
     }
-
-    // REVIEW - use else if here and multiple return lines as suggested
-    const lengthRatio = length1 / length2;
-    if ( description === null ) {
+    else {
+      let description: NullableQuadrilateralStringType = null;
+      const lengthRatio = length1 / length2;
       LENGTH_COMPARISON_DESCRIPTION_MAP.forEach( ( value, key ) => {
         if ( key.contains( lengthRatio ) ) {
           description = value;
         }
       } );
+
+      assert && assert( description, 'No description found for length ratio' );
+      return description;
     }
-    return description;
   }
 }
 
