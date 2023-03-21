@@ -75,7 +75,12 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
     super( {
       contentNode: new Node( {
         children: [ soundDesignLabelText, soundDesignDescriptionText, soundDesignRadioButtonGroup, tracksPlayForeverCheckbox ]
-      } )
+      } ),
+
+      // The shape sound options should only be available when sounds are enabled. joist disables all audio
+      // options when Audio Features are disabled, so we use 'visible' instead of 'enabled' to avoid compounding
+      // transparency when both sounds and audio are disabled.
+      visibleProperty: soundManager.enabledProperty
     } );
 
     // layout
@@ -83,14 +88,6 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
     soundDesignRadioButtonGroup.leftTop = soundDesignDescriptionText.leftBottom.plusXY( PreferencesDialog.CONTENT_INDENTATION_SPACING, 5 );
     tracksPlayForeverCheckbox.left = soundDesignLabelText.left;
     tracksPlayForeverCheckbox.top = soundDesignRadioButtonGroup.bottom + PreferencesDialog.CONTENT_SPACING;
-
-    // The shape sound options should only be available when sounds are enabled. joist disables all audio
-    // options when Audio Features are disabled, so we use 'visible' instead of 'enabled' to avoid compounding
-    // transparency when both sounds and audio are disabled.
-    // REVIEW Pass super({visibleProperty: soundManager.enabledProperty}) ??
-    soundManager.enabledProperty.link( enabled => {
-      this.visible = enabled;
-    } );
 
     this.disposeQuadrilateralSoundOptionsNode = () => {
       soundDesignRadioButtonGroup.dispose();
