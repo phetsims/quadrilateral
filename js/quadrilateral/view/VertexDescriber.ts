@@ -298,8 +298,6 @@ export default class VertexDescriber {
     assert && assert( this.vertex.angleProperty.value !== null, 'angles need to be initialized for descriptions' );
     assert && assert( otherVertex.angleProperty.value !== null, 'angles need to be initialized for descriptions' );
 
-    let description: TReadOnlyProperty<string> | null = null;
-
     const angle1 = this.vertex.angleProperty.value!;
     const angle2 = otherVertex.angleProperty.value!;
 
@@ -307,27 +305,27 @@ export default class VertexDescriber {
     // cases where we move out of isoceles trapezoid while the angles are still described as "equal".
     const usableToleranceInterval = shapeName === NamedQuadrilateral.TRAPEZOID ? 0 : this.quadrilateralShapeModel.interAngleToleranceInterval;
     if ( QuadrilateralShapeModel.isAngleEqualToOther( angle1, angle2, usableToleranceInterval ) ) {
-      description = equalToStringProperty;
+      return equalToStringProperty;
     }
     else if ( QuadrilateralShapeModel.isAngleEqualToOther( angle1, angle2 * 2, usableToleranceInterval ) ) {
-      description = twiceAsWideAsStringProperty;
+      return twiceAsWideAsStringProperty;
     }
     else if ( QuadrilateralShapeModel.isAngleEqualToOther( angle1, angle2 * 0.5, usableToleranceInterval ) ) {
-      description = halfAsWideAsStringProperty;
+      return halfAsWideAsStringProperty;
     }
+    else {
+      let description: TReadOnlyProperty<string> | null = null;
 
-    // REVIEW: This should be in an else{} - You are so right!
-    const angleRatio = angle1 / angle2;
-    if ( description === null ) {
+      const angleRatio = angle1 / angle2;
       ANGLE_COMPARISON_DESCRIPTION_MAP.forEach( ( value, key ) => {
         if ( key.contains( angleRatio ) ) {
           description = value;
         }
       } );
-    }
 
-    assert && assert( description, `Description not found for angle difference ${angleRatio}` );
-    return description!;
+      assert && assert( description, `Description not found for angle difference ${angleRatio}` );
+      return description!;
+    }
   }
 
   /**
