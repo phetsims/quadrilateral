@@ -148,68 +148,61 @@ export default class VertexDescriber {
    * For the design request of this feature please see https://github.com/phetsims/quadrilateral/issues/231
    */
   public static getWedgesDescription( vertexAngle: number, shapeModel: QuadrilateralShapeModel ): PDOMValueType | null {
-
-    // REVIEW: It would be clearer to have multiple return statements from this function. With a mutable variable
-    // and numerous assignments, you cannot tell at a glance if the value is mutated later on.
-    // REVIEW: Same comment in getAdjacentVertexObjectDescription
-    // - Great! Lets do it.
-    let wedgeDescription = null;
-
     const numberOfFullWedges = Math.floor( vertexAngle / CornerGuideNode.WEDGE_SIZE_RADIANS );
     const remainder = vertexAngle % CornerGuideNode.WEDGE_SIZE_RADIANS;
 
     if ( shapeModel.isRightAngle( vertexAngle ) ) {
-      wedgeDescription = rightAngleStringProperty;
+      return rightAngleStringProperty;
     }
     else if ( shapeModel.isFlatAngle( vertexAngle ) ) {
-      wedgeDescription = angleFlatStringProperty;
+      return angleFlatStringProperty;
     }
     else if ( shapeModel.isStaticAngleEqualToOther( remainder, 0 ) ) {
       if ( numberOfFullWedges === 1 ) {
-        wedgeDescription = oneWedgeStringProperty;
+        return oneWedgeStringProperty;
       }
       else {
-        wedgeDescription = StringUtils.fillIn( numberOfWedgesPatternStringProperty, {
+        return StringUtils.fillIn( numberOfWedgesPatternStringProperty, {
           numberOfWedges: numberOfFullWedges
         } );
       }
     }
     else if ( shapeModel.isStaticAngleEqualToOther( remainder, CornerGuideNode.WEDGE_SIZE_RADIANS / 2 ) ) {
       if ( numberOfFullWedges === 0 ) {
-        wedgeDescription = halfOneWedgeStringProperty;
+        return halfOneWedgeStringProperty;
       }
       else {
-        wedgeDescription = StringUtils.fillIn( numberOfWedgesAndAHalfPatternStringProperty, {
+        return StringUtils.fillIn( numberOfWedgesAndAHalfPatternStringProperty, {
           numberOfWedges: numberOfFullWedges
         } );
       }
     }
     else if ( remainder < CornerGuideNode.WEDGE_SIZE_RADIANS / 2 ) {
       if ( numberOfFullWedges === 0 ) {
-        wedgeDescription = lessThanHalfOneWedgeStringProperty;
+        return lessThanHalfOneWedgeStringProperty;
       }
       else if ( numberOfFullWedges === 1 ) {
-        wedgeDescription = justOverOneWedgeStringProperty;
+        return justOverOneWedgeStringProperty;
       }
       else {
-        wedgeDescription = StringUtils.fillIn( justOverNumberOfWedgesPatternStringProperty, {
+        return StringUtils.fillIn( justOverNumberOfWedgesPatternStringProperty, {
           numberOfWedges: numberOfFullWedges
         } );
       }
     }
     else if ( remainder > CornerGuideNode.WEDGE_SIZE_RADIANS / 2 ) {
       if ( numberOfFullWedges === 0 ) {
-        wedgeDescription = justUnderOneWedgeStringProperty;
+        return justUnderOneWedgeStringProperty;
       }
       else {
-        wedgeDescription = StringUtils.fillIn( justUnderNumberOfWedgesPatternStringProperty, {
+        return StringUtils.fillIn( justUnderNumberOfWedgesPatternStringProperty, {
           numberOfWedges: numberOfFullWedges + 1
         } );
       }
     }
 
-    assert && assert( wedgeDescription !== null, `did not find a wedge description for the provided angle: ${vertexAngle}` );
-    return wedgeDescription;
+    assert && assert( false, `did not find a wedge description for the provided angle: ${vertexAngle}` );
+    return '';
   }
 
   /**
@@ -220,8 +213,6 @@ export default class VertexDescriber {
    * "equal to adjacent corners."
    */
   public getAdjacentVertexObjectDescription(): PDOMValueType {
-    let description: PDOMValueType = '';
-
     const adjacentCorners = this.quadrilateralShapeModel.adjacentVertexMap.get( this.vertex )!;
     const adjacentCornersEqual = this.quadrilateralShapeModel.isInterAngleEqualToOther(
       adjacentCorners[ 0 ].angleProperty.value!,
@@ -238,19 +229,19 @@ export default class VertexDescriber {
     if ( numberOfEqualAdjacentVertexPairs === 2 ) {
 
       // This vertex and both adjacent angles are all equal
-      description = equalToAdjacentCornersStringProperty;
+      return equalToAdjacentCornersStringProperty;
     }
     else if ( numberOfEqualAdjacentVertexPairs === 1 ) {
 
       // just say "equal to one adjacent corner
-      description = equalToOneAdjacentCornerStringProperty;
+      return equalToOneAdjacentCornerStringProperty;
     }
     else if ( adjacentCornersEqual ) {
 
       // the adjacent corners are equal but not equal to provided vertex, combine their description and use either
       // to describe the relative description
       const shapeName = this.quadrilateralShapeModel.shapeNameProperty.value;
-      description = StringUtils.fillIn( equalAdjacentCornersPatternStringProperty, {
+      return StringUtils.fillIn( equalAdjacentCornersPatternStringProperty, {
         comparison: this.getAngleComparisonDescription( adjacentCorners[ 0 ], shapeName )
       } );
     }
@@ -263,17 +254,15 @@ export default class VertexDescriber {
       const secondAdjacentAngle = adjacentCorners[ 1 ].angleProperty.value!;
 
       if ( firstAdjacentAngle > vertexAngle && secondAdjacentAngle > vertexAngle ) {
-        description = smallerThanAdjacentCornersStringProperty;
+        return smallerThanAdjacentCornersStringProperty;
       }
       else if ( firstAdjacentAngle < vertexAngle && secondAdjacentAngle < vertexAngle ) {
-        description = widerThanAdjacentCornersStringProperty;
+        return widerThanAdjacentCornersStringProperty;
       }
       else {
-        description = notEqualToAdjacentCornersStringProperty;
+        return notEqualToAdjacentCornersStringProperty;
       }
     }
-
-    return description;
   }
 
   /**
