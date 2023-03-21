@@ -188,7 +188,6 @@ export default class QuadrilateralNode extends Voicing( Node ) {
 
       listenerFireTrigger: 'both',
       callback: ( event, listener ) => {
-        console.log( listener.keysDown );
         this.model.minorIntervalsFromGlobalKeyProperty.value = listener.keysDown;
       },
       cancel: listener => {
