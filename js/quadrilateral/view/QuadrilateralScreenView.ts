@@ -69,7 +69,12 @@ export default class QuadrilateralScreenView extends ScreenView {
     // Create view subcomponents
     //---------------------------------------------------------------------------------------------------------------
     this.modelViewTransform = new QuadrilateralModelViewTransform( QuadrilateralConstants.MODEL_BOUNDS, this.layoutBounds );
-    this.quadrilateralDescriber = new QuadrilateralDescriber( model.quadrilateralShapeModel, visibilityModel.shapeNameVisibleProperty, visibilityModel.markersVisibleProperty, this.modelViewTransform );
+    this.quadrilateralDescriber = new QuadrilateralDescriber(
+      model.quadrilateralShapeModel,
+      visibilityModel.shapeNameVisibleProperty,
+      visibilityModel.markersVisibleProperty,
+      this.modelViewTransform
+    );
     this.quadrilateralSoundView = new QuadrilateralSoundView( model, optionsModel.soundOptionsModel );
 
     // miscellaneous sim and visibility control components
@@ -151,7 +156,11 @@ export default class QuadrilateralScreenView extends ScreenView {
     if ( QuadrilateralQueryParameters.deviceConnection ) {
       assert && assert( this.quadrilateralTangibleController, 'The QuadrilateralTangibleController is not available' );
       deviceConnectionParentNode.children = [
-        new QuadrilateralTangibleControls( model.tangibleConnectionModel, this.quadrilateralTangibleController!, tandem.createTandem( 'connectionControls' ) )
+        new QuadrilateralTangibleControls(
+          model.tangibleConnectionModel,
+          this.quadrilateralTangibleController!,
+          tandem.createTandem( 'connectionControls' )
+        )
       ];
       deviceConnectionParentNode.top = gridNode.top;
       deviceConnectionParentNode.left = resetAllButton.left;
