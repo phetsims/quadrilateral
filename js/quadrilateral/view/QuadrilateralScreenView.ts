@@ -135,6 +135,7 @@ export default class QuadrilateralScreenView extends ScreenView {
       spacing: QuadrilateralConstants.CONTROLS_SPACING
     } );
     if ( QuadrilateralQueryParameters.deviceConnection ) {
+      assert && assert( this.quadrilateralTangibleController, 'The QuadrilateralTangibleController is not available' );
       deviceConnectionParentNode.children = [
         new QuadrilateralTangibleControls( model.tangibleConnectionModel, this.quadrilateralTangibleController!, tandem.createTandem( 'connectionControls' ) )
       ];
@@ -142,6 +143,7 @@ export default class QuadrilateralScreenView extends ScreenView {
       deviceConnectionParentNode.left = resetAllButton.left;
     }
     if ( MediaPipeQueryParameters.cameraInput === 'hands' ) {
+      assert && assert( this.quadrilateralTangibleController, 'The QuadrilateralTangibleController is not available' );
       this.quadrilateralMediaPipe = new QuadrilateralMediaPipe( model, this.quadrilateralTangibleController! );
     }
 
