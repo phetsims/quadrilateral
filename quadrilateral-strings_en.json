@@ -65,9 +65,6 @@
   "shapeNames.triangle": {
     "value": "Triangle?"
   },
-  "gotIt": {
-    "value": "Got it."
-  },
   "keyboardHelpDialog.moveCornersOrSides": {
     "value": "Move Corners or Sides"
   },
@@ -105,14 +102,6 @@
     "value": "Small Steps"
   },
   "a11y": {
-    "screenSummary": {
-      "playAreaDescription": {
-        "value": "The Play Area is your shape. It has four movable sides and four movable corners that allow you to play with side length and angle width, and create different shapes in the quadrilateral family. Quadrilaterals are closed four-sided shapes."
-      },
-      "controlAreaDescription": {
-        "value": "The Control Area has options to show shape name, add shape markers and guides, and mute shape sounds. Reset Shape to keep selected markers and guides visible, or reset sim with Reset All."
-      }
-    },
     "cornerLabelsAddedResponse": {
       "value": "Letters A through D added to corners."
     },
@@ -234,27 +223,6 @@
         },
         "noString": {
           "value": "no"
-        },
-        "generalSidePattern": {
-          "value": "Side {{firstSide}} is {{firstComparison}} side {{secondSide}}. Side {{thirdSide}} is {{secondComparison}} Side {{fourthSide}}"
-        },
-        "generalVertexPattern": {
-          "value": "{{firstCorner}} is {{firstComparison}} {{secondCorner}}, and {{thirdCorner}} is {{secondComparison}} {{fourthCorner}}."
-        },
-        "cornerAnglePattern": {
-          "value": "right angle {{cornerLabel}}"
-        },
-        "rightAngleCornersPattern": {
-          "value": "right angle {{cornersString}}"
-        },
-        "twoEqualVerticesAnglePattern": {
-          "value": "Equal {{firstCorners}} are {{firstComparison}} {{thirdCorner}} and {{secondComparison}} {{fourthCorner}}."
-        },
-        "twoPairsOfEqualVerticesPattern": {
-          "value": "Equal {{firstCorners}} are {{comparison}} equal {{secondCorners}}."
-        },
-        "cornersAnglePattern": {
-          "value": "'Corners {{firstCorner}} and {{secondCorner}}"
         }
       },
       "sidesDescriptionPattern": {
