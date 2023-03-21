@@ -25,18 +25,18 @@ const shapeSoundControlHintResponseStringProperty = QuadrilateralStrings.a11y.vo
 export default class ShapeSoundsCheckbox extends Checkbox {
   public constructor( shapeSoundEnabledProperty: Property<boolean>, tandem: Tandem ) {
     super( shapeSoundEnabledProperty, QuadrilateralIconFactory.createSoundIcon(), {
+
+      // To avoid confusion since the checkbox will do nothing when sound or all audio is disabled
+      enabledProperty: audioManager.audioAndSoundEnabledProperty,
+
+      // voicing
       voicingNameResponse: shapeSoundControlNameResponseStringProperty,
       checkedContextResponse: shapeSoundControlEnabledContextResponseStringProperty,
       voicingHintResponse: shapeSoundControlHintResponseStringProperty,
       uncheckedContextResponse: shapeSoundControlDisabledContextResponseStringProperty,
-      tandem: tandem
-    } );
 
-    // To avoid confusion since the checkbox will do nothing when sound or all audio is disabled
-    // REVIEW: Pass to super as enabledProperty. - Great!
-    // REVIEW: I've seen this a couple of times, check if there are more like it - Great!
-    audioManager.audioAndSoundEnabledProperty.link( enabled => {
-      this.enabled = enabled;
+      // phet-io
+      tandem: tandem
     } );
   }
 }
