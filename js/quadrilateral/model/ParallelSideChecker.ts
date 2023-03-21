@@ -70,8 +70,8 @@ export default class ParallelSideChecker {
    * Returns whether the two sides are currently parallel within parallelAngleToleranceInterval.
    */
   public areSidesParallel(): boolean {
-    const side1 = this.sidePair.side1;
-    const side2 = this.sidePair.side2;
+    const side1 = this.sidePair.component1;
+    const side2 = this.sidePair.component2;
     assert && assert( side1.vertex1.angleProperty.value !== null, 'angles need to be available to determine parallel state' );
     assert && assert( side2.vertex2.angleProperty.value !== null, 'angles need to be available to determine parallel state' );
 

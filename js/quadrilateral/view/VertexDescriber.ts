@@ -231,7 +231,7 @@ export default class VertexDescriber {
     let numberOfEqualAdjacentVertexPairs = 0;
     const adjacentVertexPairs = this.quadrilateralShapeModel.adjacentEqualVertexPairsProperty.value;
     adjacentVertexPairs.forEach( vertexPair => {
-      if ( vertexPair.vertex1 === this.vertex || vertexPair.vertex2 === this.vertex ) {
+      if ( vertexPair.component1 === this.vertex || vertexPair.component2 === this.vertex ) {
         numberOfEqualAdjacentVertexPairs++;
       }
     } );

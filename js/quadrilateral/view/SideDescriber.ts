@@ -97,7 +97,7 @@ export default class SideDescriber {
     const oppositeSide = this.quadrilateralShapeModel.oppositeSideMap.get( this.side )!;
 
     const parallelSidePairs = this.quadrilateralShapeModel.parallelSidePairsProperty.value;
-    const thisSideIsParallel = _.some( parallelSidePairs, sidePair => sidePair.side1 === this.side || sidePair.side2 === this.side );
+    const thisSideIsParallel = _.some( parallelSidePairs, sidePair => sidePair.component1 === this.side || sidePair.component2 === this.side );
 
     const patternStringProperty = thisSideIsParallel ?
                                   parallelSideObjectResponsePatternStringProperty :
@@ -273,13 +273,13 @@ export default class SideDescriber {
     let numberOfEqualAdjacentSidePairs = 0;
     const adjacentSidePairs = this.quadrilateralShapeModel.adjacentEqualSidePairsProperty.value;
     adjacentSidePairs.forEach( sidePair => {
-      if ( sidePair.side1 === this.side || sidePair.side2 === this.side ) {
+      if ( sidePair.component1 === this.side || sidePair.component2 === this.side ) {
         numberOfEqualAdjacentSidePairs++;
       }
     } );
 
     const parallelSideChecker = _.find( this.quadrilateralShapeModel.parallelSideCheckers, checker => {
-      return checker.sidePair.side1 === adjacentSides[ 0 ] || checker.sidePair.side1 === adjacentSides[ 1 ];
+      return checker.sidePair.component1 === adjacentSides[ 0 ] || checker.sidePair.component1 === adjacentSides[ 1 ];
     } );
     assert && assert( parallelSideChecker, 'did not find ParallelSideChecker' );
     const adjacentSidesParallel = parallelSideChecker!.areSidesParallel();

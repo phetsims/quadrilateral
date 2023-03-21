@@ -423,8 +423,8 @@ export default class QuadrilateralDescriber {
                          oppositeEqualVertexPairs.length === 1 ? onePairOfOppositeStringProperty :
                          noStringStringProperty;
 
-      angleEqualityString = adjacentEqualVertexPairs.length === 1 && this.shapeModel.isInterAngleEqualToOther( adjacentEqualVertexPairs[ 0 ].vertex1.angleProperty.value!, Math.PI / 2 ) ? rightAnglesStringProperty :
-                            oppositeEqualVertexPairs.length === 1 && this.shapeModel.isInterAngleEqualToOther( oppositeEqualVertexPairs[ 0 ].vertex1.angleProperty.value!, Math.PI / 2 ) ? rightAnglesStringProperty :
+      angleEqualityString = adjacentEqualVertexPairs.length === 1 && this.shapeModel.isInterAngleEqualToOther( adjacentEqualVertexPairs[ 0 ].component1.angleProperty.value!, Math.PI / 2 ) ? rightAnglesStringProperty :
+                            oppositeEqualVertexPairs.length === 1 && this.shapeModel.isInterAngleEqualToOther( oppositeEqualVertexPairs[ 0 ].component1.angleProperty.value!, Math.PI / 2 ) ? rightAnglesStringProperty :
                               // if two pairs of adjacent angles exist but we are not parallelogram, all cannot be
                               // right angles. OR, no angles are equal.
                             equalStringProperty;
@@ -535,8 +535,8 @@ export default class QuadrilateralDescriber {
 
       let longestSubString;
       let shortestSubString;
-      if ( _.some( this.shapeModel.oppositeEqualSidePairsProperty.value, oppositeEqualSidePair => oppositeEqualSidePair.includesSide( longestSide ) ) ||
-           _.some( this.shapeModel.adjacentEqualSidePairsProperty.value, adjacentEqualSidePair => adjacentEqualSidePair.includesSide( longestSide ) ) ) {
+      if ( _.some( this.shapeModel.oppositeEqualSidePairsProperty.value, oppositeEqualSidePair => oppositeEqualSidePair.includesComponent( longestSide ) ) ||
+           _.some( this.shapeModel.adjacentEqualSidePairsProperty.value, adjacentEqualSidePair => adjacentEqualSidePair.includesComponent( longestSide ) ) ) {
 
         // multiple sides of the same "longest" length, pluralize
         longestSubString = StringUtils.fillIn( longestSidesDescriptionPatternStringProperty, {
@@ -549,8 +549,8 @@ export default class QuadrilateralDescriber {
         } );
       }
 
-      if ( _.some( this.shapeModel.oppositeEqualSidePairsProperty.value, oppositeEqualSidePair => oppositeEqualSidePair.includesSide( shortestSide ) ) ||
-           _.some( this.shapeModel.adjacentEqualSidePairsProperty.value, adjacentEqualSidePair => adjacentEqualSidePair.includesSide( shortestSide ) ) ) {
+      if ( _.some( this.shapeModel.oppositeEqualSidePairsProperty.value, oppositeEqualSidePair => oppositeEqualSidePair.includesComponent( shortestSide ) ) ||
+           _.some( this.shapeModel.adjacentEqualSidePairsProperty.value, adjacentEqualSidePair => adjacentEqualSidePair.includesComponent( shortestSide ) ) ) {
 
         // multiple sides of the same "longest" length, pluralize
         shortestSubString = StringUtils.fillIn( shortestSidesDescriptionPatternStringProperty, {
@@ -599,8 +599,8 @@ export default class QuadrilateralDescriber {
 
         let longestSubString;
         let shortestSubString;
-        if ( _.some( this.shapeModel.oppositeEqualVertexPairsProperty.value, oppositeEQualVertexPair => oppositeEQualVertexPair.includesVertex( widestVertex ) ) ||
-             _.some( this.shapeModel.adjacentEqualVertexPairsProperty.value, adjacentEqualVertexPair => adjacentEqualVertexPair.includesVertex( widestVertex ) ) ) {
+        if ( _.some( this.shapeModel.oppositeEqualVertexPairsProperty.value, oppositeEQualVertexPair => oppositeEQualVertexPair.includesComponent( widestVertex ) ) ||
+             _.some( this.shapeModel.adjacentEqualVertexPairsProperty.value, adjacentEqualVertexPair => adjacentEqualVertexPair.includesComponent( widestVertex ) ) ) {
 
           // multiple vertices of the same "widest" angle, pluralize
           longestSubString = StringUtils.fillIn( widestCornersDescriptionPatternStringProperty, {
@@ -613,8 +613,8 @@ export default class QuadrilateralDescriber {
           } );
         }
 
-        if ( _.some( this.shapeModel.oppositeEqualVertexPairsProperty.value, oppositeEqualVertexPair => oppositeEqualVertexPair.includesVertex( smallestVertex ) ) ||
-             _.some( this.shapeModel.adjacentEqualVertexPairsProperty.value, adjacentEqualVertexPair => adjacentEqualVertexPair.includesVertex( smallestVertex ) ) ) {
+        if ( _.some( this.shapeModel.oppositeEqualVertexPairsProperty.value, oppositeEqualVertexPair => oppositeEqualVertexPair.includesComponent( smallestVertex ) ) ||
+             _.some( this.shapeModel.adjacentEqualVertexPairsProperty.value, adjacentEqualVertexPair => adjacentEqualVertexPair.includesComponent( smallestVertex ) ) ) {
 
           // multiple sides of the same "longest" length, pluralize
           shortestSubString = StringUtils.fillIn( smallestCornersDescriptionPatternStringProperty, {
@@ -691,7 +691,7 @@ export default class QuadrilateralDescriber {
     let firstSideLabel: QuadrilateralStringType;
     let secondSideLabel: QuadrilateralStringType;
 
-    if ( parallelSidePair.includesSide( this.shapeModel.sideAB ) ) {
+    if ( parallelSidePair.includesComponent( this.shapeModel.sideAB ) ) {
       firstSideLabel = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_AB );
       secondSideLabel = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_CD );
     }
@@ -716,7 +716,7 @@ export default class QuadrilateralDescriber {
     let parallelFirstSideString: QuadrilateralStringType;
     let parallelSecondSideString: QuadrilateralStringType;
 
-    if ( oppositeEqualSidePair.includesSide( this.shapeModel.sideAB ) ) {
+    if ( oppositeEqualSidePair.includesComponent( this.shapeModel.sideAB ) ) {
 
       // top sides and bottom side are equal in length, left and right sides are parallel
       equalFirstSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_AB );
@@ -750,7 +750,7 @@ export default class QuadrilateralDescriber {
   public getKiteDetailsString( oppositeEqualVertexPair: VertexPair, patternString: TReadOnlyProperty<string> = kiteDetailsShortPatternStringProperty ): string {
     let firstCornerStringProperty: TReadOnlyProperty<string>;
     let secondCornerStringProperty: TReadOnlyProperty<string>;
-    if ( oppositeEqualVertexPair.includesVertex( this.shapeModel.vertexA ) ) {
+    if ( oppositeEqualVertexPair.includesComponent( this.shapeModel.vertexA ) ) {
 
       // opposite equal vertices for the kite are A and C
       firstCornerStringProperty = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_A );

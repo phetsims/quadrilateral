@@ -91,12 +91,7 @@ export default class QuadrilateralScreenView extends ScreenView {
 
     // shape controls components
     const shapeNameDisplay = new QuadrilateralShapeNameDisplay( visibilityModel.shapeNameVisibleProperty, model.quadrilateralShapeModel.shapeNameProperty, this.quadrilateralDescriber, tandem.createTandem( 'quadrilateralShapeNameDisplay' ) );
-    const resetShapeButton = new ResetShapeButton(
-      model.quadrilateralShapeModel,
-      model.resetNotInProgressProperty,
-      visibilityModel.shapeNameVisibleProperty,
-      tandem.createTandem( 'resetShapeButton' )
-    );
+    const resetShapeButton = new ResetShapeButton( model.quadrilateralShapeModel, tandem.createTandem( 'resetShapeButton' ) );
     const shapeSoundsCheckbox = new ShapeSoundsCheckbox( model.shapeSoundEnabledProperty, tandem.createTandem( 'shapeSoundsCheckbox' ) );
 
     // quadrilateral shape and grid components

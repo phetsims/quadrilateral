@@ -452,8 +452,8 @@ export default class QuadrilateralShapeModel {
       relatedVerticesArray.forEach( relatedVertex => {
         const vertexPair = new VertexPair( keyVertex, relatedVertex );
 
-        const firstAngle = vertexPair.vertex1.angleProperty.value!;
-        const secondAngle = vertexPair.vertex2.angleProperty.value!;
+        const firstAngle = vertexPair.component1.angleProperty.value!;
+        const secondAngle = vertexPair.component2.angleProperty.value!;
         const areAnglesEqual = this.isInterAngleEqualToOther( firstAngle, secondAngle );
         const indexOfVertexPair = _.findIndex( currentVertexPairs, currentVertexPair => currentVertexPair.equals( vertexPair ) );
         const currentlyIncludesVertexPair = indexOfVertexPair > -1;
@@ -494,8 +494,8 @@ export default class QuadrilateralShapeModel {
       relatedSidesArray.forEach( relatedSide => {
         const sidePair = new SidePair( keySide, relatedSide );
 
-        const firstLength = sidePair.side1.lengthProperty.value;
-        const secondLength = sidePair.side2.lengthProperty.value;
+        const firstLength = sidePair.component1.lengthProperty.value;
+        const secondLength = sidePair.component2.lengthProperty.value;
         const areLengthsEqual = this.isInterLengthEqualToOther( firstLength, secondLength );
         const indexOfSidePair = _.findIndex( currentSidePairs, currentSidePair => currentSidePair.equals( sidePair ) );
         const currentlyIncludesSidePair = indexOfSidePair > -1;
