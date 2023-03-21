@@ -152,6 +152,9 @@ export default class QuadrilateralVertex extends QuadrilateralMovable {
    * between 0 and 2 * Math.PI. See
    * https://math.stackexchange.com/questions/878785/how-to-find-an-angle-in-range0-360-between-2-vectors
    *
+   * Custom angle claculation used instead of Vector2.angleBetween because we need the angle to span from
+   * 0 to 2PI instead of 0 to PI.
+   *
    * Assumes the following arrangement of vertices:
    *
    *        thisVertex
@@ -176,10 +179,6 @@ export default class QuadrilateralVertex extends QuadrilateralMovable {
 
     // if the angle is less than zero, we have wrapped around Math.PI and formed a concave shape - the actual
     // angle should be greater than PI
-
-    // REVIEW: In fuzzing, I saw this value go greater than Math.PI*2.
-    // REVIEW: Can the angle be computed with: const a = vector1.angleBetween( vector2 );
-    // Yes, look into this!
     if ( angle < 0 ) {
       angle = angle + 2 * Math.PI;
     }
