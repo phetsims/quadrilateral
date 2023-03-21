@@ -19,11 +19,17 @@ class UnorderedComponentPair<T extends QuadrilateralMovable> {
     this.component2 = component2;
   }
 
+  /**
+   * Does this pair equal the other?
+   */
   public equals( otherPair: UnorderedComponentPair<T> ): boolean {
     return ( this.component1 === otherPair.component1 && this.component2 === otherPair.component2 ) ||
            ( this.component2 === otherPair.component1 && this.component1 === otherPair.component2 );
   }
 
+  /**
+   * Does this pair include the provided component?
+   */
   public includesComponent( component: T ): boolean {
     return this.component1 === component || this.component2 === component;
   }
