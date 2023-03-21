@@ -95,7 +95,12 @@ export default class QuadrilateralModel implements TModel {
     } );
 
     this.visibilityModel = new QuadrilateralVisibilityModel( tandem.createTandem( 'visibilityModel' ) );
-    this.tangibleConnectionModel = new TangibleConnectionModel( this.quadrilateralShapeModel, this.optionsModel.tangibleOptionsModel, tandem.createTandem( 'tangibleConnectionModel' ) );
+    this.tangibleConnectionModel = new TangibleConnectionModel(
+      this.quadrilateralShapeModel,
+      this.quadrilateralTestShapeModel,
+      this.optionsModel.tangibleOptionsModel,
+      tandem.createTandem( 'tangibleConnectionModel' )
+    );
 
     this.shapeSoundEnabledProperty = new BooleanProperty( true, {
       tandem: tandem.createTandem( 'shapeSoundEnabledProperty' )

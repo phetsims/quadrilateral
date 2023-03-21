@@ -21,7 +21,6 @@ import Property from '../../../../../axon/js/Property.js';
 import TProperty from '../../../../../axon/js/TProperty.js';
 import Bounds2 from '../../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../../dot/js/Vector2.js';
-import { Line } from '../../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
 import NullableIO from '../../../../../tandem/js/types/NullableIO.js';
@@ -58,7 +57,10 @@ export default class TangibleConnectionModel {
   // So that this connection model can directly control the shape.
   public readonly shapeModel: QuadrilateralShapeModel;
 
-  public constructor( shapeModel: QuadrilateralShapeModel, tangibleOptionsModel: QuadrilateralTangibleOptionsModel, tandem: Tandem ) {
+  // So that we can test proposed QuadrilateralVertex positions before we change the "real" shapeModel.
+  public readonly testShapeModel: QuadrilateralShapeModel;
+
+  public constructor( shapeModel: QuadrilateralShapeModel, testShapeModel: QuadrilateralShapeModel, tangibleOptionsModel: QuadrilateralTangibleOptionsModel, tandem: Tandem ) {
     this.connectedToDeviceProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'connectedToDeviceProperty' )
     } );
@@ -73,6 +75,7 @@ export default class TangibleConnectionModel {
     this.markerDetectionModel = new MarkerDetectionModel( tandem.createTandem( 'markerDetectionModel' ) );
     this.tangibleOptionsModel = tangibleOptionsModel;
     this.shapeModel = shapeModel;
+    this.testShapeModel = testShapeModel;
 
     // Put a reference to this connection model on the window so that we can access it in wrappers that facilitate
     // communication between device and simulation.
@@ -125,40 +128,12 @@ export default class TangibleConnectionModel {
     const vertexCPosition = labelToPositionMap.get( VertexLabel.VERTEX_C );
     const vertexDPosition = labelToPositionMap.get( VertexLabel.VERTEX_D );
 
-    // all positions defined
+    // all positions defined from tangible/device input
     allowed = !!vertexAPosition! && !!vertexBPosition! && !!vertexCPosition! && !!vertexDPosition!;
 
-    const lineAB = new Line( vertexAPosition!, vertexBPosition! );
-    const lineBC = new Line( vertexBPosition!, vertexCPosition! );
-    const lineCD = new Line( vertexCPosition!, vertexDPosition! );
-    const lineDA = new Line( vertexDPosition!, vertexAPosition! );
-    const proposedLines = [ lineAB, lineBC, lineCD, lineDA ];
-
-    // No vertices overlap (0 length)
     if ( allowed ) {
-      allowed = _.every( proposedLines, proposedLine => proposedLine.getArcLength() > 0 );
-    }
-
-    // No lines intersect
-    // REVIEW: Could this be simpler? - Why isn't this using QuadrilateralShapeModel.isShapeAllowed?
-    // If that doesn't work out, we should look into simplifying and optimizing.
-    if ( allowed ) {
-      for ( let i = 0; i < proposedLines.length; i++ ) {
-        const firstLine = proposedLines[ i ];
-        for ( let j = 0; j < proposedLines.length; j++ ) {
-          const secondLine = proposedLines[ j ];
-          if ( firstLine !== secondLine ) {
-            if ( Line.intersectOther( firstLine, secondLine ).length > 0 ) {
-              allowed = false;
-              break;
-            }
-          }
-        }
-
-        if ( !allowed ) {
-          break;
-        }
-      }
+      this.testShapeModel.setVertexPositions( labelToPositionMap );
+      allowed = QuadrilateralShapeModel.isQuadrilateralShapeAllowed( this.testShapeModel );
     }
 
     return allowed;
