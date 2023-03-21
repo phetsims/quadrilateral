@@ -137,10 +137,6 @@ export default class SideDescriber {
    * "2 and three-quarter units".
    */
   public getSideUnitsDescription(): NullableQuadrilateralStringType {
-
-    // REVIEW: The "multiple returns" idea will help so much here - Great!
-    let sideDescription: NullableQuadrilateralStringType = null;
-
     const shapeModel = this.quadrilateralShapeModel;
     const sideLength = this.side.lengthProperty.value;
 
@@ -151,24 +147,24 @@ export default class SideDescriber {
       if ( numberOfFullUnits === 1 ) {
 
         // "one unit"
-        sideDescription = oneUnitStringProperty;
+        return oneUnitStringProperty;
       }
       else {
 
         // "3 units"
-        sideDescription = StringUtils.fillIn( numberOfUnitsPatternStringProperty, {
+        return StringUtils.fillIn( numberOfUnitsPatternStringProperty, {
           numberOfUnits: numberOfFullUnits
         } );
       }
     }
     else if ( shapeModel.isInterLengthEqualToOther( remainder, QuadrilateralSide.SIDE_SEGMENT_LENGTH / 2 ) ) {
       if ( numberOfFullUnits === 0 ) {
-        sideDescription = oneHalfUnitsStringProperty;
+        return oneHalfUnitsStringProperty;
       }
       else {
 
         // three and a half units
-        sideDescription = StringUtils.fillIn( numberOfUnitsAndAHalfPatternStringProperty, {
+        return StringUtils.fillIn( numberOfUnitsAndAHalfPatternStringProperty, {
           numberOfUnits: numberOfFullUnits
         } );
       }
@@ -177,12 +173,12 @@ export default class SideDescriber {
       if ( numberOfFullUnits === 0 ) {
 
         // "one quarter units"
-        sideDescription = oneQuarterUnitStringProperty;
+        return oneQuarterUnitStringProperty;
       }
       else {
 
         // 2 and three-quarter units
-        sideDescription = StringUtils.fillIn( numberAndOneQuarterUnitsPatternStringProperty, {
+        return StringUtils.fillIn( numberAndOneQuarterUnitsPatternStringProperty, {
           fullNumber: numberOfFullUnits
         } );
       }
@@ -191,12 +187,12 @@ export default class SideDescriber {
       if ( numberOfFullUnits === 0 ) {
 
         // "one quarter units"
-        sideDescription = threeQuarterUnitsStringProperty;
+        return threeQuarterUnitsStringProperty;
       }
       else {
 
         // 2 and three-quarter units
-        sideDescription = StringUtils.fillIn( numberAndThreeQuarterUnitsPatternStringProperty, {
+        return StringUtils.fillIn( numberAndThreeQuarterUnitsPatternStringProperty, {
           fullNumber: numberOfFullUnits
         } );
       }
@@ -207,11 +203,11 @@ export default class SideDescriber {
       const numberOfExtraCornerUnits = numberOfQuarterUnits % 4;
       if ( numberOfExtraCornerUnits === 0 ) {
         if ( numberOfFullUnits === 0 ) {
-          sideDescription = aboutOneUnitStringProperty;
+          return aboutOneUnitStringProperty;
         }
         else {
           // about 3 units (just under, currently)
-          sideDescription = StringUtils.fillIn( aboutNumberUnitsPatternStringProperty, {
+          return StringUtils.fillIn( aboutNumberUnitsPatternStringProperty, {
             number: numberOfFullUnits + 1
           } );
         }
@@ -219,11 +215,11 @@ export default class SideDescriber {
       else if ( numberOfExtraCornerUnits === 2 ) {
         if ( numberOfFullUnits === 0 ) {
           // about one-half units
-          sideDescription = aboutOneHalfUnitsStringProperty;
+          return aboutOneHalfUnitsStringProperty;
         }
         else {
           // about 1 and a half units
-          sideDescription = StringUtils.fillIn( aboutNumberAndAHalfUnitsPatternStringProperty, {
+          return StringUtils.fillIn( aboutNumberAndAHalfUnitsPatternStringProperty, {
             number: numberOfFullUnits
           } );
         }
@@ -234,7 +230,7 @@ export default class SideDescriber {
 
           // about three-quarter units
           // about one-quarter units
-          sideDescription = StringUtils.fillIn( aboutNumberQuarterUnitsPatternStringProperty, {
+          return StringUtils.fillIn( aboutNumberQuarterUnitsPatternStringProperty, {
             number: numberOfExtraCornerUnits
           } );
         }
@@ -242,15 +238,13 @@ export default class SideDescriber {
 
           // about 2 and one quarter units
           // about 3 and three-quarter units
-          sideDescription = StringUtils.fillIn( aboutFullNumberAndNumberQuarterUnitsPatternStringProperty, {
+          return StringUtils.fillIn( aboutFullNumberAndNumberQuarterUnitsPatternStringProperty, {
             fullNumber: numberOfFullUnits,
             number: numberOfExtraCornerUnits
           } );
         }
       }
     }
-
-    return sideDescription;
   }
 
   /**
