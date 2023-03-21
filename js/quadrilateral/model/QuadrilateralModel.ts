@@ -181,7 +181,7 @@ export default class QuadrilateralModel implements TModel {
   }
 
   /**
-   * Get the closest crid position to the provided position, in the direction of the provided directionVector.
+   * Get the closest grid position to the provided position, in the direction of the provided directionVector.
    * Use this when you need to move to the closest grid position in one dimension, instead of moving to the
    * closest grid position in both X and Y.
    */
@@ -190,10 +190,10 @@ export default class QuadrilateralModel implements TModel {
     let nextY = currentPosition.y;
 
     if ( directionVector.x !== 0 ) {
-      nextX = this.getNextPositionInDimension( currentPosition.x, directionVector.x > 0 );
+      nextX = this.getNextPositionInDimension( currentPosition, directionVector, 'x' );
     }
     else if ( directionVector.y !== 0 ) {
-      nextY = this.getNextPositionInDimension( currentPosition.y, directionVector.y > 0 );
+      nextY = this.getNextPositionInDimension( currentPosition, directionVector, 'y' );
     }
 
     return new Vector2( nextX, nextY );
@@ -201,10 +201,10 @@ export default class QuadrilateralModel implements TModel {
 
   /**
    * Returns a new position in x or y dimensions, used by getClosestGridPositionInDirection.
-   * @param currentValue - Current position in x or y dimensions
-   * @param gettingLarger - Are you getting larger in that dimension?
    */
-  private getNextPositionInDimension( currentValue: number, gettingLarger: boolean ): number {
+  private getNextPositionInDimension( currentPosition: Vector2, directionVector: Vector2, dimension: 'x' | 'y' ): number {
+    const currentValue = currentPosition[ dimension ];
+    const gettingLarger = directionVector[ dimension ] > 0;
 
     // The interval in x and y we snap to
     const interval = this.vertexIntervalProperty.value;
