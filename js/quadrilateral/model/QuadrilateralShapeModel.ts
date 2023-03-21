@@ -572,7 +572,8 @@ export default class QuadrilateralShapeModel {
    */
   private setVertexDragAreas(): void {
 
-    // TODO: What is this dilation and value??
+    // available drag areas go way outside of model bounds, constraint within model bounds is implemented by
+    // a bounds.closestPointTo check to support smooth movement around the edge of bounds
     const dilatedBounds = QuadrilateralConstants.MODEL_BOUNDS.dilated( 1 );
 
     this.vertexA.dragAreaProperty.set( QuadrilateralUtils.createVertexArea( dilatedBounds, this.vertexA, this.vertexB, this.vertexC, this.vertexD, this.validateShape ) );
