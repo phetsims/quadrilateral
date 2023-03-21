@@ -161,50 +161,15 @@ export default class QuadrilateralUtils {
       secondRay = new Ray2( vertex2.positionProperty.value, secondRayDirection );
     }
 
-    // REVIEW: There is some duplication and complexity in the following part. Can it be simplified?
+    // Find the intersection points between the calculated rays and directed boundary lines.
     let firstRayIntersectionLinePair: null | LineIntersectionPair = null;
     let secondRayIntersectionLinePair: null | LineIntersectionPair = null;
-
     directedLines.forEach( line => {
-      const firstLineIntersections = line.intersection( firstRay! );
-      const secondLineIntersections = line.intersection( secondRay! );
-
-      if ( firstLineIntersections.length > 0 ) {
-        firstRayIntersectionLinePair = {
-          line: line,
-          intersectionPoint: firstLineIntersections[ 0 ].point
-        };
+      if ( firstRayIntersectionLinePair === null ) {
+        firstRayIntersectionLinePair = QuadrilateralUtils.getLineIntersectionPair( firstRay!, line );
       }
-      else {
-
-        // There wasn't an intersection, the ray intersected exactly with a corner of the bounds, which is not
-        // a defined intersection according to Kite.
-        const intersectionPoint = QuadrilateralUtils.getLinePositionAlongRay( firstRay!, line );
-        if ( intersectionPoint ) {
-          firstRayIntersectionLinePair = {
-            line: line,
-            intersectionPoint: intersectionPoint
-          };
-        }
-      }
-
-      if ( secondLineIntersections.length > 0 ) {
-        secondRayIntersectionLinePair = {
-          line: line,
-          intersectionPoint: secondLineIntersections[ 0 ].point
-        };
-      }
-      else {
-
-        // There wasn't an intersection, the ray intersected exactly with a corner of the bounds, which is not
-        // a defined intersection according to Kite.
-        const intersectionPoint = QuadrilateralUtils.getLinePositionAlongRay( secondRay!, line );
-        if ( intersectionPoint ) {
-          secondRayIntersectionLinePair = {
-            line: line,
-            intersectionPoint: intersectionPoint
-          };
-        }
+      if ( secondRayIntersectionLinePair === null ) {
+        secondRayIntersectionLinePair = QuadrilateralUtils.getLineIntersectionPair( secondRay!, line );
       }
     } );
     assert && assert( firstRayIntersectionLinePair && secondRayIntersectionLinePair, 'ray intersections were not found' );
@@ -247,6 +212,36 @@ export default class QuadrilateralUtils {
     shape.close();
 
     return shape;
+  }
+
+  /**
+   * Get the LineIntersectionPair from the intersection between the ray and the Line. Handles a special case where
+   * the ray intersects the exact start/end of a Line. If there is no intersection point, returns null.
+   */
+  private static getLineIntersectionPair( ray: Ray2, line: Line ): LineIntersectionPair | null {
+    let intersectionLinePair: null | LineIntersectionPair = null;
+
+    const rayIntersections = line.intersection( ray );
+    if ( rayIntersections.length > 0 ) {
+      intersectionLinePair = {
+        line: line,
+        intersectionPoint: rayIntersections[ 0 ].point
+      };
+    }
+    else {
+
+      // There wasn't an intersection, the ray intersected exactly with a corner of the bounds, which is not
+      // a defined intersection according to Kite.
+      const intersectionPoint = QuadrilateralUtils.getLinePositionAlongRay( ray, line );
+      if ( intersectionPoint ) {
+        intersectionLinePair = {
+          line: line,
+          intersectionPoint: intersectionPoint
+        };
+      }
+    }
+
+    return intersectionLinePair;
   }
 
   /**
