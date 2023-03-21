@@ -23,7 +23,6 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import Multilink from '../../../../axon/js/Multilink.js';
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 
 // constants
 const cornerAStringProperty = QuadrilateralStrings.a11y.cornerAStringProperty;

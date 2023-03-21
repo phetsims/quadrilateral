@@ -51,8 +51,8 @@ export default class QuadrilateralScreenView extends ScreenView {
   private readonly quadrilateralDescriber: QuadrilateralDescriber;
   private readonly quadrilateralAlerter: QuadrilateralAlerter;
 
-  // REVIEW: Do we want prototype components going out in production code? Or move to a subclass? Or make nullable?
-  private readonly quadrilateralTangibleController: QuadrilateralTangibleController;
+  // Prototype components are only constructed and available when running with relevant query parameters.
+  private readonly quadrilateralTangibleController: QuadrilateralTangibleController | null = null;
   private readonly quadrilateralMediaPipe: QuadrilateralMediaPipe | null = null;
 
   public constructor( model: QuadrilateralModel, optionsModel: QuadrilateralOptionsModel, tandem: Tandem ) {
@@ -125,7 +125,9 @@ export default class QuadrilateralScreenView extends ScreenView {
     } );
 
     // tangible components
-    this.quadrilateralTangibleController = new QuadrilateralTangibleController( model );
+    if ( QuadrilateralQueryParameters.deviceConnection || MediaPipeQueryParameters.cameraInput === 'hands' ) {
+      this.quadrilateralTangibleController = new QuadrilateralTangibleController( model );
+    }
 
     // this parent only has children if relevant query params are provided, but is always created for easy layout
     const deviceConnectionParentNode = new VBox( {
@@ -134,13 +136,13 @@ export default class QuadrilateralScreenView extends ScreenView {
     } );
     if ( QuadrilateralQueryParameters.deviceConnection ) {
       deviceConnectionParentNode.children = [
-        new QuadrilateralTangibleControls( model.tangibleConnectionModel, this.quadrilateralTangibleController, tandem.createTandem( 'connectionControls' ) )
+        new QuadrilateralTangibleControls( model.tangibleConnectionModel, this.quadrilateralTangibleController!, tandem.createTandem( 'connectionControls' ) )
       ];
       deviceConnectionParentNode.top = gridNode.top;
       deviceConnectionParentNode.left = resetAllButton.left;
     }
     if ( MediaPipeQueryParameters.cameraInput === 'hands' ) {
-      this.quadrilateralMediaPipe = new QuadrilateralMediaPipe( model, this.quadrilateralTangibleController );
+      this.quadrilateralMediaPipe = new QuadrilateralMediaPipe( model, this.quadrilateralTangibleController! );
     }
 
     // voicing components
