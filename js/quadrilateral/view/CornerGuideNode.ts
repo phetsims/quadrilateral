@@ -51,7 +51,11 @@ export default class CornerGuideNode extends Node {
    * @param modelViewTransform
    */
   public constructor( vertex1: QuadrilateralVertex, vertex2: QuadrilateralVertex, visibleProperty: BooleanProperty, shapeModel: QuadrilateralShapeModel, modelViewTransform: ModelViewTransform2 ) {
-    super();
+    super( {
+
+      // This node is only visible when "Corner Guides" are enabled by the user
+      visibleProperty: visibleProperty
+    } );
 
     // The guide looks like alternating dark and light wedges along the annulus, we accomplish this with two paths
     const darkAnglePath = new Path( null, {
@@ -141,12 +145,6 @@ export default class CornerGuideNode extends Node {
 
     const arcNode = new Node( { children: [ darkAnglePath, lightAnglePath ] } );
     this.children = [ arcNode, crosshairPath ];
-
-    // This node is only visible when "Corner Guides" are enabled by the user
-    // REVIEW: pass to super({visibleProperty: visibleProperty})
-    visibleProperty.link( visible => {
-      this.visible = visible;
-    } );
 
     // When at a right angle, display the RightAngleIndicator, otherwise the arcs representing angles are shown.
     vertex1.angleProperty.link( angle => {
