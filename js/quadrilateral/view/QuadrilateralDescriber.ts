@@ -278,28 +278,23 @@ export default class QuadrilateralDescriber {
    * this is used when the user hides the shape name in the user interface.
    */
   public getShapePropertiesDescription(): TReadOnlyProperty<string> | string {
-
-    // REVIEW: Recommended to use multiple return statements, please see https://stackoverflow.com/questions/36707/should-a-function-have-only-one-return-statement
-    // - Yes, lets do it!
-    let shapePropertiesDescriptionStringProperty: TReadOnlyProperty<string> | string = '';
-
     const currentShapeName = this.shapeModel.shapeNameProperty.value;
     if ( currentShapeName === NamedQuadrilateral.SQUARE ) {
-      shapePropertiesDescriptionStringProperty = this.getSquareDetailsString();
+      return this.getSquareDetailsString();
     }
     else if ( currentShapeName === NamedQuadrilateral.RECTANGLE ) {
-      shapePropertiesDescriptionStringProperty = this.getRectangleDetailsString();
+      return this.getRectangleDetailsString();
     }
     else if ( currentShapeName === NamedQuadrilateral.RHOMBUS ) {
-      shapePropertiesDescriptionStringProperty = this.getRhombusDetailsString();
+      return this.getRhombusDetailsString();
     }
     else if ( currentShapeName === NamedQuadrilateral.PARALLELOGRAM ) {
-      shapePropertiesDescriptionStringProperty = this.getParallelogramDetailsString();
+      return this.getParallelogramDetailsString();
     }
     else if ( currentShapeName === NamedQuadrilateral.TRAPEZOID ) {
       assert && assert( this.shapeModel.parallelSidePairsProperty.value.length === 1, 'A Trapezoid should have one parallel side pair' );
       const parallelSidePair = this.shapeModel.parallelSidePairsProperty.value[ 0 ];
-      shapePropertiesDescriptionStringProperty = this.getTrapezoidDetailsString( parallelSidePair );
+      return this.getTrapezoidDetailsString( parallelSidePair );
     }
     else if ( currentShapeName === NamedQuadrilateral.ISOSCELES_TRAPEZOID ) {
       assert && assert( this.shapeModel.oppositeEqualSidePairsProperty.value.length === 1,
@@ -310,7 +305,7 @@ export default class QuadrilateralDescriber {
         'A Trapezoid should have one parallel side pair.' );
       const parallelSidePair = this.shapeModel.parallelSidePairsProperty.value[ 0 ];
 
-      shapePropertiesDescriptionStringProperty = this.getIsoscelesTrapezoidDetailsString(
+      return this.getIsoscelesTrapezoidDetailsString(
         oppositeEqualSidePair,
         parallelSidePair
       );
@@ -319,23 +314,23 @@ export default class QuadrilateralDescriber {
       assert && assert( this.shapeModel.oppositeEqualVertexPairsProperty.value.length === 1,
         'A kite should have only one pair of opposite equal vertices' );
       const oppositeEqualVertexPair = this.shapeModel.oppositeEqualVertexPairsProperty.value[ 0 ];
-      shapePropertiesDescriptionStringProperty = this.getKiteDetailsString( oppositeEqualVertexPair, kiteDetailsPatternStringProperty );
+      return this.getKiteDetailsString( oppositeEqualVertexPair, kiteDetailsPatternStringProperty );
     }
     else if ( currentShapeName === NamedQuadrilateral.DART ) {
-      shapePropertiesDescriptionStringProperty = this.getDartDetailsString( dartDetailsPatternStringProperty );
+      return this.getDartDetailsString( dartDetailsPatternStringProperty );
     }
     else if ( currentShapeName === NamedQuadrilateral.CONCAVE_QUADRILATERAL ) {
-      shapePropertiesDescriptionStringProperty = this.getConcaveQuadrilateralDetailsString();
+      return this.getConcaveQuadrilateralDetailsString();
     }
     else if ( currentShapeName === NamedQuadrilateral.CONVEX_QUADRILATERAL ) {
-      shapePropertiesDescriptionStringProperty = this.getConvexQuadrilateralDetailsString();
+      return this.getConvexQuadrilateralDetailsString();
     }
     else if ( currentShapeName === NamedQuadrilateral.TRIANGLE ) {
-      shapePropertiesDescriptionStringProperty = this.getTriangleDetailsString();
+      return this.getTriangleDetailsString();
     }
 
-    assert && assert( shapePropertiesDescriptionStringProperty !== '', 'Could not find shapePropertiesDescriptionProperty for shape.' );
-    return shapePropertiesDescriptionStringProperty;
+    assert && assert( false, 'Could not find shapePropertiesDescriptionProperty for shape.' );
+    return '';
   }
 
   /**
@@ -345,30 +340,22 @@ export default class QuadrilateralDescriber {
    * "large"
    */
   public getSizeDescription(): TReadOnlyProperty<string> {
-
-    // REVIEW: Recommended to use multiple return statements, please see https://stackoverflow.com/questions/36707/should-a-function-have-only-one-return-statement
-    // Please search the codebase for other places that this applies.
-    // - Yes, lets do it!
-    //
-    let sizeDescriptionStringProperty: TReadOnlyProperty<string>;
     const area = this.shapeModel.areaProperty.value;
     if ( area < TINY_THRESHOLD ) {
-      sizeDescriptionStringProperty = tinyStringProperty;
+      return tinyStringProperty;
     }
     else if ( area < VERY_SMALL_THRESHOLD ) {
-      sizeDescriptionStringProperty = verySmallStringProperty;
+      return verySmallStringProperty;
     }
     else if ( area < SMALL_THRESHOLD ) {
-      sizeDescriptionStringProperty = smallStringProperty;
+      return smallStringProperty;
     }
     else if ( area < MEDIUM_SIZED_THRESHOLD ) {
-      sizeDescriptionStringProperty = mediumSizedStringProperty;
+      return mediumSizedStringProperty;
     }
     else {
-      sizeDescriptionStringProperty = largeStringProperty;
+      return largeStringProperty;
     }
-
-    return sizeDescriptionStringProperty;
   }
 
   /**
