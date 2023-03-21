@@ -201,27 +201,44 @@ export default class QuadrilateralModel implements TModel {
 
   /**
    * Returns a new position in x or y dimensions, used by getClosestGridPositionInDirection.
-   * @param currentVal - Current position in x or y dimensions
+   * @param currentValue - Current position in x or y dimensions
    * @param gettingLarger - Are you getting larger in that dimension?
    */
-  private getNextPositionInDimension( currentVal: number, gettingLarger: boolean ): number {
+  private getNextPositionInDimension( currentValue: number, gettingLarger: boolean ): number {
+
+    // The interval in x and y we snap to
     const interval = this.vertexIntervalProperty.value;
-    let remainder = Math.abs( currentVal ) % interval;
+
+    let remainder = Math.abs( currentValue % interval );
     const onTheInterval = Utils.equalsEpsilon( remainder, 0, 0.01 );
 
-    if ( currentVal < 0 ) {
+    // The remainder calculated above is the distance between currentValue and the closest interval that is less than
+    // currentValue. So if currentValue is less than 0, the remainder needs to be the amount that currentValue is
+    // LESS than the interval to behave similarly.
+    if ( currentValue < 0 ) {
       remainder = interval - remainder;
     }
 
     let delta;
-    if ( gettingLarger ) {
-      delta = onTheInterval ? interval : interval - remainder;
+    if ( onTheInterval ) {
+
+      // exactly on the interval, delta will be the full interval value to move to the next
+      delta = gettingLarger ? interval : -interval;
+    }
+    else if ( gettingLarger ) {
+
+      // value is getting larger, delta is the distance between the currentValue and the closest interval that is
+      // larger than currentValue
+      delta = interval - remainder;
     }
     else {
-      delta = onTheInterval ? -interval : -remainder;
+
+      // value is getting smaller, delta is the distance between the current value and the closest interval that
+      // is smaller than currentValue.
+      delta = -remainder;
     }
 
-    return currentVal + delta;
+    return currentValue + delta;
   }
 }
 
