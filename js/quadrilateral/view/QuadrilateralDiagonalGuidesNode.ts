@@ -29,22 +29,17 @@ const LINE_NODE_OPTIONS = {
 };
 
 export default class QuadrilateralDiagonalGuidesNode extends Node {
-  public constructor(
-    quadrilateralShapeModel: QuadrilateralShapeModel,
-    visibleProperty: TReadOnlyProperty<boolean>,
-    modelViewTransform: ModelViewTransform2
-  ) {
-    super();
+  public constructor( quadrilateralShapeModel: QuadrilateralShapeModel, visibleProperty: TReadOnlyProperty<boolean>, modelViewTransform: ModelViewTransform2 ) {
+
+    super( {
+      visibleProperty: visibleProperty
+    } );
 
     const lineNode1 = new Line( LINE_NODE_OPTIONS );
     this.addChild( lineNode1 );
 
     const lineNode2 = new Line( LINE_NODE_OPTIONS );
     this.addChild( lineNode2 );
-
-    // Link visibility of the component to the Property controlled by the checkbox
-    // REVIEW: Pass this visibleProperty to the visibleProperty of the Node in super() - Great!
-    visibleProperty.link( visible => { this.visible = visible; } );
 
     Multilink.multilink(
       [ quadrilateralShapeModel.vertexA.positionProperty, quadrilateralShapeModel.vertexC.positionProperty ],
