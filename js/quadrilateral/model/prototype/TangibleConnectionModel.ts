@@ -27,9 +27,10 @@ import Tandem from '../../../../../tandem/js/Tandem.js';
 import NullableIO from '../../../../../tandem/js/types/NullableIO.js';
 import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
-import QuadrilateralShapeModel, { VertexWithProposedPosition } from '../QuadrilateralShapeModel.js';
+import QuadrilateralShapeModel, { VertexLabelToProposedPositionMap } from '../QuadrilateralShapeModel.js';
 import QuadrilateralTangibleOptionsModel from './QuadrilateralTangibleOptionsModel.js';
 import MarkerDetectionModel from './MarkerDetectionModel.js';
+import VertexLabel from '../VertexLabel.js';
 
 export default class TangibleConnectionModel {
 
@@ -113,35 +114,16 @@ export default class TangibleConnectionModel {
   }
 
   /**
-   * Apply a series of checks on VertexWithProposedPositions to make sure that the requested shape does not cross
+   * Apply a series of checks on the proposed positions to make sure that the requested shape does not cross
    * and does not have overlap.
    */
-  public isShapeAllowedForTangible( vertexWithProposedPositions: VertexWithProposedPosition[] ): boolean {
+  public isShapeAllowedForTangible( labelToPositionMap: VertexLabelToProposedPositionMap ): boolean {
     let allowed = true;
 
-    let vertexAPosition: Vector2;
-    let vertexBPosition: Vector2;
-    let vertexCPosition: Vector2;
-    let vertexDPosition: Vector2;
-
-    const shapeModel = this.shapeModel;
-
-    // REVIEW: Do we know each of these has only one association? If not, an earlier definition could be overwritten
-    // by null later - Use a Map instead of VertexWithProposedPosition[] to improve.
-    vertexWithProposedPositions.forEach( vertexWithProposedPosition => {
-      if ( vertexWithProposedPosition.vertex === shapeModel.vertexA ) {
-        vertexAPosition = vertexWithProposedPosition.proposedPosition!;
-      }
-      if ( vertexWithProposedPosition.vertex === shapeModel.vertexB ) {
-        vertexBPosition = vertexWithProposedPosition.proposedPosition!;
-      }
-      if ( vertexWithProposedPosition.vertex === shapeModel.vertexC ) {
-        vertexCPosition = vertexWithProposedPosition.proposedPosition!;
-      }
-      if ( vertexWithProposedPosition.vertex === shapeModel.vertexD ) {
-        vertexDPosition = vertexWithProposedPosition.proposedPosition!;
-      }
-    } );
+    const vertexAPosition = labelToPositionMap.get( VertexLabel.VERTEX_A );
+    const vertexBPosition = labelToPositionMap.get( VertexLabel.VERTEX_B );
+    const vertexCPosition = labelToPositionMap.get( VertexLabel.VERTEX_C );
+    const vertexDPosition = labelToPositionMap.get( VertexLabel.VERTEX_D );
 
     // all positions defined
     allowed = !!vertexAPosition! && !!vertexBPosition! && !!vertexCPosition! && !!vertexDPosition!;

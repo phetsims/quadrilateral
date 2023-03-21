@@ -11,7 +11,7 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
-import QuadrilateralShapeModel, { VertexWithProposedPosition } from './QuadrilateralShapeModel.js';
+import QuadrilateralShapeModel, { VertexLabelToProposedPositionMap } from './QuadrilateralShapeModel.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
@@ -135,11 +135,11 @@ export default class QuadrilateralModel implements TModel {
   /**
    * Returns true if the two vertex positions are allowed for the quadrilateral.
    */
-  public areVertexPositionsAllowed( verticesWithProposedPositions: VertexWithProposedPosition[] ): boolean {
+  public areVertexPositionsAllowed( labelToPositionMap: VertexLabelToProposedPositionMap ): boolean {
 
     // Set the test shape to the current value of the actual shape before proposed positions
     this.quadrilateralTestShapeModel.setFromShape( this.quadrilateralShapeModel );
-    this.quadrilateralTestShapeModel.setVertexPositions( verticesWithProposedPositions );
+    this.quadrilateralTestShapeModel.setVertexPositions( labelToPositionMap );
     return QuadrilateralShapeModel.isQuadrilateralShapeAllowed( this.quadrilateralTestShapeModel );
   }
 

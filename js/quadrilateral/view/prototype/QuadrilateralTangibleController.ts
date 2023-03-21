@@ -9,7 +9,7 @@
 import Vector2 from '../../../../../dot/js/Vector2.js';
 import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralModel from '../../model/QuadrilateralModel.js';
-import QuadrilateralShapeModel, { VertexWithProposedPosition } from '../../model/QuadrilateralShapeModel.js';
+import QuadrilateralShapeModel, { VertexLabelToProposedPositionMap } from '../../model/QuadrilateralShapeModel.js';
 import QuadrilateralUtils from '../../model/QuadrilateralUtils.js';
 import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
 import LinearFunction from '../../../../../dot/js/LinearFunction.js';
@@ -139,14 +139,14 @@ export default class QuadrilateralTangibleController {
     // Constrain to intervals of deviceGridSpacingProperty.value to try to reduce noise
     const constrainedGridPositions = _.map( smoothedPositions, smoothedPosition => this.quadrilateralModel.getClosestGridPosition( smoothedPosition ) );
 
-    const verticesWithProposedPositions = [
-      { vertex: shapeModel.vertexA, proposedPosition: constrainedGridPositions[ 0 ]! },
-      { vertex: shapeModel.vertexB, proposedPosition: constrainedGridPositions[ 1 ]! },
-      { vertex: shapeModel.vertexC, proposedPosition: constrainedGridPositions[ 2 ]! },
-      { vertex: shapeModel.vertexD, proposedPosition: constrainedGridPositions[ 3 ]! }
-    ];
+    const vertexLabelMap = new Map( [
+      [ shapeModel.vertexA.vertexLabel, constrainedGridPositions[ 0 ]! ],
+      [ shapeModel.vertexB.vertexLabel, constrainedGridPositions[ 1 ]! ],
+      [ shapeModel.vertexC.vertexLabel, constrainedGridPositions[ 2 ]! ],
+      [ shapeModel.vertexD.vertexLabel, constrainedGridPositions[ 3 ]! ]
+    ] );
 
-    this.shapeModel.setVertexPositions( verticesWithProposedPositions );
+    this.shapeModel.setVertexPositions( vertexLabelMap );
   }
 
   /**
@@ -156,15 +156,16 @@ export default class QuadrilateralTangibleController {
    *
    * Currently this is being used by the OpenCV prototype and a prototype using MediaPipe.
    */
-  public setPositionsFromAbsolutePositionData( proposedPositions: VertexWithProposedPosition[] ): void {
+  public setPositionsFromAbsolutePositionData( labelToProposedPositionMap: VertexLabelToProposedPositionMap ): void {
     const tangibleConnectionModel = this.tangibleConnectionModel;
 
     // you must calibrate before setting positions from a physical device
     if ( tangibleConnectionModel.physicalToModelTransform !== null && !tangibleConnectionModel.isCalibratingProperty.value ) {
 
       // scale the physical positions to the simulation virtual model
-      const scaledProposedPositions: VertexWithProposedPosition[] = proposedPositions.map( vertexWithProposedPosition => {
-        const proposedPosition = vertexWithProposedPosition.proposedPosition;
+      const labelToConstrainedPositionMap = new Map();
+      labelToProposedPositionMap.forEach( ( proposedPosition, labelKey ) => {
+        const vertex = this.shapeModel.getLabelledVertex( labelKey );
 
         let constrainedPosition: Vector2;
 
@@ -176,7 +177,7 @@ export default class QuadrilateralTangibleController {
           const virtualPosition = tangibleConnectionModel.physicalToModelTransform.modelToViewPosition( proposedPosition );
 
           // apply smoothing over a number of values to reduce noise
-          constrainedPosition = vertexWithProposedPosition.vertex.smoothPosition( virtualPosition );
+          constrainedPosition = vertex.smoothPosition( virtualPosition );
 
           // constrain within model bounds
           constrainedPosition = QuadrilateralConstants.MODEL_BOUNDS.closestPointTo( constrainedPosition );
@@ -184,21 +185,18 @@ export default class QuadrilateralTangibleController {
         else {
 
           // If the value is not reasonable, just fall back to the current position
-          constrainedPosition = vertexWithProposedPosition.vertex.positionProperty.value;
+          constrainedPosition = vertex.positionProperty.value;
         }
 
         // align with model grid positions
         constrainedPosition = this.quadrilateralModel.getClosestGridPosition( constrainedPosition! );
 
-        return {
-          vertex: vertexWithProposedPosition.vertex,
-          proposedPosition: constrainedPosition
-        };
+        labelToConstrainedPositionMap.set( labelKey, constrainedPosition );
       } );
 
       // Only set to the model if the shape is allowed and reasonable (no overlaps, no intersections)
-      if ( tangibleConnectionModel.isShapeAllowedForTangible( scaledProposedPositions ) ) {
-        this.shapeModel.setVertexPositions( scaledProposedPositions );
+      if ( tangibleConnectionModel.isShapeAllowedForTangible( labelToConstrainedPositionMap ) ) {
+        this.shapeModel.setVertexPositions( labelToConstrainedPositionMap );
       }
     }
   }

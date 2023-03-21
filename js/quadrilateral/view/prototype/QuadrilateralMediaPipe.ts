@@ -21,9 +21,10 @@ import quadrilateral from '../../../quadrilateral.js';
 import MediaPipe, { HandLandmarks } from '../../../../../tangible/js/mediaPipe/MediaPipe.js';
 import QuadrilateralModel from '../../model/QuadrilateralModel.js';
 import Vector2 from '../../../../../dot/js/Vector2.js';
-import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
+import QuadrilateralShapeModel, { VertexLabelToProposedPositionMap } from '../../model/QuadrilateralShapeModel.js';
 import MediaPipeQueryParameters from '../../../../../tangible/js/mediaPipe/MediaPipeQueryParameters.js';
 import QuadrilateralTangibleController from './QuadrilateralTangibleController.js';
+import VertexLabel from '../../model/VertexLabel.js';
 
 // aspect ratio of the video stream to map camera coordinates to sim model coordinates
 const streamDimension2 = MediaPipe.videoStreamDimension2;
@@ -42,6 +43,9 @@ type ThumbAndIndexPositions = {
 if ( MediaPipeQueryParameters.cameraInput === 'hands' ) {
   MediaPipe.initialize();
 }
+
+// A reusable map that has proposed vertex positions, to avoid lots of garbage.
+const labelToProposedPositionMap: VertexLabelToProposedPositionMap = new Map();
 
 export default class QuadrilateralMediaPipe extends MediaPipe {
   private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
@@ -84,23 +88,12 @@ export default class QuadrilateralMediaPipe extends MediaPipe {
         const rightHandPositions = sortedPositions[ 1 ];
 
         // package and attempt to update shape
-        const firstPositionProposal = {
-          vertex: this.quadrilateralShapeModel.vertexA,
-          proposedPosition: leftHandPositions.indexPosition
-        };
-        const secondPositionProposal = {
-          vertex: this.quadrilateralShapeModel.vertexB,
-          proposedPosition: rightHandPositions.indexPosition
-        };
-        const thirdPositionProposal = {
-          vertex: this.quadrilateralShapeModel.vertexC,
-          proposedPosition: rightHandPositions.thumbPosition
-        };
-        const fourthPositionProposal = {
-          vertex: this.quadrilateralShapeModel.vertexD,
-          proposedPosition: leftHandPositions.thumbPosition
-        };
-        this.tangibleController.setPositionsFromAbsolutePositionData( [ firstPositionProposal, secondPositionProposal, thirdPositionProposal, fourthPositionProposal ] );
+        labelToProposedPositionMap.set( VertexLabel.VERTEX_A, leftHandPositions.indexPosition );
+        labelToProposedPositionMap.set( VertexLabel.VERTEX_B, rightHandPositions.indexPosition );
+        labelToProposedPositionMap.set( VertexLabel.VERTEX_C, rightHandPositions.thumbPosition );
+        labelToProposedPositionMap.set( VertexLabel.VERTEX_D, leftHandPositions.thumbPosition );
+
+        this.tangibleController.setPositionsFromAbsolutePositionData( labelToProposedPositionMap );
       }
     }
   }

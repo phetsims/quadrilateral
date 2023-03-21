@@ -35,12 +35,7 @@ import SideLabel from './SideLabel.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 
 // Used when verifying that QuadrilateralVertex positions are valid before setting to the model.
-export type VertexWithProposedPosition = {
-  vertex: QuadrilateralVertex;
-
-  // This may not be available if something goes wrong with the marker detection
-  proposedPosition?: Vector2;
-};
+export type VertexLabelToProposedPositionMap = Map<VertexLabel, Vector2>;
 
 type QuadrilateralShapeModelOptions = {
 
@@ -386,24 +381,17 @@ export default class QuadrilateralShapeModel {
    * all are set. This way you can safely set multiple at a time without transient states where the shape is
    * not valid.
    */
-  public setVertexPositions( verticesWithProposedPositions: VertexWithProposedPosition[] ): void {
+  public setVertexPositions( labelToPositionMap: VertexLabelToProposedPositionMap ): void {
 
     this.setPropertiesDeferred( true );
 
-    // set all positions
-    verticesWithProposedPositions.forEach( vertexWithProposedPosition => {
+    labelToPositionMap.forEach( ( positionValue, labelKey ) => {
+      const vertex = this.getLabelledVertex( labelKey );
 
       // this is a new Vector2 instance so even if x,y values are the same as the old value it will trigger
       // listeners without this check
-      const proposedPosition = vertexWithProposedPosition.proposedPosition!;
-
-      // Review - should VertexWithProposedPositions use VertexLabel instead of the Vertex?
-      // We need to look-up the Vertex again here because we may have been provided a Vertex from a different
-      // QuadrilateralShapeModel instance.
-      const thisVertex = this.getLabelledVertex( vertexWithProposedPosition.vertex.vertexLabel );
-      assert && assert( proposedPosition, 'proposedPosition must be defined to set positions' );
-      if ( !proposedPosition.equals( thisVertex.positionProperty.value ) ) {
-        thisVertex.positionProperty.set( proposedPosition );
+      if ( !positionValue.equals( vertex.positionProperty.value ) ) {
+        vertex.positionProperty.value = positionValue;
       }
     } );
 

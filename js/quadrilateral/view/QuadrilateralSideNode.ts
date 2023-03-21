@@ -12,7 +12,7 @@ import QuadrilateralSide from '../model/QuadrilateralSide.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralVertex from '../model/QuadrilateralVertex.js';
-import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
+import QuadrilateralShapeModel, { VertexLabelToProposedPositionMap } from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import { Line, Shape } from '../../../../kite/js/imports.js';
 import SideDescriber from './SideDescriber.js';
@@ -29,6 +29,9 @@ const FOCUS_HIGHLIGHT_DILATION = 15;
 
 type SelfOptions = EmptySelfOptions;
 type SideNodeOptions = SelfOptions & StrictOmit<QuadrilateralMovableNodeOptions, 'grabbedSoundOutputLevel' | 'grabbedSound'>;
+
+// Reusable map that saves proposed vertex positions, to avoid excessive garbage.
+const scratchLabelToPositionMap: VertexLabelToProposedPositionMap = new Map();
 
 class QuadrilateralSideNode extends QuadrilateralMovableNode {
 
@@ -276,16 +279,14 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
           const proposedVertex1Position = side.vertex1.positionProperty.value.plus( smallestDeltaVector );
           const proposedVertex2Position = side.vertex2.positionProperty.value.plus( smallestDeltaVector );
 
-          const verticesWithProposedPositions = [
-            { vertex: side.vertex1, proposedPosition: proposedVertex1Position },
-            { vertex: side.vertex2, proposedPosition: proposedVertex2Position }
-          ];
+          scratchLabelToPositionMap.clear();
+          scratchLabelToPositionMap.set( side.vertex1.vertexLabel, proposedVertex1Position );
+          scratchLabelToPositionMap.set( side.vertex2.vertexLabel, proposedVertex2Position );
 
           // only update positions if both are allowed
-          // const positionsAllowed = quadrilateralModel.areVertexPositionsAllowed( side.vertex1, proposedVertex1Position, side.vertex2, proposedVertex2Position );
-          const positionsAllowed = quadrilateralModel.areVertexPositionsAllowed( verticesWithProposedPositions );
+          const positionsAllowed = quadrilateralModel.areVertexPositionsAllowed( scratchLabelToPositionMap );
           if ( positionsAllowed ) {
-            this.quadrilateralShapeModel.setVertexPositions( verticesWithProposedPositions );
+            this.quadrilateralShapeModel.setVertexPositions( scratchLabelToPositionMap );
           }
 
           this.updateBlockedState( !positionsAllowed, !inBounds );
@@ -356,10 +357,10 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
     // moving two vertices at the same time we need to check the validity after both have moved, checking the shape
     // moving one vertex at a time may result in incorrect results since that is not the shape we are ultimately
     // going to create with this change.
-    this.scratchShapeModel.setVertexPositions( [
-      { vertex: this.scratchSide.vertex1, proposedPosition: proposedVertex1Position },
-      { vertex: this.scratchSide.vertex2, proposedPosition: proposedVertex2Position }
-    ] );
+    scratchLabelToPositionMap.clear();
+    scratchLabelToPositionMap.set( this.scratchSide.vertex1.vertexLabel, proposedVertex1Position );
+    scratchLabelToPositionMap.set( this.scratchSide.vertex2.vertexLabel, proposedVertex2Position );
+    this.scratchShapeModel.setVertexPositions( scratchLabelToPositionMap );
 
     const isShapeAllowed = QuadrilateralShapeModel.isQuadrilateralShapeAllowed( this.scratchShapeModel );
     if ( isShapeAllowed ) {
@@ -367,10 +368,7 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
       // signify to the Alerter that it will be time to generate a new object response from input
       this.side.voicingObjectResponseDirty = true;
 
-      this.quadrilateralShapeModel.setVertexPositions( [
-        { vertex: this.side.vertex1, proposedPosition: proposedVertex1Position },
-        { vertex: this.side.vertex2, proposedPosition: proposedVertex2Position }
-      ] );
+      this.quadrilateralShapeModel.setVertexPositions( scratchLabelToPositionMap );
     }
 
     this.updateBlockedState( !isShapeAllowed, !inBounds );
@@ -387,7 +385,10 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
   private rotateVertexAroundOther( anchorVertex: QuadrilateralVertex, armVertex: QuadrilateralVertex, modelDelta: Vector2 ): void {
     const modelPosition = armVertex.positionProperty.get().plus( modelDelta );
     const proposedPosition = this.quadrilateralModel.getClosestGridPosition( modelPosition );
-    if ( this.quadrilateralModel.areVertexPositionsAllowed( [ { vertex: armVertex, proposedPosition: proposedPosition } ] ) ) {
+
+    scratchLabelToPositionMap.clear();
+    scratchLabelToPositionMap.set( armVertex.vertexLabel, proposedPosition );
+    if ( this.quadrilateralModel.areVertexPositionsAllowed( scratchLabelToPositionMap ) ) {
       armVertex.positionProperty.value = proposedPosition;
     }
   }

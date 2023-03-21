@@ -24,12 +24,16 @@ import QuadrilateralMovableNode, { QuadrilateralMovableNodeOptions } from './Qua
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import { VertexLabelToProposedPositionMap } from '../model/QuadrilateralShapeModel.js';
 
 // constants
 const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
 
 type SelfOptions = EmptySelfOptions;
 type VertexNodeOptions = SelfOptions & StrictOmit<QuadrilateralMovableNodeOptions, 'grabbedSound'>;
+
+// Reusable map that saves proposed vertex positions, to avoid excessive garbage.
+const scratchLabelToPositionMap: VertexLabelToProposedPositionMap = new Map();
 
 export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
   private readonly quadrilateralModel: QuadrilateralModel;
@@ -104,7 +108,8 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
         const inBoundsPosition = quadrilateralModel.vertexDragBounds.closestPointTo( proposedPosition );
         const isAgainstBounds = !inBoundsPosition.equals( proposedPosition );
 
-        const isPositionAllowed = quadrilateralModel.areVertexPositionsAllowed( [ { vertex: vertex, proposedPosition: inBoundsPosition } ] );
+        scratchLabelToPositionMap.set( vertex.vertexLabel, inBoundsPosition );
+        const isPositionAllowed = quadrilateralModel.areVertexPositionsAllowed( scratchLabelToPositionMap );
         if ( isPositionAllowed ) {
 
           // only update and trigger a new Voicing response if the position has changed.
@@ -148,7 +153,9 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
         // constrain to the allowable positions in the model along the grid
         const constrainedPosition = quadrilateralModel.getClosestGridPosition( inBoundsPosition );
 
-        const isPositionAllowed = quadrilateralModel.areVertexPositionsAllowed( [ { vertex: vertex, proposedPosition: constrainedPosition } ] );
+        scratchLabelToPositionMap.clear();
+        scratchLabelToPositionMap.set( vertex.vertexLabel, constrainedPosition );
+        const isPositionAllowed = quadrilateralModel.areVertexPositionsAllowed( scratchLabelToPositionMap );
 
         if ( isPositionAllowed ) {
           vertex.positionProperty.value = constrainedPosition;
