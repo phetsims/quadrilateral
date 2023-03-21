@@ -90,21 +90,40 @@ export default class QuadrilateralScreenView extends ScreenView {
       } );
 
     // shape controls components
-    const shapeNameDisplay = new QuadrilateralShapeNameDisplay( visibilityModel.shapeNameVisibleProperty, model.quadrilateralShapeModel.shapeNameProperty, this.quadrilateralDescriber, tandem.createTandem( 'quadrilateralShapeNameDisplay' ) );
-    const resetShapeButton = new ResetShapeButton( model.quadrilateralShapeModel, tandem.createTandem( 'resetShapeButton' ) );
-    const shapeSoundsCheckbox = new ShapeSoundsCheckbox( model.shapeSoundEnabledProperty, tandem.createTandem( 'shapeSoundsCheckbox' ) );
+    const shapeNameDisplay = new QuadrilateralShapeNameDisplay(
+      visibilityModel.shapeNameVisibleProperty,
+      model.quadrilateralShapeModel.shapeNameProperty,
+      this.quadrilateralDescriber,
+      tandem.createTandem( 'quadrilateralShapeNameDisplay' )
+    );
+    const resetShapeButton = new ResetShapeButton(
+      model.quadrilateralShapeModel,
+      tandem.createTandem( 'resetShapeButton' )
+    );
+    const shapeSoundsCheckbox = new ShapeSoundsCheckbox(
+      model.shapeSoundEnabledProperty,
+      tandem.createTandem( 'shapeSoundsCheckbox' )
+    );
 
     // quadrilateral shape and grid components
-    this.quadrilateralNode = new QuadrilateralNode( model, this.modelViewTransform, this.layoutBounds, this.quadrilateralDescriber, {
-      tandem: tandem.createTandem( 'quadrilateralNode' )
-    } );
+    this.quadrilateralNode = new QuadrilateralNode(
+      model,
+      this.modelViewTransform,
+      this.layoutBounds,
+      this.quadrilateralDescriber, {
+        tandem: tandem.createTandem( 'quadrilateralNode' )
+      } );
 
     // REVIEW: In this case and others like it, we are plucking several attributes from the model, (potentially) renaming them
     // and passing them through. This makes it difficult to trace back to the source.
     // An alternative is to pass the entire model through, and use TypeScript to narrow what is accessible
     // Note the visibilityModel is also part of the model.
     // - Cool, Ill review and update to use pick
-    const diagonalGuidesNode = new QuadrilateralDiagonalGuidesNode( model.quadrilateralShapeModel, visibilityModel.diagonalGuidesVisibleProperty, this.modelViewTransform );
+    const diagonalGuidesNode = new QuadrilateralDiagonalGuidesNode(
+      model.quadrilateralShapeModel,
+      visibilityModel.diagonalGuidesVisibleProperty,
+      this.modelViewTransform
+    );
     const interactionCueNode = new QuadrilateralInteractionCueNode(
       model.quadrilateralShapeModel,
       model.tangibleConnectionModel.connectedToDeviceProperty,
