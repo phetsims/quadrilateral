@@ -85,8 +85,6 @@ export default class EmphasisTracksSoundView extends TracksSoundView {
 
     // desired output levels for each sound (as requested by design after manually editing the gain)
     // See https://github.com/phetsims/quadrilateral/issues/175#issuecomment-1400645437
-    // REVIEW: Many of the Maps in this sim are initialized with [[]], want to do that for this one too?
-    // - Sounds good!
     this.indexToOutputLevelMap.set( 0, 0.75 );
     this.indexToOutputLevelMap.set( 1, 0.75 );
     this.indexToOutputLevelMap.set( 2, 1 );
