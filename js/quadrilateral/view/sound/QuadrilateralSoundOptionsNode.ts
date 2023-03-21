@@ -72,13 +72,10 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
       uncheckedContextResponse: tracksPlayForeverUncheckedContextResponseStringProperty
     } );
 
-    // REVIEW: inline?
-    const content = new Node( {
-      children: [ soundDesignLabelText, soundDesignDescriptionText, soundDesignRadioButtonGroup, tracksPlayForeverCheckbox ]
-    } );
-
     super( {
-      contentNode: content
+      contentNode: new Node( {
+        children: [ soundDesignLabelText, soundDesignDescriptionText, soundDesignRadioButtonGroup, tracksPlayForeverCheckbox ]
+      } )
     } );
 
     // layout
