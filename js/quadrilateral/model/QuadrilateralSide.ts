@@ -44,8 +44,9 @@ export default class QuadrilateralSide extends QuadrilateralMovable {
   // sides can never overlap
   public static readonly SIDE_WIDTH = 0.1;
 
-  // A Line between Vertex1 and Vertex2, which may be useful for calculations.
-  public readonly modelLine: LineShape;
+  // A Line between Vertex1 and Vertex2, which may be useful for calculations - Property value
+  // is reused to avoid excessive allocations.
+  public readonly modelLineProperty: Property<LineShape>;
 
   // Used to calculate the line shape (full stroked shape) - reused to avoid excessive allocations.
   private readonly scratchLineNode = new Line( 0, 0, 0, 0, {
@@ -65,7 +66,7 @@ export default class QuadrilateralSide extends QuadrilateralMovable {
     this.vertex2 = vertex2;
     this.sideLabel = sideLabel;
 
-    this.modelLine = new LineShape( vertex1.positionProperty.value, vertex2.positionProperty.value );
+    this.modelLineProperty = new Property( new LineShape( vertex1.positionProperty.value, vertex2.positionProperty.value ) );
 
     this.lengthProperty = new NumberProperty( 0, {
       tandem: tandem.createTandem( 'lengthProperty' )
@@ -85,8 +86,11 @@ export default class QuadrilateralSide extends QuadrilateralMovable {
 
     this.lengthProperty.value = Vector2.getDistanceBetweenVectors( vertex2Position, vertex1Position );
 
-    this.modelLine.start = vertex1Position;
-    this.modelLine.end = vertex2Position;
+    // Update the model Line shape and notify listeners (static to avoid excessive Line instances)
+    const modelLine = this.modelLineProperty.value;
+    modelLine.start = vertex1Position;
+    modelLine.end = vertex2Position;
+    this.modelLineProperty.notifyListenersStatic();
 
     this.scratchLineNode.setLine( vertex1Position.x, vertex1Position.y, vertex2Position.x, vertex2Position.y );
     this.shapeProperty.value = this.scratchLineNode.getStrokedShape();

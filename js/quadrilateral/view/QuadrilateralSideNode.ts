@@ -71,11 +71,8 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
     const lineNode = new LineNode( 0, 0, 0, 0 );
 
     // listeners
-    Multilink.multilink( [ side.vertex1.positionProperty, side.vertex2.positionProperty, markersVisibleProperty ], ( vertex1Position, vertex2Position, markersVisible ) => {
+    Multilink.multilink( [ side.modelLineProperty, markersVisibleProperty ], ( modelLine, markersVisible ) => {
       ticksNode.visible = markersVisible;
-
-      // create a single line that will then be divided into segments
-      const fullLine = this.side.modelLine;
 
       // The Shape for our Path - drawn in model coordinates until a transform at the end
       const lineShape = new Shape();
@@ -86,13 +83,13 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
         const lineSegments = [];
 
         // The length of a segment parametrically relative to the full line length
-        const parametricSegmentLength = QuadrilateralSide.SIDE_SEGMENT_LENGTH / fullLine.getArcLength();
+        const parametricSegmentLength = QuadrilateralSide.SIDE_SEGMENT_LENGTH / modelLine.getArcLength();
 
         const numberOfFullSegments = Math.floor( 1 / parametricSegmentLength );
         let t = 0;
         for ( let i = 0; i < numberOfFullSegments && t < 1; i++ ) {
           const nextPosition = Math.min( t + parametricSegmentLength, 1 );
-          lineSegments.push( new Line( fullLine.positionAt( t ), fullLine.positionAt( nextPosition ) ) );
+          lineSegments.push( new Line( modelLine.positionAt( t ), modelLine.positionAt( nextPosition ) ) );
           t = nextPosition;
         }
 
@@ -102,7 +99,7 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
         // Ad the remaining portion of a segment if there is one. t might not be exactly one but close enough
         // that line.positionAt produces a line with zero length, so we only add another segment if it is large enough.
         if ( 1 - t > 0.0005 ) {
-          const remainderLine = new Line( fullLine.positionAt( t ), fullLine.positionAt( 1 ) );
+          const remainderLine = new Line( modelLine.positionAt( t ), modelLine.positionAt( 1 ) );
           lineSegments.push( remainderLine );
 
           // ensure that t was large enough that we didnt create a zero-length line
@@ -137,8 +134,8 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
       else {
 
         // just a rectangular path along the line with the width of SIDE_WIDTH
-        const rightStroke = fullLine.strokeRight( QuadrilateralSide.SIDE_WIDTH );
-        const leftStroke = fullLine.strokeLeft( QuadrilateralSide.SIDE_WIDTH );
+        const rightStroke = modelLine.strokeRight( QuadrilateralSide.SIDE_WIDTH );
+        const leftStroke = modelLine.strokeLeft( QuadrilateralSide.SIDE_WIDTH );
 
         lineShape.moveToPoint( rightStroke[ 0 ].start );
         lineShape.lineToPoint( rightStroke[ 0 ].end );
@@ -152,8 +149,8 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
       sidePath.shape = modelViewTransform.modelToViewShape( lineShape );
 
       // Draw the custom focus highlight so that the highlight surrounds the shape of the line
-      const vertex1ViewPosition = modelViewTransform.modelToViewPosition( vertex1Position );
-      const vertex2ViewPosition = modelViewTransform.modelToViewPosition( vertex2Position );
+      const vertex1ViewPosition = modelViewTransform.modelToViewPosition( modelLine.start );
+      const vertex2ViewPosition = modelViewTransform.modelToViewPosition( modelLine.end );
       lineNode.setLine( vertex1ViewPosition.x, vertex1ViewPosition.y, vertex2ViewPosition.x, vertex2ViewPosition.y );
       lineNode.lineWidth = modelViewTransform.modelToViewDeltaX( QuadrilateralSide.SIDE_WIDTH ) + FOCUS_HIGHLIGHT_DILATION;
       this.focusHighlight = lineNode.getStrokedShape();

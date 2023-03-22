@@ -43,7 +43,7 @@ export default class SideTicksNode extends Path {
   public redraw(): void {
     const shape = new Shape();
 
-    const fullLine = this.side.modelLine;
+    const fullLine = this.side.modelLineProperty.value;
 
     const segmentCount = this.side.lengthProperty.value / QuadrilateralSide.SIDE_SEGMENT_LENGTH;
     const parametricTickSeparation = 1 / ( segmentCount * TICKS_PER_SEGMENT );
