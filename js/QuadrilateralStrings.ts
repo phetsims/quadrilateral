@@ -35,7 +35,6 @@ type StringsType = {
     'dartStringProperty': LinkableProperty<string>;
     'triangleStringProperty': LinkableProperty<string>;
   };
-  'gotItStringProperty': LinkableProperty<string>;
   'keyboardHelpDialog': {
     'moveCornersOrSidesStringProperty': LinkableProperty<string>;
     'moveACornerOrSideStringProperty': LinkableProperty<string>;
@@ -53,10 +52,6 @@ type StringsType = {
   };
   'smallStepsStringProperty': LinkableProperty<string>;
   'a11y': {
-    'screenSummary': {
-      'playAreaDescriptionStringProperty': LinkableProperty<string>;
-      'controlAreaDescriptionStringProperty': LinkableProperty<string>;
-    };
     'cornerLabelsAddedResponseStringProperty': LinkableProperty<string>;
     'cornerLabelsRemovedResponseStringProperty': LinkableProperty<string>;
     'cornerLabelsHintResponseStringProperty': LinkableProperty<string>;
@@ -99,13 +94,6 @@ type StringsType = {
         'onePairOfAdjacentStringProperty': LinkableProperty<string>;
         'onePairOfOppositeStringProperty': LinkableProperty<string>;
         'noStringStringProperty': LinkableProperty<string>;
-        'generalSidePatternStringProperty': LinkableProperty<string>;
-        'generalVertexPatternStringProperty': LinkableProperty<string>;
-        'cornerAnglePatternStringProperty': LinkableProperty<string>;
-        'rightAngleCornersPatternStringProperty': LinkableProperty<string>;
-        'twoEqualVerticesAnglePatternStringProperty': LinkableProperty<string>;
-        'twoPairsOfEqualVerticesPatternStringProperty': LinkableProperty<string>;
-        'cornersAnglePatternStringProperty': LinkableProperty<string>;
       };
       'sidesDescriptionPatternStringProperty': LinkableProperty<string>;
       'longestSidesDescriptionPatternStringProperty': LinkableProperty<string>;
