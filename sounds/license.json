@@ -1,5 +1,5 @@
 {
-  "quadBeatTracksBuildingBaseRhythm.mp3": {
+  "quadTrackBackgroundRhythmComplex.mp3": {
     "text": [
       "Copyright 2002-2021 University of Colorado Boulder"
     ],
@@ -7,7 +7,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "quadBeatTracksBuildingBuildingTracks000.mp3": {
+  "quadTrackLowAscendingFourNotes.mp3": {
     "text": [
       "Copyright 2002-2021 University of Colorado Boulder"
     ],
@@ -15,7 +15,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "quadBeatTracksBuildingBuildingTracks002.mp3": {
+  "quadTrackHighTonesAmbient.mp3": {
     "text": [
       "Copyright 2002-2021 University of Colorado Boulder"
     ],
@@ -23,7 +23,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "quadBeatTracksBuildingBuildingTracks003.mp3": {
+  "quadTrackHighDescendingPingRepeats.mp3": {
     "text": [
       "Copyright 2002-2021 University of Colorado Boulder"
     ],
@@ -31,7 +31,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "quadBeatTracksBuildingBuildingTracks004.mp3": {
+  "quadTrackHighBellsFallAndRise.mp3": {
     "text": [
       "Copyright 2002-2021 University of Colorado Boulder"
     ],
@@ -39,7 +39,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "quadBeatTracksBuildingBuildingTracks005.mp3": {
+  "quadTrackLowPunctualBoops.mp3": {
     "text": [
       "Copyright 2002-2021 University of Colorado Boulder"
     ],
@@ -47,7 +47,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "quadBeatTracksBuildingBuildingTracks006.mp3": {
+  "quadTrackLowDistortedTonalRhythm.mp3": {
     "text": [
       "Copyright 2002-2021 University of Colorado Boulder"
     ],
@@ -55,7 +55,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "quadMelodyTracks004.mp3": {
+  "quadTrackHighBellsShortLoop.mp3": {
     "text": [
       "Copyright 2002-2021 University of Colorado Boulder"
     ],
@@ -63,7 +63,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "quadSimpleBuildingTracks006.mp3": {
+  "quadTrackLowPunctualBoopsSparse.mp3": {
     "text": [
       "Copyright 2002-2021 University of Colorado Boulder"
     ],
@@ -71,7 +71,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "quadBaseBeatSimpler.mp3": {
+  "quadTrackBackgroundRhythmSimple.mp3": {
     "text": [
       "Copyright 2002-2021 University of Colorado Boulder"
     ],
@@ -79,7 +79,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "quadBaseBeatSimplerConcaveQuadrilateralJustRhythmV2.mp3": {
+  "quadTrackBackgroundRhythmInverted.mp3": {
     "text": [
       "Copyright 2002-2021 University of Colorado Boulder"
     ],
@@ -87,7 +87,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "quadSimpleBuildingTracks004Trapezoid.mp3": {
+  "quadTrackHighRepeatedMonotoneRinging.mp3": {
     "text": [
       "Copyright 2002-2021 University of Colorado Boulder"
     ],
