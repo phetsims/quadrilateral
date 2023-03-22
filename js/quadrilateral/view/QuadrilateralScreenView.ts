@@ -118,7 +118,7 @@ export default class QuadrilateralScreenView extends ScreenView {
       this.quadrilateralDescriber, {
         tandem: tandem.createTandem( 'quadrilateralNode' )
       } );
-    
+
     const diagonalGuidesNode = new QuadrilateralDiagonalGuidesNode(
       model.quadrilateralShapeModel,
       visibilityModel.diagonalGuidesVisibleProperty,
@@ -243,19 +243,17 @@ export default class QuadrilateralScreenView extends ScreenView {
 
     let contentString = firstStatement;
 
+    // Append remaining statements, if they exist with current sim state.
     // NOTE: This is bad for i18n but PhET decided that is OK for now.
-    if ( secondStatement ) {
-      contentString += ' ' + secondStatement;
-    }
-    if ( thirdStatement ) {
-      contentString += ' ' + thirdStatement;
-    }
-    if ( fourthStatement ) {
-      contentString += ' ' + fourthStatement;
-    }
-    if ( fifthStatement ) {
-      contentString += ' ' + fifthStatement;
-    }
+    const remainingStatements = [ secondStatement, thirdStatement, fourthStatement, fifthStatement ];
+    remainingStatements.forEach( statement => {
+      if ( statement ) {
+
+        // i18n not supported, but statements might be a string Property
+        const valueString = typeof statement === 'string' ? statement : statement.value;
+        contentString += ' ' + valueString;
+      }
+    } );
 
     return contentString;
   }
