@@ -47,8 +47,9 @@ type StringsType = {
     'shapeSoundOptionsStringProperty': LinkableProperty<string>;
     'shapeSoundOptionsDescriptionStringProperty': LinkableProperty<string>;
     'layerSoundDesignDescriptionStringProperty': LinkableProperty<string>;
-    'independentSoundDesignDescriptionStringProperty': LinkableProperty<string>;
-    'playSoundsForeverStringProperty': LinkableProperty<string>;
+    'emphasisSoundDesignDescriptionStringProperty': LinkableProperty<string>;
+    'soundsPlayForeverDescriptionStringProperty': LinkableProperty<string>;
+    'soundsPlayForeverLabelStringProperty': LinkableProperty<string>;
   };
   'smallStepsStringProperty': LinkableProperty<string>;
   'a11y': {
