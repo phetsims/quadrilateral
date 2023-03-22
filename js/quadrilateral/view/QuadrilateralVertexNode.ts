@@ -107,6 +107,7 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
         const inBoundsPosition = quadrilateralModel.vertexDragBounds.closestPointTo( proposedPosition );
         const isAgainstBounds = !inBoundsPosition.equals( proposedPosition );
 
+        scratchLabelToPositionMap.clear();
         scratchLabelToPositionMap.set( vertex.vertexLabel, inBoundsPosition );
         const isPositionAllowed = quadrilateralModel.areVertexPositionsAllowed( scratchLabelToPositionMap );
         if ( isPositionAllowed ) {
