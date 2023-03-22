@@ -200,45 +200,31 @@ export default class QuadrilateralModel implements TModel {
   }
 
   /**
-   * Returns a new position in x or y dimensions, used by getClosestGridPositionInDirection.
+   * Get the next value on the interval in provided dimension. The following diagram demonstrates how this works:
+   *                interval
+   *           |---------------|
+   *              A
+   *         |---------|
+   * -----C--*-|-*-----|-----*-|-*-----------------
+   *                   |---------|
+   *                        B
+   *  C: currentValue
+   *  A: If the value lands in this region, next position should be left side of interval.
+   *  B: If value lands in this region, next position should be right side of interval.
+   *  *: small offset so if currentValue is very close to the interval, we will round to next interval.
+   *
+   *  So the length of A (or B) is added to currentValue before rounding to the interval.
+   *
+   *  See https://github.com/phetsims/quadrilateral/issues/402 for more implementation notes.
    */
   private getNextPositionInDimension( currentPosition: Vector2, directionVector: Vector2, dimension: 'x' | 'y' ): number {
     const currentValue = currentPosition[ dimension ];
     const gettingLarger = directionVector[ dimension ] > 0;
-
-    // The interval in x and y we snap to
     const interval = this.vertexIntervalProperty.value;
 
-    let remainder = Math.abs( currentValue % interval );
-    const onTheInterval = Utils.equalsEpsilon( remainder, 0, 0.01 );
-
-    // The remainder calculated above is the distance between currentValue and the closest interval that is less than
-    // currentValue. So if currentValue is less than 0, the remainder needs to be the amount that currentValue is
-    // LESS than the interval to behave similarly.
-    if ( currentValue < 0 ) {
-      remainder = interval - remainder;
-    }
-
-    let delta;
-    if ( onTheInterval ) {
-
-      // exactly on the interval, delta will be the full interval value to move to the next
-      delta = gettingLarger ? interval : -interval;
-    }
-    else if ( gettingLarger ) {
-
-      // value is getting larger, delta is the distance between the currentValue and the closest interval that is
-      // larger than currentValue
-      delta = interval - remainder;
-    }
-    else {
-
-      // value is getting smaller, delta is the distance between the current value and the closest interval that
-      // is smaller than currentValue.
-      delta = -remainder;
-    }
-
-    return currentValue + delta;
+    const delta = 0.01 + interval / 2;
+    const sign = gettingLarger ? 1 : -1;
+    return Utils.roundToInterval( currentValue + sign * delta, interval );
   }
 }
 
