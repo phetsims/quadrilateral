@@ -37,7 +37,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     isValidValue: ( value: number ) => value <= ( 2 * Math.PI ) && value >= 0,
     defaultValue: 0.0005
   },
-  
+
   // A tolerance interval for comparing the lengths of two sides.
   interLengthToleranceInterval: {
     type: 'number',
@@ -89,15 +89,6 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     type: 'flag'
   },
 
-  // A query parameter to control the deviceGridSpacingProperty - constrains the vertex positions to intervals of this
-  // value. Useful when connected to a device with noisy sensors because it requires larger changes in value to
-  // update a vertex position.
-  deviceGridSpacing: {
-    type: 'number',
-    defaultValue: 0.025,
-    isValidValue: ( value: number ) => value <= 5 * 0.05
-  },
-
   // How many values to save when smoothing vertex positions when connected to a bluetooth device. Note that
   // this has no impact on the OpenCV prototype input. Only Bluetooth/Serial connections.
   smoothingLength: {
@@ -139,6 +130,16 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     type: 'number',
     defaultValue: 0.0625,
     isValidValue: ( value: number ) => value > 0
+  },
+
+  // A query parameter to control the deviceGridSpacingProperty - constrains the vertex positions to intervals of this
+  // value. Useful when connected to a device with noisy sensors because it requires larger changes in value to
+  // update a vertex position. Default value matches minorVertexInterval so the vertices snap to the minor grid
+  // lines.
+  deviceGridSpacing: {
+    type: 'number',
+    defaultValue: 0.0625,
+    isValidValue: ( value: number ) => value <= 5 * 0.05
   }
 } );
 

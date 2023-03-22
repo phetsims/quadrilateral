@@ -25,7 +25,7 @@ export default class QuadrilateralInputPreferencesNode extends PreferencesPanelS
     const tangibleControlsTitle = new Text( 'Tangible Controls', PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
     const gridSpacingNumberControl = new TangiblePropertyNumberControl( 'Position interval', tangibleOptionsModel.deviceGridSpacingProperty, {
       numberDisplayOptions: {
-        decimalPlaces: 3
+        decimalPlaces: 4
       }
     } );
     const smoothingLengthNumberControl = new TangiblePropertyNumberControl( 'Smoothing length', tangibleOptionsModel.smoothingLengthProperty );
