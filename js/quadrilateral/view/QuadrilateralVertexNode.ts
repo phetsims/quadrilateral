@@ -125,9 +125,6 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
       moveOnHoldDelay: 750,
       moveOnHoldInterval: 50,
 
-      // It seems that press and hold doesn't always move by downDelta. Maybe it should or maybe
-      // we need an option like this.
-      // alwaysMoveByDownDelta: true,
       tandem: providedOptions?.tandem.createTandem( 'keyboardDragListener' )
     } );
     this.addInputListener( keyboardDragListener );
