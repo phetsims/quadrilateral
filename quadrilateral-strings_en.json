@@ -816,10 +816,10 @@
     "preferencesDialog": {
       "tracksPlayForeverCheckbox": {
         "checkedContextResponse": {
-          "value": "Playing shape sounds forever."
+          "value": "Shape sounds play forever."
         },
         "uncheckedContextResponse": {
-          "value": "Playing shape sounds during active transformations."
+          "value": "Shape sounds fade out."
         }
       }
     }

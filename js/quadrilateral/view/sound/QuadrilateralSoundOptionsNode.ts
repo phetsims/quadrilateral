@@ -36,7 +36,7 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
 
   public constructor( model: QuadrilateralSoundOptionsModel, tandem: Tandem ) {
 
-    const soundDesignLabelText = new Text( shapeSoundsOptionsStringProperty, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
+    const soundDesignLabelText = new VoicingText( shapeSoundsOptionsStringProperty, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
     const soundDesignDescriptionText = new VoicingText( shapeSoundsOptionsDescriptionStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS );
 
     const soundDesignRadioButtonGroup = new AquaRadioButtonGroup( model.soundDesignProperty, [
