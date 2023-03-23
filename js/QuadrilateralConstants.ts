@@ -50,7 +50,7 @@ const QuadrilateralConstants = {
   //----------------------------------------------------------------------------------------------------------
   // VIEW CONSTANTS
   //----------------------------------------------------------------------------------------------------------
-  SCREEN_VIEW_X_MARGIN: 15,
+  SCREEN_VIEW_X_MARGIN: 25,
   SCREEN_VIEW_Y_MARGIN: 15,
 
   // spacing between different groups of components in the ScreenView

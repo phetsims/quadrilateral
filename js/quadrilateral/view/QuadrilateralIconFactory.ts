@@ -199,7 +199,7 @@ class QuadrilateralIconFactory {
   public static createLabelledIcon( iconNode: Node, labelString: TReadOnlyProperty<string> ): FlowBox {
     const labelText = new Text( labelString, {
       font: QuadrilateralConstants.SCREEN_TEXT_FONT,
-      maxWidth: 100
+      maxWidth: 85
     } );
 
     return new HBox( {
