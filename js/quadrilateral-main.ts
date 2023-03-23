@@ -34,8 +34,7 @@ const simOptions: SimOptions = {
   credits: {
     softwareDevelopment: 'Jesse Greenberg',
     team: 'Brett Fiedler, Emily B. Moore, Taliesin Smith',
-    contributors: 'Dor Abrahamson, Sofia Tancredi, and the Embodied Design Research Lab (UC Berkeley), ' +
-                  'Scott Lambert, Jenna Gorlewicz, and the CHROME Lab (St. Louis University)',
+    contributors: 'Sofia Tancredi, Dor Abrahamson (Embodied Design Research Lab, UC Berkeley), Scott Lambert, Jenna Gorlewicz (CHROME Lab, St. Louis University)',
     soundDesign: 'Ashton Morris',
 
     //TODO fill in credits with QA team
