@@ -49,7 +49,7 @@ type StringsType = {
     'layerSoundDesignDescriptionStringProperty': LinkableProperty<string>;
     'emphasisSoundDesignDescriptionStringProperty': LinkableProperty<string>;
     'soundsPlayForeverDescriptionStringProperty': LinkableProperty<string>;
-    'soundsPlayForeverLabelStringProperty': LinkableProperty<string>;
+    'playShapeSoundsForeverStringProperty': LinkableProperty<string>;
   };
   'smallStepsStringProperty': LinkableProperty<string>;
   'a11y': {
@@ -306,7 +306,7 @@ type StringsType = {
       'smallerStepsDescriptionStringProperty': LinkableProperty<string>;
     };
     'preferencesDialog': {
-      'tracksPlayForeverCheckbox': {
+      'tracksPlayForeverToggle': {
         'checkedContextResponseStringProperty': LinkableProperty<string>;
         'uncheckedContextResponseStringProperty': LinkableProperty<string>;
       }

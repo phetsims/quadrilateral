@@ -28,9 +28,9 @@ const shapeSoundsOptionsStringProperty = QuadrilateralStrings.preferencesDialog.
 const shapeSoundsOptionsDescriptionStringProperty = QuadrilateralStrings.preferencesDialog.shapeSoundOptionsDescriptionStringProperty;
 const preferencesDialogLayerSoundDesignDescriptionStringProperty = QuadrilateralStrings.preferencesDialog.layerSoundDesignDescriptionStringProperty;
 const preferencesDialogEmphasisSoundDesignDescriptionStringProperty = QuadrilateralStrings.preferencesDialog.emphasisSoundDesignDescriptionStringProperty;
-const preferencesDialogSoundsPlayForeverLabelStringProperty = QuadrilateralStrings.preferencesDialog.soundsPlayForeverLabelStringProperty;
-const tracksPlayForeverCheckedContextResponseStringProperty = QuadrilateralStrings.a11y.preferencesDialog.tracksPlayForeverCheckbox.checkedContextResponseStringProperty;
-const tracksPlayForeverUncheckedContextResponseStringProperty = QuadrilateralStrings.a11y.preferencesDialog.tracksPlayForeverCheckbox.uncheckedContextResponseStringProperty;
+const preferencesDialogPlayShapeSoundsForeverStringProperty = QuadrilateralStrings.preferencesDialog.playShapeSoundsForeverStringProperty;
+const tracksPlayForeverCheckedContextResponseStringProperty = QuadrilateralStrings.a11y.preferencesDialog.tracksPlayForeverToggle.checkedContextResponseStringProperty;
+const tracksPlayForeverUncheckedContextResponseStringProperty = QuadrilateralStrings.a11y.preferencesDialog.tracksPlayForeverToggle.uncheckedContextResponseStringProperty;
 const labelledDescriptionPatternStringProperty = JoistStrings.a11y.preferences.tabs.labelledDescriptionPatternStringProperty;
 
 export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSection {
@@ -41,9 +41,9 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
   public constructor( model: QuadrilateralSoundOptionsModel, tandem: Tandem ) {
 
     // Sounds play forever control
-    const soundsPlayForeverLabel = new Text( preferencesDialogSoundsPlayForeverLabelStringProperty, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
+    const soundsPlayForeverLabel = new Text( preferencesDialogPlayShapeSoundsForeverStringProperty, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
     const soundsPlayForeverToggleSwitch = new ToggleSwitch( model.tracksPlayForeverProperty, false, true, combineOptions<ToggleSwitchOptions>( {}, {
-      a11yName: preferencesDialogSoundsPlayForeverLabelStringProperty,
+      a11yName: preferencesDialogPlayShapeSoundsForeverStringProperty,
       rightValueContextResponse: tracksPlayForeverCheckedContextResponseStringProperty,
       leftValueContextResponse: tracksPlayForeverUncheckedContextResponseStringProperty
     }, PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS ) );
