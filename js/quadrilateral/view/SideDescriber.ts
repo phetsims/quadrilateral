@@ -32,6 +32,7 @@ const equalToStringProperty = QuadrilateralStrings.a11y.voicing.equalToStringPro
 const twiceAsLongAsStringProperty = QuadrilateralStrings.a11y.voicing.twiceAsLongAsStringProperty;
 const halfAsLongAsStringProperty = QuadrilateralStrings.a11y.voicing.halfAsLongAsStringProperty;
 const parallelSideObjectResponsePatternStringProperty = QuadrilateralStrings.a11y.voicing.parallelSideObjectResponsePatternStringProperty;
+const parallelEqualSideObjectResponsePatternStringProperty = QuadrilateralStrings.a11y.voicing.parallelEqualSideObjectResponsePatternStringProperty;
 const sideObjectResponsePatternStringProperty = QuadrilateralStrings.a11y.voicing.sideObjectResponsePatternStringProperty;
 const equalToAdjacentSidesStringProperty = QuadrilateralStrings.a11y.voicing.equalToAdjacentSidesStringProperty;
 const equalToOneAdjacentSideStringProperty = QuadrilateralStrings.a11y.voicing.equalToOneAdjacentSideStringProperty;
@@ -90,7 +91,7 @@ export default class SideDescriber {
    * Returns the Object response for the QuadrilateralSide for Voicing. Returns something like
    *
    * "equal to opposite side, equal to adjacent sides." or
-   * "parallel to and a little longer than opposite, shorter than adjacent sides"
+   * "parallel and a little longer than opposite, shorter than adjacent sides"
    */
   public getSideObjectResponse(): string {
     let response = '';
@@ -99,8 +100,11 @@ export default class SideDescriber {
     const parallelSidePairs = this.quadrilateralShapeModel.parallelSidePairsProperty.value;
     const thisSideIsParallel = _.some( parallelSidePairs, sidePair => sidePair.component1 === this.side || sidePair.component2 === this.side );
 
-    const patternStringProperty = thisSideIsParallel ?
-                                  parallelSideObjectResponsePatternStringProperty :
+    const thisSideEqualToOppositeSide = this.quadrilateralShapeModel.isInterLengthEqualToOther( oppositeSide.lengthProperty.value, this.side.lengthProperty.value );
+
+    // Unique string patterns to support more natural english when opposite sides are both parallel AND equal in length.
+    const patternStringProperty = thisSideIsParallel && thisSideEqualToOppositeSide ? parallelEqualSideObjectResponsePatternStringProperty :
+                                  thisSideIsParallel ? parallelSideObjectResponsePatternStringProperty :
                                   sideObjectResponsePatternStringProperty;
 
     // If the quadrilateral is a rhombus or a square, always describe that the opposite side is equal in length to the

@@ -675,8 +675,11 @@
       "farLongerThan": {
         "value": "far longer than"
       },
-      "parallelSideObjectResponsePattern": {
+      "parallelEqualSideObjectResponsePattern": {
         "value": "Parallel and {{oppositeComparison}} opposite side, {{adjacentSideDescription}}"
+      },
+      "parallelSideObjectResponsePattern": {
+        "value": "Parallel to and {{oppositeComparison}} opposite side, {{adjacentSideDescription}}"
       },
       "sideObjectResponsePattern": {
         "value": "{{oppositeComparison}} opposite side, {{adjacentSideDescription}}"

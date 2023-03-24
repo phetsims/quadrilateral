@@ -253,6 +253,7 @@ type StringsType = {
       'aboutTwiceAsLongAsStringProperty': LinkableProperty<string>;
       'twiceAsLongAsStringProperty': LinkableProperty<string>;
       'farLongerThanStringProperty': LinkableProperty<string>;
+      'parallelEqualSideObjectResponsePatternStringProperty': LinkableProperty<string>;
       'parallelSideObjectResponsePatternStringProperty': LinkableProperty<string>;
       'sideObjectResponsePatternStringProperty': LinkableProperty<string>;
       'sideUnitsObjectResponsePatternStringProperty': LinkableProperty<string>;
