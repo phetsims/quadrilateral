@@ -14,7 +14,7 @@ import Utils from '../../../../dot/js/Utils.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
-import SidePair from './SidePair.js';
+import QuadrilateralSidePair from './QuadrilateralSidePair.js';
 import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
 
 export default class ParallelSideChecker {
@@ -24,7 +24,7 @@ export default class ParallelSideChecker {
   // will be different depending on the runtime environment controlled by query parameters.
   private readonly parallelAngleToleranceInterval: number;
 
-  public readonly sidePair: SidePair;
+  public readonly sidePair: QuadrilateralSidePair;
 
   // A Property indicating that the provided sides are parallel, ONLY FOR DEBUGGING. Use areSidesParallel() when the
   // QuadrilateralShapeModel is stable instead.
@@ -36,11 +36,11 @@ export default class ParallelSideChecker {
   private readonly isParallelProperty: Property<boolean>;
 
   /**
-   * @param sidePair - The SidePair with opposite sides that we want to inspect for parallelism
+   * @param sidePair - The QuadrilateralSidePair with opposite sides that we want to inspect for parallelism
    * @param shapeChangedEmitter - Emitter for when the quadrilateral shape changes in some way.
    * @param tandem
    */
-  public constructor( sidePair: SidePair, shapeChangedEmitter: TEmitter, tandem: Tandem ) {
+  public constructor( sidePair: QuadrilateralSidePair, shapeChangedEmitter: TEmitter, tandem: Tandem ) {
 
     this.sidePair = sidePair;
 

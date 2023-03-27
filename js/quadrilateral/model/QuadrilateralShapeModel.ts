@@ -27,7 +27,7 @@ import TProperty from '../../../../axon/js/TProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import TEmitter from '../../../../axon/js/TEmitter.js';
 import QuadrilateralShapeDetector from './QuadrilateralShapeDetector.js';
-import SidePair from './SidePair.js';
+import QuadrilateralSidePair from './QuadrilateralSidePair.js';
 import VertexPair from './VertexPair.js';
 import QuadrilateralUtils from './QuadrilateralUtils.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
@@ -118,13 +118,13 @@ export default class QuadrilateralShapeModel {
   public readonly oppositeEqualVertexPairsProperty: Property<VertexPair[]>;
 
   // An array of all the adjacent SidePairs that have equal lengths.
-  public readonly adjacentEqualSidePairsProperty: Property<SidePair[]>;
+  public readonly adjacentEqualSidePairsProperty: Property<QuadrilateralSidePair[]>;
 
   // An array of all the opposite SidePairs that have equal side lengths.
-  public readonly oppositeEqualSidePairsProperty: Property<SidePair[]>;
+  public readonly oppositeEqualSidePairsProperty: Property<QuadrilateralSidePair[]>;
 
   // An array of all the (opposite) SidePairs that currently parallel with each other.
-  public readonly parallelSidePairsProperty: Property<SidePair[]>;
+  public readonly parallelSidePairsProperty: Property<QuadrilateralSidePair[]>;
 
   // Is the simulation *not* being reset?
   private readonly resetNotInProgressProperty: TProperty<boolean>;
@@ -191,9 +191,9 @@ export default class QuadrilateralShapeModel {
 
     this.adjacentEqualVertexPairsProperty = new Property<VertexPair[]>( [] );
     this.oppositeEqualVertexPairsProperty = new Property<VertexPair[]>( [] );
-    this.adjacentEqualSidePairsProperty = new Property<SidePair[]>( [] );
-    this.oppositeEqualSidePairsProperty = new Property<SidePair[]>( [] );
-    this.parallelSidePairsProperty = new Property<SidePair[]>( [] );
+    this.adjacentEqualSidePairsProperty = new Property<QuadrilateralSidePair[]>( [] );
+    this.oppositeEqualSidePairsProperty = new Property<QuadrilateralSidePair[]>( [] );
+    this.parallelSidePairsProperty = new Property<QuadrilateralSidePair[]>( [] );
 
     // Connect the sides, creating the shape and giving vertices the information they need to calculate angles.
     this.sideBC.connectToSide( this.sideAB );
@@ -218,13 +218,13 @@ export default class QuadrilateralShapeModel {
     this.interLengthToleranceInterval = QuadrilateralShapeModel.getWidenedToleranceInterval( QuadrilateralQueryParameters.interLengthToleranceInterval );
 
     this.sideABSideCDParallelSideChecker = new ParallelSideChecker(
-      new SidePair( this.sideAB, this.sideCD ),
+      new QuadrilateralSidePair( this.sideAB, this.sideCD ),
       this.shapeChangedEmitter,
       options.tandem.createTandem( 'sideABSideCDParallelSideChecker' )
     );
 
     this.sideBCSideDAParallelSideChecker = new ParallelSideChecker(
-      new SidePair( this.sideBC, this.sideDA ),
+      new QuadrilateralSidePair( this.sideBC, this.sideDA ),
       this.shapeChangedEmitter,
       options.tandem.createTandem( 'sideBCSideDAParallelSideChecker' )
     );
@@ -485,14 +485,14 @@ export default class QuadrilateralShapeModel {
   /**
    * Update a provided Property holding a list of sides that are equal in length (either opposite or adjacent).
    */
-  private updateEqualSidePairs( equalSidePairsProperty: Property<SidePair[]>, sideMap: Map<QuadrilateralSide, QuadrilateralSide[] | QuadrilateralSide> ): void {
+  private updateEqualSidePairs( equalSidePairsProperty: Property<QuadrilateralSidePair[]>, sideMap: Map<QuadrilateralSide, QuadrilateralSide[] | QuadrilateralSide> ): void {
     const currentSidePairs = equalSidePairsProperty.value;
 
     sideMap.forEach( ( relatedSides, keySide ) => {
 
       const relatedSidesArray = Array.isArray( relatedSides ) ? relatedSides : [ relatedSides ];
       relatedSidesArray.forEach( relatedSide => {
-        const sidePair = new SidePair( keySide, relatedSide );
+        const sidePair = new QuadrilateralSidePair( keySide, relatedSide );
 
         const firstLength = sidePair.component1.lengthProperty.value;
         const secondLength = sidePair.component2.lengthProperty.value;

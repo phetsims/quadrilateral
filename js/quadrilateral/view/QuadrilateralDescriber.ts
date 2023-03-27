@@ -16,7 +16,7 @@ import VertexLabel from '../model/VertexLabel.js';
 import VertexDescriber from './VertexDescriber.js';
 import SideDescriber from './SideDescriber.js';
 import QuadrilateralSideLabel from '../model/QuadrilateralSideLabel.js';
-import SidePair from '../model/SidePair.js';
+import QuadrilateralSidePair from '../model/QuadrilateralSidePair.js';
 import VertexPair from '../model/VertexPair.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
@@ -673,7 +673,7 @@ export default class QuadrilateralDescriber {
   /**
    * Returns a qualitative description for a trapezoid.
    */
-  public getTrapezoidDetailsString( parallelSidePair: SidePair ): string {
+  public getTrapezoidDetailsString( parallelSidePair: QuadrilateralSidePair ): string {
 
     let firstSideLabel: QuadrilateralStringType;
     let secondSideLabel: QuadrilateralStringType;
@@ -697,7 +697,7 @@ export default class QuadrilateralDescriber {
    * Returns a qualitative description for an isosceles trapezoid. Indicates which opposite/parallel side
    * pairs are equal.
    */
-  public getIsoscelesTrapezoidDetailsString( oppositeEqualSidePair: SidePair, parallelSidePair: SidePair ): string {
+  public getIsoscelesTrapezoidDetailsString( oppositeEqualSidePair: QuadrilateralSidePair, parallelSidePair: QuadrilateralSidePair ): string {
     let equalFirstSideString: QuadrilateralStringType;
     let equalSecondSideString: QuadrilateralStringType;
     let parallelFirstSideString: QuadrilateralStringType;

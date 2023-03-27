@@ -11,10 +11,10 @@ import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralSide from './QuadrilateralSide.js';
 import UnorderedComponentPair from './UnorderedComponentPair.js';
 
-export default class SidePair extends UnorderedComponentPair<QuadrilateralSide> {
+export default class QuadrilateralSidePair extends UnorderedComponentPair<QuadrilateralSide> {
   public constructor( component1: QuadrilateralSide, component2: QuadrilateralSide ) {
     super( component1, component2 );
   }
 }
 
-quadrilateral.register( 'SidePair', SidePair );
+quadrilateral.register( 'QuadrilateralSidePair', QuadrilateralSidePair );
