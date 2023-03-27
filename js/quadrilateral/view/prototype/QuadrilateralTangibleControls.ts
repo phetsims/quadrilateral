@@ -14,7 +14,7 @@ import { Text, VBox } from '../../../../../scenery/js/imports.js';
 import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
 import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
-import CalibrationContentNode from './CalibrationContentNode.js';
+import QuadrilateralCalibrationContentNode from './QuadrilateralCalibrationContentNode.js';
 import Dialog from '../../../../../sun/js/Dialog.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import QuadrilateralColors from '../../../QuadrilateralColors.js';
@@ -28,7 +28,7 @@ export default class QuadrilateralTangibleControls extends VBox {
   public constructor( tangibleConnectionModel: TangibleConnectionModel, tangibleController: QuadrilateralTangibleController, tandem: Tandem ) {
 
     // Add a Dialog that will calibrate the device to the simulation (mapping physical data to modelled data).
-    const calibrationDialog = new Dialog( new CalibrationContentNode( tangibleConnectionModel ), {
+    const calibrationDialog = new Dialog( new QuadrilateralCalibrationContentNode( tangibleConnectionModel ), {
       title: new Text( 'External Device Calibration', QuadrilateralConstants.PANEL_TITLE_TEXT_OPTIONS )
     } );
 
