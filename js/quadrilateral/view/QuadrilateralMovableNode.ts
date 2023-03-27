@@ -22,6 +22,7 @@ import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import QuadrilateralColors from '../../QuadrilateralColors.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Utterance from '../../../../utterance-queue/js/Utterance.js';
 
 // constants
 const blockedByInnerShapeStringProperty = QuadrilateralStrings.a11y.voicing.blockedByInnerShapeStringProperty;
@@ -39,7 +40,7 @@ type SelfOptions = {
 type ParentOptions = VoicingOptions & NodeOptions;
 
 // QuadrilateralVertexNode sets these properties explicitly from the nameResponse option
-export type QuadrilateralMovableNodeOptions = SelfOptions & StrictOmit<ParentOptions, 'voicingNameResponse' | 'innerContent'> & PickRequired<NodeOptions, 'tandem'>;
+export type QuadrilateralMovableNodeOptions = SelfOptions & StrictOmit<ParentOptions, 'voicingNameResponse' | 'innerContent' | 'voicingUtterance'> & PickRequired<NodeOptions, 'tandem'>;
 
 export default class QuadrilateralMovableNode extends Voicing( Node ) {
   private readonly model: QuadrilateralMovable;
@@ -58,7 +59,13 @@ export default class QuadrilateralMovableNode extends Voicing( Node ) {
       ariaRole: 'application',
       focusable: true,
       nameResponse: null,
-      grabbedSoundOutputLevel: 0.6
+      grabbedSoundOutputLevel: 0.6,
+
+      // voicing - Responses voiced by this Node should be higher Priority so that it is not interrupted by
+      // context responses during shape changes.
+      voicingUtterance: new Utterance( {
+        priority: Utterance.MEDIUM_PRIORITY
+      } )
     }, providedOptions );
 
     super( options );
