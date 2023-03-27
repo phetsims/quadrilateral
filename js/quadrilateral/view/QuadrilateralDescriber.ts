@@ -17,7 +17,7 @@ import VertexDescriber from './VertexDescriber.js';
 import SideDescriber from './SideDescriber.js';
 import QuadrilateralSideLabel from '../model/QuadrilateralSideLabel.js';
 import QuadrilateralSidePair from '../model/QuadrilateralSidePair.js';
-import VertexPair from '../model/VertexPair.js';
+import QuadrilateralVertexPair from '../model/QuadrilateralVertexPair.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import ResponsePacket from '../../../../utterance-queue/js/ResponsePacket.js';
@@ -734,7 +734,7 @@ export default class QuadrilateralDescriber {
    * @param patternString - Some contexts need a more verbose description around this pattern. Must include placeholders
    *                        `firstCorner` and `secondCorner`.
    */
-  public getKiteDetailsString( oppositeEqualVertexPair: VertexPair, patternString: TReadOnlyProperty<string> = kiteDetailsShortPatternStringProperty ): string {
+  public getKiteDetailsString( oppositeEqualVertexPair: QuadrilateralVertexPair, patternString: TReadOnlyProperty<string> = kiteDetailsShortPatternStringProperty ): string {
     let firstCornerStringProperty: TReadOnlyProperty<string>;
     let secondCornerStringProperty: TReadOnlyProperty<string>;
     if ( oppositeEqualVertexPair.includesComponent( this.shapeModel.vertexA ) ) {

@@ -11,10 +11,10 @@ import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralVertex from './QuadrilateralVertex.js';
 import UnorderedComponentPair from './UnorderedComponentPair.js';
 
-export default class VertexPair extends UnorderedComponentPair<QuadrilateralVertex> {
+export default class QuadrilateralVertexPair extends UnorderedComponentPair<QuadrilateralVertex> {
   public constructor( vertex1: QuadrilateralVertex, vertex2: QuadrilateralVertex ) {
     super( vertex1, vertex2 );
   }
 }
 
-quadrilateral.register( 'VertexPair', VertexPair );
+quadrilateral.register( 'QuadrilateralVertexPair', QuadrilateralVertexPair );

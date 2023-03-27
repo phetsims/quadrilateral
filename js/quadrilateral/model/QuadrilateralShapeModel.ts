@@ -28,7 +28,7 @@ import Multilink from '../../../../axon/js/Multilink.js';
 import TEmitter from '../../../../axon/js/TEmitter.js';
 import QuadrilateralShapeDetector from './QuadrilateralShapeDetector.js';
 import QuadrilateralSidePair from './QuadrilateralSidePair.js';
-import VertexPair from './VertexPair.js';
+import QuadrilateralVertexPair from './QuadrilateralVertexPair.js';
 import QuadrilateralUtils from './QuadrilateralUtils.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import QuadrilateralSideLabel from './QuadrilateralSideLabel.js';
@@ -112,10 +112,10 @@ export default class QuadrilateralShapeModel {
   public readonly oppositeSideMap: Map<QuadrilateralSide, QuadrilateralSide>;
 
   // An array of all the adjacent VertexPairs that currently have equal angles.
-  public readonly adjacentEqualVertexPairsProperty: Property<VertexPair[]>;
+  public readonly adjacentEqualVertexPairsProperty: Property<QuadrilateralVertexPair[]>;
 
   // An array of all the opposite VertexPairs that currently have equal angles.
-  public readonly oppositeEqualVertexPairsProperty: Property<VertexPair[]>;
+  public readonly oppositeEqualVertexPairsProperty: Property<QuadrilateralVertexPair[]>;
 
   // An array of all the adjacent SidePairs that have equal lengths.
   public readonly adjacentEqualSidePairsProperty: Property<QuadrilateralSidePair[]>;
@@ -189,8 +189,8 @@ export default class QuadrilateralShapeModel {
       [ this.sideDA, [ this.sideCD, this.sideAB ] ]
     ] );
 
-    this.adjacentEqualVertexPairsProperty = new Property<VertexPair[]>( [] );
-    this.oppositeEqualVertexPairsProperty = new Property<VertexPair[]>( [] );
+    this.adjacentEqualVertexPairsProperty = new Property<QuadrilateralVertexPair[]>( [] );
+    this.oppositeEqualVertexPairsProperty = new Property<QuadrilateralVertexPair[]>( [] );
     this.adjacentEqualSidePairsProperty = new Property<QuadrilateralSidePair[]>( [] );
     this.oppositeEqualSidePairsProperty = new Property<QuadrilateralSidePair[]>( [] );
     this.parallelSidePairsProperty = new Property<QuadrilateralSidePair[]>( [] );
@@ -444,13 +444,13 @@ export default class QuadrilateralShapeModel {
   /**
    * Update a provided Property that holds a list of equal angles (either opposite or adjacent).
    */
-  private updateEqualVertexPairs( equalVertexPairsProperty: Property<VertexPair[]>, vertexMap: Map<QuadrilateralVertex, QuadrilateralVertex[] | QuadrilateralVertex> ): void {
+  private updateEqualVertexPairs( equalVertexPairsProperty: Property<QuadrilateralVertexPair[]>, vertexMap: Map<QuadrilateralVertex, QuadrilateralVertex[] | QuadrilateralVertex> ): void {
     const currentVertexPairs = equalVertexPairsProperty.value;
     vertexMap.forEach( ( relatedVertices, keyVertex, map ) => {
 
       const relatedVerticesArray = Array.isArray( relatedVertices ) ? relatedVertices : [ relatedVertices ];
       relatedVerticesArray.forEach( relatedVertex => {
-        const vertexPair = new VertexPair( keyVertex, relatedVertex );
+        const vertexPair = new QuadrilateralVertexPair( keyVertex, relatedVertex );
 
         const firstAngle = vertexPair.component1.angleProperty.value!;
         const secondAngle = vertexPair.component2.angleProperty.value!;
@@ -460,13 +460,13 @@ export default class QuadrilateralShapeModel {
 
         if ( currentlyIncludesVertexPair && !areAnglesEqual ) {
 
-          // the VertexPair needs to be removed because angles are no longer equal
+          // the QuadrilateralVertexPair needs to be removed because angles are no longer equal
           currentVertexPairs.splice( indexOfVertexPair, 1 );
           equalVertexPairsProperty.notifyListenersStatic();
         }
         else if ( !currentlyIncludesVertexPair && areAnglesEqual ) {
 
-          // the VertexPair needs to be added because they just became equal
+          // the QuadrilateralVertexPair needs to be added because they just became equal
           currentVertexPairs.push( vertexPair );
           equalVertexPairsProperty.notifyListenersStatic();
         }
@@ -502,13 +502,13 @@ export default class QuadrilateralShapeModel {
 
         if ( currentlyIncludesSidePair && !areLengthsEqual ) {
 
-          // the VertexPair needs to be removed because angles are no longer equal
+          // the QuadrilateralVertexPair needs to be removed because angles are no longer equal
           currentSidePairs.splice( indexOfSidePair, 1 );
           equalSidePairsProperty.notifyListenersStatic();
         }
         else if ( !currentlyIncludesSidePair && areLengthsEqual ) {
 
-          // the VertexPair needs to be added because they just became equal
+          // the QuadrilateralVertexPair needs to be added because they just became equal
           currentSidePairs.push( sidePair );
           equalSidePairsProperty.notifyListenersStatic();
         }
