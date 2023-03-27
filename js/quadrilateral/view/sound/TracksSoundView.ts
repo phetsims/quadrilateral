@@ -124,11 +124,10 @@ export default class TracksSoundView extends SoundGenerator {
       }
     } );
 
-    // When shape sounds are disabled, stop playing all sounds immediately and reset state variables
+    // Stop playing all sounds immediately and reset state variables. Done on both disabled AND enabled because
+    // when shape sounds are enabled again, we want the user to move the shape to hear new sounds.
     shapeSoundEnabledProperty.link( shapeSoundEnabled => {
-      if ( !shapeSoundEnabled ) {
-        this.stopPlayingImmediately();
-      }
+      this.stopPlayingImmediately();
     } );
   }
 
