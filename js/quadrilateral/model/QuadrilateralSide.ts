@@ -13,7 +13,7 @@ import QuadrilateralVertex from './QuadrilateralVertex.js';
 import { Line } from '../../../../scenery/js/imports.js';
 import { Line as LineShape, Shape } from '../../../../kite/js/imports.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import SideLabel from './SideLabel.js';
+import QuadrilateralSideLabel from './QuadrilateralSideLabel.js';
 import QuadrilateralMovable from './QuadrilateralMovable.js';
 import Property from '../../../../axon/js/Property.js';
 import TProperty from '../../../../axon/js/TProperty.js';
@@ -31,7 +31,7 @@ export default class QuadrilateralSide extends QuadrilateralMovable {
   public readonly lengthProperty: NumberProperty;
 
   // Identifies this side within the quadrilateral shape.
-  public readonly sideLabel: SideLabel;
+  public readonly sideLabel: QuadrilateralSideLabel;
 
   // The shape of the side - A Line determined by the distance between the vertices and model width.
   public readonly shapeProperty: TProperty<Shape>;
@@ -59,7 +59,7 @@ export default class QuadrilateralSide extends QuadrilateralMovable {
    * @param sideLabel - To identify this QuadrilateralSide within the shape.
    * @param tandem
    */
-  public constructor( vertex1: QuadrilateralVertex, vertex2: QuadrilateralVertex, sideLabel: SideLabel, tandem: Tandem ) {
+  public constructor( vertex1: QuadrilateralVertex, vertex2: QuadrilateralVertex, sideLabel: QuadrilateralSideLabel, tandem: Tandem ) {
     super( tandem );
 
     this.vertex1 = vertex1;

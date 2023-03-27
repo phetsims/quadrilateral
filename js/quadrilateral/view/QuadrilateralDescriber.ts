@@ -15,7 +15,7 @@ import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import VertexLabel from '../model/VertexLabel.js';
 import VertexDescriber from './VertexDescriber.js';
 import SideDescriber from './SideDescriber.js';
-import SideLabel from '../model/SideLabel.js';
+import QuadrilateralSideLabel from '../model/QuadrilateralSideLabel.js';
 import SidePair from '../model/SidePair.js';
 import VertexPair from '../model/VertexPair.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
@@ -127,19 +127,19 @@ vertexLabelMap.set( VertexLabel.VERTEX_B, vertexBStringProperty );
 vertexLabelMap.set( VertexLabel.VERTEX_C, vertexCStringProperty );
 vertexLabelMap.set( VertexLabel.VERTEX_D, vertexDStringProperty );
 
-// A map that goes from SideLabel -> "full" side label (like "Side AB")
-const fullSideLabelMap = new Map<SideLabel, TReadOnlyProperty<string>>();
-fullSideLabelMap.set( SideLabel.SIDE_AB, sideABStringProperty );
-fullSideLabelMap.set( SideLabel.SIDE_BC, sideBCStringProperty );
-fullSideLabelMap.set( SideLabel.SIDE_CD, sideCDStringProperty );
-fullSideLabelMap.set( SideLabel.SIDE_DA, sideDAStringProperty );
+// A map that goes from QuadrilateralSideLabel -> "full" side label (like "Side AB")
+const fullSideLabelMap = new Map<QuadrilateralSideLabel, TReadOnlyProperty<string>>();
+fullSideLabelMap.set( QuadrilateralSideLabel.SIDE_AB, sideABStringProperty );
+fullSideLabelMap.set( QuadrilateralSideLabel.SIDE_BC, sideBCStringProperty );
+fullSideLabelMap.set( QuadrilateralSideLabel.SIDE_CD, sideCDStringProperty );
+fullSideLabelMap.set( QuadrilateralSideLabel.SIDE_DA, sideDAStringProperty );
 
-// A map that goes from SideLabel -> letters label (like "AB")
-const sideLabelMap = new Map<SideLabel, TReadOnlyProperty<string>>();
-sideLabelMap.set( SideLabel.SIDE_AB, aBStringProperty );
-sideLabelMap.set( SideLabel.SIDE_BC, bCStringProperty );
-sideLabelMap.set( SideLabel.SIDE_CD, cDStringProperty );
-sideLabelMap.set( SideLabel.SIDE_DA, dAStringProperty );
+// A map that goes from QuadrilateralSideLabel -> letters label (like "AB")
+const sideLabelMap = new Map<QuadrilateralSideLabel, TReadOnlyProperty<string>>();
+sideLabelMap.set( QuadrilateralSideLabel.SIDE_AB, aBStringProperty );
+sideLabelMap.set( QuadrilateralSideLabel.SIDE_BC, bCStringProperty );
+sideLabelMap.set( QuadrilateralSideLabel.SIDE_CD, cDStringProperty );
+sideLabelMap.set( QuadrilateralSideLabel.SIDE_DA, dAStringProperty );
 
 // Thresholds that are used to describe the size of the current shape. All are relative to the displayed grid
 // and the area of a grid cell.
@@ -225,11 +225,11 @@ export default class QuadrilateralDescriber {
   }
 
   /**
-   * Gets the label string for a side from its SideLabel. Just the label without other context like
+   * Gets the label string for a side from its QuadrilateralSideLabel. Just the label without other context like
    * "AB" or
    * "DA"
    */
-  public static getSideLabelString( sideLabel: SideLabel ): TReadOnlyProperty<string> {
+  public static getSideLabelString( sideLabel: QuadrilateralSideLabel ): TReadOnlyProperty<string> {
     const sideLabelStringProperty = sideLabelMap.get( sideLabel )!;
     assert && assert( sideLabelStringProperty, 'There must be a side label description.' );
     return sideLabelStringProperty;
@@ -679,12 +679,12 @@ export default class QuadrilateralDescriber {
     let secondSideLabel: QuadrilateralStringType;
 
     if ( parallelSidePair.includesComponent( this.shapeModel.sideAB ) ) {
-      firstSideLabel = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_AB );
-      secondSideLabel = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_CD );
+      firstSideLabel = QuadrilateralDescriber.getSideLabelString( QuadrilateralSideLabel.SIDE_AB );
+      secondSideLabel = QuadrilateralDescriber.getSideLabelString( QuadrilateralSideLabel.SIDE_CD );
     }
     else {
-      firstSideLabel = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_BC );
-      secondSideLabel = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_DA );
+      firstSideLabel = QuadrilateralDescriber.getSideLabelString( QuadrilateralSideLabel.SIDE_BC );
+      secondSideLabel = QuadrilateralDescriber.getSideLabelString( QuadrilateralSideLabel.SIDE_DA );
     }
 
     return StringUtils.fillIn( trapezoidDetailsPatternStringProperty, {
@@ -706,18 +706,18 @@ export default class QuadrilateralDescriber {
     if ( oppositeEqualSidePair.includesComponent( this.shapeModel.sideAB ) ) {
 
       // top sides and bottom side are equal in length, left and right sides are parallel
-      equalFirstSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_AB );
-      equalSecondSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_CD );
-      parallelFirstSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_DA );
-      parallelSecondSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_BC );
+      equalFirstSideString = QuadrilateralDescriber.getSideLabelString( QuadrilateralSideLabel.SIDE_AB );
+      equalSecondSideString = QuadrilateralDescriber.getSideLabelString( QuadrilateralSideLabel.SIDE_CD );
+      parallelFirstSideString = QuadrilateralDescriber.getSideLabelString( QuadrilateralSideLabel.SIDE_DA );
+      parallelSecondSideString = QuadrilateralDescriber.getSideLabelString( QuadrilateralSideLabel.SIDE_BC );
     }
     else {
 
       // left and right sides are equal in length, top and bottom sides are parallel
-      equalFirstSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_DA );
-      equalSecondSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_BC );
-      parallelFirstSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_AB );
-      parallelSecondSideString = QuadrilateralDescriber.getSideLabelString( SideLabel.SIDE_CD );
+      equalFirstSideString = QuadrilateralDescriber.getSideLabelString( QuadrilateralSideLabel.SIDE_DA );
+      equalSecondSideString = QuadrilateralDescriber.getSideLabelString( QuadrilateralSideLabel.SIDE_BC );
+      parallelFirstSideString = QuadrilateralDescriber.getSideLabelString( QuadrilateralSideLabel.SIDE_AB );
+      parallelSecondSideString = QuadrilateralDescriber.getSideLabelString( QuadrilateralSideLabel.SIDE_CD );
     }
 
     return StringUtils.fillIn( isoscelesTrapezoidDetailsPatternStringProperty, {

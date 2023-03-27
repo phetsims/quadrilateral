@@ -13,7 +13,7 @@
 import quadrilateral from '../../quadrilateral.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
-import SideLabel from './SideLabel.js';
+import QuadrilateralSideLabel from './QuadrilateralSideLabel.js';
 import VertexLabel from './VertexLabel.js';
 import NamedQuadrilateral from './NamedQuadrilateral.js';
 
@@ -81,10 +81,10 @@ export default class QuadrilateralShapeSnapshot {
            this.vertexDAngle; // VERTEX_D
   }
 
-  public getLengthFromSideLabel( label: SideLabel ): number {
-    return label === SideLabel.SIDE_AB ? this.sideABLength :
-           label === SideLabel.SIDE_BC ? this.sideBCLength :
-           label === SideLabel.SIDE_CD ? this.sideCDLength :
+  public getLengthFromSideLabel( label: QuadrilateralSideLabel ): number {
+    return label === QuadrilateralSideLabel.SIDE_AB ? this.sideABLength :
+           label === QuadrilateralSideLabel.SIDE_BC ? this.sideBCLength :
+           label === QuadrilateralSideLabel.SIDE_CD ? this.sideCDLength :
            this.sideDALength; // SIDE_DA
   }
 
@@ -99,18 +99,18 @@ export default class QuadrilateralShapeSnapshot {
   }
 
   /**
-   * Returns the saved vertex positions of a side given the SideLabel. Returns an array with the
+   * Returns the saved vertex positions of a side given the QuadrilateralSideLabel. Returns an array with the
    * vertex positions in order like [ side.vertex1, side.vertex2 ].
    */
-  public getVertexPositionsFromSideLabel( label: SideLabel ): [ Vector2, Vector2 ] {
-    return label === SideLabel.SIDE_AB ? [ this.vertexAPosition, this.vertexBPosition ] :
-           label === SideLabel.SIDE_BC ? [ this.vertexBPosition, this.vertexCPosition ] :
-           label === SideLabel.SIDE_CD ? [ this.vertexCPosition, this.vertexDPosition ] :
+  public getVertexPositionsFromSideLabel( label: QuadrilateralSideLabel ): [ Vector2, Vector2 ] {
+    return label === QuadrilateralSideLabel.SIDE_AB ? [ this.vertexAPosition, this.vertexBPosition ] :
+           label === QuadrilateralSideLabel.SIDE_BC ? [ this.vertexBPosition, this.vertexCPosition ] :
+           label === QuadrilateralSideLabel.SIDE_CD ? [ this.vertexCPosition, this.vertexDPosition ] :
              [ this.vertexDPosition, this.vertexAPosition ]; // SIDE_DA
   }
 
   /**
-   * Returns the saved side lengths of adjacent sides for side defined by the SideLabel. Returns
+   * Returns the saved side lengths of adjacent sides for side defined by the QuadrilateralSideLabel. Returns
    * an array of adjacent side lengths in order moving clockwise like this:
    *                sideLabel
    *               ----------
@@ -121,15 +121,15 @@ export default class QuadrilateralShapeSnapshot {
    *
    * @returns [adjacentSide1.lengthProperty.value, adjacentSide2.lengthProperty.value]
    */
-  public getAdjacentSideLengthsFromSideLabel( label: SideLabel ): [ number, number ] {
-    return label === SideLabel.SIDE_AB ? [ this.sideDALength, this.sideBCLength ] :
-           label === SideLabel.SIDE_BC ? [ this.sideABLength, this.sideCDLength ] :
-           label === SideLabel.SIDE_CD ? [ this.sideBCLength, this.sideDALength ] :
+  public getAdjacentSideLengthsFromSideLabel( label: QuadrilateralSideLabel ): [ number, number ] {
+    return label === QuadrilateralSideLabel.SIDE_AB ? [ this.sideDALength, this.sideBCLength ] :
+           label === QuadrilateralSideLabel.SIDE_BC ? [ this.sideABLength, this.sideCDLength ] :
+           label === QuadrilateralSideLabel.SIDE_CD ? [ this.sideBCLength, this.sideDALength ] :
              [ this.sideCDLength, this.sideABLength ]; // SIDE_DA
   }
 
   /**
-   * Returns true if the sides adjacent to the QuadrilateralSide labelled by provided SideLabel are parallel in this snapshot.
+   * Returns true if the sides adjacent to the QuadrilateralSide labelled by provided QuadrilateralSideLabel are parallel in this snapshot.
    * For example, given the following:
    *
    *                sideLabel
@@ -141,10 +141,10 @@ export default class QuadrilateralShapeSnapshot {
    *
    * Will return true if adjacentSide1 and adjacentSide2 are parallel.
    */
-  public getAdjacentSidesParallelFromSideLabel( label: SideLabel ): boolean {
-    return label === SideLabel.SIDE_AB ? this.sideBCsideDAParallel :
-           label === SideLabel.SIDE_BC ? this.sideABsideCDParallel :
-           label === SideLabel.SIDE_CD ? this.sideBCsideDAParallel :
+  public getAdjacentSidesParallelFromSideLabel( label: QuadrilateralSideLabel ): boolean {
+    return label === QuadrilateralSideLabel.SIDE_AB ? this.sideBCsideDAParallel :
+           label === QuadrilateralSideLabel.SIDE_BC ? this.sideABsideCDParallel :
+           label === QuadrilateralSideLabel.SIDE_CD ? this.sideBCsideDAParallel :
            this.sideABsideCDParallel; // SIDE_DA
   }
 
