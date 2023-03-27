@@ -174,10 +174,10 @@ export default class QuadrilateralModel implements TModel {
    * with the model grid. See vertexIntervalProperty for more information about how the intervals of the grid
    * can change.
    */
-  public getClosestGridPosition( ProposedPosition: Vector2 ): Vector2 {
+  public getClosestGridPosition( proposedPosition: Vector2 ): Vector2 {
 
     const interval = this.vertexIntervalProperty.value;
-    return new Vector2( Utils.roundToInterval( ProposedPosition.x, interval ), Utils.roundToInterval( ProposedPosition.y, interval ) );
+    return new Vector2( Utils.roundToInterval( proposedPosition.x, interval ), Utils.roundToInterval( proposedPosition.y, interval ) );
   }
 
   /**
