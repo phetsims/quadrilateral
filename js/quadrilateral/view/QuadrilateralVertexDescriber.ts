@@ -86,7 +86,7 @@ ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 1.6, 1.8 ), muchWiderThanString
 ANGLE_COMPARISON_DESCRIPTION_MAP.set( ABOUT_TWICE_RANGE, aboutTwiceAsWideAsStringProperty );
 ANGLE_COMPARISON_DESCRIPTION_MAP.set( new Range( 2.2, Number.POSITIVE_INFINITY ), farWiderThanStringProperty );
 
-export default class VertexDescriber {
+export default class QuadrilateralVertexDescriber {
 
   // A reference to the model components that drive description.
   private readonly vertex: QuadrilateralVertex;
@@ -121,7 +121,7 @@ export default class VertexDescriber {
     // if corner guides are visible, a description of the number of wedges is included
     if ( this.markersVisibleProperty.value ) {
       response = StringUtils.fillIn( vertexObjectResponseWithWedgesPatternStringProperty, {
-        wedgeDescription: VertexDescriber.getWedgesDescription( this.vertex.angleProperty.value!, this.quadrilateralShapeModel ),
+        wedgeDescription: QuadrilateralVertexDescriber.getWedgesDescription( this.vertex.angleProperty.value!, this.quadrilateralShapeModel ),
         oppositeComparison: oppositeComparisonString,
         adjacentVertexDescription: adjacentVertexDescriptionString
       } );
@@ -332,4 +332,4 @@ export default class VertexDescriber {
   }
 }
 
-quadrilateral.register( 'VertexDescriber', VertexDescriber );
+quadrilateral.register( 'QuadrilateralVertexDescriber', QuadrilateralVertexDescriber );

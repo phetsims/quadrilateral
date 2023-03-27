@@ -30,7 +30,7 @@ import Utils from '../../../../dot/js/Utils.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import QuadrilateralDescriber, { NullableQuadrilateralStringType } from './QuadrilateralDescriber.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import VertexDescriber from './VertexDescriber.js';
+import QuadrilateralVertexDescriber from './QuadrilateralVertexDescriber.js';
 
 // constants - Voicing strings are not translatable so we just use the StringProperty initial value
 const foundShapePatternString = QuadrilateralStrings.a11y.voicing.foundShapePatternStringProperty.value;
@@ -548,7 +548,7 @@ export default class QuadrilateralAlerter extends Alerter {
 
         // if equal to the opposite corner, just say "opposite corner" instead of the corner label
         const otherCornerLabelString = angleEqualToOpposite ? oppositeCornerString :
-                                       VertexDescriber.VERTEX_CORNER_LABEL_MAP.get( otherVertex.vertexLabel );
+                                       QuadrilateralVertexDescriber.VERTEX_CORNER_LABEL_MAP.get( otherVertex.vertexLabel );
 
         const comparisonDescription = vertexDescriber.getAngleComparisonDescription( otherVertex, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
@@ -581,7 +581,7 @@ export default class QuadrilateralAlerter extends Alerter {
         const comparisonDescription = vertexDescriber.getAngleComparisonDescription( firstAdjacentVertex, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
           comparison: comparisonDescription,
-          cornerLabel: VertexDescriber.VERTEX_CORNER_LABEL_MAP.get( firstAdjacentVertex.vertexLabel )
+          cornerLabel: QuadrilateralVertexDescriber.VERTEX_CORNER_LABEL_MAP.get( firstAdjacentVertex.vertexLabel )
         } );
       }
       else if ( this.shouldUseAngleComparisonDescription( currentAngle, secondAdjacentAngle ) ) {
@@ -590,7 +590,7 @@ export default class QuadrilateralAlerter extends Alerter {
         const comparisonDescription = vertexDescriber.getAngleComparisonDescription( secondAdjacentVertex, shapeName );
         stateResponse = StringUtils.fillIn( angleComparisonPatternString, {
           comparison: comparisonDescription,
-          cornerLabel: VertexDescriber.VERTEX_CORNER_LABEL_MAP.get( secondAdjacentVertex.vertexLabel )
+          cornerLabel: QuadrilateralVertexDescriber.VERTEX_CORNER_LABEL_MAP.get( secondAdjacentVertex.vertexLabel )
         } );
       }
     }
@@ -619,8 +619,8 @@ export default class QuadrilateralAlerter extends Alerter {
    * angle might be an opposite or adjacent angle.
    */
   private shouldUseAngleComparisonDescription( changingVertexAngle: number, otherVertexAngle: number ): boolean {
-    return VertexDescriber.isAngleAboutHalfOther( changingVertexAngle, otherVertexAngle ) ||
-           VertexDescriber.isAngleAboutTwiceOther( changingVertexAngle, otherVertexAngle ) ||
+    return QuadrilateralVertexDescriber.isAngleAboutHalfOther( changingVertexAngle, otherVertexAngle ) ||
+           QuadrilateralVertexDescriber.isAngleAboutTwiceOther( changingVertexAngle, otherVertexAngle ) ||
            this.quadrilateralShapeModel.isInterAngleEqualToOther( changingVertexAngle, otherVertexAngle );
   }
 
@@ -762,7 +762,7 @@ export default class QuadrilateralAlerter extends Alerter {
         // We have a triangle one vertex is 180 degrees and the shape is moving such that the area
         // is not changing. Describe the "flat" vertex and how its adjacent sides get longer or shorter
         response = StringUtils.fillIn( cornerFlatAsShapeChangesPatternString, {
-          cornerLabel: VertexDescriber.VERTEX_CORNER_LABEL_MAP.get( flatVertex!.vertexLabel )
+          cornerLabel: QuadrilateralVertexDescriber.VERTEX_CORNER_LABEL_MAP.get( flatVertex!.vertexLabel )
         } );
       }
       else {

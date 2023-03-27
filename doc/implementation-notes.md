@@ -36,7 +36,7 @@ This simulation supports Voicing. Description code is one of the most complicate
 - QuadrilateralDescriber: Creates description strings that describe the overall state of the quadrilateral and the state of the simulation. Contains describer subcomponents.
 - QuadrilateralAlerter: Creates description strings and requests speech synthesis for real-time feedback spoken to the user during interaction.
 - QuadrilateralSideDescriber: Creates description strings that describe the state of a QuadrilateralSide.
-- VertexDescriber: Creates description strings that describe the state of a QuadrilateralVertex.
+- QuadrilateralVertexDescriber: Creates description strings that describe the state of a QuadrilateralVertex.
 
 See https://github.com/phetsims/qa/blob/master/documentation/qa-book.md#voicing for an overview of the Voicing feature.
 

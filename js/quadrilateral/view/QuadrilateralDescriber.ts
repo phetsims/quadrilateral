@@ -13,7 +13,7 @@ import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralVertexLabel from '../model/QuadrilateralVertexLabel.js';
-import VertexDescriber from './VertexDescriber.js';
+import QuadrilateralVertexDescriber from './QuadrilateralVertexDescriber.js';
 import QuadrilateralSideDescriber from './QuadrilateralSideDescriber.js';
 import QuadrilateralSideLabel from '../model/QuadrilateralSideLabel.js';
 import QuadrilateralSidePair from '../model/QuadrilateralSidePair.js';
@@ -160,10 +160,10 @@ export default class QuadrilateralDescriber {
   public readonly sideDADescriber: QuadrilateralSideDescriber;
   private readonly sideDescribers: readonly QuadrilateralSideDescriber[];
 
-  public readonly vertexADescriber: VertexDescriber;
-  public readonly vertexBDescriber: VertexDescriber;
-  public readonly vertexCDescriber: VertexDescriber;
-  public readonly vertexDDescriber: VertexDescriber;
+  public readonly vertexADescriber: QuadrilateralVertexDescriber;
+  public readonly vertexBDescriber: QuadrilateralVertexDescriber;
+  public readonly vertexCDescriber: QuadrilateralVertexDescriber;
+  public readonly vertexDDescriber: QuadrilateralVertexDescriber;
 
   public constructor( shapeModel: QuadrilateralShapeModel, shapeNameVisibleProperty: TReadOnlyProperty<boolean>, markersVisibleProperty: TReadOnlyProperty<boolean>, modelViewTransform: ModelViewTransform2 ) {
     this.shapeModel = shapeModel;
@@ -176,16 +176,16 @@ export default class QuadrilateralDescriber {
     this.sideDADescriber = new QuadrilateralSideDescriber( shapeModel.sideDA, shapeModel, markersVisibleProperty, modelViewTransform );
     this.sideDescribers = [ this.sideABDescriber, this.sideBCDescriber, this.sideCDDescriber, this.sideDADescriber ];
 
-    this.vertexADescriber = new VertexDescriber( shapeModel.vertexA, shapeModel, markersVisibleProperty );
-    this.vertexBDescriber = new VertexDescriber( shapeModel.vertexB, shapeModel, markersVisibleProperty );
-    this.vertexCDescriber = new VertexDescriber( shapeModel.vertexC, shapeModel, markersVisibleProperty );
-    this.vertexDDescriber = new VertexDescriber( shapeModel.vertexD, shapeModel, markersVisibleProperty );
+    this.vertexADescriber = new QuadrilateralVertexDescriber( shapeModel.vertexA, shapeModel, markersVisibleProperty );
+    this.vertexBDescriber = new QuadrilateralVertexDescriber( shapeModel.vertexB, shapeModel, markersVisibleProperty );
+    this.vertexCDescriber = new QuadrilateralVertexDescriber( shapeModel.vertexC, shapeModel, markersVisibleProperty );
+    this.vertexDDescriber = new QuadrilateralVertexDescriber( shapeModel.vertexD, shapeModel, markersVisibleProperty );
   }
 
   /**
-   * Return the VertexDescriber that can be used to describe a vertex of the provided QuadrilateralVertexLabel.
+   * Return the QuadrilateralVertexDescriber that can be used to describe a vertex of the provided QuadrilateralVertexLabel.
    */
-  public getVertexDescriberForLabel( vertexLabel: QuadrilateralVertexLabel ): VertexDescriber {
+  public getVertexDescriberForLabel( vertexLabel: QuadrilateralVertexLabel ): QuadrilateralVertexDescriber {
     return vertexLabel === QuadrilateralVertexLabel.VERTEX_A ? this.vertexADescriber :
            vertexLabel === QuadrilateralVertexLabel.VERTEX_B ? this.vertexBDescriber :
            vertexLabel === QuadrilateralVertexLabel.VERTEX_C ? this.vertexCDescriber :
@@ -636,7 +636,7 @@ export default class QuadrilateralDescriber {
       } );
     }
     else {
-      descriptionString = VertexDescriber.getWedgesDescription( angle, this.shapeModel );
+      descriptionString = QuadrilateralVertexDescriber.getWedgesDescription( angle, this.shapeModel );
     }
 
     return descriptionString;

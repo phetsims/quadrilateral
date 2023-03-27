@@ -12,7 +12,7 @@ import QuadrilateralVertex from '../model/QuadrilateralVertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import VertexDescriber from './VertexDescriber.js';
+import QuadrilateralVertexDescriber from './QuadrilateralVertexDescriber.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
@@ -39,7 +39,7 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
   private readonly quadrilateralModel: QuadrilateralModel;
   private readonly vertex: QuadrilateralVertex;
 
-  public constructor( vertex: QuadrilateralVertex, vertexLabel: TReadOnlyProperty<string>, quadrilateralModel: QuadrilateralModel, vertexDescriber: VertexDescriber, modelViewTransform: ModelViewTransform2, providedOptions?: VertexNodeOptions ) {
+  public constructor( vertex: QuadrilateralVertex, vertexLabel: TReadOnlyProperty<string>, quadrilateralModel: QuadrilateralModel, vertexDescriber: QuadrilateralVertexDescriber, modelViewTransform: ModelViewTransform2, providedOptions?: VertexNodeOptions ) {
 
     const options = optionize<VertexNodeOptions, SelfOptions, QuadrilateralMovableNodeOptions>()( {
       grabbedSound: grabHighPitch_mp3
