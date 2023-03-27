@@ -350,14 +350,17 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
     scratchLabelToPositionMap.set( this.scratchSide.vertex2.vertexLabel, proposedVertex2Position );
     scratchShapeModel.setVertexPositions( scratchLabelToPositionMap );
 
-    const isShapeAllowed = QuadrilateralShapeModel.isQuadrilateralShapeAllowed( scratchShapeModel );
-    if ( isShapeAllowed ) {
+    if ( QuadrilateralShapeModel.isQuadrilateralShapeAllowed( scratchShapeModel ) ) {
 
       // signify to the Alerter that it will be time to generate a new object response from input
       this.side.voicingObjectResponseDirty = true;
       shapeModel.setVertexPositions( scratchLabelToPositionMap );
     }
 
+    // The side is only blocked by shape in the case of crossed quadrilaterals - isQuadrilateralShapeAllowed will return
+    // false if a vertex is out of bounds, but that shouldn't count toward 'blocked by shape' because there is a
+    // special check just for bounds.
+    const isShapeAllowed = QuadrilateralShapeModel.isQuadrilateralShapeNotCrossed( scratchShapeModel );
     this.updateBlockedState( !isShapeAllowed, !inBounds );
   }
 

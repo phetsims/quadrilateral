@@ -627,6 +627,69 @@ export default class QuadrilateralShapeModel {
     this.resetNotInProgressProperty.value = true;
   }
 
+  /**
+   * Returns true when the provided QuadrilateralShapeModel has every vertex contained within model bounds.
+   * @param shapeModel
+   */
+  private static areQuadrilateralVerticesInBounds( shapeModel: QuadrilateralShapeModel ): boolean {
+    return _.every( shapeModel.vertices, vertex => {
+      return QuadrilateralConstants.MODEL_BOUNDS.containsBounds( vertex.modelBoundsProperty.value );
+    } );
+  }
+
+  /**
+   * Returns true if the quadrilateral shape is NOT crossed. The quadrilateral shape is usually valid when not crossed,
+   * so returning this value makes logic easier at usage sites.
+   */
+  public static isQuadrilateralShapeNotCrossed( shapeModel: QuadrilateralShapeModel ): boolean {
+    let shapeCrossed = true;
+
+    for ( let i = 0; i < shapeModel.vertices.length; i++ ) {
+      const testVertex = shapeModel.vertices[ i ];
+
+      // Make sure that no vertices overlap any other.
+      if ( shapeCrossed ) {
+        for ( let j = 0; j < shapeModel.vertices.length; j++ ) {
+          const otherVertex = shapeModel.vertices[ j ];
+
+          if ( testVertex !== otherVertex ) {
+            shapeCrossed = !testVertex.overlapsOther( otherVertex );
+
+            if ( !shapeCrossed ) {
+              break;
+            }
+          }
+        }
+      }
+
+      // Make sure that no vertices overlap a side.
+      if ( shapeCrossed ) {
+        for ( let j = 0; j < shapeModel.sides.length; j++ ) {
+          const side = shapeModel.sides[ j ];
+          if ( !side.includesVertex( testVertex ) ) {
+            shapeCrossed = !side.shapeProperty.value.intersectsBounds( testVertex.modelBoundsProperty.value );
+
+            if ( !shapeCrossed ) {
+              break;
+            }
+          }
+        }
+      }
+
+      // Make sure the QuadrilateralVertex is within the drag area Shape.
+      if ( shapeCrossed ) {
+        assert && assert( testVertex.dragAreaProperty.value, 'Drag area must be defined for the QuadrilateralVertex' );
+        shapeCrossed = QuadrilateralUtils.customShapeContainsPoint( testVertex.dragAreaProperty.value!, testVertex.positionProperty.value );
+      }
+
+      // Quadrilateral is not allowed, no need to keep testing
+      if ( !shapeCrossed ) {
+        break;
+      }
+    }
+
+    return shapeCrossed;
+  }
 
   /**
    * Returns true if the current quadrilateral shape is allowed based on the rules of this model.
@@ -641,53 +704,13 @@ export default class QuadrilateralShapeModel {
   public static isQuadrilateralShapeAllowed( shapeModel: QuadrilateralShapeModel ): boolean {
     let shapeAllowed = true;
 
-    for ( let i = 0; i < shapeModel.vertices.length; i++ ) {
-      const testVertex = shapeModel.vertices[ i ];
+    // All vertices must be completely within model bounds.
+    shapeAllowed = QuadrilateralShapeModel.areQuadrilateralVerticesInBounds( shapeModel );
 
-      // The vertex must be completely within model bounds
-      shapeAllowed = QuadrilateralConstants.MODEL_BOUNDS.containsBounds( testVertex.modelBoundsProperty.value );
-
-      // Make sure that no vertices overlap any other.
-      if ( shapeAllowed ) {
-        for ( let j = 0; j < shapeModel.vertices.length; j++ ) {
-          const otherVertex = shapeModel.vertices[ j ];
-
-          if ( testVertex !== otherVertex ) {
-            shapeAllowed = !testVertex.overlapsOther( otherVertex );
-
-            if ( !shapeAllowed ) {
-              break;
-            }
-          }
-        }
-      }
-
-      // Make sure that no vertices overlap a side.
-      if ( shapeAllowed ) {
-        for ( let j = 0; j < shapeModel.sides.length; j++ ) {
-          const side = shapeModel.sides[ j ];
-          if ( !side.includesVertex( testVertex ) ) {
-            shapeAllowed = !side.shapeProperty.value.intersectsBounds( testVertex.modelBoundsProperty.value );
-
-            if ( !shapeAllowed ) {
-              break;
-            }
-          }
-        }
-      }
-
-      // Make sure the QuadrilateralVertex is within the drag area Shape.
-      if ( shapeAllowed ) {
-        assert && assert( testVertex.dragAreaProperty.value, 'Drag area must be defined for the QuadrilateralVertex' );
-        shapeAllowed = QuadrilateralUtils.customShapeContainsPoint( testVertex.dragAreaProperty.value!, testVertex.positionProperty.value );
-      }
-
-      // Quadrilateral is not allowed, no need to keep testing
-      if ( !shapeAllowed ) {
-        break;
-      }
+    // If all vertices are in bounds, look for crossed shapes (more computationally expensive).
+    if ( shapeAllowed ) {
+      shapeAllowed = QuadrilateralShapeModel.isQuadrilateralShapeNotCrossed( shapeModel );
     }
-
     return shapeAllowed;
   }
 
