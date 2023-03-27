@@ -7,7 +7,6 @@
  */
 
 import quadrilateral from '../quadrilateral.js';
-import { SoundDesign } from './model/QuadrilateralSoundOptionsModel.js';
 
 const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
 
@@ -105,12 +104,15 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     isValidValue: ( value: number ) => value > 0
   },
 
-  // Sets the initial sound design on startup. Values are the enumeration values of
-  // QuadrilateralSoundOptionsModel.SoundDesign as a string. See https://github.com/phetsims/quadrilateral/blob/master/js/quadrilateral/model/QuadrilateralSoundOptionsModel.ts#L37-L53
+  // Sets the initial sound design on startup. This sim has two sound designs that the user can select from.
+  // It can be set at runtime from Preferences or on load with this query parameter. Query parameter
+  // maps to one of the supported sound designs at https://github.com/phetsims/quadrilateral/blob/7a012e768b3ffd480af1651536119b4650cbb14b/js/quadrilateral/model/QuadrilateralSoundOptionsModel.ts#L18-L23
+  // shapeLayer -> TRACKS_LAYER sound design
+  // shapeUnique -> TRACKS_EMPHASIS sound design
   soundDesign: {
     type: 'string',
-    defaultValue: 'TRACKS_LAYER',
-    validValues: SoundDesign.enumeration.keys
+    defaultValue: 'shapeLayer',
+    validValues: [ 'shapeLayer', 'shapeUnique' ]
   },
 
   /**

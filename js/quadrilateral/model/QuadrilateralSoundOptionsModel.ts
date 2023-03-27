@@ -22,10 +22,19 @@ class SoundDesign extends EnumerationValue {
   public static readonly enumeration = new Enumeration( SoundDesign );
 }
 
+// Maps a query parameter string to one of the SoundDesigns. I (JG) generally prefer EnumerationValue to string union
+// types but this is unfortunate...
+const queryParameterToSoundDesignMap: Record<string, SoundDesign> = {
+  shapeLayer: SoundDesign.TRACKS_LAYER,
+  shapeUnique: SoundDesign.TRACKS_EMPHASIS
+};
+const defaultSoundDesign = queryParameterToSoundDesignMap[ QuadrilateralQueryParameters.soundDesign! ]!;
+assert && assert( defaultSoundDesign, 'No sound design for provided query parameter' );
+
 export default class QuadrilateralSoundOptionsModel {
 
   // The selected sound design
-  public soundDesignProperty = new EnumerationProperty( SoundDesign.enumeration.getValue( QuadrilateralQueryParameters.soundDesign! ) );
+  public soundDesignProperty = new EnumerationProperty( defaultSoundDesign );
 
   // If true, the sounds will play forever. Available to the user and helpful for debugging.
   public tracksPlayForeverProperty = new BooleanProperty( false );
