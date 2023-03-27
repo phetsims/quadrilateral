@@ -16,7 +16,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import VertexLabel from './VertexLabel.js';
+import QuadrilateralVertexLabel from './QuadrilateralVertexLabel.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import QuadrilateralMovable from './QuadrilateralMovable.js';
@@ -36,7 +36,7 @@ export default class QuadrilateralVertex extends QuadrilateralMovable {
   public readonly angleProperty: Property<number | null>;
 
   // Identification of this QuadrilateralVertex within the QuadrilateralShape.
-  public readonly vertexLabel: VertexLabel;
+  public readonly vertexLabel: QuadrilateralVertexLabel;
 
   // The Shape in model coordinates that defines where this QuadrilateralVertex can move. It can never
   // go outside this area. The dragAreaProperty is determined by other vertices of the quadrilateral
@@ -94,7 +94,7 @@ export default class QuadrilateralVertex extends QuadrilateralMovable {
    *                                  a tangible device (prototype).
    * @param tandem
    */
-  public constructor( initialPosition: Vector2, vertexLabel: VertexLabel, smoothingLengthProperty: TReadOnlyProperty<number>, tandem: Tandem ) {
+  public constructor( initialPosition: Vector2, vertexLabel: QuadrilateralVertexLabel, smoothingLengthProperty: TReadOnlyProperty<number>, tandem: Tandem ) {
     super( tandem );
 
     this.smoothingLengthProperty = smoothingLengthProperty;

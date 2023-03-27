@@ -14,7 +14,7 @@ import quadrilateral from '../../quadrilateral.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
 import QuadrilateralSideLabel from './QuadrilateralSideLabel.js';
-import VertexLabel from './VertexLabel.js';
+import QuadrilateralVertexLabel from './QuadrilateralVertexLabel.js';
 import NamedQuadrilateral from './NamedQuadrilateral.js';
 
 export default class QuadrilateralShapeSnapshot {
@@ -72,12 +72,12 @@ export default class QuadrilateralShapeSnapshot {
   }
 
   /**
-   * Returns the saved QuadrilateralVertex angle of a particular QuadrilateralVertex given the VertexLabel.
+   * Returns the saved QuadrilateralVertex angle of a particular QuadrilateralVertex given the QuadrilateralVertexLabel.
    */
-  public getAngleFromVertexLabel( label: VertexLabel ): number {
-    return label === VertexLabel.VERTEX_A ? this.vertexAAngle :
-           label === VertexLabel.VERTEX_B ? this.vertexBAngle :
-           label === VertexLabel.VERTEX_C ? this.vertexCAngle :
+  public getAngleFromVertexLabel( label: QuadrilateralVertexLabel ): number {
+    return label === QuadrilateralVertexLabel.VERTEX_A ? this.vertexAAngle :
+           label === QuadrilateralVertexLabel.VERTEX_B ? this.vertexBAngle :
+           label === QuadrilateralVertexLabel.VERTEX_C ? this.vertexCAngle :
            this.vertexDAngle; // VERTEX_D
   }
 
@@ -89,12 +89,12 @@ export default class QuadrilateralShapeSnapshot {
   }
 
   /**
-   * Returns the saved QuadrilateralVertex position of a particular QuadrilateralVertex given the VertexLabel.
+   * Returns the saved QuadrilateralVertex position of a particular QuadrilateralVertex given the QuadrilateralVertexLabel.
    */
-  public getPositionFromVertexLabel( label: VertexLabel ): Vector2 {
-    return label === VertexLabel.VERTEX_A ? this.vertexAPosition :
-           label === VertexLabel.VERTEX_B ? this.vertexBPosition :
-           label === VertexLabel.VERTEX_C ? this.vertexCPosition :
+  public getPositionFromVertexLabel( label: QuadrilateralVertexLabel ): Vector2 {
+    return label === QuadrilateralVertexLabel.VERTEX_A ? this.vertexAPosition :
+           label === QuadrilateralVertexLabel.VERTEX_B ? this.vertexBPosition :
+           label === QuadrilateralVertexLabel.VERTEX_C ? this.vertexCPosition :
            this.vertexDPosition; // VERTEX_D
   }
 

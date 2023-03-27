@@ -12,7 +12,7 @@ import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
-import VertexLabel from '../model/VertexLabel.js';
+import QuadrilateralVertexLabel from '../model/QuadrilateralVertexLabel.js';
 import VertexDescriber from './VertexDescriber.js';
 import SideDescriber from './SideDescriber.js';
 import QuadrilateralSideLabel from '../model/QuadrilateralSideLabel.js';
@@ -120,12 +120,12 @@ shapeNameMap.set( NamedQuadrilateral.PARALLELOGRAM, QuadrilateralStrings.a11y.vo
 shapeNameMap.set( NamedQuadrilateral.DART, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.dartStringProperty );
 shapeNameMap.set( NamedQuadrilateral.TRIANGLE, QuadrilateralStrings.a11y.voicing.shapeNames.withoutArticles.triangleStringProperty );
 
-// A map that goes from VertexLabel -> letter label (like "A")
-const vertexLabelMap = new Map<VertexLabel, TReadOnlyProperty<string>>();
-vertexLabelMap.set( VertexLabel.VERTEX_A, vertexAStringProperty );
-vertexLabelMap.set( VertexLabel.VERTEX_B, vertexBStringProperty );
-vertexLabelMap.set( VertexLabel.VERTEX_C, vertexCStringProperty );
-vertexLabelMap.set( VertexLabel.VERTEX_D, vertexDStringProperty );
+// A map that goes from QuadrilateralVertexLabel -> letter label (like "A")
+const vertexLabelMap = new Map<QuadrilateralVertexLabel, TReadOnlyProperty<string>>();
+vertexLabelMap.set( QuadrilateralVertexLabel.VERTEX_A, vertexAStringProperty );
+vertexLabelMap.set( QuadrilateralVertexLabel.VERTEX_B, vertexBStringProperty );
+vertexLabelMap.set( QuadrilateralVertexLabel.VERTEX_C, vertexCStringProperty );
+vertexLabelMap.set( QuadrilateralVertexLabel.VERTEX_D, vertexDStringProperty );
 
 // A map that goes from QuadrilateralSideLabel -> "full" side label (like "Side AB")
 const fullSideLabelMap = new Map<QuadrilateralSideLabel, TReadOnlyProperty<string>>();
@@ -183,12 +183,12 @@ export default class QuadrilateralDescriber {
   }
 
   /**
-   * Return the VertexDescriber that can be used to describe a vertex of the provided VertexLabel.
+   * Return the VertexDescriber that can be used to describe a vertex of the provided QuadrilateralVertexLabel.
    */
-  public getVertexDescriberForLabel( vertexLabel: VertexLabel ): VertexDescriber {
-    return vertexLabel === VertexLabel.VERTEX_A ? this.vertexADescriber :
-           vertexLabel === VertexLabel.VERTEX_B ? this.vertexBDescriber :
-           vertexLabel === VertexLabel.VERTEX_C ? this.vertexCDescriber :
+  public getVertexDescriberForLabel( vertexLabel: QuadrilateralVertexLabel ): VertexDescriber {
+    return vertexLabel === QuadrilateralVertexLabel.VERTEX_A ? this.vertexADescriber :
+           vertexLabel === QuadrilateralVertexLabel.VERTEX_B ? this.vertexBDescriber :
+           vertexLabel === QuadrilateralVertexLabel.VERTEX_C ? this.vertexCDescriber :
            this.vertexDDescriber;
   }
 
@@ -236,11 +236,11 @@ export default class QuadrilateralDescriber {
   }
 
   /**
-   * Gets a label string for the provided VertexLabel. Returns something like
+   * Gets a label string for the provided QuadrilateralVertexLabel. Returns something like
    * "A" or
    * "B"
    */
-  public static getVertexLabelString( vertexLabel: VertexLabel ): TReadOnlyProperty<string> {
+  public static getVertexLabelString( vertexLabel: QuadrilateralVertexLabel ): TReadOnlyProperty<string> {
     const vertexLabelStringProperty = vertexLabelMap.get( vertexLabel )!;
     assert && assert( vertexLabelStringProperty, 'There must be a label for the vertex.' );
     return vertexLabelStringProperty;
@@ -740,12 +740,12 @@ export default class QuadrilateralDescriber {
     if ( oppositeEqualVertexPair.includesComponent( this.shapeModel.vertexA ) ) {
 
       // opposite equal vertices for the kite are A and C
-      firstCornerStringProperty = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_A );
-      secondCornerStringProperty = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_C );
+      firstCornerStringProperty = QuadrilateralDescriber.getVertexLabelString( QuadrilateralVertexLabel.VERTEX_A );
+      secondCornerStringProperty = QuadrilateralDescriber.getVertexLabelString( QuadrilateralVertexLabel.VERTEX_C );
     }
     else {
-      firstCornerStringProperty = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_B );
-      secondCornerStringProperty = QuadrilateralDescriber.getVertexLabelString( VertexLabel.VERTEX_D );
+      firstCornerStringProperty = QuadrilateralDescriber.getVertexLabelString( QuadrilateralVertexLabel.VERTEX_B );
+      secondCornerStringProperty = QuadrilateralDescriber.getVertexLabelString( QuadrilateralVertexLabel.VERTEX_D );
     }
 
     return StringUtils.fillIn( patternString, {
@@ -766,15 +766,15 @@ export default class QuadrilateralDescriber {
     const inwardCornerLabel = concaveVertex.vertexLabel;
 
     // the vertices with equal angles for a dart will be the ones adjacent to the inward vertex
-    let firstCornerLabel: VertexLabel;
-    let secondCornerLabel: VertexLabel;
-    if ( inwardCornerLabel === VertexLabel.VERTEX_A || inwardCornerLabel === VertexLabel.VERTEX_C ) {
-      firstCornerLabel = VertexLabel.VERTEX_B;
-      secondCornerLabel = VertexLabel.VERTEX_D;
+    let firstCornerLabel: QuadrilateralVertexLabel;
+    let secondCornerLabel: QuadrilateralVertexLabel;
+    if ( inwardCornerLabel === QuadrilateralVertexLabel.VERTEX_A || inwardCornerLabel === QuadrilateralVertexLabel.VERTEX_C ) {
+      firstCornerLabel = QuadrilateralVertexLabel.VERTEX_B;
+      secondCornerLabel = QuadrilateralVertexLabel.VERTEX_D;
     }
     else {
-      firstCornerLabel = VertexLabel.VERTEX_A;
-      secondCornerLabel = VertexLabel.VERTEX_C;
+      firstCornerLabel = QuadrilateralVertexLabel.VERTEX_A;
+      secondCornerLabel = QuadrilateralVertexLabel.VERTEX_C;
     }
 
     return StringUtils.fillIn( patternString, {

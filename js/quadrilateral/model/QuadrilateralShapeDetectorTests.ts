@@ -12,7 +12,7 @@ import QuadrilateralShapeDetector from './QuadrilateralShapeDetector.js';
 import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
 import NamedQuadrilateral from './NamedQuadrilateral.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import VertexLabel from './VertexLabel.js';
+import QuadrilateralVertexLabel from './QuadrilateralVertexLabel.js';
 
 QUnit.module( 'BooleanProperty' );
 QUnit.test( 'QuadrilateralShapeDetector', assert => {
@@ -22,10 +22,10 @@ QUnit.test( 'QuadrilateralShapeDetector', assert => {
 
   const setPositionsToShape = ( aPosition: Vector2, bPosition: Vector2, cPosition: Vector2, dPosition: Vector2 ) => {
     shapeModel.setVertexPositions( new Map( [
-      [ VertexLabel.VERTEX_A, aPosition ],
-      [ VertexLabel.VERTEX_B, bPosition ],
-      [ VertexLabel.VERTEX_C, cPosition ],
-      [ VertexLabel.VERTEX_D, dPosition ]
+      [ QuadrilateralVertexLabel.VERTEX_A, aPosition ],
+      [ QuadrilateralVertexLabel.VERTEX_B, bPosition ],
+      [ QuadrilateralVertexLabel.VERTEX_C, cPosition ],
+      [ QuadrilateralVertexLabel.VERTEX_D, dPosition ]
     ] ) );
   };
 

@@ -11,7 +11,7 @@ import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralVertex from '../model/QuadrilateralVertex.js';
-import VertexLabel from '../model/VertexLabel.js';
+import QuadrilateralVertexLabel from '../model/QuadrilateralVertexLabel.js';
 import Range from '../../../../dot/js/Range.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import CornerGuideNode from './CornerGuideNode.js';
@@ -58,11 +58,11 @@ const justUnderNumberOfWedgesPatternStringProperty = QuadrilateralStrings.a11y.v
 const blockedByEdgeStringProperty = QuadrilateralStrings.a11y.voicing.blockedByEdgeStringProperty;
 
 // Maps a vertex to its accessible name, like "Corner A".
-const VERTEX_CORNER_LABEL_MAP = new Map<VertexLabel, TReadOnlyProperty<string>>( [
-  [ VertexLabel.VERTEX_A, cornerAStringProperty ],
-  [ VertexLabel.VERTEX_B, cornerBStringProperty ],
-  [ VertexLabel.VERTEX_C, cornerCStringProperty ],
-  [ VertexLabel.VERTEX_D, cornerDStringProperty ]
+const VERTEX_CORNER_LABEL_MAP = new Map<QuadrilateralVertexLabel, TReadOnlyProperty<string>>( [
+  [ QuadrilateralVertexLabel.VERTEX_A, cornerAStringProperty ],
+  [ QuadrilateralVertexLabel.VERTEX_B, cornerBStringProperty ],
+  [ QuadrilateralVertexLabel.VERTEX_C, cornerCStringProperty ],
+  [ QuadrilateralVertexLabel.VERTEX_D, cornerDStringProperty ]
 ] );
 
 // If ratio of an angle to another is within this range it is 'about half as large as the other'.

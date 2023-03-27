@@ -29,7 +29,7 @@ import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
 import QuadrilateralShapeModel, { VertexLabelToProposedPositionMap } from '../QuadrilateralShapeModel.js';
 import QuadrilateralTangibleOptionsModel from './QuadrilateralTangibleOptionsModel.js';
 import MarkerDetectionModel from './MarkerDetectionModel.js';
-import VertexLabel from '../VertexLabel.js';
+import QuadrilateralVertexLabel from '../QuadrilateralVertexLabel.js';
 
 export default class TangibleConnectionModel {
 
@@ -123,10 +123,10 @@ export default class TangibleConnectionModel {
   public isShapeAllowedForTangible( labelToPositionMap: VertexLabelToProposedPositionMap ): boolean {
     let allowed = true;
 
-    const vertexAPosition = labelToPositionMap.get( VertexLabel.VERTEX_A );
-    const vertexBPosition = labelToPositionMap.get( VertexLabel.VERTEX_B );
-    const vertexCPosition = labelToPositionMap.get( VertexLabel.VERTEX_C );
-    const vertexDPosition = labelToPositionMap.get( VertexLabel.VERTEX_D );
+    const vertexAPosition = labelToPositionMap.get( QuadrilateralVertexLabel.VERTEX_A );
+    const vertexBPosition = labelToPositionMap.get( QuadrilateralVertexLabel.VERTEX_B );
+    const vertexCPosition = labelToPositionMap.get( QuadrilateralVertexLabel.VERTEX_C );
+    const vertexDPosition = labelToPositionMap.get( QuadrilateralVertexLabel.VERTEX_D );
 
     // all positions defined from tangible/device input
     allowed = !!vertexAPosition! && !!vertexBPosition! && !!vertexCPosition! && !!vertexDPosition!;

@@ -18,7 +18,7 @@ import Utils from '../../../../dot/js/Utils.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
-import VertexLabel from './VertexLabel.js';
+import QuadrilateralVertexLabel from './QuadrilateralVertexLabel.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ParallelSideChecker from './ParallelSideChecker.js';
@@ -35,7 +35,7 @@ import QuadrilateralSideLabel from './QuadrilateralSideLabel.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 
 // Used when verifying that QuadrilateralVertex positions are valid before setting to the model.
-export type VertexLabelToProposedPositionMap = Map<VertexLabel, Vector2>;
+export type VertexLabelToProposedPositionMap = Map<QuadrilateralVertexLabel, Vector2>;
 
 type QuadrilateralShapeModelOptions = {
 
@@ -149,10 +149,10 @@ export default class QuadrilateralShapeModel {
     this._areAllAnglesRight = false;
     this._areAllLengthsEqual = false;
 
-    this.vertexA = new QuadrilateralVertex( new Vector2( -0.25, 0.25 ), VertexLabel.VERTEX_A, smoothingLengthProperty, options.tandem.createTandem( 'vertexA' ) );
-    this.vertexB = new QuadrilateralVertex( new Vector2( 0.25, 0.25 ), VertexLabel.VERTEX_B, smoothingLengthProperty, options.tandem.createTandem( 'vertexB' ) );
-    this.vertexC = new QuadrilateralVertex( new Vector2( 0.25, -0.25 ), VertexLabel.VERTEX_C, smoothingLengthProperty, options.tandem.createTandem( 'vertexC' ) );
-    this.vertexD = new QuadrilateralVertex( new Vector2( -0.25, -0.25 ), VertexLabel.VERTEX_D, smoothingLengthProperty, options.tandem.createTandem( 'vertexD' ) );
+    this.vertexA = new QuadrilateralVertex( new Vector2( -0.25, 0.25 ), QuadrilateralVertexLabel.VERTEX_A, smoothingLengthProperty, options.tandem.createTandem( 'vertexA' ) );
+    this.vertexB = new QuadrilateralVertex( new Vector2( 0.25, 0.25 ), QuadrilateralVertexLabel.VERTEX_B, smoothingLengthProperty, options.tandem.createTandem( 'vertexB' ) );
+    this.vertexC = new QuadrilateralVertex( new Vector2( 0.25, -0.25 ), QuadrilateralVertexLabel.VERTEX_C, smoothingLengthProperty, options.tandem.createTandem( 'vertexC' ) );
+    this.vertexD = new QuadrilateralVertex( new Vector2( -0.25, -0.25 ), QuadrilateralVertexLabel.VERTEX_D, smoothingLengthProperty, options.tandem.createTandem( 'vertexD' ) );
     this.vertices = [ this.vertexA, this.vertexB, this.vertexC, this.vertexD ];
 
     this.oppositeVertexMap = new Map( [
@@ -560,7 +560,7 @@ export default class QuadrilateralShapeModel {
   /**
    * Get the vertex of this shape model with the provided vertexLabel.
    */
-  public getLabelledVertex( vertexLabel: VertexLabel ): QuadrilateralVertex {
+  public getLabelledVertex( vertexLabel: QuadrilateralVertexLabel ): QuadrilateralVertex {
     const labelledVertex = _.find( this.vertices, vertex => vertex.vertexLabel === vertexLabel );
 
     assert && assert( labelledVertex, 'Could not find labelled vertex' );

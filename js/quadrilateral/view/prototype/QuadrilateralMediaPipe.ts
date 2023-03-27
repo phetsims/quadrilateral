@@ -24,7 +24,7 @@ import Vector2 from '../../../../../dot/js/Vector2.js';
 import QuadrilateralShapeModel, { VertexLabelToProposedPositionMap } from '../../model/QuadrilateralShapeModel.js';
 import MediaPipeQueryParameters from '../../../../../tangible/js/mediaPipe/MediaPipeQueryParameters.js';
 import QuadrilateralTangibleController from './QuadrilateralTangibleController.js';
-import VertexLabel from '../../model/VertexLabel.js';
+import QuadrilateralVertexLabel from '../../model/QuadrilateralVertexLabel.js';
 
 // aspect ratio of the video stream to map camera coordinates to sim model coordinates
 const streamDimension2 = MediaPipe.videoStreamDimension2;
@@ -88,10 +88,10 @@ export default class QuadrilateralMediaPipe extends MediaPipe {
         const rightHandPositions = sortedPositions[ 1 ];
 
         // package and attempt to update shape
-        labelToProposedPositionMap.set( VertexLabel.VERTEX_A, leftHandPositions.indexPosition );
-        labelToProposedPositionMap.set( VertexLabel.VERTEX_B, rightHandPositions.indexPosition );
-        labelToProposedPositionMap.set( VertexLabel.VERTEX_C, rightHandPositions.thumbPosition );
-        labelToProposedPositionMap.set( VertexLabel.VERTEX_D, leftHandPositions.thumbPosition );
+        labelToProposedPositionMap.set( QuadrilateralVertexLabel.VERTEX_A, leftHandPositions.indexPosition );
+        labelToProposedPositionMap.set( QuadrilateralVertexLabel.VERTEX_B, rightHandPositions.indexPosition );
+        labelToProposedPositionMap.set( QuadrilateralVertexLabel.VERTEX_C, rightHandPositions.thumbPosition );
+        labelToProposedPositionMap.set( QuadrilateralVertexLabel.VERTEX_D, leftHandPositions.thumbPosition );
 
         this.tangibleController.setPositionsFromAbsolutePositionData( labelToProposedPositionMap );
       }
