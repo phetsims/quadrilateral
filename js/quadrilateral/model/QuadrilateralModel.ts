@@ -181,6 +181,48 @@ export default class QuadrilateralModel implements TModel {
   }
 
   /**
+   * Get the closest grid position to the proposed position, in x/y dimensions OR along the diagonal if we detect
+   * movement close to the diagonal.
+   */
+  public getClosestGridPositionAlongDiagonal( currentPosition: Vector2, proposedPosition: Vector2 ): Vector2 {
+    const interval = this.vertexIntervalProperty.value;
+
+    // create a diagonal line from currentPosition to next interval, in the direction of movement
+    const diagonalIntervalPosition = currentPosition.plusXY(
+      interval * ( proposedPosition.x > currentPosition.x ? 1 : -1 ),
+      interval * ( proposedPosition.y > currentPosition.y ? 1 : -1 )
+    );
+
+    // If we are within this distance to the diagonal line between currentPosition and proposedPosition we are
+    // moving along the diagonal and should try to find the closest grid position along that diagonal line.
+    // This value was chosen by inspection. It is difficult to get a value that "feels right" without being too biased
+    // toward diagonal or movement along the axis.
+    const maximumDiagonalDistance = interval / 250;
+
+    const distanceToDiagonal = Utils.distToSegmentSquared( proposedPosition, currentPosition, diagonalIntervalPosition );
+    if ( distanceToDiagonal < maximumDiagonalDistance ) {
+
+      // Close enough to be moving along the diagonal, so the interval needs to be larger to trigger a transition.
+      // Value is the interval along the diagonal so we use the pythagorean theorem.
+      const halfInterval = interval / 2;
+      const diagonalInterval = Math.sqrt( halfInterval * halfInterval + halfInterval * halfInterval );
+      const distanceToCurrentPosition = currentPosition.distance( proposedPosition );
+
+      if ( distanceToCurrentPosition > diagonalInterval ) {
+        return diagonalIntervalPosition;
+      }
+      else {
+
+        // distance along the diagonal was not large enough, don't move
+        return currentPosition;
+      }
+    }
+    else {
+      return this.getClosestGridPosition( proposedPosition );
+    }
+  }
+
+  /**
    * Get the closest grid position to the provided position, in the direction of the provided directionVector.
    * Use this when you need to move to the closest grid position in one dimension, instead of moving to the
    * closest grid position in both X and Y.

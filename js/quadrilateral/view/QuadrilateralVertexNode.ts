@@ -148,7 +148,8 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
         const isAgainstBounds = !inBoundsPosition.equals( modelPoint );
 
         // constrain to the allowable positions in the model along the grid
-        const constrainedPosition = quadrilateralModel.getClosestGridPosition( inBoundsPosition );
+        // const constrainedPosition = quadrilateralModel.getClosestGridPosition( inBoundsPosition );
+        const constrainedPosition = quadrilateralModel.getClosestGridPositionAlongDiagonal( vertex.positionProperty.value, inBoundsPosition );
 
         scratchLabelToPositionMap.clear();
         scratchLabelToPositionMap.set( vertex.vertexLabel, constrainedPosition );
