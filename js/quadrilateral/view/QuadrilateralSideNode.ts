@@ -15,7 +15,7 @@ import QuadrilateralVertex from '../model/QuadrilateralVertex.js';
 import QuadrilateralShapeModel, { VertexLabelToProposedPositionMap } from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import { Line, Shape } from '../../../../kite/js/imports.js';
-import SideDescriber from './SideDescriber.js';
+import QuadrilateralSideDescriber from './QuadrilateralSideDescriber.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import release_mp3 from '../../../../tambo/sounds/release_mp3.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
@@ -44,7 +44,7 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
     quadrilateralModel: QuadrilateralModel,
     side: QuadrilateralSide,
     scratchSide: QuadrilateralSide,
-    sideDescriber: SideDescriber,
+    sideDescriber: QuadrilateralSideDescriber,
     modelViewTransform: ModelViewTransform2,
     providedOptions?: SideNodeOptions ) {
 

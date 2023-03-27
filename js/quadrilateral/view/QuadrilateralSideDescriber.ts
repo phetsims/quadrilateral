@@ -74,7 +74,7 @@ LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 1.6, 1.8 ), muchLongerThanStri
 LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 1.8, 2.2 ), aboutTwiceAsLongAsStringProperty );
 LENGTH_COMPARISON_DESCRIPTION_MAP.set( new Range( 2.2, Number.POSITIVE_INFINITY ), farLongerThanStringProperty );
 
-export default class SideDescriber {
+export default class QuadrilateralSideDescriber {
   public readonly side: QuadrilateralSide;
   private readonly quadrilateralShapeModel: QuadrilateralShapeModel;
   private readonly modelViewTransform: ModelViewTransform2;
@@ -364,4 +364,4 @@ export default class SideDescriber {
   }
 }
 
-quadrilateral.register( 'SideDescriber', SideDescriber );
+quadrilateral.register( 'QuadrilateralSideDescriber', QuadrilateralSideDescriber );

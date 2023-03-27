@@ -14,7 +14,7 @@ import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralVertexLabel from '../model/QuadrilateralVertexLabel.js';
 import VertexDescriber from './VertexDescriber.js';
-import SideDescriber from './SideDescriber.js';
+import QuadrilateralSideDescriber from './QuadrilateralSideDescriber.js';
 import QuadrilateralSideLabel from '../model/QuadrilateralSideLabel.js';
 import QuadrilateralSidePair from '../model/QuadrilateralSidePair.js';
 import QuadrilateralVertexPair from '../model/QuadrilateralVertexPair.js';
@@ -154,11 +154,11 @@ export default class QuadrilateralDescriber {
   private readonly shapeNameVisibleProperty: TReadOnlyProperty<boolean>;
   private readonly markersVisibleProperty: TReadOnlyProperty<boolean>;
 
-  public readonly sideABDescriber: SideDescriber;
-  public readonly sideBCDescriber: SideDescriber;
-  public readonly sideCDDescriber: SideDescriber;
-  public readonly sideDADescriber: SideDescriber;
-  private readonly sideDescribers: readonly SideDescriber[];
+  public readonly sideABDescriber: QuadrilateralSideDescriber;
+  public readonly sideBCDescriber: QuadrilateralSideDescriber;
+  public readonly sideCDDescriber: QuadrilateralSideDescriber;
+  public readonly sideDADescriber: QuadrilateralSideDescriber;
+  private readonly sideDescribers: readonly QuadrilateralSideDescriber[];
 
   public readonly vertexADescriber: VertexDescriber;
   public readonly vertexBDescriber: VertexDescriber;
@@ -170,10 +170,10 @@ export default class QuadrilateralDescriber {
     this.shapeNameVisibleProperty = shapeNameVisibleProperty;
     this.markersVisibleProperty = markersVisibleProperty;
 
-    this.sideABDescriber = new SideDescriber( shapeModel.sideAB, shapeModel, markersVisibleProperty, modelViewTransform );
-    this.sideBCDescriber = new SideDescriber( shapeModel.sideBC, shapeModel, markersVisibleProperty, modelViewTransform );
-    this.sideCDDescriber = new SideDescriber( shapeModel.sideCD, shapeModel, markersVisibleProperty, modelViewTransform );
-    this.sideDADescriber = new SideDescriber( shapeModel.sideDA, shapeModel, markersVisibleProperty, modelViewTransform );
+    this.sideABDescriber = new QuadrilateralSideDescriber( shapeModel.sideAB, shapeModel, markersVisibleProperty, modelViewTransform );
+    this.sideBCDescriber = new QuadrilateralSideDescriber( shapeModel.sideBC, shapeModel, markersVisibleProperty, modelViewTransform );
+    this.sideCDDescriber = new QuadrilateralSideDescriber( shapeModel.sideCD, shapeModel, markersVisibleProperty, modelViewTransform );
+    this.sideDADescriber = new QuadrilateralSideDescriber( shapeModel.sideDA, shapeModel, markersVisibleProperty, modelViewTransform );
     this.sideDescribers = [ this.sideABDescriber, this.sideBCDescriber, this.sideCDDescriber, this.sideDADescriber ];
 
     this.vertexADescriber = new VertexDescriber( shapeModel.vertexA, shapeModel, markersVisibleProperty );
