@@ -25,12 +25,13 @@ import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { VertexLabelToProposedPositionMap } from '../model/QuadrilateralShapeModel.js';
+import Utterance from '../../../../utterance-queue/js/Utterance.js';
 
 // constants
 const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
 
 type SelfOptions = EmptySelfOptions;
-type VertexNodeOptions = SelfOptions & StrictOmit<QuadrilateralMovableNodeOptions, 'grabbedSound'>;
+type VertexNodeOptions = SelfOptions & StrictOmit<QuadrilateralMovableNodeOptions, 'grabbedSound' | 'voicingUtterance'>;
 
 // Reusable map that saves proposed vertex positions, to avoid excessive garbage.
 const scratchLabelToPositionMap: VertexLabelToProposedPositionMap = new Map();
@@ -42,7 +43,13 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
   public constructor( vertex: QuadrilateralVertex, vertexLabel: TReadOnlyProperty<string>, quadrilateralModel: QuadrilateralModel, vertexDescriber: QuadrilateralVertexDescriber, modelViewTransform: ModelViewTransform2, providedOptions?: VertexNodeOptions ) {
 
     const options = optionize<VertexNodeOptions, SelfOptions, QuadrilateralMovableNodeOptions>()( {
-      grabbedSound: grabHighPitch_mp3
+      grabbedSound: grabHighPitch_mp3,
+
+      // voicing - Responses voiced by this Node should be higher Priority so that it is not interrupted by
+      // context responses during shape changes
+      voicingUtterance: new Utterance( {
+        priority: Utterance.MEDIUM_PRIORITY
+      } )
     }, providedOptions );
 
     const viewRadius = modelViewTransform.modelToViewBounds( vertex.modelBoundsProperty.value ).width / 2;
