@@ -53,17 +53,21 @@ export default class QuadrilateralGridNode extends Node {
 
     // dilate just enough for the quadrilateral shape to never overlap the stroke
     const modelLineWidth = modelViewTransform.viewToModelDeltaX( BORDER_RECTANGLE_LINE_WIDTH );
-    const dilatedBounds = QuadrilateralConstants.MODEL_BOUNDS.dilated( modelLineWidth );
+    const dilatedBackgroundBounds = QuadrilateralConstants.MODEL_BOUNDS.dilated( modelLineWidth );
 
-    boundsRectangle.setRectBounds( modelViewTransform.modelToViewBounds( dilatedBounds ) );
+    // The grid lines are a different color so they cannot overlap the background rectangle stroke (but should
+    // be flush up against it).
+    const dilatedGridBounds = QuadrilateralConstants.MODEL_BOUNDS.dilated( modelLineWidth / 2 );
 
-    this.drawVerticalLines( lineShape, dilatedBounds, QuadrilateralConstants.GRID_SPACING );
-    this.drawHorizontalLines( lineShape, dilatedBounds, QuadrilateralConstants.GRID_SPACING );
+    boundsRectangle.setRectBounds( modelViewTransform.modelToViewBounds( dilatedBackgroundBounds ) );
+
+    this.drawVerticalLines( lineShape, dilatedGridBounds, QuadrilateralConstants.GRID_SPACING );
+    this.drawHorizontalLines( lineShape, dilatedGridBounds, QuadrilateralConstants.GRID_SPACING );
     majorGridLinePath.shape = modelViewTransform.modelToViewShape( lineShape );
 
     const minorDebugShape = new Shape();
-    this.drawVerticalLines( minorDebugShape, dilatedBounds, QuadrilateralQueryParameters.minorVertexInterval );
-    this.drawHorizontalLines( minorDebugShape, dilatedBounds, QuadrilateralQueryParameters.minorVertexInterval );
+    this.drawVerticalLines( minorDebugShape, dilatedGridBounds, QuadrilateralQueryParameters.minorVertexInterval );
+    this.drawHorizontalLines( minorDebugShape, dilatedGridBounds, QuadrilateralQueryParameters.minorVertexInterval );
     minorGridLinePath.shape = modelViewTransform.modelToViewShape( minorDebugShape );
 
     visibleProperty.link( visible => { gridLines.visible = visible; } );
