@@ -17,7 +17,7 @@ import SideLabel from './SideLabel.js';
 import VertexLabel from './VertexLabel.js';
 import NamedQuadrilateral from './NamedQuadrilateral.js';
 
-export default class ShapeSnapshot {
+export default class QuadrilateralShapeSnapshot {
   public readonly isParallelogram: boolean;
   public readonly sideABsideCDParallel: boolean;
   public readonly sideBCsideDAParallel: boolean;
@@ -175,4 +175,4 @@ export default class ShapeSnapshot {
   }
 }
 
-quadrilateral.register( 'ShapeSnapshot', ShapeSnapshot );
+quadrilateral.register( 'QuadrilateralShapeSnapshot', QuadrilateralShapeSnapshot );
