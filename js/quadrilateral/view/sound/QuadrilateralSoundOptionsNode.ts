@@ -27,7 +27,7 @@ import JoistStrings from '../../../../../joist/js/JoistStrings.js';
 const shapeSoundsOptionsStringProperty = QuadrilateralStrings.preferencesDialog.shapeSoundOptionsStringProperty;
 const shapeSoundsOptionsDescriptionStringProperty = QuadrilateralStrings.preferencesDialog.shapeSoundOptionsDescriptionStringProperty;
 const preferencesDialogLayerSoundDesignDescriptionStringProperty = QuadrilateralStrings.preferencesDialog.layerSoundDesignDescriptionStringProperty;
-const preferencesDialogEmphasisSoundDesignDescriptionStringProperty = QuadrilateralStrings.preferencesDialog.emphasisSoundDesignDescriptionStringProperty;
+const preferencesDialogUniqueSoundDesignDescriptionStringProperty = QuadrilateralStrings.preferencesDialog.uniqueSoundDesignDescriptionStringProperty;
 const preferencesDialogPlayShapeSoundsForeverStringProperty = QuadrilateralStrings.preferencesDialog.playShapeSoundsForeverStringProperty;
 const tracksPlayForeverCheckedContextResponseStringProperty = QuadrilateralStrings.a11y.preferencesDialog.tracksPlayForeverToggle.checkedContextResponseStringProperty;
 const tracksPlayForeverUncheckedContextResponseStringProperty = QuadrilateralStrings.a11y.preferencesDialog.tracksPlayForeverToggle.uncheckedContextResponseStringProperty;
@@ -76,10 +76,10 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
       },
       {
         value: SoundDesign.TRACKS_EMPHASIS,
-        createNode: () => new Text( preferencesDialogEmphasisSoundDesignDescriptionStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
+        createNode: () => new Text( preferencesDialogUniqueSoundDesignDescriptionStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
         tandemName: `emphasisTracksSoundView${AquaRadioButton.TANDEM_NAME_SUFFIX}`,
         options: {
-          voicingNameResponse: preferencesDialogEmphasisSoundDesignDescriptionStringProperty
+          voicingNameResponse: preferencesDialogUniqueSoundDesignDescriptionStringProperty
         }
       }
     ], {

@@ -37,7 +37,7 @@ type StringsType = {
   };
   'keyboardHelpDialog': {
     'moveCornersOrSidesStringProperty': LinkableProperty<string>;
-    'moveACornerOrSideStringProperty': LinkableProperty<string>;
+    'moveCornerOrSideStringProperty': LinkableProperty<string>;
     'moveInSmallerStepsStringProperty': LinkableProperty<string>;
     'mouseStringProperty': LinkableProperty<string>;
     'shapeShortcutsStringProperty': LinkableProperty<string>;
@@ -47,8 +47,7 @@ type StringsType = {
     'shapeSoundOptionsStringProperty': LinkableProperty<string>;
     'shapeSoundOptionsDescriptionStringProperty': LinkableProperty<string>;
     'layerSoundDesignDescriptionStringProperty': LinkableProperty<string>;
-    'emphasisSoundDesignDescriptionStringProperty': LinkableProperty<string>;
-    'soundsPlayForeverDescriptionStringProperty': LinkableProperty<string>;
+    'uniqueSoundDesignDescriptionStringProperty': LinkableProperty<string>;
     'playShapeSoundsForeverStringProperty': LinkableProperty<string>;
   };
   'smallStepsStringProperty': LinkableProperty<string>;
