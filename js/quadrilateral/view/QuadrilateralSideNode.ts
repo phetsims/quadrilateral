@@ -11,7 +11,6 @@ import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralSide from '../model/QuadrilateralSide.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import QuadrilateralVertex from '../model/QuadrilateralVertex.js';
 import QuadrilateralShapeModel, { VertexLabelToProposedPositionMap } from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import { Line, Shape } from '../../../../kite/js/imports.js';
@@ -211,6 +210,7 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
         const vertex1Pressed = side.vertex1.isPressedProperty.value;
         const vertex2Pressed = side.vertex2.isPressedProperty.value;
 
+        // A side cannot be dragged while one of its Vertices is dragged (multitouch)
         if ( !vertex1Pressed && !vertex2Pressed ) {
 
           // point in the coordinate frame of the play area, then in model coordinates
@@ -275,16 +275,6 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
           }
 
           this.updateBlockedState( !positionsAllowed, !inBounds );
-        }
-        else if ( vertex1Pressed !== vertex2Pressed ) {
-
-          // only one vertex is pressed, rotate around the pressed vertex
-          if ( vertex1Pressed ) {
-            this.rotateVertexAroundOther( side.vertex1, side.vertex2, listener.modelDelta );
-          }
-          else {
-            this.rotateVertexAroundOther( side.vertex2, side.vertex1, listener.modelDelta );
-          }
         }
       },
 
@@ -362,25 +352,6 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
     // special check just for bounds.
     const isShapeAllowed = QuadrilateralShapeModel.isQuadrilateralShapeNotCrossed( scratchShapeModel );
     this.updateBlockedState( !isShapeAllowed, !inBounds );
-  }
-
-  /**
-   * Rotate one vertex around another by moving the "arm" vertex as if it were being directly dragged while keeping the
-   * pressed vertex locked in place.
-   *
-   * @param anchorVertex - Anchor vertex we are rotating around.
-   * @param armVertex - QuadrilateralVertex being repositioned.
-   * @param modelDelta - The amount of movement of the arm drag in model coordinates
-   */
-  private rotateVertexAroundOther( anchorVertex: QuadrilateralVertex, armVertex: QuadrilateralVertex, modelDelta: Vector2 ): void {
-    const modelPosition = armVertex.positionProperty.get().plus( modelDelta );
-    const proposedPosition = this.quadrilateralModel.getClosestGridPosition( modelPosition );
-
-    scratchLabelToPositionMap.clear();
-    scratchLabelToPositionMap.set( armVertex.vertexLabel, proposedPosition );
-    if ( this.quadrilateralModel.areVertexPositionsAllowed( scratchLabelToPositionMap ) ) {
-      armVertex.positionProperty.value = proposedPosition;
-    }
   }
 }
 
