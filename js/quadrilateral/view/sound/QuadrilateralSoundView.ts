@@ -27,7 +27,7 @@ export default class QuadrilateralSoundView {
       if ( soundDesign === SoundDesign.TRACKS_LAYER ) {
         this.activeSoundView = new LayersTracksSoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
       }
-      else if ( soundDesign === SoundDesign.TRACKS_EMPHASIS ) {
+      else if ( soundDesign === SoundDesign.TRACKS_UNIQUE ) {
         this.activeSoundView = new EmphasisTracksSoundView( model.quadrilateralShapeModel, model.shapeSoundEnabledProperty, model.resetNotInProgressProperty, soundOptionsModel );
       }
     } );

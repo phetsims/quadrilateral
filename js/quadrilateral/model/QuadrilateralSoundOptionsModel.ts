@@ -16,7 +16,7 @@ import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 
 // Enumeration for the different sound designs available to the user.
 class SoundDesign extends EnumerationValue {
-  public static readonly TRACKS_EMPHASIS = new SoundDesign();
+  public static readonly TRACKS_UNIQUE = new SoundDesign();
   public static readonly TRACKS_LAYER = new SoundDesign();
 
   public static readonly enumeration = new Enumeration( SoundDesign );
@@ -26,7 +26,7 @@ class SoundDesign extends EnumerationValue {
 // types but this is unfortunate...
 const queryParameterToSoundDesignMap: Record<string, SoundDesign> = {
   shapeLayer: SoundDesign.TRACKS_LAYER,
-  shapeUnique: SoundDesign.TRACKS_EMPHASIS
+  shapeUnique: SoundDesign.TRACKS_UNIQUE
 };
 const defaultSoundDesign = queryParameterToSoundDesignMap[ QuadrilateralQueryParameters.soundDesign! ]!;
 assert && assert( defaultSoundDesign, 'No sound design for provided query parameter' );

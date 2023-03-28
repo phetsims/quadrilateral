@@ -75,7 +75,7 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
         }
       },
       {
-        value: SoundDesign.TRACKS_EMPHASIS,
+        value: SoundDesign.TRACKS_UNIQUE,
         createNode: () => new Text( preferencesDialogUniqueSoundDesignDescriptionStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
         tandemName: `emphasisTracksSoundView${AquaRadioButton.TANDEM_NAME_SUFFIX}`,
         options: {

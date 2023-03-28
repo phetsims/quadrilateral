@@ -108,7 +108,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // It can be set at runtime from Preferences or on load with this query parameter. Query parameter
   // maps to one of the supported sound designs at https://github.com/phetsims/quadrilateral/blob/7a012e768b3ffd480af1651536119b4650cbb14b/js/quadrilateral/model/QuadrilateralSoundOptionsModel.ts#L18-L23
   // shapeLayer -> TRACKS_LAYER sound design
-  // shapeUnique -> TRACKS_EMPHASIS sound design
+  // shapeUnique -> TRACKS_UNIQUE sound design
   soundDesign: {
     type: 'string',
     defaultValue: 'shapeLayer',
