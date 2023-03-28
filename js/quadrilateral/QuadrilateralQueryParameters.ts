@@ -115,6 +115,14 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     validValues: [ 'shapeLayer', 'shapeUnique' ]
   },
 
+  // When present, the "layer" sound design is modified to include trapezoid sounds for shapes that share child
+  // geometric properties of the trapezoid. Teachers may not want to indicate that child shapes are actually
+  // inclusive of trapezoid properties, so this is only added by request. See
+  // https://github.com/phetsims/quadrilateral/issues/420
+  trapezoidSoundLayers: {
+    type: 'flag'
+  },
+
   /**
    * Controls the interval that the QuadrilateralVertex will be constrained to
    */

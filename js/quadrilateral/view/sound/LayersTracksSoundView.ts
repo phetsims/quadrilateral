@@ -26,6 +26,7 @@ import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
 import NamedQuadrilateral from '../../model/NamedQuadrilateral.js';
 import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
+import QuadrilateralQueryParameters from '../../QuadrilateralQueryParameters.js';
 
 // All the sounds played in this sound design.
 const LAYER_TRACKS = [
@@ -41,20 +42,37 @@ const LAYER_TRACKS = [
 
 // Each NamedQuadrilateral is assigned zero or more of the above tracks to play. Values of the map are indices of the
 // sound files in the above array that should play for each NamedQuadrilateral, according to the design in
-// https://github.com/phetsims/quadrilateral/issues/175
-const NAMED_QUADRILATERAL_TO_TRACKS_MAP = new Map( [
-  [ NamedQuadrilateral.CONVEX_QUADRILATERAL, [ 0 ] ],
-  [ NamedQuadrilateral.CONCAVE_QUADRILATERAL, [ 1 ] ],
-  [ NamedQuadrilateral.TRIANGLE, [] ],
-  [ NamedQuadrilateral.DART, [ 1, 2 ] ],
-  [ NamedQuadrilateral.KITE, [ 0, 2 ] ],
-  [ NamedQuadrilateral.TRAPEZOID, [ 0, 4 ] ],
-  [ NamedQuadrilateral.ISOSCELES_TRAPEZOID, [ 0, 4, 3 ] ],
-  [ NamedQuadrilateral.PARALLELOGRAM, [ 0, 5 ] ],
-  [ NamedQuadrilateral.RHOMBUS, [ 0, 2, 5, 6 ] ],
-  [ NamedQuadrilateral.RECTANGLE, [ 0, 3, 5, 7 ] ],
-  [ NamedQuadrilateral.SQUARE, [ 0, 2, 3, 5, 6, 7 ] ]
-] );
+// https://github.com/phetsims/quadrilateral/issues/175.
+//
+// Some teachers may prefer to include trapezoid shape properties for child shapes of the trapezoid. See
+// https://github.com/phetsims/quadrilateral/issues/420
+const NAMED_QUADRILATERAL_TO_TRACKS_MAP = QuadrilateralQueryParameters.trapezoidSoundLayers ?
+                                          new Map( [ // design with trapezoid sound in the relevant child shapes
+                                            [ NamedQuadrilateral.CONVEX_QUADRILATERAL, [ 0 ] ],
+                                            [ NamedQuadrilateral.CONCAVE_QUADRILATERAL, [ 1 ] ],
+                                            [ NamedQuadrilateral.TRIANGLE, [] ],
+                                            [ NamedQuadrilateral.DART, [ 1, 2 ] ],
+                                            [ NamedQuadrilateral.KITE, [ 0, 2 ] ],
+                                            [ NamedQuadrilateral.TRAPEZOID, [ 0, 4 ] ],
+                                            [ NamedQuadrilateral.ISOSCELES_TRAPEZOID, [ 0, 4, 3 ] ],
+                                            [ NamedQuadrilateral.PARALLELOGRAM, [ 0, 4, 5 ] ],
+                                            [ NamedQuadrilateral.RHOMBUS, [ 0, 2, 4, 5, 6 ] ],
+                                            [ NamedQuadrilateral.RECTANGLE, [ 0, 3, 4, 5, 7 ] ],
+                                            [ NamedQuadrilateral.SQUARE, [ 0, 2, 3, 4, 5, 6, 7 ] ]
+                                          ] ) :
+                                          new Map( [ // default sound design
+                                            [ NamedQuadrilateral.CONVEX_QUADRILATERAL, [ 0 ] ],
+                                            [ NamedQuadrilateral.CONCAVE_QUADRILATERAL, [ 1 ] ],
+                                            [ NamedQuadrilateral.TRIANGLE, [] ],
+                                            [ NamedQuadrilateral.DART, [ 1, 2 ] ],
+                                            [ NamedQuadrilateral.KITE, [ 0, 2 ] ],
+                                            [ NamedQuadrilateral.TRAPEZOID, [ 0, 4 ] ],
+                                            [ NamedQuadrilateral.ISOSCELES_TRAPEZOID, [ 0, 4, 3 ] ],
+                                            [ NamedQuadrilateral.PARALLELOGRAM, [ 0, 5 ] ],
+                                            [ NamedQuadrilateral.RHOMBUS, [ 0, 2, 5, 6 ] ],
+                                            [ NamedQuadrilateral.RECTANGLE, [ 0, 3, 5, 7 ] ],
+                                            [ NamedQuadrilateral.SQUARE, [ 0, 2, 3, 5, 6, 7 ] ]
+                                          ] );
 
 export default class LayersTracksSoundView extends TracksSoundView {
   private readonly disposeLayersTracksSoundView: () => void;
