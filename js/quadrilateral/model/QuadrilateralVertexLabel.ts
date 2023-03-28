@@ -1,4 +1,4 @@
-// Copyright 2022-2023, University of Colorado Boulder
+// Copyright 2023, University of Colorado Boulder
 
 /**
  * It is useful to know the identity of a particular QuadrilateralVertex, this enumeration supports that.
