@@ -253,9 +253,9 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
           const boundsConstrainedVertex1Position = modelVertex1Position.plus( correctingVector );
           const boundsConstrainedVertex2Position = modelVertex2Position.plus( correctingVector );
 
-          // constrain each to the model grid
-          const gridConstrainedVertex1Position = quadrilateralModel.getClosestGridPosition( boundsConstrainedVertex1Position );
-          const gridConstrainedVertex2Position = quadrilateralModel.getClosestGridPosition( boundsConstrainedVertex2Position );
+          // constrain each to the model grid, allowing for diagonal movement
+          const gridConstrainedVertex1Position = quadrilateralModel.getClosestGridPositionAlongDiagonal( side.vertex1.positionProperty.value, boundsConstrainedVertex1Position );
+          const gridConstrainedVertex2Position = quadrilateralModel.getClosestGridPositionAlongDiagonal( side.vertex2.positionProperty.value, boundsConstrainedVertex2Position );
 
           // deltas for each QuadrilateralVertex must be the same for the side to not change tilt while dragging - update
           // both Vertices by the smallest translation vector so they move together
