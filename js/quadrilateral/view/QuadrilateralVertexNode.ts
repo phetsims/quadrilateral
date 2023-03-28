@@ -203,7 +203,8 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
       if ( oldConstrainingEdges !== null && constrainingEdges > oldConstrainingEdges ) {
         blockedByBoundsSoundClip.play();
         this.voicingSpeakResponse( {
-          contextResponse: vertexDescriber.getBlockedByEdgeResponse()
+          contextResponse: vertexDescriber.getBlockedByEdgeResponse(),
+          utterance: this.blockedUtterance
         } );
       }
     } );

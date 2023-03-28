@@ -40,7 +40,7 @@ type SelfOptions = {
 type ParentOptions = VoicingOptions & NodeOptions;
 
 // QuadrilateralVertexNode sets these properties explicitly from the nameResponse option
-export type QuadrilateralMovableNodeOptions = SelfOptions & StrictOmit<ParentOptions, 'voicingNameResponse' | 'innerContent' | 'voicingUtterance'> & PickRequired<NodeOptions, 'tandem'>;
+export type QuadrilateralMovableNodeOptions = SelfOptions & StrictOmit<ParentOptions, 'voicingNameResponse' | 'innerContent'> & PickRequired<NodeOptions, 'tandem'>;
 
 export default class QuadrilateralMovableNode extends Voicing( Node ) {
   private readonly model: QuadrilateralMovable;
@@ -52,6 +52,12 @@ export default class QuadrilateralMovableNode extends Voicing( Node ) {
   // The actual visual PaintableNode for this view component, added as a child of this Node.
   public readonly paintableNode: PaintableNode;
 
+  // voicing - Responses related to this Node being blocked for movement have higher Priority so that it is not
+  // interrupted by context responses during shape changes.
+  public readonly blockedUtterance = new Utterance( {
+    priority: Utterance.MEDIUM_PRIORITY
+  } );
+
   public constructor( model: QuadrilateralMovable, modelViewTransform: ModelViewTransform2, paintableNode: PaintableNode, providedOptions: QuadrilateralMovableNodeOptions ) {
     const options = optionize<QuadrilateralMovableNodeOptions, SelfOptions, ParentOptions>()( {
       cursor: 'pointer',
@@ -59,13 +65,7 @@ export default class QuadrilateralMovableNode extends Voicing( Node ) {
       ariaRole: 'application',
       focusable: true,
       nameResponse: null,
-      grabbedSoundOutputLevel: 0.6,
-
-      // voicing - Responses voiced by this Node should be higher Priority so that it is not interrupted by
-      // context responses during shape changes.
-      voicingUtterance: new Utterance( {
-        priority: Utterance.MEDIUM_PRIORITY
-      } )
+      grabbedSoundOutputLevel: 0.6
     }, providedOptions );
 
     super( options );
@@ -126,7 +126,8 @@ export default class QuadrilateralMovableNode extends Voicing( Node ) {
       if ( blocked ) {
         blockedByShapeSoundClip.play();
         this.voicingSpeakResponse( {
-          contextResponse: blockedByInnerShapeStringProperty
+          contextResponse: blockedByInnerShapeStringProperty,
+          utterance: this.blockedUtterance
         } );
       }
     } );
