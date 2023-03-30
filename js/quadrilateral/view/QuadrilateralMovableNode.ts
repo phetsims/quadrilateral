@@ -131,6 +131,9 @@ export default class QuadrilateralMovableNode extends Voicing( Node ) {
         } );
       }
     } );
+
+    // Custom utterance for blocked state should only be spoken when Node is visible and voicingVisible.
+    Voicing.registerUtteranceToVoicingNode( this.blockedUtterance, this );
   }
 
   /**
