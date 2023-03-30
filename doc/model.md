@@ -6,7 +6,7 @@ This document is a high-level description of the model for PhET's Quadrilateral 
 
 ### Overview
 
-Quadrilateral enables learners to explore the properties that define shapes, as well as the relationships between shapes, in the four-sided (quadrilateral) family.the relationships. A learner can play with a four-sided shape to change its geometric properties and see how combinations of geometric properties create specific named quadrilaterals, while noting similarities between other named quadrilaterals.
+Quadrilateral enables learners to explore the properties that define shapes, as well as the relationships between shapes, in the four-sided (quadrilateral) family. A learner can play with a four-sided shape to change its geometric properties and see how combinations of geometric properties create specific named quadrilaterals, while noting similarities between other named quadrilaterals.
 
 #### Geometric properties and the shape name 
 The quadrilateral has geometric properties, such as the number of parallel sides, number of equal angles, and number of equal side lengths. The name of the quadrilateral is determined by its geometric properties. There are families of shapes that share overlapping geometric properties, and within those families, properties "build-up" to create named shapes with more specific requirements. For example, one path:
