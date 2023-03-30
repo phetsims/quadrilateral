@@ -14,6 +14,7 @@ import QuadrilateralUtils from '../../model/QuadrilateralUtils.js';
 import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
 import LinearFunction from '../../../../../dot/js/LinearFunction.js';
 import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
+import QuadrilateralVertexLabel from '../../model/QuadrilateralVertexLabel.js';
 
 export default class QuadrilateralTangibleController {
   private readonly quadrilateralModel: QuadrilateralModel;
@@ -26,6 +27,26 @@ export default class QuadrilateralTangibleController {
 
     this.shapeModel = this.quadrilateralModel.quadrilateralShapeModel;
     this.tangibleConnectionModel = this.quadrilateralModel.tangibleConnectionModel;
+
+    console.log( 'adding listener' );
+    window.addEventListener( 'message', event => {
+      const data = JSON.parse( event.data );
+      if ( data.type === 'quadrilateralCalibration' ) {
+        if ( typeof data.width === 'number' && typeof data.height === 'number' ) {
+          this.tangibleConnectionModel.setPhysicalToVirtualTransform( data.width, data.height );
+        }
+      }
+      else if ( data.type === 'quadrilateralControl' ) {
+        const map = new Map();
+
+        map.set( QuadrilateralVertexLabel.VERTEX_A, Vector2.fromStateObject( data.vertexA ) );
+        map.set( QuadrilateralVertexLabel.VERTEX_B, Vector2.fromStateObject( data.vertexB ) );
+        map.set( QuadrilateralVertexLabel.VERTEX_C, Vector2.fromStateObject( data.vertexC ) );
+        map.set( QuadrilateralVertexLabel.VERTEX_D, Vector2.fromStateObject( data.vertexD ) );
+
+        this.setPositionsFromAbsolutePositionData( map, false );
+      }
+    }, true );
   }
 
   /**
@@ -156,7 +177,7 @@ export default class QuadrilateralTangibleController {
    *
    * Currently this is being used by the OpenCV prototype and a prototype using MediaPipe.
    */
-  public setPositionsFromAbsolutePositionData( labelToProposedPositionMap: VertexLabelToProposedPositionMap ): void {
+  public setPositionsFromAbsolutePositionData( labelToProposedPositionMap: VertexLabelToProposedPositionMap, smoothPositions = true ): void {
     const tangibleConnectionModel = this.tangibleConnectionModel;
 
     // you must calibrate before setting positions from a physical device
@@ -177,7 +198,12 @@ export default class QuadrilateralTangibleController {
           const virtualPosition = tangibleConnectionModel.physicalToModelTransform.modelToViewPosition( proposedPosition );
 
           // apply smoothing over a number of values to reduce noise
-          constrainedPosition = vertex.smoothPosition( virtualPosition );
+          if ( smoothPositions ) {
+            constrainedPosition = vertex.smoothPosition( virtualPosition );
+          }
+          else {
+            constrainedPosition = virtualPosition;
+          }
 
           // constrain within model bounds
           constrainedPosition = QuadrilateralConstants.MODEL_BOUNDS.closestPointTo( constrainedPosition );
