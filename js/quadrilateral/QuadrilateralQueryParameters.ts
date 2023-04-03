@@ -3,6 +3,8 @@
 /**
  * Query parameters for this simulation.
  *
+ * A few of these are marked as `public` for teacher use. The rest are intended for internal use/testing/debugging.
+ *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
@@ -46,7 +48,8 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // When provided, user has fine control of vertex positions instead of snapping to a coarse grid. More freedom
   // of movement but named shapes will be more difficult to find.
   reducedStepSize: {
-    type: 'flag'
+    type: 'flag',
+    public: true
   },
 
   // A scale factor to apply to all tolerance intervals when the using ?reducedStepSize.
@@ -111,6 +114,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // shapeUnique -> TRACKS_UNIQUE sound design
   soundDesign: {
     type: 'string',
+    public: true,
     defaultValue: 'shapeLayer',
     validValues: [ 'shapeLayer', 'shapeUnique' ]
   },
@@ -120,7 +124,8 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // inclusive of trapezoid properties, so this is only added by request. See
   // https://github.com/phetsims/quadrilateral/issues/420
   inheritTrapezoidSound: {
-    type: 'flag'
+    type: 'flag',
+    public: true
   },
 
   /**
