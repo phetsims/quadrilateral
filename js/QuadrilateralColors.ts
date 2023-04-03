@@ -71,7 +71,7 @@ const QuadrilateralColors = {
 
   // Color for the stroke for the diagonal guides
   diagonalGuidesStrokeColorProperty: new ProfileColorProperty( quadrilateral, 'diagonalGuideStroke', {
-    default: 'lightgrey'
+    default: '#BABABA'
   } ),
 
   // Fill color for panels in the UI.
