@@ -182,9 +182,22 @@ export default class QuadrilateralModel implements TModel {
 
   /**
    * Get the closest grid position to the proposed position, in x/y dimensions OR along the diagonal if we detect
-   * movement close to the diagonal.
+   * movement close to the diagonal. This allows you to drag diagonally across grid cells if you want to, creating
+   * more intuitive interaction.
+   *
+   * The implementation of this function is summarized by
+   * https://github.com/phetsims/quadrilateral/issues/406#issuecomment-1485982113. If the proposed position
+   * is close enough to a diagonal line between the grid points, we assume that the user wants to move diagonally
+   * so we don't snap to axis-aligned positions.
    */
   public getClosestGridPositionAlongDiagonal( currentPosition: Vector2, proposedPosition: Vector2 ): Vector2 {
+
+    // At this tiny step size, this feature is more harm than help and the grid size is so small that it
+    // makes sense to just get the closest grid position.
+    if ( this.useMinorIntervalsProperty.value && QuadrilateralQueryParameters.reducedStepSize ) {
+      return this.getClosestGridPosition( proposedPosition );
+    }
+
     const interval = this.vertexIntervalProperty.value;
 
     // create a diagonal line from currentPosition to next interval, in the direction of movement
@@ -197,7 +210,7 @@ export default class QuadrilateralModel implements TModel {
     // moving along the diagonal and should try to find the closest grid position along that diagonal line.
     // This value was chosen by inspection. It is difficult to get a value that "feels right" without being too biased
     // toward diagonal or movement along the axis.
-    const maximumDiagonalDistance = interval / 250;
+    const maximumDiagonalDistance = interval / 400;
 
     const distanceToDiagonal = Utils.distToSegmentSquared( proposedPosition, currentPosition, diagonalIntervalPosition );
     if ( distanceToDiagonal < maximumDiagonalDistance ) {
