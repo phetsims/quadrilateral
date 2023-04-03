@@ -46,7 +46,7 @@ const LAYER_TRACKS = [
 //
 // Some teachers may prefer to include trapezoid shape properties for child shapes of the trapezoid. See
 // https://github.com/phetsims/quadrilateral/issues/420
-const NAMED_QUADRILATERAL_TO_TRACKS_MAP = QuadrilateralQueryParameters.trapezoidSoundLayers ?
+const NAMED_QUADRILATERAL_TO_TRACKS_MAP = QuadrilateralQueryParameters.inheritTrapezoidSound ?
                                           new Map( [ // design with trapezoid sound in the relevant child shapes
                                             [ NamedQuadrilateral.CONVEX_QUADRILATERAL, [ 0 ] ],
                                             [ NamedQuadrilateral.CONCAVE_QUADRILATERAL, [ 1 ] ],
