@@ -15,10 +15,10 @@ The quadrilateral has geometric properties, such as the number of parallel sides
 - "Isosceles Trapezoid" has the properties of "Trapezoid" plus two equal adjacent angles and one pair of equal opposite side lengths.
 - "Rectangle" has the properties of "Isosceles Trapezoid" plus an additional pair of parallel sides, all equal angles, and two pairs of equal opposite side lengths.
 
-In the simulation, we rely on the specific set of inclusive relationships between shapes
+In the simulation, we rely on the specific set of inclusive relationships between shapes.
 
 Here is a full diagram showing the geometric properties for each quadrilateral shape. Each family of shapes is a path through this graph. Shapes with more geometric properties become a more specific shape within that shape family.
-<img src="https://user-images.githubusercontent.com/6396244/221933377-fdc7d16e-9edb-4974-bf9a-eff72ce49af0.png" alt="Quadrilateral shape property hierarchy for all included shapes in the simulation" title="Quadrilateral Shape Hierarchy">
+<img src="https://user-images.githubusercontent.com/47331395/229589272-f2bd44d2-a3e4-472b-9432-4c2e6df510af.png" alt="Quadrilateral shape property hierarchy for all included shapes in the simulation" title="Quadrilateral Shape Hierarchy">
 
 Not all possible shapes are named in the simulation. We include: Convex, Concave, Dart, Kite, Trapezoid, Isosceles Trapezoid, Parallelogram, Rectangle, Rhombus, and Square. Other named shapes that may be of interest can be explored, but are not explicitly named by the simulation, such as: Right Trapezoid, Acute Trapezoid, Obtuse Trapezoid. We also include the named shape: "Triangle?". This is included as the shape that appears on screen aligns with a triangle, but does have four verticies. Teachers are encouraged to have a conversation with their students on whether it is in fact a triangle or not.
 
