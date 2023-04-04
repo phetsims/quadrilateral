@@ -1,12 +1,12 @@
 {
-  "comment": "# quadrilateral 1.0.0-rc.1 Mon Apr 03 2023 15:05:52 GMT-0400 (Eastern Daylight Time)",
+  "comment": "# quadrilateral 1.0.0-rc.1 Tue Apr 04 2023 11:55:38 GMT-0400 (Eastern Daylight Time)",
   "assert": {
     "sha": "c13a8c7741d95fbd8e37619c66ebcca8686dffe7",
     "branch": "HEAD"
   },
   "axon": {
-    "sha": "3c6ebf32988ac1b3f26e41bd7310c938fe0b1843",
-    "branch": "HEAD"
+    "sha": "e0968f7c0cbb8cc6a538afb4a5e71f988912599b",
+    "branch": "quadrilateral-1.0"
   },
   "brand": {
     "sha": "d2b54ef4d29edc31e64adb2f9488803811cad03a",
@@ -57,7 +57,7 @@
     "branch": "HEAD"
   },
   "quadrilateral": {
-    "sha": "009c7bf96b5e47c3975ec209393ad9be1a95d50d",
+    "sha": "fe84c59e2cf8836821c570b8b799adf2e93bbe07",
     "branch": "1.0"
   },
   "query-string-machine": {
