@@ -57,13 +57,14 @@ export default class ShapeShortcutsHelpSection extends KeyboardHelpSection {
       }
     );
 
-    const contents = [];
+    const contents: KeyboardHelpSectionRow[] = [];
     if ( voicingManager.initialized ) {
       contents.push( checkShapeRow );
     }
     contents.push( resetShapeRow );
 
     super( QuadrilateralStrings.keyboardHelpDialog.shapeShortcutsStringProperty, contents );
+    this.disposeEmitter.addListener( () => contents.forEach( row => row.dispose() ) );
   }
 }
 

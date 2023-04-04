@@ -52,7 +52,10 @@ export default class MoveShapeHelpSection extends KeyboardHelpSection {
       }
     );
 
-    super( moveCornersOrSidesStringProperty, [ basicMovementRow, fineMovementRow ] );
+    const rows = [ basicMovementRow, fineMovementRow ];
+    super( moveCornersOrSidesStringProperty, rows );
+    this.disposeEmitter.addListener( () => rows.forEach( row => row.dispose() ) );
+
   }
 }
 
