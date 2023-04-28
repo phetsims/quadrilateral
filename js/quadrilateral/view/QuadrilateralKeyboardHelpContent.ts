@@ -26,7 +26,9 @@ export default class QuadrilateralKeyboardHelpContent extends TwoColumnKeyboardH
     KeyboardHelpSection.alignHelpSectionIcons( [ moveShapeHelpSection, shapeShortcutsHelpSection ] );
     const leftContent = [ moveShapeHelpSection, shapeShortcutsHelpSection ];
 
-    const rightContent = [ new BasicActionsKeyboardHelpSection() ];
+    const rightContent = [ new BasicActionsKeyboardHelpSection( {
+      withCheckboxContent: true
+    } ) ];
 
     super( leftContent, rightContent );
   }
