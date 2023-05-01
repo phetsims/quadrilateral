@@ -63,7 +63,11 @@ export default class QuadrilateralNode extends Voicing( Node ) {
 
       // This Node is composed with Voicing so that we can call the voicingSpeak* functions through it. But we do not
       // want it to use the default InteractiveHighlight, QuadrilateralVertexNode/QuadrilateralSideNode are independently interactive.
-      interactiveHighlight: 'invisible'
+      interactiveHighlight: 'invisible',
+
+      // To stop parts of the UI from jostling around as this Node moves, see
+      // https://github.com/phetsims/quadrilateral/issues/432
+      preventFit: true
     }, providedOptions );
 
     super( options );
