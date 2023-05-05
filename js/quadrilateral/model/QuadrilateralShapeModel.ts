@@ -679,7 +679,7 @@ export default class QuadrilateralShapeModel {
       // Make sure the QuadrilateralVertex is within the drag area Shape.
       if ( shapeCrossed ) {
         assert && assert( testVertex.dragAreaProperty.value, 'Drag area must be defined for the QuadrilateralVertex' );
-        shapeCrossed = QuadrilateralUtils.customShapeContainsPoint( testVertex.dragAreaProperty.value!, testVertex.positionProperty.value );
+        shapeCrossed = testVertex.dragAreaProperty.value!.containsPoint( testVertex.positionProperty.value );
       }
 
       // Quadrilateral is not allowed, no need to keep testing

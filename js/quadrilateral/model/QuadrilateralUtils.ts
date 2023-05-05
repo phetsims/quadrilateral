@@ -35,37 +35,44 @@ export default class QuadrilateralUtils {
    * different way in kite, this function could be removed and replaced with shape.containsPoint.
    */
   public static customShapeContainsPoint( shape: Shape, point: Vector2 ): boolean {
-    const rayDirectionVector = new Vector2( 1, 0 ); // unit x Vector, but we may mutate it
-    let ray = new Ray2( point, rayDirectionVector );
+    const rayDirection = Vector2.X_UNIT.copy(); // we may mutate it
 
-    // Put a limit on attempts so we don't try forever
+    // Put a limit on attempts, so we don't try forever
     let count = 0;
     while ( count < 5 ) {
       count++;
 
       // Look for cases where the proposed ray will intersect with one of the vertices of a shape segment - in this case
-      // the intersection in windingIntersection is not well-defined and won't be counted so we need to use a ray with
-      // a different direction
+      // the intersection in windingIntersection may not be well-defined and won't be counted, so we need to use a ray
+      // with a different direction
       const rayIntersectsSegmentVertex = _.some( shape.subpaths, subpath => {
         return _.some( subpath.segments, segment => {
-          return segment.start.minus( point ).normalize().equals( rayDirectionVector );
+          const delta = segment.start.minus( point );
+          const magnitude = delta.magnitude;
+          if ( magnitude !== 0 ) {
+            delta.divideScalar( magnitude ); // normalize it
+            delta.subtract( rayDirection ); // check against the proposed ray direction
+            return delta.magnitudeSquared < 1e-9;
+          }
+          else {
+            // If our point is on a segment start, there probably won't be a great ray to use
+            return false;
+          }
         } );
       } );
 
       if ( rayIntersectsSegmentVertex ) {
 
         // the proposed ray will not work because it intersects with a segment QuadrilateralVertex - try another one
-        rayDirectionVector.rotate( dotRandom.nextDouble() );
+        rayDirection.rotate( dotRandom.nextDouble() );
       }
       else {
-
-        // Should be safe to use this Ray for windingIntersection
-        ray = new Ray2( point, rayDirectionVector );
+        // Should be safe to use this rayDirection for windingIntersection
         break;
       }
     }
 
-    return shape.windingIntersection( ray ) !== 0;
+    return shape.windingIntersection( new Ray2( point, rayDirection ) ) !== 0;
   }
 
   /**
