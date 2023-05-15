@@ -36,9 +36,7 @@ const simOptions: SimOptions = {
     team: 'Brett Fiedler, Emily B. Moore, Taliesin Smith',
     contributors: 'Sofia Tancredi, Dor Abrahamson (Embodied Design Research Lab, UC Berkeley), Scott Lambert, Jenna Gorlewicz (CHROME Lab, St. Louis University)',
     soundDesign: 'Ashton Morris',
-
-    //TODO fill in credits with QA team
-    qualityAssurance: ''
+    qualityAssurance: 'Jaron Droder, Emily Miller, Nancy Salpepi, Martin Veillette, and Kathryn Woessner'
   },
 
   // preferences configuration with defaults from package.json
