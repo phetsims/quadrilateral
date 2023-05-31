@@ -36,6 +36,9 @@ export default class TangibleConnectionModel {
   // True when we are connected to a device in some way, either bluetooth, serial, or OpenCV.
   public connectedToDeviceProperty: TProperty<boolean>;
 
+  // True when we are connected to Camera Input: Hands feature (tangible/MediaPipe).
+  public connectedToCameraInputHandsProperty: TProperty<boolean>;
+
   // Properties specifically related to marker detection from OpenCV prototypes.
   public markerDetectionModel: MarkerDetectionModel;
 
@@ -63,6 +66,9 @@ export default class TangibleConnectionModel {
   public constructor( shapeModel: QuadrilateralShapeModel, testShapeModel: QuadrilateralShapeModel, tangibleOptionsModel: QuadrilateralTangibleOptionsModel, tandem: Tandem ) {
     this.connectedToDeviceProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'connectedToDeviceProperty' )
+    } );
+    this.connectedToCameraInputHandsProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'connectedToCameraInputHandsProperty' )
     } );
     this.physicalModelBoundsProperty = new Property<Bounds2 | null>( null, {
       tandem: tandem.createTandem( 'physicalModelBoundsProperty' ),

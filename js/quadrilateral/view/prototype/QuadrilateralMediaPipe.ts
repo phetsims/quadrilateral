@@ -60,8 +60,8 @@ export default class QuadrilateralMediaPipe extends MediaPipe {
     // So that there is a mapping from tangible space to simulation model space
     model.tangibleConnectionModel.setPhysicalToVirtualTransform( MEDIA_PIPE_ASPECT_RATIO, 1 );
 
-    // effectively connected to a device with this prototype
-    model.tangibleConnectionModel.connectedToDeviceProperty.value = true;
+    // signify to model that there is a connection to the Camera Input: Hands feature.
+    model.tangibleConnectionModel.connectedToCameraInputHandsProperty.value = true;
   }
 
   /**

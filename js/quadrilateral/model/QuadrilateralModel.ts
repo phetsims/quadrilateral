@@ -114,12 +114,18 @@ export default class QuadrilateralModel implements TModel {
     } );
     this.useMinorIntervalsProperty = DerivedProperty.or( [ this.minorIntervalsFromGlobalKeyProperty, this.lockToMinorIntervalsProperty ] );
 
-    // QuadrilateralVertex intervals are controlled whether we are "locked" to smaller steps, whether we are temporarily using
-    // smaller steps because of a hotkey, or if running with ?reducedStepSize
+    // Complex derivation for the vertexIntervalProperty, depending on user settings, input, or prototype device
+    // connection features.
     this.vertexIntervalProperty = new DerivedProperty(
-      [ this.useMinorIntervalsProperty, this.tangibleConnectionModel.connectedToDeviceProperty, optionsModel.tangibleOptionsModel.deviceGridSpacingProperty ],
-      ( useMinorIntervals, connectedToDevice, deviceGridSpacing ) => {
+      [
+        this.useMinorIntervalsProperty,
+        this.tangibleConnectionModel.connectedToDeviceProperty,
+        this.tangibleConnectionModel.connectedToCameraInputHandsProperty,
+        optionsModel.tangibleOptionsModel.deviceGridSpacingProperty
+      ],
+      ( useMinorIntervals, connectedToDevice, connectedToCameraInput, deviceGridSpacing ) => {
         return connectedToDevice ? deviceGridSpacing :
+               connectedToCameraInput ? ( useMinorIntervals ? QuadrilateralQueryParameters.minorVertexInterval : QuadrilateralConstants.GRID_SPACING ) :
                QuadrilateralQueryParameters.reducedStepSize ? ( useMinorIntervals ? QuadrilateralConstants.MINOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralConstants.MAJOR_REDUCED_SIZE_VERTEX_INTERVAL ) :
                useMinorIntervals ? QuadrilateralQueryParameters.minorVertexInterval : QuadrilateralQueryParameters.majorVertexInterval;
       }
