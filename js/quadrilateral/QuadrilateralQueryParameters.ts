@@ -70,6 +70,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   },
 
   // If provided, some extra things will be done in the simulation to facilitate communication with the hardware/device.
+  // This flag cannot be used at the same time as ?cameraInput=hands.
   deviceConnection: {
     type: 'flag'
   },
