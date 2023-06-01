@@ -12,37 +12,65 @@ import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import optionize, { EmptySelfOptions } from '../../../../../phet-core/js/optionize.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
 import PreferencesPanelSection from '../../../../../joist/js/preferences/PreferencesPanelSection.js';
-import { Text, VBox } from '../../../../../scenery/js/imports.js';
+import { Node, Text, VBox } from '../../../../../scenery/js/imports.js';
 import PreferencesDialog from '../../../../../joist/js/preferences/PreferencesDialog.js';
 import QuadrilateralTangibleOptionsModel from '../../model/prototype/QuadrilateralTangibleOptionsModel.js';
+import MediaPipe from '../../../../../tangible/js/mediaPipe/MediaPipe.js';
 
 export default class QuadrilateralInputPreferencesNode extends PreferencesPanelSection {
   private readonly disposeQuadrilateralInputPreferencesNode: () => void;
 
   public constructor( tangibleOptionsModel: QuadrilateralTangibleOptionsModel ) {
+    assert && assert(
+      tangibleOptionsModel.cameraInputHandsConnectedProperty.value || tangibleOptionsModel.deviceConnectedProperty.value,
+      'Some prototype connection required for these options'
+    );
 
-    // Controls specifically for tangible connection
-    const tangibleControlsTitle = new Text( 'Tangible Controls', PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
-    const gridSpacingNumberControl = new TangiblePropertyNumberControl( 'Position interval', tangibleOptionsModel.deviceGridSpacingProperty, {
-      numberDisplayOptions: {
-        decimalPlaces: 4
-      }
-    } );
-    const smoothingLengthNumberControl = new TangiblePropertyNumberControl( 'Smoothing length', tangibleOptionsModel.smoothingLengthProperty );
-    const updateIntervalNumberControl = new TangiblePropertyNumberControl( 'Update interval', tangibleOptionsModel.bluetoothUpdateIntervalProperty, {
-      numberDisplayOptions: {
-        decimalPlaces: 1
-      },
-      delta: 0.1
-    } );
+    // Components and functions that will be tailored to the type of connection controls available.
+    let disposeContents: () => void;
+    let children: Node[];
+    let titleNode: Node | null = null;
+
+    if ( tangibleOptionsModel.cameraInputHandsConnectedProperty.value ) {
+      const mediaPipeContent = MediaPipe.getMediaPipeOptionsNode();
+      children = [ mediaPipeContent ];
+      disposeContents = () => {
+        mediaPipeContent.dispose();
+      };
+    }
+    else {
+
+      // Controls specifically for tangible connection
+      titleNode = new Text( 'Tangible Controls', PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
+      const gridSpacingNumberControl = new TangiblePropertyNumberControl( 'Position interval', tangibleOptionsModel.deviceGridSpacingProperty, {
+        numberDisplayOptions: {
+          decimalPlaces: 4
+        }
+      } );
+      const smoothingLengthNumberControl = new TangiblePropertyNumberControl( 'Smoothing length', tangibleOptionsModel.smoothingLengthProperty );
+      const updateIntervalNumberControl = new TangiblePropertyNumberControl( 'Update interval', tangibleOptionsModel.bluetoothUpdateIntervalProperty, {
+        numberDisplayOptions: {
+          decimalPlaces: 1
+        },
+        delta: 0.1
+      } );
+
+      children = [ gridSpacingNumberControl, smoothingLengthNumberControl, updateIntervalNumberControl ];
+      disposeContents = () => {
+        titleNode?.dispose();
+        gridSpacingNumberControl.dispose();
+        smoothingLengthNumberControl.dispose();
+        updateIntervalNumberControl.dispose();
+      };
+    }
 
     const content = new VBox( {
-      children: [ gridSpacingNumberControl, smoothingLengthNumberControl, updateIntervalNumberControl ],
+      children: children,
       spacing: PreferencesDialog.CONTENT_SPACING
     } );
 
     super( {
-      titleNode: tangibleControlsTitle,
+      titleNode: titleNode,
       contentNode: content,
 
       // margin doesn't make sense for this list of controls
@@ -50,10 +78,7 @@ export default class QuadrilateralInputPreferencesNode extends PreferencesPanelS
     } );
 
     this.disposeQuadrilateralInputPreferencesNode = () => {
-      tangibleControlsTitle.dispose();
-      gridSpacingNumberControl.dispose();
-      smoothingLengthNumberControl.dispose();
-      updateIntervalNumberControl.dispose();
+      disposeContents();
     };
   }
 

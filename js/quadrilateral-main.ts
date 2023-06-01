@@ -11,7 +11,6 @@ import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
 import { Node } from '../../scenery/js/imports.js';
 import Tandem from '../../tandem/js/Tandem.js';
-import QuadrilateralQueryParameters from './quadrilateral/QuadrilateralQueryParameters.js';
 import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';
 import QuadrilateralStrings from './QuadrilateralStrings.js';
 import QuadrilateralOptionsModel from './quadrilateral/model/QuadrilateralOptionsModel.js';
@@ -21,9 +20,8 @@ import QuadrilateralSoundOptionsNode from './quadrilateral/view/sound/Quadrilate
 const quadrilateralTitleStringProperty = QuadrilateralStrings.quadrilateral.titleStringProperty;
 const optionsModel = new QuadrilateralOptionsModel();
 
-// "Input" options are related to connection to a tangible device, this tab should only be shown when running
-// while connected to some external device.
-const inputPreferencesOptions = QuadrilateralQueryParameters.deviceConnection ? {
+// "Input" options are related to connection to a tangible device or controls for the camera
+const inputPreferencesOptions = optionsModel.tangibleOptionsModel.supportsInputOptions ? {
   customPreferences: [ {
     createContent: () => new QuadrilateralInputPreferencesNode( optionsModel.tangibleOptionsModel )
   } ]
