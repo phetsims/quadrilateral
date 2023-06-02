@@ -87,7 +87,7 @@ export default class QuadrilateralMediaPipe extends MediaPipe {
 
         // The hands will be swapped when running with the camera Y axis is flipped
         const leftHandPositions = sortedPositions[ MediaPipe.yAxisFlippedProperty.value ? 1 : 0 ];
-        const rightHandPositions = sortedPositions[ MediaPipe.xAxisFlippedProperty.value ? 0 : 1 ];
+        const rightHandPositions = sortedPositions[ MediaPipe.yAxisFlippedProperty.value ? 0 : 1 ];
 
         // When the x axis is flipped, the thumb and index fingers are swapped
         const xAxisFlipped = MediaPipe.xAxisFlippedProperty.value;
