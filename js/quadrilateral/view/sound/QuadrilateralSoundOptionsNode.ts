@@ -57,7 +57,7 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
     const shapeSoundDescriptionReadingBlockContentStringProperty = new PatternStringProperty( labelledDescriptionPatternStringProperty, {
       label: shapeSoundsOptionsStringProperty,
       description: shapeSoundsOptionsDescriptionStringProperty
-    } );
+    }, { tandem: Tandem.OPT_OUT } );
 
     // Shape Sound Options controls
     const shapeSoundOptionsLabelText = new Text( shapeSoundsOptionsStringProperty, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
