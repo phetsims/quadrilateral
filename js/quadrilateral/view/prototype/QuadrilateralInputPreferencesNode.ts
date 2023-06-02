@@ -25,8 +25,6 @@ const flipYAxisDescriptionString = 'Are your hands mapped to the wrong object or
 const flipXAxisDescriptionString = 'Are your hands moving the sim objects in what seems like the wrong direction?';
 
 export default class QuadrilateralInputPreferencesNode extends PreferencesPanelSection {
-  private readonly disposeQuadrilateralInputPreferencesNode: () => void;
-
   public constructor( tangibleOptionsModel: QuadrilateralTangibleOptionsModel ) {
     assert && assert(
       tangibleOptionsModel.cameraInputHandsConnectedProperty.value || tangibleOptionsModel.deviceConnectedProperty.value,
@@ -34,7 +32,6 @@ export default class QuadrilateralInputPreferencesNode extends PreferencesPanelS
     );
 
     // Components and functions that will be tailored to the type of connection controls available.
-    let disposeContents: () => void;
     let children: Node[];
     let titleNode: Node | null = null;
 
@@ -49,9 +46,6 @@ export default class QuadrilateralInputPreferencesNode extends PreferencesPanelS
         labelTextOptions: { lineWrap: 550, maxWidth: null }
       } );
       children = [ mediaPipeContent ];
-      disposeContents = () => {
-        mediaPipeContent.dispose();
-      };
     }
     else {
 
@@ -71,12 +65,6 @@ export default class QuadrilateralInputPreferencesNode extends PreferencesPanelS
       } );
 
       children = [ gridSpacingNumberControl, smoothingLengthNumberControl, updateIntervalNumberControl ];
-      disposeContents = () => {
-        titleNode?.dispose();
-        gridSpacingNumberControl.dispose();
-        smoothingLengthNumberControl.dispose();
-        updateIntervalNumberControl.dispose();
-      };
     }
 
     const content = new VBox( {
@@ -91,17 +79,7 @@ export default class QuadrilateralInputPreferencesNode extends PreferencesPanelS
       // margin doesn't make sense for this list of controls
       contentLeftMargin: 0
     } );
-
-    this.disposeQuadrilateralInputPreferencesNode = () => {
-      disposeContents();
-    };
   }
-
-  public override dispose(): void {
-    this.disposeQuadrilateralInputPreferencesNode();
-    super.dispose();
-  }
-
 }
 
 /**

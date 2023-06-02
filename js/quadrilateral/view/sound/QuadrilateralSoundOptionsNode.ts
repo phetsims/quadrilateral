@@ -34,10 +34,6 @@ const tracksPlayForeverUncheckedContextResponseStringProperty = QuadrilateralStr
 const labelledDescriptionPatternStringProperty = JoistStrings.a11y.preferences.tabs.labelledDescriptionPatternStringProperty;
 
 export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSection {
-
-  // Necessary for PhET-iO state and disposal since these components become dynamic when they live in a phetio capsule
-  private readonly disposeQuadrilateralSoundOptionsNode: () => void;
-
   public constructor( model: QuadrilateralSoundOptionsModel, tandem: Tandem ) {
 
     // Sounds play forever control
@@ -111,20 +107,6 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
     shapeSoundOptionsLabelText.leftTop = soundsPlayForeverPreferencesControl.leftBottom.plusXY( 0, PreferencesDialog.CONTENT_SPACING );
     shapeSoundOptionsDescriptionText.leftTop = shapeSoundOptionsLabelText.leftBottom.plusXY( 0, PreferencesDialog.VERTICAL_CONTENT_SPACING );
     soundDesignRadioButtonGroup.leftTop = shapeSoundOptionsDescriptionText.leftBottom.plusXY( PreferencesDialog.CONTENT_INDENTATION_SPACING, PreferencesDialog.VERTICAL_CONTENT_SPACING );
-
-    this.disposeQuadrilateralSoundOptionsNode = () => {
-      soundDesignRadioButtonGroup.dispose();
-      soundsPlayForeverToggleSwitch.dispose();
-      soundsPlayForeverLabel.dispose();
-      shapeSoundDescriptionReadingBlockContentStringProperty.dispose();
-      shapeSoundOptionsLabelText.dispose();
-      shapeSoundOptionsDescriptionText.dispose();
-    };
-  }
-
-  public override dispose(): void {
-    this.disposeQuadrilateralSoundOptionsNode();
-    super.dispose();
   }
 }
 
