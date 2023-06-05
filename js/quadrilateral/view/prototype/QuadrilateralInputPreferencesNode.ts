@@ -9,10 +9,9 @@
 import quadrilateral from '../../../quadrilateral.js';
 import NumberControl, { NumberControlOptions } from '../../../../../scenery-phet/js/NumberControl.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
-import optionize, { EmptySelfOptions } from '../../../../../phet-core/js/optionize.js';
+import optionize, { combineOptions, EmptySelfOptions } from '../../../../../phet-core/js/optionize.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
-import PreferencesPanelSection from '../../../../../joist/js/preferences/PreferencesPanelSection.js';
-import { Node, Text, VBox } from '../../../../../scenery/js/imports.js';
+import { Node, RichText, RichTextOptions, Text, VBox } from '../../../../../scenery/js/imports.js';
 import PreferencesDialog from '../../../../../joist/js/preferences/PreferencesDialog.js';
 import QuadrilateralTangibleOptionsModel from '../../model/prototype/QuadrilateralTangibleOptionsModel.js';
 import MediaPipe from '../../../../../tangible/js/mediaPipe/MediaPipe.js';
@@ -20,8 +19,9 @@ import MediaPipe from '../../../../../tangible/js/mediaPipe/MediaPipe.js';
 // Strings for the media pipe options content - this is a prototype and not available through production yet so
 // it is not translatable.
 const featureDescriptionString = 'Use custom hand gestures and movements to control objects in the sim. Please see the Teacher Tips for specific gestures, movements, and object mappings.';
+const NON_TRANSLATABLE_TEXT_OPTIONS = { lineWrap: 550, maxWidth: null };
 
-export default class QuadrilateralInputPreferencesNode extends PreferencesPanelSection {
+export default class QuadrilateralInputPreferencesNode extends VBox {
   public constructor( tangibleOptionsModel: QuadrilateralTangibleOptionsModel ) {
     assert && assert(
       tangibleOptionsModel.cameraInputHandsConnectedProperty.value || tangibleOptionsModel.deviceConnectedProperty.value,
@@ -30,7 +30,6 @@ export default class QuadrilateralInputPreferencesNode extends PreferencesPanelS
 
     // Components and functions that will be tailored to the type of connection controls available.
     let children: Node[];
-    let titleNode: Node | null = null;
 
     if ( tangibleOptionsModel.cameraInputHandsConnectedProperty.value ) {
       const mediaPipeContent = MediaPipe.getMediaPipeOptionsNode( {
@@ -45,34 +44,46 @@ export default class QuadrilateralInputPreferencesNode extends PreferencesPanelS
     else {
 
       // Controls specifically for tangible connection
-      titleNode = new Text( 'Tangible Controls', PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
-      const gridSpacingNumberControl = new TangiblePropertyNumberControl( 'Position interval', tangibleOptionsModel.deviceGridSpacingProperty, {
-        numberDisplayOptions: {
-          decimalPlaces: 4
-        }
-      } );
-      const smoothingLengthNumberControl = new TangiblePropertyNumberControl( 'Smoothing length', tangibleOptionsModel.smoothingLengthProperty );
-      const updateIntervalNumberControl = new TangiblePropertyNumberControl( 'Update interval', tangibleOptionsModel.bluetoothUpdateIntervalProperty, {
-        numberDisplayOptions: {
-          decimalPlaces: 1
-        },
-        delta: 0.1
-      } );
+      const titleNode = new Text( 'Tangible Input', PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
+      const descriptionNode = new RichText( 'Use slider controls to adjust the mapping and communication parameters ' +
+                                            'between the simulation and BLE-enabled device to reduce noise-related ' +
+                                            'jitter.', combineOptions<RichTextOptions>( {}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, NON_TRANSLATABLE_TEXT_OPTIONS ) );
+      const gridSpacingNumberControl = new TangiblePropertyNumberControl(
+        'Step Interval',
+        'Adjust minimum distance required by device to step a vertex in the simulation.',
+        tangibleOptionsModel.deviceGridSpacingProperty, {
+          numberDisplayOptions: {
+            decimalPlaces: 4
+          }
+        } );
+      const smoothingLengthNumberControl = new TangiblePropertyNumberControl(
+        'Number of Smoothing Values',
+        'Adjust number of values used to smooth noise in incoming sensor values from a device.',
+        tangibleOptionsModel.smoothingLengthProperty
+      );
+      const updateIntervalNumberControl = new TangiblePropertyNumberControl(
+        'Sim Update Interval',
+        'Adjust the time interval for accepting new values from the device in the simulation.',
+        tangibleOptionsModel.bluetoothUpdateIntervalProperty, {
+          numberDisplayOptions: {
+            decimalPlaces: 1
+          },
+          delta: 0.1
+          // margin doesn't make sense for this list of controls
+        } );
 
-      children = [ gridSpacingNumberControl, smoothingLengthNumberControl, updateIntervalNumberControl ];
+      children = [ titleNode, descriptionNode, gridSpacingNumberControl, smoothingLengthNumberControl, updateIntervalNumberControl ];
     }
 
     const content = new VBox( {
       children: children,
+      align: 'left',
       spacing: PreferencesDialog.CONTENT_SPACING
     } );
 
     super( {
-      titleNode: titleNode,
-      contentNode: content,
-
-      // margin doesn't make sense for this list of controls
-      contentLeftMargin: 0
+      children: [ content ],
+      spacing: 0
     } );
   }
 }
@@ -80,19 +91,33 @@ export default class QuadrilateralInputPreferencesNode extends PreferencesPanelS
 /**
  * Inner class, reusable NumberControl with default options for the purposes of this Preferences dialog content.
  */
-class TangiblePropertyNumberControl extends NumberControl {
-  public constructor( label: string, property: NumberProperty, providedOptions?: NumberControlOptions ) {
+class TangiblePropertyNumberControl extends VBox {
+  public constructor( label: string, description: string, property: NumberProperty, providedOptions?: NumberControlOptions ) {
     const propertyRange = property.range;
 
     const options = optionize<NumberControlOptions, EmptySelfOptions, NumberControlOptions>()( {
       delta: propertyRange.min,
+      titleNodeOptions: PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS,
+      layoutFunction: NumberControl.createLayoutFunction1( { align: 'left' } ),
+      sliderOptions: {
+        minorTickSpacing: propertyRange.getLength() / 10
+      },
 
       // opt out of tandems for these preferences because NumberControl requires phet.joist.sim and these
       // controls are created before the sim
       tandem: Tandem.OPT_OUT
     }, providedOptions );
 
-    super( label, property, propertyRange, options );
+    const numberControl = new NumberControl( label, property, propertyRange, options );
+
+    // a text descriptoin for this control
+    const descriptionText = new RichText( description, combineOptions<RichTextOptions>( {}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, NON_TRANSLATABLE_TEXT_OPTIONS ) );
+
+    super( {
+      children: [ numberControl, descriptionText ],
+      align: 'left',
+      spacing: PreferencesDialog.LABEL_CONTENT_SPACING
+    } );
   }
 }
 
