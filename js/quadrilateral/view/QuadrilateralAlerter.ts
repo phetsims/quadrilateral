@@ -466,7 +466,7 @@ export default class QuadrilateralAlerter extends Alerter {
    * QuadrilateralShapeModel.updateOrderDependentProperties for more information.
    */
   private getVertexChangeObjectResponse( vertex: QuadrilateralVertex ): string {
-    let response;
+    let response: string | null;
 
     // The phrase like the direction change, how the vertex angle changes, or whether the vertex angle is at
     // a critical value like 90/180 degrees
