@@ -6,7 +6,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { Node, Text, VoicingText, VoicingTextOptions } from '../../../../../scenery/js/imports.js';
+import { Node, Text, TextOptions, VoicingText, VoicingTextOptions } from '../../../../../scenery/js/imports.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralSoundOptionsModel, { SoundDesign } from '../../model/QuadrilateralSoundOptionsModel.js';
@@ -56,7 +56,10 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
     }, { tandem: Tandem.OPT_OUT } );
 
     // Shape Sound Options controls
-    const shapeSoundOptionsLabelText = new Text( shapeSoundsOptionsStringProperty, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
+    const shapeSoundOptionsLabelText = new Text( shapeSoundsOptionsStringProperty, combineOptions<TextOptions>( {}, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS, {
+      tagName: 'h3',
+      innerContent: shapeSoundsOptionsStringProperty
+    } ) );
     const shapeSoundOptionsDescriptionText = new VoicingText( shapeSoundsOptionsDescriptionStringProperty, combineOptions<VoicingTextOptions>( {}, {
       readingBlockNameResponse: shapeSoundDescriptionReadingBlockContentStringProperty
     }, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ) );
@@ -66,6 +69,7 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
         value: SoundDesign.TRACKS_LAYER,
         createNode: () => new Text( preferencesDialogLayerSoundDesignDescriptionStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
         tandemName: `layersTracksSoundView${AquaRadioButton.TANDEM_NAME_SUFFIX}`,
+        labelContent: preferencesDialogLayerSoundDesignDescriptionStringProperty,
         options: {
           voicingNameResponse: preferencesDialogLayerSoundDesignDescriptionStringProperty
         }
@@ -73,6 +77,7 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
       {
         value: SoundDesign.TRACKS_UNIQUE,
         createNode: () => new Text( preferencesDialogUniqueSoundDesignDescriptionStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
+        labelContent: preferencesDialogLayerSoundDesignDescriptionStringProperty,
         tandemName: `emphasisTracksSoundView${AquaRadioButton.TANDEM_NAME_SUFFIX}`,
         options: {
           voicingNameResponse: preferencesDialogUniqueSoundDesignDescriptionStringProperty
