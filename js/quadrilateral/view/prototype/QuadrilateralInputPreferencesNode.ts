@@ -31,9 +31,11 @@ const NON_TRANSLATABLE_TEXT_OPTIONS = { lineWrap: 550, maxWidth: null };
 
 // Types for options of inner classes
 type TangiblePropertyNumberControlSelfOptions = {
-  contextResponsePatternString?: string;
 
-  // Voicing and PDOM both use the provided contextResponsePatternString option so this cannot be provided
+  // A function that generates the context response string, in case the pattern is dependent on the value
+  createContextResponsePatternString?: ( value: number ) => string;
+
+  // Voicing and PDOM both use the provided createContextResponsePatternString option so this cannot be provided
   sliderOptions?: StrictOmit<NumberControlSliderOptions, 'a11yCreateAriaValueText'>;
 };
 
@@ -77,13 +79,13 @@ export default class QuadrilateralInputPreferencesNode extends VBox {
           numberDisplayOptions: {
             decimalPlaces: 4
           },
-          contextResponsePatternString: '{{value}} model units'
+          createContextResponsePatternString: value => '{{value}} model units'
         } );
       const smoothingLengthNumberControl = new TangiblePropertyNumberControl(
         'Smoothing Average',
         'Adjust number of values used to smooth noise in incoming sensor values from input device.',
         tangibleOptionsModel.smoothingLengthProperty, {
-          contextResponsePatternString: '{{value}} values'
+          createContextResponsePatternString: value => '{{value}} values'
         }
       );
       const updateIntervalNumberControl = new TangiblePropertyNumberControl(
@@ -94,8 +96,7 @@ export default class QuadrilateralInputPreferencesNode extends VBox {
             decimalPlaces: 1
           },
           delta: 0.1,
-          contextResponsePatternString: '{{value}} seconds'
-
+          createContextResponsePatternString: value => value === 1 ? '{{value}} second' : '{{value}} seconds'
         }
       );
 
@@ -150,7 +151,7 @@ class TangiblePropertyNumberControl extends VBox {
       },
 
       // voicing
-      contextResponsePatternString: '{{value}}',
+      createContextResponsePatternString: value => '{{value}}',
 
       // opt out of tandems for these preferences because NumberControl requires phet.joist.sim and these
       // controls are created before the sim
@@ -158,14 +159,14 @@ class TangiblePropertyNumberControl extends VBox {
     }, providedOptions );
 
     // Both Voicing and PDOM use the same context response pattern in this case
-    options.sliderOptions.a11yCreateAriaValueText = value => StringUtils.fillIn( options.contextResponsePatternString, { value: value } );
+    options.sliderOptions.a11yCreateAriaValueText = value => StringUtils.fillIn( options.createContextResponsePatternString( value ), { value: value } );
 
     const numberControl = new NumberControl( label, property, propertyRange, options );
 
     // Update descriptions whenever the value changes
     property.link( value => {
       numberControl.slider.voicingObjectResponse = StringUtils.fillIn(
-        options.contextResponsePatternString, { value: value } );
+        options.createContextResponsePatternString( value ), { value: value } );
     } );
 
     // a text descriptoin for this control
