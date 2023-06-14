@@ -7,7 +7,7 @@
  */
 
 import quadrilateral from '../../../quadrilateral.js';
-import NumberControl, { NumberControlOptions } from '../../../../../scenery-phet/js/NumberControl.js';
+import NumberControl, { NumberControlOptions, NumberControlSliderOptions } from '../../../../../scenery-phet/js/NumberControl.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import optionize, { combineOptions } from '../../../../../phet-core/js/optionize.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
@@ -18,6 +18,7 @@ import MediaPipe from '../../../../../tangible/js/mediaPipe/MediaPipe.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
 import JoistStrings from '../../../../../joist/js/JoistStrings.js';
 import StringUtils from '../../../../../phetcommon/js/util/StringUtils.js';
+import StrictOmit from '../../../../../phet-core/js/types/StrictOmit.js';
 
 // Strings for the content - this is a prototype so it is not translatable yet.
 const mediaPipeFeatureDescriptionString = 'Use custom hand gestures and movements to control objects in the sim. Please see the Teacher Tips for specific gestures, movements, and object mappings.';
@@ -30,7 +31,10 @@ const NON_TRANSLATABLE_TEXT_OPTIONS = { lineWrap: 550, maxWidth: null };
 
 // Types for options of inner classes
 type TangiblePropertyNumberControlSelfOptions = {
-  voicingContextResponsePatternString?: string;
+  contextResponsePatternString?: string;
+
+  // Voicing and PDOM both use the provided contextResponsePatternString option so this cannot be provided
+  sliderOptions?: StrictOmit<NumberControlSliderOptions, 'a11yCreateAriaValueText'>;
 };
 
 type TangiblePropertyNumberControlOptions = TangiblePropertyNumberControlSelfOptions & NumberControlOptions;
@@ -73,13 +77,13 @@ export default class QuadrilateralInputPreferencesNode extends VBox {
           numberDisplayOptions: {
             decimalPlaces: 4
           },
-          voicingContextResponsePatternString: '{{value}} model units'
+          contextResponsePatternString: '{{value}} model units'
         } );
       const smoothingLengthNumberControl = new TangiblePropertyNumberControl(
         'Smoothing Average',
         'Adjust number of values used to smooth noise in incoming sensor values from input device.',
         tangibleOptionsModel.smoothingLengthProperty, {
-          voicingContextResponsePatternString: '{{value}} values'
+          contextResponsePatternString: '{{value}} values'
         }
       );
       const updateIntervalNumberControl = new TangiblePropertyNumberControl(
@@ -90,7 +94,7 @@ export default class QuadrilateralInputPreferencesNode extends VBox {
             decimalPlaces: 1
           },
           delta: 0.1,
-          voicingContextResponsePatternString: '{{value}} seconds'
+          contextResponsePatternString: '{{value}} seconds'
 
         }
       );
@@ -138,23 +142,30 @@ class TangiblePropertyNumberControl extends VBox {
 
         // voicing
         voicingNameResponse: label,
-        voicingIgnoreVoicingManagerProperties: true
+        voicingIgnoreVoicingManagerProperties: true,
+
+        // pdom
+        labelTagName: 'label',
+        labelContent: label
       },
 
       // voicing
-      voicingContextResponsePatternString: '{{value}}',
+      contextResponsePatternString: '{{value}}',
 
       // opt out of tandems for these preferences because NumberControl requires phet.joist.sim and these
       // controls are created before the sim
       tandem: Tandem.OPT_OUT
     }, providedOptions );
 
+    // Both Voicing and PDOM use the same context response pattern in this case
+    options.sliderOptions.a11yCreateAriaValueText = value => StringUtils.fillIn( options.contextResponsePatternString, { value: value } );
+
     const numberControl = new NumberControl( label, property, propertyRange, options );
 
     // Update descriptions whenever the value changes
     property.link( value => {
       numberControl.slider.voicingObjectResponse = StringUtils.fillIn(
-        options.voicingContextResponsePatternString, { value: value } );
+        options.contextResponsePatternString, { value: value } );
     } );
 
     // a text descriptoin for this control
