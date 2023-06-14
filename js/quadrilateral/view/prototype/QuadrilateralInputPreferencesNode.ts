@@ -73,7 +73,7 @@ export default class QuadrilateralInputPreferencesNode extends VBox {
           } )
         } ) );
       const gridSpacingNumberControl = new TangiblePropertyNumberControl(
-        'Step Interval Mapping',
+        'Step Mapping',
         'Adjust amount of input-device movement needed to make a step-change in simulation.',
         tangibleOptionsModel.deviceGridSpacingProperty, {
           numberDisplayOptions: {
@@ -85,11 +85,11 @@ export default class QuadrilateralInputPreferencesNode extends VBox {
         'Smoothing Average',
         'Adjust number of values used to smooth noise in incoming sensor values from input device.',
         tangibleOptionsModel.smoothingLengthProperty, {
-          createObjectResponsePatternString: value => '{{value}} values'
+          createObjectResponsePatternString: value => value > 1 ? '{{value}} values' : '{{value}} value'
         }
       );
       const updateIntervalNumberControl = new TangiblePropertyNumberControl(
-        'Sim Update Interval',
+        'Update Interval',
         'Adjust length of time before a new value from input device is accepted and updated in simulation.',
         tangibleOptionsModel.bluetoothUpdateIntervalProperty, {
           numberDisplayOptions: {
