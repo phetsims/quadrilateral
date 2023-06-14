@@ -50,27 +50,26 @@ export default class QuadrilateralInputPreferencesNode extends VBox {
                                             'between the simulation and BLE-enabled device to reduce noise-related ' +
                                             'jitter.', combineOptions<RichTextOptions>( {}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, NON_TRANSLATABLE_TEXT_OPTIONS ) );
       const gridSpacingNumberControl = new TangiblePropertyNumberControl(
-        'Step Interval',
-        'Adjust minimum distance required by device to step a vertex in the simulation.',
+        'Step Interval Mapping',
+        'Adjust amount of input-device movement needed to make a step-change in simulation.',
         tangibleOptionsModel.deviceGridSpacingProperty, {
           numberDisplayOptions: {
             decimalPlaces: 4
           }
         } );
       const smoothingLengthNumberControl = new TangiblePropertyNumberControl(
-        'Number of Smoothing Values',
-        'Adjust number of values used to smooth noise in incoming sensor values from a device.',
+        'Smoothing Average',
+        'Adjust number of values used to smooth noise in incoming sensor values from input device.',
         tangibleOptionsModel.smoothingLengthProperty
       );
       const updateIntervalNumberControl = new TangiblePropertyNumberControl(
         'Sim Update Interval',
-        'Adjust the time interval for accepting new values from the device in the simulation.',
+        'Adjust length of time before a new value from input device is accepted and updated in simulation.',
         tangibleOptionsModel.bluetoothUpdateIntervalProperty, {
           numberDisplayOptions: {
             decimalPlaces: 1
           },
           delta: 0.1
-          // margin doesn't make sense for this list of controls
         } );
 
       children = [ titleNode, descriptionNode, gridSpacingNumberControl, smoothingLengthNumberControl, updateIntervalNumberControl ];
