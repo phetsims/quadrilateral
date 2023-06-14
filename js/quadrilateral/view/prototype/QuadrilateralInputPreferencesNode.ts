@@ -15,6 +15,7 @@ import { Node, RichText, RichTextOptions, Text, VBox } from '../../../../../scen
 import PreferencesDialog from '../../../../../joist/js/preferences/PreferencesDialog.js';
 import QuadrilateralTangibleOptionsModel from '../../model/prototype/QuadrilateralTangibleOptionsModel.js';
 import MediaPipe from '../../../../../tangible/js/mediaPipe/MediaPipe.js';
+import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
 
 // Strings for the media pipe options content - this is a prototype and not available through production yet so
 // it is not translatable.
@@ -100,7 +101,18 @@ class TangiblePropertyNumberControl extends VBox {
       titleNodeOptions: PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS,
       layoutFunction: NumberControl.createLayoutFunction1( { align: 'left' } ),
       sliderOptions: {
-        minorTickSpacing: propertyRange.getLength() / 10
+        minorTickSpacing: propertyRange.getLength() / 10,
+        minorTickStroke: 'black',
+        majorTicks: [
+          {
+            value: propertyRange.min,
+            label: new Text( propertyRange.min, { font: new PhetFont( 12 ) } )
+          },
+          {
+            value: propertyRange.max,
+            label: new Text( propertyRange.max, { font: new PhetFont( 12 ) } )
+          }
+        ]
       },
 
       // opt out of tandems for these preferences because NumberControl requires phet.joist.sim and these
