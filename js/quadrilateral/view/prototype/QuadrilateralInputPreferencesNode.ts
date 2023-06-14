@@ -93,7 +93,7 @@ export default class QuadrilateralInputPreferencesNode extends VBox {
         'Adjust length of time before a new value from input device is accepted and updated in simulation.',
         tangibleOptionsModel.bluetoothUpdateIntervalProperty, {
           numberDisplayOptions: {
-            decimalPlaces: 1
+            decimalPlaces: 2
           },
           delta: 0.1,
           createObjectResponsePatternString: value => value === 1 ? '{{value}} second' : '{{value}} seconds'
@@ -122,13 +122,14 @@ export default class QuadrilateralInputPreferencesNode extends VBox {
 class TangiblePropertyNumberControl extends VBox {
   public constructor( label: string, description: string, property: NumberProperty, providedOptions?: TangiblePropertyNumberControlOptions ) {
     const propertyRange = property.range;
+    const minorTickSpacing = propertyRange.getLength() / 10;
 
     const options = optionize<TangiblePropertyNumberControlOptions, TangiblePropertyNumberControlSelfOptions, NumberControlOptions>()( {
       delta: propertyRange.min,
       titleNodeOptions: PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS,
       layoutFunction: NumberControl.createLayoutFunction1( { align: 'left' } ),
       sliderOptions: {
-        minorTickSpacing: propertyRange.getLength() / 10,
+        minorTickSpacing: minorTickSpacing,
         minorTickStroke: 'black',
         majorTicks: [
           {
@@ -147,7 +148,8 @@ class TangiblePropertyNumberControl extends VBox {
 
         // pdom
         labelTagName: 'label',
-        labelContent: label
+        labelContent: label,
+        keyboardStep: minorTickSpacing
       },
 
       // voicing
