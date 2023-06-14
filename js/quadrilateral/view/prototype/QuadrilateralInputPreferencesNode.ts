@@ -9,18 +9,31 @@
 import quadrilateral from '../../../quadrilateral.js';
 import NumberControl, { NumberControlOptions } from '../../../../../scenery-phet/js/NumberControl.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
-import optionize, { combineOptions, EmptySelfOptions } from '../../../../../phet-core/js/optionize.js';
+import optionize, { combineOptions } from '../../../../../phet-core/js/optionize.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
-import { Node, RichText, RichTextOptions, Text, VBox } from '../../../../../scenery/js/imports.js';
+import { Node, Text, VBox, VoicingRichText, VoicingRichTextOptions } from '../../../../../scenery/js/imports.js';
 import PreferencesDialog from '../../../../../joist/js/preferences/PreferencesDialog.js';
 import QuadrilateralTangibleOptionsModel from '../../model/prototype/QuadrilateralTangibleOptionsModel.js';
 import MediaPipe from '../../../../../tangible/js/mediaPipe/MediaPipe.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
+import JoistStrings from '../../../../../joist/js/JoistStrings.js';
+import StringUtils from '../../../../../phetcommon/js/util/StringUtils.js';
 
-// Strings for the media pipe options content - this is a prototype and not available through production yet so
-// it is not translatable.
-const featureDescriptionString = 'Use custom hand gestures and movements to control objects in the sim. Please see the Teacher Tips for specific gestures, movements, and object mappings.';
+// Strings for the content - this is a prototype so it is not translatable yet.
+const mediaPipeFeatureDescriptionString = 'Use custom hand gestures and movements to control objects in the sim. Please see the Teacher Tips for specific gestures, movements, and object mappings.';
+const tangibleNumberControlsDescriptionString = 'Use sliders to adjust the mapping and communication parameters between the simulation and BLE-enabled device to reduce noise-related jitter.';
+const labelledDescriptionPatternStringProperty = JoistStrings.a11y.preferences.tabs.labelledDescriptionPatternStringProperty;
+const deviceInputString = 'Device Input';
+
+// Options reused for text that will NOT be translatable for now.
 const NON_TRANSLATABLE_TEXT_OPTIONS = { lineWrap: 550, maxWidth: null };
+
+// Types for options of inner classes
+type TangiblePropertyNumberControlSelfOptions = {
+  voicingContextResponsePatternString?: string;
+};
+
+type TangiblePropertyNumberControlOptions = TangiblePropertyNumberControlSelfOptions & NumberControlOptions;
 
 export default class QuadrilateralInputPreferencesNode extends VBox {
   public constructor( tangibleOptionsModel: QuadrilateralTangibleOptionsModel ) {
@@ -34,7 +47,7 @@ export default class QuadrilateralInputPreferencesNode extends VBox {
 
     if ( tangibleOptionsModel.cameraInputHandsConnectedProperty.value ) {
       const mediaPipeContent = MediaPipe.getMediaPipeOptionsNode( {
-        featureDescriptionString: featureDescriptionString,
+        featureDescriptionString: mediaPipeFeatureDescriptionString,
         troubleshootingControlsVisible: false,
 
         // Disable maxWidth and default lineWrap so this dialog looks good in English (not translatable)
@@ -45,22 +58,29 @@ export default class QuadrilateralInputPreferencesNode extends VBox {
     else {
 
       // Controls specifically for tangible connection
-      const titleNode = new Text( 'Device Input', PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
-      const descriptionNode = new RichText( 'Use sliders to adjust the mapping and communication parameters ' +
-                                            'between the simulation and BLE-enabled device to reduce noise-related ' +
-                                            'jitter.', combineOptions<RichTextOptions>( {}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, NON_TRANSLATABLE_TEXT_OPTIONS ) );
+      const titleNode = new Text( deviceInputString, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
+      const descriptionNode = new VoicingRichText( tangibleNumberControlsDescriptionString, combineOptions<VoicingRichTextOptions>(
+        {}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, NON_TRANSLATABLE_TEXT_OPTIONS, {
+          readingBlockNameResponse: StringUtils.fillIn( labelledDescriptionPatternStringProperty, {
+            label: deviceInputString,
+            description: tangibleNumberControlsDescriptionString
+          } )
+        } ) );
       const gridSpacingNumberControl = new TangiblePropertyNumberControl(
         'Step Interval Mapping',
         'Adjust amount of input-device movement needed to make a step-change in simulation.',
         tangibleOptionsModel.deviceGridSpacingProperty, {
           numberDisplayOptions: {
             decimalPlaces: 4
-          }
+          },
+          voicingContextResponsePatternString: '{{value}} model units'
         } );
       const smoothingLengthNumberControl = new TangiblePropertyNumberControl(
         'Smoothing Average',
         'Adjust number of values used to smooth noise in incoming sensor values from input device.',
-        tangibleOptionsModel.smoothingLengthProperty
+        tangibleOptionsModel.smoothingLengthProperty, {
+          voicingContextResponsePatternString: '{{value}} values'
+        }
       );
       const updateIntervalNumberControl = new TangiblePropertyNumberControl(
         'Sim Update Interval',
@@ -69,8 +89,11 @@ export default class QuadrilateralInputPreferencesNode extends VBox {
           numberDisplayOptions: {
             decimalPlaces: 1
           },
-          delta: 0.1
-        } );
+          delta: 0.1,
+          voicingContextResponsePatternString: '{{value}} seconds'
+
+        }
+      );
 
       children = [ titleNode, descriptionNode, gridSpacingNumberControl, smoothingLengthNumberControl, updateIntervalNumberControl ];
     }
@@ -92,10 +115,10 @@ export default class QuadrilateralInputPreferencesNode extends VBox {
  * Inner class, reusable NumberControl with default options for the purposes of this Preferences dialog content.
  */
 class TangiblePropertyNumberControl extends VBox {
-  public constructor( label: string, description: string, property: NumberProperty, providedOptions?: NumberControlOptions ) {
+  public constructor( label: string, description: string, property: NumberProperty, providedOptions?: TangiblePropertyNumberControlOptions ) {
     const propertyRange = property.range;
 
-    const options = optionize<NumberControlOptions, EmptySelfOptions, NumberControlOptions>()( {
+    const options = optionize<TangiblePropertyNumberControlOptions, TangiblePropertyNumberControlSelfOptions, NumberControlOptions>()( {
       delta: propertyRange.min,
       titleNodeOptions: PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS,
       layoutFunction: NumberControl.createLayoutFunction1( { align: 'left' } ),
@@ -111,8 +134,15 @@ class TangiblePropertyNumberControl extends VBox {
             value: propertyRange.max,
             label: new Text( propertyRange.max, { font: new PhetFont( 12 ) } )
           }
-        ]
+        ],
+
+        // voicing
+        voicingNameResponse: label,
+        voicingIgnoreVoicingManagerProperties: true
       },
+
+      // voicing
+      voicingContextResponsePatternString: '{{value}}',
 
       // opt out of tandems for these preferences because NumberControl requires phet.joist.sim and these
       // controls are created before the sim
@@ -121,8 +151,14 @@ class TangiblePropertyNumberControl extends VBox {
 
     const numberControl = new NumberControl( label, property, propertyRange, options );
 
+    // Update descriptions whenever the value changes
+    property.link( value => {
+      numberControl.slider.voicingObjectResponse = StringUtils.fillIn(
+        options.voicingContextResponsePatternString, { value: value } );
+    } );
+
     // a text descriptoin for this control
-    const descriptionText = new RichText( description, combineOptions<RichTextOptions>( {}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, NON_TRANSLATABLE_TEXT_OPTIONS ) );
+    const descriptionText = new VoicingRichText( description, combineOptions<VoicingRichTextOptions>( {}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, NON_TRANSLATABLE_TEXT_OPTIONS ) );
 
     super( {
       children: [ numberControl, descriptionText ],
