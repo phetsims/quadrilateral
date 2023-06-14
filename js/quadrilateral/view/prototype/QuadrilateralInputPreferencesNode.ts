@@ -46,7 +46,7 @@ export default class QuadrilateralInputPreferencesNode extends VBox {
 
       // Controls specifically for tangible connection
       const titleNode = new Text( 'Device Input', PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
-      const descriptionNode = new RichText( 'Use slider controls to adjust the mapping and communication parameters ' +
+      const descriptionNode = new RichText( 'Use sliders to adjust the mapping and communication parameters ' +
                                             'between the simulation and BLE-enabled device to reduce noise-related ' +
                                             'jitter.', combineOptions<RichTextOptions>( {}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, NON_TRANSLATABLE_TEXT_OPTIONS ) );
       const gridSpacingNumberControl = new TangiblePropertyNumberControl(
