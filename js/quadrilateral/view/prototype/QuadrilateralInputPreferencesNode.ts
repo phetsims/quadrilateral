@@ -11,7 +11,7 @@ import NumberControl, { NumberControlOptions, NumberControlSliderOptions } from 
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import optionize, { combineOptions } from '../../../../../phet-core/js/optionize.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
-import { Node, Text, VBox, VoicingRichText, VoicingRichTextOptions } from '../../../../../scenery/js/imports.js';
+import { Node, Text, TextOptions, VBox, VoicingRichText, VoicingRichTextOptions } from '../../../../../scenery/js/imports.js';
 import PreferencesDialog from '../../../../../joist/js/preferences/PreferencesDialog.js';
 import QuadrilateralTangibleOptionsModel from '../../model/prototype/QuadrilateralTangibleOptionsModel.js';
 import MediaPipe from '../../../../../tangible/js/mediaPipe/MediaPipe.js';
@@ -64,7 +64,12 @@ export default class QuadrilateralInputPreferencesNode extends VBox {
     else {
 
       // Controls specifically for tangible connection
-      const titleNode = new Text( deviceInputString, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
+      const titleNode = new Text( deviceInputString, combineOptions<TextOptions>( {}, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS, {
+
+        // pdom
+        tagName: 'h3',
+        innerContent: deviceInputString
+      } ) );
       const descriptionNode = new VoicingRichText( tangibleNumberControlsDescriptionString, combineOptions<VoicingRichTextOptions>(
         {}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, NON_TRANSLATABLE_TEXT_OPTIONS, {
           readingBlockNameResponse: StringUtils.fillIn( labelledDescriptionPatternStringProperty, {
