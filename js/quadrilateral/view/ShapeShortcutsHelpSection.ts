@@ -64,7 +64,6 @@ export default class ShapeShortcutsHelpSection extends KeyboardHelpSection {
     contents.push( resetShapeRow );
 
     super( QuadrilateralStrings.keyboardHelpDialog.shapeShortcutsStringProperty, contents );
-    this.disposeEmitter.addListener( () => contents.forEach( row => row.dispose() ) );
   }
 }
 
