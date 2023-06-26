@@ -13,10 +13,11 @@ import KeyboardHelpSection from '../../../../scenery-phet/js/keyboard/help/Keybo
 import KeyboardHelpSectionRow from '../../../../scenery-phet/js/keyboard/help/KeyboardHelpSectionRow.js';
 import LetterKeyNode from '../../../../scenery-phet/js/keyboard/LetterKeyNode.js';
 import TextKeyNode from '../../../../scenery-phet/js/keyboard/TextKeyNode.js';
-import { voicingManager } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralKeyboardHelpContent from './QuadrilateralKeyboardHelpContent.js';
+import { voicingManager } from '../../../../scenery/js/imports.js';
+import localeProperty from '../../../../joist/js/i18n/localeProperty.js';
 
 // Voicing is NOT translatable and won't be for a very long time. This content is invisible in non-english locales and
 // when Voicing is not supported.
@@ -58,10 +59,14 @@ export default class ShapeShortcutsHelpSection extends KeyboardHelpSection {
     );
 
     const contents: KeyboardHelpSectionRow[] = [];
-    if ( voicingManager.initialized ) {
-      contents.push( checkShapeRow );
-    }
+    contents.push( checkShapeRow );
     contents.push( resetShapeRow );
+
+    // This content only pertains to the Voicing feature which is only available in English. Hide if running in a
+    // different language or if language changes from dynamic locales.
+    localeProperty.link( locale => {
+      checkShapeRow.setContentsVisible( voicingManager.voicingSupportedForLocale( locale ) );
+    } );
 
     super( QuadrilateralStrings.keyboardHelpDialog.shapeShortcutsStringProperty, contents );
   }
