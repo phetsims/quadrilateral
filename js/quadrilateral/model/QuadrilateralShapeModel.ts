@@ -33,6 +33,7 @@ import QuadrilateralUtils from './QuadrilateralUtils.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import QuadrilateralSideLabel from './QuadrilateralSideLabel.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
+import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 
 // Used when verifying that QuadrilateralVertex positions are valid before setting to the model.
 export type VertexLabelToProposedPositionMap = Map<QuadrilateralVertexLabel, Vector2>;
@@ -42,8 +43,7 @@ type QuadrilateralShapeModelOptions = {
   // If true, the shape gets tested to make sure it is valid. This means no overlapping vertices and no crossed
   // sides.
   validateShape?: boolean;
-  tandem?: Tandem;
-};
+} & Pick<PhetioObjectOptions, 'tandem'>;
 
 export default class QuadrilateralShapeModel {
 
