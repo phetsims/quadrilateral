@@ -181,9 +181,7 @@ export default class QuadrilateralNode extends Voicing( Node ) {
 
     // When the shift key is down, Vertices snap to finer intervals
     this.addInputListener( new KeyboardListener( {
-
-      // TODO: Should only have to supply 'shift' instead of both - See https://github.com/phetsims/scenery/issues/1520
-      keys: [ 'shiftLeft', 'shiftRight' ],
+      keys: [ 'shift' ],
 
       // Need to allow other keys to be down to fire this listener or else it does not release on shift + tab
       // when shift is released before the tab key. Would be ideal if KeyboardListener supported this better.
