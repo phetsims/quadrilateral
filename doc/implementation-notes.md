@@ -38,7 +38,7 @@ This simulation supports Voicing. Description code is one of the most complicate
 - QuadrilateralSideDescriber: Creates description strings that describe the state of a QuadrilateralSide.
 - QuadrilateralVertexDescriber: Creates description strings that describe the state of a QuadrilateralVertex.
 
-See https://github.com/phetsims/qa/blob/master/documentation/qa-book.md#voicing for an overview of the Voicing feature.
+See https://github.com/phetsims/qa/blob/main/documentation/qa-book.md#voicing for an overview of the Voicing feature.
 
 #### Prototypes
 This sim has several prototypes for new features. These features are not going to be published to the main website, but we may share demos or links on the accessibility prototypes page. Code related to these prototypes are in /model/prototype and /view/prototype directories. These features are:
