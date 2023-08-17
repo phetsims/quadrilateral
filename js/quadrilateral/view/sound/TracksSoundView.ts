@@ -98,7 +98,7 @@ export default class TracksSoundView extends SoundGenerator {
         // All sub-SoundClips need to align perfectly, do not trim any silence
         trimSilence: false
       } );
-      generator.connect( this.masterGainNode );
+      generator.connect( this.mainGainNode );
 
       // immediately start playing all sounds, all control for this design uses output level
       generator.play();
@@ -207,7 +207,7 @@ export default class TracksSoundView extends SoundGenerator {
    */
   public override dispose(): void {
     this.soundClips.forEach( generator => {
-      generator.disconnect( this.masterGainNode );
+      generator.disconnect( this.mainGainNode );
       generator.dispose();
     } );
 
