@@ -183,7 +183,7 @@ export default class QuadrilateralNode extends Voicing( Node ) {
     this.addInputListener( new KeyboardListener( {
       keys: [ 'shift' ],
       listenerFireTrigger: 'both',
-      callback: ( event, listener ) => {
+      callback: ( event, keysPressed, listener ) => {
         this.model.minorIntervalsFromGlobalKeyProperty.value = listener.keysDown;
       },
       cancel: listener => {
@@ -198,9 +198,7 @@ export default class QuadrilateralNode extends Voicing( Node ) {
     this.addInputListener( new KeyboardListener( {
       keys: [ 'alt+shift+r', 'alt+c' ],
       global: true,
-      callback: ( event, listener ) => {
-        const keysPressed = listener.keysPressed;
-
+      callback: ( event, keysPressed, listener ) => {
         if ( keysPressed === 'alt+c' ) {
 
           // command to check shape, Voicing the current shape name or its Properties depending on name visibility

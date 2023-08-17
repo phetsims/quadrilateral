@@ -100,7 +100,7 @@ export default class QuadrilateralMovableNode extends Voicing( Node ) {
     // Voicing - speak all content about this component when you press enter or spacebar
     this.addInputListener( new KeyboardListener( {
       keys: [ 'enter', 'space' ],
-      callback: ( event, listener ) => {
+      callback: () => {
         this.voicingSpeakFullResponse();
       }
     } ) );
