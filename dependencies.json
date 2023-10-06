@@ -1,5 +1,5 @@
 {
-  "comment": "# quadrilateral 1.2.0-cameraInputObjects.0 Fri Oct 06 2023 10:46:00 GMT-0400 (Eastern Daylight Time)",
+  "comment": "# quadrilateral 1.2.0-cameraInputObjects.1 Fri Oct 06 2023 14:08:36 GMT-0400 (Eastern Daylight Time)",
   "assert": {
     "sha": "94831413cd4dd4dc27c2a1aebbcafd3987934a99",
     "branch": "main"
@@ -57,7 +57,7 @@
     "branch": "main"
   },
   "quadrilateral": {
-    "sha": "a210eb803658d4e156cefa24ccb9b7e1ff16f65b",
+    "sha": "d787c980071f9cb88fbd29c8c074e50e20e409f9",
     "branch": "cameraInputObjects"
   },
   "query-string-machine": {
@@ -69,7 +69,7 @@
     "branch": "main"
   },
   "scenery-phet": {
-    "sha": "9f3bfe06508888dea568ab7c718220760bfeea61",
+    "sha": "4cdb1bfb4736ba3422a97ed2557ad11ef89e6b8c",
     "branch": "main"
   },
   "sherpa": {
