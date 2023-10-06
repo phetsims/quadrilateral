@@ -144,7 +144,7 @@ export default class QuadrilateralScreenView extends ScreenView {
 
       // @ts-expect-error - For good reason, TypeScript doesn't allow this. But I am OK with it to support a prototype.
       // Putting this object on the window exposes it to iframes for control (on the same origin!).
-      window.quadrilateralTangibleController = this.quadrilateralTangibleController;
+      window.tangibleController = this.quadrilateralTangibleController;
     }
 
     // this parent only has children if relevant query params are provided, but is always created for easy layout

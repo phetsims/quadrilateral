@@ -51,7 +51,7 @@ export default class QuadrilateralTangibleControls extends VBox {
     // final contents depend on query parameters
     const children = [];
 
-    // open the calibration dialog
+    // open the calibration dialog - only useful for BLE and Serial connection prototypes
     const calibrationButton = new TextPushButton( 'Calibrate Device', {
       listener: () => {
         calibrationDialog.show();
@@ -60,13 +60,14 @@ export default class QuadrilateralTangibleControls extends VBox {
       textNodeOptions: QuadrilateralConstants.SCREEN_TEXT_OPTIONS,
       baseColor: QuadrilateralColors.screenViewButtonColorProperty
     } );
-    children.push( calibrationButton );
+
 
     if ( QuadrilateralQueryParameters.bluetooth ) {
 
       // request BLE devices
       const bluetoothButton = new QuadrilateralBluetoothConnectionButton( tangibleConnectionModel, tangibleController );
       children.push( bluetoothButton );
+      children.push( calibrationButton );
     }
 
     if ( QuadrilateralQueryParameters.serial ) {
@@ -74,6 +75,7 @@ export default class QuadrilateralTangibleControls extends VBox {
       // send values to the device with serial connection
       const sendValuesButton = new QuadrilateralSerialConnectionButton( tangibleConnectionModel );
       children.push( sendValuesButton );
+      children.push( calibrationButton );
     }
 
     super( {
