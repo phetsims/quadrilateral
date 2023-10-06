@@ -141,6 +141,10 @@ export default class QuadrilateralScreenView extends ScreenView {
     // tangible components
     if ( QuadrilateralQueryParameters.deviceConnection || MediaPipeQueryParameters.cameraInput === 'hands' ) {
       this.quadrilateralTangibleController = new QuadrilateralTangibleController( model );
+
+      // @ts-expect-error - For good reason, TypeScript doesn't allow this. But I am OK with it to support a prototype.
+      // Putting this object on the window exposes it to iframes for control (on the same origin!).
+      window.quadrilateralTangibleController = this.quadrilateralTangibleController;
     }
 
     // this parent only has children if relevant query params are provided, but is always created for easy layout
