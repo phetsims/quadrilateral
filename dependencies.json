@@ -13,7 +13,7 @@
     "branch": "HEAD"
   },
   "chipper": {
-    "sha": "e79e03a2f2d78e195db87446e5dbb22944015182",
+    "sha": "4a7d3cf05581d74339cda27f2151060d311c8570",
     "branch": "HEAD"
   },
   "dot": {
@@ -57,7 +57,7 @@
     "branch": "HEAD"
   },
   "quadrilateral": {
-    "sha": "0c570f88c2f6de2274268198924c0d4d74ce7412",
+    "sha": "fc760534e11acb847257a9c13e89502f2a84f4a0",
     "branch": "1.1"
   },
   "query-string-machine": {
