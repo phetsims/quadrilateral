@@ -13,7 +13,6 @@ import QuadrilateralSoundOptionsModel, { SoundDesign } from '../../model/Quadril
 import PreferencesDialog from '../../../../../joist/js/preferences/PreferencesDialog.js';
 import AquaRadioButtonGroup from '../../../../../sun/js/AquaRadioButtonGroup.js';
 import PreferencesPanelSection from '../../../../../joist/js/preferences/PreferencesPanelSection.js';
-import AquaRadioButton from '../../../../../sun/js/AquaRadioButton.js';
 import QuadrilateralStrings from '../../../QuadrilateralStrings.js';
 import soundManager from '../../../../../tambo/js/soundManager.js';
 import ToggleSwitch, { ToggleSwitchOptions } from '../../../../../sun/js/ToggleSwitch.js';
@@ -68,7 +67,7 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
       {
         value: SoundDesign.TRACKS_LAYER,
         createNode: () => new Text( preferencesDialogLayerSoundDesignDescriptionStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
-        tandemName: `layersTracksSoundView${AquaRadioButton.TANDEM_NAME_SUFFIX}`,
+        tandemName: 'layersTracksSoundViewRadioButton',
         labelContent: preferencesDialogLayerSoundDesignDescriptionStringProperty,
         options: {
           voicingNameResponse: preferencesDialogLayerSoundDesignDescriptionStringProperty
@@ -78,7 +77,7 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
         value: SoundDesign.TRACKS_UNIQUE,
         createNode: () => new Text( preferencesDialogUniqueSoundDesignDescriptionStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
         labelContent: preferencesDialogUniqueSoundDesignDescriptionStringProperty,
-        tandemName: `emphasisTracksSoundView${AquaRadioButton.TANDEM_NAME_SUFFIX}`,
+        tandemName: 'emphasisTracksSoundViewRadioButton',
         options: {
           voicingNameResponse: preferencesDialogUniqueSoundDesignDescriptionStringProperty
         }
