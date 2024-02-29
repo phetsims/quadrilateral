@@ -1,5 +1,5 @@
 {
-  "comment": "# quadrilateral 1.1.6-rc.1 Mon Feb 12 2024 15:09:58 GMT-0700 (Mountain Standard Time)",
+  "comment": "# quadrilateral 1.1.6-rc.2 Thu Feb 29 2024 15:37:34 GMT-0700 (Mountain Standard Time)",
   "assert": {
     "sha": "cc59d7f0574270924a886cb3d43a1b7507cd0553",
     "branch": "HEAD"
@@ -57,7 +57,7 @@
     "branch": "HEAD"
   },
   "quadrilateral": {
-    "sha": "1d8d013d94bba5e62d43bf50345afdb97b214cd7",
+    "sha": "516bd91c7342cd8e2d8bd2c8f0d5298127de12c1",
     "branch": "1.1"
   },
   "query-string-machine": {
