@@ -1,4 +1,4 @@
-// Copyright 2021-2023, University of Colorado Boulder
+// Copyright 2021-2024, University of Colorado Boulder
 
 /**
  * Options for the Preferences Dialog that allow us to set the sound design and sub-options.
