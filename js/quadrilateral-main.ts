@@ -45,7 +45,7 @@ const simOptions: SimOptions = {
         {
 
           // Due to the layout considerations in the Preferences Dialog, it has 2 columns. Our entry for the left column
-          // is blank
+          // is blank. See https://github.com/phetsims/joist/issues/956
           createContent: () => new Node()
         },
         {
