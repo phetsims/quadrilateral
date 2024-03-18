@@ -49,7 +49,7 @@
     "branch": "HEAD"
   },
   "phetcommon": {
-    "sha": "b9861d201f5cf55d71f937a981b5be75fac91e5e",
+    "sha": "a764b5287953dca54002096ab536131642217ce7",
     "branch": "HEAD"
   },
   "phetmarks": {
@@ -57,7 +57,7 @@
     "branch": "HEAD"
   },
   "quadrilateral": {
-    "sha": "367608acfa9704f83fece72ad693e2557af5b69f",
+    "sha": "31b6f63ad7e2449d770bd6805944b8fc853989a9",
     "branch": "1.1"
   },
   "query-string-machine": {
