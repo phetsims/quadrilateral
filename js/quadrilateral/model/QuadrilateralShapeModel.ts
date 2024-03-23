@@ -1,4 +1,4 @@
-// Copyright 2021-2023, University of Colorado Boulder
+// Copyright 2021-2024, University of Colorado Boulder
 
 /**
  * A model component for the components of the actual quadrilateral geometry/shape. This includes subcomponents

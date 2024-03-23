@@ -1,4 +1,4 @@
-// Copyright 2021-2023, University of Colorado Boulder
+// Copyright 2021-2024, University of Colorado Boulder
 
 /**
  * A class that generates many descriptions for the quadrilateral and simulation. It assembles strings that describe

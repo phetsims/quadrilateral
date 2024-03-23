@@ -1,4 +1,4 @@
-// Copyright 2022-2023, University of Colorado Boulder
+// Copyright 2022-2024, University of Colorado Boulder
 
 /**
  * A prototype application of MediaPipe in quadrilateral. See https://github.com/phetsims/tangible.

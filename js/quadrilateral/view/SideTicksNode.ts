@@ -1,4 +1,4 @@
-// Copyright 2022-2023, University of Colorado Boulder
+// Copyright 2022-2024, University of Colorado Boulder
 
 /**
  * The major and minor tick marks for the QuadrilateralSideNode, which make it easier to view relative side lengths.

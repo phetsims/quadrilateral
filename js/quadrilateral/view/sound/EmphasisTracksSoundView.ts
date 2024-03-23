@@ -1,4 +1,4 @@
-// Copyright 2022-2023, University of Colorado Boulder
+// Copyright 2022-2024, University of Colorado Boulder
 
 /**
  * In this design, all tracks play at once. Depending on the shape name, one or more of the tracks will have a higher

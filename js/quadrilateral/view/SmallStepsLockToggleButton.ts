@@ -1,4 +1,4 @@
-// Copyright 2023, University of Colorado Boulder
+// Copyright 2023-2024, University of Colorado Boulder
 
 /**
  * The UI component that locks motion for the QuadrilateralVertex to be constrained to the minor grid.

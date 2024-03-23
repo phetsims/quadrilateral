@@ -1,4 +1,4 @@
-// Copyright 2023, University of Colorado Boulder
+// Copyright 2023-2024, University of Colorado Boulder
 
 /**
  * Help content for the KeyboardHelpDialog describing how to change the shape by moving sides and vertices.
