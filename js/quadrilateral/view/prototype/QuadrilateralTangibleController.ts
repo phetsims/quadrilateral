@@ -130,20 +130,20 @@ export default class QuadrilateralTangibleController {
 
     // smooth positions to try to reduce noise
     const smoothedPositions = [
-      shapeModel.vertexA.smoothPosition( constrainedPositions[ 0 ]! ),
-      shapeModel.vertexB.smoothPosition( constrainedPositions[ 1 ]! ),
-      shapeModel.vertexC.smoothPosition( constrainedPositions[ 2 ]! ),
-      shapeModel.vertexD.smoothPosition( constrainedPositions[ 3 ]! )
+      shapeModel.vertexA.smoothPosition( constrainedPositions[ 0 ] ),
+      shapeModel.vertexB.smoothPosition( constrainedPositions[ 1 ] ),
+      shapeModel.vertexC.smoothPosition( constrainedPositions[ 2 ] ),
+      shapeModel.vertexD.smoothPosition( constrainedPositions[ 3 ] )
     ];
 
     // Constrain to intervals of deviceGridSpacingProperty.value to try to reduce noise
     const constrainedGridPositions = _.map( smoothedPositions, smoothedPosition => this.quadrilateralModel.getClosestGridPosition( smoothedPosition ) );
 
     const vertexLabelMap = new Map( [
-      [ shapeModel.vertexA.vertexLabel, constrainedGridPositions[ 0 ]! ],
-      [ shapeModel.vertexB.vertexLabel, constrainedGridPositions[ 1 ]! ],
-      [ shapeModel.vertexC.vertexLabel, constrainedGridPositions[ 2 ]! ],
-      [ shapeModel.vertexD.vertexLabel, constrainedGridPositions[ 3 ]! ]
+      [ shapeModel.vertexA.vertexLabel, constrainedGridPositions[ 0 ] ],
+      [ shapeModel.vertexB.vertexLabel, constrainedGridPositions[ 1 ] ],
+      [ shapeModel.vertexC.vertexLabel, constrainedGridPositions[ 2 ] ],
+      [ shapeModel.vertexD.vertexLabel, constrainedGridPositions[ 3 ] ]
     ] );
 
     this.shapeModel.setVertexPositions( vertexLabelMap );

@@ -28,7 +28,7 @@ const queryParameterToSoundDesignMap: Record<string, SoundDesign> = {
   shapeLayer: SoundDesign.TRACKS_LAYER,
   shapeUnique: SoundDesign.TRACKS_UNIQUE
 };
-const defaultSoundDesign = queryParameterToSoundDesignMap[ QuadrilateralQueryParameters.soundDesign! ]!;
+const defaultSoundDesign = queryParameterToSoundDesignMap[ QuadrilateralQueryParameters.soundDesign! ];
 assert && assert( defaultSoundDesign, 'No sound design for provided query parameter' );
 
 export default class QuadrilateralSoundOptionsModel {

@@ -882,7 +882,7 @@ export default class QuadrilateralAlerter extends Alerter {
 
     const differences = [];
     for ( let i = 0; i < currentDistancesToRight.length; i++ ) {
-      differences.push( currentDistancesToRight[ i ]! - previousDistancesToRight[ i ] );
+      differences.push( currentDistancesToRight[ i ] - previousDistancesToRight[ i ] );
     }
 
     // If the distances to pi for every angle have gotten smaller, we are getting closer to right angles, that is

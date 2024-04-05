@@ -173,10 +173,10 @@ export default class QuadrilateralUtils {
     let secondRayIntersectionLinePair: null | LineIntersectionPair = null;
     directedLines.forEach( line => {
       if ( firstRayIntersectionLinePair === null ) {
-        firstRayIntersectionLinePair = QuadrilateralUtils.getLineIntersectionPair( firstRay!, line );
+        firstRayIntersectionLinePair = QuadrilateralUtils.getLineIntersectionPair( firstRay, line );
       }
       if ( secondRayIntersectionLinePair === null ) {
-        secondRayIntersectionLinePair = QuadrilateralUtils.getLineIntersectionPair( secondRay!, line );
+        secondRayIntersectionLinePair = QuadrilateralUtils.getLineIntersectionPair( secondRay, line );
       }
     } );
     assert && assert( firstRayIntersectionLinePair && secondRayIntersectionLinePair, 'ray intersections were not found' );
