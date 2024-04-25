@@ -180,25 +180,17 @@ export default class QuadrilateralNode extends Voicing( Node ) {
     //---------------------------------------------------------------------------------------------------------------
 
     // When the shift key is down, Vertices snap to finer intervals
-    this.addInputListener( new KeyboardListener( {
-      keys: [ 'shift' ],
-      listenerFireTrigger: 'both',
-      callback: ( event, keysPressed, listener ) => {
-        this.model.minorIntervalsFromGlobalKeyProperty.value = listener.keysDown;
-      },
-      cancel: listener => {
-
-        // not locking until next press
-        this.model.minorIntervalsFromGlobalKeyProperty.value = false;
-      },
-      global: true
-    } ) );
+    const shiftKeyListener = KeyboardListener.createGlobal( this, {
+      keys: [ 'shift' ]
+    } );
+    shiftKeyListener.isPressedProperty.link( isPressed => {
+      this.model.minorIntervalsFromGlobalKeyProperty.value = isPressed;
+    } );
 
     // Global key listeners
-    this.addInputListener( new KeyboardListener( {
+    KeyboardListener.createGlobal( this, {
       keys: [ 'alt+shift+r', 'alt+c' ],
-      global: true,
-      callback: ( event, keysPressed, listener ) => {
+      fire: ( event, keysPressed, listener ) => {
         if ( keysPressed === 'alt+c' ) {
 
           // command to check shape, Voicing the current shape name or its Properties depending on name visibility
@@ -213,7 +205,7 @@ export default class QuadrilateralNode extends Voicing( Node ) {
           Voicing.alertUtterance( this.voicingUtterance );
         }
       }
-    } ) );
+    } );
 
     this.vertexNodes = [ vertexANode, vertexBNode, vertexCNode, vertexDNode ];
     this.sideNodes = [ sideABNode, sideBCNode, sideCDNode, sideDANode ];
