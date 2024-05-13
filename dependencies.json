@@ -41,7 +41,7 @@
     "branch": "HEAD"
   },
   "phet-io-sim-specific": {
-    "sha": "715ac98f29cd8d2e4ad594bf8b07b156a3a4dd7c",
+    "sha": "0f08ff0abf839bfe4c6178c20db85dc0b181a76c",
     "branch": "HEAD"
   },
   "phet-io-wrappers": {
@@ -57,7 +57,7 @@
     "branch": "HEAD"
   },
   "quadrilateral": {
-    "sha": "69b2d6c2634eb9513fa3106ac8fa0158a352ab5f",
+    "sha": "2753ef59cb090b6904b27f1a66c92aee93a36b2a",
     "branch": "1.1"
   },
   "query-string-machine": {
