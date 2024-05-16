@@ -42,6 +42,7 @@ import QuadrilateralTangibleControls from './prototype/QuadrilateralTangibleCont
 import QuadrilateralModelViewTransform from './QuadrilateralModelViewTransform.js';
 import QuadrilateralTangibleController from './prototype/QuadrilateralTangibleController.js';
 import { SpeakableResolvedResponse } from '../../../../utterance-queue/js/ResponsePacket.js';
+import QuadrilateralDataControls from './prototype/QuadrilateralDataControls.js';
 
 export default class QuadrilateralScreenView extends ScreenView {
   private readonly model: QuadrilateralModel;
@@ -167,6 +168,9 @@ export default class QuadrilateralScreenView extends ScreenView {
       deviceConnectionParentNode.left = resetAllButton.left;
     }
 
+    // Controls specific to a 2024 user study.
+    const dataControls = new QuadrilateralDataControls( model.tangibleConnectionModel );
+
     // voicing components
     this.quadrilateralAlerter = new QuadrilateralAlerter( model, this, this.modelViewTransform, this.quadrilateralDescriber );
 
@@ -189,7 +193,8 @@ export default class QuadrilateralScreenView extends ScreenView {
       shapeSoundsCheckbox,
       shapeNameDisplay,
       resetShapeButton,
-      deviceConnectionParentNode
+      deviceConnectionParentNode,
+      dataControls
     ];
 
     //---------------------------------------------------------------------------------------------------------------
@@ -201,7 +206,7 @@ export default class QuadrilateralScreenView extends ScreenView {
       this.layoutBounds.maxY - QuadrilateralConstants.SCREEN_VIEW_Y_MARGIN
     );
     smallStepsLockToggleButton.leftBottom = resetAllButton.leftTop.minusXY( 0, QuadrilateralConstants.VIEW_GROUP_SPACING );
-    visibilityControls.leftCenter = gridNode.rightCenter.plusXY( QuadrilateralConstants.VIEW_SPACING, 0 );
+    visibilityControls.leftCenter = gridNode.rightCenter.plusXY( QuadrilateralConstants.VIEW_SPACING, 20 );
 
     shapeNameDisplay.centerBottom = gridNode.centerTop.minusXY( 0, QuadrilateralConstants.VIEW_SPACING );
     shapeSoundsCheckbox.rightCenter = new Vector2( gridNode.right, shapeNameDisplay.centerY );
@@ -214,9 +219,11 @@ export default class QuadrilateralScreenView extends ScreenView {
       );
     } );
 
-    deviceConnectionParentNode.leftBottom = visibilityControls.leftTop.minusXY( 0, QuadrilateralConstants.VIEW_GROUP_SPACING );
+    deviceConnectionParentNode.leftBottom = visibilityControls.leftTop.minusXY( 0, QuadrilateralConstants.VIEW_GROUP_SPACING / 2 );
 
     debugValuesPanel.leftTop = gridNode.leftTop.plusXY( 5, 5 );
+
+    dataControls.leftTop = new Vector2( deviceConnectionParentNode.left, this.layoutBounds.top + 5 );
 
     //---------------------------------------------------------------------------------------------------------------
     // Traversal order

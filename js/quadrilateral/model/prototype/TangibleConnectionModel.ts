@@ -20,6 +20,7 @@ import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
 import Property from '../../../../../axon/js/Property.js';
 import TProperty from '../../../../../axon/js/TProperty.js';
 import Bounds2 from '../../../../../dot/js/Bounds2.js';
+import Range from '../../../../../dot/js/Range.js';
 import Vector2 from '../../../../../dot/js/Vector2.js';
 import ModelViewTransform2 from '../../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
@@ -30,6 +31,7 @@ import QuadrilateralShapeModel, { VertexLabelToProposedPositionMap } from '../Qu
 import QuadrilateralTangibleOptionsModel from './QuadrilateralTangibleOptionsModel.js';
 import MarkerDetectionModel from './MarkerDetectionModel.js';
 import QuadrilateralVertexLabel from '../QuadrilateralVertexLabel.js';
+import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 
 export default class TangibleConnectionModel {
 
@@ -63,6 +65,14 @@ export default class TangibleConnectionModel {
   // So that we can test proposed QuadrilateralVertex positions before we change the "real" shapeModel.
   public readonly testShapeModel: QuadrilateralShapeModel;
 
+  // A task pointing to a particular question that will be asked in a user study.
+  // Mostly to annotate an entry in the data collection.
+  public readonly taskProperty: NumberProperty;
+
+  // Collection of data for the user study. Contains the task number, shape name, and time stamp for the data
+  // collection. Every time the user presses "Submit Answer", an entry will be added to this array.
+  private dataCollection: { task: number; shape: string; timestamp: string }[] = [];
+
   public constructor( shapeModel: QuadrilateralShapeModel, testShapeModel: QuadrilateralShapeModel, tangibleOptionsModel: QuadrilateralTangibleOptionsModel, tandem: Tandem ) {
     this.connectedToDeviceProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'connectedToDeviceProperty' )
@@ -76,6 +86,10 @@ export default class TangibleConnectionModel {
     } );
     this.isCalibratingProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'isCalibratingProperty' )
+    } );
+
+    this.taskProperty = new NumberProperty( 1, {
+      range: new Range( 0, 999 )
     } );
 
     this.markerDetectionModel = new MarkerDetectionModel( tandem.createTandem( 'markerDetectionModel' ) );
@@ -143,6 +157,39 @@ export default class TangibleConnectionModel {
     }
 
     return allowed;
+  }
+
+  /**
+   * For the 2024 user study, we want to collect the task number, shape name, and time stamp every time the
+   * user presses the "Submit Answer" button.
+   */
+  public submitAnswer(): void {
+    this.dataCollection.push( {
+      task: this.taskProperty.value,
+      shape: this.shapeModel.shapeNameProperty.value.toString(),
+      timestamp: new Date().toISOString()
+    } );
+  }
+
+  /**
+   * Save the data collection to a file on the user's machine. Convert to a blob and then download.
+   */
+  public saveData(): void {
+
+    // Convert the data collection to a JSON string.
+    const dataCollectionString = JSON.stringify( this.dataCollection );
+
+    // Create a blob from the JSON string.
+    const blob = new Blob( [ dataCollectionString ], { type: 'text/plain' } );
+
+    // Create a URL for the blob.
+    const url = URL.createObjectURL( blob );
+
+    // Create a link element and click it to download the file.
+    const a = document.createElement( 'a' );
+    a.href = url;
+    a.download = 'studyData.json';
+    a.click();
   }
 }
 
