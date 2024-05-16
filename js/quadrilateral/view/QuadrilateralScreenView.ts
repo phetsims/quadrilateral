@@ -223,7 +223,7 @@ export default class QuadrilateralScreenView extends ScreenView {
 
     debugValuesPanel.leftTop = gridNode.leftTop.plusXY( 5, 5 );
 
-    dataControls.leftTop = new Vector2( deviceConnectionParentNode.left, this.layoutBounds.top + 5 );
+    dataControls.leftTop = new Vector2( resetAllButton.left, this.layoutBounds.top + 5 );
 
     //---------------------------------------------------------------------------------------------------------------
     // Traversal order
