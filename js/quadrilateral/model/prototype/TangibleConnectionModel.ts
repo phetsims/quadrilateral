@@ -33,6 +33,20 @@ import MarkerDetectionModel from './MarkerDetectionModel.js';
 import QuadrilateralVertexLabel from '../QuadrilateralVertexLabel.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 
+type DataCollectionEntry = {
+  task: number;
+  shape: string;
+  vertexAPosition: string;
+  vertexBPosition: string;
+  vertexCPosition: string;
+  vertexDPosition: string;
+  vertexAAngle: number;
+  vertexBAngle: number;
+  vertexCAngle: number;
+  vertexDAngle: number;
+  timestamp: string;
+};
+
 export default class TangibleConnectionModel {
 
   // True when we are connected to a device in some way, either bluetooth, serial, or OpenCV.
@@ -71,7 +85,7 @@ export default class TangibleConnectionModel {
 
   // Collection of data for the user study. Contains the task number, shape name, and time stamp for the data
   // collection. Every time the user presses "Submit Answer", an entry will be added to this array.
-  private dataCollection: { task: number; shape: string; timestamp: string }[] = [];
+  private dataCollection: DataCollectionEntry[] = [];
 
   public constructor( shapeModel: QuadrilateralShapeModel, testShapeModel: QuadrilateralShapeModel, tangibleOptionsModel: QuadrilateralTangibleOptionsModel, tandem: Tandem ) {
     this.connectedToDeviceProperty = new BooleanProperty( false, {
@@ -167,6 +181,14 @@ export default class TangibleConnectionModel {
     this.dataCollection.push( {
       task: this.taskProperty.value,
       shape: this.shapeModel.shapeNameProperty.value.toString(),
+      vertexAPosition: this.shapeModel.vertexA.positionProperty.value.toString(),
+      vertexBPosition: this.shapeModel.vertexB.positionProperty.value.toString(),
+      vertexCPosition: this.shapeModel.vertexC.positionProperty.value.toString(),
+      vertexDPosition: this.shapeModel.vertexD.positionProperty.value.toString(),
+      vertexAAngle: this.shapeModel.vertexA.angleProperty.value!,
+      vertexBAngle: this.shapeModel.vertexB.angleProperty.value!,
+      vertexCAngle: this.shapeModel.vertexC.angleProperty.value!,
+      vertexDAngle: this.shapeModel.vertexD.angleProperty.value!,
       timestamp: new Date().toISOString()
     } );
   }
@@ -176,8 +198,8 @@ export default class TangibleConnectionModel {
    */
   public saveData(): void {
 
-    // Convert the data collection to a JSON string.
-    const dataCollectionString = JSON.stringify( this.dataCollection );
+    // Convert the data collection to a JSON string, formatted nicely for readability
+    const dataCollectionString = JSON.stringify( this.dataCollection, null, 2 );
 
     // Create a blob from the JSON string.
     const blob = new Blob( [ dataCollectionString ], { type: 'text/plain' } );
