@@ -156,6 +156,17 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
     type: 'number',
     defaultValue: 0.0625,
     isValidValue: ( value: number ) => value <= 5 * 0.05
+  },
+
+  /**
+   * For https://github.com/phetsims/quadrilateral/issues/458, controls how the data is saved. If "download", then
+   * the data will be saved to a file. If "newTab", then the data will be shown in a new tab. Needed for browsers that
+   * prevent file downloads.
+   */
+  saveDataTo: {
+    type: 'string',
+    defaultValue: 'download',
+    validValues: [ 'download', 'newTab' ]
   }
 } );
 

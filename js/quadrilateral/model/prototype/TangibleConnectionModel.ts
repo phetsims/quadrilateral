@@ -32,6 +32,7 @@ import QuadrilateralTangibleOptionsModel from './QuadrilateralTangibleOptionsMod
 import MarkerDetectionModel from './MarkerDetectionModel.js';
 import QuadrilateralVertexLabel from '../QuadrilateralVertexLabel.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
+import QuadrilateralQueryParameters from '../../QuadrilateralQueryParameters.js';
 
 type DataCollectionEntry = {
   task: number;
@@ -201,17 +202,35 @@ export default class TangibleConnectionModel {
     // Convert the data collection to a JSON string, formatted nicely for readability
     const dataCollectionString = JSON.stringify( this.dataCollection, null, 2 );
 
-    // Create a blob from the JSON string.
-    const blob = new Blob( [ dataCollectionString ], { type: 'text/plain' } );
+    if ( QuadrilateralQueryParameters.saveDataTo === 'download' ) {
 
-    // Create a URL for the blob.
-    const url = URL.createObjectURL( blob );
+      // Create a blob from the JSON string.
+      const blob = new Blob( [ dataCollectionString ], { type: 'text/plain' } );
 
-    // Create a link element and click it to download the file.
-    const a = document.createElement( 'a' );
-    a.href = url;
-    a.download = 'studyData.json';
-    a.click();
+      // Create a URL for the blob.
+      const url = URL.createObjectURL( blob );
+
+      // Create a link element and click it to download the file.
+      const a = document.createElement( 'a' );
+      a.href = url;
+      a.download = 'studyData.json';
+      a.click();
+    }
+    else if ( QuadrilateralQueryParameters.saveDataTo === 'newTab' ) {
+
+      // Create a new window or tab and open the JSON data in it
+      const newWindow = window.open();
+      if ( newWindow ) {
+        newWindow.document.open();
+        newWindow.document.write( '<html><body><pre>' + dataCollectionString + '</pre></body></html>' );
+
+        // Close the document to indicate writing is complete
+        newWindow.document.close();
+      }
+    }
+    else {
+      throw new Error( 'Invalid value for QuadrilateralQueryParameters.saveDataTo' );
+    }
   }
 }
 
