@@ -228,6 +228,17 @@ export default class TangibleConnectionModel {
         newWindow.document.close();
       }
     }
+    else if ( QuadrilateralQueryParameters.saveDataTo === 'clipboard' ) {
+
+      // Copy the text inside the text field
+      // Use the Clipboard API to write text to the clipboard
+      navigator.clipboard.writeText( dataCollectionString ).then( () => {
+
+        // The data should be in the clipboard now.
+      } ).catch( err => {
+        console.error( 'Error copying text: ', err );
+      } );
+    }
     else {
       throw new Error( 'Invalid value for QuadrilateralQueryParameters.saveDataTo' );
     }

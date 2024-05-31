@@ -166,7 +166,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   saveDataTo: {
     type: 'string',
     defaultValue: 'download',
-    validValues: [ 'download', 'newTab' ]
+    validValues: [ 'download', 'newTab', 'clipboard' ]
   }
 } );
 
