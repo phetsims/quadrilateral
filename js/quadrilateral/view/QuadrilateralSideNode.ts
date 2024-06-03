@@ -160,7 +160,7 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
       shiftDragDelta: this.smallViewDragDelta,
       transform: modelViewTransform,
       drag: ( event, listener ) => {
-        this.moveVerticesFromModelDelta( listener.vectorDelta );
+        this.moveVerticesFromModelDelta( listener.modelDelta );
       },
 
       moveOnHoldDelay: 750,

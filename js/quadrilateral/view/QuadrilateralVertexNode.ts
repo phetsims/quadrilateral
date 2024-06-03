@@ -101,7 +101,7 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
 
       transform: modelViewTransform,
       drag: ( event, listener ) => {
-        const proposedPosition = quadrilateralModel.getClosestGridPositionInDirection( vertex.positionProperty.value, listener.vectorDelta );
+        const proposedPosition = quadrilateralModel.getClosestGridPositionInDirection( vertex.positionProperty.value, listener.modelDelta );
 
         // constrain to model bounds
         const inBoundsPosition = quadrilateralModel.vertexDragBounds.closestPointTo( proposedPosition );
