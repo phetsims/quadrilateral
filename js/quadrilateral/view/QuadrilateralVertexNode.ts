@@ -6,7 +6,7 @@
  * @author Jesse Greenberg
  */
 
-import { Circle, DragListener, KeyboardDragListener, Path, SceneryEvent, Text } from '../../../../scenery/js/imports.js';
+import { Circle, DragListener, Path, SceneryEvent, Text } from '../../../../scenery/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import QuadrilateralVertex from '../model/QuadrilateralVertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -25,6 +25,7 @@ import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { VertexLabelToProposedPositionMap } from '../model/QuadrilateralShapeModel.js';
+import RichDragListener from '../../../../scenery-phet/js/RichDragListener.js';
 
 // constants
 const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
@@ -95,96 +96,98 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
       vertexLabelText.center = circle.center;
     } );
 
-    const keyboardDragListener = new KeyboardDragListener( {
-      dragDelta: this.largeViewDragDelta,
-      shiftDragDelta: this.smallViewDragDelta,
-
+    const richDragListener = new RichDragListener( {
       transform: modelViewTransform,
-      drag: ( event, listener ) => {
-        const proposedPosition = quadrilateralModel.getClosestGridPositionInDirection( vertex.positionProperty.value, listener.modelDelta );
 
-        // constrain to model bounds
-        const inBoundsPosition = quadrilateralModel.vertexDragBounds.closestPointTo( proposedPosition );
-        const isAgainstBounds = !inBoundsPosition.equals( proposedPosition );
+      // No sounds for this DragListener, custom grab sounds are used for vertices/sides
+      grabSound: null,
+      releaseSound: null,
 
-        scratchLabelToPositionMap.clear();
-        scratchLabelToPositionMap.set( vertex.vertexLabel, inBoundsPosition );
-        const isPositionAllowed = quadrilateralModel.areVertexPositionsAllowed( scratchLabelToPositionMap );
-        if ( isPositionAllowed ) {
+      richKeyboardDragListenerOptions: {
+        dragDelta: this.largeViewDragDelta,
+        shiftDragDelta: this.smallViewDragDelta,
+        moveOnHoldDelay: 750,
+        moveOnHoldInterval: 50,
 
-          // only update and trigger a new Voicing response if the position has changed.
-          if ( !vertex.positionProperty.value.equals( inBoundsPosition ) ) {
-            vertex.voicingObjectResponseDirty = true;
-            vertex.positionProperty.value = inBoundsPosition;
+        drag: ( event, listener ) => {
+          const proposedPosition = quadrilateralModel.getClosestGridPositionInDirection( vertex.positionProperty.value, listener.modelDelta );
+
+          // constrain to model bounds
+          const inBoundsPosition = quadrilateralModel.vertexDragBounds.closestPointTo( proposedPosition );
+          const isAgainstBounds = !inBoundsPosition.equals( proposedPosition );
+
+          scratchLabelToPositionMap.clear();
+          scratchLabelToPositionMap.set( vertex.vertexLabel, inBoundsPosition );
+          const isPositionAllowed = quadrilateralModel.areVertexPositionsAllowed( scratchLabelToPositionMap );
+          if ( isPositionAllowed ) {
+
+            // only update and trigger a new Voicing response if the position has changed.
+            if ( !vertex.positionProperty.value.equals( inBoundsPosition ) ) {
+              vertex.voicingObjectResponseDirty = true;
+              vertex.positionProperty.value = inBoundsPosition;
+            }
           }
-        }
 
-        this.updateBlockedState( !isPositionAllowed, isAgainstBounds );
+          this.updateBlockedState( !isPositionAllowed, isAgainstBounds );
+        }
       },
 
-      moveOnHoldDelay: 750,
-      moveOnHoldInterval: 50,
+      richPointerDragListenerOptions: {
+        start: event => {
+          const pointerPoint = event.pointer.point;
+          const parentPoint = this.globalToParentPoint( pointerPoint );
+          startPosition = modelViewTransform.viewToModelPosition( parentPoint );
+        },
+        drag: ( event: SceneryEvent, listener: DragListener ) => {
+          const pointerPoint = event.pointer.point;
+          const parentPoint = this.globalToParentPoint( pointerPoint );
+          const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
 
-      tandem: providedOptions?.tandem.createTandem( 'keyboardDragListener' )
+          // constrain to model bounds
+          const inBoundsPosition = quadrilateralModel.vertexDragBounds.closestPointTo( modelPoint );
+          const isAgainstBounds = !inBoundsPosition.equals( modelPoint );
+
+          // constrain to the allowable positions in the model along the grid
+          // const constrainedPosition = quadrilateralModel.getClosestGridPosition( inBoundsPosition );
+          const constrainedPosition = quadrilateralModel.getClosestGridPositionAlongDiagonal( vertex.positionProperty.value, inBoundsPosition );
+
+          scratchLabelToPositionMap.clear();
+          scratchLabelToPositionMap.set( vertex.vertexLabel, constrainedPosition );
+          const isPositionAllowed = quadrilateralModel.areVertexPositionsAllowed( scratchLabelToPositionMap );
+
+          if ( isPositionAllowed ) {
+            vertex.positionProperty.value = constrainedPosition;
+          }
+
+          this.updateBlockedState( !isPositionAllowed, isAgainstBounds );
+        },
+        end: event => {
+
+          // event may be null if interupted or cancelled
+          if ( event ) {
+            const pointerPoint = event.pointer.point;
+            const parentPoint = this.globalToParentPoint( pointerPoint );
+            const endPosition = modelViewTransform.viewToModelPosition( parentPoint );
+
+            if ( startPosition.equals( endPosition ) ) {
+              this.voicingSpeakFullResponse();
+            }
+          }
+        }
+      }
     } );
-    this.addInputListener( keyboardDragListener );
+
+    this.addInputListener( richDragListener );
 
     // Position on drag start, in model coordinate frame.
     let startPosition: Vector2;
-    const dragListener = new DragListener( {
-      transform: modelViewTransform,
-      start: event => {
-        const pointerPoint = event.pointer.point;
-        const parentPoint = this.globalToParentPoint( pointerPoint );
-        startPosition = modelViewTransform.viewToModelPosition( parentPoint );
-      },
-      drag: ( event: SceneryEvent, listener: DragListener ) => {
-        const pointerPoint = event.pointer.point;
-        const parentPoint = this.globalToParentPoint( pointerPoint );
-        const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
 
-        // constrain to model bounds
-        const inBoundsPosition = quadrilateralModel.vertexDragBounds.closestPointTo( modelPoint );
-        const isAgainstBounds = !inBoundsPosition.equals( modelPoint );
+    // Notify when this vertex is pressed - This is the specific case for the pointer drag listener, see below
+    // for how we notify pressed state for keyboard dragging
+    richDragListener.pointerListenerPressedProperty.link( isPressed => vertex.isPressedProperty.set( isPressed ) );
 
-        // constrain to the allowable positions in the model along the grid
-        // const constrainedPosition = quadrilateralModel.getClosestGridPosition( inBoundsPosition );
-        const constrainedPosition = quadrilateralModel.getClosestGridPositionAlongDiagonal( vertex.positionProperty.value, inBoundsPosition );
-
-        scratchLabelToPositionMap.clear();
-        scratchLabelToPositionMap.set( vertex.vertexLabel, constrainedPosition );
-        const isPositionAllowed = quadrilateralModel.areVertexPositionsAllowed( scratchLabelToPositionMap );
-
-        if ( isPositionAllowed ) {
-          vertex.positionProperty.value = constrainedPosition;
-        }
-
-        this.updateBlockedState( !isPositionAllowed, isAgainstBounds );
-      },
-      end: event => {
-
-        // event may be null if interupted or cancelled
-        if ( event ) {
-          const pointerPoint = event.pointer.point;
-          const parentPoint = this.globalToParentPoint( pointerPoint );
-          const endPosition = modelViewTransform.viewToModelPosition( parentPoint );
-
-          if ( startPosition.equals( endPosition ) ) {
-            this.voicingSpeakFullResponse();
-          }
-        }
-      },
-
-      tandem: providedOptions?.tandem.createTandem( 'dragListener' )
-    } );
-    this.addInputListener( dragListener );
-
-    // notify when this vertex is pressed
-    dragListener.isPressedProperty.link( isPressed => vertex.isPressedProperty.set( isPressed ) );
-
-    // I am not sure if the isPressedProperty should be set here, but it may not be necessary. It should probably be set by the
-    // KeyboardDragListener on start/end drag, or the KeyboardDRagListener should
-    // have its own isPressedProperty to match the API of the DragListener.
+    // The vertex is pressed when it receives focus - NOT when a key is pressed (the default for
+    // RichKeyboardDragListener), which we found to be too much sound.
     this.addInputListener( {
       focus: () => {
         vertex.isPressedProperty.value = true;
