@@ -36,7 +36,7 @@ type TangiblePropertyNumberControlSelfOptions = {
   createObjectResponsePatternString?: ( value: number ) => string;
 
   // Voicing and PDOM both use the provided createObjectResponsePatternString option so this cannot be provided
-  sliderOptions?: StrictOmit<NumberControlSliderOptions, 'a11yCreateAriaValueText'>;
+  sliderOptions?: StrictOmit<NumberControlSliderOptions, 'pdomCreateAriaValueText'>;
 };
 
 type TangiblePropertyNumberControlOptions = TangiblePropertyNumberControlSelfOptions & NumberControlOptions;
@@ -166,7 +166,7 @@ class TangiblePropertyNumberControl extends VBox {
     }, providedOptions );
 
     // Both Voicing and PDOM use the same object response pattern in this case
-    options.sliderOptions.a11yCreateAriaValueText = value => StringUtils.fillIn( options.createObjectResponsePatternString( value ), { value: value } );
+    options.sliderOptions.pdomCreateAriaValueText = value => StringUtils.fillIn( options.createObjectResponsePatternString( value ), { value: value } );
 
     const numberControl = new NumberControl( label, property, propertyRange, options );
 
