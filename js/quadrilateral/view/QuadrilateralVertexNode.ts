@@ -179,7 +179,7 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
 
     // Notify when this vertex is pressed - This is the specific case for the pointer drag listener, see below
     // for how we notify pressed state for keyboard dragging
-    richDragListener.pointerListenerPressedProperty.link( isPressed => vertex.isPressedProperty.set( isPressed ) );
+    richDragListener.dragListener.isPressedProperty.link( isPressed => vertex.isPressedProperty.set( isPressed ) );
 
     // The vertex is pressed when it receives focus - NOT when a key is pressed (the default for
     // RichKeyboardDragListener), which we found to be too much sound.
