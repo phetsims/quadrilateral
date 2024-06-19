@@ -6,7 +6,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { Line as LineNode, Path, SceneryEvent } from '../../../../scenery/js/imports.js';
+import { Line as LineNode, Path, RichDragListener, SceneryEvent } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralSide from '../model/QuadrilateralSide.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -22,7 +22,6 @@ import SideTicksNode from './SideTicksNode.js';
 import QuadrilateralMovableNode, { QuadrilateralMovableNodeOptions } from './QuadrilateralMovableNode.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import SoundRichDragListener from '../../../../scenery-phet/js/SoundRichDragListener.js';
 
 // The dilation around side shapes when drawing the focus highlight.
 const FOCUS_HIGHLIGHT_DILATION = 15;
@@ -164,15 +163,11 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
     let vertex1StartPosition = side.vertex1.positionProperty.value;
     let vertex2StartPosition = side.vertex2.positionProperty.value;
 
-    const richDragListener = new SoundRichDragListener( {
+    const richDragListener = new RichDragListener( {
       transform: modelViewTransform,
 
-      // Default drag sounds are a bit much when combined with the other sounds in this sim.
-      grabSound: null,
-      releaseSound: null,
-
       // Keyboard specific behavior
-      richKeyboardDragListenerOptions: {
+      keyboardDragListenerOptions: {
         dragDelta: this.largeViewDragDelta,
         shiftDragDelta: this.smallViewDragDelta,
         moveOnHoldDelay: 750,
@@ -182,7 +177,7 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
         }
       },
 
-      richPointerDragListenerOptions: {
+      dragListenerOptions: {
         start: ( event, listener ) => {
           side.isPressedProperty.value = true;
 

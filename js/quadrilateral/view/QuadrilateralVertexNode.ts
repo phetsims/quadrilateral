@@ -6,7 +6,7 @@
  * @author Jesse Greenberg
  */
 
-import { Circle, DragListener, Path, SceneryEvent, Text } from '../../../../scenery/js/imports.js';
+import { Circle, DragListener, Path, RichDragListener, SceneryEvent, Text } from '../../../../scenery/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import QuadrilateralVertex from '../model/QuadrilateralVertex.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -25,7 +25,6 @@ import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { VertexLabelToProposedPositionMap } from '../model/QuadrilateralShapeModel.js';
-import SoundRichDragListener from '../../../../scenery-phet/js/SoundRichDragListener.js';
 
 // constants
 const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
@@ -96,14 +95,10 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
       vertexLabelText.center = circle.center;
     } );
 
-    const richDragListener = new SoundRichDragListener( {
+    const richDragListener = new RichDragListener( {
       transform: modelViewTransform,
 
-      // No sounds for this DragListener, custom grab sounds are used for vertices/sides
-      grabSound: null,
-      releaseSound: null,
-
-      richKeyboardDragListenerOptions: {
+      keyboardDragListenerOptions: {
         dragDelta: this.largeViewDragDelta,
         shiftDragDelta: this.smallViewDragDelta,
         moveOnHoldDelay: 750,
@@ -132,7 +127,7 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
         }
       },
 
-      richPointerDragListenerOptions: {
+      dragListenerOptions: {
         start: event => {
           const pointerPoint = event.pointer.point;
           const parentPoint = this.globalToParentPoint( pointerPoint );
