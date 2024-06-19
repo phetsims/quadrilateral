@@ -22,7 +22,7 @@ import SideTicksNode from './SideTicksNode.js';
 import QuadrilateralMovableNode, { QuadrilateralMovableNodeOptions } from './QuadrilateralMovableNode.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import RichDragListener from '../../../../scenery-phet/js/RichDragListener.js';
+import SoundRichDragListener from '../../../../scenery-phet/js/SoundRichDragListener.js';
 
 // The dilation around side shapes when drawing the focus highlight.
 const FOCUS_HIGHLIGHT_DILATION = 15;
@@ -164,7 +164,7 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
     let vertex1StartPosition = side.vertex1.positionProperty.value;
     let vertex2StartPosition = side.vertex2.positionProperty.value;
 
-    const richDragListener = new RichDragListener( {
+    const richDragListener = new SoundRichDragListener( {
       transform: modelViewTransform,
 
       // Default drag sounds are a bit much when combined with the other sounds in this sim.

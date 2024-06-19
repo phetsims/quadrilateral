@@ -25,7 +25,7 @@ import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { VertexLabelToProposedPositionMap } from '../model/QuadrilateralShapeModel.js';
-import RichDragListener from '../../../../scenery-phet/js/RichDragListener.js';
+import SoundRichDragListener from '../../../../scenery-phet/js/SoundRichDragListener.js';
 
 // constants
 const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );
@@ -96,7 +96,7 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
       vertexLabelText.center = circle.center;
     } );
 
-    const richDragListener = new RichDragListener( {
+    const richDragListener = new SoundRichDragListener( {
       transform: modelViewTransform,
 
       // No sounds for this DragListener, custom grab sounds are used for vertices/sides
