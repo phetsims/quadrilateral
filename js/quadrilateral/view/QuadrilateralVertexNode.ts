@@ -182,7 +182,7 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
     richDragListener.dragListener.isPressedProperty.link( isPressed => vertex.isPressedProperty.set( isPressed ) );
 
     // The vertex is pressed when it receives focus - NOT when a key is pressed (the default for
-    // RichKeyboardDragListener), which we found to be too much sound.
+    // SoundKeyboardDragListener), which we found to be too much sound.
     this.addInputListener( {
       focus: () => {
         vertex.isPressedProperty.value = true;
