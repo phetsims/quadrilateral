@@ -57,7 +57,7 @@
     "branch": "HEAD"
   },
   "quadrilateral": {
-    "sha": "bf10c3d814b8935a3c4af022a3b9b211902222ec",
+    "sha": "3ba918a0a1c539ca9f615589bfafc57fb9d1f4e1",
     "branch": "1.1"
   },
   "query-string-machine": {
@@ -65,7 +65,7 @@
     "branch": "HEAD"
   },
   "scenery": {
-    "sha": "250ccabc8145a965c07ea8f2b6e6722fcac2a9ac",
+    "sha": "6fbfc2271f86df7285881cc3c253cf68b3b777c4",
     "branch": "HEAD"
   },
   "scenery-phet": {
