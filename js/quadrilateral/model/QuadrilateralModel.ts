@@ -39,6 +39,7 @@ export default class QuadrilateralModel implements TModel {
   // Whether a reset is currently in progress. Added for sound. If the model is actively resetting, SoundManagers
   // are disabled so we don't play sounds for transient model states. Tracks when the reset is NOT in progress
   // because that makes it most convenient to pass to SoundGenerator enableControlProperties.
+  // TODO: See https://github.com/phetsims/quadrilateral/issues/459.  Sounds are now disabled by default.  Is this Property still needed?
   public readonly resetNotInProgressProperty: TProperty<boolean>;
 
   // The available bounds for smooth vertex dragging (the model bounds eroded by the width of a vertex so a vertex

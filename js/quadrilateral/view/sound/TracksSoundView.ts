@@ -77,8 +77,8 @@ export default class TracksSoundView extends SoundGenerator {
   public constructor( shapeModel: QuadrilateralShapeModel, shapeSoundEnabledProperty: TReadOnlyProperty<boolean>, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel, tracks: WrappedAudioBuffer[] ) {
     super( {
 
-      // don't play sounds while model reset is in progress or when the user has opted out of playing music tracks
-      enableControlProperties: [ resetNotInProgressProperty, shapeSoundEnabledProperty ],
+      // Don't play sounds when the user has opted out of playing music tracks.
+      enabledProperty: shapeSoundEnabledProperty,
 
       // No sound from this track set initially
       initialOutputLevel: 0
