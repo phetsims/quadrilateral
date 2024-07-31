@@ -7,7 +7,7 @@
  */
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import { KeyboardListener, Node, NodeOptions, TPaint, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
+import { HotkeyData, KeyboardListener, Node, NodeOptions, TPaint, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralSideNode from './QuadrilateralSideNode.js';
@@ -23,6 +23,7 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import Multilink from '../../../../axon/js/Multilink.js';
+import Property from '../../../../axon/js/Property.js';
 
 // constants
 const cornerAStringProperty = QuadrilateralStrings.a11y.cornerAStringProperty;
@@ -181,7 +182,7 @@ export default class QuadrilateralNode extends Voicing( Node ) {
 
     // When the shift key is down, Vertices snap to finer intervals
     const shiftKeyListener = KeyboardListener.createGlobal( this, {
-      keys: [ 'shift' ]
+      keyStringProperties: QuadrilateralNode.SHIFT_HOTKEY_DATA.keyStringProperties
     } );
     shiftKeyListener.isPressedProperty.link( isPressed => {
       this.model.minorIntervalsFromGlobalKeyProperty.value = isPressed;
@@ -189,15 +190,17 @@ export default class QuadrilateralNode extends Voicing( Node ) {
 
     // Global key listeners
     KeyboardListener.createGlobal( this, {
-      keys: [ 'alt+shift+r', 'alt+c' ],
+      keyStringProperties: HotkeyData.combineKeyStringProperties( [
+        QuadrilateralNode.RESET_SHAPE_HOTKEY_DATA, QuadrilateralNode.CHECK_SHAPE_HOTKEY_DATA
+      ] ),
       fire: ( event, keysPressed, listener ) => {
-        if ( keysPressed === 'alt+c' ) {
+        if ( QuadrilateralNode.CHECK_SHAPE_HOTKEY_DATA.hasKeyStroke( keysPressed ) ) {
 
           // command to check shape, Voicing the current shape name or its Properties depending on name visibility
           this.voicingUtterance.alert = quadrilateralDescriber.getCheckShapeDescription();
           Voicing.alertUtterance( this.voicingUtterance );
         }
-        else if ( keysPressed === 'alt+shift+r' ) {
+        else if ( QuadrilateralNode.RESET_SHAPE_HOTKEY_DATA.hasKeyStroke( keysPressed ) ) {
 
           // command to reset shape
           this.quadrilateralShapeModel.isolatedReset();
@@ -277,6 +280,27 @@ export default class QuadrilateralNode extends Voicing( Node ) {
     this.vertexNodes.forEach( vertexNode => { vertexNode.paintableNode.fill = this.activeFill; } );
     this.sideNodes.forEach( sideNode => { sideNode.paintableNode.fill = this.activeFill; } );
   }
+
+  public static readonly RESET_SHAPE_HOTKEY_DATA = new HotkeyData( {
+    keyStringProperties: [ new Property( 'alt+shift+r' ) ],
+    keyboardHelpDialogLabelStringProperty: QuadrilateralStrings.keyboardHelpDialog.resetShapeStringProperty,
+    global: true,
+    repoName: quadrilateral.name
+  } );
+
+  public static readonly CHECK_SHAPE_HOTKEY_DATA = new HotkeyData( {
+    keyStringProperties: [ new Property( 'alt+c' ) ],
+    keyboardHelpDialogLabelStringProperty: new Property( 'Check Shape' ),
+    global: true,
+    repoName: quadrilateral.name
+  } );
+
+  public static readonly SHIFT_HOTKEY_DATA = new HotkeyData( {
+    keyStringProperties: [ new Property( 'shift' ) ],
+    binderName: 'Snap to Fine Intervals',
+    global: true,
+    repoName: quadrilateral.name
+  } );
 }
 
 quadrilateral.register( 'QuadrilateralNode', QuadrilateralNode );

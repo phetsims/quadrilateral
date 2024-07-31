@@ -7,7 +7,7 @@
  */
 
 import quadrilateral from '../../quadrilateral.js';
-import { KeyboardListener, Node, NodeOptions, PaintableNode, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
+import { HotkeyData, KeyboardListener, Node, NodeOptions, PaintableNode, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import optionize from '../../../../phet-core/js/optionize.js';
@@ -23,6 +23,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import QuadrilateralColors from '../../QuadrilateralColors.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Utterance from '../../../../utterance-queue/js/Utterance.js';
+import Property from '../../../../axon/js/Property.js';
 
 // constants
 const blockedByInnerShapeStringProperty = QuadrilateralStrings.a11y.voicing.blockedByInnerShapeStringProperty;
@@ -99,7 +100,7 @@ export default class QuadrilateralMovableNode extends Voicing( Node ) {
 
     // Voicing - speak all content about this component when you press enter or spacebar
     this.addInputListener( new KeyboardListener( {
-      keys: [ 'enter', 'space' ],
+      keyStringProperties: QuadrilateralMovableNode.SPEAK_DETAILS_HOTKEY_DATA.keyStringProperties,
       fire: () => {
         this.voicingSpeakFullResponse();
       }
@@ -143,6 +144,13 @@ export default class QuadrilateralMovableNode extends Voicing( Node ) {
     this.model.movementBlockedByShapeProperty.value = isBlockedByShape;
     this.model.movementBlockedByBoundsProperty.value = isBlockedByBounds;
   }
+
+  public static readonly SPEAK_DETAILS_HOTKEY_DATA = new HotkeyData( {
+    keyStringProperties: [ new Property( 'enter' ), new Property( 'space' ) ],
+    binderName: 'Speak details',
+    repoName: quadrilateral.name,
+    global: true
+  } );
 }
 
 quadrilateral.register( 'QuadrilateralMovableNode', QuadrilateralMovableNode );
