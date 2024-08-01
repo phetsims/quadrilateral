@@ -24,6 +24,8 @@ import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import Property from '../../../../axon/js/Property.js';
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
+import TextKeyNode from '../../../../scenery-phet/js/keyboard/TextKeyNode.js';
 
 // constants
 const cornerAStringProperty = QuadrilateralStrings.a11y.cornerAStringProperty;
@@ -38,6 +40,8 @@ const vertexAStringProperty = QuadrilateralStrings.vertexAStringProperty;
 const vertexBStringProperty = QuadrilateralStrings.vertexBStringProperty;
 const vertexCStringProperty = QuadrilateralStrings.vertexCStringProperty;
 const vertexDStringProperty = QuadrilateralStrings.vertexDStringProperty;
+const checkShapeDescriptionStringProperty = QuadrilateralStrings.a11y.keyboardHelpDialog.checkShapeDescriptionPatternStringProperty;
+const resetShapeDescriptionStringProperty = QuadrilateralStrings.a11y.keyboardHelpDialog.resetShapeDescriptionPatternStringProperty;
 
 // in seconds,
 const SHAPE_FILL_TIME = 0.35;
@@ -284,13 +288,22 @@ export default class QuadrilateralNode extends Voicing( Node ) {
   public static readonly RESET_SHAPE_HOTKEY_DATA = new HotkeyData( {
     keyStringProperties: [ new Property( 'alt+shift+r' ) ],
     keyboardHelpDialogLabelStringProperty: QuadrilateralStrings.keyboardHelpDialog.resetShapeStringProperty,
+    keyboardHelpDialogPDOMLabelStringProperty: StringUtils.fillIn( resetShapeDescriptionStringProperty, {
+          altOrOption: TextKeyNode.getAltKeyString()
+        } ),
     global: true,
     repoName: quadrilateral.name
   } );
 
   public static readonly CHECK_SHAPE_HOTKEY_DATA = new HotkeyData( {
     keyStringProperties: [ new Property( 'alt+c' ) ],
-    keyboardHelpDialogLabelStringProperty: new Property( 'Check Shape' ),
+
+    // Voicing is NOT translatable and won't be for a very long time. This content is invisible in non-english locales and
+    // when Voicing is not supported.
+    keyboardHelpDialogLabelStringProperty: new Property( 'With Voicing enabled, check shape name or properties' ),
+    keyboardHelpDialogPDOMLabelStringProperty: StringUtils.fillIn( checkShapeDescriptionStringProperty, {
+      altOrOption: TextKeyNode.getAltKeyString()
+    } ),
     global: true,
     repoName: quadrilateral.name
   } );
