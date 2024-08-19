@@ -10,13 +10,12 @@ import Property from '../../../../axon/js/Property.js';
 import quadrilateral from '../../quadrilateral.js';
 import LockNode from '../../../../scenery-phet/js/LockNode.js';
 import RectangularToggleButton, { RectangularToggleButtonOptions } from '../../../../sun/js/buttons/RectangularToggleButton.js';
-import { Text } from '../../../../scenery/js/imports.js';
+import { Node, Text } from '../../../../scenery/js/imports.js';
 import QuadrilateralColors from '../../QuadrilateralColors.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
-import { Shape } from '../../../../kite/js/imports.js';
 
 // constants
 const smallStepsStringProperty = QuadrilateralStrings.smallStepsStringProperty;
@@ -29,7 +28,7 @@ const unlockedContextResponseStringProperty = QuadrilateralStrings.a11y.voicing.
 type SelfOptions = EmptySelfOptions;
 type SmallStepsLockToggleButtonOptions = SelfOptions & StrictOmit<RectangularToggleButtonOptions, 'content'>;
 
-export default class SmallStepsLockToggleButton extends RectangularToggleButton<boolean> {
+export default class SmallStepsLockToggleButton extends Node {
   public constructor( lockToMinorIntervalsProperty: Property<boolean>, providedOptions?: SmallStepsLockToggleButtonOptions ) {
 
     const buttonIcon = new LockNode( lockToMinorIntervalsProperty, { scale: 0.4 } );
@@ -42,35 +41,34 @@ export default class SmallStepsLockToggleButton extends RectangularToggleButton<
       voicingHintResponse: hintResponseStringProperty
     }, providedOptions );
 
-    super( lockToMinorIntervalsProperty, false, true, options );
+    super();
+
+    const button = new RectangularToggleButton( lockToMinorIntervalsProperty, false, true, options );
 
     const labelNode = new Text( smallStepsStringProperty, {
       font: QuadrilateralConstants.SCREEN_TEXT_FONT,
       maxWidth: 100,
-      leftCenter: this.rightCenter.plusXY( QuadrilateralConstants.CONTROL_LABEL_SPACING, 0 ),
 
       // so that this label does not interfere with enhanced touch areas below
       pickable: false
-    } );
-    this.addChild( labelNode );
-
-    // The mouse area for this button includes the self and its label text - must update with dynamic locales
-    labelNode.boundsProperty.link( () => {
-      this.mouseArea = Shape.rectangle( 0, 0, this.width, this.height );
-      this.touchArea = this.mouseArea;
     } );
 
     // voicing - update dynamic content and request Voicing when the change is made
     lockToMinorIntervalsProperty.link( lockToMinorIntervals => {
 
-      this.voicingNameResponse = lockToMinorIntervals ? lockedNameResponseStringProperty : unlockedNameResponseStringProperty;
-      this.voicingContextResponse = lockToMinorIntervals ? lockedContextResponseStringProperty : unlockedContextResponseStringProperty;
+      button.voicingNameResponse = lockToMinorIntervals ? lockedNameResponseStringProperty : unlockedNameResponseStringProperty;
+      button.voicingContextResponse = lockToMinorIntervals ? lockedContextResponseStringProperty : unlockedContextResponseStringProperty;
 
-      this.voicingSpeakResponse( {
-        nameResponse: this.voicingNameResponse,
-        contextResponse: this.voicingContextResponse
+      button.voicingSpeakResponse( {
+        nameResponse: button.voicingNameResponse,
+        contextResponse: button.voicingContextResponse
       } );
     } );
+
+    this.children = [ button, labelNode ];
+
+    // layout
+    labelNode.leftCenter = button.rightCenter.plusXY( QuadrilateralConstants.CONTROL_LABEL_SPACING, 0 );
   }
 }
 
