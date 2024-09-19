@@ -1,11 +1,11 @@
-// Copyright 2022-2023, University of Colorado Boulder
+// Copyright 2022-2024, University of Colorado Boulder
 
 /**
  * Icons for the simulation.
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { Circle, FlowBox, HBox, Line, Node, Path, PathOptions, Text } from '../../../../scenery/js/imports.js';
+import { Circle, FlowBox, HBox, Line, Node, Path, PathOptions, Text, TextOptions } from '../../../../scenery/js/imports.js';
 import Utils from '../../../../dot/js/Utils.js';
 import GridIcon from '../../../../scenery-phet/js/GridIcon.js';
 import quadrilateral from '../../quadrilateral.js';
@@ -35,7 +35,7 @@ class QuadrilateralIconFactory {
       lineWidth: QuadrilateralIconFactory.ICON_LINE_WIDTH
     } );
 
-    const label = new Text( 'A', { ...QuadrilateralConstants.SCREEN_TEXT_OPTIONS, center: circle.center } );
+    const label = new Text( 'A', combineOptions<TextOptions>( {}, QuadrilateralConstants.SCREEN_TEXT_OPTIONS, { center: circle.center } ) );
     circle.addChild( label );
 
     return circle;

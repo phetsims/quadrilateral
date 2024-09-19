@@ -1,4 +1,4 @@
-// Copyright 2022-2023, University of Colorado Boulder
+// Copyright 2022-2024, University of Colorado Boulder
 
 /**
  * Base class for the sound designs. There are a collection of soundtracks that will play and represent shapes and
@@ -77,8 +77,8 @@ export default class TracksSoundView extends SoundGenerator {
   public constructor( shapeModel: QuadrilateralShapeModel, shapeSoundEnabledProperty: TReadOnlyProperty<boolean>, resetNotInProgressProperty: TReadOnlyProperty<boolean>, soundOptionsModel: QuadrilateralSoundOptionsModel, tracks: WrappedAudioBuffer[] ) {
     super( {
 
-      // don't play sounds while model reset is in progress or when the user has opted out of playing music tracks
-      enableControlProperties: [ resetNotInProgressProperty, shapeSoundEnabledProperty ],
+      // Don't play sounds when the user has opted out of playing music tracks.
+      enabledProperty: shapeSoundEnabledProperty,
 
       // No sound from this track set initially
       initialOutputLevel: 0
@@ -98,7 +98,7 @@ export default class TracksSoundView extends SoundGenerator {
         // All sub-SoundClips need to align perfectly, do not trim any silence
         trimSilence: false
       } );
-      generator.connect( this.masterGainNode );
+      generator.connect( this.mainGainNode );
 
       // immediately start playing all sounds, all control for this design uses output level
       generator.play();
@@ -207,7 +207,7 @@ export default class TracksSoundView extends SoundGenerator {
    */
   public override dispose(): void {
     this.soundClips.forEach( generator => {
-      generator.disconnect( this.masterGainNode );
+      generator.disconnect( this.mainGainNode );
       generator.dispose();
     } );
 

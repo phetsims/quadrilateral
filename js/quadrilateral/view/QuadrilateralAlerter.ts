@@ -1,4 +1,4 @@
-// Copyright 2021-2023, University of Colorado Boulder
+// Copyright 2021-2024, University of Colorado Boulder
 
 /**
  * Responsible for generating the real-time feedback alerts for the simulation and actually voicing them at the right
@@ -466,7 +466,7 @@ export default class QuadrilateralAlerter extends Alerter {
    * QuadrilateralShapeModel.updateOrderDependentProperties for more information.
    */
   private getVertexChangeObjectResponse( vertex: QuadrilateralVertex ): string {
-    let response;
+    let response: string | null;
 
     // The phrase like the direction change, how the vertex angle changes, or whether the vertex angle is at
     // a critical value like 90/180 degrees
@@ -882,7 +882,7 @@ export default class QuadrilateralAlerter extends Alerter {
 
     const differences = [];
     for ( let i = 0; i < currentDistancesToRight.length; i++ ) {
-      differences.push( currentDistancesToRight[ i ]! - previousDistancesToRight[ i ] );
+      differences.push( currentDistancesToRight[ i ] - previousDistancesToRight[ i ] );
     }
 
     // If the distances to pi for every angle have gotten smaller, we are getting closer to right angles, that is

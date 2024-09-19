@@ -46,7 +46,7 @@ const LAYER_TRACKS = [
 //
 // Some teachers may prefer to include trapezoid shape properties for child shapes of the trapezoid. See
 // https://github.com/phetsims/quadrilateral/issues/420
-const NAMED_QUADRILATERAL_TO_TRACKS_MAP = QuadrilateralQueryParameters.trapezoidSoundLayers ?
+const NAMED_QUADRILATERAL_TO_TRACKS_MAP = QuadrilateralQueryParameters.inheritTrapezoidSound ?
                                           new Map( [ // design with trapezoid sound in the relevant child shapes
                                             [ NamedQuadrilateral.CONVEX_QUADRILATERAL, [ 0 ] ],
                                             [ NamedQuadrilateral.CONCAVE_QUADRILATERAL, [ 1 ] ],
@@ -70,8 +70,8 @@ const NAMED_QUADRILATERAL_TO_TRACKS_MAP = QuadrilateralQueryParameters.trapezoid
                                             [ NamedQuadrilateral.ISOSCELES_TRAPEZOID, [ 0, 4, 3 ] ],
                                             [ NamedQuadrilateral.PARALLELOGRAM, [ 0, 5 ] ],
                                             [ NamedQuadrilateral.RHOMBUS, [ 0, 2, 5, 6 ] ],
-                                            [ NamedQuadrilateral.RECTANGLE, [ 0, 3, 5, 7 ] ],
-                                            [ NamedQuadrilateral.SQUARE, [ 0, 2, 3, 5, 6, 7 ] ]
+                                            [ NamedQuadrilateral.RECTANGLE, [ 0, 5, 7 ] ],
+                                            [ NamedQuadrilateral.SQUARE, [ 0, 2, 5, 6, 7 ] ]
                                           ] );
 
 export default class LayersTracksSoundView extends TracksSoundView {
@@ -86,7 +86,7 @@ export default class LayersTracksSoundView extends TracksSoundView {
     this.indexToOutputLevelMap.set( 1, 0.6 );
     this.indexToOutputLevelMap.set( 2, 1 );
     this.indexToOutputLevelMap.set( 3, 0.75 );
-    this.indexToOutputLevelMap.set( 4, 0.65 );
+    this.indexToOutputLevelMap.set( 4, 0.55 );
     this.indexToOutputLevelMap.set( 5, 1 );
     this.indexToOutputLevelMap.set( 6, 0.45 );
     this.indexToOutputLevelMap.set( 7, 0.70 );

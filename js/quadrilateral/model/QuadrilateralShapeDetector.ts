@@ -1,4 +1,4 @@
-// Copyright 2022-2023, University of Colorado Boulder
+// Copyright 2022-2024, University of Colorado Boulder
 
 /**
  * Detects the most specific name of the quadrilateral shape from the current geometric properties.

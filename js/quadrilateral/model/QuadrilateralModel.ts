@@ -1,4 +1,4 @@
-// Copyright 2021-2023, University of Colorado Boulder
+// Copyright 2021-2024, University of Colorado Boulder
 
 /**
  * The base model class for the sim. Assembles all model components and responsible for managing Properties
@@ -39,6 +39,7 @@ export default class QuadrilateralModel implements TModel {
   // Whether a reset is currently in progress. Added for sound. If the model is actively resetting, SoundManagers
   // are disabled so we don't play sounds for transient model states. Tracks when the reset is NOT in progress
   // because that makes it most convenient to pass to SoundGenerator enableControlProperties.
+  // TODO: See https://github.com/phetsims/quadrilateral/issues/459.  Sounds are now disabled by default.  Is this Property still needed?
   public readonly resetNotInProgressProperty: TProperty<boolean>;
 
   // The available bounds for smooth vertex dragging (the model bounds eroded by the width of a vertex so a vertex
@@ -114,12 +115,18 @@ export default class QuadrilateralModel implements TModel {
     } );
     this.useMinorIntervalsProperty = DerivedProperty.or( [ this.minorIntervalsFromGlobalKeyProperty, this.lockToMinorIntervalsProperty ] );
 
-    // QuadrilateralVertex intervals are controlled whether we are "locked" to smaller steps, whether we are temporarily using
-    // smaller steps because of a hotkey, or if running with ?reducedStepSize
+    // Complex derivation for the vertexIntervalProperty, depending on user settings, input, or prototype device
+    // connection features.
     this.vertexIntervalProperty = new DerivedProperty(
-      [ this.useMinorIntervalsProperty, this.tangibleConnectionModel.connectedToDeviceProperty, optionsModel.tangibleOptionsModel.deviceGridSpacingProperty ],
-      ( useMinorIntervals, connectedToDevice, deviceGridSpacing ) => {
+      [
+        this.useMinorIntervalsProperty,
+        this.tangibleConnectionModel.connectedToDeviceProperty,
+        this.tangibleConnectionModel.connectedToCameraInputHandsProperty,
+        optionsModel.tangibleOptionsModel.deviceGridSpacingProperty
+      ],
+      ( useMinorIntervals, connectedToDevice, connectedToCameraInput, deviceGridSpacing ) => {
         return connectedToDevice ? deviceGridSpacing :
+               connectedToCameraInput ? ( useMinorIntervals ? QuadrilateralQueryParameters.minorVertexInterval : QuadrilateralConstants.GRID_SPACING ) :
                QuadrilateralQueryParameters.reducedStepSize ? ( useMinorIntervals ? QuadrilateralConstants.MINOR_REDUCED_SIZE_VERTEX_INTERVAL : QuadrilateralConstants.MAJOR_REDUCED_SIZE_VERTEX_INTERVAL ) :
                useMinorIntervals ? QuadrilateralQueryParameters.minorVertexInterval : QuadrilateralQueryParameters.majorVertexInterval;
       }
@@ -182,9 +189,22 @@ export default class QuadrilateralModel implements TModel {
 
   /**
    * Get the closest grid position to the proposed position, in x/y dimensions OR along the diagonal if we detect
-   * movement close to the diagonal.
+   * movement close to the diagonal. This allows you to drag diagonally across grid cells if you want to, creating
+   * more intuitive interaction.
+   *
+   * The implementation of this function is summarized by
+   * https://github.com/phetsims/quadrilateral/issues/406#issuecomment-1485982113. If the proposed position
+   * is close enough to a diagonal line between the grid points, we assume that the user wants to move diagonally
+   * so we don't snap to axis-aligned positions.
    */
   public getClosestGridPositionAlongDiagonal( currentPosition: Vector2, proposedPosition: Vector2 ): Vector2 {
+
+    // At this tiny step size, this feature is more harm than help and the grid size is so small that it
+    // makes sense to just get the closest grid position.
+    if ( this.useMinorIntervalsProperty.value && QuadrilateralQueryParameters.reducedStepSize ) {
+      return this.getClosestGridPosition( proposedPosition );
+    }
+
     const interval = this.vertexIntervalProperty.value;
 
     // create a diagonal line from currentPosition to next interval, in the direction of movement
@@ -197,7 +217,7 @@ export default class QuadrilateralModel implements TModel {
     // moving along the diagonal and should try to find the closest grid position along that diagonal line.
     // This value was chosen by inspection. It is difficult to get a value that "feels right" without being too biased
     // toward diagonal or movement along the axis.
-    const maximumDiagonalDistance = interval / 250;
+    const maximumDiagonalDistance = interval / 400;
 
     const distanceToDiagonal = Utils.distToSegmentSquared( proposedPosition, currentPosition, diagonalIntervalPosition );
     if ( distanceToDiagonal < maximumDiagonalDistance ) {

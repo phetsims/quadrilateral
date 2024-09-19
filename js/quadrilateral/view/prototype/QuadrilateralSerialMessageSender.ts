@@ -1,4 +1,4 @@
-// Copyright 2023, University of Colorado Boulder
+// Copyright 2023-2024, University of Colorado Boulder
 
 /**
  * A class that will send a representation of the model to a parent iframe that will eventually send values

@@ -1,4 +1,4 @@
-// Copyright 2021-2023, University of Colorado Boulder
+// Copyright 2021-2024, University of Colorado Boulder
 
 /**
  * An enumeration for the kinds of named quadrilaterals that can be detected based on the shape's geometric properties.

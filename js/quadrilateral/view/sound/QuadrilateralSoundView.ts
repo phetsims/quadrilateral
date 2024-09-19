@@ -1,4 +1,4 @@
-// Copyright 2021-2023, University of Colorado Boulder
+// Copyright 2021-2024, University of Colorado Boulder
 
 /**
  * File responsible for the sound view of the quadrilateral. There are two sound designs that can be used (changed

@@ -1,4 +1,4 @@
-// Copyright 2021-2023, University of Colorado Boulder
+// Copyright 2021-2024, University of Colorado Boulder
 
 /**
  * Main entry point for the sim.
@@ -11,7 +11,6 @@ import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
 import { Node } from '../../scenery/js/imports.js';
 import Tandem from '../../tandem/js/Tandem.js';
-import QuadrilateralQueryParameters from './quadrilateral/QuadrilateralQueryParameters.js';
 import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';
 import QuadrilateralStrings from './QuadrilateralStrings.js';
 import QuadrilateralOptionsModel from './quadrilateral/model/QuadrilateralOptionsModel.js';
@@ -21,9 +20,8 @@ import QuadrilateralSoundOptionsNode from './quadrilateral/view/sound/Quadrilate
 const quadrilateralTitleStringProperty = QuadrilateralStrings.quadrilateral.titleStringProperty;
 const optionsModel = new QuadrilateralOptionsModel();
 
-// "Input" options are related to connection to a tangible device, this tab should only be shown when running
-// while connected to some external device.
-const inputPreferencesOptions = QuadrilateralQueryParameters.deviceConnection ? {
+// "Input" options are related to connection to a tangible device or controls for the camera
+const inputPreferencesOptions = optionsModel.tangibleOptionsModel.supportsInputOptions ? {
   customPreferences: [ {
     createContent: () => new QuadrilateralInputPreferencesNode( optionsModel.tangibleOptionsModel )
   } ]
@@ -36,9 +34,7 @@ const simOptions: SimOptions = {
     team: 'Brett Fiedler, Emily B. Moore, Taliesin Smith',
     contributors: 'Sofia Tancredi, Dor Abrahamson (Embodied Design Research Lab, UC Berkeley), Scott Lambert, Jenna Gorlewicz (CHROME Lab, St. Louis University)',
     soundDesign: 'Ashton Morris',
-
-    //TODO fill in credits with QA team
-    qualityAssurance: ''
+    qualityAssurance: 'Jaron Droder, Emily Miller, Nancy Salpepi, Martin Veillette, and Kathryn Woessner'
   },
 
   // preferences configuration with defaults from package.json
@@ -49,7 +45,7 @@ const simOptions: SimOptions = {
         {
 
           // Due to the layout considerations in the Preferences Dialog, it has 2 columns. Our entry for the left column
-          // is blank
+          // is blank. See https://github.com/phetsims/joist/issues/956
           createContent: () => new Node()
         },
         {

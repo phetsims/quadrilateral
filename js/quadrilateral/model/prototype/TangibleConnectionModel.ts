@@ -1,4 +1,4 @@
-// Copyright 2023, University of Colorado Boulder
+// Copyright 2023-2024, University of Colorado Boulder
 
 /**
  * A collection of Properties used for prototypes that connect this simulation to tangible devices.
@@ -36,6 +36,9 @@ export default class TangibleConnectionModel {
   // True when we are connected to a device in some way, either bluetooth, serial, or OpenCV.
   public connectedToDeviceProperty: TProperty<boolean>;
 
+  // True when we are connected to Camera Input: Hands feature (tangible/MediaPipe).
+  public connectedToCameraInputHandsProperty: TProperty<boolean>;
+
   // Properties specifically related to marker detection from OpenCV prototypes.
   public markerDetectionModel: MarkerDetectionModel;
 
@@ -63,6 +66,9 @@ export default class TangibleConnectionModel {
   public constructor( shapeModel: QuadrilateralShapeModel, testShapeModel: QuadrilateralShapeModel, tangibleOptionsModel: QuadrilateralTangibleOptionsModel, tandem: Tandem ) {
     this.connectedToDeviceProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'connectedToDeviceProperty' )
+    } );
+    this.connectedToCameraInputHandsProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'connectedToCameraInputHandsProperty' )
     } );
     this.physicalModelBoundsProperty = new Property<Bounds2 | null>( null, {
       tandem: tandem.createTandem( 'physicalModelBoundsProperty' ),
@@ -113,6 +119,20 @@ export default class TangibleConnectionModel {
       new Vector2( width / 2, height / 2 ), // center of the physical space "model"
       new Vector2( 0, 0 ), // origin of the simulation model
       QuadrilateralConstants.MODEL_BOUNDS.height / ( height ) // scale from physical model to simulation space
+    );
+  }
+
+  /**
+   * This transform maps from PaperLand coordinates to the simulation model space.
+   *
+   * Paper Land coordinates go form 0-1 in x and y, where the origin is in the top left. The simulation model has
+   * dimensions QuadrilateralConstants.MODEL_BOUNDS, with center at (0, 0) with +x right and +y up.
+   */
+  public setPhysicalToVirtualTransformForPaperLand(): void {
+    this.physicalToModelTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
+      new Vector2( 0.5, 0.5 ), // center of the physical space "model"
+      new Vector2( 0, 0 ), // origin of the simulation model
+      QuadrilateralConstants.MODEL_BOUNDS.height / 1 // scale from physical model to simulation space
     );
   }
 

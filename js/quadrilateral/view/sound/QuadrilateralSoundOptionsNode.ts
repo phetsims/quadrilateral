@@ -1,4 +1,4 @@
-// Copyright 2021-2023, University of Colorado Boulder
+// Copyright 2021-2024, University of Colorado Boulder
 
 /**
  * Options for the Preferences Dialog that allow us to set the sound design and sub-options.
@@ -6,14 +6,13 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { Node, Text, VoicingText, VoicingTextOptions } from '../../../../../scenery/js/imports.js';
+import { Node, Text, TextOptions, VoicingText, VoicingTextOptions } from '../../../../../scenery/js/imports.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralSoundOptionsModel, { SoundDesign } from '../../model/QuadrilateralSoundOptionsModel.js';
 import PreferencesDialog from '../../../../../joist/js/preferences/PreferencesDialog.js';
 import AquaRadioButtonGroup from '../../../../../sun/js/AquaRadioButtonGroup.js';
 import PreferencesPanelSection from '../../../../../joist/js/preferences/PreferencesPanelSection.js';
-import AquaRadioButton from '../../../../../sun/js/AquaRadioButton.js';
 import QuadrilateralStrings from '../../../QuadrilateralStrings.js';
 import soundManager from '../../../../../tambo/js/soundManager.js';
 import ToggleSwitch, { ToggleSwitchOptions } from '../../../../../sun/js/ToggleSwitch.js';
@@ -34,10 +33,6 @@ const tracksPlayForeverUncheckedContextResponseStringProperty = QuadrilateralStr
 const labelledDescriptionPatternStringProperty = JoistStrings.a11y.preferences.tabs.labelledDescriptionPatternStringProperty;
 
 export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSection {
-
-  // Necessary for PhET-iO state and disposal since these components become dynamic when they live in a phetio capsule
-  private readonly disposeQuadrilateralSoundOptionsNode: () => void;
-
   public constructor( model: QuadrilateralSoundOptionsModel, tandem: Tandem ) {
 
     // Sounds play forever control
@@ -57,10 +52,13 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
     const shapeSoundDescriptionReadingBlockContentStringProperty = new PatternStringProperty( labelledDescriptionPatternStringProperty, {
       label: shapeSoundsOptionsStringProperty,
       description: shapeSoundsOptionsDescriptionStringProperty
-    } );
+    }, { tandem: Tandem.OPT_OUT } );
 
     // Shape Sound Options controls
-    const shapeSoundOptionsLabelText = new Text( shapeSoundsOptionsStringProperty, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
+    const shapeSoundOptionsLabelText = new Text( shapeSoundsOptionsStringProperty, combineOptions<TextOptions>( {}, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS, {
+      tagName: 'h3',
+      innerContent: shapeSoundsOptionsStringProperty
+    } ) );
     const shapeSoundOptionsDescriptionText = new VoicingText( shapeSoundsOptionsDescriptionStringProperty, combineOptions<VoicingTextOptions>( {}, {
       readingBlockNameResponse: shapeSoundDescriptionReadingBlockContentStringProperty
     }, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ) );
@@ -69,7 +67,8 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
       {
         value: SoundDesign.TRACKS_LAYER,
         createNode: () => new Text( preferencesDialogLayerSoundDesignDescriptionStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
-        tandemName: `layersTracksSoundView${AquaRadioButton.TANDEM_NAME_SUFFIX}`,
+        tandemName: 'layersTracksSoundViewRadioButton',
+        labelContent: preferencesDialogLayerSoundDesignDescriptionStringProperty,
         options: {
           voicingNameResponse: preferencesDialogLayerSoundDesignDescriptionStringProperty
         }
@@ -77,7 +76,8 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
       {
         value: SoundDesign.TRACKS_UNIQUE,
         createNode: () => new Text( preferencesDialogUniqueSoundDesignDescriptionStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
-        tandemName: `emphasisTracksSoundView${AquaRadioButton.TANDEM_NAME_SUFFIX}`,
+        labelContent: preferencesDialogUniqueSoundDesignDescriptionStringProperty,
+        tandemName: 'emphasisTracksSoundViewRadioButton',
         options: {
           voicingNameResponse: preferencesDialogUniqueSoundDesignDescriptionStringProperty
         }
@@ -111,20 +111,6 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
     shapeSoundOptionsLabelText.leftTop = soundsPlayForeverPreferencesControl.leftBottom.plusXY( 0, PreferencesDialog.CONTENT_SPACING );
     shapeSoundOptionsDescriptionText.leftTop = shapeSoundOptionsLabelText.leftBottom.plusXY( 0, PreferencesDialog.VERTICAL_CONTENT_SPACING );
     soundDesignRadioButtonGroup.leftTop = shapeSoundOptionsDescriptionText.leftBottom.plusXY( PreferencesDialog.CONTENT_INDENTATION_SPACING, PreferencesDialog.VERTICAL_CONTENT_SPACING );
-
-    this.disposeQuadrilateralSoundOptionsNode = () => {
-      soundDesignRadioButtonGroup.dispose();
-      soundsPlayForeverToggleSwitch.dispose();
-      soundsPlayForeverLabel.dispose();
-      shapeSoundDescriptionReadingBlockContentStringProperty.dispose();
-      shapeSoundOptionsLabelText.dispose();
-      shapeSoundOptionsDescriptionText.dispose();
-    };
-  }
-
-  public override dispose(): void {
-    this.disposeQuadrilateralSoundOptionsNode();
-    super.dispose();
   }
 }
 

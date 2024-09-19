@@ -1,4 +1,4 @@
-// Copyright 2021-2023, University of Colorado Boulder
+// Copyright 2021-2024, University of Colorado Boulder
 
 /**
  * The view for a side of the quadrilateral shape.
@@ -6,7 +6,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { DragListener, KeyboardDragListener, Line as LineNode, Path, SceneryEvent } from '../../../../scenery/js/imports.js';
+import { Line as LineNode, Path, RichDragListener, SceneryEvent } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralSide from '../model/QuadrilateralSide.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -155,21 +155,6 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
       this.focusHighlight = lineNode.getStrokedShape();
     } );
 
-    const keyboardDragListener = new KeyboardDragListener( {
-      dragDelta: this.largeViewDragDelta,
-      shiftDragDelta: this.smallViewDragDelta,
-      transform: modelViewTransform,
-      drag: ( vectorDelta: Vector2 ) => {
-        this.moveVerticesFromModelDelta( vectorDelta );
-      },
-
-      moveOnHoldDelay: 750,
-      moveOnHoldInterval: 50,
-
-      tandem: providedOptions?.tandem?.createTandem( 'keyboardDragListener' )
-    } );
-    this.addInputListener( keyboardDragListener );
-
     // Vectors between the start position during drag and each vertex so that we can translate vertex positions
     // relative to a pointer position on a side.
     let vectorToVertex1: null | Vector2 = null;
@@ -178,108 +163,122 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
     let vertex1StartPosition = side.vertex1.positionProperty.value;
     let vertex2StartPosition = side.vertex2.positionProperty.value;
 
-    this.addInputListener( new DragListener( {
+    const richDragListener = new RichDragListener( {
       transform: modelViewTransform,
-      start: ( event, listener ) => {
-        side.isPressedProperty.value = true;
 
-        // point in the coordinate frame of the play area, then in model coordinates
-        assert && assert( event.pointer.point, 'How could there not be a point from an event?' );
-        const parentPoint = this.globalToParentPoint( event.pointer.point );
-        const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
-
-        vectorToVertex1 = ( side.vertex1.positionProperty.value ).minus( modelPoint );
-        vectorToVertex2 = ( side.vertex2.positionProperty.value ).minus( modelPoint );
-
-        vertex1StartPosition = side.vertex1.positionProperty.value;
-        vertex2StartPosition = side.vertex2.positionProperty.value;
-      },
-      end: () => {
-        side.isPressedProperty.value = false;
-
-        // If there is no motion speak information about this side. If there is movement during drag other
-        // responses describing the change will be used.
-        const vertex1Position = side.vertex1.positionProperty.value;
-        const vertex2Position = side.vertex2.positionProperty.value;
-        if ( vertex1StartPosition === vertex1Position && vertex2StartPosition === vertex2Position ) {
-          this.voicingSpeakFullResponse();
+      // Keyboard specific behavior
+      keyboardDragListenerOptions: {
+        dragDelta: this.largeViewDragDelta,
+        shiftDragDelta: this.smallViewDragDelta,
+        moveOnHoldDelay: 750,
+        moveOnHoldInterval: 50,
+        drag: ( event, listener ) => {
+          this.moveVerticesFromModelDelta( listener.modelDelta );
         }
       },
-      drag: ( event: SceneryEvent, listener: DragListener ) => {
 
-        const vertex1Pressed = side.vertex1.isPressedProperty.value;
-        const vertex2Pressed = side.vertex2.isPressedProperty.value;
-
-        // A side cannot be dragged while one of its Vertices is dragged (multitouch)
-        if ( !vertex1Pressed && !vertex2Pressed ) {
+      dragListenerOptions: {
+        start: ( event, listener ) => {
+          side.isPressedProperty.value = true;
 
           // point in the coordinate frame of the play area, then in model coordinates
+          assert && assert( event.pointer.point, 'How could there not be a point from an event?' );
           const parentPoint = this.globalToParentPoint( event.pointer.point );
           const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
 
-          assert && assert( vectorToVertex1, 'vectorToVertex1 should have been defined at start of drag' );
-          assert && assert( vectorToVertex2, 'vectorToVertex1 should have been defined at start of drag' );
-          const modelVertex1Position = modelPoint.plus( vectorToVertex1! );
-          const modelVertex2Position = modelPoint.plus( vectorToVertex2! );
+          vectorToVertex1 = ( side.vertex1.positionProperty.value ).minus( modelPoint );
+          vectorToVertex2 = ( side.vertex2.positionProperty.value ).minus( modelPoint );
 
-          // Absolute bounding box around the side - useful for determine allowable vertex positions while supporting
-          // smooth dragging
-          const sideBounds = new Bounds2( 0, 0, 0, 0 );
-          sideBounds.addPoint( modelVertex1Position );
-          sideBounds.addPoint( modelVertex2Position );
+          vertex1StartPosition = side.vertex1.positionProperty.value;
+          vertex2StartPosition = side.vertex2.positionProperty.value;
+        },
+        end: () => {
+          side.isPressedProperty.value = false;
 
-          // now shift the proposed positions by a delta that would keep the sideBounds within vertexDragBounds
-          const vertexDragBounds = quadrilateralModel.vertexDragBounds;
-          const correctingVector = new Vector2( 0, 0 );
-
-          const inBounds = vertexDragBounds.containsBounds( sideBounds );
-          if ( !inBounds ) {
-
-            if ( sideBounds.maxY > vertexDragBounds.maxY ) {
-              correctingVector.y = vertexDragBounds.maxY - sideBounds.maxY;
-            }
-            else if ( sideBounds.minY < vertexDragBounds.minY ) {
-              correctingVector.y = vertexDragBounds.minY - sideBounds.minY;
-            }
-
-            if ( sideBounds.maxX > vertexDragBounds.maxX ) {
-              correctingVector.x = vertexDragBounds.maxX - sideBounds.maxX;
-            }
-            else if ( sideBounds.minX < vertexDragBounds.minX ) {
-              correctingVector.x = vertexDragBounds.minX - sideBounds.minX;
-            }
+          // If there is no motion speak information about this side. If there is movement during drag other
+          // responses describing the change will be used.
+          const vertex1Position = side.vertex1.positionProperty.value;
+          const vertex2Position = side.vertex2.positionProperty.value;
+          if ( vertex1StartPosition === vertex1Position && vertex2StartPosition === vertex2Position ) {
+            this.voicingSpeakFullResponse();
           }
+        },
+        drag: ( event: SceneryEvent ) => {
 
-          const boundsConstrainedVertex1Position = modelVertex1Position.plus( correctingVector );
-          const boundsConstrainedVertex2Position = modelVertex2Position.plus( correctingVector );
+          const vertex1Pressed = side.vertex1.isPressedProperty.value;
+          const vertex2Pressed = side.vertex2.isPressedProperty.value;
 
-          // constrain each to the model grid, allowing for diagonal movement
-          const gridConstrainedVertex1Position = quadrilateralModel.getClosestGridPositionAlongDiagonal( side.vertex1.positionProperty.value, boundsConstrainedVertex1Position );
-          const gridConstrainedVertex2Position = quadrilateralModel.getClosestGridPositionAlongDiagonal( side.vertex2.positionProperty.value, boundsConstrainedVertex2Position );
+          // A side cannot be dragged while one of its Vertices is dragged (multitouch)
+          if ( !vertex1Pressed && !vertex2Pressed ) {
 
-          // deltas for each QuadrilateralVertex must be the same for the side to not change tilt while dragging - update
-          // both Vertices by the smallest translation vector so they move together
-          const smallestDeltaVector = this.getSmallestTranslationVector( gridConstrainedVertex1Position, gridConstrainedVertex2Position );
+            // point in the coordinate frame of the play area, then in model coordinates
+            const parentPoint = this.globalToParentPoint( event.pointer.point );
+            const modelPoint = modelViewTransform.viewToModelPosition( parentPoint );
 
-          const proposedVertex1Position = side.vertex1.positionProperty.value.plus( smallestDeltaVector );
-          const proposedVertex2Position = side.vertex2.positionProperty.value.plus( smallestDeltaVector );
+            assert && assert( vectorToVertex1, 'vectorToVertex1 should have been defined at start of drag' );
+            assert && assert( vectorToVertex2, 'vectorToVertex1 should have been defined at start of drag' );
+            const modelVertex1Position = modelPoint.plus( vectorToVertex1! );
+            const modelVertex2Position = modelPoint.plus( vectorToVertex2! );
 
-          scratchLabelToPositionMap.clear();
-          scratchLabelToPositionMap.set( side.vertex1.vertexLabel, proposedVertex1Position );
-          scratchLabelToPositionMap.set( side.vertex2.vertexLabel, proposedVertex2Position );
+            // Absolute bounding box around the side - useful for determine allowable vertex positions while supporting
+            // smooth dragging
+            const sideBounds = new Bounds2( 0, 0, 0, 0 );
+            sideBounds.addPoint( modelVertex1Position );
+            sideBounds.addPoint( modelVertex2Position );
 
-          // only update positions if both are allowed
-          const positionsAllowed = quadrilateralModel.areVertexPositionsAllowed( scratchLabelToPositionMap );
-          if ( positionsAllowed ) {
-            this.quadrilateralModel.quadrilateralShapeModel.setVertexPositions( scratchLabelToPositionMap );
+            // now shift the proposed positions by a delta that would keep the sideBounds within vertexDragBounds
+            const vertexDragBounds = quadrilateralModel.vertexDragBounds;
+            const correctingVector = new Vector2( 0, 0 );
+
+            const inBounds = vertexDragBounds.containsBounds( sideBounds );
+            if ( !inBounds ) {
+
+              if ( sideBounds.maxY > vertexDragBounds.maxY ) {
+                correctingVector.y = vertexDragBounds.maxY - sideBounds.maxY;
+              }
+              else if ( sideBounds.minY < vertexDragBounds.minY ) {
+                correctingVector.y = vertexDragBounds.minY - sideBounds.minY;
+              }
+
+              if ( sideBounds.maxX > vertexDragBounds.maxX ) {
+                correctingVector.x = vertexDragBounds.maxX - sideBounds.maxX;
+              }
+              else if ( sideBounds.minX < vertexDragBounds.minX ) {
+                correctingVector.x = vertexDragBounds.minX - sideBounds.minX;
+              }
+            }
+
+            const boundsConstrainedVertex1Position = modelVertex1Position.plus( correctingVector );
+            const boundsConstrainedVertex2Position = modelVertex2Position.plus( correctingVector );
+
+            // constrain each to the model grid, allowing for diagonal movement
+            const gridConstrainedVertex1Position = quadrilateralModel.getClosestGridPositionAlongDiagonal( side.vertex1.positionProperty.value, boundsConstrainedVertex1Position );
+            const gridConstrainedVertex2Position = quadrilateralModel.getClosestGridPositionAlongDiagonal( side.vertex2.positionProperty.value, boundsConstrainedVertex2Position );
+
+            // deltas for each QuadrilateralVertex must be the same for the side to not change tilt while dragging - update
+            // both Vertices by the smallest translation vector so they move together
+            const smallestDeltaVector = this.getSmallestTranslationVector( gridConstrainedVertex1Position, gridConstrainedVertex2Position );
+
+            const proposedVertex1Position = side.vertex1.positionProperty.value.plus( smallestDeltaVector );
+            const proposedVertex2Position = side.vertex2.positionProperty.value.plus( smallestDeltaVector );
+
+            scratchLabelToPositionMap.clear();
+            scratchLabelToPositionMap.set( side.vertex1.vertexLabel, proposedVertex1Position );
+            scratchLabelToPositionMap.set( side.vertex2.vertexLabel, proposedVertex2Position );
+
+            // only update positions if both are allowed
+            const positionsAllowed = quadrilateralModel.areVertexPositionsAllowed( scratchLabelToPositionMap );
+            if ( positionsAllowed ) {
+              this.quadrilateralModel.quadrilateralShapeModel.setVertexPositions( scratchLabelToPositionMap );
+            }
+
+            this.updateBlockedState( !positionsAllowed, !inBounds );
           }
-
-          this.updateBlockedState( !positionsAllowed, !inBounds );
         }
-      },
+      }
+    } );
 
-      tandem: providedOptions?.tandem?.createTandem( 'dragListener' )
-    } ) );
+    this.addInputListener( richDragListener );
 
     // voicing - re-generate the voicing descriptions when Properties used for content change
     this.quadrilateralModel.quadrilateralShapeModel.shapeChangedEmitter.addListener( () => {

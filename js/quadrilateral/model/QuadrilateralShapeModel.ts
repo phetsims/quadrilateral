@@ -1,4 +1,4 @@
-// Copyright 2021-2023, University of Colorado Boulder
+// Copyright 2021-2024, University of Colorado Boulder
 
 /**
  * A model component for the components of the actual quadrilateral geometry/shape. This includes subcomponents
@@ -33,6 +33,7 @@ import QuadrilateralUtils from './QuadrilateralUtils.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import QuadrilateralSideLabel from './QuadrilateralSideLabel.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
+import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 
 // Used when verifying that QuadrilateralVertex positions are valid before setting to the model.
 export type VertexLabelToProposedPositionMap = Map<QuadrilateralVertexLabel, Vector2>;
@@ -42,8 +43,7 @@ type QuadrilateralShapeModelOptions = {
   // If true, the shape gets tested to make sure it is valid. This means no overlapping vertices and no crossed
   // sides.
   validateShape?: boolean;
-  tandem?: Tandem;
-};
+} & Pick<PhetioObjectOptions, 'tandem'>;
 
 export default class QuadrilateralShapeModel {
 
@@ -679,7 +679,7 @@ export default class QuadrilateralShapeModel {
       // Make sure the QuadrilateralVertex is within the drag area Shape.
       if ( shapeCrossed ) {
         assert && assert( testVertex.dragAreaProperty.value, 'Drag area must be defined for the QuadrilateralVertex' );
-        shapeCrossed = QuadrilateralUtils.customShapeContainsPoint( testVertex.dragAreaProperty.value!, testVertex.positionProperty.value );
+        shapeCrossed = testVertex.dragAreaProperty.value!.containsPoint( testVertex.positionProperty.value );
       }
 
       // Quadrilateral is not allowed, no need to keep testing

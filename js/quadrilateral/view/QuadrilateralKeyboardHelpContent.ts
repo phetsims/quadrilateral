@@ -1,4 +1,4 @@
-// Copyright 2022-2023, University of Colorado Boulder
+// Copyright 2022-2024, University of Colorado Boulder
 
 /**
  * The keyboard help content for the Quadrilateral sim. This has yet to be designed and is just ready for more content.
@@ -26,7 +26,9 @@ export default class QuadrilateralKeyboardHelpContent extends TwoColumnKeyboardH
     KeyboardHelpSection.alignHelpSectionIcons( [ moveShapeHelpSection, shapeShortcutsHelpSection ] );
     const leftContent = [ moveShapeHelpSection, shapeShortcutsHelpSection ];
 
-    const rightContent = [ new BasicActionsKeyboardHelpSection() ];
+    const rightContent = [ new BasicActionsKeyboardHelpSection( {
+      withCheckboxContent: true
+    } ) ];
 
     super( leftContent, rightContent );
   }

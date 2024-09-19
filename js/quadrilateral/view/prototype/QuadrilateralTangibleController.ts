@@ -1,4 +1,4 @@
-// Copyright 2023, University of Colorado Boulder
+// Copyright 2023-2024, University of Colorado Boulder
 
 /**
  * A general class that updates the sim from tangible device input. In that way it "controls" the simulation model.
@@ -28,13 +28,10 @@ export default class QuadrilateralTangibleController {
     this.shapeModel = this.quadrilateralModel.quadrilateralShapeModel;
     this.tangibleConnectionModel = this.quadrilateralModel.tangibleConnectionModel;
 
-    console.log( 'adding listener' );
     window.addEventListener( 'message', event => {
       const data = JSON.parse( event.data );
       if ( data.type === 'quadrilateralCalibration' ) {
-        if ( typeof data.width === 'number' && typeof data.height === 'number' ) {
-          this.tangibleConnectionModel.setPhysicalToVirtualTransform( data.width, data.height );
-        }
+        this.tangibleConnectionModel.setPhysicalToVirtualTransformForPaperLand();
       }
       else if ( data.type === 'quadrilateralControl' ) {
         const map = new Map();
@@ -151,20 +148,20 @@ export default class QuadrilateralTangibleController {
 
     // smooth positions to try to reduce noise
     const smoothedPositions = [
-      shapeModel.vertexA.smoothPosition( constrainedPositions[ 0 ]! ),
-      shapeModel.vertexB.smoothPosition( constrainedPositions[ 1 ]! ),
-      shapeModel.vertexC.smoothPosition( constrainedPositions[ 2 ]! ),
-      shapeModel.vertexD.smoothPosition( constrainedPositions[ 3 ]! )
+      shapeModel.vertexA.smoothPosition( constrainedPositions[ 0 ] ),
+      shapeModel.vertexB.smoothPosition( constrainedPositions[ 1 ] ),
+      shapeModel.vertexC.smoothPosition( constrainedPositions[ 2 ] ),
+      shapeModel.vertexD.smoothPosition( constrainedPositions[ 3 ] )
     ];
 
     // Constrain to intervals of deviceGridSpacingProperty.value to try to reduce noise
     const constrainedGridPositions = _.map( smoothedPositions, smoothedPosition => this.quadrilateralModel.getClosestGridPosition( smoothedPosition ) );
 
     const vertexLabelMap = new Map( [
-      [ shapeModel.vertexA.vertexLabel, constrainedGridPositions[ 0 ]! ],
-      [ shapeModel.vertexB.vertexLabel, constrainedGridPositions[ 1 ]! ],
-      [ shapeModel.vertexC.vertexLabel, constrainedGridPositions[ 2 ]! ],
-      [ shapeModel.vertexD.vertexLabel, constrainedGridPositions[ 3 ]! ]
+      [ shapeModel.vertexA.vertexLabel, constrainedGridPositions[ 0 ] ],
+      [ shapeModel.vertexB.vertexLabel, constrainedGridPositions[ 1 ] ],
+      [ shapeModel.vertexC.vertexLabel, constrainedGridPositions[ 2 ] ],
+      [ shapeModel.vertexD.vertexLabel, constrainedGridPositions[ 3 ] ]
     ] );
 
     this.shapeModel.setVertexPositions( vertexLabelMap );
@@ -186,6 +183,7 @@ export default class QuadrilateralTangibleController {
       // scale the physical positions to the simulation virtual model
       const labelToConstrainedPositionMap = new Map();
       labelToProposedPositionMap.forEach( ( proposedPosition, labelKey ) => {
+
         const vertex = this.shapeModel.getLabelledVertex( labelKey );
 
         let constrainedPosition: Vector2;
@@ -194,8 +192,17 @@ export default class QuadrilateralTangibleController {
         // shouldn't crash if data isn't right
         if ( proposedPosition && proposedPosition.isFinite() ) {
 
+          if ( labelKey.name === 'VERTEX_A' ) {
+            console.log( 'proposedPosition', proposedPosition );
+          }
+
           // transform from tangible to virtual coordinates
           const virtualPosition = tangibleConnectionModel.physicalToModelTransform.modelToViewPosition( proposedPosition );
+
+          // console.log( 'asdf' );
+          // if ( labelKey.name === 'VERTEX_A' ) {
+          //   console.log( 'virtualPosition', virtualPosition );
+          // }
 
           // apply smoothing over a number of values to reduce noise
           if ( smoothPositions ) {
@@ -216,6 +223,10 @@ export default class QuadrilateralTangibleController {
 
         // align with model grid positions
         constrainedPosition = this.quadrilateralModel.getClosestGridPosition( constrainedPosition! );
+
+        // if ( labelKey.name === 'VERTEX_A' ) {
+        //   console.log( 'constrainedPosition', constrainedPosition );
+        // }
 
         labelToConstrainedPositionMap.set( labelKey, constrainedPosition );
       } );

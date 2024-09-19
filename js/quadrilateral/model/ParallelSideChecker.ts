@@ -1,4 +1,4 @@
-// Copyright 2022-2023, University of Colorado Boulder
+// Copyright 2022-2024, University of Colorado Boulder
 
 /**
  * Responsible for keeping two opposite sides of the quadrilateral and calculating if they are parallel within
@@ -8,7 +8,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import TEmitter from '../../../../axon/js/TEmitter.js';
+import { TReadOnlyEmitter } from '../../../../axon/js/TEmitter.js';
 import Property from '../../../../axon/js/Property.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -40,7 +40,7 @@ export default class ParallelSideChecker {
    * @param shapeChangedEmitter - Emitter for when the quadrilateral shape changes in some way.
    * @param tandem
    */
-  public constructor( sidePair: QuadrilateralSidePair, shapeChangedEmitter: TEmitter, tandem: Tandem ) {
+  public constructor( sidePair: QuadrilateralSidePair, shapeChangedEmitter: TReadOnlyEmitter, tandem: Tandem ) {
 
     this.sidePair = sidePair;
 

@@ -1,7 +1,9 @@
-// Copyright 2021-2023, University of Colorado Boulder
+// Copyright 2021-2024, University of Colorado Boulder
 
 /**
  * Query parameters for this simulation.
+ *
+ * A few of these are marked as `public` for teacher use. The rest are intended for internal use/testing/debugging.
  *
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
@@ -46,7 +48,8 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // When provided, user has fine control of vertex positions instead of snapping to a coarse grid. More freedom
   // of movement but named shapes will be more difficult to find.
   reducedStepSize: {
-    type: 'flag'
+    type: 'flag',
+    public: true
   },
 
   // A scale factor to apply to all tolerance intervals when the using ?reducedStepSize.
@@ -67,6 +70,7 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   },
 
   // If provided, some extra things will be done in the simulation to facilitate communication with the hardware/device.
+  // This flag cannot be used at the same time as ?cameraInput=hands.
   deviceConnection: {
     type: 'flag'
   },
@@ -111,16 +115,18 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   // shapeUnique -> TRACKS_UNIQUE sound design
   soundDesign: {
     type: 'string',
+    public: true,
     defaultValue: 'shapeLayer',
     validValues: [ 'shapeLayer', 'shapeUnique' ]
   },
 
-  // When present, the "layer" sound design is modified to include trapezoid sounds for shapes that share child
+  // When present, the "layer" sound design is modified to include trapezoid sounds for shapes that inherit
   // geometric properties of the trapezoid. Teachers may not want to indicate that child shapes are actually
   // inclusive of trapezoid properties, so this is only added by request. See
   // https://github.com/phetsims/quadrilateral/issues/420
-  trapezoidSoundLayers: {
-    type: 'flag'
+  inheritTrapezoidSound: {
+    type: 'flag',
+    public: true
   },
 
   /**

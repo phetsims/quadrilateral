@@ -1,4 +1,4 @@
-// Copyright 2022-2023, University of Colorado Boulder
+// Copyright 2022-2024, University of Colorado Boulder
 
 /**
  * A prototype application of MediaPipe in quadrilateral. See https://github.com/phetsims/tangible.
@@ -60,8 +60,8 @@ export default class QuadrilateralMediaPipe extends MediaPipe {
     // So that there is a mapping from tangible space to simulation model space
     model.tangibleConnectionModel.setPhysicalToVirtualTransform( MEDIA_PIPE_ASPECT_RATIO, 1 );
 
-    // effectively connected to a device with this prototype
-    model.tangibleConnectionModel.connectedToDeviceProperty.value = true;
+    // signify to model that there is a connection to the Camera Input: Hands feature.
+    model.tangibleConnectionModel.connectedToCameraInputHandsProperty.value = true;
   }
 
   /**
@@ -82,16 +82,25 @@ export default class QuadrilateralMediaPipe extends MediaPipe {
         const firstHandPositions = this.getThumbAndIndexPositions( landmarks[ 0 ] );
         const secondHandPositions = this.getThumbAndIndexPositions( landmarks[ 1 ] );
 
-        // sort to determine which one is left/right
+        // sort to determine which one is left/right - left hand at index 0, right hand at index 1
         const sortedPositions = this.sortHandedness( [ firstHandPositions, secondHandPositions ] );
-        const leftHandPositions = sortedPositions[ 0 ];
-        const rightHandPositions = sortedPositions[ 1 ];
+
+        // The hands will be swapped when running with the camera Y axis is flipped
+        const leftHandPositions = sortedPositions[ MediaPipe.yAxisFlippedProperty.value ? 1 : 0 ];
+        const rightHandPositions = sortedPositions[ MediaPipe.yAxisFlippedProperty.value ? 0 : 1 ];
+
+        // When the x axis is flipped, the thumb and index fingers are swapped
+        const xAxisFlipped = MediaPipe.xAxisFlippedProperty.value;
+        const aPosition = xAxisFlipped ? leftHandPositions.thumbPosition : leftHandPositions.indexPosition;
+        const bPosition = xAxisFlipped ? rightHandPositions.thumbPosition : rightHandPositions.indexPosition;
+        const cPosition = xAxisFlipped ? rightHandPositions.indexPosition : rightHandPositions.thumbPosition;
+        const dPosition = xAxisFlipped ? leftHandPositions.indexPosition : leftHandPositions.thumbPosition;
 
         // package and attempt to update shape
-        labelToProposedPositionMap.set( QuadrilateralVertexLabel.VERTEX_A, leftHandPositions.indexPosition );
-        labelToProposedPositionMap.set( QuadrilateralVertexLabel.VERTEX_B, rightHandPositions.indexPosition );
-        labelToProposedPositionMap.set( QuadrilateralVertexLabel.VERTEX_C, rightHandPositions.thumbPosition );
-        labelToProposedPositionMap.set( QuadrilateralVertexLabel.VERTEX_D, leftHandPositions.thumbPosition );
+        labelToProposedPositionMap.set( QuadrilateralVertexLabel.VERTEX_A, aPosition );
+        labelToProposedPositionMap.set( QuadrilateralVertexLabel.VERTEX_B, bPosition );
+        labelToProposedPositionMap.set( QuadrilateralVertexLabel.VERTEX_C, cPosition );
+        labelToProposedPositionMap.set( QuadrilateralVertexLabel.VERTEX_D, dPosition );
 
         this.tangibleController.setPositionsFromAbsolutePositionData( labelToProposedPositionMap );
       }

@@ -1,4 +1,4 @@
-// Copyright 2021-2023, University of Colorado Boulder
+// Copyright 2021-2024, University of Colorado Boulder
 
 /**
  * The model for a side of the quadrilateral. A QuadrilateralSide is defined by the line between two Vertices.

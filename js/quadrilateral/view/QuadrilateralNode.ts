@@ -1,4 +1,4 @@
-// Copyright 2021-2023, University of Colorado Boulder
+// Copyright 2021-2024, University of Colorado Boulder
 
 /**
  * The view component for the quadrilateral shape, including labels and markers.
@@ -7,7 +7,7 @@
  */
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import { KeyboardListener, Node, NodeOptions, TPaint, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
+import { HotkeyData, KeyboardListener, Node, NodeOptions, TPaint, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralSideNode from './QuadrilateralSideNode.js';
@@ -23,6 +23,9 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import Multilink from '../../../../axon/js/Multilink.js';
+import Property from '../../../../axon/js/Property.js';
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
+import TextKeyNode from '../../../../scenery-phet/js/keyboard/TextKeyNode.js';
 
 // constants
 const cornerAStringProperty = QuadrilateralStrings.a11y.cornerAStringProperty;
@@ -37,6 +40,8 @@ const vertexAStringProperty = QuadrilateralStrings.vertexAStringProperty;
 const vertexBStringProperty = QuadrilateralStrings.vertexBStringProperty;
 const vertexCStringProperty = QuadrilateralStrings.vertexCStringProperty;
 const vertexDStringProperty = QuadrilateralStrings.vertexDStringProperty;
+const checkShapeDescriptionStringProperty = QuadrilateralStrings.a11y.keyboardHelpDialog.checkShapeDescriptionPatternStringProperty;
+const resetShapeDescriptionStringProperty = QuadrilateralStrings.a11y.keyboardHelpDialog.resetShapeDescriptionPatternStringProperty;
 
 // in seconds,
 const SHAPE_FILL_TIME = 0.35;
@@ -63,7 +68,11 @@ export default class QuadrilateralNode extends Voicing( Node ) {
 
       // This Node is composed with Voicing so that we can call the voicingSpeak* functions through it. But we do not
       // want it to use the default InteractiveHighlight, QuadrilateralVertexNode/QuadrilateralSideNode are independently interactive.
-      interactiveHighlight: 'invisible'
+      interactiveHighlight: 'invisible',
+
+      // To stop parts of the UI from jostling around as this Node moves, see
+      // https://github.com/phetsims/quadrilateral/issues/432
+      preventFit: true
     }, providedOptions );
 
     super( options );
@@ -176,42 +185,26 @@ export default class QuadrilateralNode extends Voicing( Node ) {
     //---------------------------------------------------------------------------------------------------------------
 
     // When the shift key is down, Vertices snap to finer intervals
-    this.addInputListener( new KeyboardListener( {
-
-      // TODO: Should only have to supply 'shift' instead of both - See https://github.com/phetsims/scenery/issues/1520
-      keys: [ 'shiftLeft', 'shiftRight' ],
-
-      // Need to allow other keys to be down to fire this listener or else it does not release on shift + tab
-      // when shift is released before the tab key. Would be ideal if KeyboardListener supported this better.
-      // See https://github.com/phetsims/quadrilateral/issues/388
-      allowOtherKeys: true,
-
-      listenerFireTrigger: 'both',
-      callback: ( event, listener ) => {
-        this.model.minorIntervalsFromGlobalKeyProperty.value = listener.keysDown;
-      },
-      cancel: listener => {
-
-        // not locking until next press
-        this.model.minorIntervalsFromGlobalKeyProperty.value = false;
-      },
-      global: true
-    } ) );
+    const shiftKeyListener = KeyboardListener.createGlobal( this, {
+      keyStringProperties: QuadrilateralNode.SHIFT_HOTKEY_DATA.keyStringProperties
+    } );
+    shiftKeyListener.isPressedProperty.link( isPressed => {
+      this.model.minorIntervalsFromGlobalKeyProperty.value = isPressed;
+    } );
 
     // Global key listeners
-    this.addInputListener( new KeyboardListener( {
-      keys: [ 'alt+shift+r', 'alt+c' ],
-      global: true,
-      callback: ( event, listener ) => {
-        const keysPressed = listener.keysPressed;
-
-        if ( keysPressed === 'alt+c' ) {
+    KeyboardListener.createGlobal( this, {
+      keyStringProperties: HotkeyData.combineKeyStringProperties( [
+        QuadrilateralNode.RESET_SHAPE_HOTKEY_DATA, QuadrilateralNode.CHECK_SHAPE_HOTKEY_DATA
+      ] ),
+      fire: ( event, keysPressed, listener ) => {
+        if ( QuadrilateralNode.CHECK_SHAPE_HOTKEY_DATA.hasKeyStroke( keysPressed ) ) {
 
           // command to check shape, Voicing the current shape name or its Properties depending on name visibility
           this.voicingUtterance.alert = quadrilateralDescriber.getCheckShapeDescription();
           Voicing.alertUtterance( this.voicingUtterance );
         }
-        else if ( keysPressed === 'alt+shift+r' ) {
+        else if ( QuadrilateralNode.RESET_SHAPE_HOTKEY_DATA.hasKeyStroke( keysPressed ) ) {
 
           // command to reset shape
           this.quadrilateralShapeModel.isolatedReset();
@@ -219,7 +212,7 @@ export default class QuadrilateralNode extends Voicing( Node ) {
           Voicing.alertUtterance( this.voicingUtterance );
         }
       }
-    } ) );
+    } );
 
     this.vertexNodes = [ vertexANode, vertexBNode, vertexCNode, vertexDNode ];
     this.sideNodes = [ sideABNode, sideBCNode, sideCDNode, sideDANode ];
@@ -291,6 +284,36 @@ export default class QuadrilateralNode extends Voicing( Node ) {
     this.vertexNodes.forEach( vertexNode => { vertexNode.paintableNode.fill = this.activeFill; } );
     this.sideNodes.forEach( sideNode => { sideNode.paintableNode.fill = this.activeFill; } );
   }
+
+  public static readonly RESET_SHAPE_HOTKEY_DATA = new HotkeyData( {
+    keyStringProperties: [ new Property( 'alt+shift+r' ) ],
+    keyboardHelpDialogLabelStringProperty: QuadrilateralStrings.keyboardHelpDialog.resetShapeStringProperty,
+    keyboardHelpDialogPDOMLabelStringProperty: StringUtils.fillIn( resetShapeDescriptionStringProperty, {
+          altOrOption: TextKeyNode.getAltKeyString()
+        } ),
+    global: true,
+    repoName: quadrilateral.name
+  } );
+
+  public static readonly CHECK_SHAPE_HOTKEY_DATA = new HotkeyData( {
+    keyStringProperties: [ new Property( 'alt+c' ) ],
+
+    // Voicing is NOT translatable and won't be for a very long time. This content is invisible in non-english locales and
+    // when Voicing is not supported.
+    keyboardHelpDialogLabelStringProperty: new Property( 'With Voicing enabled, check shape name or properties' ),
+    keyboardHelpDialogPDOMLabelStringProperty: StringUtils.fillIn( checkShapeDescriptionStringProperty, {
+      altOrOption: TextKeyNode.getAltKeyString()
+    } ),
+    global: true,
+    repoName: quadrilateral.name
+  } );
+
+  public static readonly SHIFT_HOTKEY_DATA = new HotkeyData( {
+    keyStringProperties: [ new Property( 'shift' ) ],
+    binderName: 'Snap to Fine Intervals',
+    global: true,
+    repoName: quadrilateral.name
+  } );
 }
 
 quadrilateral.register( 'QuadrilateralNode', QuadrilateralNode );

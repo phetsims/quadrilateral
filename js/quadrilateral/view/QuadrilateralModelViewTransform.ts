@@ -1,4 +1,4 @@
-// Copyright 2023, University of Colorado Boulder
+// Copyright 2023-2024, University of Colorado Boulder
 
 /**
  * Transforms the model space to view space. The view space is a rectangular area within the ScreenView
@@ -17,7 +17,7 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 // dimensions of the view space, relative to ScreenView layoutBounds
 const VIEW_DIMENSION = new Dimension2( 790, 530 );
 
-export default class QuadrilateralModelViewTransform2 extends ModelViewTransform2 {
+export default class QuadrilateralModelViewTransform extends ModelViewTransform2 {
   public constructor( modelBounds: Bounds2, layoutBounds: Bounds2 ) {
     super();
 
@@ -52,4 +52,4 @@ export default class QuadrilateralModelViewTransform2 extends ModelViewTransform
   }
 }
 
-quadrilateral.register( 'QuadrilateralModelViewTransform2', QuadrilateralModelViewTransform2 );
+quadrilateral.register( 'QuadrilateralModelViewTransform', QuadrilateralModelViewTransform );
