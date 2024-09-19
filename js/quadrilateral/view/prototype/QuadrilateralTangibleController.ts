@@ -31,7 +31,9 @@ export default class QuadrilateralTangibleController {
     window.addEventListener( 'message', event => {
       const data = JSON.parse( event.data );
       if ( data.type === 'quadrilateralCalibration' ) {
-        this.tangibleConnectionModel.setPhysicalToVirtualTransformForPaperLand();
+        if ( data.width && data.height ) {
+          this.tangibleConnectionModel.setPhysicalToVirtualTransformForPaperLand( data.width, data.height );
+        }
       }
       else if ( data.type === 'quadrilateralControl' ) {
         const map = new Map();
@@ -192,17 +194,8 @@ export default class QuadrilateralTangibleController {
         // shouldn't crash if data isn't right
         if ( proposedPosition && proposedPosition.isFinite() ) {
 
-          if ( labelKey.name === 'VERTEX_A' ) {
-            console.log( 'proposedPosition', proposedPosition );
-          }
-
           // transform from tangible to virtual coordinates
           const virtualPosition = tangibleConnectionModel.physicalToModelTransform.modelToViewPosition( proposedPosition );
-
-          // console.log( 'asdf' );
-          // if ( labelKey.name === 'VERTEX_A' ) {
-          //   console.log( 'virtualPosition', virtualPosition );
-          // }
 
           // apply smoothing over a number of values to reduce noise
           if ( smoothPositions ) {
@@ -223,10 +216,6 @@ export default class QuadrilateralTangibleController {
 
         // align with model grid positions
         constrainedPosition = this.quadrilateralModel.getClosestGridPosition( constrainedPosition! );
-
-        // if ( labelKey.name === 'VERTEX_A' ) {
-        //   console.log( 'constrainedPosition', constrainedPosition );
-        // }
 
         labelToConstrainedPositionMap.set( labelKey, constrainedPosition );
       } );

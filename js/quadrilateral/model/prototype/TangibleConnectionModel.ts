@@ -128,11 +128,11 @@ export default class TangibleConnectionModel {
    * Paper Land coordinates go form 0-1 in x and y, where the origin is in the top left. The simulation model has
    * dimensions QuadrilateralConstants.MODEL_BOUNDS, with center at (0, 0) with +x right and +y up.
    */
-  public setPhysicalToVirtualTransformForPaperLand(): void {
+  public setPhysicalToVirtualTransformForPaperLand( width: number, height: number ): void {
     this.physicalToModelTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
-      new Vector2( 0.5, 0.5 ), // center of the physical space "model"
+      new Vector2( height / 2, height / 2 ), // center of the physical space "model"
       new Vector2( 0, 0 ), // origin of the simulation model
-      QuadrilateralConstants.MODEL_BOUNDS.height / 1 // scale from physical model to simulation space
+      QuadrilateralConstants.MODEL_BOUNDS.height / height // scale from physical model to simulation space
     );
   }
 
