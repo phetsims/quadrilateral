@@ -42,7 +42,7 @@
         ],
         "parserOptions": {
           "project": [
-            "../quadrilateral/tsconfig.json"
+            "../chipper/tsconfig/eslint-all/tsconfig.json"
           ]
         }
       }
