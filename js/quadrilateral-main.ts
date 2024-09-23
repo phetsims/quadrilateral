@@ -11,11 +11,11 @@ import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
 import { Node } from '../../scenery/js/imports.js';
 import Tandem from '../../tandem/js/Tandem.js';
-import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';
-import QuadrilateralStrings from './QuadrilateralStrings.js';
 import QuadrilateralOptionsModel from './quadrilateral/model/QuadrilateralOptionsModel.js';
+import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';
 import QuadrilateralInputPreferencesNode from './quadrilateral/view/prototype/QuadrilateralInputPreferencesNode.js';
 import QuadrilateralSoundOptionsNode from './quadrilateral/view/sound/QuadrilateralSoundOptionsNode.js';
+import QuadrilateralStrings from './QuadrilateralStrings.js';
 
 const quadrilateralTitleStringProperty = QuadrilateralStrings.quadrilateral.titleStringProperty;
 const optionsModel = new QuadrilateralOptionsModel();
