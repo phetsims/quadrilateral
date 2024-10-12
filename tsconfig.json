@@ -11,7 +11,7 @@
       "path": "../tangible/tsconfig.json"
     },
     {
-      "path": "../chipper/tsconfig/buildjson"
+      "path": "../chipper/tsconfig/buildjson/tsconfig.json"
     }
   ]
 }
