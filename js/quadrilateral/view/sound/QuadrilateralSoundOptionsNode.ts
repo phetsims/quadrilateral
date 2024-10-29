@@ -68,17 +68,17 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
         value: SoundDesign.TRACKS_LAYER,
         createNode: () => new Text( preferencesDialogLayerSoundDesignDescriptionStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
         tandemName: 'layersTracksSoundViewRadioButton',
-        labelContent: preferencesDialogLayerSoundDesignDescriptionStringProperty,
         options: {
+          accessibleName: preferencesDialogLayerSoundDesignDescriptionStringProperty,
           voicingNameResponse: preferencesDialogLayerSoundDesignDescriptionStringProperty
         }
       },
       {
         value: SoundDesign.TRACKS_UNIQUE,
         createNode: () => new Text( preferencesDialogUniqueSoundDesignDescriptionStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
-        labelContent: preferencesDialogUniqueSoundDesignDescriptionStringProperty,
         tandemName: 'emphasisTracksSoundViewRadioButton',
         options: {
+          accessibleName: preferencesDialogUniqueSoundDesignDescriptionStringProperty,
           voicingNameResponse: preferencesDialogUniqueSoundDesignDescriptionStringProperty
         }
       }
