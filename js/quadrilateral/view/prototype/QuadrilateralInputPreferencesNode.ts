@@ -133,6 +133,10 @@ class TangiblePropertyNumberControl extends VBox {
       delta: propertyRange.min,
       titleNodeOptions: PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS,
       layoutFunction: NumberControl.createLayoutFunction1( { align: 'left' } ),
+
+      // pdom
+      accessibleName: label,
+
       sliderOptions: {
         minorTickSpacing: minorTickSpacing,
         minorTickStroke: 'black',
@@ -152,8 +156,6 @@ class TangiblePropertyNumberControl extends VBox {
         voicingIgnoreVoicingManagerProperties: true,
 
         // pdom
-        labelTagName: 'label',
-        labelContent: label,
         keyboardStep: minorTickSpacing
       },
 
