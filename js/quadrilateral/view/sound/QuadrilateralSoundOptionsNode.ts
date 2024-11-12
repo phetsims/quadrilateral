@@ -38,7 +38,7 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
     // Sounds play forever control
     const soundsPlayForeverLabel = new Text( preferencesDialogPlayShapeSoundsForeverStringProperty, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
     const soundsPlayForeverToggleSwitch = new ToggleSwitch( model.tracksPlayForeverProperty, false, true, combineOptions<ToggleSwitchOptions>( {}, {
-      a11yName: preferencesDialogPlayShapeSoundsForeverStringProperty,
+      accessibleName: preferencesDialogPlayShapeSoundsForeverStringProperty,
       rightValueContextResponse: tracksPlayForeverCheckedContextResponseStringProperty,
       leftValueContextResponse: tracksPlayForeverUncheckedContextResponseStringProperty
     }, PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS ) );
