@@ -83,7 +83,6 @@ export default class QuadrilateralScreenView extends ScreenView {
     } );
     const resetAllButton = new ResetAllButton( {
       listener: () => {
-        this.interruptSubtreeInput();
         model.reset();
       },
       tandem: tandem.createTandem( 'resetAllButton' )
