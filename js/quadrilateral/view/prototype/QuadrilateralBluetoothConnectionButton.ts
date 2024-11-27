@@ -1,5 +1,10 @@
 // Copyright 2022-2024, University of Colorado Boulder
 
+import Emitter from '../../../../../axon/js/Emitter.js';
+import stepTimer from '../../../../../axon/js/stepTimer.js';
+import Utils from '../../../../../dot/js/Utils.js';
+import IntentionalAny from '../../../../../phet-core/js/types/IntentionalAny.js';
+import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 /**
  * To test connecting to a bluetooth device using web bluetooth. This code was written in collaboration with Scott
  * Lambert from SLU, who built the tangible hardware and bluetooth device.
@@ -15,13 +20,8 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 import quadrilateral from '../../../quadrilateral.js';
-import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
-import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
-import Utils from '../../../../../dot/js/Utils.js';
-import Emitter from '../../../../../axon/js/Emitter.js';
-import stepTimer from '../../../../../axon/js/stepTimer.js';
-import IntentionalAny from '../../../../../phet-core/js/types/IntentionalAny.js';
 import QuadrilateralColors from '../../../QuadrilateralColors.js';
+import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
 import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
 import QuadrilateralTangibleController from './QuadrilateralTangibleController.js';
 

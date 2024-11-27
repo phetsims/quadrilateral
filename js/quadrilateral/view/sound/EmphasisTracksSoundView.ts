@@ -10,22 +10,22 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import quadrilateral from '../../../quadrilateral.js';
-import TracksSoundView from './TracksSoundView.js';
-import quadTrackBackgroundRhythmComplex_mp3 from '../../../../sounds/quadTrackBackgroundRhythmComplex_mp3.js';
-import quadTrackLowAscendingFourNotes_mp3 from '../../../../sounds/quadTrackLowAscendingFourNotes_mp3.js';
-import quadTrackHighTonesAmbient_mp3 from '../../../../sounds/quadTrackHighTonesAmbient_mp3.js';
-import quadTrackHighDescendingPingRepeats_mp3 from '../../../../sounds/quadTrackHighDescendingPingRepeats_mp3.js';
-import quadTrackHighBellsFallAndRise_mp3 from '../../../../sounds/quadTrackHighBellsFallAndRise_mp3.js';
-import quadTrackLowPunctualBoops_mp3 from '../../../../sounds/quadTrackLowPunctualBoops_mp3.js';
-import quadTrackLowDistortedTonalRhythm_mp3 from '../../../../sounds/quadTrackLowDistortedTonalRhythm_mp3.js';
-import quadTrackHighRepeatedMonotoneRinging_mp3 from '../../../../sounds/quadTrackHighRepeatedMonotoneRinging_mp3.js';
-import quadTrackBackgroundRhythmInverted_mp3 from '../../../../sounds/quadTrackBackgroundRhythmInverted_mp3.js';
-import quadTrackLowPunctualBoopsSparse_mp3 from '../../../../sounds/quadTrackLowPunctualBoopsSparse_mp3.js';
-import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
+import quadTrackBackgroundRhythmComplex_mp3 from '../../../../sounds/quadTrackBackgroundRhythmComplex_mp3.js';
+import quadTrackBackgroundRhythmInverted_mp3 from '../../../../sounds/quadTrackBackgroundRhythmInverted_mp3.js';
+import quadTrackHighBellsFallAndRise_mp3 from '../../../../sounds/quadTrackHighBellsFallAndRise_mp3.js';
+import quadTrackHighDescendingPingRepeats_mp3 from '../../../../sounds/quadTrackHighDescendingPingRepeats_mp3.js';
+import quadTrackHighRepeatedMonotoneRinging_mp3 from '../../../../sounds/quadTrackHighRepeatedMonotoneRinging_mp3.js';
+import quadTrackHighTonesAmbient_mp3 from '../../../../sounds/quadTrackHighTonesAmbient_mp3.js';
+import quadTrackLowAscendingFourNotes_mp3 from '../../../../sounds/quadTrackLowAscendingFourNotes_mp3.js';
+import quadTrackLowDistortedTonalRhythm_mp3 from '../../../../sounds/quadTrackLowDistortedTonalRhythm_mp3.js';
+import quadTrackLowPunctualBoops_mp3 from '../../../../sounds/quadTrackLowPunctualBoops_mp3.js';
+import quadTrackLowPunctualBoopsSparse_mp3 from '../../../../sounds/quadTrackLowPunctualBoopsSparse_mp3.js';
+import quadrilateral from '../../../quadrilateral.js';
 import NamedQuadrilateral from '../../model/NamedQuadrilateral.js';
+import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
+import TracksSoundView from './TracksSoundView.js';
 
 // default output level for sound clips that are playing in the background behind the louder emphasized sound
 const DEFAULT_BACKGROUND_OUTPUT_LEVEL = 0.15;

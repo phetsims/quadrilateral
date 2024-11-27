@@ -6,14 +6,14 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { Path } from '../../../../scenery/js/imports.js';
-import QuadrilateralVertex from '../model/QuadrilateralVertex.js';
-import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { Line, Shape } from '../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import QuadrilateralColors from '../../QuadrilateralColors.js';
+import { Path } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import QuadrilateralColors from '../../QuadrilateralColors.js';
+import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
+import QuadrilateralVertex from '../model/QuadrilateralVertex.js';
 
 // in model coordinates, length of a side of the indicator from the edge of a line between two vertices
 const SIDE_LENGTH = 0.12;

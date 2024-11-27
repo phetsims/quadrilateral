@@ -7,22 +7,22 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralStrings from '../../QuadrilateralStrings.js';
-import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
-import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
-import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
-import QuadrilateralVertexLabel from '../model/QuadrilateralVertexLabel.js';
-import QuadrilateralVertexDescriber from './QuadrilateralVertexDescriber.js';
-import QuadrilateralSideDescriber from './QuadrilateralSideDescriber.js';
-import QuadrilateralSideLabel from '../model/QuadrilateralSideLabel.js';
-import QuadrilateralSidePair from '../model/QuadrilateralSidePair.js';
-import QuadrilateralVertexPair from '../model/QuadrilateralVertexPair.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import QuadrilateralConstants from '../../QuadrilateralConstants.js';
-import ResponsePacket from '../../../../utterance-queue/js/ResponsePacket.js';
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import { PDOMValueType } from '../../../../scenery/js/imports.js';
+import ResponsePacket from '../../../../utterance-queue/js/ResponsePacket.js';
+import quadrilateral from '../../quadrilateral.js';
+import QuadrilateralConstants from '../../QuadrilateralConstants.js';
+import QuadrilateralStrings from '../../QuadrilateralStrings.js';
+import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
+import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
+import QuadrilateralSideLabel from '../model/QuadrilateralSideLabel.js';
+import QuadrilateralSidePair from '../model/QuadrilateralSidePair.js';
+import QuadrilateralVertexLabel from '../model/QuadrilateralVertexLabel.js';
+import QuadrilateralVertexPair from '../model/QuadrilateralVertexPair.js';
+import QuadrilateralSideDescriber from './QuadrilateralSideDescriber.js';
+import QuadrilateralVertexDescriber from './QuadrilateralVertexDescriber.js';
 
 // Alias for string types used in this sim - to support string Properties (dynamic locales), strings, and often
 // null values for functions. Even though Voicing and Interactive Description do not support dynamic locales, code

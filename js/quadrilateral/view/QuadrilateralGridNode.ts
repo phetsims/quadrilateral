@@ -6,15 +6,15 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import quadrilateral from '../../quadrilateral.js';
-import { Node, Path, Rectangle } from '../../../../scenery/js/imports.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import QuadrilateralColors from '../../QuadrilateralColors.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 import { Shape } from '../../../../kite/js/imports.js';
-import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import { Node, Path, Rectangle } from '../../../../scenery/js/imports.js';
+import quadrilateral from '../../quadrilateral.js';
+import QuadrilateralColors from '../../QuadrilateralColors.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
+import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 
 // constants
 const MAJOR_GRID_LINE_OPTIONS = {

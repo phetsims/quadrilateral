@@ -10,9 +10,9 @@
 import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralModel from '../../model/QuadrilateralModel.js';
 import QuadrilateralSoundOptionsModel, { SoundDesign } from '../../model/QuadrilateralSoundOptionsModel.js';
+import EmphasisTracksSoundView from './EmphasisTracksSoundView.js';
 import LayersTracksSoundView from './LayersTracksSoundView.js';
 import TracksSoundView from './TracksSoundView.js';
-import EmphasisTracksSoundView from './EmphasisTracksSoundView.js';
 
 export default class QuadrilateralSoundView {
 

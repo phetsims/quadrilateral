@@ -11,9 +11,9 @@
 
 import Bounds2 from '../../../../../dot/js/Bounds2.js';
 import Utils from '../../../../../dot/js/Utils.js';
-import quadrilateral from '../../../quadrilateral.js';
-import { Circle, Line, Rectangle, Text, VBox, VBoxOptions } from '../../../../../scenery/js/imports.js';
 import optionize, { EmptySelfOptions } from '../../../../../phet-core/js/optionize.js';
+import { Circle, Line, Rectangle, Text, VBox, VBoxOptions } from '../../../../../scenery/js/imports.js';
+import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
 import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
 

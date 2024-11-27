@@ -13,18 +13,18 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import quadrilateral from '../../quadrilateral.js';
-import { Node, Path } from '../../../../scenery/js/imports.js';
-import QuadrilateralVertex from '../model/QuadrilateralVertex.js';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import Utils from '../../../../dot/js/Utils.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import { Line, Shape } from '../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
+import { Node, Path } from '../../../../scenery/js/imports.js';
+import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralColors from '../../QuadrilateralColors.js';
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
-import Multilink from '../../../../axon/js/Multilink.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
+import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
+import QuadrilateralVertex from '../model/QuadrilateralVertex.js';
 
 // constants
 // The size of each wedge of the angle guide, in radians

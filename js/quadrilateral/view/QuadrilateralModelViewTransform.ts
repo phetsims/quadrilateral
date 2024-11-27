@@ -8,11 +8,11 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import Bounds2 from '../../../../dot/js/Bounds2.js';
+import Dimension2 from '../../../../dot/js/Dimension2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
-import Dimension2 from '../../../../dot/js/Dimension2.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
 
 // dimensions of the view space, relative to ScreenView layoutBounds
 const VIEW_DIMENSION = new Dimension2( 790, 530 );

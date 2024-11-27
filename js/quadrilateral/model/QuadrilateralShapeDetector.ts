@@ -11,8 +11,8 @@
  */
 
 import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
 import NamedQuadrilateral from './NamedQuadrilateral.js';
+import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
 
 // Set up the bits for each shape property.
 const CONCAVE_ANGLE = ( shapeModel: QuadrilateralShapeModel ) => _.some( shapeModel.vertices, vertex => vertex.angleProperty.value! > Math.PI );

@@ -6,14 +6,14 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import LinearFunction from '../../../../../dot/js/LinearFunction.js';
 import Vector2 from '../../../../../dot/js/Vector2.js';
 import quadrilateral from '../../../quadrilateral.js';
+import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
+import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
 import QuadrilateralModel from '../../model/QuadrilateralModel.js';
 import QuadrilateralShapeModel, { VertexLabelToProposedPositionMap } from '../../model/QuadrilateralShapeModel.js';
 import QuadrilateralUtils from '../../model/QuadrilateralUtils.js';
-import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
-import LinearFunction from '../../../../../dot/js/LinearFunction.js';
-import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
 
 export default class QuadrilateralTangibleController {
   private readonly quadrilateralModel: QuadrilateralModel;

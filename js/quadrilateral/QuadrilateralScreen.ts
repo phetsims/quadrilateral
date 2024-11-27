@@ -6,13 +6,13 @@
  */
 
 import Screen, { ScreenOptions } from '../../../joist/js/Screen.js';
-import QuadrilateralColors from '../QuadrilateralColors.js';
-import quadrilateral from '../quadrilateral.js';
-import QuadrilateralModel from './model/QuadrilateralModel.js';
-import QuadrilateralScreenView from './view/QuadrilateralScreenView.js';
-import QuadrilateralOptionsModel from './model/QuadrilateralOptionsModel.js';
 import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
+import quadrilateral from '../quadrilateral.js';
+import QuadrilateralColors from '../QuadrilateralColors.js';
+import QuadrilateralModel from './model/QuadrilateralModel.js';
+import QuadrilateralOptionsModel from './model/QuadrilateralOptionsModel.js';
 import QuadrilateralKeyboardHelpContent from './view/QuadrilateralKeyboardHelpContent.js';
+import QuadrilateralScreenView from './view/QuadrilateralScreenView.js';
 
 export default class QuadrilateralScreen extends Screen<QuadrilateralModel, QuadrilateralScreenView> {
   public constructor( optionsModel: QuadrilateralOptionsModel, providedOptions: ScreenOptions ) {

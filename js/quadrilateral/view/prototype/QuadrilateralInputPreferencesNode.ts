@@ -6,19 +6,19 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import quadrilateral from '../../../quadrilateral.js';
-import NumberControl, { NumberControlOptions, NumberControlSliderOptions } from '../../../../../scenery-phet/js/NumberControl.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
-import optionize, { combineOptions } from '../../../../../phet-core/js/optionize.js';
-import Tandem from '../../../../../tandem/js/Tandem.js';
-import { Node, Text, TextOptions, VBox, VoicingRichText, VoicingRichTextOptions } from '../../../../../scenery/js/imports.js';
-import PreferencesDialog from '../../../../../joist/js/preferences/PreferencesDialog.js';
-import QuadrilateralTangibleOptionsModel from '../../model/prototype/QuadrilateralTangibleOptionsModel.js';
-import MediaPipe from '../../../../../tangible/js/mediaPipe/MediaPipe.js';
-import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
 import JoistStrings from '../../../../../joist/js/JoistStrings.js';
-import StringUtils from '../../../../../phetcommon/js/util/StringUtils.js';
+import PreferencesDialog from '../../../../../joist/js/preferences/PreferencesDialog.js';
+import optionize, { combineOptions } from '../../../../../phet-core/js/optionize.js';
 import StrictOmit from '../../../../../phet-core/js/types/StrictOmit.js';
+import StringUtils from '../../../../../phetcommon/js/util/StringUtils.js';
+import NumberControl, { NumberControlOptions, NumberControlSliderOptions } from '../../../../../scenery-phet/js/NumberControl.js';
+import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
+import { Node, Text, TextOptions, VBox, VoicingRichText, VoicingRichTextOptions } from '../../../../../scenery/js/imports.js';
+import Tandem from '../../../../../tandem/js/Tandem.js';
+import MediaPipe from '../../../../../tangible/js/mediaPipe/MediaPipe.js';
+import quadrilateral from '../../../quadrilateral.js';
+import QuadrilateralTangibleOptionsModel from '../../model/prototype/QuadrilateralTangibleOptionsModel.js';
 
 // Strings for the content - this is a prototype so it is not translatable yet.
 const mediaPipeFeatureDescriptionString = 'Use custom hand gestures and movements to control objects in the sim. Please see the Teacher Tips for specific gestures, movements, and object mappings.';

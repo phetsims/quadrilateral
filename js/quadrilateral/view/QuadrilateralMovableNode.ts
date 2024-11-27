@@ -6,24 +6,24 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import quadrilateral from '../../quadrilateral.js';
-import { HotkeyData, KeyboardListener, Node, NodeOptions, PaintableNode, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
-import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import QuadrilateralMovable from '../model/QuadrilateralMovable.js';
-import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
-import WrappedAudioBuffer from '../../../../tambo/js/WrappedAudioBuffer.js';
-import soundManager from '../../../../tambo/js/soundManager.js';
-import quadShapeCollision_mp3 from '../../../sounds/quadShapeCollision_mp3.js';
-import QuadrilateralStrings from '../../QuadrilateralStrings.js';
-import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
-import QuadrilateralConstants from '../../QuadrilateralConstants.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import QuadrilateralColors from '../../QuadrilateralColors.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import Utterance from '../../../../utterance-queue/js/Utterance.js';
 import Property from '../../../../axon/js/Property.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import { HotkeyData, KeyboardListener, Node, NodeOptions, PaintableNode, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
+import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
+import soundManager from '../../../../tambo/js/soundManager.js';
+import WrappedAudioBuffer from '../../../../tambo/js/WrappedAudioBuffer.js';
+import Utterance from '../../../../utterance-queue/js/Utterance.js';
+import quadShapeCollision_mp3 from '../../../sounds/quadShapeCollision_mp3.js';
+import quadrilateral from '../../quadrilateral.js';
+import QuadrilateralColors from '../../QuadrilateralColors.js';
+import QuadrilateralConstants from '../../QuadrilateralConstants.js';
+import QuadrilateralStrings from '../../QuadrilateralStrings.js';
+import QuadrilateralMovable from '../model/QuadrilateralMovable.js';
+import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 
 // constants
 const blockedByInnerShapeStringProperty = QuadrilateralStrings.a11y.voicing.blockedByInnerShapeStringProperty;

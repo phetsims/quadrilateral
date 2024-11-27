@@ -5,19 +5,19 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { Circle, FlowBox, HBox, Line, Node, Path, PathOptions, Text, TextOptions } from '../../../../scenery/js/imports.js';
-import Utils from '../../../../dot/js/Utils.js';
-import GridIcon from '../../../../scenery-phet/js/GridIcon.js';
-import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralConstants from '../../QuadrilateralConstants.js';
-import QuadrilateralColors from '../../QuadrilateralColors.js';
-import { Line as ShapeLine, Shape } from '../../../../kite/js/imports.js';
-import musicSolidShape from '../../../../sherpa/js/fontawesome-5/musicSolidShape.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import Ray2 from '../../../../dot/js/Ray2.js';
-import Matrix3 from '../../../../dot/js/Matrix3.js';
-import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Matrix3 from '../../../../dot/js/Matrix3.js';
+import Ray2 from '../../../../dot/js/Ray2.js';
+import Utils from '../../../../dot/js/Utils.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import { Line as ShapeLine, Shape } from '../../../../kite/js/imports.js';
+import { combineOptions } from '../../../../phet-core/js/optionize.js';
+import GridIcon from '../../../../scenery-phet/js/GridIcon.js';
+import { Circle, FlowBox, HBox, Line, Node, Path, PathOptions, Text, TextOptions } from '../../../../scenery/js/imports.js';
+import musicSolidShape from '../../../../sherpa/js/fontawesome-5/musicSolidShape.js';
+import quadrilateral from '../../quadrilateral.js';
+import QuadrilateralColors from '../../QuadrilateralColors.js';
+import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 
 class QuadrilateralIconFactory {
 

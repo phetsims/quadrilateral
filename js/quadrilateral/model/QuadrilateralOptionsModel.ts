@@ -8,8 +8,8 @@
  */
 
 import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralSoundOptionsModel from './QuadrilateralSoundOptionsModel.js';
 import QuadrilateralTangibleOptionsModel from './prototype/QuadrilateralTangibleOptionsModel.js';
+import QuadrilateralSoundOptionsModel from './QuadrilateralSoundOptionsModel.js';
 
 export default class QuadrilateralOptionsModel {
   public readonly soundOptionsModel = new QuadrilateralSoundOptionsModel();

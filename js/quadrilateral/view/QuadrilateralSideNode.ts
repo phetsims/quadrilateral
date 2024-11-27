@@ -6,22 +6,22 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { Line as LineNode, Path, RichDragListener, SceneryEvent } from '../../../../scenery/js/imports.js';
-import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralSide from '../model/QuadrilateralSide.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import QuadrilateralShapeModel, { VertexLabelToProposedPositionMap } from '../model/QuadrilateralShapeModel.js';
-import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import { Line, Shape } from '../../../../kite/js/imports.js';
-import QuadrilateralSideDescriber from './QuadrilateralSideDescriber.js';
 import Multilink from '../../../../axon/js/Multilink.js';
-import release_mp3 from '../../../../tambo/sounds/release_mp3.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import SideTicksNode from './SideTicksNode.js';
-import QuadrilateralMovableNode, { QuadrilateralMovableNodeOptions } from './QuadrilateralMovableNode.js';
-import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import { Line, Shape } from '../../../../kite/js/imports.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import { Line as LineNode, Path, RichDragListener, SceneryEvent } from '../../../../scenery/js/imports.js';
+import release_mp3 from '../../../../tambo/sounds/release_mp3.js';
+import quadrilateral from '../../quadrilateral.js';
+import QuadrilateralModel from '../model/QuadrilateralModel.js';
+import QuadrilateralShapeModel, { VertexLabelToProposedPositionMap } from '../model/QuadrilateralShapeModel.js';
+import QuadrilateralSide from '../model/QuadrilateralSide.js';
+import QuadrilateralMovableNode, { QuadrilateralMovableNodeOptions } from './QuadrilateralMovableNode.js';
+import QuadrilateralSideDescriber from './QuadrilateralSideDescriber.js';
+import SideTicksNode from './SideTicksNode.js';
 
 // The dilation around side shapes when drawing the focus highlight.
 const FOCUS_HIGHLIGHT_DILATION = 15;

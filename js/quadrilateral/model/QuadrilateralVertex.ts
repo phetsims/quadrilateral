@@ -6,21 +6,21 @@
  * @author Jesse Greenberg
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Property from '../../../../axon/js/Property.js';
-import Vector2Property from '../../../../dot/js/Vector2Property.js';
-import quadrilateral from '../../quadrilateral.js';
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import { Shape } from '../../../../kite/js/imports.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import QuadrilateralVertexLabel from './QuadrilateralVertexLabel.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import Vector2Property from '../../../../dot/js/Vector2Property.js';
+import { Shape } from '../../../../kite/js/imports.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
-import QuadrilateralMovable from './QuadrilateralMovable.js';
+import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
+import QuadrilateralMovable from './QuadrilateralMovable.js';
+import QuadrilateralVertexLabel from './QuadrilateralVertexLabel.js';
 
 const VERTEX_BOUNDS = new Bounds2( 0, 0, QuadrilateralConstants.VERTEX_WIDTH, QuadrilateralConstants.VERTEX_WIDTH );
 const HALF_WIDTH = VERTEX_BOUNDS.width / 2;

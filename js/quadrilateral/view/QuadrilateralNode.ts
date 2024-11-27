@@ -6,26 +6,26 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Bounds2 from '../../../../dot/js/Bounds2.js';
-import { HotkeyData, KeyboardListener, Node, NodeOptions, TPaint, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
-import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralStrings from '../../QuadrilateralStrings.js';
-import QuadrilateralSideNode from './QuadrilateralSideNode.js';
-import QuadrilateralVertexNode from './QuadrilateralVertexNode.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
-import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import CornerGuideNode from './CornerGuideNode.js';
-import QuadrilateralColors from '../../QuadrilateralColors.js';
-import RightAngleIndicatorNode from './RightAngleIndicatorNode.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import QuadrilateralDescriber from './QuadrilateralDescriber.js';
-import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import Property from '../../../../axon/js/Property.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import TextKeyNode from '../../../../scenery-phet/js/keyboard/TextKeyNode.js';
+import { HotkeyData, KeyboardListener, Node, NodeOptions, TPaint, Voicing, VoicingOptions } from '../../../../scenery/js/imports.js';
+import quadrilateral from '../../quadrilateral.js';
+import QuadrilateralColors from '../../QuadrilateralColors.js';
+import QuadrilateralStrings from '../../QuadrilateralStrings.js';
+import QuadrilateralModel from '../model/QuadrilateralModel.js';
+import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
+import CornerGuideNode from './CornerGuideNode.js';
+import QuadrilateralDescriber from './QuadrilateralDescriber.js';
+import QuadrilateralSideNode from './QuadrilateralSideNode.js';
+import QuadrilateralVertexNode from './QuadrilateralVertexNode.js';
+import RightAngleIndicatorNode from './RightAngleIndicatorNode.js';
 
 // constants
 const cornerAStringProperty = QuadrilateralStrings.a11y.cornerAStringProperty;

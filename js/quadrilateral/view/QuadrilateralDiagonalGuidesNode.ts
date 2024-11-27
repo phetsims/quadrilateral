@@ -7,19 +7,19 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import quadrilateral from '../../quadrilateral.js';
-import { Line, Node } from '../../../../scenery/js/imports.js';
-import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import Multilink from '../../../../axon/js/Multilink.js';
 import Ray2 from '../../../../dot/js/Ray2.js';
-import { Shape } from '../../../../kite/js/imports.js';
-import QuadrilateralColors from '../../QuadrilateralColors.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import QuadrilateralUtils from '../model/QuadrilateralUtils.js';
+import { Shape } from '../../../../kite/js/imports.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import { Line, Node } from '../../../../scenery/js/imports.js';
+import quadrilateral from '../../quadrilateral.js';
+import QuadrilateralColors from '../../QuadrilateralColors.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
+import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
+import QuadrilateralUtils from '../model/QuadrilateralUtils.js';
 
 // constants
 const LINE_NODE_OPTIONS = {

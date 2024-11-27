@@ -8,32 +8,32 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Property from '../../../../axon/js/Property.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import quadrilateral from '../../quadrilateral.js';
-import NamedQuadrilateral from './NamedQuadrilateral.js';
-import QuadrilateralSide from './QuadrilateralSide.js';
-import QuadrilateralVertex from './QuadrilateralVertex.js';
-import Utils from '../../../../dot/js/Utils.js';
 import Emitter from '../../../../axon/js/Emitter.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
-import QuadrilateralVertexLabel from './QuadrilateralVertexLabel.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
-import ParallelSideChecker from './ParallelSideChecker.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
-import TProperty from '../../../../axon/js/TProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import TEmitter from '../../../../axon/js/TEmitter.js';
-import QuadrilateralShapeDetector from './QuadrilateralShapeDetector.js';
-import QuadrilateralSidePair from './QuadrilateralSidePair.js';
-import QuadrilateralVertexPair from './QuadrilateralVertexPair.js';
-import QuadrilateralUtils from './QuadrilateralUtils.js';
+import TProperty from '../../../../axon/js/TProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import QuadrilateralSideLabel from './QuadrilateralSideLabel.js';
-import QuadrilateralConstants from '../../QuadrilateralConstants.js';
+import Utils from '../../../../dot/js/Utils.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
+import quadrilateral from '../../quadrilateral.js';
+import QuadrilateralConstants from '../../QuadrilateralConstants.js';
+import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
+import NamedQuadrilateral from './NamedQuadrilateral.js';
+import ParallelSideChecker from './ParallelSideChecker.js';
+import QuadrilateralShapeDetector from './QuadrilateralShapeDetector.js';
+import QuadrilateralSide from './QuadrilateralSide.js';
+import QuadrilateralSideLabel from './QuadrilateralSideLabel.js';
+import QuadrilateralSidePair from './QuadrilateralSidePair.js';
+import QuadrilateralUtils from './QuadrilateralUtils.js';
+import QuadrilateralVertex from './QuadrilateralVertex.js';
+import QuadrilateralVertexLabel from './QuadrilateralVertexLabel.js';
+import QuadrilateralVertexPair from './QuadrilateralVertexPair.js';
 
 // Used when verifying that QuadrilateralVertex positions are valid before setting to the model.
 export type VertexLabelToProposedPositionMap = Map<QuadrilateralVertexLabel, Vector2>;

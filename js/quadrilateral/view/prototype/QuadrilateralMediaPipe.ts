@@ -17,14 +17,14 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import quadrilateral from '../../../quadrilateral.js';
-import MediaPipe, { HandLandmarks } from '../../../../../tangible/js/mediaPipe/MediaPipe.js';
-import QuadrilateralModel from '../../model/QuadrilateralModel.js';
 import Vector2 from '../../../../../dot/js/Vector2.js';
-import QuadrilateralShapeModel, { VertexLabelToProposedPositionMap } from '../../model/QuadrilateralShapeModel.js';
+import MediaPipe, { HandLandmarks } from '../../../../../tangible/js/mediaPipe/MediaPipe.js';
 import MediaPipeQueryParameters from '../../../../../tangible/js/mediaPipe/MediaPipeQueryParameters.js';
-import QuadrilateralTangibleController from './QuadrilateralTangibleController.js';
+import quadrilateral from '../../../quadrilateral.js';
+import QuadrilateralModel from '../../model/QuadrilateralModel.js';
+import QuadrilateralShapeModel, { VertexLabelToProposedPositionMap } from '../../model/QuadrilateralShapeModel.js';
 import QuadrilateralVertexLabel from '../../model/QuadrilateralVertexLabel.js';
+import QuadrilateralTangibleController from './QuadrilateralTangibleController.js';
 
 // aspect ratio of the video stream to map camera coordinates to sim model coordinates
 const streamDimension2 = MediaPipe.videoStreamDimension2;

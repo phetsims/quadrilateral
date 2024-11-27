@@ -7,19 +7,19 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import Property from '../../../../axon/js/Property.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import { Node, Rectangle, VoicingText, VoicingTextOptions } from '../../../../scenery/js/imports.js';
 import ExpandCollapseButton from '../../../../sun/js/ExpandCollapseButton.js';
-import quadrilateral from '../../quadrilateral.js';
-import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
-import QuadrilateralConstants from '../../QuadrilateralConstants.js';
-import Multilink from '../../../../axon/js/Multilink.js';
-import QuadrilateralStrings from '../../QuadrilateralStrings.js';
-import QuadrilateralColors from '../../QuadrilateralColors.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import quadrilateral from '../../quadrilateral.js';
+import QuadrilateralColors from '../../QuadrilateralColors.js';
+import QuadrilateralConstants from '../../QuadrilateralConstants.js';
+import QuadrilateralStrings from '../../QuadrilateralStrings.js';
+import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import QuadrilateralDescriber from './QuadrilateralDescriber.js';
-import { combineOptions } from '../../../../phet-core/js/optionize.js';
 
 // constants
 const squareStringProperty = QuadrilateralStrings.shapeNames.squareStringProperty;

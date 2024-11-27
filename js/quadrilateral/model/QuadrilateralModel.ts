@@ -9,21 +9,21 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
-import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
-import QuadrilateralShapeModel, { VertexLabelToProposedPositionMap } from './QuadrilateralShapeModel.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import Utils from '../../../../dot/js/Utils.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import QuadrilateralOptionsModel from './QuadrilateralOptionsModel.js';
-import TProperty from '../../../../axon/js/TProperty.js';
-import Emitter from '../../../../axon/js/Emitter.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import Emitter from '../../../../axon/js/Emitter.js';
+import TProperty from '../../../../axon/js/TProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Utils from '../../../../dot/js/Utils.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import TModel from '../../../../joist/js/TModel.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
+import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import TangibleConnectionModel from './prototype/TangibleConnectionModel.js';
+import QuadrilateralOptionsModel from './QuadrilateralOptionsModel.js';
+import QuadrilateralShapeModel, { VertexLabelToProposedPositionMap } from './QuadrilateralShapeModel.js';
 import QuadrilateralVisibilityModel from './QuadrilateralVisibilityModel.js';
-import TModel from '../../../../joist/js/TModel.js';
 
 export default class QuadrilateralModel implements TModel {
 

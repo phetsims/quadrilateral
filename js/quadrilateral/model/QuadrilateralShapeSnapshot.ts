@@ -10,12 +10,12 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import quadrilateral from '../../quadrilateral.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import quadrilateral from '../../quadrilateral.js';
+import NamedQuadrilateral from './NamedQuadrilateral.js';
 import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
 import QuadrilateralSideLabel from './QuadrilateralSideLabel.js';
 import QuadrilateralVertexLabel from './QuadrilateralVertexLabel.js';
-import NamedQuadrilateral from './NamedQuadrilateral.js';
 
 export default class QuadrilateralShapeSnapshot {
   public readonly isParallelogram: boolean;

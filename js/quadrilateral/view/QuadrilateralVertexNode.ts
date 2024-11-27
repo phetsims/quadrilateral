@@ -6,25 +6,25 @@
  * @author Jesse Greenberg
  */
 
-import { Circle, DragListener, Path, RichDragListener, SceneryEvent, Text } from '../../../../scenery/js/imports.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import QuadrilateralVertex from '../model/QuadrilateralVertex.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import QuadrilateralVertexDescriber from './QuadrilateralVertexDescriber.js';
-import { Shape } from '../../../../kite/js/imports.js';
-import QuadrilateralConstants from '../../QuadrilateralConstants.js';
-import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
-import grabHighPitch_mp3 from '../../../sounds/grabHighPitch_mp3.js';
-import boundaryReached_mp3 from '../../../../tambo/sounds/boundaryReached_mp3.js';
-import soundManager from '../../../../tambo/js/soundManager.js';
-import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralMovableNode, { QuadrilateralMovableNodeOptions } from './QuadrilateralMovableNode.js';
-import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import { Shape } from '../../../../kite/js/imports.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { Circle, DragListener, Path, RichDragListener, SceneryEvent, Text } from '../../../../scenery/js/imports.js';
+import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
+import soundManager from '../../../../tambo/js/soundManager.js';
+import boundaryReached_mp3 from '../../../../tambo/sounds/boundaryReached_mp3.js';
+import grabHighPitch_mp3 from '../../../sounds/grabHighPitch_mp3.js';
+import quadrilateral from '../../quadrilateral.js';
+import QuadrilateralConstants from '../../QuadrilateralConstants.js';
+import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import { VertexLabelToProposedPositionMap } from '../model/QuadrilateralShapeModel.js';
+import QuadrilateralVertex from '../model/QuadrilateralVertex.js';
+import QuadrilateralMovableNode, { QuadrilateralMovableNodeOptions } from './QuadrilateralMovableNode.js';
+import QuadrilateralVertexDescriber from './QuadrilateralVertexDescriber.js';
 
 // constants
 const LABEL_TEXT_FONT = new PhetFont( { size: 16, weight: 'bold' } );

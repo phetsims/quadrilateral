@@ -20,8 +20,8 @@
 
 import Utils from '../../../../../dot/js/Utils.js';
 import quadrilateral from '../../../quadrilateral.js';
-import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
+import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 
 export default class QuadrilateralSerialMessageSender {
   private readonly shapeModel: QuadrilateralShapeModel;

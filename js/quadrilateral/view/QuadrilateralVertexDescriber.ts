@@ -6,17 +6,17 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Range from '../../../../dot/js/Range.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
+import { PDOMValueType } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
+import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralVertex from '../model/QuadrilateralVertex.js';
 import QuadrilateralVertexLabel from '../model/QuadrilateralVertexLabel.js';
-import Range from '../../../../dot/js/Range.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import CornerGuideNode from './CornerGuideNode.js';
-import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
-import { PDOMValueType } from '../../../../scenery/js/imports.js';
 
 // constants
 const cornerAStringProperty = QuadrilateralStrings.a11y.cornerAStringProperty;

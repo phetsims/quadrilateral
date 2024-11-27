@@ -8,14 +8,14 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import { TReadOnlyEmitter } from '../../../../axon/js/TEmitter.js';
 import Property from '../../../../axon/js/Property.js';
+import { TReadOnlyEmitter } from '../../../../axon/js/TEmitter.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
-import QuadrilateralSidePair from './QuadrilateralSidePair.js';
 import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
+import QuadrilateralSidePair from './QuadrilateralSidePair.js';
 
 export default class ParallelSideChecker {
 

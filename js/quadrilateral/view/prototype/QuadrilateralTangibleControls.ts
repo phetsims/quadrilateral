@@ -11,17 +11,17 @@
  */
 
 import { Text, VBox } from '../../../../../scenery/js/imports.js';
+import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
+import Dialog from '../../../../../sun/js/Dialog.js';
+import Tandem from '../../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../../quadrilateral.js';
+import QuadrilateralColors from '../../../QuadrilateralColors.js';
 import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
 import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
-import QuadrilateralCalibrationContentNode from './QuadrilateralCalibrationContentNode.js';
-import Dialog from '../../../../../sun/js/Dialog.js';
-import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
-import QuadrilateralColors from '../../../QuadrilateralColors.js';
 import QuadrilateralQueryParameters from '../../QuadrilateralQueryParameters.js';
 import QuadrilateralBluetoothConnectionButton from './QuadrilateralBluetoothConnectionButton.js';
+import QuadrilateralCalibrationContentNode from './QuadrilateralCalibrationContentNode.js';
 import QuadrilateralSerialConnectionButton from './QuadrilateralSerialConnectionButton.js';
-import Tandem from '../../../../../tandem/js/Tandem.js';
 import QuadrilateralTangibleController from './QuadrilateralTangibleController.js';
 
 export default class QuadrilateralTangibleControls extends VBox {

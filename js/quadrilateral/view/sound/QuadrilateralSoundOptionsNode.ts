@@ -6,21 +6,21 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { Node, Text, TextOptions, VoicingText, VoicingTextOptions } from '../../../../../scenery/js/imports.js';
-import Tandem from '../../../../../tandem/js/Tandem.js';
-import quadrilateral from '../../../quadrilateral.js';
-import QuadrilateralSoundOptionsModel, { SoundDesign } from '../../model/QuadrilateralSoundOptionsModel.js';
-import PreferencesDialog from '../../../../../joist/js/preferences/PreferencesDialog.js';
-import AquaRadioButtonGroup from '../../../../../sun/js/AquaRadioButtonGroup.js';
-import PreferencesPanelSection from '../../../../../joist/js/preferences/PreferencesPanelSection.js';
-import QuadrilateralStrings from '../../../QuadrilateralStrings.js';
-import soundManager from '../../../../../tambo/js/soundManager.js';
-import ToggleSwitch, { ToggleSwitchOptions } from '../../../../../sun/js/ToggleSwitch.js';
-import PreferencesDialogConstants from '../../../../../joist/js/preferences/PreferencesDialogConstants.js';
-import PreferencesControl from '../../../../../joist/js/preferences/PreferencesControl.js';
-import { combineOptions } from '../../../../../phet-core/js/optionize.js';
 import PatternStringProperty from '../../../../../axon/js/PatternStringProperty.js';
 import JoistStrings from '../../../../../joist/js/JoistStrings.js';
+import PreferencesControl from '../../../../../joist/js/preferences/PreferencesControl.js';
+import PreferencesDialog from '../../../../../joist/js/preferences/PreferencesDialog.js';
+import PreferencesDialogConstants from '../../../../../joist/js/preferences/PreferencesDialogConstants.js';
+import PreferencesPanelSection from '../../../../../joist/js/preferences/PreferencesPanelSection.js';
+import { combineOptions } from '../../../../../phet-core/js/optionize.js';
+import { Node, Text, TextOptions, VoicingText, VoicingTextOptions } from '../../../../../scenery/js/imports.js';
+import AquaRadioButtonGroup from '../../../../../sun/js/AquaRadioButtonGroup.js';
+import ToggleSwitch, { ToggleSwitchOptions } from '../../../../../sun/js/ToggleSwitch.js';
+import soundManager from '../../../../../tambo/js/soundManager.js';
+import Tandem from '../../../../../tandem/js/Tandem.js';
+import quadrilateral from '../../../quadrilateral.js';
+import QuadrilateralStrings from '../../../QuadrilateralStrings.js';
+import QuadrilateralSoundOptionsModel, { SoundDesign } from '../../model/QuadrilateralSoundOptionsModel.js';
 
 // constants
 const shapeSoundsOptionsStringProperty = QuadrilateralStrings.preferencesDialog.shapeSoundOptionsStringProperty;

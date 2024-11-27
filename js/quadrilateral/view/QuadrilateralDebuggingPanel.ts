@@ -9,21 +9,21 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import Multilink from '../../../../axon/js/Multilink.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Dimension2 from '../../../../dot/js/Dimension2.js';
+import Range from '../../../../dot/js/Range.js';
+import Utils from '../../../../dot/js/Utils.js';
+import { combineOptions } from '../../../../phet-core/js/optionize.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
+import NumberControl from '../../../../scenery-phet/js/NumberControl.js';
+import { Node, NodeOptions, Rectangle, Text, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import { Node, NodeOptions, Rectangle, Text, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
-import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import Utils from '../../../../dot/js/Utils.js';
-import Property from '../../../../axon/js/Property.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import Range from '../../../../dot/js/Range.js';
-import NumberControl from '../../../../scenery-phet/js/NumberControl.js';
-import Multilink from '../../../../axon/js/Multilink.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
-import Dimension2 from '../../../../dot/js/Dimension2.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
-import { combineOptions } from '../../../../phet-core/js/optionize.js';
 
 // constants
 const TEXT_OPTIONS = { fontSize: 16 };

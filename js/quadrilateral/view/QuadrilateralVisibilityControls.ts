@@ -6,16 +6,16 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
-import { VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
-import quadrilateral from '../../quadrilateral.js';
-import Checkbox from '../../../../sun/js/Checkbox.js';
-import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import QuadrilateralIconFactory from './QuadrilateralIconFactory.js';
+import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
+import { VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
+import Checkbox from '../../../../sun/js/Checkbox.js';
+import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
+import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralVisibilityModel from '../model/QuadrilateralVisibilityModel.js';
+import QuadrilateralIconFactory from './QuadrilateralIconFactory.js';
 
 type SelfOptions = EmptySelfOptions;
 type QuadrilateralVisibilityControlsOptions = SelfOptions & StrictOmit<VBoxOptions, 'children'> & PickRequired<VBoxOptions, 'tandem'>;

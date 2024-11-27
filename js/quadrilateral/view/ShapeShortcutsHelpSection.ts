@@ -7,13 +7,13 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import localeProperty from '../../../../joist/js/i18n/localeProperty.js';
 import KeyboardHelpSection from '../../../../scenery-phet/js/keyboard/help/KeyboardHelpSection.js';
 import KeyboardHelpSectionRow from '../../../../scenery-phet/js/keyboard/help/KeyboardHelpSectionRow.js';
+import { voicingManager } from '../../../../scenery/js/imports.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralKeyboardHelpContent from './QuadrilateralKeyboardHelpContent.js';
-import { voicingManager } from '../../../../scenery/js/imports.js';
-import localeProperty from '../../../../joist/js/i18n/localeProperty.js';
 import QuadrilateralNode from './QuadrilateralNode.js';
 
 export default class ShapeShortcutsHelpSection extends KeyboardHelpSection {

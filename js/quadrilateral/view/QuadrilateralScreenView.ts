@@ -11,37 +11,37 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import Vector2 from '../../../../dot/js/Vector2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
-import QuadrilateralConstants from '../../QuadrilateralConstants.js';
-import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import { VBox } from '../../../../scenery/js/imports.js';
-import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
-import QuadrilateralNode from './QuadrilateralNode.js';
-import QuadrilateralSoundView from './sound/QuadrilateralSoundView.js';
-import QuadrilateralStrings from '../../QuadrilateralStrings.js';
-import QuadrilateralDescriber from './QuadrilateralDescriber.js';
-import QuadrilateralDebuggingPanel from './QuadrilateralDebuggingPanel.js';
-import QuadrilateralVisibilityControls from './QuadrilateralVisibilityControls.js';
-import QuadrilateralGridNode from './QuadrilateralGridNode.js';
-import QuadrilateralAlerter from './QuadrilateralAlerter.js';
-import QuadrilateralOptionsModel from '../model/QuadrilateralOptionsModel.js';
-import QuadrilateralMediaPipe from './prototype/QuadrilateralMediaPipe.js';
-import QuadrilateralDiagonalGuidesNode from './QuadrilateralDiagonalGuidesNode.js';
-import QuadrilateralShapeNameDisplay from './QuadrilateralShapeNameDisplay.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import MediaPipeQueryParameters from '../../../../tangible/js/mediaPipe/MediaPipeQueryParameters.js';
+import { SpeakableResolvedResponse } from '../../../../utterance-queue/js/ResponsePacket.js';
+import quadrilateral from '../../quadrilateral.js';
+import QuadrilateralConstants from '../../QuadrilateralConstants.js';
+import QuadrilateralStrings from '../../QuadrilateralStrings.js';
+import QuadrilateralModel from '../model/QuadrilateralModel.js';
+import QuadrilateralOptionsModel from '../model/QuadrilateralOptionsModel.js';
+import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
+import QuadrilateralMediaPipe from './prototype/QuadrilateralMediaPipe.js';
+import QuadrilateralTangibleController from './prototype/QuadrilateralTangibleController.js';
+import QuadrilateralTangibleControls from './prototype/QuadrilateralTangibleControls.js';
+import QuadrilateralAlerter from './QuadrilateralAlerter.js';
+import QuadrilateralDebuggingPanel from './QuadrilateralDebuggingPanel.js';
+import QuadrilateralDescriber from './QuadrilateralDescriber.js';
+import QuadrilateralDiagonalGuidesNode from './QuadrilateralDiagonalGuidesNode.js';
+import QuadrilateralGridNode from './QuadrilateralGridNode.js';
 import QuadrilateralInteractionCueNode from './QuadrilateralInteractionCueNode.js';
+import QuadrilateralModelViewTransform from './QuadrilateralModelViewTransform.js';
+import QuadrilateralNode from './QuadrilateralNode.js';
+import QuadrilateralShapeNameDisplay from './QuadrilateralShapeNameDisplay.js';
+import QuadrilateralVisibilityControls from './QuadrilateralVisibilityControls.js';
 import ResetShapeButton from './ResetShapeButton.js';
 import ShapeSoundsCheckbox from './ShapeSoundsCheckbox.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
 import SmallStepsLockToggleButton from './SmallStepsLockToggleButton.js';
-import QuadrilateralTangibleControls from './prototype/QuadrilateralTangibleControls.js';
-import QuadrilateralModelViewTransform from './QuadrilateralModelViewTransform.js';
-import QuadrilateralTangibleController from './prototype/QuadrilateralTangibleController.js';
-import { SpeakableResolvedResponse } from '../../../../utterance-queue/js/ResponsePacket.js';
+import QuadrilateralSoundView from './sound/QuadrilateralSoundView.js';
 
 export default class QuadrilateralScreenView extends ScreenView {
   private readonly model: QuadrilateralModel;

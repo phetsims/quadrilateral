@@ -6,17 +6,17 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Vector2 from '../../../../dot/js/Vector2.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
-import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralVertex from './QuadrilateralVertex.js';
-import { Line } from '../../../../scenery/js/imports.js';
-import { Line as LineShape, Shape } from '../../../../kite/js/imports.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import QuadrilateralSideLabel from './QuadrilateralSideLabel.js';
-import QuadrilateralMovable from './QuadrilateralMovable.js';
 import Property from '../../../../axon/js/Property.js';
 import TProperty from '../../../../axon/js/TProperty.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import { Line as LineShape, Shape } from '../../../../kite/js/imports.js';
+import { Line } from '../../../../scenery/js/imports.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
+import quadrilateral from '../../quadrilateral.js';
+import QuadrilateralMovable from './QuadrilateralMovable.js';
+import QuadrilateralSideLabel from './QuadrilateralSideLabel.js';
+import QuadrilateralVertex from './QuadrilateralVertex.js';
 
 export default class QuadrilateralSide extends QuadrilateralMovable {
 

@@ -6,13 +6,13 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import quadrilateral from '../../quadrilateral.js';
-import { Path } from '../../../../scenery/js/imports.js';
-import QuadrilateralSide from '../model/QuadrilateralSide.js';
-import { Line, Shape } from '../../../../kite/js/imports.js';
-import QuadrilateralColors from '../../QuadrilateralColors.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import { Line, Shape } from '../../../../kite/js/imports.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import { Path } from '../../../../scenery/js/imports.js';
+import quadrilateral from '../../quadrilateral.js';
+import QuadrilateralColors from '../../QuadrilateralColors.js';
+import QuadrilateralSide from '../model/QuadrilateralSide.js';
 
 const TICKS_PER_SEGMENT = 4;
 

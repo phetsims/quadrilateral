@@ -11,25 +11,25 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralModel from '../model/QuadrilateralModel.js';
-import Utterance from '../../../../utterance-queue/js/Utterance.js';
+import Utils from '../../../../dot/js/Utils.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Alerter from '../../../../scenery-phet/js/accessibility/describers/Alerter.js';
-import QuadrilateralScreenView from './QuadrilateralScreenView.js';
+import MovementAlerter from '../../../../scenery-phet/js/accessibility/describers/MovementAlerter.js';
 import { Voicing } from '../../../../scenery/js/imports.js';
 import ResponsePacket from '../../../../utterance-queue/js/ResponsePacket.js';
+import Utterance from '../../../../utterance-queue/js/Utterance.js';
+import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
+import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
+import QuadrilateralModel from '../model/QuadrilateralModel.js';
+import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralShapeSnapshot from '../model/QuadrilateralShapeSnapshot.js';
 import QuadrilateralSide from '../model/QuadrilateralSide.js';
-import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
-import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
-import MovementAlerter from '../../../../scenery-phet/js/accessibility/describers/MovementAlerter.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import QuadrilateralVertex from '../model/QuadrilateralVertex.js';
-import Utils from '../../../../dot/js/Utils.js';
-import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import QuadrilateralDescriber, { NullableQuadrilateralStringType } from './QuadrilateralDescriber.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
+import QuadrilateralScreenView from './QuadrilateralScreenView.js';
 import QuadrilateralVertexDescriber from './QuadrilateralVertexDescriber.js';
 
 // constants - Voicing strings are not translatable so we just use the StringProperty initial value

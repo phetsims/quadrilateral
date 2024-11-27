@@ -6,15 +6,15 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import quadrilateral from '../../quadrilateral.js';
-import QuadrilateralSide from '../model/QuadrilateralSide.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Range from '../../../../dot/js/Range.js';
-import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
+import QuadrilateralSide from '../model/QuadrilateralSide.js';
 import { NullableQuadrilateralStringType } from './QuadrilateralDescriber.js';
 
 // constants

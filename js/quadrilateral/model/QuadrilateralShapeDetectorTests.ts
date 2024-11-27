@@ -8,10 +8,10 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import NamedQuadrilateral from './NamedQuadrilateral.js';
 import QuadrilateralShapeDetector from './QuadrilateralShapeDetector.js';
 import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
-import NamedQuadrilateral from './NamedQuadrilateral.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
 import QuadrilateralVertexLabel from './QuadrilateralVertexLabel.js';
 
 QUnit.module( 'BooleanProperty' );
