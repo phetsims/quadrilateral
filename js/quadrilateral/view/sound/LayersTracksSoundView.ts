@@ -1,4 +1,4 @@
-// Copyright 2022-2023, University of Colorado Boulder
+// Copyright 2022-2024, University of Colorado Boulder
 
 /**
  * In this design, tracks are mapped to a shape name and a sub-set of tracks will play at one time. Geometric
