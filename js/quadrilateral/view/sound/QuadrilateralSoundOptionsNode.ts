@@ -90,12 +90,6 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
       tandem: tandem.createTandem( 'soundDesignRadioButtonGroup' )
     } );
 
-    // Voice the radio button on selection. We considered putting this in AquaRadioButton, but the design
-    // team indicated different radio buttons might voice different content (not just the name response).
-    soundDesignRadioButtonGroup.onInputEmitter.addListener( () => {
-      soundDesignRadioButtonGroup.getButton( model.soundDesignProperty.value ).voicingSpeakNameResponse();
-    } );
-
     super( {
       contentNode: new Node( {
         children: [ soundsPlayForeverPreferencesControl, shapeSoundOptionsLabelText, shapeSoundOptionsDescriptionText, soundDesignRadioButtonGroup ]
