@@ -11,7 +11,8 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Ray2 from '../../../../dot/js/Ray2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import { Line, Shape } from '../../../../kite/js/imports.js';
+import { Line } from '../../../../kite/js/segments/Segment.js';
+import Shape from '../../../../kite/js/Shape.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralVertex from './QuadrilateralVertex.js';
 

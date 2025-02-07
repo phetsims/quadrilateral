@@ -9,11 +9,15 @@
 import Multilink from '../../../../axon/js/Multilink.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import { Line, Shape } from '../../../../kite/js/imports.js';
+import { Line } from '../../../../kite/js/segments/Segment.js';
+import Shape from '../../../../kite/js/Shape.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import { Line as LineNode, Path, RichDragListener, SceneryEvent } from '../../../../scenery/js/imports.js';
+import SceneryEvent from '../../../../scenery/js/input/SceneryEvent.js';
+import RichDragListener from '../../../../scenery/js/listeners/RichDragListener.js';
+import LineNode from '../../../../scenery/js/nodes/Line.js'; // eslint-disable-line phet/default-import-match-filename
+import Path from '../../../../scenery/js/nodes/Path.js';
 import release_mp3 from '../../../../tambo/sounds/release_mp3.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';

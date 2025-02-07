@@ -10,7 +10,7 @@
 import localeProperty from '../../../../joist/js/i18n/localeProperty.js';
 import KeyboardHelpSection from '../../../../scenery-phet/js/keyboard/help/KeyboardHelpSection.js';
 import KeyboardHelpSectionRow from '../../../../scenery-phet/js/keyboard/help/KeyboardHelpSectionRow.js';
-import { voicingManager } from '../../../../scenery/js/imports.js';
+import voicingManager from '../../../../scenery/js/accessibility/voicing/voicingManager.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralKeyboardHelpContent from './QuadrilateralKeyboardHelpContent.js';

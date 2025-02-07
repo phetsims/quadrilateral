@@ -8,12 +8,17 @@
 
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import { Shape } from '../../../../kite/js/imports.js';
+import Shape from '../../../../kite/js/Shape.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Circle, DragListener, Path, RichDragListener, SceneryEvent, Text } from '../../../../scenery/js/imports.js';
+import SceneryEvent from '../../../../scenery/js/input/SceneryEvent.js';
+import DragListener from '../../../../scenery/js/listeners/DragListener.js';
+import RichDragListener from '../../../../scenery/js/listeners/RichDragListener.js';
+import Circle from '../../../../scenery/js/nodes/Circle.js';
+import Path from '../../../../scenery/js/nodes/Path.js';
+import Text from '../../../../scenery/js/nodes/Text.js';
 import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
 import boundaryReached_mp3 from '../../../../tambo/sounds/boundaryReached_mp3.js';

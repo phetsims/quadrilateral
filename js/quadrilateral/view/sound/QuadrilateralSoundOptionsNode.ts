@@ -13,7 +13,9 @@ import PreferencesDialog from '../../../../../joist/js/preferences/PreferencesDi
 import PreferencesDialogConstants from '../../../../../joist/js/preferences/PreferencesDialogConstants.js';
 import PreferencesPanelSection from '../../../../../joist/js/preferences/PreferencesPanelSection.js';
 import { combineOptions } from '../../../../../phet-core/js/optionize.js';
-import { Node, Text, TextOptions, VoicingText, VoicingTextOptions } from '../../../../../scenery/js/imports.js';
+import VoicingText, { VoicingTextOptions } from '../../../../../scenery/js/accessibility/voicing/nodes/VoicingText.js';
+import Node from '../../../../../scenery/js/nodes/Node.js';
+import Text, { TextOptions } from '../../../../../scenery/js/nodes/Text.js';
 import AquaRadioButtonGroup from '../../../../../sun/js/AquaRadioButtonGroup.js';
 import ToggleSwitch, { ToggleSwitchOptions } from '../../../../../sun/js/ToggleSwitch.js';
 import soundManager from '../../../../../tambo/js/soundManager.js';

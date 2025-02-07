@@ -9,7 +9,7 @@
 import PreferencesModel from '../../joist/js/preferences/PreferencesModel.js';
 import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
-import { Node } from '../../scenery/js/imports.js';
+import Node from '../../scenery/js/nodes/Node.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import QuadrilateralOptionsModel from './quadrilateral/model/QuadrilateralOptionsModel.js';
 import QuadrilateralScreen from './quadrilateral/QuadrilateralScreen.js';

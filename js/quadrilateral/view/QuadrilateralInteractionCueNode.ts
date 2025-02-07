@@ -9,9 +9,10 @@
 
 import Emitter from '../../../../axon/js/Emitter.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import { Line, Shape } from '../../../../kite/js/imports.js';
+import { Line } from '../../../../kite/js/segments/Segment.js';
+import Shape from '../../../../kite/js/Shape.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import { Path } from '../../../../scenery/js/imports.js';
+import Path from '../../../../scenery/js/nodes/Path.js';
 import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralColors from '../../QuadrilateralColors.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';

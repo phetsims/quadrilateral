@@ -17,7 +17,7 @@ import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Alerter from '../../../../scenery-phet/js/accessibility/describers/Alerter.js';
 import MovementAlerter from '../../../../scenery-phet/js/accessibility/describers/MovementAlerter.js';
-import { Voicing } from '../../../../scenery/js/imports.js';
+import Voicing from '../../../../scenery/js/accessibility/voicing/Voicing.js';
 import ResponsePacket from '../../../../utterance-queue/js/ResponsePacket.js';
 import Utterance from '../../../../utterance-queue/js/Utterance.js';
 import quadrilateral from '../../quadrilateral.js';

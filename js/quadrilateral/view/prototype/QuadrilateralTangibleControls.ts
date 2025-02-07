@@ -10,7 +10,8 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { Text, VBox } from '../../../../../scenery/js/imports.js';
+import VBox from '../../../../../scenery/js/layout/nodes/VBox.js';
+import Text from '../../../../../scenery/js/nodes/Text.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import Dialog from '../../../../../sun/js/Dialog.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
