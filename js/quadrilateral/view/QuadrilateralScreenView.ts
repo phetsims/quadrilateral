@@ -1,4 +1,4 @@
-// Copyright 2021-2024, University of Colorado Boulder
+// Copyright 2021-2025, University of Colorado Boulder
 
 /**
  * The ScreenView for this simulation. For readability, implementation of this class is broken into blocks of code that

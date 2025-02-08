@@ -1,4 +1,4 @@
-// Copyright 2022-2024, University of Colorado Boulder
+// Copyright 2022-2025, University of Colorado Boulder
 
 /**
  * Draws a diagonal line across the opposite pairs of vertex corners. Line extends across the model bounds.

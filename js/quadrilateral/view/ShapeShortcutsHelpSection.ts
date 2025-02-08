@@ -1,4 +1,4 @@
-// Copyright 2023-2024, University of Colorado Boulder
+// Copyright 2023-2025, University of Colorado Boulder
 
 /**
  * Help content for the KeyboardHelpDialog, describing how to reset the shape and get information about the shape
