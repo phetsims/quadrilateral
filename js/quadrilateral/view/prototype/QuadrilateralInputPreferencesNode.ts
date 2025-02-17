@@ -26,7 +26,7 @@ import QuadrilateralTangibleOptionsModel from '../../model/prototype/Quadrilater
 // Strings for the content - this is a prototype so it is not translatable yet.
 const mediaPipeFeatureDescriptionString = 'Use custom hand gestures and movements to control objects in the sim. Please see the Teacher Tips for specific gestures, movements, and object mappings.';
 const tangibleNumberControlsDescriptionString = 'Use sliders to adjust the mapping and communication parameters between the simulation and BLE-enabled device to reduce noise-related jitter.';
-const labelledDescriptionPatternStringProperty = JoistStrings.a11y.preferences.tabs.labelledDescriptionPatternStringProperty;
+const labelledDescriptionPatternStringProperty = JoistStrings.a11y.translatable.preferences.tabs.labelledDescriptionPatternStringProperty;
 const deviceInputString = 'Device Input';
 
 // Options reused for text that will NOT be translatable for now.
