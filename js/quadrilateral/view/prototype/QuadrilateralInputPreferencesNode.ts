@@ -8,7 +8,7 @@
 
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import JoistStrings from '../../../../../joist/js/JoistStrings.js';
-import PreferencesDialog from '../../../../../joist/js/preferences/PreferencesDialog.js';
+import PreferencesDialogConstants from '../../../../../joist/js/preferences/PreferencesDialogConstants.js';
 import optionize, { combineOptions } from '../../../../../phet-core/js/optionize.js';
 import StrictOmit from '../../../../../phet-core/js/types/StrictOmit.js';
 import StringUtils from '../../../../../phetcommon/js/util/StringUtils.js';
@@ -67,14 +67,14 @@ export default class QuadrilateralInputPreferencesNode extends VBox {
     else {
 
       // Controls specifically for tangible connection
-      const titleNode = new Text( deviceInputString, combineOptions<TextOptions>( {}, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS, {
+      const titleNode = new Text( deviceInputString, combineOptions<TextOptions>( {}, PreferencesDialogConstants.PANEL_SECTION_LABEL_OPTIONS, {
 
         // pdom
         tagName: 'h3',
         innerContent: deviceInputString
       } ) );
       const descriptionNode = new VoicingRichText( tangibleNumberControlsDescriptionString, combineOptions<VoicingRichTextOptions>(
-        {}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, NON_TRANSLATABLE_TEXT_OPTIONS, {
+        {}, PreferencesDialogConstants.PANEL_SECTION_CONTENT_OPTIONS, NON_TRANSLATABLE_TEXT_OPTIONS, {
           readingBlockNameResponse: StringUtils.fillIn( labelledDescriptionPatternStringProperty, {
             label: deviceInputString,
             description: tangibleNumberControlsDescriptionString
@@ -114,7 +114,7 @@ export default class QuadrilateralInputPreferencesNode extends VBox {
     const content = new VBox( {
       children: children,
       align: 'left',
-      spacing: PreferencesDialog.CONTENT_SPACING
+      spacing: PreferencesDialogConstants.CONTENT_SPACING
     } );
 
     super( {
@@ -134,7 +134,7 @@ class TangiblePropertyNumberControl extends VBox {
 
     const options = optionize<TangiblePropertyNumberControlOptions, TangiblePropertyNumberControlSelfOptions, NumberControlOptions>()( {
       delta: propertyRange.min,
-      titleNodeOptions: PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS,
+      titleNodeOptions: PreferencesDialogConstants.PANEL_SECTION_CONTENT_OPTIONS,
       layoutFunction: NumberControl.createLayoutFunction1( { align: 'left' } ),
 
       // pdom
@@ -182,12 +182,12 @@ class TangiblePropertyNumberControl extends VBox {
     } );
 
     // a text descriptoin for this control
-    const descriptionText = new VoicingRichText( description, combineOptions<VoicingRichTextOptions>( {}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, NON_TRANSLATABLE_TEXT_OPTIONS ) );
+    const descriptionText = new VoicingRichText( description, combineOptions<VoicingRichTextOptions>( {}, PreferencesDialogConstants.PANEL_SECTION_CONTENT_OPTIONS, NON_TRANSLATABLE_TEXT_OPTIONS ) );
 
     super( {
       children: [ numberControl, descriptionText ],
       align: 'left',
-      spacing: PreferencesDialog.LABEL_CONTENT_SPACING
+      spacing: PreferencesDialogConstants.LABEL_CONTENT_SPACING
     } );
   }
 }

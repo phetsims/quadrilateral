@@ -9,7 +9,6 @@
 import PatternStringProperty from '../../../../../axon/js/PatternStringProperty.js';
 import JoistStrings from '../../../../../joist/js/JoistStrings.js';
 import PreferencesControl from '../../../../../joist/js/preferences/PreferencesControl.js';
-import PreferencesDialog from '../../../../../joist/js/preferences/PreferencesDialog.js';
 import PreferencesDialogConstants from '../../../../../joist/js/preferences/PreferencesDialogConstants.js';
 import PreferencesPanelSection from '../../../../../joist/js/preferences/PreferencesPanelSection.js';
 import { combineOptions } from '../../../../../phet-core/js/optionize.js';
@@ -38,7 +37,7 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
   public constructor( model: QuadrilateralSoundOptionsModel, tandem: Tandem ) {
 
     // Sounds play forever control
-    const soundsPlayForeverLabel = new Text( preferencesDialogPlayShapeSoundsForeverStringProperty, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
+    const soundsPlayForeverLabel = new Text( preferencesDialogPlayShapeSoundsForeverStringProperty, PreferencesDialogConstants.PANEL_SECTION_LABEL_OPTIONS );
     const soundsPlayForeverToggleSwitch = new ToggleSwitch( model.tracksPlayForeverProperty, false, true, combineOptions<ToggleSwitchOptions>( {}, {
       accessibleName: preferencesDialogPlayShapeSoundsForeverStringProperty,
       rightValueContextResponse: tracksPlayForeverCheckedContextResponseStringProperty,
@@ -57,18 +56,18 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
     }, { tandem: Tandem.OPT_OUT } );
 
     // Shape Sound Options controls
-    const shapeSoundOptionsLabelText = new Text( shapeSoundsOptionsStringProperty, combineOptions<TextOptions>( {}, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS, {
+    const shapeSoundOptionsLabelText = new Text( shapeSoundsOptionsStringProperty, combineOptions<TextOptions>( {}, PreferencesDialogConstants.PANEL_SECTION_LABEL_OPTIONS, {
       tagName: 'h3',
       innerContent: shapeSoundsOptionsStringProperty
     } ) );
     const shapeSoundOptionsDescriptionText = new VoicingText( shapeSoundsOptionsDescriptionStringProperty, combineOptions<VoicingTextOptions>( {}, {
       readingBlockNameResponse: shapeSoundDescriptionReadingBlockContentStringProperty
-    }, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ) );
+    }, PreferencesDialogConstants.PANEL_SECTION_CONTENT_OPTIONS ) );
 
     const soundDesignRadioButtonGroup = new AquaRadioButtonGroup( model.soundDesignProperty, [
       {
         value: SoundDesign.TRACKS_LAYER,
-        createNode: () => new Text( preferencesDialogLayerSoundDesignDescriptionStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
+        createNode: () => new Text( preferencesDialogLayerSoundDesignDescriptionStringProperty, PreferencesDialogConstants.PANEL_SECTION_CONTENT_OPTIONS ),
         tandemName: 'layersTracksSoundViewRadioButton',
         options: {
           accessibleName: preferencesDialogLayerSoundDesignDescriptionStringProperty,
@@ -77,7 +76,7 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
       },
       {
         value: SoundDesign.TRACKS_UNIQUE,
-        createNode: () => new Text( preferencesDialogUniqueSoundDesignDescriptionStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
+        createNode: () => new Text( preferencesDialogUniqueSoundDesignDescriptionStringProperty, PreferencesDialogConstants.PANEL_SECTION_CONTENT_OPTIONS ),
         tandemName: 'emphasisTracksSoundViewRadioButton',
         options: {
           accessibleName: preferencesDialogUniqueSoundDesignDescriptionStringProperty,
@@ -104,9 +103,9 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
     } );
 
     // layout
-    shapeSoundOptionsLabelText.leftTop = soundsPlayForeverPreferencesControl.leftBottom.plusXY( 0, PreferencesDialog.CONTENT_SPACING );
-    shapeSoundOptionsDescriptionText.leftTop = shapeSoundOptionsLabelText.leftBottom.plusXY( 0, PreferencesDialog.VERTICAL_CONTENT_SPACING );
-    soundDesignRadioButtonGroup.leftTop = shapeSoundOptionsDescriptionText.leftBottom.plusXY( PreferencesDialog.CONTENT_INDENTATION_SPACING, PreferencesDialog.VERTICAL_CONTENT_SPACING );
+    shapeSoundOptionsLabelText.leftTop = soundsPlayForeverPreferencesControl.leftBottom.plusXY( 0, PreferencesDialogConstants.CONTENT_SPACING );
+    shapeSoundOptionsDescriptionText.leftTop = shapeSoundOptionsLabelText.leftBottom.plusXY( 0, PreferencesDialogConstants.VERTICAL_CONTENT_SPACING );
+    soundDesignRadioButtonGroup.leftTop = shapeSoundOptionsDescriptionText.leftBottom.plusXY( PreferencesDialogConstants.CONTENT_INDENTATION_SPACING, PreferencesDialogConstants.VERTICAL_CONTENT_SPACING );
   }
 }
 
