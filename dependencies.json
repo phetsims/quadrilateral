@@ -1,5 +1,5 @@
 {
-  "comment": "# quadrilateral 1.1.10-rc.1 Wed Mar 19 2025 15:09:41 GMT-0400 (Eastern Daylight Time)",
+  "comment": "# quadrilateral 1.1.10 Wed Mar 19 2025 18:16:49 GMT-0400 (Eastern Daylight Time)",
   "assert": {
     "sha": "cc59d7f0574270924a886cb3d43a1b7507cd0553",
     "branch": "HEAD"
@@ -57,7 +57,7 @@
     "branch": "HEAD"
   },
   "quadrilateral": {
-    "sha": "3520d29cd26d04adbddb61fcbbb4cfc7390c3708",
+    "sha": "3492b11fc9dff08465d2b630fd3a53cdb324c9ea",
     "branch": "1.1"
   },
   "query-string-machine": {
