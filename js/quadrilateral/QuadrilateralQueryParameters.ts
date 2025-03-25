@@ -8,6 +8,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import { QueryStringMachine } from '../../../query-string-machine/js/QueryStringMachineModule.js';
 import quadrilateral from '../quadrilateral.js';
 
 const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
