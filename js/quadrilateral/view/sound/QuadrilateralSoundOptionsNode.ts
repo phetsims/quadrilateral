@@ -56,10 +56,7 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
     }, { tandem: Tandem.OPT_OUT } );
 
     // Shape Sound Options controls
-    const shapeSoundOptionsLabelText = new Text( shapeSoundsOptionsStringProperty, combineOptions<TextOptions>( {}, PreferencesDialogConstants.PANEL_SECTION_LABEL_OPTIONS, {
-      tagName: 'h3',
-      innerContent: shapeSoundsOptionsStringProperty
-    } ) );
+    const shapeSoundOptionsLabelText = new Text( shapeSoundsOptionsStringProperty, combineOptions<TextOptions>( {}, PreferencesDialogConstants.PANEL_SECTION_LABEL_OPTIONS ) );
     const shapeSoundOptionsDescriptionText = new VoicingText( shapeSoundsOptionsDescriptionStringProperty, combineOptions<VoicingTextOptions>( {}, {
       readingBlockNameResponse: shapeSoundDescriptionReadingBlockContentStringProperty
     }, PreferencesDialogConstants.PANEL_SECTION_CONTENT_OPTIONS ) );
@@ -93,7 +90,8 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
 
     super( {
       contentNode: new Node( {
-        children: [ soundsPlayForeverPreferencesControl, shapeSoundOptionsLabelText, shapeSoundOptionsDescriptionText, soundDesignRadioButtonGroup ]
+        children: [ soundsPlayForeverPreferencesControl, shapeSoundOptionsLabelText, shapeSoundOptionsDescriptionText, soundDesignRadioButtonGroup ],
+        accessibleHeading: shapeSoundsOptionsStringProperty
       } ),
 
       // The shape sound options should only be available when sounds are enabled. joist disables all audio

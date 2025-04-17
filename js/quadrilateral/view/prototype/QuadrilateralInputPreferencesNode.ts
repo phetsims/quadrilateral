@@ -70,8 +70,7 @@ export default class QuadrilateralInputPreferencesNode extends VBox {
       const titleNode = new Text( deviceInputString, combineOptions<TextOptions>( {}, PreferencesDialogConstants.PANEL_SECTION_LABEL_OPTIONS, {
 
         // pdom
-        tagName: 'h3',
-        innerContent: deviceInputString
+        accessibleHeading: deviceInputString
       } ) );
       const descriptionNode = new VoicingRichText( tangibleNumberControlsDescriptionString, combineOptions<VoicingRichTextOptions>(
         {}, PreferencesDialogConstants.PANEL_SECTION_CONTENT_OPTIONS, NON_TRANSLATABLE_TEXT_OPTIONS, {
