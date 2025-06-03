@@ -225,14 +225,14 @@ export default class QuadrilateralScreenView extends ScreenView {
   }
 
   /**
-   * Get the content that is spoken from the Voicing toolbar to describe this ScreenView.
+   * Get the content that is spoken from the VoicingToolbar to describe this ScreenView.
    */
   public override getVoicingOverviewContent(): SpeakableResolvedResponse {
     return QuadrilateralStrings.a11y.voicing.overviewContentStringProperty;
   }
 
   /**
-   * Get the details content that is spoken from the Voicing toolbar to describe details about the simulation.
+   * Get the details content that is spoken from the VoicingToolbar to describe details about the simulation.
    */
   public override getVoicingDetailsContent(): SpeakableResolvedResponse {
     const firstStatement = this.quadrilateralDescriber.getFirstDetailsStatement();
@@ -260,7 +260,7 @@ export default class QuadrilateralScreenView extends ScreenView {
   }
 
   /**
-   * Get the content that is spoken from the Voicing toolbar to describe this ScreenView. In this sim we use the hint
+   * Get the content that is spoken from the VoicingToolbar to describe this ScreenView. In this sim we use the hint
    * button to describe the parallelogram state and shape name of the quadrilateral.
    */
   public override getVoicingHintContent(): SpeakableResolvedResponse {

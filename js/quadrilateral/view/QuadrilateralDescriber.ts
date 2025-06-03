@@ -359,7 +359,7 @@ export default class QuadrilateralDescriber {
   }
 
   /**
-   * Returns the first details statement for the Voicing toolbar. Details are broken up into numbered statements.
+   * Returns the first details statement for the Voicingtoolbar. Details are broken up into numbered statements.
    * This first one provides the current named shape and its size.
    */
   public getFirstDetailsStatement(): string {
@@ -378,7 +378,7 @@ export default class QuadrilateralDescriber {
   }
 
   /**
-   * Returns the second "details" statement for the Voicing toolbar. Details are broken up into three numbered
+   * Returns the second "details" statement for the VoicingToolbar. Details are broken up into three numbered
    * statements. This one is a summary about equal corner angles and equal side lengths. Will return something like
    * "Right now, opposite corners are equal and opposite sides are equal." or
    * "Right now, on pair of opposite corners are equal and opposite sides are equal" or
@@ -430,7 +430,7 @@ export default class QuadrilateralDescriber {
   }
 
   /**
-   * Returns the third "details" statement for the Voicing toolbar. This is a qualitative description of the current
+   * Returns the third "details" statement for the VoicingToolbar. This is a qualitative description of the current
    * shape, that does not include shape name.
    */
   public getThirdDetailsStatement(): NullableQuadrilateralStringType {
@@ -491,7 +491,7 @@ export default class QuadrilateralDescriber {
   }
 
   /**
-   * The fourth description of the "details" button in the Voicing toolbar. Returns a description of the longest and
+   * The fourth description of the "details" button in the VoicingToolbar. Returns a description of the longest and
    * shortest sides of the shape. Only returns a string if shape "markers" are displayed - otherwise this more
    * quantitative content is skipped.
    */
@@ -560,7 +560,7 @@ export default class QuadrilateralDescriber {
   }
 
   /**
-   * The fifth statement of the "details" button in the Voicing toolbar. Returns a description of the widest and
+   * The fifth statement of the "details" button in the VoicingToolbar. Returns a description of the widest and
    * smallest angles of the shape. Only returns a string if corner guides are displayed - otherwise this more
    * quantitative content is skipped.
    */
