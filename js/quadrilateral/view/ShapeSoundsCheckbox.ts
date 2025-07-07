@@ -31,9 +31,9 @@ export default class ShapeSoundsCheckbox extends Checkbox {
 
       // voicing
       voicingNameResponse: shapeSoundControlNameResponseStringProperty,
-      checkedContextResponse: shapeSoundControlEnabledContextResponseStringProperty,
+      accessibleContextResponseChecked: shapeSoundControlEnabledContextResponseStringProperty,
       voicingHintResponse: shapeSoundControlHintResponseStringProperty,
-      uncheckedContextResponse: shapeSoundControlDisabledContextResponseStringProperty,
+      accessibleContextResponseUnchecked: shapeSoundControlDisabledContextResponseStringProperty,
 
       // phet-io
       tandem: tandem

@@ -44,8 +44,8 @@ export default class QuadrilateralVisibilityControls extends VBox {
       voicingHintResponse: QuadrilateralStrings.a11y.cornerLabelsHintResponseStringProperty,
 
       // a11y
-      checkedContextResponse: QuadrilateralStrings.a11y.cornerLabelsAddedResponseStringProperty,
-      uncheckedContextResponse: QuadrilateralStrings.a11y.cornerLabelsRemovedResponseStringProperty,
+      accessibleContextResponseChecked: QuadrilateralStrings.a11y.cornerLabelsAddedResponseStringProperty,
+      accessibleContextResponseUnchecked: QuadrilateralStrings.a11y.cornerLabelsRemovedResponseStringProperty,
 
       // phet-io
       tandem: options.tandem.createTandem( 'cornerLabelsCheckbox' )
@@ -63,8 +63,8 @@ export default class QuadrilateralVisibilityControls extends VBox {
       voicingHintResponse: QuadrilateralStrings.a11y.markersHintResponseStringProperty,
 
       // a11y
-      checkedContextResponse: QuadrilateralStrings.a11y.markersAddedResponseStringProperty,
-      uncheckedContextResponse: QuadrilateralStrings.a11y.markersRemovedResponseStringProperty,
+      accessibleContextResponseChecked: QuadrilateralStrings.a11y.markersAddedResponseStringProperty,
+      accessibleContextResponseUnchecked: QuadrilateralStrings.a11y.markersRemovedResponseStringProperty,
 
       // phet-io
       tandem: options.tandem.createTandem( 'markersCheckbox' )
@@ -82,8 +82,8 @@ export default class QuadrilateralVisibilityControls extends VBox {
       voicingHintResponse: QuadrilateralStrings.a11y.diagonalGuidesHintResponseStringProperty,
 
       // a11y
-      checkedContextResponse: QuadrilateralStrings.a11y.diagonalGuidesAddedResponseStringProperty,
-      uncheckedContextResponse: QuadrilateralStrings.a11y.diagonalGuidesRemovedResponseStringProperty,
+      accessibleContextResponseChecked: QuadrilateralStrings.a11y.diagonalGuidesAddedResponseStringProperty,
+      accessibleContextResponseUnchecked: QuadrilateralStrings.a11y.diagonalGuidesRemovedResponseStringProperty,
 
       // phet-io
       tandem: options.tandem.createTandem( 'diagonalGuidesCheckbox' )
@@ -101,8 +101,8 @@ export default class QuadrilateralVisibilityControls extends VBox {
       voicingHintResponse: QuadrilateralStrings.a11y.gridLinesHintResponseStringProperty,
 
       // a11y
-      checkedContextResponse: QuadrilateralStrings.a11y.gridLinesAddedResponseStringProperty,
-      uncheckedContextResponse: QuadrilateralStrings.a11y.gridLinesRemovedResponseStringProperty,
+      accessibleContextResponseChecked: QuadrilateralStrings.a11y.gridLinesAddedResponseStringProperty,
+      accessibleContextResponseUnchecked: QuadrilateralStrings.a11y.gridLinesRemovedResponseStringProperty,
 
       // phet-io
       tandem: options.tandem.createTandem( 'gridCheckbox' )
