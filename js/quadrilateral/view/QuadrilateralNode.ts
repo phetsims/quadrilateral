@@ -290,7 +290,7 @@ export default class QuadrilateralNode extends Voicing( Node ) {
   }
 
   public static readonly RESET_SHAPE_HOTKEY_DATA = new HotkeyData( {
-    keyStringProperties: [ new Property( 'alt+shift+r' ) ],
+    keys: [ 'alt+shift+r' ],
     keyboardHelpDialogLabelStringProperty: QuadrilateralStrings.keyboardHelpDialog.resetShapeStringProperty,
     keyboardHelpDialogPDOMLabelStringProperty: StringUtils.fillIn( resetShapeDescriptionStringProperty, {
           altOrOption: TextKeyNode.getAltKeyString()
@@ -300,7 +300,7 @@ export default class QuadrilateralNode extends Voicing( Node ) {
   } );
 
   public static readonly CHECK_SHAPE_HOTKEY_DATA = new HotkeyData( {
-    keyStringProperties: [ new Property( 'alt+c' ) ],
+    keys: [ 'alt+c' ],
 
     // Voicing is NOT translatable and won't be for a very long time. This content is invisible in non-english locales and
     // when Voicing is not supported.
@@ -313,7 +313,7 @@ export default class QuadrilateralNode extends Voicing( Node ) {
   } );
 
   public static readonly SHIFT_HOTKEY_DATA = new HotkeyData( {
-    keyStringProperties: [ new Property( 'shift' ) ],
+    keys: [ 'shift' ],
     binderName: 'Snap to Fine Intervals',
     global: true,
     repoName: quadrilateral.name

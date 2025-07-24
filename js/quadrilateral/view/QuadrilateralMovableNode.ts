@@ -6,7 +6,6 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
@@ -150,7 +149,7 @@ export default class QuadrilateralMovableNode extends Voicing( Node ) {
   }
 
   public static readonly SPEAK_DETAILS_HOTKEY_DATA = new HotkeyData( {
-    keyStringProperties: [ new Property( 'enter' ), new Property( 'space' ) ],
+    keys: [ 'enter', 'space' ],
     binderName: 'Speak details',
     repoName: quadrilateral.name,
     global: true
