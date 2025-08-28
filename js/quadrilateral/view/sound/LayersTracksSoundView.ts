@@ -12,7 +12,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
+import { TReadOnlyProperty } from '../../../../../axon/js/TReadOnlyProperty.js';
 import quadTrackBackgroundRhythmInverted_mp3 from '../../../../sounds/quadTrackBackgroundRhythmInverted_mp3.js';
 import quadTrackBackgroundRhythmSimple_mp3 from '../../../../sounds/quadTrackBackgroundRhythmSimple_mp3.js';
 import quadTrackHighBellsFallAndRise_mp3 from '../../../../sounds/quadTrackHighBellsFallAndRise_mp3.js';

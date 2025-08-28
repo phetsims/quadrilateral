@@ -12,7 +12,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
+import { TReadOnlyProperty } from '../../../../../axon/js/TReadOnlyProperty.js';
 import LinearFunction from '../../../../../dot/js/LinearFunction.js';
 import Enumeration from '../../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../../phet-core/js/EnumerationValue.js';

@@ -9,7 +9,7 @@
 
 import Multilink from '../../../../axon/js/Multilink.js';
 import Property from '../../../../axon/js/Property.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import { TReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import VoicingText, { VoicingTextOptions } from '../../../../scenery/js/accessibility/voicing/nodes/VoicingText.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
