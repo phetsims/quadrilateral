@@ -303,9 +303,6 @@ type StringsType = {
       }
     };
     'keyboardHelpDialog': {
-      'checkShapeDescriptionPatternStringProperty': LocalizedStringProperty;
-      'resetShapeDescriptionPatternStringProperty': LocalizedStringProperty;
-      'moveShapeDescriptionStringProperty': LocalizedStringProperty;
       'smallerStepsDescriptionStringProperty': LocalizedStringProperty;
     };
     'preferencesDialog': {

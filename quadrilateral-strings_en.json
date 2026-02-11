@@ -800,15 +800,6 @@
       }
     },
     "keyboardHelpDialog": {
-      "checkShapeDescriptionPattern": {
-        "value": "With Voicing enabled, check shape name or properties with {{altOrOption}} plus C."
-      },
-      "resetShapeDescriptionPattern": {
-        "value": "Reset Shape with {{altOrOption}} plus Shift plus R."
-      },
-      "moveShapeDescription": {
-        "value": "Move corner or side up, left, down, or right with Arrow keys or with letter keys W, A, S, or D."
-      },
       "smallerStepsDescription": {
         "value": "Move in smaller steps with Shift plus Arrow keys, or Shift plus letter keys W, A, S, or D, or Shift plus Mouse."
       }
