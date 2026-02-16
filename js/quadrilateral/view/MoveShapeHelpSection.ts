@@ -46,7 +46,7 @@ export default class MoveShapeHelpSection extends KeyboardHelpSection {
         labelOptions: {
           lineWrap: QuadrilateralKeyboardHelpContent.LABEL_LINE_WRAP
         },
-        labelInnerContent: smallerStepsDescriptionStringProperty
+        accessibleRowDescriptionProperty: smallerStepsDescriptionStringProperty
       }
     );
 
