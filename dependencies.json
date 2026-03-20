@@ -21,7 +21,7 @@
     "branch": "HEAD"
   },
   "joist": {
-    "sha": "24442fcb828a5598c306e2bafba83acb7a869584",
+    "sha": "4ef8018adc98362a6667098c0f4058a8beb2b07d",
     "branch": "HEAD"
   },
   "kite": {
@@ -57,7 +57,7 @@
     "branch": "HEAD"
   },
   "quadrilateral": {
-    "sha": "f29bd3bd92bc2828d88369ba5dae4622454ebdb8",
+    "sha": "2a5c231bc8762b4f0cfcae414e34fdc9eabfa0d3",
     "branch": "1.1"
   },
   "query-string-machine": {
