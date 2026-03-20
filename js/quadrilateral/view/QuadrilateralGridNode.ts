@@ -13,7 +13,6 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralColors from '../../QuadrilateralColors.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
@@ -111,5 +110,3 @@ export default class QuadrilateralGridNode extends Node {
     }
   }
 }
-
-quadrilateral.register( 'QuadrilateralGridNode', QuadrilateralGridNode );

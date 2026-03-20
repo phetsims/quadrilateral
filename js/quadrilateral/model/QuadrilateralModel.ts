@@ -17,7 +17,6 @@ import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import TModel from '../../../../joist/js/TModel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import TangibleConnectionModel from './prototype/TangibleConnectionModel.js';
@@ -289,5 +288,3 @@ export default class QuadrilateralModel implements TModel {
     return Utils.roundToInterval( currentValue + sign * delta, interval );
   }
 }
-
-quadrilateral.register( 'QuadrilateralModel', QuadrilateralModel );

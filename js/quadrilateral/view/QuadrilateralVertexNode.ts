@@ -23,7 +23,6 @@ import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
 import soundManager from '../../../../tambo/js/soundManager.js';
 import boundaryReached_mp3 from '../../../../tambo/sounds/boundaryReached_mp3.js';
 import grabHighPitch_mp3 from '../../../sounds/grabHighPitch_mp3.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import { VertexLabelToProposedPositionMap } from '../model/QuadrilateralShapeModel.js';
@@ -223,5 +222,3 @@ export default class QuadrilateralVertexNode extends QuadrilateralMovableNode {
     } );
   }
 }
-
-quadrilateral.register( 'QuadrilateralVertexNode', QuadrilateralVertexNode );

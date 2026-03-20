@@ -19,7 +19,6 @@
  */
 
 import Utils from '../../../../../dot/js/Utils.js';
-import quadrilateral from '../../../quadrilateral.js';
 import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
 import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 
@@ -61,5 +60,3 @@ export default class QuadrilateralSerialMessageSender {
     return Utils.toFixedNumber( value, 2 );
   }
 }
-
-quadrilateral.register( 'QuadrilateralSerialMessageSender', QuadrilateralSerialMessageSender );

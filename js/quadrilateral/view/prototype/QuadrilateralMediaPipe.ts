@@ -20,7 +20,6 @@
 import Vector2 from '../../../../../dot/js/Vector2.js';
 import MediaPipe, { HandLandmarks } from '../../../../../tangible/js/mediaPipe/MediaPipe.js';
 import MediaPipeQueryParameters from '../../../../../tangible/js/mediaPipe/MediaPipeQueryParameters.js';
-import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralModel from '../../model/QuadrilateralModel.js';
 import QuadrilateralShapeModel, { VertexLabelToProposedPositionMap } from '../../model/QuadrilateralShapeModel.js';
 import QuadrilateralVertexLabel from '../../model/QuadrilateralVertexLabel.js';
@@ -128,5 +127,3 @@ export default class QuadrilateralMediaPipe extends MediaPipe {
     return handPositions[ 0 ].thumbPosition.x <= handPositions[ 1 ].thumbPosition.x ? handPositions : handPositions.reverse();
   }
 }
-
-quadrilateral.register( 'QuadrilateralMediaPipe', QuadrilateralMediaPipe );

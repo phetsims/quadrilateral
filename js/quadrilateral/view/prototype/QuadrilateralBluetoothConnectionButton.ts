@@ -19,7 +19,6 @@ import stepTimer from '../../../../../axon/js/stepTimer.js';
 import Utils from '../../../../../dot/js/Utils.js';
 import IntentionalAny from '../../../../../phet-core/js/types/IntentionalAny.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
-import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralColors from '../../../QuadrilateralColors.js';
 import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
 import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
@@ -192,5 +191,3 @@ export default class QuadrilateralBluetoothConnectionButton extends TextPushButt
     return value;
   }
 }
-
-quadrilateral.register( 'QuadrilateralBluetoothConnectionButton', QuadrilateralBluetoothConnectionButton );

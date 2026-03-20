@@ -11,7 +11,6 @@ import { Line } from '../../../../kite/js/segments/Segment.js';
 import Shape from '../../../../kite/js/Shape.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralColors from '../../QuadrilateralColors.js';
 import QuadrilateralSide from '../model/QuadrilateralSide.js';
 
@@ -69,5 +68,3 @@ export default class SideTicksNode extends Path {
     this.shape = this.modelViewTransform.modelToViewShape( shape );
   }
 }
-
-quadrilateral.register( 'SideTicksNode', SideTicksNode );

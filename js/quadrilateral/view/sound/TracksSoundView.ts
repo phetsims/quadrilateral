@@ -20,7 +20,6 @@ import SoundClip from '../../../../../tambo/js/sound-generators/SoundClip.js';
 import SoundGenerator from '../../../../../tambo/js/sound-generators/SoundGenerator.js';
 import soundManager from '../../../../../tambo/js/soundManager.js';
 import WrappedAudioBuffer from '../../../../../tambo/js/WrappedAudioBuffer.js';
-import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
 
@@ -214,5 +213,3 @@ export default class TracksSoundView extends SoundGenerator {
     super.dispose();
   }
 }
-
-quadrilateral.register( 'TracksSoundView', TracksSoundView );

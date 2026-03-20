@@ -12,7 +12,6 @@ import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import { PDOMValueType } from '../../../../scenery/js/accessibility/pdom/ParallelDOM.js';
 import ResponsePacket from '../../../../utterance-queue/js/ResponsePacket.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
@@ -829,5 +828,3 @@ export default class QuadrilateralDescriber {
     contextResponse: resetShapeContextResponseStringProperty
   } );
 }
-
-quadrilateral.register( 'QuadrilateralDescriber', QuadrilateralDescriber );

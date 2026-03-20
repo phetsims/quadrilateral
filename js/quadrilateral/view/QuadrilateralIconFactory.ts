@@ -22,7 +22,6 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Path, { PathOptions } from '../../../../scenery/js/nodes/Path.js';
 import Text, { TextOptions } from '../../../../scenery/js/nodes/Text.js';
 import musicSolidShape from '../../../../sherpa/js/fontawesome-5/musicSolidShape.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralColors from '../../QuadrilateralColors.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 
@@ -216,5 +215,4 @@ class QuadrilateralIconFactory {
   }
 }
 
-quadrilateral.register( 'QuadrilateralIconFactory', QuadrilateralIconFactory );
 export default QuadrilateralIconFactory;

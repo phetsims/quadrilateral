@@ -19,7 +19,6 @@ import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import MediaPipeQueryParameters from '../../../../tangible/js/mediaPipe/MediaPipeQueryParameters.js';
 import { SpeakableResolvedResponse } from '../../../../utterance-queue/js/ResponsePacket.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
@@ -281,5 +280,3 @@ export default class QuadrilateralScreenView extends ScreenView {
     this.quadrilateralNode && this.quadrilateralNode.step( dt );
   }
 }
-
-quadrilateral.register( 'QuadrilateralScreenView', QuadrilateralScreenView );

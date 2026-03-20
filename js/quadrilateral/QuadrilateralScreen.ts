@@ -7,7 +7,6 @@
 
 import Screen, { ScreenOptions } from '../../../joist/js/Screen.js';
 import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import quadrilateral from '../quadrilateral.js';
 import QuadrilateralColors from '../QuadrilateralColors.js';
 import QuadrilateralModel from './model/QuadrilateralModel.js';
 import QuadrilateralOptionsModel from './model/QuadrilateralOptionsModel.js';
@@ -29,5 +28,3 @@ export default class QuadrilateralScreen extends Screen<QuadrilateralModel, Quad
     );
   }
 }
-
-quadrilateral.register( 'QuadrilateralScreen', QuadrilateralScreen );

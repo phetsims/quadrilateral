@@ -108,5 +108,4 @@ const QuadrilateralColors = {
   } )
 };
 
-quadrilateral.register( 'QuadrilateralColors', QuadrilateralColors );
 export default QuadrilateralColors;

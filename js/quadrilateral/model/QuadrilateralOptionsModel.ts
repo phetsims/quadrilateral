@@ -7,7 +7,6 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralTangibleOptionsModel from './prototype/QuadrilateralTangibleOptionsModel.js';
 import QuadrilateralSoundOptionsModel from './QuadrilateralSoundOptionsModel.js';
 
@@ -15,5 +14,3 @@ export default class QuadrilateralOptionsModel {
   public readonly soundOptionsModel = new QuadrilateralSoundOptionsModel();
   public readonly tangibleOptionsModel = new QuadrilateralTangibleOptionsModel();
 }
-
-quadrilateral.register( 'QuadrilateralOptionsModel', QuadrilateralOptionsModel );

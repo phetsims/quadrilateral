@@ -20,7 +20,6 @@ import Node from '../../../../../scenery/js/nodes/Node.js';
 import Text, { TextOptions } from '../../../../../scenery/js/nodes/Text.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
 import MediaPipe from '../../../../../tangible/js/mediaPipe/MediaPipe.js';
-import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralTangibleOptionsModel from '../../model/prototype/QuadrilateralTangibleOptionsModel.js';
 
 // Strings for the content - this is a prototype so it is not translatable yet.
@@ -190,5 +189,3 @@ class TangiblePropertyNumberControl extends VBox {
     } );
   }
 }
-
-quadrilateral.register( 'QuadrilateralInputPreferencesNode', QuadrilateralInputPreferencesNode );

@@ -8,7 +8,6 @@
 
 import Bounds2 from '../../dot/js/Bounds2.js';
 import PhetFont from '../../scenery-phet/js/PhetFont.js';
-import quadrilateral from './quadrilateral.js';
 
 const SCREEN_TEXT_FONT = new PhetFont( { size: 18 } );
 const VERTEX_WIDTH = 0.1;
@@ -90,5 +89,4 @@ const QuadrilateralConstants = {
   }
 };
 
-quadrilateral.register( 'QuadrilateralConstants', QuadrilateralConstants );
 export default QuadrilateralConstants;

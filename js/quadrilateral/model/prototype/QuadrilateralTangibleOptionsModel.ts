@@ -11,7 +11,6 @@ import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import Range from '../../../../../dot/js/Range.js';
 import MediaPipeQueryParameters from '../../../../../tangible/js/mediaPipe/MediaPipeQueryParameters.js';
-import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralQueryParameters from '../../QuadrilateralQueryParameters.js';
 
 export default class QuadrilateralTangibleOptionsModel {
@@ -46,5 +45,3 @@ export default class QuadrilateralTangibleOptionsModel {
     this.supportsInputOptions = this.deviceConnectedProperty.value || this.cameraInputHandsConnectedProperty.value;
   }
 }
-
-quadrilateral.register( 'QuadrilateralTangibleOptionsModel', QuadrilateralTangibleOptionsModel );

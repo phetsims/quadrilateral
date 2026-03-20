@@ -8,7 +8,6 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 
 export default class QuadrilateralVisibilityModel {
@@ -65,5 +64,3 @@ export default class QuadrilateralVisibilityModel {
     this.showDebugValuesProperty.reset();
   }
 }
-
-quadrilateral.register( 'QuadrilateralVisibilityModel', QuadrilateralVisibilityModel );

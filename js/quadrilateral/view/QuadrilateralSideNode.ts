@@ -19,7 +19,6 @@ import RichDragListener from '../../../../scenery/js/listeners/RichDragListener.
 import LineNode from '../../../../scenery/js/nodes/Line.js'; // eslint-disable-line phet/default-import-match-filename
 import Path from '../../../../scenery/js/nodes/Path.js';
 import release_mp3 from '../../../../tambo/sounds/release_mp3.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
 import QuadrilateralShapeModel, { VertexLabelToProposedPositionMap } from '../model/QuadrilateralShapeModel.js';
 import QuadrilateralSide from '../model/QuadrilateralSide.js';
@@ -358,5 +357,4 @@ class QuadrilateralSideNode extends QuadrilateralMovableNode {
   }
 }
 
-quadrilateral.register( 'QuadrilateralSideNode', QuadrilateralSideNode );
 export default QuadrilateralSideNode;

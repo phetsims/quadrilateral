@@ -19,7 +19,6 @@ import AquaRadioButtonGroup from '../../../../../sun/js/AquaRadioButtonGroup.js'
 import ToggleSwitch, { ToggleSwitchOptions } from '../../../../../sun/js/ToggleSwitch.js';
 import soundManager from '../../../../../tambo/js/soundManager.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
-import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralStrings from '../../../QuadrilateralStrings.js';
 import QuadrilateralSoundOptionsModel, { SoundDesign } from '../../model/QuadrilateralSoundOptionsModel.js';
 
@@ -105,5 +104,3 @@ export default class QuadrilateralSoundOptionsNode extends PreferencesPanelSecti
     soundDesignRadioButtonGroup.leftTop = shapeSoundOptionsDescriptionText.leftBottom.plusXY( PreferencesDialogConstants.CONTENT_INDENTATION_SPACING, PreferencesDialogConstants.VERTICAL_CONTENT_SPACING );
   }
 }
-
-quadrilateral.register( 'QuadrilateralSoundOptionsNode', QuadrilateralSoundOptionsNode );

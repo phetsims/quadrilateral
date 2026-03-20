@@ -7,7 +7,6 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralMovable from './QuadrilateralMovable.js';
 
 class UnorderedComponentPair<T extends QuadrilateralMovable> {
@@ -35,5 +34,4 @@ class UnorderedComponentPair<T extends QuadrilateralMovable> {
   }
 }
 
-quadrilateral.register( 'UnorderedComponentPair', UnorderedComponentPair );
 export default UnorderedComponentPair;

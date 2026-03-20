@@ -13,7 +13,6 @@ import LockNode from '../../../../scenery-phet/js/LockNode.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import RectangularToggleButton, { RectangularToggleButtonOptions } from '../../../../sun/js/buttons/RectangularToggleButton.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralColors from '../../QuadrilateralColors.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
@@ -72,5 +71,3 @@ export default class SmallStepsLockToggleButton extends Node {
     labelNode.leftCenter = button.rightCenter.plusXY( QuadrilateralConstants.CONTROL_LABEL_SPACING, 0 );
   }
 }
-
-quadrilateral.register( 'SmallStepsLockToggleButton', SmallStepsLockToggleButton );

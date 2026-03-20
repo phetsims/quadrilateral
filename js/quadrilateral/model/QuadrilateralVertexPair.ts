@@ -7,7 +7,6 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralVertex from './QuadrilateralVertex.js';
 import UnorderedComponentPair from './UnorderedComponentPair.js';
 
@@ -16,5 +15,3 @@ export default class QuadrilateralVertexPair extends UnorderedComponentPair<Quad
     super( vertex1, vertex2 );
   }
 }
-
-quadrilateral.register( 'QuadrilateralVertexPair', QuadrilateralVertexPair );

@@ -21,7 +21,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import QuadrilateralQueryParameters from '../QuadrilateralQueryParameters.js';
 import NamedQuadrilateral from './NamedQuadrilateral.js';
@@ -740,5 +739,3 @@ export default class QuadrilateralShapeModel {
     return Utils.equalsEpsilon( angle1, angle2, toleranceInterval );
   }
 }
-
-quadrilateral.register( 'QuadrilateralShapeModel', QuadrilateralShapeModel );

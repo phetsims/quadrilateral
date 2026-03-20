@@ -11,7 +11,6 @@
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 
 // dimensions of the view space, relative to ScreenView layoutBounds
@@ -51,5 +50,3 @@ export default class QuadrilateralModelViewTransform extends ModelViewTransform2
     this.setToRectangleInvertedYMapping( modelBoundsForTransform, viewBoundsForTransform );
   }
 }
-
-quadrilateral.register( 'QuadrilateralModelViewTransform', QuadrilateralModelViewTransform );

@@ -8,7 +8,6 @@
 
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralColors from '../../QuadrilateralColors.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
@@ -44,5 +43,3 @@ export default class ResetShapeButton extends TextPushButton {
     } );
   }
 }
-
-quadrilateral.register( 'ResetShapeButton', ResetShapeButton );

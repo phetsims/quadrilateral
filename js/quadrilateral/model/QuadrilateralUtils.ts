@@ -13,7 +13,6 @@ import Ray2 from '../../../../dot/js/Ray2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Line } from '../../../../kite/js/segments/Segment.js';
 import Shape from '../../../../kite/js/Shape.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralVertex from './QuadrilateralVertex.js';
 
 // A useful type for calculations for the vertex Shapes which define where the QuadrilateralVertex can move depending on
@@ -318,5 +317,3 @@ export default class QuadrilateralUtils {
     return points;
   }
 }
-
-quadrilateral.register( 'QuadrilateralUtils', QuadrilateralUtils );

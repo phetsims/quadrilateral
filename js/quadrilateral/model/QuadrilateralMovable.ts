@@ -9,7 +9,6 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import quadrilateral from '../../quadrilateral.js';
 
 export default class QuadrilateralMovable {
 
@@ -32,5 +31,3 @@ export default class QuadrilateralMovable {
     } );
   }
 }
-
-quadrilateral.register( 'QuadrilateralMovable', QuadrilateralMovable );

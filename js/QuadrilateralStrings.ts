@@ -316,6 +316,4 @@ type StringsType = {
 
 const QuadrilateralStrings = getStringModule( 'QUADRILATERAL' ) as StringsType;
 
-quadrilateral.register( 'QuadrilateralStrings', QuadrilateralStrings );
-
 export default QuadrilateralStrings;

@@ -10,7 +10,6 @@ import { TReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
@@ -363,5 +362,3 @@ export default class QuadrilateralSideDescriber {
     }
   }
 }
-
-quadrilateral.register( 'QuadrilateralSideDescriber', QuadrilateralSideDescriber );

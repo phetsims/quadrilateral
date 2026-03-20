@@ -8,7 +8,6 @@
 
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
-import quadrilateral from '../../quadrilateral.js';
 
 export default class QuadrilateralVertexLabel extends EnumerationValue {
   public static readonly VERTEX_A = new QuadrilateralVertexLabel();
@@ -18,5 +17,3 @@ export default class QuadrilateralVertexLabel extends EnumerationValue {
 
   public static readonly enumeration = new Enumeration( QuadrilateralVertexLabel );
 }
-
-quadrilateral.register( 'QuadrilateralVertexLabel', QuadrilateralVertexLabel );

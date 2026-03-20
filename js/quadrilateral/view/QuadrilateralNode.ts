@@ -309,5 +309,3 @@ export default class QuadrilateralNode extends Voicing( Node ) {
     repoName: quadrilateral.name
   } );
 }
-
-quadrilateral.register( 'QuadrilateralNode', QuadrilateralNode );

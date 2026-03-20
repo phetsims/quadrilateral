@@ -8,7 +8,6 @@
 
 import LinearFunction from '../../../../../dot/js/LinearFunction.js';
 import Vector2 from '../../../../../dot/js/Vector2.js';
-import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
 import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
 import QuadrilateralModel from '../../model/QuadrilateralModel.js';
@@ -201,6 +200,3 @@ export default class QuadrilateralTangibleController {
     }
   }
 }
-
-
-quadrilateral.register( 'QuadrilateralTangibleController', QuadrilateralTangibleController );

@@ -16,7 +16,6 @@ import Shape from '../../../../kite/js/Shape.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralColors from '../../QuadrilateralColors.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
@@ -100,5 +99,3 @@ export default class QuadrilateralDiagonalGuidesNode extends Node {
     return point;
   }
 }
-
-quadrilateral.register( 'QuadrilateralDiagonalGuidesNode', QuadrilateralDiagonalGuidesNode );

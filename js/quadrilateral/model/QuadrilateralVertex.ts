@@ -17,7 +17,6 @@ import Shape from '../../../../kite/js/Shape.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import QuadrilateralMovable from './QuadrilateralMovable.js';
 import QuadrilateralVertexLabel from './QuadrilateralVertexLabel.js';
@@ -208,5 +207,3 @@ export default class QuadrilateralVertex extends QuadrilateralMovable {
     return Vector2.average( this.smoothingPositions );
   }
 }
-
-quadrilateral.register( 'QuadrilateralVertex', QuadrilateralVertex );

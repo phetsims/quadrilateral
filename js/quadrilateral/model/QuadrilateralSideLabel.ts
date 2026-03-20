@@ -8,7 +8,6 @@
 
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
-import quadrilateral from '../../quadrilateral.js';
 
 export default class QuadrilateralSideLabel extends EnumerationValue {
   public static readonly SIDE_AB = new QuadrilateralSideLabel();
@@ -18,5 +17,3 @@ export default class QuadrilateralSideLabel extends EnumerationValue {
 
   public static readonly enumeration = new Enumeration( QuadrilateralSideLabel );
 }
-
-quadrilateral.register( 'QuadrilateralSideLabel', QuadrilateralSideLabel );

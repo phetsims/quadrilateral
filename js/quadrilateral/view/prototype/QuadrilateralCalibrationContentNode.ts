@@ -17,7 +17,6 @@ import Circle from '../../../../../scenery/js/nodes/Circle.js';
 import Line from '../../../../../scenery/js/nodes/Line.js';
 import Rectangle from '../../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../../scenery/js/nodes/Text.js';
-import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
 import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
 
@@ -88,5 +87,3 @@ export default class QuadrilateralCalibrationContentNode extends VBox {
     } );
   }
 }
-
-quadrilateral.register( 'QuadrilateralCalibrationContentNode', QuadrilateralCalibrationContentNode );

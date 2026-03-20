@@ -20,7 +20,6 @@ import MovementAlerter from '../../../../scenery-phet/js/accessibility/describer
 import Voicing from '../../../../scenery/js/accessibility/voicing/Voicing.js';
 import ResponsePacket from '../../../../utterance-queue/js/ResponsePacket.js';
 import Utterance from '../../../../utterance-queue/js/Utterance.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import QuadrilateralModel from '../model/QuadrilateralModel.js';
@@ -940,5 +939,3 @@ export default class QuadrilateralAlerter extends Alerter {
     } );
   }
 }
-
-quadrilateral.register( 'QuadrilateralAlerter', QuadrilateralAlerter );

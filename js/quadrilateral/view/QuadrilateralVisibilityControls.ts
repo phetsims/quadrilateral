@@ -11,7 +11,6 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import VBox, { VBoxOptions } from '../../../../scenery/js/layout/nodes/VBox.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralVisibilityModel from '../model/QuadrilateralVisibilityModel.js';
@@ -114,5 +113,3 @@ export default class QuadrilateralVisibilityControls extends VBox {
     super( options );
   }
 }
-
-quadrilateral.register( 'QuadrilateralVisibilityControls', QuadrilateralVisibilityControls );

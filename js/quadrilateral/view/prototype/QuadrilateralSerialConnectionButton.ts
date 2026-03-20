@@ -10,7 +10,6 @@
  */
 
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
-import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralColors from '../../../QuadrilateralColors.js';
 import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
 import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
@@ -31,5 +30,3 @@ export default class QuadrilateralSerialConnectionButton extends TextPushButton 
     } );
   }
 }
-
-quadrilateral.register( 'QuadrilateralSerialConnectionButton', QuadrilateralSerialConnectionButton );

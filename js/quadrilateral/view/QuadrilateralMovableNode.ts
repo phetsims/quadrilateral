@@ -155,5 +155,3 @@ export default class QuadrilateralMovableNode extends Voicing( Node ) {
     global: true
   } );
 }
-
-quadrilateral.register( 'QuadrilateralMovableNode', QuadrilateralMovableNode );

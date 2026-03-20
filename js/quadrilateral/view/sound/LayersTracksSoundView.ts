@@ -21,7 +21,6 @@ import quadTrackHighDescendingPingRepeats_mp3 from '../../../../sounds/quadTrack
 import quadTrackLowAscendingFourNotes_mp3 from '../../../../sounds/quadTrackLowAscendingFourNotes_mp3.js';
 import quadTrackLowDistortedTonalRhythm_mp3 from '../../../../sounds/quadTrackLowDistortedTonalRhythm_mp3.js';
 import quadTrackLowPunctualBoops_mp3 from '../../../../sounds/quadTrackLowPunctualBoops_mp3.js';
-import quadrilateral from '../../../quadrilateral.js';
 import NamedQuadrilateral from '../../model/NamedQuadrilateral.js';
 import QuadrilateralShapeModel from '../../model/QuadrilateralShapeModel.js';
 import QuadrilateralSoundOptionsModel from '../../model/QuadrilateralSoundOptionsModel.js';
@@ -114,5 +113,3 @@ export default class LayersTracksSoundView extends TracksSoundView {
     super.dispose();
   }
 }
-
-quadrilateral.register( 'LayersTracksSoundView', LayersTracksSoundView );

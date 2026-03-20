@@ -9,7 +9,6 @@
  */
 
 import { QueryStringMachine } from '../../../query-string-machine/js/QueryStringMachineModule.js';
-import quadrilateral from '../quadrilateral.js';
 
 const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
 
@@ -160,5 +159,4 @@ const QuadrilateralQueryParameters = QueryStringMachine.getAll( {
   }
 } );
 
-quadrilateral.register( 'QuadrilateralQueryParameters', QuadrilateralQueryParameters );
 export default QuadrilateralQueryParameters;

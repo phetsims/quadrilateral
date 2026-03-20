@@ -12,7 +12,6 @@ import Property from '../../../../axon/js/Property.js';
 import audioManager from '../../../../joist/js/audioManager.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralIconFactory from './QuadrilateralIconFactory.js';
 
@@ -40,5 +39,3 @@ export default class ShapeSoundsCheckbox extends Checkbox {
     } );
   }
 }
-
-quadrilateral.register( 'ShapeSoundsCheckbox', ShapeSoundsCheckbox );

@@ -15,7 +15,6 @@ import Text from '../../../../../scenery/js/nodes/Text.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import Dialog from '../../../../../sun/js/Dialog.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
-import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralColors from '../../../QuadrilateralColors.js';
 import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
 import TangibleConnectionModel from '../../model/prototype/TangibleConnectionModel.js';
@@ -84,5 +83,3 @@ export default class QuadrilateralTangibleControls extends VBox {
     } );
   }
 }
-
-quadrilateral.register( 'QuadrilateralTangibleControls', QuadrilateralTangibleControls );

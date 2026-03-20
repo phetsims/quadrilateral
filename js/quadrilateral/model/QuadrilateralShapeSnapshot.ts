@@ -11,7 +11,6 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
-import quadrilateral from '../../quadrilateral.js';
 import NamedQuadrilateral from './NamedQuadrilateral.js';
 import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
 import QuadrilateralSideLabel from './QuadrilateralSideLabel.js';
@@ -174,5 +173,3 @@ export default class QuadrilateralShapeSnapshot {
     return numberOfEqualSides;
   }
 }
-
-quadrilateral.register( 'QuadrilateralShapeSnapshot', QuadrilateralShapeSnapshot );

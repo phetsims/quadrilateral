@@ -10,7 +10,6 @@ import { TReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import { PDOMValueType } from '../../../../scenery/js/accessibility/pdom/ParallelDOM.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import NamedQuadrilateral from '../model/NamedQuadrilateral.js';
 import QuadrilateralShapeModel from '../model/QuadrilateralShapeModel.js';
@@ -331,5 +330,3 @@ export default class QuadrilateralVertexDescriber {
     return ABOUT_TWICE_RANGE.contains( angle / other );
   }
 }
-
-quadrilateral.register( 'QuadrilateralVertexDescriber', QuadrilateralVertexDescriber );

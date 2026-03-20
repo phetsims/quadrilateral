@@ -16,7 +16,6 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import ExpandCollapseButton from '../../../../sun/js/ExpandCollapseButton.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralColors from '../../QuadrilateralColors.js';
 import QuadrilateralConstants from '../../QuadrilateralConstants.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
@@ -131,5 +130,3 @@ export default class QuadrilateralShapeNameDisplay extends Node {
     expandCollapseButton.leftCenter = backgroundRectangle.leftCenter.plusXY( expandCollapseButton.width / 2, 0 );
   }
 }
-
-quadrilateral.register( 'QuadrilateralShapeNameDisplay', QuadrilateralShapeNameDisplay );

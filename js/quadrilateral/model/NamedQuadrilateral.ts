@@ -8,7 +8,6 @@
 
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
-import quadrilateral from '../../quadrilateral.js';
 
 export default class NamedQuadrilateral extends EnumerationValue {
   public static readonly SQUARE = new NamedQuadrilateral();
@@ -28,5 +27,3 @@ export default class NamedQuadrilateral extends EnumerationValue {
     phetioDocumentation: 'Possible named shapes for the quadrilateral.'
   } );
 }
-
-quadrilateral.register( 'NamedQuadrilateral', NamedQuadrilateral );

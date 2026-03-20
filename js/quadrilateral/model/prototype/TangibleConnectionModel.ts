@@ -24,7 +24,6 @@ import Vector2 from '../../../../../dot/js/Vector2.js';
 import ModelViewTransform2 from '../../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
 import NullableIO from '../../../../../tandem/js/types/NullableIO.js';
-import quadrilateral from '../../../quadrilateral.js';
 import QuadrilateralConstants from '../../../QuadrilateralConstants.js';
 import QuadrilateralShapeModel, { VertexLabelToProposedPositionMap } from '../QuadrilateralShapeModel.js';
 import QuadrilateralVertexLabel from '../QuadrilateralVertexLabel.js';
@@ -145,5 +144,3 @@ export default class TangibleConnectionModel {
     return allowed;
   }
 }
-
-quadrilateral.register( 'TangibleConnectionModel', TangibleConnectionModel );

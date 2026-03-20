@@ -14,7 +14,6 @@ import { Line as LineShape } from '../../../../kite/js/segments/Segment.js';
 import Shape from '../../../../kite/js/Shape.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralMovable from './QuadrilateralMovable.js';
 import QuadrilateralSideLabel from './QuadrilateralSideLabel.js';
 import QuadrilateralVertex from './QuadrilateralVertex.js';
@@ -132,5 +131,3 @@ export default class QuadrilateralSide extends QuadrilateralMovable {
     this.vertex1.connectToOthers( otherSide.vertex1, this.vertex2 );
   }
 }
-
-quadrilateral.register( 'QuadrilateralSide', QuadrilateralSide );

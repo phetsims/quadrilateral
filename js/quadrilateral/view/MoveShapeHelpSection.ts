@@ -11,7 +11,6 @@ import KeyboardHelpSection from '../../../../scenery-phet/js/keyboard/help/Keybo
 import KeyboardHelpSectionRow from '../../../../scenery-phet/js/keyboard/help/KeyboardHelpSectionRow.js';
 import KeyboardDragListener from '../../../../scenery/js/listeners/KeyboardDragListener.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
-import quadrilateral from '../../quadrilateral.js';
 import QuadrilateralStrings from '../../QuadrilateralStrings.js';
 import QuadrilateralKeyboardHelpContent from './QuadrilateralKeyboardHelpContent.js';
 
@@ -54,5 +53,3 @@ export default class MoveShapeHelpSection extends KeyboardHelpSection {
     super( moveCornersOrSidesStringProperty, rows );
   }
 }
-
-quadrilateral.register( 'MoveShapeHelpSection', MoveShapeHelpSection );

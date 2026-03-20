@@ -10,7 +10,6 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import quadrilateral from '../../quadrilateral.js';
 import NamedQuadrilateral from './NamedQuadrilateral.js';
 import QuadrilateralShapeModel from './QuadrilateralShapeModel.js';
 
@@ -125,5 +124,3 @@ export default class QuadrilateralShapeDetector {
     }
   }
 }
-
-quadrilateral.register( 'QuadrilateralShapeDetector', QuadrilateralShapeDetector );
