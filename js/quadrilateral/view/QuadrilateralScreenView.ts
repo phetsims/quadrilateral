@@ -61,8 +61,6 @@ export default class QuadrilateralScreenView extends ScreenView {
       tandem: tandem
     } );
 
-    console.log( 'test commit' );
-
     this.model = model;
     const visibilityModel = model.visibilityModel;
 
