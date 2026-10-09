@@ -61,7 +61,7 @@ natural language that describes every possible state of the quadrilateral and si
 - QuadrilateralSideDescriber: Creates description strings that describe the state of a QuadrilateralSide.
 - QuadrilateralVertexDescriber: Creates description strings that describe the state of a QuadrilateralVertex.
 
-See https://github.com/phetsims/qa/blob/main/documentation/qa-book.md#voicing for an overview of the Voicing feature.
+See [qa-book.md](../../qa/documentation/qa-book.md#voicing) for an overview of the Voicing feature.
 
 #### Prototypes
 
